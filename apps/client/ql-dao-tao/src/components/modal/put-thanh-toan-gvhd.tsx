@@ -106,7 +106,7 @@ const PutSupervisorPaymentRecord = () => {
             title={id ? 'Chỉnh sửa thanh toán' : 'Thêm mới thanh toán'}
             className="w-[45vw]"
         >
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="expertId" label="Chuyên gia">
                     <Select
                         placeholder="Chọn chuyên gia"
@@ -118,7 +118,7 @@ const PutSupervisorPaymentRecord = () => {
                         allowClear
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem form={form} name="transactionCode" label="Mã giao dịch">
                     <Input placeholder="Nhập mã giao dịch" />

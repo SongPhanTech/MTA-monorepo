@@ -25,6 +25,8 @@ const baseSchema = z.object({
     email: z.string().email().nullish(),
     bankAccountNumber: z.string().nullish(),
     bankName: z.string().nullish(),
+    projectExpert: z.boolean().default(true),
+    thesisExpert: z.boolean().default(true),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean(),
 }
@@ -49,6 +51,8 @@ const baseSchemaWithoutDefaults = z.object({
     email: z.string().email().nullish(),
     bankAccountNumber: z.string().nullish(),
     bankName: z.string().nullish(),
+    projectExpert: z.boolean(),
+    thesisExpert: z.boolean(),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean(),
 }
@@ -60,8 +64,6 @@ const relationSchema = z.object({
     coSupervisedTheses: z.array(z.unknown()).optional(),
     subjectClass: z.array(z.unknown()).optional(),
     councilMemberships: z.array(z.unknown()).optional(),
-    payments: z.array(z.unknown()).optional(),
-    supervisorPaymentRecord: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -112,6 +114,8 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
     email: z.string().email().nullish(),
     bankAccountNumber: z.string().nullish(),
     bankName: z.string().nullish(),
+    projectExpert: z.boolean(),
+    thesisExpert: z.boolean(),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean()
 }).partial().passthrough();
@@ -121,7 +125,7 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
  * `ExpertProfile` schema for create operations excluding foreign keys and relations.
  */
 export const ExpertProfileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, projectExpert: true, thesisExpert: true
 });
 
 

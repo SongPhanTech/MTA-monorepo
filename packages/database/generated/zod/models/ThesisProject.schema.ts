@@ -72,7 +72,9 @@ const relationSchema = z.object({
     subjectClass: z.record(z.string(), z.unknown()).optional(),
     thesisSession: z.record(z.string(), z.unknown()).optional(),
     supervisor: z.record(z.string(), z.unknown()).optional(),
+    supervisorPayment: z.record(z.string(), z.unknown()).optional(),
     coSupervisor: z.record(z.string(), z.unknown()).optional(),
+    coSupervisorPayment: z.record(z.string(), z.unknown()).optional(),
     organization: z.record(z.string(), z.unknown()).optional(),
     council: z.record(z.string(), z.unknown()).optional(),
     room: z.record(z.string(), z.unknown()).optional(),
@@ -81,14 +83,15 @@ const relationSchema = z.object({
     librarySubmission: z.record(z.string(), z.unknown()).optional(),
     decisions: z.array(z.unknown()).optional(),
     registrations: z.array(z.unknown()).optional(),
-    supervisorPayments: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     subjectClassId: z.string().nullish(),
     thesisSessionId: z.string().nullish(),
     supervisorId: z.string().nullish(),
+    supervisorPaymentId: z.string().nullish(),
     coSupervisorId: z.string().nullish(),
+    coSupervisorPaymentId: z.string().nullish(),
     organizationId: z.string().uuid().nullish(),
     councilId: z.string().nullish(),
     roomId: z.string().nullish(),

@@ -85,12 +85,16 @@ export default function SupervisorPaymentRecordPage() {
             ...where,
         },
         include: {
-            thesisProject: {
+            thesisProjects: {
                 include: {
-                    subjectClass: true,
+                    supervisor: true,
                 },
             },
-            expert: true,
+            coThesisProjects: {
+                include: {
+                    coSupervisor: true,
+                },
+            },
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -209,7 +213,9 @@ export default function SupervisorPaymentRecordPage() {
                                 width: 150,
                                 type: 'input',
                                 align: 'center',
-                                render: (_, record) => record.expert.name,
+                                render: (_, record) =>
+                                    record.thesisProjects?.supervisor.name ||
+                                    record.coThesisProjects?.coSupervisor.name,
                             },
                             {
                                 title: 'Đề tài',
@@ -217,7 +223,8 @@ export default function SupervisorPaymentRecordPage() {
                                 width: 150,
                                 type: 'input',
                                 align: 'center',
-                                render: (_, record) => record.thesisProject.title,
+                                render: (_, record) =>
+                                    record.thesisProjects?.title || record.coThesisProjects?.title,
                             },
                             {
                                 title: 'Mã giao dịch',

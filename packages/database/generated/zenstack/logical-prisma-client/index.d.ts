@@ -1622,6 +1622,16 @@ export type LibrarySubmission = $Result.DefaultSelection<Prisma.$LibrarySubmissi
  */
 export type DefaultCouncilRolePayAmount = $Result.DefaultSelection<Prisma.$DefaultCouncilRolePayAmountPayload>;
 /**
+ * Model DefaultSupervisorPayAmount
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type DefaultSupervisorPayAmount = $Result.DefaultSelection<Prisma.$DefaultSupervisorPayAmountPayload>;
+/**
  * Model PaymentRecord
  * Quản lý việc thanh toán hội đồng
  * @
@@ -4141,6 +4151,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get defaultCouncilRolePayAmount(): Prisma.DefaultCouncilRolePayAmountDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.defaultSupervisorPayAmount`: Exposes CRUD operations for the **DefaultSupervisorPayAmount** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more DefaultSupervisorPayAmounts
+     * const defaultSupervisorPayAmounts = await prisma.defaultSupervisorPayAmount.findMany()
+     * ```
+     */
+    get defaultSupervisorPayAmount(): Prisma.DefaultSupervisorPayAmountDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.paymentRecord`: Exposes CRUD operations for the **PaymentRecord** model.
      * Example usage:
      * ```ts
@@ -5911,6 +5930,7 @@ export namespace Prisma {
         DefenseRecord: 'DefenseRecord',
         LibrarySubmission: 'LibrarySubmission',
         DefaultCouncilRolePayAmount: 'DefaultCouncilRolePayAmount',
+        DefaultSupervisorPayAmount: 'DefaultSupervisorPayAmount',
         PaymentRecord: 'PaymentRecord',
         SupervisorPaymentRecord: 'SupervisorPaymentRecord',
         EvaluationPeriod: 'EvaluationPeriod',
@@ -8639,7 +8659,9 @@ export namespace Prisma {
         subjectClassId: 'subjectClassId',
         thesisSessionId: 'thesisSessionId',
         supervisorId: 'supervisorId',
+        supervisorPaymentId: 'supervisorPaymentId',
         coSupervisorId: 'coSupervisorId',
+        coSupervisorPaymentId: 'coSupervisorPaymentId',
         organizationId: 'organizationId',
         maxStudents: 'maxStudents',
         councilId: 'councilId',
@@ -8704,6 +8726,8 @@ export namespace Prisma {
         email: 'email',
         bankAccountNumber: 'bankAccountNumber',
         bankName: 'bankName',
+        projectExpert: 'projectExpert',
+        thesisExpert: 'thesisExpert',
         eligiblePresident: 'eligiblePresident',
         eligibleSecretary: 'eligibleSecretary'
     };
@@ -8801,6 +8825,17 @@ export namespace Prisma {
         role: 'role',
         amount: 'amount'
     };
+    export const DefaultSupervisorPayAmountScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        amount: 'amount'
+    };
     export const PaymentRecordScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -8814,7 +8849,6 @@ export namespace Prisma {
         status: 'status',
         paymentDate: 'paymentDate',
         transactionCode: 'transactionCode',
-        expertId: 'expertId',
         councilMemberId: 'councilMemberId'
     };
     export const SupervisorPaymentRecordScalarFieldEnum: {
@@ -8826,8 +8860,6 @@ export namespace Prisma {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
-        thesisProjectId: 'thesisProjectId',
-        expertId: 'expertId',
         amount: 'amount',
         status: 'status',
         paymentDate: 'paymentDate',
@@ -11740,7 +11772,9 @@ export namespace Prisma {
         subjectClassId: 'subjectClassId',
         thesisSessionId: 'thesisSessionId',
         supervisorId: 'supervisorId',
+        supervisorPaymentId: 'supervisorPaymentId',
         coSupervisorId: 'coSupervisorId',
+        coSupervisorPaymentId: 'coSupervisorPaymentId',
         organizationId: 'organizationId',
         councilId: 'councilId',
         roomId: 'roomId',
@@ -11836,13 +11870,18 @@ export namespace Prisma {
         description: 'description',
         createdBy: 'createdBy'
     };
+    export const DefaultSupervisorPayAmountOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy'
+    };
     export const PaymentRecordOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
         description: 'description',
         createdBy: 'createdBy',
         transactionCode: 'transactionCode',
-        expertId: 'expertId',
         councilMemberId: 'councilMemberId'
     };
     export const SupervisorPaymentRecordOrderByRelevanceFieldEnum: {
@@ -11850,8 +11889,6 @@ export namespace Prisma {
         code: 'code',
         description: 'description',
         createdBy: 'createdBy',
-        thesisProjectId: 'thesisProjectId',
-        expertId: 'expertId',
         transactionCode: 'transactionCode'
     };
     export const EvaluationPeriodOrderByRelevanceFieldEnum: {
@@ -69743,7 +69780,9 @@ export namespace Prisma {
         subjectClass<T extends ThesisProject$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         thesisSession<T extends ThesisProject$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$thesisSessionArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         supervisor<T extends ThesisProject$supervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$supervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        supervisorPayment<T extends ThesisProject$supervisorPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$supervisorPaymentArgs<ExtArgs>>): Prisma__SupervisorPaymentRecordClient<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         coSupervisor<T extends ThesisProject$coSupervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$coSupervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        coSupervisorPayment<T extends ThesisProject$coSupervisorPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$coSupervisorPaymentArgs<ExtArgs>>): Prisma__SupervisorPaymentRecordClient<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         organization<T extends ThesisProject$organizationArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$organizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         council<T extends ThesisProject$councilArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$councilArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         room<T extends ThesisProject$roomArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -69752,7 +69791,6 @@ export namespace Prisma {
         librarySubmission<T extends ThesisProject$librarySubmissionArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$librarySubmissionArgs<ExtArgs>>): Prisma__LibrarySubmissionClient<$Result.GetResult<Prisma.$LibrarySubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         decisions<T extends ThesisProject$decisionsArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$decisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         registrations<T extends ThesisProject$registrationsArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentThesisRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        supervisorPayments<T extends ThesisProject$supervisorPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$supervisorPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -69803,7 +69841,9 @@ export namespace Prisma {
         readonly subjectClassId: FieldRef<"ThesisProject", 'String'>;
         readonly thesisSessionId: FieldRef<"ThesisProject", 'String'>;
         readonly supervisorId: FieldRef<"ThesisProject", 'String'>;
+        readonly supervisorPaymentId: FieldRef<"ThesisProject", 'String'>;
         readonly coSupervisorId: FieldRef<"ThesisProject", 'String'>;
+        readonly coSupervisorPaymentId: FieldRef<"ThesisProject", 'String'>;
         readonly organizationId: FieldRef<"ThesisProject", 'String'>;
         readonly maxStudents: FieldRef<"ThesisProject", 'Int'>;
         readonly councilId: FieldRef<"ThesisProject", 'String'>;
@@ -70941,8 +70981,6 @@ export namespace Prisma {
         coSupervisedTheses<T extends ExpertProfile$coSupervisedThesesArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$coSupervisedThesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         subjectClass<T extends ExpertProfile$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$subjectClassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         councilMemberships<T extends ExpertProfile$councilMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$councilMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        payments<T extends ExpertProfile$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        supervisorPaymentRecord<T extends ExpertProfile$supervisorPaymentRecordArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$supervisorPaymentRecordArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -70989,6 +71027,8 @@ export namespace Prisma {
         readonly email: FieldRef<"ExpertProfile", 'String'>;
         readonly bankAccountNumber: FieldRef<"ExpertProfile", 'String'>;
         readonly bankName: FieldRef<"ExpertProfile", 'String'>;
+        readonly projectExpert: FieldRef<"ExpertProfile", 'Boolean'>;
+        readonly thesisExpert: FieldRef<"ExpertProfile", 'Boolean'>;
         readonly eligiblePresident: FieldRef<"ExpertProfile", 'Boolean'>;
         readonly eligibleSecretary: FieldRef<"ExpertProfile", 'Boolean'>;
     }
@@ -73684,6 +73724,386 @@ export namespace Prisma {
         readonly amount: FieldRef<"DefaultCouncilRolePayAmount", 'Decimal'>;
     }
 
+    export interface DefaultSupervisorPayAmountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DefaultSupervisorPayAmount'], meta: { name: 'DefaultSupervisorPayAmount' } };
+        /**
+         * Fields of the DefaultSupervisorPayAmount model
+         */
+        readonly fields: DefaultSupervisorPayAmountFieldRefs;
+        /**
+         * Find zero or one DefaultSupervisorPayAmount that matches the filter.
+         * @param {DefaultSupervisorPayAmountFindUniqueArgs} args - Arguments to find a DefaultSupervisorPayAmount
+         * @example
+         * // Get one DefaultSupervisorPayAmount
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends DefaultSupervisorPayAmountFindUniqueArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountFindUniqueArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one DefaultSupervisorPayAmount that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {DefaultSupervisorPayAmountFindUniqueOrThrowArgs} args - Arguments to find a DefaultSupervisorPayAmount
+         * @example
+         * // Get one DefaultSupervisorPayAmount
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends DefaultSupervisorPayAmountFindUniqueOrThrowArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first DefaultSupervisorPayAmount that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DefaultSupervisorPayAmountFindFirstArgs} args - Arguments to find a DefaultSupervisorPayAmount
+         * @example
+         * // Get one DefaultSupervisorPayAmount
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends DefaultSupervisorPayAmountFindFirstArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountFindFirstArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first DefaultSupervisorPayAmount that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DefaultSupervisorPayAmountFindFirstOrThrowArgs} args - Arguments to find a DefaultSupervisorPayAmount
+         * @example
+         * // Get one DefaultSupervisorPayAmount
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends DefaultSupervisorPayAmountFindFirstOrThrowArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountFindFirstOrThrowArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more DefaultSupervisorPayAmounts that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DefaultSupervisorPayAmountFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all DefaultSupervisorPayAmounts
+         * const defaultSupervisorPayAmounts = await prisma.defaultSupervisorPayAmount.findMany()
+         *
+         * // Get first 10 DefaultSupervisorPayAmounts
+         * const defaultSupervisorPayAmounts = await prisma.defaultSupervisorPayAmount.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const defaultSupervisorPayAmountWithIdOnly = await prisma.defaultSupervisorPayAmount.findMany({ select: { id: true } })
+         */
+        findMany<T extends DefaultSupervisorPayAmountFindManyArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a DefaultSupervisorPayAmount.
+         * @param {DefaultSupervisorPayAmountCreateArgs} args - Arguments to create a DefaultSupervisorPayAmount.
+         * @example
+         * // Create one DefaultSupervisorPayAmount
+         * const DefaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.create({
+         *   data: {
+         *     // ... data to create a DefaultSupervisorPayAmount
+         *   }
+         * })
+         */
+        create<T extends DefaultSupervisorPayAmountCreateArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountCreateArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many DefaultSupervisorPayAmounts.
+         * @param {DefaultSupervisorPayAmountCreateManyArgs} args - Arguments to create many DefaultSupervisorPayAmounts.
+         * @example
+         * // Create many DefaultSupervisorPayAmounts
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends DefaultSupervisorPayAmountCreateManyArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many DefaultSupervisorPayAmounts and returns the data saved in the database.
+         * @param {DefaultSupervisorPayAmountCreateManyAndReturnArgs} args - Arguments to create many DefaultSupervisorPayAmounts.
+         * @example
+         * // Create many DefaultSupervisorPayAmounts
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many DefaultSupervisorPayAmounts and only return the `id`
+         * const defaultSupervisorPayAmountWithIdOnly = await prisma.defaultSupervisorPayAmount.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends DefaultSupervisorPayAmountCreateManyAndReturnArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a DefaultSupervisorPayAmount.
+         * @param {DefaultSupervisorPayAmountDeleteArgs} args - Arguments to delete one DefaultSupervisorPayAmount.
+         * @example
+         * // Delete one DefaultSupervisorPayAmount
+         * const DefaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.delete({
+         *   where: {
+         *     // ... filter to delete one DefaultSupervisorPayAmount
+         *   }
+         * })
+         */
+        delete<T extends DefaultSupervisorPayAmountDeleteArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountDeleteArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one DefaultSupervisorPayAmount.
+         * @param {DefaultSupervisorPayAmountUpdateArgs} args - Arguments to update one DefaultSupervisorPayAmount.
+         * @example
+         * // Update one DefaultSupervisorPayAmount
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends DefaultSupervisorPayAmountUpdateArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountUpdateArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more DefaultSupervisorPayAmounts.
+         * @param {DefaultSupervisorPayAmountDeleteManyArgs} args - Arguments to filter DefaultSupervisorPayAmounts to delete.
+         * @example
+         * // Delete a few DefaultSupervisorPayAmounts
+         * const { count } = await prisma.defaultSupervisorPayAmount.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends DefaultSupervisorPayAmountDeleteManyArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more DefaultSupervisorPayAmounts.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DefaultSupervisorPayAmountUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many DefaultSupervisorPayAmounts
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends DefaultSupervisorPayAmountUpdateManyArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more DefaultSupervisorPayAmounts and returns the data updated in the database.
+         * @param {DefaultSupervisorPayAmountUpdateManyAndReturnArgs} args - Arguments to update many DefaultSupervisorPayAmounts.
+         * @example
+         * // Update many DefaultSupervisorPayAmounts
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more DefaultSupervisorPayAmounts and only return the `id`
+         * const defaultSupervisorPayAmountWithIdOnly = await prisma.defaultSupervisorPayAmount.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends DefaultSupervisorPayAmountUpdateManyAndReturnArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one DefaultSupervisorPayAmount.
+         * @param {DefaultSupervisorPayAmountUpsertArgs} args - Arguments to update or create a DefaultSupervisorPayAmount.
+         * @example
+         * // Update or create a DefaultSupervisorPayAmount
+         * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.upsert({
+         *   create: {
+         *     // ... data to create a DefaultSupervisorPayAmount
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the DefaultSupervisorPayAmount we want to update
+         *   }
+         * })
+         */
+        upsert<T extends DefaultSupervisorPayAmountUpsertArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountUpsertArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of DefaultSupervisorPayAmounts.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DefaultSupervisorPayAmountCountArgs} args - Arguments to filter DefaultSupervisorPayAmounts to count.
+         * @example
+         * // Count the number of DefaultSupervisorPayAmounts
+         * const count = await prisma.defaultSupervisorPayAmount.count({
+         *   where: {
+         *     // ... the filter for the DefaultSupervisorPayAmounts we want to count
+         *   }
+         * })
+         */
+        count<T extends DefaultSupervisorPayAmountCountArgs>(args?: Subset<T, DefaultSupervisorPayAmountCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], DefaultSupervisorPayAmountCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a DefaultSupervisorPayAmount.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DefaultSupervisorPayAmountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends DefaultSupervisorPayAmountAggregateArgs>(args: Subset<T, DefaultSupervisorPayAmountAggregateArgs>): Prisma.PrismaPromise<GetDefaultSupervisorPayAmountAggregateType<T>>;
+        /**
+         * Group by DefaultSupervisorPayAmount.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DefaultSupervisorPayAmountGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends DefaultSupervisorPayAmountGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DefaultSupervisorPayAmountGroupByArgs['orderBy'] }
+        : { orderBy?: DefaultSupervisorPayAmountGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, DefaultSupervisorPayAmountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDefaultSupervisorPayAmountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for DefaultSupervisorPayAmount.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__DefaultSupervisorPayAmountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the DefaultSupervisorPayAmount model
+     */
+    interface DefaultSupervisorPayAmountFieldRefs {
+        readonly id: FieldRef<"DefaultSupervisorPayAmount", 'String'>;
+        readonly code: FieldRef<"DefaultSupervisorPayAmount", 'String'>;
+        readonly active: FieldRef<"DefaultSupervisorPayAmount", 'Boolean'>;
+        readonly description: FieldRef<"DefaultSupervisorPayAmount", 'String'>;
+        readonly deletedAt: FieldRef<"DefaultSupervisorPayAmount", 'DateTime'>;
+        readonly createdAt: FieldRef<"DefaultSupervisorPayAmount", 'DateTime'>;
+        readonly updatedAt: FieldRef<"DefaultSupervisorPayAmount", 'DateTime'>;
+        readonly createdBy: FieldRef<"DefaultSupervisorPayAmount", 'String'>;
+        readonly amount: FieldRef<"DefaultSupervisorPayAmount", 'Decimal'>;
+    }
+
     export interface PaymentRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PaymentRecord'], meta: { name: 'PaymentRecord' } };
         /**
@@ -74027,7 +74447,6 @@ export namespace Prisma {
      */
     export interface Prisma__PaymentRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        expert<T extends ExpertProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfileDefaultArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         councilMember<T extends PaymentRecord$councilMemberArgs<ExtArgs> = {}>(args?: Subset<T, PaymentRecord$councilMemberArgs<ExtArgs>>): Prisma__CouncilMemberClient<$Result.GetResult<Prisma.$CouncilMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -74067,7 +74486,6 @@ export namespace Prisma {
         readonly status: FieldRef<"PaymentRecord", 'PaymentStatus'>;
         readonly paymentDate: FieldRef<"PaymentRecord", 'DateTime'>;
         readonly transactionCode: FieldRef<"PaymentRecord", 'String'>;
-        readonly expertId: FieldRef<"PaymentRecord", 'String'>;
         readonly councilMemberId: FieldRef<"PaymentRecord", 'String'>;
     }
 
@@ -74414,8 +74832,8 @@ export namespace Prisma {
      */
     export interface Prisma__SupervisorPaymentRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        thesisProject<T extends ThesisProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProjectDefaultArgs<ExtArgs>>): Prisma__ThesisProjectClient<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        expert<T extends ExpertProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfileDefaultArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        thesisProjects<T extends SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs> = {}>(args?: Subset<T, SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        coThesisProjects<T extends SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs> = {}>(args?: Subset<T, SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -74450,8 +74868,6 @@ export namespace Prisma {
         readonly createdAt: FieldRef<"SupervisorPaymentRecord", 'DateTime'>;
         readonly updatedAt: FieldRef<"SupervisorPaymentRecord", 'DateTime'>;
         readonly createdBy: FieldRef<"SupervisorPaymentRecord", 'String'>;
-        readonly thesisProjectId: FieldRef<"SupervisorPaymentRecord", 'String'>;
-        readonly expertId: FieldRef<"SupervisorPaymentRecord", 'String'>;
         readonly amount: FieldRef<"SupervisorPaymentRecord", 'Decimal'>;
         readonly status: FieldRef<"SupervisorPaymentRecord", 'PaymentStatus'>;
         readonly paymentDate: FieldRef<"SupervisorPaymentRecord", 'DateTime'>;
@@ -111290,7 +111706,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -122838,6 +123254,80 @@ export namespace Prisma {
                     }
                 }
             }
+            DefaultSupervisorPayAmount: {
+                payload: Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>
+                fields: Prisma.DefaultSupervisorPayAmountFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.DefaultSupervisorPayAmountFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.DefaultSupervisorPayAmountFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.DefaultSupervisorPayAmountFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.DefaultSupervisorPayAmountFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+                    }
+                    findMany: {
+                        args: Prisma.DefaultSupervisorPayAmountFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>[]
+                    }
+                    create: {
+                        args: Prisma.DefaultSupervisorPayAmountCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+                    }
+                    createMany: {
+                        args: Prisma.DefaultSupervisorPayAmountCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.DefaultSupervisorPayAmountCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.DefaultSupervisorPayAmountDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+                    }
+                    update: {
+                        args: Prisma.DefaultSupervisorPayAmountUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.DefaultSupervisorPayAmountDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.DefaultSupervisorPayAmountUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.DefaultSupervisorPayAmountUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.DefaultSupervisorPayAmountUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.DefaultSupervisorPayAmountAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateDefaultSupervisorPayAmount>
+                    }
+                    groupBy: {
+                        args: Prisma.DefaultSupervisorPayAmountGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<DefaultSupervisorPayAmountGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.DefaultSupervisorPayAmountCountArgs<ExtArgs>
+                        result: $Utils.Optional<DefaultSupervisorPayAmountCountAggregateOutputType> | number
+                    }
+                }
+            }
             PaymentRecord: {
                 payload: Prisma.$PaymentRecordPayload<ExtArgs>
                 fields: Prisma.PaymentRecordFieldRefs
@@ -130203,6 +130693,7 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordOmit
         librarySubmission?: LibrarySubmissionOmit
         defaultCouncilRolePayAmount?: DefaultCouncilRolePayAmountOmit
+        defaultSupervisorPayAmount?: DefaultSupervisorPayAmountOmit
         paymentRecord?: PaymentRecordOmit
         supervisorPaymentRecord?: SupervisorPaymentRecordOmit
         evaluationPeriod?: EvaluationPeriodOmit
@@ -134120,12 +134611,10 @@ export namespace Prisma {
     export type ThesisProjectCountOutputType = {
         decisions: number
         registrations: number
-        supervisorPayments: number
     };
     export type ThesisProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         decisions?: boolean | ThesisProjectCountOutputTypeCountDecisionsArgs
         registrations?: boolean | ThesisProjectCountOutputTypeCountRegistrationsArgs
-        supervisorPayments?: boolean | ThesisProjectCountOutputTypeCountSupervisorPaymentsArgs
     };
     /**
      * ThesisProjectCountOutputType without action
@@ -134147,12 +134636,6 @@ export namespace Prisma {
      */
     export type ThesisProjectCountOutputTypeCountRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StudentThesisRegistrationWhereInput
-    };
-    /**
-     * ThesisProjectCountOutputType without action
-     */
-    export type ThesisProjectCountOutputTypeCountSupervisorPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: SupervisorPaymentRecordWhereInput
     };
     /**
      * Count Type DefenseSessionCountOutputType
@@ -134187,8 +134670,6 @@ export namespace Prisma {
         coSupervisedTheses: number
         subjectClass: number
         councilMemberships: number
-        payments: number
-        supervisorPaymentRecord: number
     };
     export type ExpertProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         major?: boolean | ExpertProfileCountOutputTypeCountMajorArgs
@@ -134196,8 +134677,6 @@ export namespace Prisma {
         coSupervisedTheses?: boolean | ExpertProfileCountOutputTypeCountCoSupervisedThesesArgs
         subjectClass?: boolean | ExpertProfileCountOutputTypeCountSubjectClassArgs
         councilMemberships?: boolean | ExpertProfileCountOutputTypeCountCouncilMembershipsArgs
-        payments?: boolean | ExpertProfileCountOutputTypeCountPaymentsArgs
-        supervisorPaymentRecord?: boolean | ExpertProfileCountOutputTypeCountSupervisorPaymentRecordArgs
     };
     /**
      * ExpertProfileCountOutputType without action
@@ -134237,18 +134716,6 @@ export namespace Prisma {
      */
     export type ExpertProfileCountOutputTypeCountCouncilMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: CouncilMemberWhereInput
-    };
-    /**
-     * ExpertProfileCountOutputType without action
-     */
-    export type ExpertProfileCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: PaymentRecordWhereInput
-    };
-    /**
-     * ExpertProfileCountOutputType without action
-     */
-    export type ExpertProfileCountOutputTypeCountSupervisorPaymentRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: SupervisorPaymentRecordWhereInput
     };
     /**
      * Count Type DecisionCountOutputType
@@ -134353,6 +134820,38 @@ export namespace Prisma {
      */
     export type LibrarySubmissionCountOutputTypeCountDocumentFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: DocumentFileWhereInput
+    };
+    /**
+     * Count Type SupervisorPaymentRecordCountOutputType
+     */
+    export type SupervisorPaymentRecordCountOutputType = {
+        thesisProjects: number
+        coThesisProjects: number
+    };
+    export type SupervisorPaymentRecordCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        thesisProjects?: boolean | SupervisorPaymentRecordCountOutputTypeCountThesisProjectsArgs
+        coThesisProjects?: boolean | SupervisorPaymentRecordCountOutputTypeCountCoThesisProjectsArgs
+    };
+    /**
+     * SupervisorPaymentRecordCountOutputType without action
+     */
+    export type SupervisorPaymentRecordCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SupervisorPaymentRecordCountOutputType
+         */
+        select?: SupervisorPaymentRecordCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * SupervisorPaymentRecordCountOutputType without action
+     */
+    export type SupervisorPaymentRecordCountOutputTypeCountThesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisProjectWhereInput
+    };
+    /**
+     * SupervisorPaymentRecordCountOutputType without action
+     */
+    export type SupervisorPaymentRecordCountOutputTypeCountCoThesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisProjectWhereInput
     };
     /**
      * Count Type EvaluationPeriodCountOutputType
@@ -255168,7 +255667,9 @@ export namespace Prisma {
         subjectClassId: string | null
         thesisSessionId: string | null
         supervisorId: string | null
+        supervisorPaymentId: string | null
         coSupervisorId: string | null
+        coSupervisorPaymentId: string | null
         organizationId: string | null
         maxStudents: number | null
         councilId: string | null
@@ -255205,7 +255706,9 @@ export namespace Prisma {
         subjectClassId: string | null
         thesisSessionId: string | null
         supervisorId: string | null
+        supervisorPaymentId: string | null
         coSupervisorId: string | null
+        coSupervisorPaymentId: string | null
         organizationId: string | null
         maxStudents: number | null
         councilId: string | null
@@ -255242,7 +255745,9 @@ export namespace Prisma {
         subjectClassId: number
         thesisSessionId: number
         supervisorId: number
+        supervisorPaymentId: number
         coSupervisorId: number
+        coSupervisorPaymentId: number
         organizationId: number
         maxStudents: number
         councilId: number
@@ -255286,7 +255791,9 @@ export namespace Prisma {
         subjectClassId?: true
         thesisSessionId?: true
         supervisorId?: true
+        supervisorPaymentId?: true
         coSupervisorId?: true
+        coSupervisorPaymentId?: true
         organizationId?: true
         maxStudents?: true
         councilId?: true
@@ -255323,7 +255830,9 @@ export namespace Prisma {
         subjectClassId?: true
         thesisSessionId?: true
         supervisorId?: true
+        supervisorPaymentId?: true
         coSupervisorId?: true
+        coSupervisorPaymentId?: true
         organizationId?: true
         maxStudents?: true
         councilId?: true
@@ -255360,7 +255869,9 @@ export namespace Prisma {
         subjectClassId?: true
         thesisSessionId?: true
         supervisorId?: true
+        supervisorPaymentId?: true
         coSupervisorId?: true
+        coSupervisorPaymentId?: true
         organizationId?: true
         maxStudents?: true
         councilId?: true
@@ -255478,7 +255989,9 @@ export namespace Prisma {
         subjectClassId: string | null
         thesisSessionId: string | null
         supervisorId: string | null
+        supervisorPaymentId: string | null
         coSupervisorId: string | null
+        coSupervisorPaymentId: string | null
         organizationId: string | null
         maxStudents: number | null
         councilId: string | null
@@ -255532,7 +256045,9 @@ export namespace Prisma {
         subjectClassId?: boolean
         thesisSessionId?: boolean
         supervisorId?: boolean
+        supervisorPaymentId?: boolean
         coSupervisorId?: boolean
+        coSupervisorPaymentId?: boolean
         organizationId?: boolean
         maxStudents?: boolean
         councilId?: boolean
@@ -255546,7 +256061,9 @@ export namespace Prisma {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+        supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+        coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -255555,7 +256072,6 @@ export namespace Prisma {
         librarySubmission?: boolean | ThesisProject$librarySubmissionArgs<ExtArgs>
         decisions?: boolean | ThesisProject$decisionsArgs<ExtArgs>
         registrations?: boolean | ThesisProject$registrationsArgs<ExtArgs>
-        supervisorPayments?: boolean | ThesisProject$supervisorPaymentsArgs<ExtArgs>
         _count?: boolean | ThesisProjectCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -255583,7 +256099,9 @@ export namespace Prisma {
         subjectClassId?: boolean
         thesisSessionId?: boolean
         supervisorId?: boolean
+        supervisorPaymentId?: boolean
         coSupervisorId?: boolean
+        coSupervisorPaymentId?: boolean
         organizationId?: boolean
         maxStudents?: boolean
         councilId?: boolean
@@ -255597,7 +256115,9 @@ export namespace Prisma {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+        supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+        coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -255628,7 +256148,9 @@ export namespace Prisma {
         subjectClassId?: boolean
         thesisSessionId?: boolean
         supervisorId?: boolean
+        supervisorPaymentId?: boolean
         coSupervisorId?: boolean
+        coSupervisorPaymentId?: boolean
         organizationId?: boolean
         maxStudents?: boolean
         councilId?: boolean
@@ -255642,7 +256164,9 @@ export namespace Prisma {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+        supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+        coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -255673,7 +256197,9 @@ export namespace Prisma {
         subjectClassId?: boolean
         thesisSessionId?: boolean
         supervisorId?: boolean
+        supervisorPaymentId?: boolean
         coSupervisorId?: boolean
+        coSupervisorPaymentId?: boolean
         organizationId?: boolean
         maxStudents?: boolean
         councilId?: boolean
@@ -255685,12 +256211,14 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "coSupervisorId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "supervisorPaymentId" | "coSupervisorId" | "coSupervisorPaymentId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+        supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+        coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -255699,14 +256227,15 @@ export namespace Prisma {
         librarySubmission?: boolean | ThesisProject$librarySubmissionArgs<ExtArgs>
         decisions?: boolean | ThesisProject$decisionsArgs<ExtArgs>
         registrations?: boolean | ThesisProject$registrationsArgs<ExtArgs>
-        supervisorPayments?: boolean | ThesisProject$supervisorPaymentsArgs<ExtArgs>
         _count?: boolean | ThesisProjectCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ThesisProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+        supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+        coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -255716,7 +256245,9 @@ export namespace Prisma {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+        supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+        coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -255728,13 +256259,15 @@ export namespace Prisma {
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
             thesisSession: Prisma.$ThesisSessionPayload<ExtArgs> | null
             /**
-             * Chuyên gia hướng dẫn
+             * Chuyên gia hướng dẫn b 
              */
             supervisor: Prisma.$ExpertProfilePayload<ExtArgs> | null
+            supervisorPayment: Prisma.$SupervisorPaymentRecordPayload<ExtArgs> | null
             /**
-             * Chuyên gia hướng dẫn phụ
+             * Chuyên gia hướng dẫn bảo vệ phụ
              */
             coSupervisor: Prisma.$ExpertProfilePayload<ExtArgs> | null
+            coSupervisorPayment: Prisma.$SupervisorPaymentRecordPayload<ExtArgs> | null
             /**
              * Đơn vị quản lý
              */
@@ -255752,7 +256285,6 @@ export namespace Prisma {
             librarySubmission: Prisma.$LibrarySubmissionPayload<ExtArgs> | null
             decisions: Prisma.$DecisionPayload<ExtArgs>[]
             registrations: Prisma.$StudentThesisRegistrationPayload<ExtArgs>[]
-            supervisorPayments: Prisma.$SupervisorPaymentRecordPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -255779,7 +256311,9 @@ export namespace Prisma {
             subjectClassId: string | null
             thesisSessionId: string | null
             supervisorId: string | null
+            supervisorPaymentId: string | null
             coSupervisorId: string | null
+            coSupervisorPaymentId: string | null
             organizationId: string | null
             maxStudents: number | null
             councilId: string | null
@@ -256232,6 +256766,24 @@ export namespace Prisma {
         where?: ExpertProfileWhereInput
     };
     /**
+     * ThesisProject.supervisorPayment
+     */
+    export type ThesisProject$supervisorPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SupervisorPaymentRecord
+         */
+        select?: SupervisorPaymentRecordSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SupervisorPaymentRecord
+         */
+        omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SupervisorPaymentRecordInclude<ExtArgs> | null
+        where?: SupervisorPaymentRecordWhereInput
+    };
+    /**
      * ThesisProject.coSupervisor
      */
     export type ThesisProject$coSupervisorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -256248,6 +256800,24 @@ export namespace Prisma {
          */
         include?: ExpertProfileInclude<ExtArgs> | null
         where?: ExpertProfileWhereInput
+    };
+    /**
+     * ThesisProject.coSupervisorPayment
+     */
+    export type ThesisProject$coSupervisorPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SupervisorPaymentRecord
+         */
+        select?: SupervisorPaymentRecordSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SupervisorPaymentRecord
+         */
+        omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SupervisorPaymentRecordInclude<ExtArgs> | null
+        where?: SupervisorPaymentRecordWhereInput
     };
     /**
      * ThesisProject.organization
@@ -256402,29 +256972,6 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StudentThesisRegistrationScalarFieldEnum | StudentThesisRegistrationScalarFieldEnum[]
-    };
-    /**
-     * ThesisProject.supervisorPayments
-     */
-    export type ThesisProject$supervisorPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the SupervisorPaymentRecord
-         */
-        select?: SupervisorPaymentRecordSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the SupervisorPaymentRecord
-         */
-        omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: SupervisorPaymentRecordInclude<ExtArgs> | null
-        where?: SupervisorPaymentRecordWhereInput
-        orderBy?: SupervisorPaymentRecordOrderByWithRelationInput | SupervisorPaymentRecordOrderByWithRelationInput[]
-        cursor?: SupervisorPaymentRecordWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: SupervisorPaymentRecordScalarFieldEnum | SupervisorPaymentRecordScalarFieldEnum[]
     };
     /**
      * ThesisProject without action
@@ -257963,6 +258510,8 @@ export namespace Prisma {
         email: string | null
         bankAccountNumber: string | null
         bankName: string | null
+        projectExpert: boolean | null
+        thesisExpert: boolean | null
         eligiblePresident: boolean | null
         eligibleSecretary: boolean | null
     };
@@ -257987,6 +258536,8 @@ export namespace Prisma {
         email: string | null
         bankAccountNumber: string | null
         bankName: string | null
+        projectExpert: boolean | null
+        thesisExpert: boolean | null
         eligiblePresident: boolean | null
         eligibleSecretary: boolean | null
     };
@@ -258011,6 +258562,8 @@ export namespace Prisma {
         email: number
         bankAccountNumber: number
         bankName: number
+        projectExpert: number
+        thesisExpert: number
         eligiblePresident: number
         eligibleSecretary: number
         _all: number
@@ -258036,6 +258589,8 @@ export namespace Prisma {
         email?: true
         bankAccountNumber?: true
         bankName?: true
+        projectExpert?: true
+        thesisExpert?: true
         eligiblePresident?: true
         eligibleSecretary?: true
     };
@@ -258060,6 +258615,8 @@ export namespace Prisma {
         email?: true
         bankAccountNumber?: true
         bankName?: true
+        projectExpert?: true
+        thesisExpert?: true
         eligiblePresident?: true
         eligibleSecretary?: true
     };
@@ -258084,6 +258641,8 @@ export namespace Prisma {
         email?: true
         bankAccountNumber?: true
         bankName?: true
+        projectExpert?: true
+        thesisExpert?: true
         eligiblePresident?: true
         eligibleSecretary?: true
         _all?: true
@@ -258175,6 +258734,8 @@ export namespace Prisma {
         email: string | null
         bankAccountNumber: string | null
         bankName: string | null
+        projectExpert: boolean
+        thesisExpert: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         _count: ExpertProfileCountAggregateOutputType | null
@@ -258214,6 +258775,8 @@ export namespace Prisma {
         email?: boolean
         bankAccountNumber?: boolean
         bankName?: boolean
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -258222,8 +258785,6 @@ export namespace Prisma {
         coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
         subjectClass?: boolean | ExpertProfile$subjectClassArgs<ExtArgs>
         councilMemberships?: boolean | ExpertProfile$councilMembershipsArgs<ExtArgs>
-        payments?: boolean | ExpertProfile$paymentsArgs<ExtArgs>
-        supervisorPaymentRecord?: boolean | ExpertProfile$supervisorPaymentRecordArgs<ExtArgs>
         _count?: boolean | ExpertProfileCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -258247,6 +258808,8 @@ export namespace Prisma {
         email?: boolean
         bankAccountNumber?: boolean
         bankName?: boolean
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -258272,6 +258835,8 @@ export namespace Prisma {
         email?: boolean
         bankAccountNumber?: boolean
         bankName?: boolean
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -258297,10 +258862,12 @@ export namespace Prisma {
         email?: boolean
         bankAccountNumber?: boolean
         bankName?: boolean
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
     };
-    export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "name" | "academicRank" | "academicDegree" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>;
+    export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "name" | "academicRank" | "academicDegree" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "projectExpert" | "thesisExpert" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
         major?: boolean | ExpertProfile$majorArgs<ExtArgs>
@@ -258308,8 +258875,6 @@ export namespace Prisma {
         coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
         subjectClass?: boolean | ExpertProfile$subjectClassArgs<ExtArgs>
         councilMemberships?: boolean | ExpertProfile$councilMembershipsArgs<ExtArgs>
-        payments?: boolean | ExpertProfile$paymentsArgs<ExtArgs>
-        supervisorPaymentRecord?: boolean | ExpertProfile$supervisorPaymentRecordArgs<ExtArgs>
         _count?: boolean | ExpertProfileCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ExpertProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -258327,8 +258892,6 @@ export namespace Prisma {
             coSupervisedTheses: Prisma.$ThesisProjectPayload<ExtArgs>[]
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs>[]
             councilMemberships: Prisma.$CouncilMemberPayload<ExtArgs>[]
-            payments: Prisma.$PaymentRecordPayload<ExtArgs>[]
-            supervisorPaymentRecord: Prisma.$SupervisorPaymentRecordPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -258354,6 +258917,8 @@ export namespace Prisma {
             email: string | null
             bankAccountNumber: string | null
             bankName: string | null
+            projectExpert: boolean
+            thesisExpert: boolean
             eligiblePresident: boolean
             eligibleSecretary: boolean
         }, ExtArgs["result"]["expertProfile"]>
@@ -258872,52 +259437,6 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: CouncilMemberScalarFieldEnum | CouncilMemberScalarFieldEnum[]
-    };
-    /**
-     * ExpertProfile.payments
-     */
-    export type ExpertProfile$paymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the PaymentRecord
-         */
-        select?: PaymentRecordSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the PaymentRecord
-         */
-        omit?: PaymentRecordOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: PaymentRecordInclude<ExtArgs> | null
-        where?: PaymentRecordWhereInput
-        orderBy?: PaymentRecordOrderByWithRelationInput | PaymentRecordOrderByWithRelationInput[]
-        cursor?: PaymentRecordWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: PaymentRecordScalarFieldEnum | PaymentRecordScalarFieldEnum[]
-    };
-    /**
-     * ExpertProfile.supervisorPaymentRecord
-     */
-    export type ExpertProfile$supervisorPaymentRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the SupervisorPaymentRecord
-         */
-        select?: SupervisorPaymentRecordSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the SupervisorPaymentRecord
-         */
-        omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: SupervisorPaymentRecordInclude<ExtArgs> | null
-        where?: SupervisorPaymentRecordWhereInput
-        orderBy?: SupervisorPaymentRecordOrderByWithRelationInput | SupervisorPaymentRecordOrderByWithRelationInput[]
-        cursor?: SupervisorPaymentRecordWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: SupervisorPaymentRecordScalarFieldEnum | SupervisorPaymentRecordScalarFieldEnum[]
     };
     /**
      * ExpertProfile without action
@@ -263831,6 +264350,615 @@ export namespace Prisma {
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
     };
     /**
+     * Model DefaultSupervisorPayAmount
+     */
+    export type AggregateDefaultSupervisorPayAmount = {
+        _count: DefaultSupervisorPayAmountCountAggregateOutputType | null
+        _avg: DefaultSupervisorPayAmountAvgAggregateOutputType | null
+        _sum: DefaultSupervisorPayAmountSumAggregateOutputType | null
+        _min: DefaultSupervisorPayAmountMinAggregateOutputType | null
+        _max: DefaultSupervisorPayAmountMaxAggregateOutputType | null
+    };
+    export type DefaultSupervisorPayAmountAvgAggregateOutputType = {
+        amount: Decimal | null
+    };
+    export type DefaultSupervisorPayAmountSumAggregateOutputType = {
+        amount: Decimal | null
+    };
+    export type DefaultSupervisorPayAmountMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        amount: Decimal | null
+    };
+    export type DefaultSupervisorPayAmountMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        amount: Decimal | null
+    };
+    export type DefaultSupervisorPayAmountCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        amount: number
+        _all: number
+    };
+    export type DefaultSupervisorPayAmountAvgAggregateInputType = {
+        amount?: true
+    };
+    export type DefaultSupervisorPayAmountSumAggregateInputType = {
+        amount?: true
+    };
+    export type DefaultSupervisorPayAmountMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        amount?: true
+    };
+    export type DefaultSupervisorPayAmountMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        amount?: true
+    };
+    export type DefaultSupervisorPayAmountCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        amount?: true
+        _all?: true
+    };
+    export type DefaultSupervisorPayAmountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which DefaultSupervisorPayAmount to aggregate.
+         */
+        where?: DefaultSupervisorPayAmountWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of DefaultSupervisorPayAmounts to fetch.
+         */
+        orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` DefaultSupervisorPayAmounts from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` DefaultSupervisorPayAmounts.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned DefaultSupervisorPayAmounts
+        **/
+        _count?: true | DefaultSupervisorPayAmountCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: DefaultSupervisorPayAmountAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: DefaultSupervisorPayAmountSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: DefaultSupervisorPayAmountMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: DefaultSupervisorPayAmountMaxAggregateInputType
+    };
+    export type GetDefaultSupervisorPayAmountAggregateType<T extends DefaultSupervisorPayAmountAggregateArgs> = {
+        [P in keyof T & keyof AggregateDefaultSupervisorPayAmount]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDefaultSupervisorPayAmount[P]>
+        : GetScalarType<T[P], AggregateDefaultSupervisorPayAmount[P]>
+    };
+    export type DefaultSupervisorPayAmountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DefaultSupervisorPayAmountWhereInput
+        orderBy?: DefaultSupervisorPayAmountOrderByWithAggregationInput | DefaultSupervisorPayAmountOrderByWithAggregationInput[]
+        by: DefaultSupervisorPayAmountScalarFieldEnum[] | DefaultSupervisorPayAmountScalarFieldEnum
+        having?: DefaultSupervisorPayAmountScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: DefaultSupervisorPayAmountCountAggregateInputType | true
+        _avg?: DefaultSupervisorPayAmountAvgAggregateInputType
+        _sum?: DefaultSupervisorPayAmountSumAggregateInputType
+        _min?: DefaultSupervisorPayAmountMinAggregateInputType
+        _max?: DefaultSupervisorPayAmountMaxAggregateInputType
+    };
+    export type DefaultSupervisorPayAmountGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        amount: Decimal
+        _count: DefaultSupervisorPayAmountCountAggregateOutputType | null
+        _avg: DefaultSupervisorPayAmountAvgAggregateOutputType | null
+        _sum: DefaultSupervisorPayAmountSumAggregateOutputType | null
+        _min: DefaultSupervisorPayAmountMinAggregateOutputType | null
+        _max: DefaultSupervisorPayAmountMaxAggregateOutputType | null
+    };
+    type GetDefaultSupervisorPayAmountGroupByPayload<T extends DefaultSupervisorPayAmountGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<DefaultSupervisorPayAmountGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof DefaultSupervisorPayAmountGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], DefaultSupervisorPayAmountGroupByOutputType[P]>
+                : GetScalarType<T[P], DefaultSupervisorPayAmountGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type DefaultSupervisorPayAmountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        amount?: boolean
+    }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
+    export type DefaultSupervisorPayAmountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        amount?: boolean
+    }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
+    export type DefaultSupervisorPayAmountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        amount?: boolean
+    }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
+    export type DefaultSupervisorPayAmountSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        amount?: boolean
+    };
+    export type DefaultSupervisorPayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "amount", ExtArgs["result"]["defaultSupervisorPayAmount"]>;
+    export type $DefaultSupervisorPayAmountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "DefaultSupervisorPayAmount"
+        objects: {}
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            amount: Prisma.Decimal
+        }, ExtArgs["result"]["defaultSupervisorPayAmount"]>
+        composites: {}
+    };
+    type DefaultSupervisorPayAmountGetPayload<S extends boolean | null | undefined | DefaultSupervisorPayAmountDefaultArgs> = $Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload, S>;
+    type DefaultSupervisorPayAmountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<DefaultSupervisorPayAmountFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: DefaultSupervisorPayAmountCountAggregateInputType | true
+    };
+    /**
+     * DefaultSupervisorPayAmount findUnique
+     */
+    export type DefaultSupervisorPayAmountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Filter, which DefaultSupervisorPayAmount to fetch.
+         */
+        where: DefaultSupervisorPayAmountWhereUniqueInput
+    };
+    /**
+     * DefaultSupervisorPayAmount findUniqueOrThrow
+     */
+    export type DefaultSupervisorPayAmountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Filter, which DefaultSupervisorPayAmount to fetch.
+         */
+        where: DefaultSupervisorPayAmountWhereUniqueInput
+    };
+    /**
+     * DefaultSupervisorPayAmount findFirst
+     */
+    export type DefaultSupervisorPayAmountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Filter, which DefaultSupervisorPayAmount to fetch.
+         */
+        where?: DefaultSupervisorPayAmountWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of DefaultSupervisorPayAmounts to fetch.
+         */
+        orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for DefaultSupervisorPayAmounts.
+         */
+        cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` DefaultSupervisorPayAmounts from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` DefaultSupervisorPayAmounts.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of DefaultSupervisorPayAmounts.
+         */
+        distinct?: DefaultSupervisorPayAmountScalarFieldEnum | DefaultSupervisorPayAmountScalarFieldEnum[]
+    };
+    /**
+     * DefaultSupervisorPayAmount findFirstOrThrow
+     */
+    export type DefaultSupervisorPayAmountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Filter, which DefaultSupervisorPayAmount to fetch.
+         */
+        where?: DefaultSupervisorPayAmountWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of DefaultSupervisorPayAmounts to fetch.
+         */
+        orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for DefaultSupervisorPayAmounts.
+         */
+        cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` DefaultSupervisorPayAmounts from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` DefaultSupervisorPayAmounts.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of DefaultSupervisorPayAmounts.
+         */
+        distinct?: DefaultSupervisorPayAmountScalarFieldEnum | DefaultSupervisorPayAmountScalarFieldEnum[]
+    };
+    /**
+     * DefaultSupervisorPayAmount findMany
+     */
+    export type DefaultSupervisorPayAmountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Filter, which DefaultSupervisorPayAmounts to fetch.
+         */
+        where?: DefaultSupervisorPayAmountWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of DefaultSupervisorPayAmounts to fetch.
+         */
+        orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing DefaultSupervisorPayAmounts.
+         */
+        cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` DefaultSupervisorPayAmounts from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` DefaultSupervisorPayAmounts.
+         */
+        skip?: number
+        distinct?: DefaultSupervisorPayAmountScalarFieldEnum | DefaultSupervisorPayAmountScalarFieldEnum[]
+    };
+    /**
+     * DefaultSupervisorPayAmount create
+     */
+    export type DefaultSupervisorPayAmountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * The data needed to create a DefaultSupervisorPayAmount.
+         */
+        data: XOR<DefaultSupervisorPayAmountCreateInput, DefaultSupervisorPayAmountUncheckedCreateInput>
+    };
+    /**
+     * DefaultSupervisorPayAmount createMany
+     */
+    export type DefaultSupervisorPayAmountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many DefaultSupervisorPayAmounts.
+         */
+        data: DefaultSupervisorPayAmountCreateManyInput | DefaultSupervisorPayAmountCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * DefaultSupervisorPayAmount createManyAndReturn
+     */
+    export type DefaultSupervisorPayAmountCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * The data used to create many DefaultSupervisorPayAmounts.
+         */
+        data: DefaultSupervisorPayAmountCreateManyInput | DefaultSupervisorPayAmountCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * DefaultSupervisorPayAmount update
+     */
+    export type DefaultSupervisorPayAmountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * The data needed to update a DefaultSupervisorPayAmount.
+         */
+        data: XOR<DefaultSupervisorPayAmountUpdateInput, DefaultSupervisorPayAmountUncheckedUpdateInput>
+        /**
+         * Choose, which DefaultSupervisorPayAmount to update.
+         */
+        where: DefaultSupervisorPayAmountWhereUniqueInput
+    };
+    /**
+     * DefaultSupervisorPayAmount updateMany
+     */
+    export type DefaultSupervisorPayAmountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update DefaultSupervisorPayAmounts.
+         */
+        data: XOR<DefaultSupervisorPayAmountUpdateManyMutationInput, DefaultSupervisorPayAmountUncheckedUpdateManyInput>
+        /**
+         * Filter which DefaultSupervisorPayAmounts to update
+         */
+        where?: DefaultSupervisorPayAmountWhereInput
+        /**
+         * Limit how many DefaultSupervisorPayAmounts to update.
+         */
+        limit?: number
+    };
+    /**
+     * DefaultSupervisorPayAmount updateManyAndReturn
+     */
+    export type DefaultSupervisorPayAmountUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * The data used to update DefaultSupervisorPayAmounts.
+         */
+        data: XOR<DefaultSupervisorPayAmountUpdateManyMutationInput, DefaultSupervisorPayAmountUncheckedUpdateManyInput>
+        /**
+         * Filter which DefaultSupervisorPayAmounts to update
+         */
+        where?: DefaultSupervisorPayAmountWhereInput
+        /**
+         * Limit how many DefaultSupervisorPayAmounts to update.
+         */
+        limit?: number
+    };
+    /**
+     * DefaultSupervisorPayAmount upsert
+     */
+    export type DefaultSupervisorPayAmountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * The filter to search for the DefaultSupervisorPayAmount to update in case it exists.
+         */
+        where: DefaultSupervisorPayAmountWhereUniqueInput
+        /**
+         * In case the DefaultSupervisorPayAmount found by the `where` argument doesn't exist, create a new DefaultSupervisorPayAmount with this data.
+         */
+        create: XOR<DefaultSupervisorPayAmountCreateInput, DefaultSupervisorPayAmountUncheckedCreateInput>
+        /**
+         * In case the DefaultSupervisorPayAmount was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<DefaultSupervisorPayAmountUpdateInput, DefaultSupervisorPayAmountUncheckedUpdateInput>
+    };
+    /**
+     * DefaultSupervisorPayAmount delete
+     */
+    export type DefaultSupervisorPayAmountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Filter which DefaultSupervisorPayAmount to delete.
+         */
+        where: DefaultSupervisorPayAmountWhereUniqueInput
+    };
+    /**
+     * DefaultSupervisorPayAmount deleteMany
+     */
+    export type DefaultSupervisorPayAmountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which DefaultSupervisorPayAmounts to delete
+         */
+        where?: DefaultSupervisorPayAmountWhereInput
+        /**
+         * Limit how many DefaultSupervisorPayAmounts to delete.
+         */
+        limit?: number
+    };
+    /**
+     * DefaultSupervisorPayAmount without action
+     */
+    export type DefaultSupervisorPayAmountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    };
+    /**
      * Model PaymentRecord
      */
     export type AggregatePaymentRecord = {
@@ -263859,7 +264987,6 @@ export namespace Prisma {
         status: $Enums.PaymentStatus | null
         paymentDate: Date | null
         transactionCode: string | null
-        expertId: string | null
         councilMemberId: string | null
     };
     export type PaymentRecordMaxAggregateOutputType = {
@@ -263875,7 +265002,6 @@ export namespace Prisma {
         status: $Enums.PaymentStatus | null
         paymentDate: Date | null
         transactionCode: string | null
-        expertId: string | null
         councilMemberId: string | null
     };
     export type PaymentRecordCountAggregateOutputType = {
@@ -263891,7 +265017,6 @@ export namespace Prisma {
         status: number
         paymentDate: number
         transactionCode: number
-        expertId: number
         councilMemberId: number
         _all: number
     };
@@ -263914,7 +265039,6 @@ export namespace Prisma {
         status?: true
         paymentDate?: true
         transactionCode?: true
-        expertId?: true
         councilMemberId?: true
     };
     export type PaymentRecordMaxAggregateInputType = {
@@ -263930,7 +265054,6 @@ export namespace Prisma {
         status?: true
         paymentDate?: true
         transactionCode?: true
-        expertId?: true
         councilMemberId?: true
     };
     export type PaymentRecordCountAggregateInputType = {
@@ -263946,7 +265069,6 @@ export namespace Prisma {
         status?: true
         paymentDate?: true
         transactionCode?: true
-        expertId?: true
         councilMemberId?: true
         _all?: true
     };
@@ -264043,7 +265165,6 @@ export namespace Prisma {
         status: $Enums.PaymentStatus
         paymentDate: Date | null
         transactionCode: string | null
-        expertId: string
         councilMemberId: string | null
         _count: PaymentRecordCountAggregateOutputType | null
         _avg: PaymentRecordAvgAggregateOutputType | null
@@ -264076,9 +265197,7 @@ export namespace Prisma {
         status?: boolean
         paymentDate?: boolean
         transactionCode?: boolean
-        expertId?: boolean
         councilMemberId?: boolean
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
     }, ExtArgs["result"]["paymentRecord"]>;
     export type PaymentRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -264094,9 +265213,7 @@ export namespace Prisma {
         status?: boolean
         paymentDate?: boolean
         transactionCode?: boolean
-        expertId?: boolean
         councilMemberId?: boolean
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
     }, ExtArgs["result"]["paymentRecord"]>;
     export type PaymentRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -264112,9 +265229,7 @@ export namespace Prisma {
         status?: boolean
         paymentDate?: boolean
         transactionCode?: boolean
-        expertId?: boolean
         councilMemberId?: boolean
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
     }, ExtArgs["result"]["paymentRecord"]>;
     export type PaymentRecordSelectScalar = {
@@ -264130,26 +265245,21 @@ export namespace Prisma {
         status?: boolean
         paymentDate?: boolean
         transactionCode?: boolean
-        expertId?: boolean
         councilMemberId?: boolean
     };
-    export type PaymentRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "amount" | "status" | "paymentDate" | "transactionCode" | "expertId" | "councilMemberId", ExtArgs["result"]["paymentRecord"]>;
+    export type PaymentRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "amount" | "status" | "paymentDate" | "transactionCode" | "councilMemberId", ExtArgs["result"]["paymentRecord"]>;
     export type PaymentRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
     };
     export type PaymentRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
     };
     export type PaymentRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
     };
     export type $PaymentRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "PaymentRecord"
         objects: {
-            expert: Prisma.$ExpertProfilePayload<ExtArgs>
             councilMember: Prisma.$CouncilMemberPayload<ExtArgs> | null
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -264165,7 +265275,6 @@ export namespace Prisma {
             status: $Enums.PaymentStatus
             paymentDate: Date | null
             transactionCode: string | null
-            expertId: string
             councilMemberId: string | null
         }, ExtArgs["result"]["paymentRecord"]>
         composites: {}
@@ -264611,8 +265720,6 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
-        thesisProjectId: string | null
-        expertId: string | null
         amount: Decimal | null
         status: $Enums.PaymentStatus | null
         paymentDate: Date | null
@@ -264627,8 +265734,6 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
-        thesisProjectId: string | null
-        expertId: string | null
         amount: Decimal | null
         status: $Enums.PaymentStatus | null
         paymentDate: Date | null
@@ -264643,8 +265748,6 @@ export namespace Prisma {
         createdAt: number
         updatedAt: number
         createdBy: number
-        thesisProjectId: number
-        expertId: number
         amount: number
         status: number
         paymentDate: number
@@ -264666,8 +265769,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
-        thesisProjectId?: true
-        expertId?: true
         amount?: true
         status?: true
         paymentDate?: true
@@ -264682,8 +265783,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
-        thesisProjectId?: true
-        expertId?: true
         amount?: true
         status?: true
         paymentDate?: true
@@ -264698,8 +265797,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
-        thesisProjectId?: true
-        expertId?: true
         amount?: true
         status?: true
         paymentDate?: true
@@ -264795,8 +265892,6 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         createdBy: string | null
-        thesisProjectId: string
-        expertId: string
         amount: Decimal
         status: $Enums.PaymentStatus
         paymentDate: Date | null
@@ -264828,14 +265923,13 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
-        thesisProjectId?: boolean
-        expertId?: boolean
         amount?: boolean
         status?: boolean
         paymentDate?: boolean
         transactionCode?: boolean
-        thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+        thesisProjects?: boolean | SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>
+        coThesisProjects?: boolean | SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>
+        _count?: boolean | SupervisorPaymentRecordCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["supervisorPaymentRecord"]>;
     export type SupervisorPaymentRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -264846,14 +265940,10 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
-        thesisProjectId?: boolean
-        expertId?: boolean
         amount?: boolean
         status?: boolean
         paymentDate?: boolean
         transactionCode?: boolean
-        thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["supervisorPaymentRecord"]>;
     export type SupervisorPaymentRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -264864,14 +265954,10 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
-        thesisProjectId?: boolean
-        expertId?: boolean
         amount?: boolean
         status?: boolean
         paymentDate?: boolean
         transactionCode?: boolean
-        thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["supervisorPaymentRecord"]>;
     export type SupervisorPaymentRecordSelectScalar = {
         id?: boolean
@@ -264882,31 +265968,24 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
-        thesisProjectId?: boolean
-        expertId?: boolean
         amount?: boolean
         status?: boolean
         paymentDate?: boolean
         transactionCode?: boolean
     };
-    export type SupervisorPaymentRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "thesisProjectId" | "expertId" | "amount" | "status" | "paymentDate" | "transactionCode", ExtArgs["result"]["supervisorPaymentRecord"]>;
+    export type SupervisorPaymentRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "amount" | "status" | "paymentDate" | "transactionCode", ExtArgs["result"]["supervisorPaymentRecord"]>;
     export type SupervisorPaymentRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+        thesisProjects?: boolean | SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>
+        coThesisProjects?: boolean | SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>
+        _count?: boolean | SupervisorPaymentRecordCountOutputTypeDefaultArgs<ExtArgs>
     };
-    export type SupervisorPaymentRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
-    };
-    export type SupervisorPaymentRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-        expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
-    };
+    export type SupervisorPaymentRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type SupervisorPaymentRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
     export type $SupervisorPaymentRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "SupervisorPaymentRecord"
         objects: {
-            thesisProject: Prisma.$ThesisProjectPayload<ExtArgs>
-            expert: Prisma.$ExpertProfilePayload<ExtArgs>
+            thesisProjects: Prisma.$ThesisProjectPayload<ExtArgs>[]
+            coThesisProjects: Prisma.$ThesisProjectPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -264917,8 +265996,6 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             createdBy: string | null
-            thesisProjectId: string
-            expertId: string
             amount: Prisma.Decimal
             status: $Enums.PaymentStatus
             paymentDate: Date | null
@@ -265168,10 +266245,6 @@ export namespace Prisma {
          */
         data: SupervisorPaymentRecordCreateManyInput | SupervisorPaymentRecordCreateManyInput[]
         skipDuplicates?: boolean
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: SupervisorPaymentRecordIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * SupervisorPaymentRecord update
@@ -265239,10 +266312,6 @@ export namespace Prisma {
          * Limit how many SupervisorPaymentRecords to update.
          */
         limit?: number
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: SupervisorPaymentRecordIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * SupervisorPaymentRecord upsert
@@ -265306,6 +266375,52 @@ export namespace Prisma {
          * Limit how many SupervisorPaymentRecords to delete.
          */
         limit?: number
+    };
+    /**
+     * SupervisorPaymentRecord.thesisProjects
+     */
+    export type SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisProject
+         */
+        select?: ThesisProjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisProject
+         */
+        omit?: ThesisProjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisProjectInclude<ExtArgs> | null
+        where?: ThesisProjectWhereInput
+        orderBy?: ThesisProjectOrderByWithRelationInput | ThesisProjectOrderByWithRelationInput[]
+        cursor?: ThesisProjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
+    };
+    /**
+     * SupervisorPaymentRecord.coThesisProjects
+     */
+    export type SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisProject
+         */
+        select?: ThesisProjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisProject
+         */
+        omit?: ThesisProjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisProjectInclude<ExtArgs> | null
+        where?: ThesisProjectWhereInput
+        orderBy?: ThesisProjectOrderByWithRelationInput | ThesisProjectOrderByWithRelationInput[]
+        cursor?: ThesisProjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
     };
     /**
      * SupervisorPaymentRecord without action
@@ -334236,6 +335351,7 @@ export namespace Prisma {
     export type DefenseRecordScalarFieldEnum = (typeof DefenseRecordScalarFieldEnum)[keyof typeof DefenseRecordScalarFieldEnum];
     export type LibrarySubmissionScalarFieldEnum = (typeof LibrarySubmissionScalarFieldEnum)[keyof typeof LibrarySubmissionScalarFieldEnum];
     export type DefaultCouncilRolePayAmountScalarFieldEnum = (typeof DefaultCouncilRolePayAmountScalarFieldEnum)[keyof typeof DefaultCouncilRolePayAmountScalarFieldEnum];
+    export type DefaultSupervisorPayAmountScalarFieldEnum = (typeof DefaultSupervisorPayAmountScalarFieldEnum)[keyof typeof DefaultSupervisorPayAmountScalarFieldEnum];
     export type PaymentRecordScalarFieldEnum = (typeof PaymentRecordScalarFieldEnum)[keyof typeof PaymentRecordScalarFieldEnum];
     export type SupervisorPaymentRecordScalarFieldEnum = (typeof SupervisorPaymentRecordScalarFieldEnum)[keyof typeof SupervisorPaymentRecordScalarFieldEnum];
     export type EvaluationPeriodScalarFieldEnum = (typeof EvaluationPeriodScalarFieldEnum)[keyof typeof EvaluationPeriodScalarFieldEnum];
@@ -334494,6 +335610,7 @@ export namespace Prisma {
     export type DefenseRecordOrderByRelevanceFieldEnum = (typeof DefenseRecordOrderByRelevanceFieldEnum)[keyof typeof DefenseRecordOrderByRelevanceFieldEnum];
     export type LibrarySubmissionOrderByRelevanceFieldEnum = (typeof LibrarySubmissionOrderByRelevanceFieldEnum)[keyof typeof LibrarySubmissionOrderByRelevanceFieldEnum];
     export type DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum = (typeof DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum)[keyof typeof DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum];
+    export type DefaultSupervisorPayAmountOrderByRelevanceFieldEnum = (typeof DefaultSupervisorPayAmountOrderByRelevanceFieldEnum)[keyof typeof DefaultSupervisorPayAmountOrderByRelevanceFieldEnum];
     export type PaymentRecordOrderByRelevanceFieldEnum = (typeof PaymentRecordOrderByRelevanceFieldEnum)[keyof typeof PaymentRecordOrderByRelevanceFieldEnum];
     export type SupervisorPaymentRecordOrderByRelevanceFieldEnum = (typeof SupervisorPaymentRecordOrderByRelevanceFieldEnum)[keyof typeof SupervisorPaymentRecordOrderByRelevanceFieldEnum];
     export type EvaluationPeriodOrderByRelevanceFieldEnum = (typeof EvaluationPeriodOrderByRelevanceFieldEnum)[keyof typeof EvaluationPeriodOrderByRelevanceFieldEnum];
@@ -351911,7 +353028,9 @@ export namespace Prisma {
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+        supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+        coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
         maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
         councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -351925,7 +353044,9 @@ export namespace Prisma {
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         thesisSession?: XOR<ThesisSessionNullableScalarRelationFilter, ThesisSessionWhereInput> | null
         supervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+        supervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
         coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+        coSupervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
         organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         council?: XOR<CouncilNullableScalarRelationFilter, CouncilWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
@@ -351934,7 +353055,6 @@ export namespace Prisma {
         librarySubmission?: XOR<LibrarySubmissionNullableScalarRelationFilter, LibrarySubmissionWhereInput> | null
         decisions?: DecisionListRelationFilter
         registrations?: StudentThesisRegistrationListRelationFilter
-        supervisorPayments?: SupervisorPaymentRecordListRelationFilter
     };
     export type ThesisProjectOrderByWithRelationInput = {
         id?: SortOrder
@@ -351961,7 +353081,9 @@ export namespace Prisma {
         subjectClassId?: SortOrderInput | SortOrder
         thesisSessionId?: SortOrderInput | SortOrder
         supervisorId?: SortOrderInput | SortOrder
+        supervisorPaymentId?: SortOrderInput | SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
+        coSupervisorPaymentId?: SortOrderInput | SortOrder
         organizationId?: SortOrderInput | SortOrder
         maxStudents?: SortOrderInput | SortOrder
         councilId?: SortOrderInput | SortOrder
@@ -351975,7 +353097,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassOrderByWithRelationInput
         thesisSession?: ThesisSessionOrderByWithRelationInput
         supervisor?: ExpertProfileOrderByWithRelationInput
+        supervisorPayment?: SupervisorPaymentRecordOrderByWithRelationInput
         coSupervisor?: ExpertProfileOrderByWithRelationInput
+        coSupervisorPayment?: SupervisorPaymentRecordOrderByWithRelationInput
         organization?: DM_DonViOrderByWithRelationInput
         council?: CouncilOrderByWithRelationInput
         room?: RoomOrderByWithRelationInput
@@ -351984,7 +353108,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionOrderByWithRelationInput
         decisions?: DecisionOrderByRelationAggregateInput
         registrations?: StudentThesisRegistrationOrderByRelationAggregateInput
-        supervisorPayments?: SupervisorPaymentRecordOrderByRelationAggregateInput
         _relevance?: ThesisProjectOrderByRelevanceInput
     };
     export type ThesisProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -352015,7 +353138,9 @@ export namespace Prisma {
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+        supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+        coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
         maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
         councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -352029,7 +353154,9 @@ export namespace Prisma {
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         thesisSession?: XOR<ThesisSessionNullableScalarRelationFilter, ThesisSessionWhereInput> | null
         supervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+        supervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
         coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+        coSupervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
         organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         council?: XOR<CouncilNullableScalarRelationFilter, CouncilWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
@@ -352038,7 +353165,6 @@ export namespace Prisma {
         librarySubmission?: XOR<LibrarySubmissionNullableScalarRelationFilter, LibrarySubmissionWhereInput> | null
         decisions?: DecisionListRelationFilter
         registrations?: StudentThesisRegistrationListRelationFilter
-        supervisorPayments?: SupervisorPaymentRecordListRelationFilter
     }, "id" | "code">;
     export type ThesisProjectOrderByWithAggregationInput = {
         id?: SortOrder
@@ -352065,7 +353191,9 @@ export namespace Prisma {
         subjectClassId?: SortOrderInput | SortOrder
         thesisSessionId?: SortOrderInput | SortOrder
         supervisorId?: SortOrderInput | SortOrder
+        supervisorPaymentId?: SortOrderInput | SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
+        coSupervisorPaymentId?: SortOrderInput | SortOrder
         organizationId?: SortOrderInput | SortOrder
         maxStudents?: SortOrderInput | SortOrder
         councilId?: SortOrderInput | SortOrder
@@ -352110,7 +353238,9 @@ export namespace Prisma {
         subjectClassId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         supervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        supervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        coSupervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         organizationId?: UuidNullableWithAggregatesFilter<"ThesisProject"> | string | null
         maxStudents?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
         councilId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -352351,6 +353481,8 @@ export namespace Prisma {
         email?: StringNullableFilter<"ExpertProfile"> | string | null
         bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
         bankName?: StringNullableFilter<"ExpertProfile"> | string | null
+        projectExpert?: BoolFilter<"ExpertProfile"> | boolean
+        thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -352359,8 +353491,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectListRelationFilter
         subjectClass?: SubjectClassListRelationFilter
         councilMemberships?: CouncilMemberListRelationFilter
-        payments?: PaymentRecordListRelationFilter
-        supervisorPaymentRecord?: SupervisorPaymentRecordListRelationFilter
     };
     export type ExpertProfileOrderByWithRelationInput = {
         id?: SortOrder
@@ -352383,6 +353513,8 @@ export namespace Prisma {
         email?: SortOrderInput | SortOrder
         bankAccountNumber?: SortOrderInput | SortOrder
         bankName?: SortOrderInput | SortOrder
+        projectExpert?: SortOrder
+        thesisExpert?: SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
         lecturer?: LecturerOrderByWithRelationInput
@@ -352391,8 +353523,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectOrderByRelationAggregateInput
         subjectClass?: SubjectClassOrderByRelationAggregateInput
         councilMemberships?: CouncilMemberOrderByRelationAggregateInput
-        payments?: PaymentRecordOrderByRelationAggregateInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordOrderByRelationAggregateInput
         _relevance?: ExpertProfileOrderByRelevanceInput
     };
     export type ExpertProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -352419,6 +353549,8 @@ export namespace Prisma {
         email?: StringNullableFilter<"ExpertProfile"> | string | null
         bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
         bankName?: StringNullableFilter<"ExpertProfile"> | string | null
+        projectExpert?: BoolFilter<"ExpertProfile"> | boolean
+        thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -352427,8 +353559,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectListRelationFilter
         subjectClass?: SubjectClassListRelationFilter
         councilMemberships?: CouncilMemberListRelationFilter
-        payments?: PaymentRecordListRelationFilter
-        supervisorPaymentRecord?: SupervisorPaymentRecordListRelationFilter
     }, "id" | "code" | "lecturerId">;
     export type ExpertProfileOrderByWithAggregationInput = {
         id?: SortOrder
@@ -352451,6 +353581,8 @@ export namespace Prisma {
         email?: SortOrderInput | SortOrder
         bankAccountNumber?: SortOrderInput | SortOrder
         bankName?: SortOrderInput | SortOrder
+        projectExpert?: SortOrder
+        thesisExpert?: SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
         _count?: ExpertProfileCountOrderByAggregateInput
@@ -352481,6 +353613,8 @@ export namespace Prisma {
         email?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         bankAccountNumber?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         bankName?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
+        projectExpert?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
+        thesisExpert?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
         eligiblePresident?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
     };
@@ -353092,6 +354226,76 @@ export namespace Prisma {
         role?: EnumCouncilRoleWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
         amount?: DecimalWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
     };
+    export type DefaultSupervisorPayAmountWhereInput = {
+        AND?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
+        OR?: DefaultSupervisorPayAmountWhereInput[]
+        NOT?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
+        id?: StringFilter<"DefaultSupervisorPayAmount"> | string
+        code?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        active?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+        description?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        deletedAt?: DateTimeNullableFilter<"DefaultSupervisorPayAmount"> | Date | string | null
+        createdAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+        updatedAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+        createdBy?: UuidNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+    };
+    export type DefaultSupervisorPayAmountOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        amount?: SortOrder
+        _relevance?: DefaultSupervisorPayAmountOrderByRelevanceInput
+    };
+    export type DefaultSupervisorPayAmountWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
+        OR?: DefaultSupervisorPayAmountWhereInput[]
+        NOT?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
+        active?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+        description?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        deletedAt?: DateTimeNullableFilter<"DefaultSupervisorPayAmount"> | Date | string | null
+        createdAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+        updatedAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+        createdBy?: UuidNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+    }, "id" | "code">;
+    export type DefaultSupervisorPayAmountOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        amount?: SortOrder
+        _count?: DefaultSupervisorPayAmountCountOrderByAggregateInput
+        _avg?: DefaultSupervisorPayAmountAvgOrderByAggregateInput
+        _max?: DefaultSupervisorPayAmountMaxOrderByAggregateInput
+        _min?: DefaultSupervisorPayAmountMinOrderByAggregateInput
+        _sum?: DefaultSupervisorPayAmountSumOrderByAggregateInput
+    };
+    export type DefaultSupervisorPayAmountScalarWhereWithAggregatesInput = {
+        AND?: DefaultSupervisorPayAmountScalarWhereWithAggregatesInput | DefaultSupervisorPayAmountScalarWhereWithAggregatesInput[]
+        OR?: DefaultSupervisorPayAmountScalarWhereWithAggregatesInput[]
+        NOT?: DefaultSupervisorPayAmountScalarWhereWithAggregatesInput | DefaultSupervisorPayAmountScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string
+        code?: StringNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string | null
+        active?: BoolWithAggregatesFilter<"DefaultSupervisorPayAmount"> | boolean
+        description?: StringNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string | null
+        amount?: DecimalWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+    };
     export type PaymentRecordWhereInput = {
         AND?: PaymentRecordWhereInput | PaymentRecordWhereInput[]
         OR?: PaymentRecordWhereInput[]
@@ -353108,9 +354312,7 @@ export namespace Prisma {
         status?: EnumPaymentStatusFilter<"PaymentRecord"> | $Enums.PaymentStatus
         paymentDate?: DateTimeNullableFilter<"PaymentRecord"> | Date | string | null
         transactionCode?: StringNullableFilter<"PaymentRecord"> | string | null
-        expertId?: StringFilter<"PaymentRecord"> | string
         councilMemberId?: StringNullableFilter<"PaymentRecord"> | string | null
-        expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
         councilMember?: XOR<CouncilMemberNullableScalarRelationFilter, CouncilMemberWhereInput> | null
     };
     export type PaymentRecordOrderByWithRelationInput = {
@@ -353126,9 +354328,7 @@ export namespace Prisma {
         status?: SortOrder
         paymentDate?: SortOrderInput | SortOrder
         transactionCode?: SortOrderInput | SortOrder
-        expertId?: SortOrder
         councilMemberId?: SortOrderInput | SortOrder
-        expert?: ExpertProfileOrderByWithRelationInput
         councilMember?: CouncilMemberOrderByWithRelationInput
         _relevance?: PaymentRecordOrderByRelevanceInput
     };
@@ -353149,8 +354349,6 @@ export namespace Prisma {
         status?: EnumPaymentStatusFilter<"PaymentRecord"> | $Enums.PaymentStatus
         paymentDate?: DateTimeNullableFilter<"PaymentRecord"> | Date | string | null
         transactionCode?: StringNullableFilter<"PaymentRecord"> | string | null
-        expertId?: StringFilter<"PaymentRecord"> | string
-        expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
         councilMember?: XOR<CouncilMemberNullableScalarRelationFilter, CouncilMemberWhereInput> | null
     }, "id" | "code" | "councilMemberId">;
     export type PaymentRecordOrderByWithAggregationInput = {
@@ -353166,7 +354364,6 @@ export namespace Prisma {
         status?: SortOrder
         paymentDate?: SortOrderInput | SortOrder
         transactionCode?: SortOrderInput | SortOrder
-        expertId?: SortOrder
         councilMemberId?: SortOrderInput | SortOrder
         _count?: PaymentRecordCountOrderByAggregateInput
         _avg?: PaymentRecordAvgOrderByAggregateInput
@@ -353190,7 +354387,6 @@ export namespace Prisma {
         status?: EnumPaymentStatusWithAggregatesFilter<"PaymentRecord"> | $Enums.PaymentStatus
         paymentDate?: DateTimeNullableWithAggregatesFilter<"PaymentRecord"> | Date | string | null
         transactionCode?: StringNullableWithAggregatesFilter<"PaymentRecord"> | string | null
-        expertId?: StringWithAggregatesFilter<"PaymentRecord"> | string
         councilMemberId?: StringNullableWithAggregatesFilter<"PaymentRecord"> | string | null
     };
     export type SupervisorPaymentRecordWhereInput = {
@@ -353205,14 +354401,12 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
         updatedAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
         createdBy?: UuidNullableFilter<"SupervisorPaymentRecord"> | string | null
-        thesisProjectId?: StringFilter<"SupervisorPaymentRecord"> | string
-        expertId?: StringFilter<"SupervisorPaymentRecord"> | string
         amount?: DecimalFilter<"SupervisorPaymentRecord"> | Decimal | DecimalJsLike | number | string
         status?: EnumPaymentStatusFilter<"SupervisorPaymentRecord"> | $Enums.PaymentStatus
         paymentDate?: DateTimeNullableFilter<"SupervisorPaymentRecord"> | Date | string | null
         transactionCode?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-        thesisProject?: XOR<ThesisProjectScalarRelationFilter, ThesisProjectWhereInput>
-        expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
+        thesisProjects?: ThesisProjectListRelationFilter
+        coThesisProjects?: ThesisProjectListRelationFilter
     };
     export type SupervisorPaymentRecordOrderByWithRelationInput = {
         id?: SortOrder
@@ -353223,14 +354417,12 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
-        thesisProjectId?: SortOrder
-        expertId?: SortOrder
         amount?: SortOrder
         status?: SortOrder
         paymentDate?: SortOrderInput | SortOrder
         transactionCode?: SortOrderInput | SortOrder
-        thesisProject?: ThesisProjectOrderByWithRelationInput
-        expert?: ExpertProfileOrderByWithRelationInput
+        thesisProjects?: ThesisProjectOrderByRelationAggregateInput
+        coThesisProjects?: ThesisProjectOrderByRelationAggregateInput
         _relevance?: SupervisorPaymentRecordOrderByRelevanceInput
     };
     export type SupervisorPaymentRecordWhereUniqueInput = Prisma.AtLeast<{
@@ -353245,14 +354437,12 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
         updatedAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
         createdBy?: UuidNullableFilter<"SupervisorPaymentRecord"> | string | null
-        thesisProjectId?: StringFilter<"SupervisorPaymentRecord"> | string
-        expertId?: StringFilter<"SupervisorPaymentRecord"> | string
         amount?: DecimalFilter<"SupervisorPaymentRecord"> | Decimal | DecimalJsLike | number | string
         status?: EnumPaymentStatusFilter<"SupervisorPaymentRecord"> | $Enums.PaymentStatus
         paymentDate?: DateTimeNullableFilter<"SupervisorPaymentRecord"> | Date | string | null
         transactionCode?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-        thesisProject?: XOR<ThesisProjectScalarRelationFilter, ThesisProjectWhereInput>
-        expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
+        thesisProjects?: ThesisProjectListRelationFilter
+        coThesisProjects?: ThesisProjectListRelationFilter
     }, "id" | "code">;
     export type SupervisorPaymentRecordOrderByWithAggregationInput = {
         id?: SortOrder
@@ -353263,8 +354453,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
-        thesisProjectId?: SortOrder
-        expertId?: SortOrder
         amount?: SortOrder
         status?: SortOrder
         paymentDate?: SortOrderInput | SortOrder
@@ -353287,8 +354475,6 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"SupervisorPaymentRecord"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"SupervisorPaymentRecord"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"SupervisorPaymentRecord"> | string | null
-        thesisProjectId?: StringWithAggregatesFilter<"SupervisorPaymentRecord"> | string
-        expertId?: StringWithAggregatesFilter<"SupervisorPaymentRecord"> | string
         amount?: DecimalWithAggregatesFilter<"SupervisorPaymentRecord"> | Decimal | DecimalJsLike | number | string
         status?: EnumPaymentStatusWithAggregatesFilter<"SupervisorPaymentRecord"> | $Enums.PaymentStatus
         paymentDate?: DateTimeNullableWithAggregatesFilter<"SupervisorPaymentRecord"> | Date | string | null
@@ -381030,7 +382216,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -381039,7 +382227,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateInput = {
         id?: string
@@ -381066,7 +382253,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -381081,7 +382270,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -381114,7 +382302,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -381123,7 +382313,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -381150,7 +382339,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -381165,7 +382356,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectCreateManyInput = {
         id?: string
@@ -381192,7 +382382,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -381258,7 +382450,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -381518,6 +382712,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -381526,8 +382722,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUncheckedCreateInput = {
         id?: string
@@ -381550,6 +382744,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -381557,8 +382753,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -381580,6 +382774,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -381588,8 +382784,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -381612,6 +382806,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -381619,8 +382815,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileCreateManyInput = {
         id?: string
@@ -381643,6 +382837,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
     };
@@ -381666,6 +382862,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -381690,6 +382888,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -382372,6 +383572,83 @@ export namespace Prisma {
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     };
+    export type DefaultSupervisorPayAmountCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+    };
+    export type DefaultSupervisorPayAmountUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+    };
+    export type DefaultSupervisorPayAmountUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    };
+    export type DefaultSupervisorPayAmountUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    };
+    export type DefaultSupervisorPayAmountCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+    };
+    export type DefaultSupervisorPayAmountUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    };
+    export type DefaultSupervisorPayAmountUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    };
     export type PaymentRecordCreateInput = {
         id?: string
         code?: string | null
@@ -382385,7 +383662,6 @@ export namespace Prisma {
         status?: $Enums.PaymentStatus
         paymentDate?: Date | string | null
         transactionCode?: string | null
-        expert: ExpertProfileCreateNestedOneWithoutPaymentsInput
         councilMember?: CouncilMemberCreateNestedOneWithoutPaymentInput
     };
     export type PaymentRecordUncheckedCreateInput = {
@@ -382401,7 +383677,6 @@ export namespace Prisma {
         status?: $Enums.PaymentStatus
         paymentDate?: Date | string | null
         transactionCode?: string | null
-        expertId: string
         councilMemberId?: string | null
     };
     export type PaymentRecordUpdateInput = {
@@ -382417,7 +383692,6 @@ export namespace Prisma {
         status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        expert?: ExpertProfileUpdateOneRequiredWithoutPaymentsNestedInput
         councilMember?: CouncilMemberUpdateOneWithoutPaymentNestedInput
     };
     export type PaymentRecordUncheckedUpdateInput = {
@@ -382433,7 +383707,6 @@ export namespace Prisma {
         status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        expertId?: StringFieldUpdateOperationsInput | string
         councilMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type PaymentRecordCreateManyInput = {
@@ -382449,7 +383722,6 @@ export namespace Prisma {
         status?: $Enums.PaymentStatus
         paymentDate?: Date | string | null
         transactionCode?: string | null
-        expertId: string
         councilMemberId?: string | null
     };
     export type PaymentRecordUpdateManyMutationInput = {
@@ -382479,7 +383751,6 @@ export namespace Prisma {
         status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        expertId?: StringFieldUpdateOperationsInput | string
         councilMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SupervisorPaymentRecordCreateInput = {
@@ -382495,8 +383766,8 @@ export namespace Prisma {
         status?: $Enums.PaymentStatus
         paymentDate?: Date | string | null
         transactionCode?: string | null
-        thesisProject: ThesisProjectCreateNestedOneWithoutSupervisorPaymentsInput
-        expert: ExpertProfileCreateNestedOneWithoutSupervisorPaymentRecordInput
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput
+        coThesisProjects?: ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput
     };
     export type SupervisorPaymentRecordUncheckedCreateInput = {
         id?: string
@@ -382507,12 +383778,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        thesisProjectId: string
-        expertId: string
         amount: Decimal | DecimalJsLike | number | string
         status?: $Enums.PaymentStatus
         paymentDate?: Date | string | null
         transactionCode?: string | null
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput
+        coThesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput
     };
     export type SupervisorPaymentRecordUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -382527,8 +383798,8 @@ export namespace Prisma {
         status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisProject?: ThesisProjectUpdateOneRequiredWithoutSupervisorPaymentsNestedInput
-        expert?: ExpertProfileUpdateOneRequiredWithoutSupervisorPaymentRecordNestedInput
+        thesisProjects?: ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput
+        coThesisProjects?: ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput
     };
     export type SupervisorPaymentRecordUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -382539,12 +383810,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisProjectId?: StringFieldUpdateOperationsInput | string
-        expertId?: StringFieldUpdateOperationsInput | string
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput
+        coThesisProjects?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput
     };
     export type SupervisorPaymentRecordCreateManyInput = {
         id?: string
@@ -382555,8 +383826,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        thesisProjectId: string
-        expertId: string
         amount: Decimal | DecimalJsLike | number | string
         status?: $Enums.PaymentStatus
         paymentDate?: Date | string | null
@@ -382585,8 +383854,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisProjectId?: StringFieldUpdateOperationsInput | string
-        expertId?: StringFieldUpdateOperationsInput | string
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -403905,6 +405172,10 @@ export namespace Prisma {
         is?: ExpertProfileWhereInput | null
         isNot?: ExpertProfileWhereInput | null
     };
+    export type SupervisorPaymentRecordNullableScalarRelationFilter = {
+        is?: SupervisorPaymentRecordWhereInput | null
+        isNot?: SupervisorPaymentRecordWhereInput | null
+    };
     export type CouncilNullableScalarRelationFilter = {
         is?: CouncilWhereInput | null
         isNot?: CouncilWhereInput | null
@@ -403918,15 +405189,7 @@ export namespace Prisma {
         some?: DecisionWhereInput
         none?: DecisionWhereInput
     };
-    export type SupervisorPaymentRecordListRelationFilter = {
-        every?: SupervisorPaymentRecordWhereInput
-        some?: SupervisorPaymentRecordWhereInput
-        none?: SupervisorPaymentRecordWhereInput
-    };
     export type DecisionOrderByRelationAggregateInput = {
-        _count?: SortOrder
-    };
-    export type SupervisorPaymentRecordOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type ThesisProjectOrderByRelevanceInput = {
@@ -403959,7 +405222,9 @@ export namespace Prisma {
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
         supervisorId?: SortOrder
+        supervisorPaymentId?: SortOrder
         coSupervisorId?: SortOrder
+        coSupervisorPaymentId?: SortOrder
         organizationId?: SortOrder
         maxStudents?: SortOrder
         councilId?: SortOrder
@@ -403999,7 +405264,9 @@ export namespace Prisma {
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
         supervisorId?: SortOrder
+        supervisorPaymentId?: SortOrder
         coSupervisorId?: SortOrder
+        coSupervisorPaymentId?: SortOrder
         organizationId?: SortOrder
         maxStudents?: SortOrder
         councilId?: SortOrder
@@ -404036,7 +405303,9 @@ export namespace Prisma {
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
         supervisorId?: SortOrder
+        supervisorPaymentId?: SortOrder
         coSupervisorId?: SortOrder
+        coSupervisorPaymentId?: SortOrder
         organizationId?: SortOrder
         maxStudents?: SortOrder
         councilId?: SortOrder
@@ -404207,15 +405476,7 @@ export namespace Prisma {
         some?: CouncilMemberWhereInput
         none?: CouncilMemberWhereInput
     };
-    export type PaymentRecordListRelationFilter = {
-        every?: PaymentRecordWhereInput
-        some?: PaymentRecordWhereInput
-        none?: PaymentRecordWhereInput
-    };
     export type CouncilMemberOrderByRelationAggregateInput = {
-        _count?: SortOrder
-    };
-    export type PaymentRecordOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type ExpertProfileOrderByRelevanceInput = {
@@ -404244,6 +405505,8 @@ export namespace Prisma {
         email?: SortOrder
         bankAccountNumber?: SortOrder
         bankName?: SortOrder
+        projectExpert?: SortOrder
+        thesisExpert?: SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
     };
@@ -404268,6 +405531,8 @@ export namespace Prisma {
         email?: SortOrder
         bankAccountNumber?: SortOrder
         bankName?: SortOrder
+        projectExpert?: SortOrder
+        thesisExpert?: SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
     };
@@ -404292,6 +405557,8 @@ export namespace Prisma {
         email?: SortOrder
         bankAccountNumber?: SortOrder
         bankName?: SortOrder
+        projectExpert?: SortOrder
+        thesisExpert?: SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
     };
@@ -404697,6 +405964,50 @@ export namespace Prisma {
     export type DefaultCouncilRolePayAmountSumOrderByAggregateInput = {
         amount?: SortOrder
     };
+    export type DefaultSupervisorPayAmountOrderByRelevanceInput = {
+        fields: DefaultSupervisorPayAmountOrderByRelevanceFieldEnum | DefaultSupervisorPayAmountOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type DefaultSupervisorPayAmountCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        amount?: SortOrder
+    };
+    export type DefaultSupervisorPayAmountAvgOrderByAggregateInput = {
+        amount?: SortOrder
+    };
+    export type DefaultSupervisorPayAmountMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        amount?: SortOrder
+    };
+    export type DefaultSupervisorPayAmountMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        amount?: SortOrder
+    };
+    export type DefaultSupervisorPayAmountSumOrderByAggregateInput = {
+        amount?: SortOrder
+    };
     export type EnumPaymentStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
         in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -404725,7 +406036,6 @@ export namespace Prisma {
         status?: SortOrder
         paymentDate?: SortOrder
         transactionCode?: SortOrder
-        expertId?: SortOrder
         councilMemberId?: SortOrder
     };
     export type PaymentRecordAvgOrderByAggregateInput = {
@@ -404744,7 +406054,6 @@ export namespace Prisma {
         status?: SortOrder
         paymentDate?: SortOrder
         transactionCode?: SortOrder
-        expertId?: SortOrder
         councilMemberId?: SortOrder
     };
     export type PaymentRecordMinOrderByAggregateInput = {
@@ -404760,7 +406069,6 @@ export namespace Prisma {
         status?: SortOrder
         paymentDate?: SortOrder
         transactionCode?: SortOrder
-        expertId?: SortOrder
         councilMemberId?: SortOrder
     };
     export type PaymentRecordSumOrderByAggregateInput = {
@@ -404789,8 +406097,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
-        thesisProjectId?: SortOrder
-        expertId?: SortOrder
         amount?: SortOrder
         status?: SortOrder
         paymentDate?: SortOrder
@@ -404808,8 +406114,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
-        thesisProjectId?: SortOrder
-        expertId?: SortOrder
         amount?: SortOrder
         status?: SortOrder
         paymentDate?: SortOrder
@@ -404824,8 +406128,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
-        thesisProjectId?: SortOrder
-        expertId?: SortOrder
         amount?: SortOrder
         status?: SortOrder
         paymentDate?: SortOrder
@@ -425811,10 +427113,20 @@ export namespace Prisma {
         connectOrCreate?: ExpertProfileCreateOrConnectWithoutSupervisedThesesInput
         connect?: ExpertProfileWhereUniqueInput
     };
+    export type SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput = {
+        create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput>
+        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectsInput
+        connect?: SupervisorPaymentRecordWhereUniqueInput
+    };
     export type ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput = {
         create?: XOR<ExpertProfileCreateWithoutCoSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutCoSupervisedThesesInput>
         connectOrCreate?: ExpertProfileCreateOrConnectWithoutCoSupervisedThesesInput
         connect?: ExpertProfileWhereUniqueInput
+    };
+    export type SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput = {
+        create?: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
+        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutCoThesisProjectsInput
+        connect?: SupervisorPaymentRecordWhereUniqueInput
     };
     export type DM_DonViCreateNestedOneWithoutThesisProjectsInput = {
         create?: XOR<DM_DonViCreateWithoutThesisProjectsInput, DM_DonViUncheckedCreateWithoutThesisProjectsInput>
@@ -425858,12 +427170,6 @@ export namespace Prisma {
         createMany?: StudentThesisRegistrationCreateManyThesisProjectInputEnvelope
         connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
     };
-    export type SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput = {
-        create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput> | SupervisorPaymentRecordCreateWithoutThesisProjectInput[] | SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput[]
-        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput | SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput[]
-        createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
-        connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    };
     export type DefenseRecordUncheckedCreateNestedOneWithoutThesisInput = {
         create?: XOR<DefenseRecordCreateWithoutThesisInput, DefenseRecordUncheckedCreateWithoutThesisInput>
         connectOrCreate?: DefenseRecordCreateOrConnectWithoutThesisInput
@@ -425885,12 +427191,6 @@ export namespace Prisma {
         connectOrCreate?: StudentThesisRegistrationCreateOrConnectWithoutThesisProjectInput | StudentThesisRegistrationCreateOrConnectWithoutThesisProjectInput[]
         createMany?: StudentThesisRegistrationCreateManyThesisProjectInputEnvelope
         connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
-    };
-    export type SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput = {
-        create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput> | SupervisorPaymentRecordCreateWithoutThesisProjectInput[] | SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput[]
-        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput | SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput[]
-        createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
-        connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
     };
     export type EnumThesisTypeFieldUpdateOperationsInput = {
         set?: $Enums.ThesisType
@@ -425925,6 +427225,15 @@ export namespace Prisma {
         connect?: ExpertProfileWhereUniqueInput
         update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutSupervisedThesesInput, ExpertProfileUpdateWithoutSupervisedThesesInput>, ExpertProfileUncheckedUpdateWithoutSupervisedThesesInput>
     };
+    export type SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput = {
+        create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput>
+        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectsInput
+        upsert?: SupervisorPaymentRecordUpsertWithoutThesisProjectsInput
+        disconnect?: SupervisorPaymentRecordWhereInput | boolean
+        delete?: SupervisorPaymentRecordWhereInput | boolean
+        connect?: SupervisorPaymentRecordWhereUniqueInput
+        update?: XOR<XOR<SupervisorPaymentRecordUpdateToOneWithWhereWithoutThesisProjectsInput, SupervisorPaymentRecordUpdateWithoutThesisProjectsInput>, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput>
+    };
     export type ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput = {
         create?: XOR<ExpertProfileCreateWithoutCoSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutCoSupervisedThesesInput>
         connectOrCreate?: ExpertProfileCreateOrConnectWithoutCoSupervisedThesesInput
@@ -425933,6 +427242,15 @@ export namespace Prisma {
         delete?: ExpertProfileWhereInput | boolean
         connect?: ExpertProfileWhereUniqueInput
         update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutCoSupervisedThesesInput, ExpertProfileUpdateWithoutCoSupervisedThesesInput>, ExpertProfileUncheckedUpdateWithoutCoSupervisedThesesInput>
+    };
+    export type SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput = {
+        create?: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
+        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutCoThesisProjectsInput
+        upsert?: SupervisorPaymentRecordUpsertWithoutCoThesisProjectsInput
+        disconnect?: SupervisorPaymentRecordWhereInput | boolean
+        delete?: SupervisorPaymentRecordWhereInput | boolean
+        connect?: SupervisorPaymentRecordWhereUniqueInput
+        update?: XOR<XOR<SupervisorPaymentRecordUpdateToOneWithWhereWithoutCoThesisProjectsInput, SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput>, SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput>
     };
     export type DM_DonViUpdateOneWithoutThesisProjectsNestedInput = {
         create?: XOR<DM_DonViCreateWithoutThesisProjectsInput, DM_DonViUncheckedCreateWithoutThesisProjectsInput>
@@ -426014,19 +427332,6 @@ export namespace Prisma {
         updateMany?: StudentThesisRegistrationUpdateManyWithWhereWithoutThesisProjectInput | StudentThesisRegistrationUpdateManyWithWhereWithoutThesisProjectInput[]
         deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
     };
-    export type SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput = {
-        create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput> | SupervisorPaymentRecordCreateWithoutThesisProjectInput[] | SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput[]
-        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput | SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput[]
-        upsert?: SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput | SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput[]
-        createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
-        set?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        disconnect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        delete?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        update?: SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput | SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput[]
-        updateMany?: SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput | SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput[]
-        deleteMany?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
-    };
     export type DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput = {
         create?: XOR<DefenseRecordCreateWithoutThesisInput, DefenseRecordUncheckedCreateWithoutThesisInput>
         connectOrCreate?: DefenseRecordCreateOrConnectWithoutThesisInput
@@ -426070,19 +427375,6 @@ export namespace Prisma {
         update?: StudentThesisRegistrationUpdateWithWhereUniqueWithoutThesisProjectInput | StudentThesisRegistrationUpdateWithWhereUniqueWithoutThesisProjectInput[]
         updateMany?: StudentThesisRegistrationUpdateManyWithWhereWithoutThesisProjectInput | StudentThesisRegistrationUpdateManyWithWhereWithoutThesisProjectInput[]
         deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
-    };
-    export type SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput = {
-        create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput> | SupervisorPaymentRecordCreateWithoutThesisProjectInput[] | SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput[]
-        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput | SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput[]
-        upsert?: SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput | SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput[]
-        createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
-        set?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        disconnect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        delete?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        update?: SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput | SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput[]
-        updateMany?: SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput | SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput[]
-        deleteMany?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
     };
     export type ThesisProjectCreateNestedManyWithoutDefenseSessionInput = {
         create?: XOR<ThesisProjectCreateWithoutDefenseSessionInput, ThesisProjectUncheckedCreateWithoutDefenseSessionInput> | ThesisProjectCreateWithoutDefenseSessionInput[] | ThesisProjectUncheckedCreateWithoutDefenseSessionInput[]
@@ -426238,18 +427530,6 @@ export namespace Prisma {
         createMany?: CouncilMemberCreateManyExpertInputEnvelope
         connect?: CouncilMemberWhereUniqueInput | CouncilMemberWhereUniqueInput[]
     };
-    export type PaymentRecordCreateNestedManyWithoutExpertInput = {
-        create?: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput> | PaymentRecordCreateWithoutExpertInput[] | PaymentRecordUncheckedCreateWithoutExpertInput[]
-        connectOrCreate?: PaymentRecordCreateOrConnectWithoutExpertInput | PaymentRecordCreateOrConnectWithoutExpertInput[]
-        createMany?: PaymentRecordCreateManyExpertInputEnvelope
-        connect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    };
-    export type SupervisorPaymentRecordCreateNestedManyWithoutExpertInput = {
-        create?: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput> | SupervisorPaymentRecordCreateWithoutExpertInput[] | SupervisorPaymentRecordUncheckedCreateWithoutExpertInput[]
-        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutExpertInput | SupervisorPaymentRecordCreateOrConnectWithoutExpertInput[]
-        createMany?: SupervisorPaymentRecordCreateManyExpertInputEnvelope
-        connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    };
     export type TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput = {
         create?: XOR<TrainingMajorCreateWithoutExpertProfileInput, TrainingMajorUncheckedCreateWithoutExpertProfileInput> | TrainingMajorCreateWithoutExpertProfileInput[] | TrainingMajorUncheckedCreateWithoutExpertProfileInput[]
         connectOrCreate?: TrainingMajorCreateOrConnectWithoutExpertProfileInput | TrainingMajorCreateOrConnectWithoutExpertProfileInput[]
@@ -426277,18 +427557,6 @@ export namespace Prisma {
         connectOrCreate?: CouncilMemberCreateOrConnectWithoutExpertInput | CouncilMemberCreateOrConnectWithoutExpertInput[]
         createMany?: CouncilMemberCreateManyExpertInputEnvelope
         connect?: CouncilMemberWhereUniqueInput | CouncilMemberWhereUniqueInput[]
-    };
-    export type PaymentRecordUncheckedCreateNestedManyWithoutExpertInput = {
-        create?: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput> | PaymentRecordCreateWithoutExpertInput[] | PaymentRecordUncheckedCreateWithoutExpertInput[]
-        connectOrCreate?: PaymentRecordCreateOrConnectWithoutExpertInput | PaymentRecordCreateOrConnectWithoutExpertInput[]
-        createMany?: PaymentRecordCreateManyExpertInputEnvelope
-        connect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    };
-    export type SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput = {
-        create?: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput> | SupervisorPaymentRecordCreateWithoutExpertInput[] | SupervisorPaymentRecordUncheckedCreateWithoutExpertInput[]
-        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutExpertInput | SupervisorPaymentRecordCreateOrConnectWithoutExpertInput[]
-        createMany?: SupervisorPaymentRecordCreateManyExpertInputEnvelope
-        connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
     };
     export type LecturerUpdateOneWithoutExpertProfileNestedInput = {
         create?: XOR<LecturerCreateWithoutExpertProfileInput, LecturerUncheckedCreateWithoutExpertProfileInput>
@@ -426362,32 +427630,6 @@ export namespace Prisma {
         updateMany?: CouncilMemberUpdateManyWithWhereWithoutExpertInput | CouncilMemberUpdateManyWithWhereWithoutExpertInput[]
         deleteMany?: CouncilMemberScalarWhereInput | CouncilMemberScalarWhereInput[]
     };
-    export type PaymentRecordUpdateManyWithoutExpertNestedInput = {
-        create?: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput> | PaymentRecordCreateWithoutExpertInput[] | PaymentRecordUncheckedCreateWithoutExpertInput[]
-        connectOrCreate?: PaymentRecordCreateOrConnectWithoutExpertInput | PaymentRecordCreateOrConnectWithoutExpertInput[]
-        upsert?: PaymentRecordUpsertWithWhereUniqueWithoutExpertInput | PaymentRecordUpsertWithWhereUniqueWithoutExpertInput[]
-        createMany?: PaymentRecordCreateManyExpertInputEnvelope
-        set?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-        disconnect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-        delete?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-        connect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-        update?: PaymentRecordUpdateWithWhereUniqueWithoutExpertInput | PaymentRecordUpdateWithWhereUniqueWithoutExpertInput[]
-        updateMany?: PaymentRecordUpdateManyWithWhereWithoutExpertInput | PaymentRecordUpdateManyWithWhereWithoutExpertInput[]
-        deleteMany?: PaymentRecordScalarWhereInput | PaymentRecordScalarWhereInput[]
-    };
-    export type SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput = {
-        create?: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput> | SupervisorPaymentRecordCreateWithoutExpertInput[] | SupervisorPaymentRecordUncheckedCreateWithoutExpertInput[]
-        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutExpertInput | SupervisorPaymentRecordCreateOrConnectWithoutExpertInput[]
-        upsert?: SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput | SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput[]
-        createMany?: SupervisorPaymentRecordCreateManyExpertInputEnvelope
-        set?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        disconnect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        delete?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        update?: SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput | SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput[]
-        updateMany?: SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput | SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput[]
-        deleteMany?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
-    };
     export type TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput = {
         create?: XOR<TrainingMajorCreateWithoutExpertProfileInput, TrainingMajorUncheckedCreateWithoutExpertProfileInput> | TrainingMajorCreateWithoutExpertProfileInput[] | TrainingMajorUncheckedCreateWithoutExpertProfileInput[]
         connectOrCreate?: TrainingMajorCreateOrConnectWithoutExpertProfileInput | TrainingMajorCreateOrConnectWithoutExpertProfileInput[]
@@ -426450,32 +427692,6 @@ export namespace Prisma {
         update?: CouncilMemberUpdateWithWhereUniqueWithoutExpertInput | CouncilMemberUpdateWithWhereUniqueWithoutExpertInput[]
         updateMany?: CouncilMemberUpdateManyWithWhereWithoutExpertInput | CouncilMemberUpdateManyWithWhereWithoutExpertInput[]
         deleteMany?: CouncilMemberScalarWhereInput | CouncilMemberScalarWhereInput[]
-    };
-    export type PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput = {
-        create?: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput> | PaymentRecordCreateWithoutExpertInput[] | PaymentRecordUncheckedCreateWithoutExpertInput[]
-        connectOrCreate?: PaymentRecordCreateOrConnectWithoutExpertInput | PaymentRecordCreateOrConnectWithoutExpertInput[]
-        upsert?: PaymentRecordUpsertWithWhereUniqueWithoutExpertInput | PaymentRecordUpsertWithWhereUniqueWithoutExpertInput[]
-        createMany?: PaymentRecordCreateManyExpertInputEnvelope
-        set?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-        disconnect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-        delete?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-        connect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-        update?: PaymentRecordUpdateWithWhereUniqueWithoutExpertInput | PaymentRecordUpdateWithWhereUniqueWithoutExpertInput[]
-        updateMany?: PaymentRecordUpdateManyWithWhereWithoutExpertInput | PaymentRecordUpdateManyWithWhereWithoutExpertInput[]
-        deleteMany?: PaymentRecordScalarWhereInput | PaymentRecordScalarWhereInput[]
-    };
-    export type SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput = {
-        create?: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput> | SupervisorPaymentRecordCreateWithoutExpertInput[] | SupervisorPaymentRecordUncheckedCreateWithoutExpertInput[]
-        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutExpertInput | SupervisorPaymentRecordCreateOrConnectWithoutExpertInput[]
-        upsert?: SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput | SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput[]
-        createMany?: SupervisorPaymentRecordCreateManyExpertInputEnvelope
-        set?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        disconnect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        delete?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-        update?: SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput | SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput[]
-        updateMany?: SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput | SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput[]
-        deleteMany?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
     };
     export type DocumentFileCreateNestedManyWithoutDecisionInput = {
         create?: XOR<DocumentFileCreateWithoutDecisionInput, DocumentFileUncheckedCreateWithoutDecisionInput> | DocumentFileCreateWithoutDecisionInput[] | DocumentFileUncheckedCreateWithoutDecisionInput[]
@@ -426818,11 +428034,6 @@ export namespace Prisma {
         updateMany?: DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput | DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput[]
         deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
     };
-    export type ExpertProfileCreateNestedOneWithoutPaymentsInput = {
-        create?: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
-        connectOrCreate?: ExpertProfileCreateOrConnectWithoutPaymentsInput
-        connect?: ExpertProfileWhereUniqueInput
-    };
     export type CouncilMemberCreateNestedOneWithoutPaymentInput = {
         create?: XOR<CouncilMemberCreateWithoutPaymentInput, CouncilMemberUncheckedCreateWithoutPaymentInput>
         connectOrCreate?: CouncilMemberCreateOrConnectWithoutPaymentInput
@@ -426830,13 +428041,6 @@ export namespace Prisma {
     };
     export type EnumPaymentStatusFieldUpdateOperationsInput = {
         set?: $Enums.PaymentStatus
-    };
-    export type ExpertProfileUpdateOneRequiredWithoutPaymentsNestedInput = {
-        create?: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
-        connectOrCreate?: ExpertProfileCreateOrConnectWithoutPaymentsInput
-        upsert?: ExpertProfileUpsertWithoutPaymentsInput
-        connect?: ExpertProfileWhereUniqueInput
-        update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutPaymentsInput, ExpertProfileUpdateWithoutPaymentsInput>, ExpertProfileUncheckedUpdateWithoutPaymentsInput>
     };
     export type CouncilMemberUpdateOneWithoutPaymentNestedInput = {
         create?: XOR<CouncilMemberCreateWithoutPaymentInput, CouncilMemberUncheckedCreateWithoutPaymentInput>
@@ -426847,29 +428051,81 @@ export namespace Prisma {
         connect?: CouncilMemberWhereUniqueInput
         update?: XOR<XOR<CouncilMemberUpdateToOneWithWhereWithoutPaymentInput, CouncilMemberUpdateWithoutPaymentInput>, CouncilMemberUncheckedUpdateWithoutPaymentInput>
     };
-    export type ThesisProjectCreateNestedOneWithoutSupervisorPaymentsInput = {
-        create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput>
-        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentsInput
-        connect?: ThesisProjectWhereUniqueInput
+    export type ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput = {
+        create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManySupervisorPaymentInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
     };
-    export type ExpertProfileCreateNestedOneWithoutSupervisorPaymentRecordInput = {
-        create?: XOR<ExpertProfileCreateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput>
-        connectOrCreate?: ExpertProfileCreateOrConnectWithoutSupervisorPaymentRecordInput
-        connect?: ExpertProfileWhereUniqueInput
+    export type ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput = {
+        create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
     };
-    export type ThesisProjectUpdateOneRequiredWithoutSupervisorPaymentsNestedInput = {
-        create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput>
-        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentsInput
-        upsert?: ThesisProjectUpsertWithoutSupervisorPaymentsInput
-        connect?: ThesisProjectWhereUniqueInput
-        update?: XOR<XOR<ThesisProjectUpdateToOneWithWhereWithoutSupervisorPaymentsInput, ThesisProjectUpdateWithoutSupervisorPaymentsInput>, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentsInput>
+    export type ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput = {
+        create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManySupervisorPaymentInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
     };
-    export type ExpertProfileUpdateOneRequiredWithoutSupervisorPaymentRecordNestedInput = {
-        create?: XOR<ExpertProfileCreateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput>
-        connectOrCreate?: ExpertProfileCreateOrConnectWithoutSupervisorPaymentRecordInput
-        upsert?: ExpertProfileUpsertWithoutSupervisorPaymentRecordInput
-        connect?: ExpertProfileWhereUniqueInput
-        update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutSupervisorPaymentRecordInput, ExpertProfileUpdateWithoutSupervisorPaymentRecordInput>, ExpertProfileUncheckedUpdateWithoutSupervisorPaymentRecordInput>
+    export type ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput = {
+        create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
+    export type ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManySupervisorPaymentInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
+    export type ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManySupervisorPaymentInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
     };
     export type SemesterCreateNestedOneWithoutEvaluationPeriodInput = {
         create?: XOR<SemesterCreateWithoutEvaluationPeriodInput, SemesterUncheckedCreateWithoutEvaluationPeriodInput>
@@ -469130,7 +470386,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
         defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -469138,7 +470396,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutOrganizationInput = {
         id?: string
@@ -469165,7 +470422,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         maxStudents?: number | null
         councilId?: string | null
         roomId?: string | null
@@ -469179,7 +470438,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutOrganizationInput = {
         where: ThesisProjectWhereUniqueInput
@@ -469651,7 +470909,9 @@ export namespace Prisma {
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+        supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+        coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
         maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
         councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -496635,7 +497895,9 @@ export namespace Prisma {
         projectEnd?: Date | string | null
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -496644,7 +497906,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -496670,7 +497931,9 @@ export namespace Prisma {
         type?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -496685,7 +497948,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutSubjectClassInput = {
         where: ThesisProjectWhereUniqueInput
@@ -496715,6 +497977,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -496722,8 +497986,6 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -496746,14 +498008,14 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileCreateOrConnectWithoutSubjectClassInput = {
         where: ExpertProfileWhereUniqueInput
@@ -497713,6 +498975,8 @@ export namespace Prisma {
         email?: StringNullableFilter<"ExpertProfile"> | string | null
         bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
         bankName?: StringNullableFilter<"ExpertProfile"> | string | null
+        projectExpert?: BoolFilter<"ExpertProfile"> | boolean
+        thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
     };
@@ -502706,7 +503970,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -502714,7 +503980,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutRoomInput = {
         id?: string
@@ -502741,7 +504006,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -502755,7 +504022,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutRoomInput = {
         where: ThesisProjectWhereUniqueInput
@@ -504040,6 +505306,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -504047,8 +505315,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUncheckedCreateWithoutMajorInput = {
         id?: string
@@ -504071,14 +505337,14 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileCreateOrConnectWithoutMajorInput = {
         where: ExpertProfileWhereUniqueInput
@@ -516680,6 +517946,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
@@ -516687,8 +517955,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUncheckedCreateWithoutLecturerInput = {
         id?: string
@@ -516710,6 +517976,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -516717,8 +517985,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileCreateOrConnectWithoutLecturerInput = {
         where: ExpertProfileWhereUniqueInput
@@ -519996,7 +521262,9 @@ export namespace Prisma {
         projectEnd?: Date | string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -520005,7 +521273,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutThesisSessionInput = {
         id?: string
@@ -520031,7 +521298,9 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -520046,7 +521315,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutThesisSessionInput = {
         where: ThesisProjectWhereUniqueInput
@@ -520415,6 +521683,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -520422,8 +521692,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUncheckedCreateWithoutSupervisedThesesInput = {
         id?: string
@@ -520446,18 +521714,52 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileCreateOrConnectWithoutSupervisedThesesInput = {
         where: ExpertProfileWhereUniqueInput
         create: XOR<ExpertProfileCreateWithoutSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutSupervisedThesesInput>
+    };
+    export type SupervisorPaymentRecordCreateWithoutThesisProjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+        status?: $Enums.PaymentStatus
+        paymentDate?: Date | string | null
+        transactionCode?: string | null
+        coThesisProjects?: ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput
+    };
+    export type SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+        status?: $Enums.PaymentStatus
+        paymentDate?: Date | string | null
+        transactionCode?: string | null
+        coThesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput
+    };
+    export type SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectsInput = {
+        where: SupervisorPaymentRecordWhereUniqueInput
+        create: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput>
     };
     export type ExpertProfileCreateWithoutCoSupervisedThesesInput = {
         id?: string
@@ -520479,6 +521781,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -520486,8 +521790,6 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUncheckedCreateWithoutCoSupervisedThesesInput = {
         id?: string
@@ -520510,18 +521812,52 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileCreateOrConnectWithoutCoSupervisedThesesInput = {
         where: ExpertProfileWhereUniqueInput
         create: XOR<ExpertProfileCreateWithoutCoSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutCoSupervisedThesesInput>
+    };
+    export type SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+        status?: $Enums.PaymentStatus
+        paymentDate?: Date | string | null
+        transactionCode?: string | null
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput
+    };
+    export type SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+        status?: $Enums.PaymentStatus
+        paymentDate?: Date | string | null
+        transactionCode?: string | null
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput
+    };
+    export type SupervisorPaymentRecordCreateOrConnectWithoutCoThesisProjectsInput = {
+        where: SupervisorPaymentRecordWhereUniqueInput
+        create: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
     };
     export type DM_DonViCreateWithoutThesisProjectsInput = {
         Id?: string
@@ -520865,44 +522201,6 @@ export namespace Prisma {
         data: StudentThesisRegistrationCreateManyThesisProjectInput | StudentThesisRegistrationCreateManyThesisProjectInput[]
         skipDuplicates?: boolean
     };
-    export type SupervisorPaymentRecordCreateWithoutThesisProjectInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
-        expert: ExpertProfileCreateNestedOneWithoutSupervisorPaymentRecordInput
-    };
-    export type SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        expertId: string
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
-    };
-    export type SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput = {
-        where: SupervisorPaymentRecordWhereUniqueInput
-        create: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput>
-    };
-    export type SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope = {
-        data: SupervisorPaymentRecordCreateManyThesisProjectInput | SupervisorPaymentRecordCreateManyThesisProjectInput[]
-        skipDuplicates?: boolean
-    };
     export type SubjectClassUpsertWithoutThesisProjectsInput = {
         update: XOR<SubjectClassUpdateWithoutThesisProjectsInput, SubjectClassUncheckedUpdateWithoutThesisProjectsInput>
         create: XOR<SubjectClassCreateWithoutThesisProjectsInput, SubjectClassUncheckedCreateWithoutThesisProjectsInput>
@@ -521100,6 +522398,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -521107,8 +522407,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateWithoutSupervisedThesesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -521131,14 +522429,53 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
+    };
+    export type SupervisorPaymentRecordUpsertWithoutThesisProjectsInput = {
+        update: XOR<SupervisorPaymentRecordUpdateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput>
+        create: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput>
+        where?: SupervisorPaymentRecordWhereInput
+    };
+    export type SupervisorPaymentRecordUpdateToOneWithWhereWithoutThesisProjectsInput = {
+        where?: SupervisorPaymentRecordWhereInput
+        data: XOR<SupervisorPaymentRecordUpdateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput>
+    };
+    export type SupervisorPaymentRecordUpdateWithoutThesisProjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+        coThesisProjects?: ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput
+    };
+    export type SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+        coThesisProjects?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput
     };
     export type ExpertProfileUpsertWithoutCoSupervisedThesesInput = {
         update: XOR<ExpertProfileUpdateWithoutCoSupervisedThesesInput, ExpertProfileUncheckedUpdateWithoutCoSupervisedThesesInput>
@@ -521169,6 +522506,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -521176,8 +522515,6 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateWithoutCoSupervisedThesesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -521200,14 +522537,53 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
+    };
+    export type SupervisorPaymentRecordUpsertWithoutCoThesisProjectsInput = {
+        update: XOR<SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput>
+        create: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
+        where?: SupervisorPaymentRecordWhereInput
+    };
+    export type SupervisorPaymentRecordUpdateToOneWithWhereWithoutCoThesisProjectsInput = {
+        where?: SupervisorPaymentRecordWhereInput
+        data: XOR<SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput>
+    };
+    export type SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisProjects?: ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput
+    };
+    export type SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput
     };
     export type DM_DonViUpsertWithoutThesisProjectsInput = {
         update: XOR<DM_DonViUpdateWithoutThesisProjectsInput, DM_DonViUncheckedUpdateWithoutThesisProjectsInput>
@@ -521539,38 +522915,6 @@ export namespace Prisma {
         where: StudentThesisRegistrationScalarWhereInput
         data: XOR<StudentThesisRegistrationUpdateManyMutationInput, StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectInput>
     };
-    export type SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput = {
-        where: SupervisorPaymentRecordWhereUniqueInput
-        update: XOR<SupervisorPaymentRecordUpdateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectInput>
-        create: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput>
-    };
-    export type SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput = {
-        where: SupervisorPaymentRecordWhereUniqueInput
-        data: XOR<SupervisorPaymentRecordUpdateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectInput>
-    };
-    export type SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput = {
-        where: SupervisorPaymentRecordScalarWhereInput
-        data: XOR<SupervisorPaymentRecordUpdateManyMutationInput, SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectInput>
-    };
-    export type SupervisorPaymentRecordScalarWhereInput = {
-        AND?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
-        OR?: SupervisorPaymentRecordScalarWhereInput[]
-        NOT?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
-        id?: StringFilter<"SupervisorPaymentRecord"> | string
-        code?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-        active?: BoolFilter<"SupervisorPaymentRecord"> | boolean
-        description?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-        deletedAt?: DateTimeNullableFilter<"SupervisorPaymentRecord"> | Date | string | null
-        createdAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
-        updatedAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
-        createdBy?: UuidNullableFilter<"SupervisorPaymentRecord"> | string | null
-        thesisProjectId?: StringFilter<"SupervisorPaymentRecord"> | string
-        expertId?: StringFilter<"SupervisorPaymentRecord"> | string
-        amount?: DecimalFilter<"SupervisorPaymentRecord"> | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFilter<"SupervisorPaymentRecord"> | $Enums.PaymentStatus
-        paymentDate?: DateTimeNullableFilter<"SupervisorPaymentRecord"> | Date | string | null
-        transactionCode?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-    };
     export type ThesisProjectCreateWithoutDefenseSessionInput = {
         id?: string
         code?: string | null
@@ -521602,7 +522946,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -521610,7 +522956,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutDefenseSessionInput = {
         id?: string
@@ -521637,7 +522982,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -521651,7 +522998,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutDefenseSessionInput = {
         where: ThesisProjectWhereUniqueInput
@@ -521923,7 +523269,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -521931,7 +523279,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutRegistrationsInput = {
         id?: string
@@ -521958,7 +523305,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -521972,7 +523321,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutRegistrationsInput = {
         where: ThesisProjectWhereUniqueInput
@@ -522350,7 +523698,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -522358,7 +523708,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -522385,7 +523734,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -522399,7 +523750,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type LecturerUpsertWithoutReviewedThesisRegistrationsInput = {
         update: XOR<LecturerUpdateWithoutReviewedThesisRegistrationsInput, LecturerUncheckedUpdateWithoutReviewedThesisRegistrationsInput>
@@ -522671,7 +524021,9 @@ export namespace Prisma {
         projectEnd?: Date | string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -522680,7 +524032,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutSupervisorInput = {
         id?: string
@@ -522706,7 +524057,9 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -522721,7 +524074,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutSupervisorInput = {
         where: ThesisProjectWhereUniqueInput
@@ -522762,6 +524114,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -522770,7 +524124,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutCoSupervisorInput = {
         id?: string
@@ -522797,6 +524150,8 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -522811,7 +524166,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutCoSupervisorInput = {
         where: ThesisProjectWhereUniqueInput
@@ -522965,82 +524319,6 @@ export namespace Prisma {
     };
     export type CouncilMemberCreateManyExpertInputEnvelope = {
         data: CouncilMemberCreateManyExpertInput | CouncilMemberCreateManyExpertInput[]
-        skipDuplicates?: boolean
-    };
-    export type PaymentRecordCreateWithoutExpertInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
-        councilMember?: CouncilMemberCreateNestedOneWithoutPaymentInput
-    };
-    export type PaymentRecordUncheckedCreateWithoutExpertInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
-        councilMemberId?: string | null
-    };
-    export type PaymentRecordCreateOrConnectWithoutExpertInput = {
-        where: PaymentRecordWhereUniqueInput
-        create: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput>
-    };
-    export type PaymentRecordCreateManyExpertInputEnvelope = {
-        data: PaymentRecordCreateManyExpertInput | PaymentRecordCreateManyExpertInput[]
-        skipDuplicates?: boolean
-    };
-    export type SupervisorPaymentRecordCreateWithoutExpertInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
-        thesisProject: ThesisProjectCreateNestedOneWithoutSupervisorPaymentsInput
-    };
-    export type SupervisorPaymentRecordUncheckedCreateWithoutExpertInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        thesisProjectId: string
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
-    };
-    export type SupervisorPaymentRecordCreateOrConnectWithoutExpertInput = {
-        where: SupervisorPaymentRecordWhereUniqueInput
-        create: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput>
-    };
-    export type SupervisorPaymentRecordCreateManyExpertInputEnvelope = {
-        data: SupervisorPaymentRecordCreateManyExpertInput | SupervisorPaymentRecordCreateManyExpertInput[]
         skipDuplicates?: boolean
     };
     export type LecturerUpsertWithoutExpertProfileInput = {
@@ -523201,51 +524479,6 @@ export namespace Prisma {
         councilId?: StringFilter<"CouncilMember"> | string
         expertId?: StringFilter<"CouncilMember"> | string
     };
-    export type PaymentRecordUpsertWithWhereUniqueWithoutExpertInput = {
-        where: PaymentRecordWhereUniqueInput
-        update: XOR<PaymentRecordUpdateWithoutExpertInput, PaymentRecordUncheckedUpdateWithoutExpertInput>
-        create: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput>
-    };
-    export type PaymentRecordUpdateWithWhereUniqueWithoutExpertInput = {
-        where: PaymentRecordWhereUniqueInput
-        data: XOR<PaymentRecordUpdateWithoutExpertInput, PaymentRecordUncheckedUpdateWithoutExpertInput>
-    };
-    export type PaymentRecordUpdateManyWithWhereWithoutExpertInput = {
-        where: PaymentRecordScalarWhereInput
-        data: XOR<PaymentRecordUpdateManyMutationInput, PaymentRecordUncheckedUpdateManyWithoutExpertInput>
-    };
-    export type PaymentRecordScalarWhereInput = {
-        AND?: PaymentRecordScalarWhereInput | PaymentRecordScalarWhereInput[]
-        OR?: PaymentRecordScalarWhereInput[]
-        NOT?: PaymentRecordScalarWhereInput | PaymentRecordScalarWhereInput[]
-        id?: StringFilter<"PaymentRecord"> | string
-        code?: StringNullableFilter<"PaymentRecord"> | string | null
-        active?: BoolFilter<"PaymentRecord"> | boolean
-        description?: StringNullableFilter<"PaymentRecord"> | string | null
-        deletedAt?: DateTimeNullableFilter<"PaymentRecord"> | Date | string | null
-        createdAt?: DateTimeFilter<"PaymentRecord"> | Date | string
-        updatedAt?: DateTimeFilter<"PaymentRecord"> | Date | string
-        createdBy?: UuidNullableFilter<"PaymentRecord"> | string | null
-        amount?: DecimalFilter<"PaymentRecord"> | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFilter<"PaymentRecord"> | $Enums.PaymentStatus
-        paymentDate?: DateTimeNullableFilter<"PaymentRecord"> | Date | string | null
-        transactionCode?: StringNullableFilter<"PaymentRecord"> | string | null
-        expertId?: StringFilter<"PaymentRecord"> | string
-        councilMemberId?: StringNullableFilter<"PaymentRecord"> | string | null
-    };
-    export type SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput = {
-        where: SupervisorPaymentRecordWhereUniqueInput
-        update: XOR<SupervisorPaymentRecordUpdateWithoutExpertInput, SupervisorPaymentRecordUncheckedUpdateWithoutExpertInput>
-        create: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput>
-    };
-    export type SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput = {
-        where: SupervisorPaymentRecordWhereUniqueInput
-        data: XOR<SupervisorPaymentRecordUpdateWithoutExpertInput, SupervisorPaymentRecordUncheckedUpdateWithoutExpertInput>
-    };
-    export type SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput = {
-        where: SupervisorPaymentRecordScalarWhereInput
-        data: XOR<SupervisorPaymentRecordUpdateManyMutationInput, SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertInput>
-    };
     export type DocumentFileCreateWithoutDecisionInput = {
         id?: string
         code?: string | null
@@ -523351,7 +524584,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -523359,7 +524594,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutDecisionsInput = {
         id?: string
@@ -523386,7 +524620,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -523400,7 +524636,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutDecisionsInput = {
         where: ThesisProjectWhereUniqueInput
@@ -523459,7 +524694,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -523467,7 +524704,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutDecisionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -523494,7 +524730,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -523508,7 +524746,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type CouncilMemberCreateWithoutInvitationsInput = {
         id?: string
@@ -523656,7 +524893,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
         defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -523664,7 +524903,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutCouncilInput = {
         id?: string
@@ -523691,7 +524929,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         roomId?: string | null
@@ -523705,7 +524945,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutCouncilInput = {
         where: ThesisProjectWhereUniqueInput
@@ -523880,6 +525119,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -523887,8 +525128,6 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
-        payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUncheckedCreateWithoutCouncilMembershipsInput = {
         id?: string
@@ -523911,14 +525150,14 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
-        payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileCreateOrConnectWithoutCouncilMembershipsInput = {
         where: ExpertProfileWhereUniqueInput
@@ -523937,7 +525176,6 @@ export namespace Prisma {
         status?: $Enums.PaymentStatus
         paymentDate?: Date | string | null
         transactionCode?: string | null
-        expert: ExpertProfileCreateNestedOneWithoutPaymentsInput
     };
     export type PaymentRecordUncheckedCreateWithoutCouncilMemberInput = {
         id?: string
@@ -523952,7 +525190,6 @@ export namespace Prisma {
         status?: $Enums.PaymentStatus
         paymentDate?: Date | string | null
         transactionCode?: string | null
-        expertId: string
     };
     export type PaymentRecordCreateOrConnectWithoutCouncilMemberInput = {
         where: PaymentRecordWhereUniqueInput
@@ -524052,6 +525289,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -524059,8 +525298,6 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
-        payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateWithoutCouncilMembershipsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -524083,14 +525320,14 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
-        payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
     };
     export type PaymentRecordUpsertWithoutCouncilMemberInput = {
         update: XOR<PaymentRecordUpdateWithoutCouncilMemberInput, PaymentRecordUncheckedUpdateWithoutCouncilMemberInput>
@@ -524114,7 +525351,6 @@ export namespace Prisma {
         status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        expert?: ExpertProfileUpdateOneRequiredWithoutPaymentsNestedInput
     };
     export type PaymentRecordUncheckedUpdateWithoutCouncilMemberInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -524129,7 +525365,6 @@ export namespace Prisma {
         status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        expertId?: StringFieldUpdateOperationsInput | string
     };
     export type InvitationUpsertWithoutCouncilMemberInput = {
         update: XOR<InvitationUpdateWithoutCouncilMemberInput, InvitationUncheckedUpdateWithoutCouncilMemberInput>
@@ -524195,7 +525430,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -524203,7 +525440,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutDefenseRecordInput = {
         id?: string
@@ -524230,7 +525466,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -524244,7 +525482,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutDefenseRecordInput = {
         where: ThesisProjectWhereUniqueInput
@@ -524364,7 +525601,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -524372,7 +525611,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutDefenseRecordInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -524399,7 +525637,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -524413,7 +525653,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutDefenseRecordInput = {
         where: DocumentFileWhereUniqueInput
@@ -524459,7 +525698,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -524467,7 +525708,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectUncheckedCreateWithoutLibrarySubmissionInput = {
         id?: string
@@ -524494,7 +525734,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -524508,7 +525750,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
     };
     export type ThesisProjectCreateOrConnectWithoutLibrarySubmissionInput = {
         where: ThesisProjectWhereUniqueInput
@@ -524628,7 +525869,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -524636,7 +525879,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutLibrarySubmissionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -524663,7 +525905,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -524677,7 +525921,6 @@ export namespace Prisma {
         defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutLibrarySubmissionInput = {
         where: DocumentFileWhereUniqueInput
@@ -524691,70 +525934,6 @@ export namespace Prisma {
     export type DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput = {
         where: DocumentFileScalarWhereInput
         data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionInput>
-    };
-    export type ExpertProfileCreateWithoutPaymentsInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
-        organization?: string | null
-        position?: string | null
-        specialization?: string | null
-        workplace?: string | null
-        phone?: string | null
-        email?: string | null
-        bankAccountNumber?: string | null
-        bankName?: string | null
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
-        lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
-        major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
-        supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
-        coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
-        subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
-        councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
-    };
-    export type ExpertProfileUncheckedCreateWithoutPaymentsInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        lecturerId?: string | null
-        name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
-        organization?: string | null
-        position?: string | null
-        specialization?: string | null
-        workplace?: string | null
-        phone?: string | null
-        email?: string | null
-        bankAccountNumber?: string | null
-        bankName?: string | null
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
-        major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
-        supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
-        coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
-        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
-        councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-    };
-    export type ExpertProfileCreateOrConnectWithoutPaymentsInput = {
-        where: ExpertProfileWhereUniqueInput
-        create: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
     };
     export type CouncilMemberCreateWithoutPaymentInput = {
         id?: string
@@ -524787,75 +525966,6 @@ export namespace Prisma {
     export type CouncilMemberCreateOrConnectWithoutPaymentInput = {
         where: CouncilMemberWhereUniqueInput
         create: XOR<CouncilMemberCreateWithoutPaymentInput, CouncilMemberUncheckedCreateWithoutPaymentInput>
-    };
-    export type ExpertProfileUpsertWithoutPaymentsInput = {
-        update: XOR<ExpertProfileUpdateWithoutPaymentsInput, ExpertProfileUncheckedUpdateWithoutPaymentsInput>
-        create: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
-        where?: ExpertProfileWhereInput
-    };
-    export type ExpertProfileUpdateToOneWithWhereWithoutPaymentsInput = {
-        where?: ExpertProfileWhereInput
-        data: XOR<ExpertProfileUpdateWithoutPaymentsInput, ExpertProfileUncheckedUpdateWithoutPaymentsInput>
-    };
-    export type ExpertProfileUpdateWithoutPaymentsInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
-        organization?: NullableStringFieldUpdateOperationsInput | string | null
-        position?: NullableStringFieldUpdateOperationsInput | string | null
-        specialization?: NullableStringFieldUpdateOperationsInput | string | null
-        workplace?: NullableStringFieldUpdateOperationsInput | string | null
-        phone?: NullableStringFieldUpdateOperationsInput | string | null
-        email?: NullableStringFieldUpdateOperationsInput | string | null
-        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankName?: NullableStringFieldUpdateOperationsInput | string | null
-        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
-        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
-        lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
-        major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
-        supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
-        coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
-        subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
-        councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
-    };
-    export type ExpertProfileUncheckedUpdateWithoutPaymentsInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
-        organization?: NullableStringFieldUpdateOperationsInput | string | null
-        position?: NullableStringFieldUpdateOperationsInput | string | null
-        specialization?: NullableStringFieldUpdateOperationsInput | string | null
-        workplace?: NullableStringFieldUpdateOperationsInput | string | null
-        phone?: NullableStringFieldUpdateOperationsInput | string | null
-        email?: NullableStringFieldUpdateOperationsInput | string | null
-        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankName?: NullableStringFieldUpdateOperationsInput | string | null
-        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
-        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
-        major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
-        supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
-        coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
-        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
-        councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
     };
     export type CouncilMemberUpsertWithoutPaymentInput = {
         update: XOR<CouncilMemberUpdateWithoutPaymentInput, CouncilMemberUncheckedUpdateWithoutPaymentInput>
@@ -524894,7 +526004,7 @@ export namespace Prisma {
         expertId?: StringFieldUpdateOperationsInput | string
         invitations?: InvitationUncheckedUpdateOneWithoutCouncilMemberNestedInput
     };
-    export type ThesisProjectCreateWithoutSupervisorPaymentsInput = {
+    export type ThesisProjectCreateWithoutSupervisorPaymentInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -524926,6 +526036,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -524935,7 +526046,7 @@ export namespace Prisma {
         decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
     };
-    export type ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput = {
+    export type ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -524961,6 +526072,7 @@ export namespace Prisma {
         thesisSessionId?: string | null
         supervisorId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -524976,11 +526088,15 @@ export namespace Prisma {
         decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
         registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
     };
-    export type ThesisProjectCreateOrConnectWithoutSupervisorPaymentsInput = {
+    export type ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput = {
         where: ThesisProjectWhereUniqueInput
-        create: XOR<ThesisProjectCreateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput>
+        create: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput>
     };
-    export type ExpertProfileCreateWithoutSupervisorPaymentRecordInput = {
+    export type ThesisProjectCreateManySupervisorPaymentInputEnvelope = {
+        data: ThesisProjectCreateManySupervisorPaymentInput | ThesisProjectCreateManySupervisorPaymentInput[]
+        skipDuplicates?: boolean
+    };
+    export type ThesisProjectCreateWithoutCoSupervisorPaymentInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -524989,28 +526105,40 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
-        organization?: string | null
-        position?: string | null
-        specialization?: string | null
-        workplace?: string | null
-        phone?: string | null
-        email?: string | null
-        bankAccountNumber?: string | null
-        bankName?: string | null
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
-        lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
-        major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
-        supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
-        coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
-        subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
-        councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordCreateNestedManyWithoutExpertInput
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        maxStudents?: number | null
+        defenseDate?: Date | string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
+        supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
+        coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
+        council?: CouncilCreateNestedOneWithoutThesisInput
+        room?: RoomCreateNestedOneWithoutThesisProjectInput
+        defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
+        defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
+        decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
     };
-    export type ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput = {
+    export type ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -525019,190 +526147,72 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        lecturerId?: string | null
-        name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
-        organization?: string | null
-        position?: string | null
-        specialization?: string | null
-        workplace?: string | null
-        phone?: string | null
-        email?: string | null
-        bankAccountNumber?: string | null
-        bankName?: string | null
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
-        major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
-        supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
-        coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
-        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
-        councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-        payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorId?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
+        decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
     };
-    export type ExpertProfileCreateOrConnectWithoutSupervisorPaymentRecordInput = {
-        where: ExpertProfileWhereUniqueInput
-        create: XOR<ExpertProfileCreateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput>
+    export type ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput = {
+        where: ThesisProjectWhereUniqueInput
+        create: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput>
     };
-    export type ThesisProjectUpsertWithoutSupervisorPaymentsInput = {
-        update: XOR<ThesisProjectUpdateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentsInput>
-        create: XOR<ThesisProjectCreateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput>
-        where?: ThesisProjectWhereInput
+    export type ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope = {
+        data: ThesisProjectCreateManyCoSupervisorPaymentInput | ThesisProjectCreateManyCoSupervisorPaymentInput[]
+        skipDuplicates?: boolean
     };
-    export type ThesisProjectUpdateToOneWithWhereWithoutSupervisorPaymentsInput = {
-        where?: ThesisProjectWhereInput
-        data: XOR<ThesisProjectUpdateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentsInput>
+    export type ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput = {
+        where: ThesisProjectWhereUniqueInput
+        update: XOR<ThesisProjectUpdateWithoutSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentInput>
+        create: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput>
     };
-    export type ThesisProjectUpdateWithoutSupervisorPaymentsInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        title?: NullableStringFieldUpdateOperationsInput | string | null
-        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
-        summary?: NullableStringFieldUpdateOperationsInput | string | null
-        objectives?: NullableStringFieldUpdateOperationsInput | string | null
-        scope?: NullableStringFieldUpdateOperationsInput | string | null
-        methodology?: NullableStringFieldUpdateOperationsInput | string | null
-        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
-        requirements?: NullableStringFieldUpdateOperationsInput | string | null
-        technologies?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
-        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        language?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableStringFieldUpdateOperationsInput | string | null
-        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
-        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
-        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
-        supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
-        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
-        organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
-        council?: CouncilUpdateOneWithoutThesisNestedInput
-        room?: RoomUpdateOneWithoutThesisProjectNestedInput
-        defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
-        defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
-        librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
-        decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
-        registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+    export type ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput = {
+        where: ThesisProjectWhereUniqueInput
+        data: XOR<ThesisProjectUpdateWithoutSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentInput>
     };
-    export type ThesisProjectUncheckedUpdateWithoutSupervisorPaymentsInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        title?: NullableStringFieldUpdateOperationsInput | string | null
-        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
-        summary?: NullableStringFieldUpdateOperationsInput | string | null
-        objectives?: NullableStringFieldUpdateOperationsInput | string | null
-        scope?: NullableStringFieldUpdateOperationsInput | string | null
-        methodology?: NullableStringFieldUpdateOperationsInput | string | null
-        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
-        requirements?: NullableStringFieldUpdateOperationsInput | string | null
-        technologies?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
-        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        language?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
-        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
-        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
-        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
-        councilId?: NullableStringFieldUpdateOperationsInput | string | null
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
-        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
-        librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
-        decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
-        registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+    export type ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput = {
+        where: ThesisProjectScalarWhereInput
+        data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentInput>
     };
-    export type ExpertProfileUpsertWithoutSupervisorPaymentRecordInput = {
-        update: XOR<ExpertProfileUpdateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedUpdateWithoutSupervisorPaymentRecordInput>
-        create: XOR<ExpertProfileCreateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput>
-        where?: ExpertProfileWhereInput
+    export type ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput = {
+        where: ThesisProjectWhereUniqueInput
+        update: XOR<ThesisProjectUpdateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutCoSupervisorPaymentInput>
+        create: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput>
     };
-    export type ExpertProfileUpdateToOneWithWhereWithoutSupervisorPaymentRecordInput = {
-        where?: ExpertProfileWhereInput
-        data: XOR<ExpertProfileUpdateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedUpdateWithoutSupervisorPaymentRecordInput>
+    export type ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput = {
+        where: ThesisProjectWhereUniqueInput
+        data: XOR<ThesisProjectUpdateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutCoSupervisorPaymentInput>
     };
-    export type ExpertProfileUpdateWithoutSupervisorPaymentRecordInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
-        organization?: NullableStringFieldUpdateOperationsInput | string | null
-        position?: NullableStringFieldUpdateOperationsInput | string | null
-        specialization?: NullableStringFieldUpdateOperationsInput | string | null
-        workplace?: NullableStringFieldUpdateOperationsInput | string | null
-        phone?: NullableStringFieldUpdateOperationsInput | string | null
-        email?: NullableStringFieldUpdateOperationsInput | string | null
-        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankName?: NullableStringFieldUpdateOperationsInput | string | null
-        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
-        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
-        lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
-        major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
-        supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
-        coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
-        subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
-        councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-    };
-    export type ExpertProfileUncheckedUpdateWithoutSupervisorPaymentRecordInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
-        organization?: NullableStringFieldUpdateOperationsInput | string | null
-        position?: NullableStringFieldUpdateOperationsInput | string | null
-        specialization?: NullableStringFieldUpdateOperationsInput | string | null
-        workplace?: NullableStringFieldUpdateOperationsInput | string | null
-        phone?: NullableStringFieldUpdateOperationsInput | string | null
-        email?: NullableStringFieldUpdateOperationsInput | string | null
-        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankName?: NullableStringFieldUpdateOperationsInput | string | null
-        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
-        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
-        major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
-        supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
-        coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
-        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
-        councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
+    export type ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput = {
+        where: ThesisProjectScalarWhereInput
+        data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentInput>
     };
     export type SemesterCreateWithoutEvaluationPeriodInput = {
         id?: string
@@ -561799,7 +562809,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         maxStudents?: number | null
         councilId?: string | null
         roomId?: string | null
@@ -562699,7 +563711,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
         defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -562707,7 +563721,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -562734,7 +563747,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562748,7 +563763,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateManyWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -562775,7 +563789,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -584714,7 +585730,9 @@ export namespace Prisma {
         type?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -585066,7 +586084,9 @@ export namespace Prisma {
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -585075,7 +586095,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -585101,7 +586120,9 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -585116,7 +586137,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateManyWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -585142,7 +586162,9 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -585174,6 +586196,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -585181,8 +586205,6 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -585205,14 +586227,14 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateManyWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -585235,6 +586257,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -588397,7 +589421,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -588772,7 +589798,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -588780,7 +589808,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -588807,7 +589834,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -588821,7 +589850,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateManyWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -588848,7 +589876,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -589528,6 +590558,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -589535,8 +590567,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateWithoutMajorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -589559,14 +590589,14 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateManyWithoutMajorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -589589,6 +590619,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -593861,6 +594893,8 @@ export namespace Prisma {
         email?: string | null
         bankAccountNumber?: string | null
         bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
     };
@@ -594867,6 +595901,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
@@ -594874,8 +595910,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -594897,6 +595931,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -594904,8 +595940,6 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-        payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-        supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateManyWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -594927,6 +595961,8 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
         bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -595492,7 +596528,9 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -595534,7 +596572,9 @@ export namespace Prisma {
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -595543,7 +596583,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutThesisSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -595569,7 +596608,9 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -595584,7 +596625,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateManyWithoutThesisSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -595610,7 +596650,9 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -595653,21 +596695,6 @@ export namespace Prisma {
         reviewedAt?: Date | string | null
         reviewedById?: string | null
         reviewNote?: string | null
-    };
-    export type SupervisorPaymentRecordCreateManyThesisProjectInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        expertId: string
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
     };
     export type DecisionUpdateWithoutThesisProjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -595769,51 +596796,6 @@ export namespace Prisma {
         reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
     };
-    export type SupervisorPaymentRecordUpdateWithoutThesisProjectInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        expert?: ExpertProfileUpdateOneRequiredWithoutSupervisorPaymentRecordNestedInput
-    };
-    export type SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        expertId?: StringFieldUpdateOperationsInput | string
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    };
-    export type SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        expertId?: StringFieldUpdateOperationsInput | string
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    };
     export type ThesisProjectCreateManyDefenseSessionInput = {
         id?: string
         code?: string | null
@@ -595839,7 +596821,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -595881,7 +596865,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -595889,7 +596875,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutDefenseSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -595916,7 +596901,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -595930,7 +596917,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateManyWithoutDefenseSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -595957,7 +596943,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -595992,7 +596980,9 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -596029,6 +597019,8 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -596051,36 +597043,6 @@ export namespace Prisma {
         createdBy?: string | null
         role: $Enums.CouncilRole
         councilId: string
-    };
-    export type PaymentRecordCreateManyExpertInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
-        councilMemberId?: string | null
-    };
-    export type SupervisorPaymentRecordCreateManyExpertInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        thesisProjectId: string
-        amount: Decimal | DecimalJsLike | number | string
-        status?: $Enums.PaymentStatus
-        paymentDate?: Date | string | null
-        transactionCode?: string | null
     };
     export type TrainingMajorUpdateWithoutExpertProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596182,7 +597144,9 @@ export namespace Prisma {
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -596191,7 +597155,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutSupervisorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596217,7 +597180,9 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -596232,7 +597197,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateManyWithoutSupervisorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596258,7 +597222,9 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -596301,6 +597267,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -596309,7 +597277,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutCoSupervisorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596336,6 +597303,8 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -596350,7 +597319,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateManyWithoutCoSupervisorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596377,6 +597345,8 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -596577,96 +597547,6 @@ export namespace Prisma {
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         councilId?: StringFieldUpdateOperationsInput | string
     };
-    export type PaymentRecordUpdateWithoutExpertInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        councilMember?: CouncilMemberUpdateOneWithoutPaymentNestedInput
-    };
-    export type PaymentRecordUncheckedUpdateWithoutExpertInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        councilMemberId?: NullableStringFieldUpdateOperationsInput | string | null
-    };
-    export type PaymentRecordUncheckedUpdateManyWithoutExpertInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        councilMemberId?: NullableStringFieldUpdateOperationsInput | string | null
-    };
-    export type SupervisorPaymentRecordUpdateWithoutExpertInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisProject?: ThesisProjectUpdateOneRequiredWithoutSupervisorPaymentsNestedInput
-    };
-    export type SupervisorPaymentRecordUncheckedUpdateWithoutExpertInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisProjectId?: StringFieldUpdateOperationsInput | string
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    };
-    export type SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        thesisProjectId?: StringFieldUpdateOperationsInput | string
-        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    };
     export type DocumentFileCreateManyDecisionInput = {
         id?: string
         code?: string | null
@@ -596824,7 +597704,9 @@ export namespace Prisma {
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorId?: string | null
+        supervisorPaymentId?: string | null
         coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         roomId?: string | null
@@ -596878,7 +597760,9 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
         defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -596886,7 +597770,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateWithoutCouncilInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596913,7 +597796,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -596927,7 +597812,6 @@ export namespace Prisma {
         librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
     };
     export type ThesisProjectUncheckedUpdateManyWithoutCouncilInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596954,7 +597838,9 @@ export namespace Prisma {
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -597268,6 +598154,326 @@ export namespace Prisma {
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ThesisProjectCreateManySupervisorPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorId?: string | null
+        coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+    };
+    export type ThesisProjectCreateManyCoSupervisorPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorId?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+    };
+    export type ThesisProjectUpdateWithoutSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+        supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
+        council?: CouncilUpdateOneWithoutThesisNestedInput
+        room?: RoomUpdateOneWithoutThesisProjectNestedInput
+        defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateWithoutSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type ThesisProjectUpdateWithoutCoSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+        supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
+        council?: CouncilUpdateOneWithoutThesisNestedInput
+        room?: RoomUpdateOneWithoutThesisProjectNestedInput
+        defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateWithoutCoSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type StandardPeriodCreateManyPeriodInput = {
         id?: string
