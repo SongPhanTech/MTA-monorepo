@@ -1,3 +1,6 @@
+# prisma engines
+*.node
+
 # Dependencies
 node_modules
 .pnp

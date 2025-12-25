@@ -1,4 +1,5 @@
-out.zip
+*.zip
+*.tar.gz
 
 # Dependencies
 node_modules
