@@ -136,5 +136,14 @@ export default function CountriesSendingForStudy() {
 }
 
 CountriesSendingForStudy.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Các nước cử đi học tập' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

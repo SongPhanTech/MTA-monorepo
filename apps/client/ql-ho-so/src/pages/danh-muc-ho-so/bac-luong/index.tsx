@@ -141,5 +141,14 @@ export default function BacLuong() {
 }
 
 BacLuong.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Bậc lương' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

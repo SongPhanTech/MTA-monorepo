@@ -80,7 +80,7 @@ export default function LoaiTinhTrangCongTacModal() {
         >
             <Col span={24}>
                 <FormItem label="Tên loại tình trạng công tác" name="name" required form={form}>
-                    <Input placeholder="Nhập tên bậc lương" />
+                    <Input placeholder="Nhập tên loại tình trạng công tác" />
                 </FormItem>
             </Col>
             <Col span={24}>

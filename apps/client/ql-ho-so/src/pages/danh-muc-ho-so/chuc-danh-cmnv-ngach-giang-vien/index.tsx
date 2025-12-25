@@ -140,5 +140,14 @@ export default function ProfessionalTitleOfLecturer() {
 }
 
 ProfessionalTitleOfLecturer.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Chức danh CMNV ngạch giảng viên' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

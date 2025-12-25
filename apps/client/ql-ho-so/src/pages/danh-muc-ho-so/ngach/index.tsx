@@ -132,5 +132,14 @@ export default function Ngach() {
 }
 
 Ngach.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Ngạch' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

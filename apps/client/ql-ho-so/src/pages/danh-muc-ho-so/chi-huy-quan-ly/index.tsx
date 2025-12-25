@@ -141,5 +141,14 @@ export default function ManagementCommand() {
 }
 
 ManagementCommand.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Chỉ huy quản lý' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

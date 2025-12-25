@@ -137,5 +137,14 @@ export default function CadreEvaluation() {
 }
 
 CadreEvaluation.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Xếp loại đánh giá cán bộ' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

@@ -88,12 +88,12 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Vui lòng nhập họ và tên đệm!',
+                                    message: 'Vui lòng nhập tên!',
                                 },
                             ]}
                             className="mb-0"
                         >
-                            <Input placeholder="Nhập họ và tên đệm" className="h-9" />
+                            <Input placeholder="Nhập tên" className="h-9" />
                         </FormItem>
                     </Col>
                     <Col span={12}>
@@ -274,7 +274,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
 
                     <Col span={12}>
                         <FormItem form={form} name="soTruong" label="Sở trường" className="mb-0">
-                            <Input placeholder="Nhập số trường" className="h-9" />
+                            <Input placeholder="Nhập sở trường" className="h-9" />
                         </FormItem>
                     </Col>
 

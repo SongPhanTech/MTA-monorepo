@@ -58,7 +58,7 @@ export default function PutKyLuatModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={isEdit ? 'Cập nhật hình thức khen thưởng' : 'Thêm mới hình thức khen thưởng'}
+            title={isEdit ? 'Cập nhật hình thức kỷ luật' : 'Thêm mới hình thức kỷ luật'}
             className="w-[40vw]"
             layout="vertical"
         >

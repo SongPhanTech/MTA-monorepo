@@ -142,5 +142,14 @@ export default function LoaiTinhTrangCongTac() {
 }
 
 LoaiTinhTrangCongTac.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Loại tình trạng công tác' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

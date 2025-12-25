@@ -73,7 +73,7 @@ export default function SucKhoeModal() {
         >
             <Col span={24}>
                 <FormItem label="Tên sức khỏe" name="name" required form={form}>
-                    <Input placeholder="Nhập tên sức khỏe" />
+                    <Input placeholder="Nhập tên loại sức khỏe" />
                 </FormItem>
             </Col>
             <Col span={24}>

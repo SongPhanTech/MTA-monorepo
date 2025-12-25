@@ -139,5 +139,14 @@ export default function PartyMemberQualityEvaluation() {
 }
 
 PartyMemberQualityEvaluation.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Xếp loại đánh giá chất lượng đảng viên' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

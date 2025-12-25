@@ -137,5 +137,14 @@ export default function StateManagementLevel() {
 }
 
 StateManagementLevel.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Trình độ quản lý nhà nước' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

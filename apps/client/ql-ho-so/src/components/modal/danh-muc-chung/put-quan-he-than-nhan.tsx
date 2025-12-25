@@ -73,7 +73,7 @@ export default function QuanHeThanNhanModal() {
         >
             <Col span={24}>
                 <FormItem label="Tên quan hệ thân nhân" name="name" required form={form}>
-                    <Input placeholder="Nhập tên nhóm máu" />
+                    <Input placeholder="Nhập tên quan hệ thân nhân" />
                 </FormItem>
             </Col>
             <Col span={24}>

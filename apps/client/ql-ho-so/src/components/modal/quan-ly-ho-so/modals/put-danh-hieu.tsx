@@ -71,7 +71,7 @@ export default function PutDanhHieuModal() {
             <Col span={24}>
                 <FormItem label="Ngày phong tặng danh hiệu" name="thoiGian" required form={form}>
                     <DatePicker
-                        placeholder="Ngày phong tặng danh hiệu"
+                        placeholder="Chọn ngày phong tặng danh hiệu"
                         className="w-full"
                         format={{
                             format: 'DD/MM/YYYY',

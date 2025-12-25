@@ -137,5 +137,14 @@ export default function TypeOfStudy() {
 }
 
 TypeOfStudy.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Loại hình đi học tập' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

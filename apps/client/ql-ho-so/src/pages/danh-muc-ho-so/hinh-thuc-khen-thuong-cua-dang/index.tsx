@@ -137,5 +137,14 @@ export default function FormsOfPartyCommendation() {
 }
 
 FormsOfPartyCommendation.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Hình thức khen thưởng của đảng' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

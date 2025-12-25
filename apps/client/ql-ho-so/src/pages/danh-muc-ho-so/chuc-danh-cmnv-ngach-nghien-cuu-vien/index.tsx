@@ -137,5 +137,14 @@ export default function ProfessionalTitleOfResearcher() {
 }
 
 ProfessionalTitleOfResearcher.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Chức danh CMNV ngạch nghiên cứu viên' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

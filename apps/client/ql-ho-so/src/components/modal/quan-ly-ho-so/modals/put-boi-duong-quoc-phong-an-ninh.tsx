@@ -62,7 +62,11 @@ export default function PutBoiDuongQuocPhongModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={isEdit ? 'Cập nhật trình độ ngoại ngữ' : 'Thêm mới trình độ ngoại ngữ'}
+            title={
+                isEdit
+                    ? 'Cập nhật lớp bồi dưỡng quốc phòng an ninh'
+                    : 'Thêm mới lớp bồi dưỡng quốc phòng an ninh'
+            }
             className="w-[40vw]"
             layout="vertical"
         >

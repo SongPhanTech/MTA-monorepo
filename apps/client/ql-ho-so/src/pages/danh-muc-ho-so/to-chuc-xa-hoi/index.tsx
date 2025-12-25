@@ -136,5 +136,14 @@ export default function SocialOrganization() {
 }
 
 SocialOrganization.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Tổ chức xã hội' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

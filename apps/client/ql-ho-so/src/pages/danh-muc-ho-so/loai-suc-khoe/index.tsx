@@ -132,5 +132,14 @@ export default function HealthType() {
 }
 
 HealthType.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục hồ sơ', href: '/danh-muc-ho-so' },
+                { title: 'Loại sức khỏe' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }
