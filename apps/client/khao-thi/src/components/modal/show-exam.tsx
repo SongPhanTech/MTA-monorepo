@@ -1,16 +1,17 @@
 import { CopyOutlined } from '@ant-design/icons'
-import { Button, Flex, Input, message, Modal } from 'antd'
+import { getRuntimeEnv } from '@workspace/libs/utils'
+import { Button, Flex, Input, Modal, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ThongTinKhaoSatModal = () => {
     const { isOpen, onClose, input } = useDisclosure<{ dataTable: any[]; id: string }>({
         tag: 'ThongTinKhaoSatModal',
     })
-    const link = `https://mta.swantech.vn/ems/lam-khao-sat/${input?.id}`
+    const link = `${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}/lam-khao-sat/${input?.id}`
 
     // const handleCopy = async () => {
     //     try {
-    //         const link = `https://mta.swantech.vn/ems/lam-khao-sat/${input?.id}`
+    //         const link = `${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}/lam-khao-sat/${input?.id}`
     //         await navigator.clipboard.writeText(link)
     //     } catch (err) {
     //         console.error('Failed to copy: ', err)
