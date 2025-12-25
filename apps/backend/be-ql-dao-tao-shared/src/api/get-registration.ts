@@ -1,3 +1,5 @@
+
+
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 
@@ -45,25 +47,29 @@ const getRegistration = createRoute({
 app.openapi(getRegistration, async (c) => {
     const { class_terms, students_code } = c.req.valid('json')
 
-    const logs = await prisma.classRegisterLogs.findMany({
+    const logs = await prisma.subjectClass.findMany({
         where: {
-            classRegisterSession: {
-                name: class_terms,
-            },
-            student: {
-                code: students_code,
-            },
-        },
-        select: {
-            subjectClass: {
-                select: {
-                    code: true,
+                semester: {
+                   name:{
+                    contains:class_terms.trim(),
+                    mode:'insensitive'
+                   }
                 },
-            },
+            
+           subjectClassStudent:{
+                    some:{
+                        student:{
+                            code:students_code
+                        }
+                    }   
+           }
         },
+      select:{
+        code:true
+      }
     })
-    const class_reg = logs.map((l) => l.subjectClass.code)
-
+   
+    const class_reg = logs.map((l) => l.code)
     return c.json({
         result_code: '000',
         result_desc: 'success',
