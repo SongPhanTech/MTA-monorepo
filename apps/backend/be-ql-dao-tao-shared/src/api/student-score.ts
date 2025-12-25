@@ -93,7 +93,6 @@ app.openapi(getStudentScore, async (c) => {
                     },
                 },
             },
-            trainingObjectType: true,
         },
     })
 

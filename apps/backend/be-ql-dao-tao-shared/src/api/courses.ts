@@ -1,3 +1,4 @@
+
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { prisma } from '..'
 import { ErrorCode, FailedResponseSchema } from '../dto/base'
@@ -155,6 +156,7 @@ app.openapi(getOpenCourses, async (c) => {
                     active: true,
                     deletedAt: null,
                 },
+               
                 include: {
                     prerequisiteSubject: {
                         select: {
@@ -229,6 +231,7 @@ app.openapi(getOpenCourses, async (c) => {
                         },
                     },
                 },
+              
             })
 
             return {
@@ -278,7 +281,7 @@ app.openapi(getOpenCourses, async (c) => {
                     const class_time = subjectClass.subjectClassTimes
                         .map((t) => `T${t.dayOfWeek}(${t.startPeriod}-${t.endPeriod})`)
                         .join(', ')
-
+                   
                     return {
                         session_code: s.code,
                         program_code: program_code ?? curriculumVersion?.code,
@@ -292,6 +295,7 @@ app.openapi(getOpenCourses, async (c) => {
                         class_students_reg: subjectClass.maxStudent,
                         class_students_count: subjectClass._count.subjectClassStudent,
                         class_teachers: [mainLecturer, extraLecturer].filter(Boolean).join(', '),
+                        class_credit_hour:version.credit,
                         class_tuition: version.credit * s.tuitionPerCredit,
                         class_time,
                         class_exam_date: subjectClass.examDate,

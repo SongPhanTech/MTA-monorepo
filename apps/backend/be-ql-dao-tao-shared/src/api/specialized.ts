@@ -88,7 +88,7 @@ app.openapi(getSpecialized, async (c) => {
                     trainingMajor: true,
                 },
             },
-            fixedClasses: {
+            fixedClass: {
                 select: {
                     trainingCourse: {
                         select: {
@@ -108,7 +108,8 @@ app.openapi(getSpecialized, async (c) => {
     })
 
     const data: SpecializedInfo[] = curriculumVersions.map((item) => {
-        const scholastic = new Set(item.fixedClasses.map((cls) => cls.trainingCourse.name))
+        const scholastic = new Set(item.fixedClass ? [item.fixedClass.trainingCourse.name] : [])
+
         return {
             specialized_code: item.curriculum.trainingMajor.code,
             specialized_name: item.curriculum.trainingMajor.name,
