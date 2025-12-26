@@ -471,18 +471,10 @@ app.openapi(openSubjectClass, async (c) => {
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
-        include: {
-            schoolYear: true,
-        },
+        include: { schoolYear: true },
     })
     if (!semester) {
-        return c.json(
-            {
-                success: false,
-                message: 'Học kỳ không tồn tại',
-            },
-            400
-        )
+        return c.json({ success: false, message: 'Học kỳ không tồn tại' }, 400)
     }
 
     let semesterType =
@@ -655,10 +647,10 @@ app.openapi(openSubjectClass, async (c) => {
                 )
                 AND (
                 ${search ?? null}::TEXT IS NULL
-                    OR subject_version_name ILIKE ${search}
-                    OR subject_version_code ILIKE ${search}
-                    OR fixed_class_name ILIKE ${search}
-                    OR fixed_class_code ILIKE ${search}
+                    OR subject_version_name ILIKE ${`%${search}%`}
+                    OR subject_version_code ILIKE ${`%${search}%`}
+                    OR fixed_class_name ILIKE ${`%${search}%`}
+                    OR fixed_class_code ILIKE ${`%${search}%`}
                 )
             )
         GROUP BY subject_version_id,
