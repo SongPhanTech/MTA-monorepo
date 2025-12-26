@@ -41,14 +41,14 @@ export default function MonTheoKeHoachDuKien() {
     } = useOpenSubjectClass(
         {
             semesterId: semesterId as string,
-            search: searchText,
-            trainingCourseId: trainingCourseId ?? '',
+            search: searchText || undefined,
+            trainingCourseId: trainingCourseId || '',
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             nextSemester: 0,
             fixedClassId: fixedClassId,
         },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
+        { query: { enabled: !!semesterId && !!trainingObjectTypeId && !!trainingCourseId } }
     )
 
     const data = useMemo(() => {
