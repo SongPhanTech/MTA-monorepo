@@ -103,40 +103,15 @@ app.openapi(registration, async (c) => {
 
     const results = await Promise.allSettled(
         class_data.map(async (cls) => {
-            const subjectClass = await prisma.subjectClass.findUnique({
-                where: { id: cls, semesterId: { in: semesterIds } },
+            const subjectClass = await prisma.subjectClass.findFirst({
+                where: {
+                    code: cls, 
+                    semesterId: { in: semesterIds },
+                },
                 include: {
                     subject: true,
                     subjectClassStudent: {
                         select: { student: { select: { code: true } } },
-                    },
-                    mainLecturer: {
-                        select: {
-                            userProfile: {
-                                select: {
-                                    fullname: true,
-                                    level: { select: { sMa: true, sTen: true } },
-                                    academicRankType: { select: { sMa: true, sTen: true } },
-                                    academicDegreeType: {
-                                        select: { sMa: true, sTen: true },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    extraLecturer: {
-                        select: {
-                            userProfile: {
-                                select: {
-                                    fullname: true,
-                                    level: { select: { sMa: true, sTen: true } },
-                                    academicRankType: { select: { sMa: true, sTen: true } },
-                                    academicDegreeType: {
-                                        select: { sMa: true, sTen: true },
-                                    },
-                                },
-                            },
-                        },
                     },
                     _count: {
                         select: {
@@ -151,11 +126,14 @@ app.openapi(registration, async (c) => {
             }
 
             if (type_res === TYPE_RES.REGISTER) {
-                if (subjectClass._count.subjectClassStudent >= subjectClass.maxStudent) {
+                  console.log(subjectClass.maxStudent)
+                if (subjectClass._count.subjectClassStudent >= subjectClass.maxStudent) {      
                     throw new Error(
                         `Lớp ${subjectClass.subject.name} ${cls} đã quá số lượng đăng ký`
+                        
                     )
                 }
+
                 if (
                     subjectClass.subjectClassStudent.some(
                         (item) => item.student.code === student.code
@@ -205,7 +183,6 @@ app.openapi(registration, async (c) => {
             return cls
         })
     )
-
     const class_valid: string[] = []
     const class_invalid: string[] = []
     const descriptions: string[] = []
