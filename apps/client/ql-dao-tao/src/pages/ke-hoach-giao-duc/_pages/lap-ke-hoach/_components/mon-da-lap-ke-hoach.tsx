@@ -112,6 +112,13 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                         },
                         subjectClassType: type,
                     },
+                    orderBy: {
+                        trainingBlockSubject: {
+                            subject: {
+                                code: 'asc',
+                            },
+                        },
+                    },
                 },
                 _count: {
                     select: {
@@ -375,6 +382,17 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                                 <div className="text-left">
                                     {record?.trainingBlockSubject?.subject?.name} (
                                     {record?.trainingBlockSubject?.subject?.credit})
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'Lớp',
+                            width: 120,
+                            align: 'center',
+                            render: (_, record) => (
+                                <div className="text-left">
+                                    {record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion
+                                        ?.curriculumVersion?.fixedClass?.code || ''}
                                 </div>
                             ),
                         },

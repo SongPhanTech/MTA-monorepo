@@ -116,11 +116,6 @@ export default function MonTheoKeHoachDuKien() {
                         },
                         select: {
                             id: true,
-                            planTrainingSubjects: {
-                                where: {
-                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
-                                },
-                            },
                         },
                     },
                 },
