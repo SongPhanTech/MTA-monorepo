@@ -1,7 +1,11 @@
+import TreeSelect from '@/components/commons/tree-select'
 import { queryClient } from '@api/index'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import Tabs from '@components/commons/tabar'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import { type DocumentFile, type SubjectVersion, SubjectVersionType } from '@workspace/db/client'
 import {
@@ -13,16 +17,12 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message, Radio, Row, Switch } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import DocumentPaths from '@components/commons/documentPaths'
-import Tabs from '@components/commons/tabar'
-import { useExamTypeOptions } from '@hooks/examType'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
-import TreeSelect from '@/components/commons/tree-select'
 
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
@@ -61,7 +61,6 @@ const PutVersionSubjectModal = () => {
         onClose: form.resetFields,
     })
 
-    const subjectId = input?.subjectId
     const subjectVersionId = input?.subjectVersionId
     const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
     const { mutateAsync: createSubjectVersionHistory } = useCreateSubjectVersionHistory()
@@ -73,10 +72,13 @@ const PutVersionSubjectModal = () => {
                 coRequisiteSubject: true,
                 documentFiles: true,
                 studentSubjectScore: { take: 1 },
+                subject: true,
             },
         },
         { enabled: !!subjectVersionId }
     )
+
+    const subjectId = input?.subjectId || subjectVersion?.subjectId || ''
 
     const isScored = useMemo(
         () => !!subjectVersion?.studentSubjectScore.length,
@@ -451,7 +453,7 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={4}>
-                    <FormItem form={form} name="codeTkb" label="Mã TKB" required>
+                    <FormItem form={form} name="codeTkb" label="Mã TKB">
                         <Input placeholder="Mã TKB" readOnly={input?.isLocked} />
                     </FormItem>
                 </Col>

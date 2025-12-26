@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import type { $Enums } from '@workspace/db/client'
 import { useFindManySubject, useFindManySubjectVersion } from '@workspace/db/hooks'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
-import { Button, Collapse, Modal, Tag } from 'antd'
+import { Button, Collapse, Modal, Tag, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -143,6 +143,7 @@ const ModalPreviewUpload = () => {
                             key="1"
                         >
                             <Table
+                                className="p-0 m-0"
                                 columns={[
                                     {
                                         title: 'STT',
@@ -178,14 +179,15 @@ const ModalPreviewUpload = () => {
                 )}
 
                 <Table
+                    scrollable
+                    maxHeight={'calc(85vh - 260px)'}
                     columns={[
                         {
-                            title: 'STT',
+                            title: 'TT',
                             dataIndex: 'stt',
                             key: 'stt',
-                            width: 60,
+                            width: 35,
                             align: 'center',
-                            fixed: 'left',
                             render: (_, __, index: number) =>
                                 index + 1 + (currentPage - 1) * numberOfPages,
                         },
@@ -193,8 +195,7 @@ const ModalPreviewUpload = () => {
                             title: 'Trạng thái',
                             dataIndex: 'status',
                             key: 'status',
-                            width: 150,
-                            fixed: 'left',
+                            width: 100,
                             align: 'center',
                             render: (status: 'new' | 'new-version' | 'duplicate') => {
                                 if (status === 'new') {
@@ -210,21 +211,27 @@ const ModalPreviewUpload = () => {
                             title: 'Khối kiến thức',
                             dataIndex: 'trainingBlockName',
                             key: 'knowledgeBlock',
-                            fixed: 'left',
-                            width: 250,
+                            width: 200,
+                        },
+                        {
+                            title: <Tooltip title="Mã môn học">Mã MH</Tooltip>,
+                            align: 'center',
+                            width: 100,
+                            render:(_, record)=> record.code?.toUpperCase()
                         },
                         {
                             title: 'Tên học phần',
-                            dataIndex: 'name',
-                            key: 'name',
+                            // dataIndex: 'name',
+                            // key: 'name',
                             width: 270,
-                            fixed: 'left',
+                            render: (_, record) => record?.name,
                         },
                         {
                             title: 'Bắt buộc',
                             dataIndex: 'type',
                             key: 'required',
-                            width: 150,
+                            align: 'center',
+                            width: 100,
                             render: (value) => mapSubjectRequirementType(value),
                         },
                         {
@@ -232,7 +239,7 @@ const ModalPreviewUpload = () => {
                             dataIndex: 'useForFinalScore',
                             key: 'useForFinalScore',
                             align: 'center',
-                            width: 170,
+                            width: 100,
                             render: (value: boolean | undefined) => {
                                 if (value === true) return '0'
                                 if (value === false) return '1'
@@ -243,15 +250,10 @@ const ModalPreviewUpload = () => {
                             title: 'Loại học phần',
                             dataIndex: 'subjectVersionType',
                             key: 'type',
-                            width: 270,
+                            width: 120,
                             render: (value) => mapSubjectVersionType(value),
                         },
-                        {
-                            title: 'Mã học phần',
-                            dataIndex: 'code',
-                            key: 'code',
-                            width: 170,
-                        },
+
                         {
                             title: 'Khoa, Viện phụ trách',
                             dataIndex: 'organizationCode',

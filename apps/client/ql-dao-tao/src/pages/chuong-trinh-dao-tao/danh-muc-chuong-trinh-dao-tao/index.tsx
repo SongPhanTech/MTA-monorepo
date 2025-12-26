@@ -1,3 +1,4 @@
+import TreeSelect from '@/components/commons/tree-select'
 import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
@@ -13,11 +14,9 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import type {
     CurriculumVersion,
-    DocumentFile,
-    TrainingBlockOnCurriculumVersion,
     TrainingCourse,
     TrainingMajor,
-    TrainingTime,
+    TrainingTime
 } from '@workspace/db/client'
 import {
     useCountCurriculum,
@@ -40,7 +39,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
@@ -485,12 +483,12 @@ export default function TrainingProgramCatalog() {
                                 <div>
                                     {code && (
                                         <div>
-                                            <strong>Code:</strong> {code}
+                                            <strong>Mã:</strong> {code}
                                         </div>
                                     )}
                                     {name && (
                                         <div>
-                                            <strong>Name:</strong> {name}
+                                            <strong>Tên:</strong> {name}
                                         </div>
                                     )}
                                     {managementOrganization?.sTen && (
@@ -721,12 +719,7 @@ export default function TrainingProgramCatalog() {
                                                             if (isLocked) {
                                                                 return
                                                             }
-                                                            handleCloneCurriculumVersion(
-                                                                record as CurriculumVersion & {
-                                                                    trainingBlocks: TrainingBlockOnCurriculumVersion[]
-                                                                    documentFiles: DocumentFile[]
-                                                                }
-                                                            )
+                                                            handleCloneCurriculumVersion(record)
                                                         }}
                                                     />
                                                 )}
@@ -742,9 +735,7 @@ export default function TrainingProgramCatalog() {
                                                                 return
                                                             }
                                                             onOpenCurriculumVersion({
-                                                                curriculumId: (
-                                                                    record as CurriculumVersion
-                                                                ).curriculumId,
+                                                                curriculumId: record.curriculumId,
                                                                 versionId: record?.id,
                                                             })
                                                         }}

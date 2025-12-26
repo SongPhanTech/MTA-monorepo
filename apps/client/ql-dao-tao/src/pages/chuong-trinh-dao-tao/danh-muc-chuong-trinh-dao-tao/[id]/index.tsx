@@ -12,11 +12,8 @@ import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 
 import type {
-    CurriculumVersion,
-    DocumentFile,
     Prisma,
-    SubjectVersion,
-    TrainingBlockOnCurriculumVersion,
+    SubjectVersion
 } from '@workspace/db/client'
 import { $Enums, type TrainingBlockSubject } from '@workspace/db/client'
 import {
@@ -27,6 +24,7 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { cn } from '@workspace/ui/lib/utils'
@@ -37,7 +35,6 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
-import { getMinioUrl } from '@workspace/libs/utils'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -68,9 +65,6 @@ export default function TrainingProgramSubjects() {
                             include: {
                                 subject: {
                                     include: {
-                                        // planTrainingSubject: {
-                                        //     take: 1,
-                                        // },
                                         subjectClass: {
                                             take: 1,
                                         },
@@ -442,7 +436,7 @@ export default function TrainingProgramSubjects() {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider orientation="left" orientationMargin={0} className='m-0 p-0'>
                 CTĐT toàn khoá:{' '}
                 {[
                     initialValue?.code,
@@ -453,11 +447,11 @@ export default function TrainingProgramSubjects() {
                     .filter(Boolean)
                     .join(' - ')}
             </Divider>
-            <Row gutter={[16, 0]}>
+            <Row gutter={[0, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="end">
+                    <Row gutter={[0, 0]} align="top" justify="end">
                         <Col span={12}>
-                            <Flex justify="end" gap={4}>
+                            <Flex justify="end" gap={4} className='m-0 p-0'>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'NHAP_EXCEL'
@@ -497,12 +491,7 @@ export default function TrainingProgramSubjects() {
                                         <Button
                                             onClick={() =>
                                                 initialValue &&
-                                                handleCloneCurriculumVersion(
-                                                    initialValue as CurriculumVersion & {
-                                                        trainingBlocks: TrainingBlockOnCurriculumVersion[]
-                                                        documentFiles: DocumentFile[]
-                                                    }
-                                                )
+                                                handleCloneCurriculumVersion(initialValue)
                                             }
                                             className="text-primary border-primary mr-2"
                                             disabled={!initialValue}
@@ -535,7 +524,6 @@ export default function TrainingProgramSubjects() {
                         </Col>
                     </Row>
                 </Col>
-
                 <Col span={24}>
                     <div className="flex gap-2">
                         <p className="flex gap-2 items-center">
