@@ -86,6 +86,7 @@ export default function MonTheoKeHoachDuKien() {
             queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectVersion'] })
         }, 500),
         []
     )
