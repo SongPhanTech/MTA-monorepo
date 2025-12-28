@@ -384,8 +384,8 @@ const XemTaiLieu = () => {
     })
 
     const documentUrl = getMinioUrl(input?.uri || '')
-    console.log(input);
-    
+    console.log(input, documentUrl)
+
     const fileType = input?.mimeType?.toLowerCase() ?? ''
 
     return (
