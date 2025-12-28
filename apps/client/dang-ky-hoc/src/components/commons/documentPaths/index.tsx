@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons'
 import type { DocumentFile, Prisma } from '@workspace/db/client'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { getMinioUrl, getRuntimeEnv } from '@workspace/libs/utils'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { message, Tooltip, Typography, Upload } from 'antd'
 import type { FormInstance } from 'antd/es/form'
 import axios from 'axios'
@@ -85,7 +85,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     const handlePreviewFile = async (file: UploadedFileItem) => {
         try {
             return onOpenPreview({
-                uri: getMinioUrl(file.path),
+                uri: file.path,
                 name: file.name,
                 mimeType: file.name.split('.').pop() || file.mimeType,
             })
