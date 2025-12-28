@@ -2423,6 +2423,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'dM_LoaiTinhTrangCongTac',
+                }, dM_NuocCuDiHocTap: {
+                    name: "dM_NuocCuDiHocTap",
+                    type: "DM_NuocCuDiHocTap",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'quaTrinhCuDiCongTac',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_NuocCuDiHocTapId" },
+                }, dM_NuocCuDiHocTapId: {
+                    name: "dM_NuocCuDiHocTapId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_NuocCuDiHocTap',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -24094,6 +24108,12 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, quaTrinhCuDiCongTac: {
+                    name: "quaTrinhCuDiCongTac",
+                    type: "QuaTrinhCuDiCongTac",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_NuocCuDiHocTap',
                 },
             }, uniqueConstraints: {
                 id: {

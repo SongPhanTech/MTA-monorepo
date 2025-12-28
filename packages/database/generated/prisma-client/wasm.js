@@ -479,6 +479,7 @@ exports.Prisma.QuaTrinhCuDiCongTacScalarFieldEnum = {
   chucVuId: 'chucVuId',
   dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
   dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
+  dM_NuocCuDiHocTapId: 'dM_NuocCuDiHocTapId',
   userProfileId: 'userProfileId'
 };
 
@@ -4782,6 +4783,7 @@ exports.Prisma.QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum = {
   chucVuId: 'chucVuId',
   dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
   dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
+  dM_NuocCuDiHocTapId: 'dM_NuocCuDiHocTapId',
   userProfileId: 'userProfileId'
 };
 

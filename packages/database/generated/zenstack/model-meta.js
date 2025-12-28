@@ -2581,6 +2581,21 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'dM_LoaiTinhTrangCongTac',
+                }, dM_NuocCuDiHocTap: {
+                    name: "dM_NuocCuDiHocTap",
+                    type: "DM_NuocCuDiHocTap",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'quaTrinhCuDiCongTac',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_NuocCuDiHocTapId" },
+                }, dM_NuocCuDiHocTapId: {
+                    name: "dM_NuocCuDiHocTapId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_NuocCuDiHocTap',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -25412,6 +25427,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, quaTrinhCuDiCongTac: {
+                    name: "quaTrinhCuDiCongTac",
+                    type: "QuaTrinhCuDiCongTac",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_NuocCuDiHocTap',
                 },
             }, uniqueConstraints: {
                 id: {

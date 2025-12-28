@@ -1141,6 +1141,8 @@ model QuaTrinhCuDiCongTac {
   dM_TinhTrangCongTacId     String?
   dM_LoaiTinhTrangCongTac   DM_LoaiTinhTrangCongTac? @relation(fields: [dM_LoaiTinhTrangCongTacId], references: [id])
   dM_LoaiTinhTrangCongTacId String?
+  dM_NuocCuDiHocTap         DM_NuocCuDiHocTap?       @relation(fields: [dM_NuocCuDiHocTapId], references: [id])
+  dM_NuocCuDiHocTapId       String?
   userProfile               UserProfile              @relation(fields: [userProfileId], references: [id])
   userProfileId             String
 
@@ -7116,15 +7118,16 @@ model DM_TinhTrangDiHocTap {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model DM_NuocCuDiHocTap {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @default("") @db.Uuid()
-  name        String    @unique()
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  createdBy           String?               @default("") @db.Uuid()
+  name                String                @unique()
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 
   @@schema("ql-ho-so")
 }
