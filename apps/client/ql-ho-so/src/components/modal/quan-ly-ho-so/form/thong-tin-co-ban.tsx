@@ -60,7 +60,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     // )
     const renderContent = () => {
         return (
-            <div className="px-6">
+            <div className="px-6 form-label-wrap">
                 <div className="mb-6 font-semibold text-base">Thông tin chung</div>
                 <Row className="mb-6" gutter={[16, 16]}>
                     <Col span={12}>
@@ -776,6 +776,23 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     }
     return (
         <div>
+            <style>{`
+                .form-label-wrap .ant-form-item .ant-form-item-label {
+                    flex: 0 0 180px !important;
+                    max-width: 180px !important;
+                }
+                .form-label-wrap .ant-form-item .ant-form-item-label > label {
+                    white-space: normal !important;
+                    height: auto !important;
+                    line-height: 1.5 !important;
+                }
+                .form-label-wrap .ant-form-item .ant-form-item-label > label::after {
+                    content: '' !important;
+                }
+                .form-label-wrap .ant-form-item .ant-form-item-control {
+                    flex: 1 !important;
+                }
+            `}</style>
             <Collapse
                 items={[
                     {

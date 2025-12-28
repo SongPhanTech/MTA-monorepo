@@ -23,7 +23,7 @@ export default function DoanDang({ expland, setExpland }: DomProps) {
 
     const renderContent = () => {
         return (
-            <div className="px-6">
+            <div className="px-6 form-label-wrap">
                 <Row className="mb-6" gutter={[16, 16]}>
                     <Col span={12}>
                         <FormItem
@@ -121,6 +121,7 @@ export default function DoanDang({ expland, setExpland }: DomProps) {
                             className="mb-0"
                         >
                             <Select
+                                placeholder="Chọn xếp loại đánh giá chất lượng đảng viên"
                                 options={xepLoaiDanhGiaChatLuongDangVien.map((i) => {
                                     return {
                                         label: i.name,
@@ -138,6 +139,7 @@ export default function DoanDang({ expland, setExpland }: DomProps) {
                             className="mb-0"
                         >
                             <Select
+                                placeholder="Chọn hình thức khen thưởng Đảng"
                                 options={hinhThucKhenThuongDang.map((i) => {
                                     return {
                                         label: i.name,
@@ -153,6 +155,23 @@ export default function DoanDang({ expland, setExpland }: DomProps) {
     }
     return (
         <div className="">
+            <style>{`
+                .form-label-wrap .ant-form-item .ant-form-item-label {
+                    flex: 0 0 180px !important;
+                    max-width: 180px !important;
+                }
+                .form-label-wrap .ant-form-item .ant-form-item-label > label {
+                    white-space: normal !important;
+                    height: auto !important;
+                    line-height: 1.5 !important;
+                }
+                .form-label-wrap .ant-form-item .ant-form-item-label > label::after {
+                    content: '' !important;
+                }
+                .form-label-wrap .ant-form-item .ant-form-item-control {
+                    flex: 1 !important;
+                }
+            `}</style>
             <Collapse
                 items={[
                     {
