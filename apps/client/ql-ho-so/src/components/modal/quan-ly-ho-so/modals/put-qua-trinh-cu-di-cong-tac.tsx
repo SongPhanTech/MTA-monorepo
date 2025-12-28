@@ -7,6 +7,7 @@ import type { QuaTrinhCuDiCongTac } from '@workspace/db'
 import {
     useFindManyDM_ChucVu,
     useFindManyDM_LoaiTinhTrangCongTac,
+    useFindManyDM_NuocCuDiHocTap,
     useFindManyDM_TinhTrangCongTac,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
@@ -27,6 +28,7 @@ export default function PutQuaTrinhCuDiCongTacModal() {
     const { data: chucVuOptions } = useFindManyDM_ChucVu()
     const { data: loaiTinhTrangCongTacList = [] } = useFindManyDM_LoaiTinhTrangCongTac()
     const { data: tinhTrangCongTacList = [] } = useFindManyDM_TinhTrangCongTac()
+    const { data: nuocCuDiHocTapList = [] } = useFindManyDM_NuocCuDiHocTap()
 
     async function onOk(output: QuaTrinhCuDiCongTac) {
         try {
@@ -94,6 +96,17 @@ export default function PutQuaTrinhCuDiCongTacModal() {
                             format: 'DD/MM/YYYY',
                             type: 'mask',
                         }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem label="Nước công tác" name="dM_NuocCuDiHocTapId" form={form}>
+                    <Select
+                        placeholder="Chọn nước công tác"
+                        options={nuocCuDiHocTapList?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
                     />
                 </FormItem>
             </Col>

@@ -9,6 +9,7 @@ import type { QuaTrinhCuDiCongTac } from '@workspace/db'
 import {
     useFindManyDM_ChucVu,
     useFindManyDM_LoaiTinhTrangCongTac,
+    useFindManyDM_NuocCuDiHocTap,
     useFindManyDM_TinhTrangCongTac,
 } from '@workspace/db/hooks'
 import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
@@ -33,8 +34,26 @@ export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProp
         }
     )
 
-    const { data: loaiTinhTrangCongTacList = [] } = useFindManyDM_LoaiTinhTrangCongTac()
-    const { data: tinhTrangCongTacList = [] } = useFindManyDM_TinhTrangCongTac()
+    const { data: loaiTinhTrangCongTacList = [] } = useFindManyDM_LoaiTinhTrangCongTac(
+        {},
+        {
+            enabled: expland.includes('quaTrinhCuDiCongTac'),
+        }
+    )
+
+    const { data: tinhTrangCongTacList = [] } = useFindManyDM_TinhTrangCongTac(
+        {},
+        {
+            enabled: expland.includes('quaTrinhCuDiCongTac'),
+        }
+    )
+
+    const { data: nuocCuDiHocTapList = [] } = useFindManyDM_NuocCuDiHocTap(
+        {},
+        {
+            enabled: expland.includes('quaTrinhCuDiCongTac'),
+        }
+    )
 
     const handleSave = (data: QuaTrinhCuDiCongTac) => {
         const currentList = form.getFieldValue('quaTrinhCuDiCongTac') || []
@@ -127,6 +146,17 @@ export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProp
                             render: (_, record) => formatDate(record?.denThangNam) || '',
                         },
                         {
+                            title: 'Nước công tác',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => {
+                                const nuoc = nuocCuDiHocTapList.find(
+                                    (nc) => nc.id === record?.dM_NuocCuDiHocTapId
+                                )
+                                return nuoc ? nuoc.name : ''
+                            },
+                        },
+                        {
                             title: 'Đơn vị',
                             align: 'center',
                             width: 140,
@@ -196,7 +226,7 @@ export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProp
             <Collapse
                 items={[
                     {
-                        key: 'quaTrinhDuocCuDiCongTac',
+                        key: 'quaTrinhCuDiCongTac',
                         label: (
                             <Title level={4} className="mb-0">
                                 Quá trình được cử đi công tác
