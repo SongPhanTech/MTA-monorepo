@@ -392,7 +392,7 @@ const XemTaiLieu = () => {
         <Modal
             title="Xem tài liệu"
             open={isOpen}
-            className="w-[100vw] top-[10px]"
+            className="w-[100vw] top-[5px] max-h-[95vh] p-0"
             style={{
                 display: supportedImageFileTypes.includes(fileType) ? 'none' : undefined,
             }}
