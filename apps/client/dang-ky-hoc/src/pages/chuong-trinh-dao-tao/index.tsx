@@ -31,7 +31,9 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: me } = useSession()
+    // const userId = '1fdeb41e-932b-47f2-92b5-85b271c1596c'
     const userId = me?.sDM_NhanVienId || ''
+
     const { data: userProfile } = useFindUniqueUserProfile(
         {
             where: { id: userId },
