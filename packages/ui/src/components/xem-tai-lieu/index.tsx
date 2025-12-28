@@ -303,7 +303,7 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
             placeholderContainer?.appendChild(placeholder)
             const config = {
                 width: '100%',
-                height: '100%',
+                height: '750px',
                 type: mode === 'edit' ? 'desktop' : 'embedded',
                 documentType: getDocumentType(fileType),
                 token: '',
@@ -392,7 +392,7 @@ const XemTaiLieu = () => {
         <Modal
             title="Xem tài liệu"
             open={isOpen}
-            className="w-[100vw] top-[5px] max-h-[95vh] p-0"
+            className="w-[100vw] top-0"
             style={{
                 display: supportedImageFileTypes.includes(fileType) ? 'none' : undefined,
             }}
@@ -404,7 +404,7 @@ const XemTaiLieu = () => {
                 hidden: true,
             }}
         >
-            <Row gutter={[10, 10]}>
+            <Row gutter={[8, 8]}>
                 <Col span={24}>
                     <Flex justify="end" className="mb-2">
                         <Button
