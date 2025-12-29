@@ -37,7 +37,7 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
             ...(isDevEnvironment()
                 ? {}
                 : {
-                      vaiTro: { array_contains: roles.map((item:any) => item.sRoleId).filter(Boolean) },
+                      vaiTro: { array_contains: permissions.map((item:any) => item.sRoleId).filter(Boolean) },
                   }),
         },
         orderBy: { name: 'asc' },
