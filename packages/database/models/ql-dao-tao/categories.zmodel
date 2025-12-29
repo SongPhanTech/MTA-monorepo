@@ -43,6 +43,7 @@ model TrainingObjectType extends Base {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   thesisSession        ThesisSession[]
+  vaiTro               Json?     // Json Array of DM_VaiTro IDs
 
   @@schema("ql-dao-tao")
 }

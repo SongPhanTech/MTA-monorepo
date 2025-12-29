@@ -3337,6 +3337,7 @@ model TrainingObjectType {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   thesisSession        ThesisSession[]
+  vaiTro               Json?
 
   @@schema("ql-dao-tao")
 }

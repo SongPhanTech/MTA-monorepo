@@ -11,10 +11,7 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 
-import type {
-    Prisma,
-    SubjectVersion
-} from '@workspace/db/client'
+import type { Prisma, SubjectVersion } from '@workspace/db/client'
 import { $Enums, type TrainingBlockSubject } from '@workspace/db/client'
 import {
     useDeleteManyTrainingBlockSubject,
@@ -436,7 +433,7 @@ export default function TrainingProgramSubjects() {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0} className='m-0 p-0'>
+            <Divider orientation="left" orientationMargin={0} className="m-0 p-0">
                 CTĐT toàn khoá:{' '}
                 {[
                     initialValue?.code,
@@ -451,7 +448,7 @@ export default function TrainingProgramSubjects() {
                 <Col span={24}>
                     <Row gutter={[0, 0]} align="top" justify="end">
                         <Col span={12}>
-                            <Flex justify="end" gap={4} className='m-0 p-0'>
+                            <Flex justify="end" gap={4} className="m-0 p-0">
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'NHAP_EXCEL'

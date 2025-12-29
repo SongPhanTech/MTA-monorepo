@@ -217,7 +217,7 @@ const ModalPreviewUpload = () => {
                             title: <Tooltip title="Mã môn học">Mã MH</Tooltip>,
                             align: 'center',
                             width: 100,
-                            render:(_, record)=> record.code?.toUpperCase()
+                            render: (_, record) => record.code?.toUpperCase(),
                         },
                         {
                             title: 'Tên học phần',

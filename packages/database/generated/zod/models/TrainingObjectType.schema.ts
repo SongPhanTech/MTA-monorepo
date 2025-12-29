@@ -17,6 +17,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     type: TrainingObjectTypesSchema,
+    vaiTro: z.any().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -30,6 +31,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     type: TrainingObjectTypesSchema,
+    vaiTro: z.any().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -87,7 +89,8 @@ export const TrainingObjectTypePrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    type: TrainingObjectTypesSchema
+    type: TrainingObjectTypesSchema,
+    vaiTro: z.any().nullish()
 }).partial().passthrough();
 
 

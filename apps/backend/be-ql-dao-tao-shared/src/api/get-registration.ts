@@ -1,5 +1,3 @@
-
-
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 
@@ -49,26 +47,26 @@ app.openapi(getRegistration, async (c) => {
 
     const logs = await prisma.subjectClass.findMany({
         where: {
-                semester: {
-                   name:{
-                    contains:class_terms.trim(),
-                    mode:'insensitive'
-                   }
+            semester: {
+                name: {
+                    contains: class_terms.trim(),
+                    mode: 'insensitive',
                 },
-            
-           subjectClassStudent:{
-                    some:{
-                        student:{
-                            code:students_code
-                        }
-                    }   
-           }
+            },
+
+            subjectClassStudent: {
+                some: {
+                    student: {
+                        code: students_code,
+                    },
+                },
+            },
         },
-      select:{
-        code:true
-      }
+        select: {
+            code: true,
+        },
     })
-   
+
     const class_reg = logs.map((l) => l.code)
     return c.json({
         result_code: '000',

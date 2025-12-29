@@ -2127,7 +2127,8 @@ exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   name: 'name',
   type: 'type',
   trainingFormId: 'trainingFormId',
-  trainingLevelId: 'trainingLevelId'
+  trainingLevelId: 'trainingLevelId',
+  vaiTro: 'vaiTro'
 };
 
 exports.Prisma.PriorityObjectScalarFieldEnum = {

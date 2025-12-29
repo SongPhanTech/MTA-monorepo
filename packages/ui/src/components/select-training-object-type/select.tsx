@@ -1,14 +1,47 @@
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
 import { Select, type SelectProps, Tooltip } from 'antd'
 import { useTrainingObjectTypeStore } from './hook'
+import {
+    useGetDMVaiTros,
+    useGetUserPermissionsAccessLevelAppCodeUserId,
+} from '@workspace/libs/api/system'
+import { useMemo } from 'react'
+import type { GetDMVaiTroDTO } from '@workspace/libs/api/schemas'
+import { getRuntimeEnv, isDevEnvironment } from '../../../../libs/src/utils'
 
 type AntdSelectProps = SelectProps
 
 const SelectTrainingObjectType = (props: AntdSelectProps) => {
+    const { id, onSelect } = useTrainingObjectTypeStore()
+
+    const { data: role } = useGetDMVaiTros()
+
+    const { data: permission } = useGetUserPermissionsAccessLevelAppCodeUserId(
+        getRuntimeEnv('NEXT_PUBLIC_APP_CODE'),
+        window?.contextData?.userId ?? ''
+    )
+
+    const roles = useMemo(() => {
+        if (role?.status !== 200) return []
+        return role?.data as unknown as GetDMVaiTroDTO[]
+    }, [role])
+
+    const permissions = useMemo(() => {
+        if (permission?.status !== 200) return []
+        return permission?.data?.Roles || []
+    }, [permission])
+
     const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
+        where: {
+            active: true,
+            ...(isDevEnvironment()
+                ? {}
+                : {
+                      vaiTro: { array_contains: roles.map((item) => item.sRoleId).filter(Boolean) },
+                  }),
+        },
         orderBy: { name: 'asc' },
     })
-    const { id, onSelect } = useTrainingObjectTypeStore()
 
     // useEffect(() => {
     //     if (!id && doiTuongDaoTao.length > 0 && doiTuongDaoTao?.[0]?.id) {

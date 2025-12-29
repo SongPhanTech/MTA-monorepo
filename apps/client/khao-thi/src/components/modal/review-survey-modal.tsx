@@ -64,15 +64,18 @@ const ReviewSurveyModal = () => {
     )
 
     const requireExplanation = useMemo(() => {
-            return data?.survey?.surveyChoice?.filter((i: any) => !!i?.requireExplanation).map((i) => i.id)
-        }, [data])
+        return data?.survey?.surveyChoice
+            ?.filter((i: any) => !!i?.requireExplanation)
+            .map((i) => i.id)
+    }, [data])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (data) {
-            const list= data?.responses.filter((i:any)=>requireExplanation?.includes(i?.surveyChoiceId))
+            const list = data?.responses.filter((i: any) =>
+                requireExplanation?.includes(i?.surveyChoiceId)
+            )
             const result = data?.responses.map((i) => {
-                
                 return {
                     surveyChoiceId: i?.surveyChoiceId,
                     answerText: i?.answerText,
@@ -81,14 +84,13 @@ const ReviewSurveyModal = () => {
             })
 
             setExpandedRowKeys(list.map((i) => i?.surveyQuestionId))
-     
 
             form.setFieldsValue({
-                questionsList: result})
-                console.log(form.getFieldsValue());
-                
+                questionsList: result,
+            })
+            console.log(form.getFieldsValue())
         }
-    }, [data,requireExplanation])
+    }, [data, requireExplanation])
 
     return (
         <AntdModal
@@ -139,114 +141,120 @@ const ReviewSurveyModal = () => {
                                 </Col>
 
                                 <Col span={24} className="mb-3">
-                                 <Form form={form} className="px-6 max-w-[1100px] w-full mx-auto">
-                                          <Table
-                                        rowKey="id"
-                                        dataSource={data?.responses || []}
-                                        pagination={false}
-                                        columns={[
-                                            {
-                                                title: 'STT',
-                                                width: 50,
-                                                align: 'center',
-                                                render: (_, __, index) => index + 1,
-                                            },
-                                            {
-                                                title: 'Nội dung phản hồi',
-                                                dataIndex: 'content',
-                                                render: (_, record) => {
-                                                    return (
-                                                        <div
-                                                            dangerouslySetInnerHTML={{
-                                                                __html: record?.surveyQuestion
-                                                                    ?.name,
-                                                            }}
+                                    <Form
+                                        form={form}
+                                        className="px-6 max-w-[1100px] w-full mx-auto"
+                                    >
+                                        <Table
+                                            rowKey="id"
+                                            dataSource={data?.responses || []}
+                                            pagination={false}
+                                            columns={[
+                                                {
+                                                    title: 'STT',
+                                                    width: 50,
+                                                    align: 'center',
+                                                    render: (_, __, index) => index + 1,
+                                                },
+                                                {
+                                                    title: 'Nội dung phản hồi',
+                                                    dataIndex: 'content',
+                                                    render: (_, record) => {
+                                                        return (
+                                                            <div
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: record?.surveyQuestion
+                                                                        ?.name,
+                                                                }}
+                                                            />
+                                                        )
+                                                    },
+                                                },
+                                                {
+                                                    title: 'Mức phản hồi',
+                                                    width: 200,
+                                                    align: 'center',
+                                                    render: (_, record, qIndex) => {
+                                                        return record?.surveyQuestion?.type ===
+                                                            'SINGLE_CHOICE' ? (
+                                                            <Form.Item
+                                                                name={[
+                                                                    'questionsList',
+                                                                    qIndex,
+                                                                    'surveyChoiceId',
+                                                                ]}
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message:
+                                                                            'Vui lòng chọn mức phản hồi',
+                                                                    },
+                                                                ]}
+                                                                style={{ marginBottom: 0 }}
+                                                                className="w-full"
+                                                            >
+                                                                <Radio.Group className="w-full gap-x-2 flex">
+                                                                    {data?.survey?.surveyChoice.map(
+                                                                        (i) => (
+                                                                            <Radio.Button
+                                                                                key={i?.id}
+                                                                                value={i?.id}
+                                                                            >
+                                                                                {i?.answer}
+                                                                            </Radio.Button>
+                                                                        )
+                                                                    )}
+                                                                </Radio.Group>
+                                                            </Form.Item>
+                                                        ) : (
+                                                            <Form.Item
+                                                                name={[
+                                                                    'questionsList',
+                                                                    qIndex,
+                                                                    'answerText',
+                                                                ]}
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message: 'Nhập câu trả lời',
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                            </Form.Item>
+                                                        )
+                                                    },
+                                                },
+                                            ]}
+                                            expandable={{
+                                                expandedRowKeys,
+                                                showExpandColumn: false,
+                                                expandedRowRender: (record, index) => (
+                                                    <Form.Item
+                                                        label="Lý do"
+                                                        name={[
+                                                            'questionsList',
+                                                            index,
+                                                            'explanation',
+                                                        ]}
+                                                        // rules={[
+                                                        //     {
+                                                        //     required:
+                                                        //         form.getFieldValue(['responses', record.id]) === 4,
+                                                        //     message: 'Vui lòng nhập lý do',
+                                                        //     },
+                                                        // ]}
+                                                    >
+                                                        <Input.TextArea
+                                                            rows={3}
+                                                            placeholder="Nhập lý do tại đây..."
                                                         />
-                                                    )
-                                                },
-                                            },
-                                            {
-                                                title: 'Mức phản hồi',
-                                                width: 200,
-                                                align: 'center',
-                                                render: (_, record, qIndex) => {
-                                                    return record?.surveyQuestion?.type ===
-                                                        'SINGLE_CHOICE' ? (
-                                                        <Form.Item
-                                                            name={[
-                                                                'questionsList',
-                                                                qIndex,
-                                                                'surveyChoiceId',
-                                                            ]}
-                                                            rules={[
-                                                                {
-                                                                    required: true,
-                                                                    message:
-                                                                        'Vui lòng chọn mức phản hồi',
-                                                                },
-                                                            ]}
-                                                            style={{ marginBottom: 0 }}
-                                                            className="w-full"
-                                                        >
-                                                            <Radio.Group className="w-full gap-x-2 flex">
-                                                                {data?.survey?.surveyChoice.map(
-                                                                    (i) => (
-                                                                        <Radio.Button
-                                                                            key={i?.id}
-                                                                            value={i?.id}
-                                                                        >
-                                                                            {i?.answer}
-                                                                        </Radio.Button>
-                                                                    )
-                                                                )}
-                                                            </Radio.Group>
-                                                        </Form.Item>
-                                                    ) : (
-                                                        <Form.Item
-                                                            name={[
-                                                                'questionsList',
-                                                                qIndex,
-                                                                'answerText',
-                                                            ]}
-                                                            rules={[
-                                                                {
-                                                                    required: true,
-                                                                    message: 'Nhập câu trả lời',
-                                                                },
-                                                            ]}
-                                                        >
-                                                            <Input.TextArea placeholder="Nhập câu trả lời" />
-                                                        </Form.Item>
-                                                    )
-                                                },
-                                            },
-                                        ]}
-                                        expandable={{
-                                            expandedRowKeys,
-                                            showExpandColumn: false,
-                                            expandedRowRender: (record, index) => (
-                                                <Form.Item
-                                                    label="Lý do"
-                                                    name={['questionsList', index, 'explanation']}
-                                                    // rules={[
-                                                    //     {
-                                                    //     required:
-                                                    //         form.getFieldValue(['responses', record.id]) === 4,
-                                                    //     message: 'Vui lòng nhập lý do',
-                                                    //     },
-                                                    // ]}
-                                                >
-                                                    <Input.TextArea
-                                                        rows={3}
-                                                        placeholder="Nhập lý do tại đây..."
-                                                    />
-                                                </Form.Item>
-                                            ),
-                                        }}
-                                        bordered={true}
-                                    />
-                                 </Form>
-                                  
+                                                    </Form.Item>
+                                                ),
+                                            }}
+                                            bordered={true}
+                                        />
+                                    </Form>
                                 </Col>
                                 {data?.additionalSuggestion && (
                                     <Col span={24}>
