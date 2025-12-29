@@ -103,9 +103,9 @@ app.openapi(registration, async (c) => {
 
     const results = await Promise.allSettled(
         class_data.map(async (cls) => {
-            const subjectClass = await prisma.subjectClass.findFirst({
+            const subjectClass = await prisma.subjectClass.findUnique({
                 where: {
-                    code: cls, 
+                    id: cls, 
                     semesterId: { in: semesterIds },
                 },
                 include: {
