@@ -1,5 +1,5 @@
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
-import { useGetUserPermissionsAccessLevelAppCodeUserId } from '@workspace/libs/api/system'
+import { useGetUserPermissionsPermissionAppCodeUserId } from '@workspace/libs/api/system'
 import { Select, type SelectProps, Tooltip } from 'antd'
 import { useMemo } from 'react'
 import { getRuntimeEnv, isDevEnvironment } from '../../../../libs/src/utils'
@@ -10,7 +10,7 @@ type AntdSelectProps = SelectProps
 const SelectTrainingObjectType = (props: AntdSelectProps) => {
     const { id, onSelect } = useTrainingObjectTypeStore()
 
-    const { data: permission } = useGetUserPermissionsAccessLevelAppCodeUserId(
+    const { data: permission } = useGetUserPermissionsPermissionAppCodeUserId(
         getRuntimeEnv('NEXT_PUBLIC_APP_CODE'),
         window?.contextData?.userId ?? ''
     )
@@ -19,7 +19,6 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
         if (permission?.status !== 200) return []
         return (permission?.data as any)?.Roles || []
     }, [permission])
-    console.log('permissions', permissions, permission)
 
     const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
         where: {
