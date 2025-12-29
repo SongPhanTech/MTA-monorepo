@@ -42,6 +42,8 @@ export default {
     "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/[id]"
   },
   "QL_DAO_TAO": {
+    "CAU_HINH_THANH_TOAN_DO_AN": "/cau-hinh-thanh-toan/cau-hinh-thanh-toan-do-an",
+    "CAU_HINH_THANH_TOAN_LUAN_VAN": "/cau-hinh-thanh-toan/cau-hinh-thanh-toan-luan-van",
     "CAU_HINH_THANH_TOAN": "/cau-hinh-thanh-toan",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",

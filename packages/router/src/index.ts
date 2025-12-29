@@ -513,6 +513,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_THONG_KE,
                         description: 'Thống kê kết quả bảo vệ',
                     },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THANH_TOAN_DO_AN,
+                        label: 'Cấu hình thanh toán',
+                        path: ROUTER_PATH.QL_DAO_TAO.CAU_HINH_THANH_TOAN_DO_AN,
+                        description: 'Cấu hình thanh toán',
+                    },
                 ],
             },
             {
@@ -555,6 +561,12 @@ const NAVIGATION: NavigationType = {
                         label: 'Thống kê kết quả bảo vệ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_THONG_KE,
                         description: 'Thống kê kết quả bảo vệ',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THANH_TOAN_LUAN_VAN,
+                        label: 'Cấu hình thanh toán',
+                        path: ROUTER_PATH.QL_DAO_TAO.CAU_HINH_THANH_TOAN_LUAN_VAN,
+                        description: 'Cấu hình thanh toán',
                     },
                 ],
             },
