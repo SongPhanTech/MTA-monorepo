@@ -330,15 +330,15 @@ model LibrarySubmission extends Base {
 }
 
 model DefaultCouncilRolePayAmount extends Base {
-  role   CouncilRole
-  amount Decimal
-
+  role      CouncilRole
+  amount    Decimal
+  inAcademy Boolean     @default(true)
   @@schema("ql-dao-tao")
 }
 model DefaultSupervisorPayAmount extends Base {
-  role   SupervisorRole
-  amount Decimal
-
+  role      SupervisorRole
+  amount    Decimal
+  inAcademy Boolean        @default(true)
   @@schema("ql-dao-tao")
 }
 enum PaymentStatus {
