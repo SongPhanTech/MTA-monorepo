@@ -1,35 +1,25 @@
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
+import { useGetUserPermissionsAccessLevelAppCodeUserId } from '@workspace/libs/api/system'
 import { Select, type SelectProps, Tooltip } from 'antd'
-import { useTrainingObjectTypeStore } from './hook'
-import {
-    useGetDMVaiTros,
-    useGetUserPermissionsAccessLevelAppCodeUserId,
-} from '@workspace/libs/api/system'
 import { useMemo } from 'react'
-import type { GetDMVaiTroDTO } from '@workspace/libs/api/schemas'
 import { getRuntimeEnv, isDevEnvironment } from '../../../../libs/src/utils'
+import { useTrainingObjectTypeStore } from './hook'
 
 type AntdSelectProps = SelectProps
 
 const SelectTrainingObjectType = (props: AntdSelectProps) => {
     const { id, onSelect } = useTrainingObjectTypeStore()
 
-    const { data: role } = useGetDMVaiTros()
-
     const { data: permission } = useGetUserPermissionsAccessLevelAppCodeUserId(
         getRuntimeEnv('NEXT_PUBLIC_APP_CODE'),
         window?.contextData?.userId ?? ''
     )
 
-    const roles = useMemo(() => {
-        if (role?.status !== 200) return []
-        return role?.data as unknown as GetDMVaiTroDTO[]
-    }, [role])
-
     const permissions = useMemo(() => {
         if (permission?.status !== 200) return []
         return (permission?.data as any)?.Roles || []
     }, [permission])
+    console.log('permissions', permissions, permission)
 
     const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
         where: {
@@ -38,9 +28,7 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
                 ? {}
                 : {
                       vaiTro: {
-                          hasSome: permissions
-                              .map((item: any) => item.sRoleId)
-                              .filter(Boolean),
+                          hasSome: permissions.map((item: any) => item.sRoleId).filter(Boolean),
                       },
                   }),
         },
