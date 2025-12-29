@@ -276,6 +276,12 @@ enum CouncilRole {
   @@schema("ql-dao-tao")
 }
 
+enum SupervisorRole {
+  SUPERVISOR // Chuyên gia hướng dẫn
+  CO_SUPERVISOR // Chuyên gia hướng dẫn phụ
+
+  @@schema("ql-dao-tao")
+}
 /// Thành viên trong một Hội đồng
 model CouncilMember extends Base {
   role        CouncilRole
@@ -324,12 +330,13 @@ model LibrarySubmission extends Base {
 }
 
 model DefaultCouncilRolePayAmount extends Base {
-  role   CouncilRole @unique
+  role   CouncilRole
   amount Decimal
 
   @@schema("ql-dao-tao")
 }
 model DefaultSupervisorPayAmount extends Base {
+  role   SupervisorRole
   amount Decimal
 
   @@schema("ql-dao-tao")
