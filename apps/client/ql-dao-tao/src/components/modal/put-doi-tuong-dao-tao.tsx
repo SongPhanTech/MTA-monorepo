@@ -152,6 +152,7 @@ const PutTrainingObjectTypeModal = () => {
             <Col span={8}>
                 <FormItem form={form} name="trainingLevelId" label="Bậc đào tạo">
                     <Select
+                        allowClear
                         placeholder="Chọn bậc đào tạo"
                         options={trainingLevels?.map((item) => ({
                             label: item.name,

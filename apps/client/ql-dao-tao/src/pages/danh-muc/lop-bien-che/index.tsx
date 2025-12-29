@@ -264,7 +264,7 @@ export default function FixedClassPage() {
                 const url = window.URL.createObjectURL(blob)
                 const link = document.createElement('a')
                 link.href = url
-                link.download = filename || 'thong-ke-no.xlsx'
+                link.download = filename || 'QS theo khoá.xlsx'
                 link.click()
                 window.URL.revokeObjectURL(url)
             }
