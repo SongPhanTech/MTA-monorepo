@@ -19,6 +19,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     role: CouncilRoleSchema,
     amount: DecimalSchema,
+    inAcademy: z.boolean().default(true),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -32,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdBy: z.string().uuid().nullish(),
     role: CouncilRoleSchema,
     amount: DecimalSchema,
+    inAcademy: z.boolean(),
 }
 ).strict();
 
@@ -68,7 +70,8 @@ export const DefaultCouncilRolePayAmountPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     role: CouncilRoleSchema,
-    amount: DecimalSchema
+    amount: DecimalSchema,
+    inAcademy: z.boolean()
 }).partial().passthrough();
 
 
@@ -76,7 +79,7 @@ export const DefaultCouncilRolePayAmountPrismaUpdateSchema = z.object({
  * `DefaultCouncilRolePayAmount` schema for create operations excluding foreign keys and relations.
  */
 export const DefaultCouncilRolePayAmountCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, inAcademy: true
 });
 
 
@@ -84,7 +87,7 @@ export const DefaultCouncilRolePayAmountCreateScalarSchema = baseSchemaWithoutDe
  * `DefaultCouncilRolePayAmount` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const DefaultCouncilRolePayAmountCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, inAcademy: true
 });
 
 

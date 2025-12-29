@@ -2692,6 +2692,7 @@ export type StudentThesisRegistrationStatus = $Enums.StudentThesisRegistrationSt
 export type DecisionType = $Enums.DecisionType;
 export type CouncilProposalStatus = $Enums.CouncilProposalStatus;
 export type CouncilRole = $Enums.CouncilRole;
+export type SupervisorRole = $Enums.SupervisorRole;
 export type PaymentStatus = $Enums.PaymentStatus;
 export type EvaluationPeriodStatus = $Enums.EvaluationPeriodStatus;
 export type StandardCatalogType = $Enums.StandardCatalogType;
@@ -5153,6 +5154,7 @@ export const StudentThesisRegistrationStatus: typeof $Enums.StudentThesisRegistr
 export const DecisionType: typeof $Enums.DecisionType;
 export const CouncilProposalStatus: typeof $Enums.CouncilProposalStatus;
 export const CouncilRole: typeof $Enums.CouncilRole;
+export const SupervisorRole: typeof $Enums.SupervisorRole;
 export const PaymentStatus: typeof $Enums.PaymentStatus;
 export const EvaluationPeriodStatus: typeof $Enums.EvaluationPeriodStatus;
 export const StandardCatalogType: typeof $Enums.StandardCatalogType;
@@ -5452,6 +5454,11 @@ export namespace $Enums {
         MEMBER: 'MEMBER'
     };
     export type CouncilRole = (typeof CouncilRole)[keyof typeof CouncilRole];
+    export const SupervisorRole: {
+        SUPERVISOR: 'SUPERVISOR',
+        CO_SUPERVISOR: 'CO_SUPERVISOR'
+    };
+    export type SupervisorRole = (typeof SupervisorRole)[keyof typeof SupervisorRole];
     export const PaymentStatus: {
         PENDING: 'PENDING',
         PROCESSING: 'PROCESSING',
@@ -8824,7 +8831,8 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
         role: 'role',
-        amount: 'amount'
+        amount: 'amount',
+        inAcademy: 'inAcademy'
     };
     export const DefaultSupervisorPayAmountScalarFieldEnum: {
         id: 'id',
@@ -8835,7 +8843,9 @@ export namespace Prisma {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
-        amount: 'amount'
+        role: 'role',
+        amount: 'amount',
+        inAcademy: 'inAcademy'
     };
     export const PaymentRecordScalarFieldEnum: {
         id: 'id',
@@ -73726,6 +73736,7 @@ export namespace Prisma {
         readonly createdBy: FieldRef<"DefaultCouncilRolePayAmount", 'String'>;
         readonly role: FieldRef<"DefaultCouncilRolePayAmount", 'CouncilRole'>;
         readonly amount: FieldRef<"DefaultCouncilRolePayAmount", 'Decimal'>;
+        readonly inAcademy: FieldRef<"DefaultCouncilRolePayAmount", 'Boolean'>;
     }
 
     export interface DefaultSupervisorPayAmountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -74105,7 +74116,9 @@ export namespace Prisma {
         readonly createdAt: FieldRef<"DefaultSupervisorPayAmount", 'DateTime'>;
         readonly updatedAt: FieldRef<"DefaultSupervisorPayAmount", 'DateTime'>;
         readonly createdBy: FieldRef<"DefaultSupervisorPayAmount", 'String'>;
+        readonly role: FieldRef<"DefaultSupervisorPayAmount", 'SupervisorRole'>;
         readonly amount: FieldRef<"DefaultSupervisorPayAmount", 'Decimal'>;
+        readonly inAcademy: FieldRef<"DefaultSupervisorPayAmount", 'Boolean'>;
     }
 
     export interface PaymentRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -263821,6 +263834,7 @@ export namespace Prisma {
         createdBy: string | null
         role: $Enums.CouncilRole | null
         amount: Decimal | null
+        inAcademy: boolean | null
     };
     export type DefaultCouncilRolePayAmountMaxAggregateOutputType = {
         id: string | null
@@ -263833,6 +263847,7 @@ export namespace Prisma {
         createdBy: string | null
         role: $Enums.CouncilRole | null
         amount: Decimal | null
+        inAcademy: boolean | null
     };
     export type DefaultCouncilRolePayAmountCountAggregateOutputType = {
         id: number
@@ -263845,6 +263860,7 @@ export namespace Prisma {
         createdBy: number
         role: number
         amount: number
+        inAcademy: number
         _all: number
     };
     export type DefaultCouncilRolePayAmountAvgAggregateInputType = {
@@ -263864,6 +263880,7 @@ export namespace Prisma {
         createdBy?: true
         role?: true
         amount?: true
+        inAcademy?: true
     };
     export type DefaultCouncilRolePayAmountMaxAggregateInputType = {
         id?: true
@@ -263876,6 +263893,7 @@ export namespace Prisma {
         createdBy?: true
         role?: true
         amount?: true
+        inAcademy?: true
     };
     export type DefaultCouncilRolePayAmountCountAggregateInputType = {
         id?: true
@@ -263888,6 +263906,7 @@ export namespace Prisma {
         createdBy?: true
         role?: true
         amount?: true
+        inAcademy?: true
         _all?: true
     };
     export type DefaultCouncilRolePayAmountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -263981,6 +264000,7 @@ export namespace Prisma {
         createdBy: string | null
         role: $Enums.CouncilRole
         amount: Decimal
+        inAcademy: boolean
         _count: DefaultCouncilRolePayAmountCountAggregateOutputType | null
         _avg: DefaultCouncilRolePayAmountAvgAggregateOutputType | null
         _sum: DefaultCouncilRolePayAmountSumAggregateOutputType | null
@@ -264010,6 +264030,7 @@ export namespace Prisma {
         createdBy?: boolean
         role?: boolean
         amount?: boolean
+        inAcademy?: boolean
     }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
     export type DefaultCouncilRolePayAmountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -264022,6 +264043,7 @@ export namespace Prisma {
         createdBy?: boolean
         role?: boolean
         amount?: boolean
+        inAcademy?: boolean
     }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
     export type DefaultCouncilRolePayAmountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -264034,6 +264056,7 @@ export namespace Prisma {
         createdBy?: boolean
         role?: boolean
         amount?: boolean
+        inAcademy?: boolean
     }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
     export type DefaultCouncilRolePayAmountSelectScalar = {
         id?: boolean
@@ -264046,8 +264069,9 @@ export namespace Prisma {
         createdBy?: boolean
         role?: boolean
         amount?: boolean
+        inAcademy?: boolean
     };
-    export type DefaultCouncilRolePayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount", ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
+    export type DefaultCouncilRolePayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount" | "inAcademy", ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
     export type $DefaultCouncilRolePayAmountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DefaultCouncilRolePayAmount"
         objects: {}
@@ -264062,6 +264086,7 @@ export namespace Prisma {
             createdBy: string | null
             role: $Enums.CouncilRole
             amount: Prisma.Decimal
+            inAcademy: boolean
         }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>
         composites: {}
     };
@@ -264440,7 +264465,9 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
+        role: $Enums.SupervisorRole | null
         amount: Decimal | null
+        inAcademy: boolean | null
     };
     export type DefaultSupervisorPayAmountMaxAggregateOutputType = {
         id: string | null
@@ -264451,7 +264478,9 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
+        role: $Enums.SupervisorRole | null
         amount: Decimal | null
+        inAcademy: boolean | null
     };
     export type DefaultSupervisorPayAmountCountAggregateOutputType = {
         id: number
@@ -264462,7 +264491,9 @@ export namespace Prisma {
         createdAt: number
         updatedAt: number
         createdBy: number
+        role: number
         amount: number
+        inAcademy: number
         _all: number
     };
     export type DefaultSupervisorPayAmountAvgAggregateInputType = {
@@ -264480,7 +264511,9 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        role?: true
         amount?: true
+        inAcademy?: true
     };
     export type DefaultSupervisorPayAmountMaxAggregateInputType = {
         id?: true
@@ -264491,7 +264524,9 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        role?: true
         amount?: true
+        inAcademy?: true
     };
     export type DefaultSupervisorPayAmountCountAggregateInputType = {
         id?: true
@@ -264502,7 +264537,9 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        role?: true
         amount?: true
+        inAcademy?: true
         _all?: true
     };
     export type DefaultSupervisorPayAmountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -264594,7 +264631,9 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         createdBy: string | null
+        role: $Enums.SupervisorRole
         amount: Decimal
+        inAcademy: boolean
         _count: DefaultSupervisorPayAmountCountAggregateOutputType | null
         _avg: DefaultSupervisorPayAmountAvgAggregateOutputType | null
         _sum: DefaultSupervisorPayAmountSumAggregateOutputType | null
@@ -264622,7 +264661,9 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        role?: boolean
         amount?: boolean
+        inAcademy?: boolean
     }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
     export type DefaultSupervisorPayAmountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -264633,7 +264674,9 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        role?: boolean
         amount?: boolean
+        inAcademy?: boolean
     }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
     export type DefaultSupervisorPayAmountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -264644,7 +264687,9 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        role?: boolean
         amount?: boolean
+        inAcademy?: boolean
     }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
     export type DefaultSupervisorPayAmountSelectScalar = {
         id?: boolean
@@ -264655,9 +264700,11 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        role?: boolean
         amount?: boolean
+        inAcademy?: boolean
     };
-    export type DefaultSupervisorPayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "amount", ExtArgs["result"]["defaultSupervisorPayAmount"]>;
+    export type DefaultSupervisorPayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount" | "inAcademy", ExtArgs["result"]["defaultSupervisorPayAmount"]>;
     export type $DefaultSupervisorPayAmountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DefaultSupervisorPayAmount"
         objects: {}
@@ -264670,7 +264717,9 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             createdBy: string | null
+            role: $Enums.SupervisorRole
             amount: Prisma.Decimal
+            inAcademy: boolean
         }, ExtArgs["result"]["defaultSupervisorPayAmount"]>
         composites: {}
     };
@@ -336207,6 +336256,14 @@ export namespace Prisma {
      */
     export type ListEnumCouncilRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouncilRole[]'>;
     /**
+     * Reference to a field of type 'SupervisorRole'
+     */
+    export type EnumSupervisorRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupervisorRole'>;
+    /**
+     * Reference to a field of type 'SupervisorRole[]'
+     */
+    export type ListEnumSupervisorRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupervisorRole[]'>;
+    /**
      * Reference to a field of type 'PaymentStatus'
      */
     export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>;
@@ -354312,6 +354369,7 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
         role?: EnumCouncilRoleFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
         amount?: DecimalFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFilter<"DefaultCouncilRolePayAmount"> | boolean
     };
     export type DefaultCouncilRolePayAmountOrderByWithRelationInput = {
         id?: SortOrder
@@ -354324,12 +354382,12 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
         _relevance?: DefaultCouncilRolePayAmountOrderByRelevanceInput
     };
     export type DefaultCouncilRolePayAmountWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        role?: $Enums.CouncilRole
         AND?: DefaultCouncilRolePayAmountWhereInput | DefaultCouncilRolePayAmountWhereInput[]
         OR?: DefaultCouncilRolePayAmountWhereInput[]
         NOT?: DefaultCouncilRolePayAmountWhereInput | DefaultCouncilRolePayAmountWhereInput[]
@@ -354339,8 +354397,10 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"DefaultCouncilRolePayAmount"> | Date | string
         updatedAt?: DateTimeFilter<"DefaultCouncilRolePayAmount"> | Date | string
         createdBy?: UuidNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
+        role?: EnumCouncilRoleFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
         amount?: DecimalFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
-    }, "id" | "code" | "role">;
+        inAcademy?: BoolFilter<"DefaultCouncilRolePayAmount"> | boolean
+    }, "id" | "code">;
     export type DefaultCouncilRolePayAmountOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -354352,6 +354412,7 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
         _count?: DefaultCouncilRolePayAmountCountOrderByAggregateInput
         _avg?: DefaultCouncilRolePayAmountAvgOrderByAggregateInput
         _max?: DefaultCouncilRolePayAmountMaxOrderByAggregateInput
@@ -354372,6 +354433,7 @@ export namespace Prisma {
         createdBy?: UuidNullableWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | string | null
         role?: EnumCouncilRoleWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
         amount?: DecimalWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | boolean
     };
     export type DefaultSupervisorPayAmountWhereInput = {
         AND?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
@@ -354385,7 +354447,9 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
         updatedAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
         createdBy?: UuidNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        role?: EnumSupervisorRoleFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
         amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
     };
     export type DefaultSupervisorPayAmountOrderByWithRelationInput = {
         id?: SortOrder
@@ -354396,7 +354460,9 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
+        role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
         _relevance?: DefaultSupervisorPayAmountOrderByRelevanceInput
     };
     export type DefaultSupervisorPayAmountWhereUniqueInput = Prisma.AtLeast<{
@@ -354411,7 +354477,9 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
         updatedAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
         createdBy?: UuidNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        role?: EnumSupervisorRoleFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
         amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
     }, "id" | "code">;
     export type DefaultSupervisorPayAmountOrderByWithAggregationInput = {
         id?: SortOrder
@@ -354422,7 +354490,9 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
+        role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
         _count?: DefaultSupervisorPayAmountCountOrderByAggregateInput
         _avg?: DefaultSupervisorPayAmountAvgOrderByAggregateInput
         _max?: DefaultSupervisorPayAmountMaxOrderByAggregateInput
@@ -354441,7 +354511,9 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string | null
+        role?: EnumSupervisorRoleWithAggregatesFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
         amount?: DecimalWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolWithAggregatesFilter<"DefaultSupervisorPayAmount"> | boolean
     };
     export type PaymentRecordWhereInput = {
         AND?: PaymentRecordWhereInput | PaymentRecordWhereInput[]
@@ -383655,6 +383727,7 @@ export namespace Prisma {
         createdBy?: string | null
         role: $Enums.CouncilRole
         amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
     };
     export type DefaultCouncilRolePayAmountUncheckedCreateInput = {
         id?: string
@@ -383667,6 +383740,7 @@ export namespace Prisma {
         createdBy?: string | null
         role: $Enums.CouncilRole
         amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
     };
     export type DefaultCouncilRolePayAmountUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -383679,6 +383753,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type DefaultCouncilRolePayAmountUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -383691,6 +383766,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type DefaultCouncilRolePayAmountCreateManyInput = {
         id?: string
@@ -383703,6 +383779,7 @@ export namespace Prisma {
         createdBy?: string | null
         role: $Enums.CouncilRole
         amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
     };
     export type DefaultCouncilRolePayAmountUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -383715,6 +383792,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type DefaultCouncilRolePayAmountUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -383727,6 +383805,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type DefaultSupervisorPayAmountCreateInput = {
         id?: string
@@ -383737,7 +383816,9 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        role: $Enums.SupervisorRole
         amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
     };
     export type DefaultSupervisorPayAmountUncheckedCreateInput = {
         id?: string
@@ -383748,7 +383829,9 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        role: $Enums.SupervisorRole
         amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
     };
     export type DefaultSupervisorPayAmountUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -383759,7 +383842,9 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type DefaultSupervisorPayAmountUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -383770,7 +383855,9 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type DefaultSupervisorPayAmountCreateManyInput = {
         id?: string
@@ -383781,7 +383868,9 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        role: $Enums.SupervisorRole
         amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
     };
     export type DefaultSupervisorPayAmountUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -383792,7 +383881,9 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type DefaultSupervisorPayAmountUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -383803,7 +383894,9 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type PaymentRecordCreateInput = {
         id?: string
@@ -406100,6 +406193,7 @@ export namespace Prisma {
         createdBy?: SortOrder
         role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
     };
     export type DefaultCouncilRolePayAmountAvgOrderByAggregateInput = {
         amount?: SortOrder
@@ -406115,6 +406209,7 @@ export namespace Prisma {
         createdBy?: SortOrder
         role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
     };
     export type DefaultCouncilRolePayAmountMinOrderByAggregateInput = {
         id?: SortOrder
@@ -406127,9 +406222,16 @@ export namespace Prisma {
         createdBy?: SortOrder
         role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
     };
     export type DefaultCouncilRolePayAmountSumOrderByAggregateInput = {
         amount?: SortOrder
+    };
+    export type EnumSupervisorRoleFilter<$PrismaModel = never> = {
+        equals?: $Enums.SupervisorRole | EnumSupervisorRoleFieldRefInput<$PrismaModel>
+        in?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+        notIn?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+        not?: NestedEnumSupervisorRoleFilter<$PrismaModel> | $Enums.SupervisorRole
     };
     export type DefaultSupervisorPayAmountOrderByRelevanceInput = {
         fields: DefaultSupervisorPayAmountOrderByRelevanceFieldEnum | DefaultSupervisorPayAmountOrderByRelevanceFieldEnum[]
@@ -406145,7 +406247,9 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
     };
     export type DefaultSupervisorPayAmountAvgOrderByAggregateInput = {
         amount?: SortOrder
@@ -406159,7 +406263,9 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
     };
     export type DefaultSupervisorPayAmountMinOrderByAggregateInput = {
         id?: SortOrder
@@ -406170,10 +406276,21 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        role?: SortOrder
         amount?: SortOrder
+        inAcademy?: SortOrder
     };
     export type DefaultSupervisorPayAmountSumOrderByAggregateInput = {
         amount?: SortOrder
+    };
+    export type EnumSupervisorRoleWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.SupervisorRole | EnumSupervisorRoleFieldRefInput<$PrismaModel>
+        in?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+        notIn?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+        not?: NestedEnumSupervisorRoleWithAggregatesFilter<$PrismaModel> | $Enums.SupervisorRole
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumSupervisorRoleFilter<$PrismaModel>
+        _max?: NestedEnumSupervisorRoleFilter<$PrismaModel>
     };
     export type EnumPaymentStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -428215,6 +428332,9 @@ export namespace Prisma {
         updateMany?: DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput | DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput[]
         deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
     };
+    export type EnumSupervisorRoleFieldUpdateOperationsInput = {
+        set?: $Enums.SupervisorRole
+    };
     export type CouncilMemberCreateNestedOneWithoutPaymentInput = {
         create?: XOR<CouncilMemberCreateWithoutPaymentInput, CouncilMemberUncheckedCreateWithoutPaymentInput>
         connectOrCreate?: CouncilMemberCreateOrConnectWithoutPaymentInput
@@ -435449,6 +435569,21 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumCouncilRoleFilter<$PrismaModel>
         _max?: NestedEnumCouncilRoleFilter<$PrismaModel>
+    };
+    export type NestedEnumSupervisorRoleFilter<$PrismaModel = never> = {
+        equals?: $Enums.SupervisorRole | EnumSupervisorRoleFieldRefInput<$PrismaModel>
+        in?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+        notIn?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+        not?: NestedEnumSupervisorRoleFilter<$PrismaModel> | $Enums.SupervisorRole
+    };
+    export type NestedEnumSupervisorRoleWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.SupervisorRole | EnumSupervisorRoleFieldRefInput<$PrismaModel>
+        in?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+        notIn?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+        not?: NestedEnumSupervisorRoleWithAggregatesFilter<$PrismaModel> | $Enums.SupervisorRole
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumSupervisorRoleFilter<$PrismaModel>
+        _max?: NestedEnumSupervisorRoleFilter<$PrismaModel>
     };
     export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
