@@ -28,7 +28,7 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
 
     const permissions = useMemo(() => {
         if (permission?.status !== 200) return []
-        return permission?.data?.Roles || []
+        return (permission?.data as any)?.Roles || []
     }, [permission])
 
     const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
@@ -37,7 +37,7 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
             ...(isDevEnvironment()
                 ? {}
                 : {
-                      vaiTro: { array_contains: roles.map((item) => item.sRoleId).filter(Boolean) },
+                      vaiTro: { array_contains: roles.map((item:any) => item.sRoleId).filter(Boolean) },
                   }),
         },
         orderBy: { name: 'asc' },
