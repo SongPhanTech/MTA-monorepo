@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
@@ -14,9 +13,10 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import type {
     CurriculumVersion,
+    Prisma,
     TrainingCourse,
     TrainingMajor,
-    TrainingTime
+    TrainingTime,
 } from '@workspace/db/client'
 import {
     useCountCurriculum,
@@ -66,11 +66,12 @@ export default function TrainingProgramCatalog() {
             ...(filters.code && {
                 code: { contains: filters.code, mode: 'insensitive' as const },
             }),
-            ...(filters.trainingCourses && {
-                fixedClasses: {
-                    some: { trainingCourseId: { in: filters.trainingCourses } },
-                },
-            }),
+            ...(filters.trainingCourses &&
+                filters.trainingCourses.length > 0 && {
+                    fixedClass: {
+                        trainingCourseId: { in: filters.trainingCourses },
+                    },
+                }),
             ...(filters.trainingTime && {
                 trainingTimeId: { in: filters.trainingTime },
             }),
@@ -122,7 +123,7 @@ export default function TrainingProgramCatalog() {
                       },
                   }
                 : {}),
-        }
+        } satisfies Prisma.CurriculumVersionWhereInput
 
         return {
             deletedAt: null,
@@ -189,13 +190,11 @@ export default function TrainingProgramCatalog() {
                           }
                         : {}),
                     trainingObjectTypeId,
-                    ...(filters.trainingCourses
+                    ...(filters.trainingCourses && filters.trainingCourses.length > 0
                         ? {
-                              fixedClasses: {
-                                  some: {
-                                      trainingCourseId: {
-                                          in: filters.trainingCourses,
-                                      },
+                              fixedClass: {
+                                  trainingCourseId: {
+                                      in: filters.trainingCourses,
                                   },
                               },
                           }
@@ -402,21 +401,22 @@ export default function TrainingProgramCatalog() {
                                         allowClear
                                     />
                                 </Col>
-                                <Col span={8}>
-                                    <TreeSelect
-                                        placeholder="Chọn đơn vị quản lý"
-                                        allowClear
-                                        showSearch
-                                        treeDefaultExpandAll
-                                        onChange={(val) =>
+                                <Col span={6}>
+                                    <Select
+                                        className="w-full"
+                                        placeholder="Chọn khóa đào tạo"
+                                        options={trainingCourseData.map((i) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                        onChange={(val) => {
                                             setFilters({
                                                 ...filters,
-                                                managementOrganizationId: val,
+                                                trainingCourses: val,
                                             })
-                                        }
-                                        treeData={treeData}
-                                        maxTagCount={'responsive'}
-                                        className="w-full"
+                                        }}
+                                        mode="multiple"
+                                        allowClear
                                     />
                                 </Col>
                                 <Col span={6}>
