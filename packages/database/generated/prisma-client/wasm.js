@@ -5805,7 +5805,8 @@ exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   trainingFormId: 'trainingFormId',
-  trainingLevelId: 'trainingLevelId'
+  trainingLevelId: 'trainingLevelId',
+  vaiTro: 'vaiTro'
 };
 
 exports.Prisma.PriorityObjectOrderByRelevanceFieldEnum = {

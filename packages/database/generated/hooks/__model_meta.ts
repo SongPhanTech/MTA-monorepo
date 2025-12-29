@@ -11538,8 +11538,8 @@ const metadata: ModelMeta = {
                     backLink: 'trainingObjectType',
                 }, vaiTro: {
                     name: "vaiTro",
-                    type: "Json",
-                    isOptional: true,
+                    type: "String",
+                    isArray: true,
                 },
             }, uniqueConstraints: {
                 id: {
