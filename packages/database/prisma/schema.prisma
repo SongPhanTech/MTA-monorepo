@@ -372,6 +372,13 @@ enum CouncilRole {
   @@schema("ql-dao-tao")
 }
 
+enum SupervisorRole {
+  SUPERVISOR
+  CO_SUPERVISOR
+
+  @@schema("ql-dao-tao")
+}
+
 enum PaymentStatus {
   PENDING
   PROCESSING
@@ -4671,22 +4678,25 @@ model DefaultCouncilRolePayAmount {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now()) @updatedAt()
   createdBy   String?     @db.Uuid()
-  role        CouncilRole @unique()
+  role        CouncilRole
   amount      Decimal
+  inAcademy   Boolean     @default(true)
 
   @@schema("ql-dao-tao")
 }
 
 model DefaultSupervisorPayAmount {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String         @id() @default(cuid())
+  code        String?        @unique()
+  active      Boolean        @default(true)
+  description String?        @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt()
+  createdBy   String?        @db.Uuid()
+  role        SupervisorRole
   amount      Decimal
+  inAcademy   Boolean        @default(true)
 
   @@schema("ql-dao-tao")
 }

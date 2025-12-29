@@ -3060,7 +3060,8 @@ exports.Prisma.DefaultCouncilRolePayAmountScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   role: 'role',
-  amount: 'amount'
+  amount: 'amount',
+  inAcademy: 'inAcademy'
 };
 
 exports.Prisma.DefaultSupervisorPayAmountScalarFieldEnum = {
@@ -3072,7 +3073,9 @@ exports.Prisma.DefaultSupervisorPayAmountScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  amount: 'amount'
+  role: 'role',
+  amount: 'amount',
+  inAcademy: 'inAcademy'
 };
 
 exports.Prisma.PaymentRecordScalarFieldEnum = {
@@ -7570,6 +7573,11 @@ exports.CouncilRole = exports.$Enums.CouncilRole = {
   REVIEWER_1: 'REVIEWER_1',
   REVIEWER_2: 'REVIEWER_2',
   MEMBER: 'MEMBER'
+};
+
+exports.SupervisorRole = exports.$Enums.SupervisorRole = {
+  SUPERVISOR: 'SUPERVISOR',
+  CO_SUPERVISOR: 'CO_SUPERVISOR'
 };
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {

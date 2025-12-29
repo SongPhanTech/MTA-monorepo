@@ -18007,10 +18007,13 @@ const metadata = {
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
+                }, inAcademy: {
+                    name: "inAcademy",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18019,9 +18022,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, role: {
-                    name: "role",
-                    fields: ["role"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
@@ -18065,9 +18065,16 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DefaultSupervisorPayAmount$createdBy,
+                }, role: {
+                    name: "role",
+                    type: "SupervisorRole",
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
+                }, inAcademy: {
+                    name: "inAcademy",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 },
             }, uniqueConstraints: {
                 id: {

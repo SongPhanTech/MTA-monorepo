@@ -5,6 +5,7 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { SupervisorRoleSchema } from '../enums/SupervisorRole.schema';
 import { DecimalSchema } from '../common';
 import { Decimal } from 'decimal.js';
 const baseSchema = z.object({
@@ -16,7 +17,9 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    role: SupervisorRoleSchema,
     amount: DecimalSchema,
+    inAcademy: z.boolean().default(true),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -28,7 +31,9 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    role: SupervisorRoleSchema,
     amount: DecimalSchema,
+    inAcademy: z.boolean(),
 }
 ).strict();
 
@@ -64,7 +69,9 @@ export const DefaultSupervisorPayAmountPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    amount: DecimalSchema
+    role: SupervisorRoleSchema,
+    amount: DecimalSchema,
+    inAcademy: z.boolean()
 }).partial().passthrough();
 
 
@@ -72,7 +79,7 @@ export const DefaultSupervisorPayAmountPrismaUpdateSchema = z.object({
  * `DefaultSupervisorPayAmount` schema for create operations excluding foreign keys and relations.
  */
 export const DefaultSupervisorPayAmountCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, inAcademy: true
 });
 
 
@@ -80,7 +87,7 @@ export const DefaultSupervisorPayAmountCreateScalarSchema = baseSchemaWithoutDef
  * `DefaultSupervisorPayAmount` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const DefaultSupervisorPayAmountCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, inAcademy: true
 });
 
 
