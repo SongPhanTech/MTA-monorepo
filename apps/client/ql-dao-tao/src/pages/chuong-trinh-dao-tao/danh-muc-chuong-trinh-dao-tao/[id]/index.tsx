@@ -341,8 +341,7 @@ export default function TrainingProgramSubjects() {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
 
-    const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
-        curriculumVersionId: string
+    const { onOpen: onOpenTrainingBlockSubject } = useDisclosure<{
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
     }>({
@@ -676,15 +675,14 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 colSpan: 1,
-                                render: (_, { id }) => (
+                                render: (_, record) => (
                                     <div className="flex gap-2.5 justify-center items-center">
                                         <CreateIcon
                                             title={'Thêm môn học'}
                                             onClick={(e) => {
                                                 e.stopPropagation()
                                                 onOpenTrainingBlockSubject({
-                                                    curriculumVersionId: id,
-                                                    trainingBlockOnCurriculumVersionId: id,
+                                                    trainingBlockOnCurriculumVersionId: record.id,
                                                     trainingBlockSubjectId: '',
                                                 })
                                             }}
@@ -1004,7 +1002,6 @@ export default function TrainingProgramSubjects() {
                                                 <EditIcon
                                                     onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({
-                                                            curriculumVersionId: id,
                                                             trainingBlockOnCurriculumVersionId:
                                                                 record?.trainingBlockOnCurriculumVersionId,
                                                             trainingBlockSubjectId: record?.id,

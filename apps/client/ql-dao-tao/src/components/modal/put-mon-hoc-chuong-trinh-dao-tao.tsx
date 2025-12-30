@@ -7,7 +7,6 @@ import {
     useCreateManyTrainingBlockSubject,
     useFindManyDM_DonVi,
     useFindManySubjectVersion,
-    useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueTrainingBlockOnCurriculumVersion,
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
@@ -28,7 +27,6 @@ export type PutTrainingBlockSubject = TrainingBlockSubject & {
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
-    curriculumVersionId: string
     trainingBlockOnCurriculumVersionId: string
     trainingBlockSubjectId: string
 }
@@ -56,19 +54,22 @@ const PutTrainingBlockSubject = () => {
         { where: { id: input?.trainingBlockSubjectId } },
         { enabled: !!input?.trainingBlockSubjectId }
     )
-
-    const { data: trainingBlockOnCurriculumVersion } = useFindManyTrainingBlockOnCurriculumVersion(
-        {
-            where: { curriculumVersionId: input?.curriculumVersionId },
-            include: { trainingBlock: true },
-        },
-        { enabled: !!input?.curriculumVersionId }
-    )
-
     const { data: trainingBlockOnCurriculum } = useFindUniqueTrainingBlockOnCurriculumVersion(
         {
             where: { id: input?.trainingBlockOnCurriculumVersionId },
-            include: { trainingBlock: true },
+            include: {
+                trainingBlock: true,
+                curriculumVersion: {
+                    select: {
+                        trainingBlocks: {
+                            select: {
+                                id: true,
+                                trainingBlock: true,
+                            },
+                        },
+                    },
+                },
+            },
         },
         {
             enabled: !!input?.trainingBlockOnCurriculumVersionId,
@@ -113,7 +114,9 @@ const PutTrainingBlockSubject = () => {
             showSpinner()
             const payload = {
                 subjectId: output.subjectId,
-                trainingBlockOnCurriculumVersionId: output.trainingBlockOnCurriculumVersionId,
+                trainingBlockOnCurriculumVersionId:
+                    output.trainingBlockOnCurriculumVersionId ??
+                    input?.trainingBlockOnCurriculumVersionId,
                 semester: output?.semester,
                 type: output?.type,
                 useForFinalScore: !output?.conditional,
@@ -249,9 +252,14 @@ const PutTrainingBlockSubject = () => {
                             placeholder="Chọn khối kiến thức"
                             showSearch
                             onChange={(val) => handleFilterChange('managementOrganizationId', val)}
-                            options={trainingBlockOnCurriculumVersion?.map((item) => {
-                                return { label: item.trainingBlock.name, value: item.id }
-                            })}
+                            options={trainingBlockOnCurriculum?.curriculumVersion?.trainingBlocks?.map(
+                                (item) => {
+                                    return {
+                                        label: item.trainingBlock.name,
+                                        value: item.id,
+                                    }
+                                }
+                            )}
                         />
                     </FormItem>
                 </Col>
