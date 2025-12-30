@@ -95,7 +95,6 @@ export default function PostgraduateProject({
         onChange: (newSelectedRowKeys: React.Key[]) => {
             setSelectedRowKeys(newSelectedRowKeys)
         },
-        // type: 'checkbox' là mặc định, nếu muốn radio thì dùng 'radio'
     }
     // state cho số lượng trang để phân trang
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -404,14 +403,8 @@ export default function PostgraduateProject({
                                 coSupervisor: true,
                                 room: true,
                                 defenseRecord: true,
-                                // supervisorPayments: {
-                                //     include: {
-                                //         expert: true,
-                                //     },
-                                //     orderBy: {
-                                //         description: 'asc',
-                                //     },
-                                // },
+                                supervisorPayment: true,
+                                coSupervisorPayment: true,
                                 council: {
                                     include: { members: { include: { expert: true } } },
                                 },
@@ -894,128 +887,128 @@ export default function PostgraduateProject({
     }
     // hàm xử lý xuất file phụ lục ds luận văn
     const phulucdsluanvan = async () => {
-        // showSpinner()
-        // if (!allStudentsInClasses?.length) {
-        //     message.error('Không có dữ liệu để xuất phụ lục danh sách luận văn')
-        //     hideSpinner()
-        //     return
-        // }
-        // const organizationMap = new Map<string, any>()
-        // let dotxet = ''
-        // allStudentsInClasses.forEach((student) => {
-        //     dotxet =
-        //         dotxet ||
-        //         student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name ||
-        //         ''
-        //     const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
-        //     if (!thesisProject) return
-        //     const organizationId = thesisProject.organization?.Id || ''
-        //     const organizationName = thesisProject.organization?.sTen || 'Chưa có đơn vị'
-        //     const organizationCode = thesisProject.organization?.sCode || ''
-        //     if (!organizationMap.has(organizationId)) {
-        //         organizationMap.set(organizationId, {
-        //             organizationId: organizationId === '' ? null : organizationId,
-        //             sTen: organizationName || '',
-        //             sCode: organizationCode || '',
-        //             thesisProject: [],
-        //         })
-        //     }
-        //     const orgData = organizationMap.get(organizationId)
-        //     orgData.thesisProject.push({
-        //         hovatenhocvien: student.userProfile?.fullname || '',
-        //         ngaysinh: student.userProfile?.dateOfBirth
-        //             ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY')
-        //             : '',
-        //         doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
-        //         khoa: student.fixedClass?.trainingCourse?.name || '',
-        //         tendetai: thesisProject.title || '',
-        //         gvhd1: thesisProject.supervisor?.name || '',
-        //         gvhd2: thesisProject.coSupervisor?.name || '',
-        //         isThesis:
-        //             thesisProject.description?.split('-')[1].trim().split(':')[1] ||
-        //             ''.toLowerCase(),
-        //         language:
-        //             thesisProject.description?.split('-')[0].trim().split(':')[1] ||
-        //             ''.toLowerCase(),
-        //     })
-        // })
-        // // Convert Map to Array
-        // const result = Array.from(organizationMap.values())
-        // if (result.length === 0) {
-        //     message.error('Không có dữ liệu để xuất phụ lục danh sách luận văn')
-        //     hideSpinner()
-        //     return
-        // }
-        // let count = 1
-        // const dataRows: TableRow[] = result.flatMap((item: any) => {
-        //     const orgRow: TableRow = {
-        //         cells: [
-        //             {
-        //                 value: `${item.sCode} - ${item.sTen}`,
-        //                 border: true,
-        //                 align: 'center',
-        //                 colSpan: 6,
-        //                 bold: true,
-        //             },
-        //         ],
-        //     }
-        //     const thesisRows: TableRow[] = item.thesisProject.map((thesis: any) => {
-        //         return {
-        //             cells: [
-        //                 { value: count++, border: true, align: 'center' },
-        //                 {
-        //                     value: `${thesis.hovatenhocvien}\n${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
-        //                     border: true,
-        //                     align: 'left',
-        //                 },
-        //                 { value: `${thesis.tendetai}`, border: true, align: 'left' },
-        //                 {
-        //                     value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ''}\n${
-        //                         thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ''
-        //                     }`,
-        //                     border: true,
-        //                     align: 'left',
-        //                 },
-        //                 { value: `${thesis.isThesis}`, border: true, align: 'center' },
-        //                 { value: `${thesis.language}`, border: true, align: 'center' },
-        //             ],
-        //         }
-        //     })
-        //     return [orgRow, ...thesisRows]
-        // })
-        // const gapRow: TableRow = {
-        //     cells: [{ value: null, border: false }],
-        // }
-        // const totalRow: TableRow = {
-        //     cells: [
-        //         {
-        //             value: `(Tổng số: ${count - 1} học viên)`,
-        //             align: 'center',
-        //             colSpan: 6,
-        //             border: false,
-        //         },
-        //     ],
-        // }
-        // try {
-        //     await exportFromTemplate({
-        //         templateUrl: getMinioUrl('mta/template/phulucluanvanthacsi.xlsx'),
-        //         sheets: [
-        //             {
-        //                 sheet: 'phulucluanvanthacsi',
-        //                 rows: [...dataRows, gapRow, totalRow],
-        //                 tableStartCell: { row: 7, col: 1 },
-        //                 data: {
-        //                     dotxet: dotxet || '',
-        //                 },
-        //             },
-        //         ],
-        //         fileName: 'PhuLucDsLuanVan',
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        showSpinner()
+        if (!allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để xuất phụ lục danh sách luận văn')
+            hideSpinner()
+            return
+        }
+        const organizationMap = new Map<string, any>()
+        let dotxet = ''
+        allStudentsInClasses.forEach((student) => {
+            dotxet =
+                dotxet ||
+                student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name ||
+                ''
+            const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
+            if (!thesisProject) return
+            const organizationId = thesisProject.organization?.Id || ''
+            const organizationName = thesisProject.organization?.sTen || 'Chưa có đơn vị'
+            const organizationCode = thesisProject.organization?.sCode || ''
+            if (!organizationMap.has(organizationId)) {
+                organizationMap.set(organizationId, {
+                    organizationId: organizationId === '' ? null : organizationId,
+                    sTen: organizationName || '',
+                    sCode: organizationCode || '',
+                    thesisProject: [],
+                })
+            }
+            const orgData = organizationMap.get(organizationId)
+            orgData.thesisProject.push({
+                hovatenhocvien: student.userProfile?.fullname || '',
+                ngaysinh: student.userProfile?.dateOfBirth
+                    ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                    : '',
+                doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
+                khoa: student.fixedClass?.trainingCourse?.name || '',
+                tendetai: thesisProject.title || '',
+                gvhd1: thesisProject.supervisor?.name || '',
+                gvhd2: thesisProject.coSupervisor?.name || '',
+                isThesis:
+                    thesisProject.description?.split('-')[1].trim().split(':')[1] ||
+                    ''.toLowerCase(),
+                language:
+                    thesisProject.description?.split('-')[0].trim().split(':')[1] ||
+                    ''.toLowerCase(),
+            })
+        })
+        // Convert Map to Array
+        const result = Array.from(organizationMap.values())
+        if (result.length === 0) {
+            message.error('Không có dữ liệu để xuất phụ lục danh sách luận văn')
+            hideSpinner()
+            return
+        }
+        let count = 1
+        const dataRows: TableRow[] = result.flatMap((item: any) => {
+            const orgRow: TableRow = {
+                cells: [
+                    {
+                        value: `${item.sCode} - ${item.sTen}`,
+                        border: true,
+                        align: 'center',
+                        colSpan: 6,
+                        bold: true,
+                    },
+                ],
+            }
+            const thesisRows: TableRow[] = item.thesisProject.map((thesis: any) => {
+                return {
+                    cells: [
+                        { value: count++, border: true, align: 'center' },
+                        {
+                            value: `${thesis.hovatenhocvien}\n${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
+                            border: true,
+                            align: 'left',
+                        },
+                        { value: `${thesis.tendetai}`, border: true, align: 'left' },
+                        {
+                            value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ''}\n${
+                                thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ''
+                            }`,
+                            border: true,
+                            align: 'left',
+                        },
+                        { value: `${thesis.isThesis}`, border: true, align: 'center' },
+                        { value: `${thesis.language}`, border: true, align: 'center' },
+                    ],
+                }
+            })
+            return [orgRow, ...thesisRows]
+        })
+        const gapRow: TableRow = {
+            cells: [{ value: null, border: false }],
+        }
+        const totalRow: TableRow = {
+            cells: [
+                {
+                    value: `(Tổng số: ${count - 1} học viên)`,
+                    align: 'center',
+                    colSpan: 6,
+                    border: false,
+                },
+            ],
+        }
+        try {
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/phulucluanvanthacsi.xlsx'),
+                sheets: [
+                    {
+                        sheet: 'phulucluanvanthacsi',
+                        rows: [...dataRows, gapRow, totalRow],
+                        tableStartCell: { row: 7, col: 1 },
+                        data: {
+                            dotxet: dotxet || '',
+                        },
+                    },
+                ],
+                fileName: 'PhuLucDsLuanVan',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
 
     // hàm xử lý lấy ra danh sách thống kê cán bộ hướng dẫn LV
@@ -1473,8 +1466,11 @@ export default function PostgraduateProject({
                                         )
                                     }
                                     return (
-                                        record?.thesisRegistrations?.[0]?.thesisProject
-                                            ?.organization?.sMa || ''
+                                        `${
+                                            record?.thesisRegistrations?.[0]?.thesisProject
+                                                ?.organization?.sMa
+                                        } - ${record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen}` ||
+                                        ''
                                     )
                                 },
                             },

@@ -1,5 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
-import PaymentConfigurationPage from '../PaymentConfiguration'
+import PaymentConfigurationPage from '../../cau-hinh-thanh-toan/PaymentConfiguration'
 
 export default function CauHinhThanhToanLuanVan() {
     return <PaymentConfigurationPage isThesis={true} />

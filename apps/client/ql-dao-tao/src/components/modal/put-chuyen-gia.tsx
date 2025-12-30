@@ -8,23 +8,23 @@ import {
     useFindUniqueExpertProfile,
     useFindUniqueLecturer,
     useUpdateExpertProfile,
+    useUpsertExpertProfile,
 } from '@workspace/db/hooks'
 import { Checkbox, Col, Form, Input, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
-
+export interface PutExpertProfileProps {
+    id?: string
+    thesisExpert?: boolean
+}
 export type PutExpertProfile = ExpertProfile
 dayjs.locale('vi')
 
 const PutExpertProfile = () => {
     const [form] = Form.useForm<PutExpertProfile>()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<PutExpertProfileProps>({
         tag: 'PutExpertProfile',
         onClose: form.resetFields,
     })
@@ -33,7 +33,10 @@ const PutExpertProfile = () => {
 
     const [search, setSearch] = useState('')
     const [selectedLecturerId, setSelectedLecturerId] = useState<string | undefined>()
-    const { data: expert } = useFindUniqueExpertProfile({ where: { id } }, { enabled: !!id })
+    const { data: expert } = useFindUniqueExpertProfile(
+        { where: { id: input?.id } },
+        { enabled: !!input?.id }
+    )
 
     const { data: lecturer = [] } = useFindManyLecturer({
         where: {
@@ -93,47 +96,88 @@ const PutExpertProfile = () => {
 
     const { mutateAsync: createExpertProfile } = useCreateExpertProfile()
     const { mutateAsync: updateExpertProfile } = useUpdateExpertProfile()
+    const { mutateAsync: upsertExpertProfile } = useUpsertExpertProfile()
     async function onOk(output?: PutExpertProfile) {
         if (!output) return
 
-        const payload = selectedLecturer
-            ? {
-                  name: selectedLecturer.userProfile.fullname || null,
-                  phone: selectedLecturer.userProfile.phoneNumber || null,
-                  email: selectedLecturer.userProfile.email || null,
-                  lecturerId: selectedLecturer.id,
-                  eligibleSecretary: output.eligibleSecretary,
-                  eligiblePresident: output.eligiblePresident,
-                  bankAccountNumber: output.bankAccountNumber,
-                  bankName: output.bankName,
-              }
-            : {
-                  academicRank: output.academicRank,
-                  academicDegree: output.academicDegree,
-                  specialization: output.specialization,
-                  workplace: output.workplace,
-                  phone: output.phone,
-                  email: output.email,
-                  name: output?.name?.trim(),
-                  eligibleSecretary: output.eligibleSecretary,
-                  eligiblePresident: output.eligiblePresident,
-                  bankAccountNumber: output.bankAccountNumber,
-                  bankName: output.bankName,
-              }
-
         try {
             showSpinner()
-            if (id) {
+            if (input?.id) {
+                const payload = selectedLecturer
+                    ? {
+                          name: selectedLecturer.userProfile.fullname || null,
+                          phone: selectedLecturer.userProfile.phoneNumber || null,
+                          email: selectedLecturer.userProfile.email || null,
+                          lecturerId: selectedLecturer.id,
+                          eligibleSecretary: output.eligibleSecretary,
+                          eligiblePresident: output.eligiblePresident,
+                          bankAccountNumber: output.bankAccountNumber,
+                          bankName: output.bankName,
+                      }
+                    : {
+                          academicRank: output.academicRank,
+                          academicDegree: output.academicDegree,
+                          specialization: output.specialization,
+                          workplace: output.workplace,
+                          phone: output.phone,
+                          email: output.email,
+                          name: output?.name?.trim(),
+                          eligibleSecretary: output.eligibleSecretary,
+                          eligiblePresident: output.eligiblePresident,
+                          bankAccountNumber: output.bankAccountNumber,
+                          bankName: output.bankName,
+                      }
                 await updateExpertProfile({
-                    where: { id },
+                    where: { id: input?.id },
                     data: payload,
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createExpertProfile({
-                    data: payload,
-                })
-                message.success('Thêm mới thành công')
+                if (isInternal && selectedLecturer) {
+                    await upsertExpertProfile({
+                        where: { lecturerId: selectedLecturer.id },
+                        update: {
+                            ...(input?.thesisExpert
+                                ? { thesisExpert: true }
+                                : { projectExpert: true }),
+                            bankAccountNumber: output.bankAccountNumber,
+                            bankName: output.bankName,
+                        },
+                        create: {
+                            name: selectedLecturer.userProfile.fullname || null,
+                            phone: selectedLecturer.userProfile.phoneNumber || null,
+                            email: selectedLecturer.userProfile.email || null,
+                            lecturerId: selectedLecturer.id,
+                            eligibleSecretary: output.eligibleSecretary,
+                            eligiblePresident: output.eligiblePresident,
+                            bankAccountNumber: output.bankAccountNumber,
+                            bankName: output.bankName,
+                            ...(input?.thesisExpert
+                                ? { thesisExpert: true }
+                                : { projectExpert: true }),
+                        },
+                    })
+                } else {
+                    await createExpertProfile({
+                        data: {
+                            academicRank: output.academicRank,
+                            academicDegree: output.academicDegree,
+                            specialization: output.specialization,
+                            workplace: output.workplace,
+                            phone: output.phone,
+                            email: output.email,
+                            name: output?.name?.trim(),
+                            eligibleSecretary: output.eligibleSecretary,
+                            eligiblePresident: output.eligiblePresident,
+                            bankAccountNumber: output.bankAccountNumber,
+                            bankName: output.bankName,
+                            ...(input?.thesisExpert
+                                ? { thesisExpert: true }
+                                : { projectExpert: true }),
+                        },
+                    })
+                }
+                message.success('Thêm mới chuyên gia thành công')
             }
 
             onClose()
@@ -155,24 +199,27 @@ const PutExpertProfile = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa chuyên gia' : 'Thêm mới chuyên gia'}
+            title={input?.id ? 'Chỉnh sửa chuyên gia' : 'Thêm mới chuyên gia'}
             className="w-[50vw]"
         >
-            <Col span={24} className="mb-4">
-                <Radio.Group
-                    onChange={(e) => {
-                        setIsInternal(e.target.value === 'internal')
-                        if (!id) {
-                            form.resetFields()
-                        }
-                    }}
-                    disabled={!!id}
-                    value={isInternal ? 'internal' : 'external'}
-                >
-                    <Radio value="internal">Chuyên gia trong trường</Radio>
-                    <Radio value="external">Chuyên gia ngoài trường</Radio>
-                </Radio.Group>
-            </Col>
+            {input?.thesisExpert && (
+                <Col span={24} className="mb-4">
+                    <Radio.Group
+                        onChange={(e) => {
+                            setIsInternal(e.target.value === 'internal')
+                            if (!input?.id) {
+                                form.resetFields()
+                            }
+                        }}
+                        disabled={!!input?.id}
+                        value={isInternal ? 'internal' : 'external'}
+                    >
+                        <Radio value="internal">Chuyên gia trong trường</Radio>
+                        <Radio value="external">Chuyên gia ngoài trường</Radio>
+                    </Radio.Group>
+                </Col>
+            )}
+
             {isInternal && (
                 <Col span={24}>
                     <FormItem form={form} name="lecturerId" label="Chuyên gia hướng dẫn" required>

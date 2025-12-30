@@ -12,17 +12,19 @@ import {
     useUpdateThesisSession,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, message, Row } from 'antd'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { BsGear } from 'react-icons/bs'
+import { useRouter } from 'next/router'
 
 export default function ThesisSession() {
     const { can, canSome } = useAbility()
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -32,7 +34,6 @@ export default function ThesisSession() {
         applicationEnd: undefined,
         statusGraduationSession: undefined,
     })
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: thesisSessionData } = useFindManyThesisSession({
         where: {
@@ -52,8 +53,6 @@ export default function ThesisSession() {
                       },
                   }
                 : {}),
-
-            trainingObjectTypeId,
         },
         include: {
             trainingObjectType: true,
@@ -81,10 +80,10 @@ export default function ThesisSession() {
                       },
                   }
                 : {}),
-            trainingObjectTypeId,
             deletedAt: null,
         },
     })
+    const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
 
     const { onOpen } = useDisclosure<string>({
         tag: 'PutThesisSession',
@@ -95,7 +94,10 @@ export default function ThesisSession() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
+    const handleNavigateSetting = (id: string) => {
+        router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_CAU_HINH_HOI_DONG}/${id}`)
+    }
+
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -254,6 +256,12 @@ export default function ThesisSession() {
                                                         onClick={(e) => e.stopPropagation()}
                                                     />
                                                 )}
+                                                <Tooltip title="Cấu hình lớp đồ án" placement="top">
+                                                    <BsGear
+                                                        className="cursor-pointer"
+                                                        onClick={() => handleNavigateSetting(id)}
+                                                    />
+                                                </Tooltip>
                                             </Row>
                                         )
                                     }

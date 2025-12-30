@@ -52,7 +52,6 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
             ...councilRolePayAmounts.map((item) => ({ ...item, type: 'COUNCIL' })),
             ...supervisorPayAmounts.map((item) => ({ ...item, type: 'SUPERVISOR' })),
         ]
-
         allRawData.forEach((item) => {
             const roleName = RoleType.get(item.role) ?? 'N/A'
 
@@ -99,8 +98,8 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
             'Phản biện 1',
             'Phản biện 2',
             'Ủy viên',
-            'Chuyên gia hướng dẫn',
-            'Chuyên gia hướng dẫn phụ',
+            'Chuyên gia hướng dẫn (GVHD1)',
+            'Chuyên gia hướng dẫn phụ (GVHD2)',
         ]
         const result = roleOrder
             .map((name) => map.get(name))
@@ -153,7 +152,7 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
             return '-'
         }
 
-        return new Intl.NumberFormat('vi-VN').format(value)
+        return `${new Intl.NumberFormat('vi-VN').format(value)} VNĐ`
     }
     const handleSave = async () => {
         showSpinner()
@@ -209,7 +208,6 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
             await Promise.all(updatePromises)
             message.success(`Đã cập nhật thành công ${updatePromises.length} thay đổi!`)
         } catch (error) {
-            console.error('Lỗi cập nhật:', error)
             message.error('Cập nhật thất bại. Vui lòng kiểm tra lại.')
         } finally {
             setIsEditing(false)
@@ -304,7 +302,6 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
                                   ]
                                 : []),
 
-                            // LOGIC: Nếu LÀ Thesis thì hiện cột Luận văn/Đề án
                             ...(isThesis
                                 ? [
                                       {

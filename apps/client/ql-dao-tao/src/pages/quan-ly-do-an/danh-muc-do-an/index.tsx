@@ -3,6 +3,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import SettingsIcon from '@components/icons/settings'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -34,7 +35,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { BsGear } from 'react-icons/bs'
 
 export default function ThesisProject() {
     const { can, canSome } = useAbility()
@@ -570,12 +570,11 @@ export default function ThesisProject() {
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
                                     'SUA'
                                 ) && (
-                                    <Tooltip title="Cấu hình lớp đồ án" placement="top">
-                                        <BsGear
-                                            className="cursor-pointer"
-                                            onClick={() => handleNavigateSetting(id)}
-                                        />
-                                    </Tooltip>
+                                    <SettingsIcon
+                                        className="cursor-pointer"
+                                        onClick={() => handleNavigateSetting(id)}
+                                        title="Cấu hình hội đồng"
+                                    />
                                 )}
                             </div>
                         )}
