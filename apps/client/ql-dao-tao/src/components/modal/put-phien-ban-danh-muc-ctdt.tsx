@@ -125,7 +125,7 @@ const PutCurriculumVersion = () => {
                     model: 'CurriculumVersion',
                     operation: 'findUnique',
                     data: {
-                        where: { id: versionId },
+                        where: { id: versionId, active: true, deletedAt: null },
                         include: {
                             trainingBlocks: {
                                 include: {
@@ -133,7 +133,19 @@ const PutCurriculumVersion = () => {
                                         include: {
                                             subject: true,
                                         },
+                                        where: {
+                                            active: true,
+                                            deletedAt: null,
+                                            subject: {
+                                                active: true,
+                                                deletedAt: null,
+                                            },
+                                        },
                                     },
+                                },
+                                where: {
+                                    active: true,
+                                    deletedAt: null,
                                 },
                             },
                         },
