@@ -235,6 +235,7 @@ const PutCurriculum = () => {
                 >
                     <Select
                         placeholder="Đối tượng đào tạo"
+                        disabled
                         options={trainingObjectTypeData.map((i) => {
                             return {
                                 value: i.id,
