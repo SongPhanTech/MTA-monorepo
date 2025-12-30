@@ -990,7 +990,7 @@ export default function TrainingProgramSubjects() {
                                                     <ViewIcon
                                                         onClick={() =>
                                                             handleModalSubjectVersion(
-                                                                record.subjectId,
+                                                                '',
                                                                 record.subjectId,
                                                                 !can(
                                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
