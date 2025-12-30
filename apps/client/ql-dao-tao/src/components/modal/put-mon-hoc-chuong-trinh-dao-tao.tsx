@@ -2,10 +2,9 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import {
-    SubjectRequirementType,
-    type SubjectVersion,
-    type TrainingBlockSubject,
+import type {
+    SubjectVersion,
+    TrainingBlockSubject,
 } from '@workspace/db/client'
 import {
     useCreateManyTrainingBlockSubject,
@@ -269,7 +268,6 @@ const PutTrainingBlockSubject = () => {
                         placeholder="Chọn loại môn học"
                         options={subjectRequirementTypeOptions}
                         allowClear
-                        defaultValue={SubjectRequirementType.None}
                     />
                 </FormItem>
             </Col>
