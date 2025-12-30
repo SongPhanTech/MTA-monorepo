@@ -348,7 +348,7 @@ export default function TrainingProgramSubjects() {
         tag: 'PutTrainingBlockSubject',
     })
 
-    const { onOpen: onOpenTrainingBlock, onClose: onCloseTrainingBlock } = useDisclosure<{
+    const { onOpen: onOpenTrainingBlock } = useDisclosure<{
         curriculumVersionId: string
     }>({
         tag: 'PutTrainingBlockOnCurriculumVersion',
@@ -677,25 +677,49 @@ export default function TrainingProgramSubjects() {
                                 colSpan: 1,
                                 render: (_, record) => (
                                     <div className="flex gap-2.5 justify-center items-center">
-                                        <CreateIcon
-                                            title={'Thêm môn học'}
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                onOpenTrainingBlockSubject({
-                                                    trainingBlockOnCurriculumVersionId: record.id,
-                                                    trainingBlockSubjectId: '',
-                                                })
-                                            }}
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDeleteTrainingBlockOnCurriculumVersion(
-                                                        id
-                                                    ),
-                                            }}
-                                            onClick={(e) => e.stopPropagation()}
-                                        />
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={() =>
+                                                    onOpenTrainingBlock({
+                                                        curriculumVersionId:
+                                                            initialValue?.id as string,
+                                                    })
+                                                }
+                                            />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                            'THEM'
+                                        ) && (
+                                            <CreateIcon
+                                                title={'Thêm môn học'}
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenTrainingBlockSubject({
+                                                        trainingBlockOnCurriculumVersionId:
+                                                            record.id,
+                                                        trainingBlockSubjectId: '',
+                                                    })
+                                                }}
+                                            />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteTrainingBlockOnCurriculumVersion(
+                                                            id
+                                                        ),
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        )}
                                     </div>
                                 ),
                             },
@@ -729,7 +753,7 @@ export default function TrainingProgramSubjects() {
                                         <span>TCTC</span>
                                     </Tooltip>
                                 ),
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                             },
                             {
@@ -791,7 +815,11 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                             },
                             {
-                                title: 'Số tiết TKB',
+                                title: (
+                                    <Tooltip title="Số tiết thời khóa biểu">
+                                        <span>Số tiết TKB</span>
+                                    </Tooltip>
+                                ),
                                 dataIndex: 'periodCmp',
                                 width: 120,
                                 align: 'center',
@@ -812,7 +840,7 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'LT',
+                                title: <Tooltip title="Số tiết lý thuyết">LT</Tooltip>,
                                 dataIndex: 'numberOfTheoryCmp',
                                 width: 80,
                                 type: 'cmp',
@@ -833,7 +861,7 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'BT',
+                                title: <Tooltip title="Số tiết bài tập">BT</Tooltip>,
                                 dataIndex: 'numberOfPracticalCmp',
                                 type: 'cmp',
                                 width: 80,
@@ -854,7 +882,7 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'ThL',
+                                title: <Tooltip title="Số tiết thảo luận">ThL</Tooltip>,
                                 dataIndex: 'numberOfSelfStudyCmp',
                                 width: 80,
                                 align: 'center',
@@ -875,7 +903,9 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'TN, TH',
+                                title: (
+                                    <Tooltip title="Số tiết thí nghiệm, thực hành">TN, TH</Tooltip>
+                                ),
                                 dataIndex: 'numberOfPracticeCmp',
                                 width: 90,
                                 align: 'center',
@@ -896,7 +926,7 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'Ôn',
+                                title: <Tooltip title="Số tiết ôn tập">Ôn</Tooltip>,
                                 dataIndex: 'numberOfReviewCmp',
                                 width: 60,
                                 align: 'center',
@@ -917,7 +947,7 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'KT, Thi',
+                                title: <Tooltip title="Số tiết kiểm tra, thi">KT, Thi</Tooltip>,
                                 dataIndex: 'numberOfExamCmp',
                                 width: 90,
                                 align: 'center',
