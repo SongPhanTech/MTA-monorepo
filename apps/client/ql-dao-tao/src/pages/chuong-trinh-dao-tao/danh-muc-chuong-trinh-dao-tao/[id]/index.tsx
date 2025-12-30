@@ -548,11 +548,11 @@ export default function TrainingProgramSubjects() {
                             const subject = record as unknown as TrainingBlockSubject
                             return {
                                 className: cn(
-                                    !subject.useForFinalScore && 'bg-orange-300',
                                     subject.type === $Enums.SubjectRequirementType.Mandatory &&
                                         'bg-white',
                                     subject.type === $Enums.SubjectRequirementType.Optional &&
-                                        'bg-yellow-100'
+                                        'bg-yellow-100',
+                                    !subject.useForFinalScore && 'bg-orange-300'
                                 ),
                             }
                         }}

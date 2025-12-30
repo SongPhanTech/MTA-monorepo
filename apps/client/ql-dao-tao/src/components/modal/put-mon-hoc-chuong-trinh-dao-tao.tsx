@@ -2,10 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type {
-    SubjectVersion,
-    TrainingBlockSubject,
-} from '@workspace/db/client'
+import type { SubjectVersion, TrainingBlockSubject } from '@workspace/db/client'
 import {
     useCreateManyTrainingBlockSubject,
     useFindManyDM_DonVi,
@@ -25,7 +22,9 @@ import { useTrainingObjectTypeStore } from '@workspace/ui'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
-export type PutTrainingBlockSubject = TrainingBlockSubject
+export type PutTrainingBlockSubject = TrainingBlockSubject & {
+    conditional?: boolean
+}
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
@@ -92,14 +91,14 @@ const PutTrainingBlockSubject = () => {
             form.setFieldsValue({
                 ...initialValue,
                 useForFinalScore: initialValue.useForFinalScore,
+                conditional: !initialValue.useForFinalScore,
                 graduation: initialValue.graduation,
-                // print: initialValue.print,
             })
         } else {
             form.setFieldsValue({
-                useForFinalScore: false,
+                useForFinalScore: true,
+                conditional: false,
                 graduation: false,
-                // print: false,
                 active: true,
             })
         }
@@ -117,7 +116,7 @@ const PutTrainingBlockSubject = () => {
                 trainingBlockOnCurriculumVersionId: output.trainingBlockOnCurriculumVersionId,
                 semester: output?.semester,
                 type: output?.type,
-                useForFinalScore: output?.useForFinalScore,
+                useForFinalScore: !output?.conditional,
                 graduation: output?.graduation,
                 // print: output?.print,
                 active: output?.active,
@@ -191,6 +190,11 @@ const PutTrainingBlockSubject = () => {
                     : 'Thêm mới môn học khối kiến thức'
             }
             className="min-w-[400px] w-[500px]"
+            formProps={{
+                onValuesChange: (changedValues) => {
+                    console.log('changedValues', changedValues)
+                },
+            }}
         >
             {!input?.trainingBlockSubjectId && (
                 <Col span={24}>
@@ -274,8 +278,8 @@ const PutTrainingBlockSubject = () => {
             <Col span={24}>
                 <FormItem
                     form={form}
-                    name="useForFinalScore"
-                    label="Tính điểm thi cuối kỳ"
+                    name="conditional"
+                    label="Môn điều kiện"
                     layout="horizontal"
                     valuePropName="checked"
                     className="mb-0"
