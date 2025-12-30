@@ -19,7 +19,6 @@ const mapExamType = (examType: $Enums.ExamType): string => {
 
 const mapSubjectRequirementType = (type: $Enums.SubjectRequirementType): string => {
     const typeMap: Partial<Record<$Enums.SubjectRequirementType, string>> = {
-        None: 'Không',
         Mandatory: 'Bắt buộc',
         Optional: 'Tự chọn',
     }
