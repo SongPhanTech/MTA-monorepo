@@ -7376,7 +7376,6 @@ exports.EquivalencySide = exports.$Enums.EquivalencySide = {
 };
 
 exports.SubjectRequirementType = exports.$Enums.SubjectRequirementType = {
-  None: 'None',
   Mandatory: 'Mandatory',
   Optional: 'Optional'
 };

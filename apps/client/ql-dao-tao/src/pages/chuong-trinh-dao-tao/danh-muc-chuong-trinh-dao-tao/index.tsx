@@ -11,12 +11,12 @@ import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type {
-    CurriculumVersion,
-    Prisma,
-    TrainingCourse,
-    TrainingMajor,
-    TrainingTime,
+import {
+    type CurriculumVersion,
+    type Prisma,
+    type TrainingCourse,
+    type TrainingMajor,
+    type TrainingTime,
 } from '@workspace/db/client'
 import {
     useCountCurriculum,
@@ -539,25 +539,6 @@ export default function TrainingProgramCatalog() {
                                 width: 300,
                                 type: 'input',
                             },
-                            // {
-                            //     title: <Tooltip title="Đối tượng đào tạo">ĐTĐT</Tooltip>,
-                            //     dataIndex: 'trainingObjectTypes',
-                            //     align: 'center',
-                            //     width: 150,
-                            //     // type: 'select',
-                            //     // options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
-                            //     //     value: i.id,
-                            //     //     label: i.name,
-                            //     // })),
-                            //     render: (
-                            //         __,
-                            //         record: { trainingObjectType?: TrainingObjectType }
-                            //     ) => {
-                            //         return record.trainingObjectType
-                            //             ? record.trainingObjectType.name
-                            //             : ''
-                            //     },
-                            // },
                             {
                                 title: 'Khoá',
                                 align: 'center',
@@ -612,24 +593,94 @@ export default function TrainingProgramCatalog() {
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
                                 type: 'cmp',
-                                distinctFilters: ['electiveCredits', 'numberOfSemesters'],
+                                distinctFilters: ['requiredCredits'],
                                 width: 90,
+                                // render: ({ trainingBlocks = [] }) => {
+                                //     const totalCredit = trainingBlocks.reduce(
+                                //         (
+                                //             total: number,
+                                //             block: {
+                                //                 subjects?: {
+                                //                     type: SubjectRequirementType
+                                //                     subject: { credit?: number }
+                                //                 }[]
+                                //             }
+                                //         ) => {
+                                //             const blockCredit =
+                                //                 block?.subjects?.reduce(
+                                //                     (sum, { subject, type }) =>
+                                //                         sum +
+                                //                         (type ===
+                                //                         $Enums.SubjectRequirementType.Mandatory
+                                //                             ? subject?.credit || 0
+                                //                             : 0),
+                                //                     0
+                                //                 ) || 0
+                                //             return total + blockCredit
+                                //         },
+                                //         0
+                                //     )
+                                //     return totalCredit
+                                // },
                             },
                             {
                                 title: <Tooltip title="Số tín chỉ tự chọn">Số TCTC</Tooltip>,
-                                dataIndex: 'electiveCredits',
                                 align: 'center',
                                 type: 'cmp',
                                 width: 90,
-                                distinctFilters: ['numberOfSemesters', 'requiredCredits'],
+                                dataIndex: 'electiveCredits',
+                                distinctFilters: ['electiveCredits'],
+                                // render: ({ trainingBlocks = [] }) => {
+                                //     const totalCredit = trainingBlocks.reduce(
+                                //         (
+                                //             total: number,
+                                //             block: {
+                                //                 subjects?: {
+                                //                     type: SubjectRequirementType
+                                //                     subject: { credit?: number }
+                                //                 }[]
+                                //             }
+                                //         ) => {
+                                //             const blockCredit =
+                                //                 block?.subjects?.reduce(
+                                //                     (sum, { subject, type }) =>
+                                //                         sum +
+                                //                         (type ===
+                                //                         $Enums.SubjectRequirementType.Optional
+                                //                             ? subject?.credit || 0
+                                //                             : 0),
+                                //                     0
+                                //                 ) || 0
+                                //             return total + blockCredit
+                                //         },
+                                //         0
+                                //     )
+                                //     return totalCredit
+                                // },
                             },
                             {
                                 title: <Tooltip title="Số học kỳ">Số HK</Tooltip>,
                                 dataIndex: 'numberOfSemesters',
                                 align: 'center',
                                 type: 'cmp',
-                                distinctFilters: ['electiveCredits', 'requiredCredits'],
+                                distinctFilters: ['numberOfSemesters'],
                                 width: 90,
+                                // render: ({ trainingBlocks = [] }) => {
+                                //     const allSemester = trainingBlocks.flatMap(
+                                //         (block: {
+                                //             subjects?: {
+                                //                 semester: number
+                                //             }[]
+                                //         }) => {
+                                //             return (
+                                //                 block.subjects
+                                //                     ?.map((e) => e?.semester)
+                                //                     ?.filter?.(Boolean) || []
+                                //             )
+                                //         }
+                                //     )
+                                //     return allSemester?.length > 0 ? Math.max(...allSemester) : ''
+                                // },
                             },
                             {
                                 title: <Tooltip title="Thời gian đào tạo">TGĐT</Tooltip>,

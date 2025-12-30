@@ -17,7 +17,6 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingLevel,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { fixedClassStudentCount } from '@workspace/libs/api/training'
@@ -186,7 +185,6 @@ export default function FixedClassPage() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },

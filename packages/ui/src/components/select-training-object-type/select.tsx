@@ -1,38 +1,12 @@
-import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
-import { useGetUserPermissionsPermissionAppCodeUserId } from '@workspace/libs/api/system'
 import { Select, type SelectProps, Tooltip } from 'antd'
-import { useMemo } from 'react'
-import { getRuntimeEnv, isDevEnvironment } from '../../../../libs/src/utils'
-import { useTrainingObjectTypeStore } from './hook'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from './hook'
 
 type AntdSelectProps = SelectProps
 
 const SelectTrainingObjectType = (props: AntdSelectProps) => {
     const { id, onSelect } = useTrainingObjectTypeStore()
 
-    const { data: permission } = useGetUserPermissionsPermissionAppCodeUserId(
-        getRuntimeEnv('NEXT_PUBLIC_APP_CODE'),
-        window?.contextData?.userId ?? ''
-    )
-
-    const permissions = useMemo(() => {
-        if (permission?.status !== 200) return []
-        return (permission?.data as any)?.Roles || []
-    }, [permission])
-
-    const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
-        where: {
-            active: true,
-            ...(isDevEnvironment()
-                ? {}
-                : {
-                      vaiTro: {
-                          hasSome: permissions.map((item: any) => item.sRoleId).filter(Boolean),
-                      },
-                  }),
-        },
-        orderBy: { name: 'asc' },
-    })
+    const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectTypePermission()
 
     // useEffect(() => {
     //     if (!id && doiTuongDaoTao.length > 0 && doiTuongDaoTao?.[0]?.id) {

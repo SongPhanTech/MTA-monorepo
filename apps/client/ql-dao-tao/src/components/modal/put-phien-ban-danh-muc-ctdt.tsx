@@ -7,13 +7,15 @@ import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import Tabs from '@components/commons/tabar'
 import useSpinner from '@hooks/spinner'
-import type {
-    CurriculumVersion,
-    DiplomaType,
-    DocumentFile,
-    TrainingForm,
-    TrainingObjectType,
-    TrainingTime,
+import {
+    $Enums,
+    type CurriculumVersion,
+    type DiplomaType,
+    type DocumentFile,
+    type Prisma,
+    type TrainingForm,
+    type TrainingObjectType,
+    type TrainingTime,
 } from '@workspace/db/client'
 import {
     useCreateCurriculumVersion,
@@ -21,7 +23,6 @@ import {
     useFindManyDiplomaType,
     useFindManyTrainingLanguage,
     useFindManyTrainingLevel,
-    useFindManyTrainingObjectType,
     useFindManyTrainingTime,
     useFindManyTrainingType,
     useFindUniqueCurriculumVersion,
@@ -30,7 +31,7 @@ import {
 import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { parseSheetSubject } from '@workspace/libs/parseExcel'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -39,6 +40,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Download } from 'lucide-react'
+import { sqlTransaction } from '@workspace/libs/api/model'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -84,7 +86,7 @@ const PutCurriculumVersion = () => {
 
     const { data: trainingLevelData = [] } = useFindManyTrainingLevel()
     const { data: trainingTimeData = [] } = useFindManyTrainingTime()
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
     const { data: trainingTypeData = [] } = useFindManyTrainingType()
     const { data: trainingLanguageData = [] } = useFindManyTrainingLanguage({
@@ -116,6 +118,81 @@ const PutCurriculumVersion = () => {
         fileInput.click()
     }
 
+    const updateDynamicFields = async (versionId: string) => {
+        try {
+            const resVersion = await sqlTransaction([
+                {
+                    model: 'CurriculumVersion',
+                    operation: 'findUnique',
+                    data: {
+                        where: { id: versionId },
+                        include: {
+                            trainingBlocks: {
+                                include: {
+                                    subjects: {
+                                        include: {
+                                            subject: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            ])
+            if (resVersion.status !== 200) return
+            const versionData = resVersion.data[0] as Prisma.CurriculumVersionGetPayload<{
+                include: {
+                    trainingBlocks: {
+                        include: {
+                            subjects: {
+                                include: {
+                                    subject: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }>
+            const totalMandatoryCredits = versionData.trainingBlocks.reduce((total, block) => {
+                const blockCredit =
+                    block?.subjects?.reduce(
+                        (sum, { subject, type }) =>
+                            sum +
+                            (type === $Enums.SubjectRequirementType.Mandatory
+                                ? subject?.credit || 0
+                                : 0),
+                        0
+                    ) || 0
+                return total + blockCredit
+            }, 0)
+            const totalOptionalCredits = versionData.trainingBlocks.reduce((total, block) => {
+                const blockCredit =
+                    block?.subjects?.reduce(
+                        (sum, { subject, type }) =>
+                            sum +
+                            (type === $Enums.SubjectRequirementType.Optional
+                                ? subject?.credit || 0
+                                : 0),
+                        0
+                    ) || 0
+                return total + blockCredit
+            }, 0)
+
+            const allSemester = versionData.trainingBlocks.flatMap((block) => {
+                return block.subjects?.map((e) => e?.semester ?? 0)?.filter?.(Boolean) || []
+            })
+            await updateCurriculumVersion({
+                where: { id: versionId },
+                data: {
+                    numberOfSemesters: allSemester?.length > 0 ? Math.max(...allSemester) : 0,
+                    requiredCredits: totalMandatoryCredits,
+                    electiveCredits: totalOptionalCredits,
+                },
+            })
+        } catch (error) {}
+    }
+
     async function onOk(output?: PutCurriculumVersion) {
         if (!output) return
         try {
@@ -133,15 +210,10 @@ const PutCurriculumVersion = () => {
                 trainingLevelId: output.trainingLevelId,
                 trainingTypeId: output.trainingTypeId,
                 trainingTimeId: output.trainingTimeId,
-                numberOfSemesters: output.numberOfSemesters,
-                // coef_1: output.coef_1,
-                // coef_2: output.coef_2,
-                // coef_3: output.coef_3,
                 diplomaTypeId: output.diplomaTypeId,
-                // scoreToTakeExam: output.scoreToTakeExam,
-                // scoreToPass: output.scoreToPass,
                 description: output.description,
                 active: output.active,
+                numberOfSemesters: output.numberOfSemesters,
                 electiveCredits: output.electiveCredits,
                 requiredCredits: output.requiredCredits,
                 jobPosition: output.jobPosition,
@@ -216,7 +288,7 @@ const PutCurriculumVersion = () => {
                         throw new Error(res.data?.message || 'Lỗi khi nhập dữ liệu từ file')
                     }
                 }
-
+                await updateDynamicFields(input.versionId)
                 message.success('Cập nhật thành công')
             } else {
                 if (!input?.curriculumId) {
@@ -258,7 +330,7 @@ const PutCurriculumVersion = () => {
                         throw new Error(res.data?.message || 'Lỗi khi nhập dữ liệu từ file')
                     }
                 }
-
+                if (newCurriculumVersion) await updateDynamicFields(newCurriculumVersion.id)
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
@@ -411,6 +483,7 @@ const PutCurriculumVersion = () => {
                                         >
                                             <InputNumber
                                                 min={0}
+                                                disabled
                                                 type="number"
                                                 placeholder="Nhập Số kỳ học"
                                                 className="w-full"
@@ -522,6 +595,7 @@ const PutCurriculumVersion = () => {
                                         >
                                             <InputNumber
                                                 min={0}
+                                                disabled
                                                 type="number"
                                                 placeholder="Nhập số tín chỉ bắt buộc"
                                                 className="w-full"
@@ -537,6 +611,7 @@ const PutCurriculumVersion = () => {
                                         >
                                             <InputNumber
                                                 min={0}
+                                                disabled
                                                 type="number"
                                                 placeholder="Nhập số tín chỉ tự chọn"
                                                 className="w-full"

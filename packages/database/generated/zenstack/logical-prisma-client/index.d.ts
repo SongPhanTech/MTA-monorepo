@@ -5280,7 +5280,6 @@ export namespace $Enums {
     };
     export type EquivalencySide = (typeof EquivalencySide)[keyof typeof EquivalencySide];
     export const SubjectRequirementType: {
-        None: 'None',
         Mandatory: 'Mandatory',
         Optional: 'Optional'
     };

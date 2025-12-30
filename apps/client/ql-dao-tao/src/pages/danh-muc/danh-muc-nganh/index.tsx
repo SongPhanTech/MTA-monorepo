@@ -11,7 +11,6 @@ import {
     useCountTrainingField,
     useFindManyDM_DonVi,
     useFindManyTrainingField,
-    useFindManyTrainingObjectType,
     useUpdateTrainingField,
 } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/libs/utils'
@@ -22,6 +21,7 @@ import dayjs from 'dayjs'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 
 export default function TrainingFieldPage() {
     const { can, canSome } = useAbility()
@@ -180,7 +180,7 @@ export default function TrainingFieldPage() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
 
     return (
         <div>

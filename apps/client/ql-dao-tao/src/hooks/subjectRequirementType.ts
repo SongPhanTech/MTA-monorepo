@@ -7,7 +7,6 @@ export type SubjectRequirementTypeOption = {
 
 export const useSubjectRequirementTypeOptions = () => {
     const options: SubjectRequirementTypeOption[] = [
-        { value: SubjectRequirementType.None, label: 'Không' },
         { value: SubjectRequirementType.Mandatory, label: 'Bắt buộc' },
         { value: SubjectRequirementType.Optional, label: 'Tự chọn' },
     ]

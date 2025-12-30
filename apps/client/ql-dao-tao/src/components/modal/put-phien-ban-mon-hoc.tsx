@@ -12,12 +12,11 @@ import {
     useCreateSubjectVersion,
     useCreateSubjectVersionHistory,
     useFindManySubject,
-    useFindManyTrainingObjectType,
     useFindUniqueSubject,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message, Radio, Row, Switch } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -106,7 +105,7 @@ const PutVersionSubjectModal = () => {
         },
     })
 
-    const { data: trainingObjectType = [] } = useFindManyTrainingObjectType({
+    const { data: trainingObjectType = [] } = useFindManyTrainingObjectTypePermission({
         select: { id: true, name: true },
     })
 

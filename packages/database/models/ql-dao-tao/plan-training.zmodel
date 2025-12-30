@@ -745,7 +745,6 @@ enum EquivalencySide {
 
 /// loại bắt buộc
 enum SubjectRequirementType {
-  None // không xác định
   Mandatory // bắt buộc
   Optional // tự chọn
   @@schema("ql-dao-tao")
@@ -761,7 +760,7 @@ model TrainingBlockSubject extends Base {
 
   semester                           Int? // kỳ học
 
-  type                               SubjectRequirementType           @default(None) // loại bắt buộc
+  type                               SubjectRequirementType           @default(Mandatory) // loại bắt buộc
   /// tính điểm thi cuối ~ !môn điều kiện ~ in trên bảng điểm
   useForFinalScore                   Boolean
   /// môn tốt nghiệp (dùng trong bảng tốt nghiệp, điểm đạt tốt nghiệp)

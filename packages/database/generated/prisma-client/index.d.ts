@@ -1429,7 +1429,6 @@ export type EquivalencySide = (typeof EquivalencySide)[keyof typeof EquivalencyS
 
 
 export const SubjectRequirementType: {
-  None: 'None',
   Mandatory: 'Mandatory',
   Optional: 'Optional'
 };
