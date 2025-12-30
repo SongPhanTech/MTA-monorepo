@@ -448,7 +448,7 @@ export default function GraduationDecisionDiploma() {
                                 <Col span={4}>
                                     <Form.Item className="mb-0" name="fixedClassId">
                                         <Select
-                                            placeholder="Chọn lớp biên chế"
+                                            placeholder="Chọn lớp quản lý"
                                             options={fixedClassData.map((i: FixedClass) => ({
                                                 value: i.id,
                                                 label: i.name,

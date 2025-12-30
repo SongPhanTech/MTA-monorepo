@@ -278,7 +278,7 @@ const ModalChiTietSinhVien = () => {
                         <Descriptions.Item label="Điểm cơ sở/Môn 2">
                             {studentData?.facility}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Lớp biên chế">
+                        <Descriptions.Item label="Lớp quản lý">
                             {studentData?.fixedClass?.code} - {studentData?.fixedClass?.name}
                         </Descriptions.Item>
                         <Descriptions.Item label="Khoá học">

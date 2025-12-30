@@ -23,6 +23,7 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
     const { can } = useAbility()
@@ -47,7 +48,17 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
-
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
+    const { onOpen: onOpenDetailSubjectClass } = useDisclosure<{
+        id: string
+        mode: 'edit' | 'view'
+    }>({
+        tag: 'PutOneSubjectClassModal',
+    })
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -382,10 +393,23 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                             },
                             {
                                 title: 'Mã lớp',
-                                dataIndex: 'code',
                                 align: 'center',
                                 width: 120,
                                 type: 'input',
+                                render: (_, record) => (
+                                    <p
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenDetailSubjectClass({
+                                                id: record.id,
+                                                mode: 'view',
+                                            })
+                                        }}
+                                        className="cursor-pointer hover:text-primary"
+                                    >
+                                        {record.code}
+                                    </p>
+                                ),
                             },
                             {
                                 title: 'Sĩ số',
@@ -400,7 +424,15 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                                 align: 'left',
                                 type: 'input',
                                 render: (_, record) => (
-                                    <p>
+                                    <p
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenDetailSubject({
+                                                subjectVersionId: record.subjectId,
+                                            })
+                                        }}
+                                        className="cursor-pointer hover:text-primary"
+                                    >
                                         {record.type === $Enums.SubjectClassType.RETAKE ? (
                                             <Tag color={'blue'} className="p-0 px-1">
                                                 Học lại

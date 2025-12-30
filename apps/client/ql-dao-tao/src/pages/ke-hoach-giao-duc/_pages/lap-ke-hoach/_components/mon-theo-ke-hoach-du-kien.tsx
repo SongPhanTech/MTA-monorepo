@@ -35,6 +35,12 @@ export default function MonTheoKeHoachDuKien() {
     }>({
         tag: 'ModalChiTietMonHoc',
     })
+    const { onOpen: onOpenDetailFixedClass } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChiTietLopBienChe',
+    })
+
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
     const { id: trainingMajorId } = useTrainingMajorStore()
@@ -280,7 +286,19 @@ export default function MonTheoKeHoachDuKien() {
                                     align: 'center',
                                     width: 120,
                                     render: (__, record) => {
-                                        return `${record?.fixedClassCode} (${record?.fixedClassCount})`
+                                        return (
+                                            <span
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenDetailFixedClass({
+                                                        fixedClassId: record.fixedClassId,
+                                                    })
+                                                }}
+                                                className="hover:text-primary cursor-pointer"
+                                            >
+                                                {`${record?.fixedClassCode} (${record?.fixedClassCount})`}
+                                            </span>
+                                        )
                                     },
                                 },
                                 {

@@ -28,6 +28,11 @@ export default function MonKySau() {
     }>({
         tag: 'ModalChiTietMonHoc',
     })
+    const { onOpen: onOpenDetailFixedClass } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChiTietLopBienChe',
+    })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res } = useOpenSubjectClass(
         {
@@ -154,7 +159,19 @@ export default function MonKySau() {
                                 align: 'center',
                                 width: 120,
                                 render: (__, record) => {
-                                    return `${record?.fixedClassCode} (${record?.fixedClassCount})`
+                                    return (
+                                        <span
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenDetailFixedClass({
+                                                    fixedClassId: record.fixedClassId,
+                                                })
+                                            }}
+                                            className="text-left hover:text-primary cursor-pointer"
+                                        >
+                                            {`${record?.fixedClassCode} (${record?.fixedClassCount})`}
+                                        </span>
+                                    )
                                 },
                             },
                             {

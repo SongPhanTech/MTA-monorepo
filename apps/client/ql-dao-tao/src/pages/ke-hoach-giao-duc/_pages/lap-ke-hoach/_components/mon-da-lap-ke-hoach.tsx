@@ -38,6 +38,11 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
     }>({
         tag: 'ModalChiTietMonHoc',
     })
+    const { onOpen: onOpenDetailFixedClass } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChiTietLopBienChe',
+    })
     const { data: semesterData } = useFindUniqueSemester(
         {
             where: { id: semesterId },
@@ -388,7 +393,8 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         onOpenDetailSubject({
-                                            subjectVersionId: record.trainingBlockSubject?.subject?.id,
+                                            subjectVersionId:
+                                                record.trainingBlockSubject?.subject?.id,
                                         })
                                     }}
                                     className="text-left hover:text-primary cursor-pointer"
@@ -403,7 +409,17 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                             width: 120,
                             align: 'center',
                             render: (_, record) => (
-                                <div className="text-left">
+                                <div
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenDetailFixedClass({
+                                            fixedClassId: record?.trainingBlockSubject
+                                                ?.trainingBlockOnCurriculumVersion
+                                                ?.curriculumVersion?.fixedClass?.id as string,
+                                        })
+                                    }}
+                                    className="text-left hover:text-primary cursor-pointer"
+                                >
                                     {record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion
                                         ?.curriculumVersion?.fixedClass?.code || ''}
                                 </div>
