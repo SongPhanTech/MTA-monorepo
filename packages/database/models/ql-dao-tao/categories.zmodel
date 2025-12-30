@@ -189,7 +189,6 @@ model TrainingMajor extends Base {
   studentGraduationApplication StudentGraduationApplication[]
 
   surveyObjectTypes            SurveyObjectType[]
-  @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
 }
 
