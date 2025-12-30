@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { SubjectVersion, TrainingBlockSubject } from '@workspace/db/client'
+import { $Enums, type SubjectVersion, type TrainingBlockSubject } from '@workspace/db/client'
 import {
     useCreateManyTrainingBlockSubject,
     useFindManyDM_DonVi,
@@ -101,6 +101,7 @@ const PutTrainingBlockSubject = () => {
                 conditional: false,
                 graduation: false,
                 active: true,
+                type: $Enums.SubjectRequirementType.Mandatory,
             })
         }
     }, [initialValue, form])
@@ -279,7 +280,6 @@ const PutTrainingBlockSubject = () => {
                     <Select
                         placeholder="Chọn loại môn học"
                         options={subjectRequirementTypeOptions}
-                        allowClear
                     />
                 </FormItem>
             </Col>
