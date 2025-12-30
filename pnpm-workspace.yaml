@@ -66,7 +66,7 @@ catalog:
   '@zenstackhq/openapi': ^2.20.1
   '@zenstackhq/runtime': ^2.20.1
   '@zenstackhq/server': ^2.20.1
-  '@zenstackhq/tanstack-query': ^2.20.1
+  '@zenstackhq/tanstack-query': 2.21.1
   antd: ^5.23.1
   antd-img-crop: ^4.25.0
   autoprefixer: ^10.4.20
