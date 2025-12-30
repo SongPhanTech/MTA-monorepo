@@ -293,6 +293,7 @@ export default function ThoiKhoaBieu({
                                 subjectClassTimes: true,
                                 fixedClasses: {
                                     select: {
+                                        id: true,
                                         code: true,
                                         _count: {
                                             select: {
@@ -398,6 +399,21 @@ export default function ThoiKhoaBieu({
             return newFilters
         })
     }
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
+
+    const { onOpen: onOpenDetailFixedClass } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChiTietLopBienChe',
+    })
+
+    const { onOpen: onOpenDetailLecture } = useDisclosure<string>({
+        tag: 'ModalChiTietGiangVien',
+    })
 
     const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
 
@@ -562,7 +578,15 @@ export default function ThoiKhoaBieu({
                                         rowSpan: record.rowSpan,
                                     }),
                                     render: (_, record) => (
-                                        <p className="text-left">
+                                        <p
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenDetailSubject({
+                                                    subjectVersionId: record.subjectId,
+                                                })
+                                            }}
+                                            className="text-left hover:text-primary cursor-pointer"
+                                        >
                                             {record?.name} ({record.subject?.credit})
                                         </p>
                                     ),
@@ -591,8 +615,19 @@ export default function ThoiKhoaBieu({
                                     width: 100,
                                     render: (_, record) => (
                                         <p>
-                                            {record?.fixedClasses?.map((e) => e.code).join(', ') ||
-                                                '-'}
+                                            {record?.fixedClasses?.map((e) => (
+                                                <span
+                                                    onClick={(ev) => {
+                                                        ev.stopPropagation()
+                                                        onOpenDetailFixedClass({
+                                                            fixedClassId: e.id,
+                                                        })
+                                                    }}
+                                                    className="hover:text-primary cursor-pointer"
+                                                >
+                                                    {e.code}
+                                                </span>
+                                            ))}
                                         </p>
                                     ),
                                 },
@@ -615,15 +650,33 @@ export default function ThoiKhoaBieu({
                                     title: 'Giảng viên 1',
                                     align: 'center',
                                     type: 'input',
-                                    render: (__, record) =>
-                                        record?.mainLecturer?.userProfile?.fullname ?? '-',
+                                    render: (__, record) => (
+                                        <span
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenDetailLecture(record?.mainLecturer?.id || '')
+                                            }}
+                                            className="hover:text-primary cursor-pointer"
+                                        >
+                                            {record?.mainLecturer?.userProfile?.fullname ?? '-'}
+                                        </span>
+                                    ),
                                 },
                                 {
                                     title: 'Giảng viên 2',
                                     align: 'center',
                                     type: 'input',
-                                    render: (__, record) =>
-                                        record?.extraLecturer?.userProfile?.fullname ?? '-',
+                                    render: (__, record) => (
+                                        <span
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenDetailLecture(record?.extraLecturer?.id || '')
+                                            }}
+                                            className="hover:text-primary cursor-pointer"
+                                        >
+                                            {record?.extraLecturer?.userProfile?.fullname ?? '-'}
+                                        </span>
+                                    ),
                                 },
                                 {
                                     title: 'Hình thức thi',

@@ -5,6 +5,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -22,7 +23,11 @@ export default function MonKySau() {
     const searchText = Form.useWatch('searchText', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const { id: trainingCourseId } = useTrainingCourseStore()
-
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res } = useOpenSubjectClass(
         {
@@ -129,7 +134,15 @@ export default function MonKySau() {
                                 onCell: (record) => ({ rowSpan: record.rowSpan }),
                                 render: (__, record) => {
                                     return (
-                                        <div className="text-left">
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenDetailSubject({
+                                                    subjectVersionId: record.subjectVersionId,
+                                                })
+                                            }}
+                                            className="text-left hover:text-primary cursor-pointer"
+                                        >
                                             {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
                                                 ''}
                                         </div>
