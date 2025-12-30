@@ -893,6 +893,8 @@ export default function TrainingProgramCatalog() {
                             </div>
                         )}
                         data={data}
+                        scrollable
+                        maxHeight={'calc(100vh - 290px)'}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
