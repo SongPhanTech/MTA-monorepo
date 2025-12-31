@@ -444,6 +444,7 @@ export default function PostgraduateProject({
     // hàm xử lý lấy ra danh sách session
     const { data: thesisSessionData } = useFindManyThesisSession({
         orderBy: { startDate: 'desc' },
+
         where: {
             trainingObjectTypeId: trainingObjectId,
         },
@@ -545,137 +546,137 @@ export default function PostgraduateProject({
     }
     // hàm xử lý xuất file giấy mời HDLV
     const giaymoihdlv = async () => {
-        // if (!students?.length && !allStudentsInClasses?.length) {
-        //     message.error('Không có dữ liệu để tạo giấy mời HDLV')
-        //     return
-        // }
-        // showSpinner()
-        // const presentDay = dayjs().format('DD/MM/YYYY')
-        // const ngay = presentDay.split('/')[0]
-        // const thang = presentDay.split('/')[1]
-        // const nam = presentDay.split('/')[2]
-        // try {
-        //     const allSheetOptions = allStudentsInClasses?.map((student) => {
-        //         const supervisor =
-        //             student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-        //         const data = {
-        //             ngay: ngay,
-        //             thang: thang,
-        //             nam: nam,
-        //             tenhocvien: student?.userProfile?.fullname,
-        //             tenhuongdan: supervisor ? ` ${supervisor}` : '',
-        //             khoa: student?.fixedClass?.trainingCourse?.name || '',
-        //             chuyennganh:
-        //                 student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-        //                 '',
-        //             tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
-        //             type:
-        //                 student?.thesisRegistrations?.[0]?.thesisProject?.description
-        //                     ?.split('-')[1]
-        //                     .trim()
-        //                     .split(':')[1]
-        //                     .trim()
-        //                     .toLowerCase() || '',
-        //         }
-        //         const gapRow: TableRow = {
-        //             cells: [{ value: null, colSpan: 18, border: false }],
-        //         }
-        //         return {
-        //             sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
-        //             data: data,
-        //             tableStartCell: { row: 25, col: 1 },
-        //             rows: [gapRow],
-        //         }
-        //     })
-        //     await exportFromTemplate({
-        //         templateUrl: getMinioUrl('mta/template/GiayMoiHDLV.xlsx'),
-        //         sheets: allSheetOptions ?? [],
-        //         fileName: 'GiayMoiHDLV',
-        //         mergeSheetsToOne: true,
-        //         sheetName: 'GiayMoiHDLV',
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để tạo giấy mời HDLV')
+            return
+        }
+        showSpinner()
+        const presentDay = dayjs().format('DD/MM/YYYY')
+        const ngay = presentDay.split('/')[0]
+        const thang = presentDay.split('/')[1]
+        const nam = presentDay.split('/')[2]
+        try {
+            const allSheetOptions = allStudentsInClasses?.map((student) => {
+                const supervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+                const data = {
+                    ngay: ngay,
+                    thang: thang,
+                    nam: nam,
+                    tenhocvien: student?.userProfile?.fullname,
+                    tenhuongdan: supervisor ? ` ${supervisor}` : '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    type:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1]
+                            .trim()
+                            .toLowerCase() || '',
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+                    data: data,
+                    tableStartCell: { row: 25, col: 1 },
+                    rows: [gapRow],
+                }
+            })
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/GiayMoiHDLV.xlsx'),
+                sheets: allSheetOptions ?? [],
+                fileName: 'GiayMoiHDLV',
+                mergeSheetsToOne: true,
+                sheetName: 'GiayMoiHDLV',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
     // hàm xử lý xuất file hồ sơ bảo vệ LV
     const hosobvlv = async () => {
-        // if (!students?.length && !allStudentsInClasses?.length) {
-        //     message.error('Không có dữ liệu để tạo hồ sơ bảo vệ LV')
-        //     return
-        // }
-        // showSpinner()
-        // try {
-        //     const allSheetOptions = allStudentsInClasses?.map((student) => {
-        //         const thanhvienhoidong =
-        //             student?.thesisRegistrations?.[0]?.thesisProject?.council?.members
-        //         const phanbien1 = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.REVIEWER_1
-        //         )
-        //         const phanbien2 = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.REVIEWER_2
-        //         )
-        //         const chutich = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.CHAIRMAN
-        //         )
-        //         const thuky = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.SECRETARY
-        //         )
-        //         const uyvien = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.MEMBER
-        //         )
-        //         const data = {
-        //             tenhocvien: student.userProfile?.fullname || '',
-        //             type:
-        //                 student.thesisRegistrations?.[0]?.thesisProject?.description
-        //                     ?.split('-')[1]
-        //                     .trim()
-        //                     .split(':')[1]
-        //                     .trim()
-        //                     .toLowerCase() || '',
-        //             khoa: student?.fixedClass?.trainingCourse?.name || '',
-        //             chuyennganh:
-        //                 student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-        //                 '',
-        //             nganh:
-        //                 student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-        //                     ?.trainingField?.name || '',
-        //             detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
-        //             ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-        //                 ? dayjs(
-        //                       student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-        //                   ).format('DD/MM/YYYY')
-        //                 : '',
-        //             phanbien1: phanbien1?.expert?.name || '',
-        //             phanbien2: phanbien2?.expert?.name || '',
-        //             chutich: chutich?.expert?.name || '',
-        //             thuky: thuky?.expert?.name || '',
-        //             uyvien: uyvien?.expert?.name || '',
-        //         }
-        //         const gapRow: TableRow = {
-        //             cells: [{ value: null, colSpan: 18, border: false }],
-        //         }
-        //         return {
-        //             sheet: `${student.userProfile?.code}`,
-        //             data: data,
-        //             tableStartCell: { row: 104, col: 1 },
-        //             rows: [gapRow],
-        //         }
-        //     })
-        //     await exportFromTemplate({
-        //         templateUrl: getMinioUrl('mta/template/HoSoBVLVTN.xlsx'),
-        //         sheets: allSheetOptions ?? [],
-        //         fileName: 'Hosobvlv',
-        //         mergeSheetsToOne: true,
-        //         sheetName: 'Hosobvlv',
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để tạo hồ sơ bảo vệ LV')
+            return
+        }
+        showSpinner()
+        try {
+            const allSheetOptions = allStudentsInClasses?.map((student) => {
+                const thanhvienhoidong =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.council?.members
+                const phanbien1 = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.REVIEWER_1
+                )
+                const phanbien2 = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.REVIEWER_2
+                )
+                const chutich = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.CHAIRMAN
+                )
+                const thuky = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.SECRETARY
+                )
+                const uyvien = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.MEMBER
+                )
+                const data = {
+                    tenhocvien: student.userProfile?.fullname || '',
+                    type:
+                        student.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1]
+                            .trim()
+                            .toLowerCase() || '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    nganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.name || '',
+                    detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+                        ? dayjs(
+                              student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+                          ).format('DD/MM/YYYY')
+                        : '',
+                    phanbien1: phanbien1?.expert?.name || '',
+                    phanbien2: phanbien2?.expert?.name || '',
+                    chutich: chutich?.expert?.name || '',
+                    thuky: thuky?.expert?.name || '',
+                    uyvien: uyvien?.expert?.name || '',
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.code}`,
+                    data: data,
+                    tableStartCell: { row: 104, col: 1 },
+                    rows: [gapRow],
+                }
+            })
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/HoSoBVLVTN.xlsx'),
+                sheets: allSheetOptions ?? [],
+                fileName: 'Hosobvlv',
+                mergeSheetsToOne: true,
+                sheetName: 'Hosobvlv',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
     // hàm xử lý xuất file danh sách bảo vệ LV
     const danhsachbaove = async () => {
