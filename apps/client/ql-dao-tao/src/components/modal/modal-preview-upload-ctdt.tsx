@@ -19,7 +19,6 @@ const mapExamType = (examType: $Enums.ExamType): string => {
 
 const mapSubjectRequirementType = (type: $Enums.SubjectRequirementType): string => {
     const typeMap: Partial<Record<$Enums.SubjectRequirementType, string>> = {
-        None: 'Không',
         Mandatory: 'Bắt buộc',
         Optional: 'Tự chọn',
     }
@@ -217,7 +216,7 @@ const ModalPreviewUpload = () => {
                             title: <Tooltip title="Mã môn học">Mã MH</Tooltip>,
                             align: 'center',
                             width: 100,
-                            render:(_, record)=> record.code?.toUpperCase()
+                            render: (_, record) => record.code?.toUpperCase(),
                         },
                         {
                             title: 'Tên học phần',

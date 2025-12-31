@@ -239,6 +239,7 @@ import type {
     GetDMTrinhDoTinHocsId401,
     GetDMTrinhDoTinHocsId403,
     GetDMTrinhDoTinHocsIdParams,
+    GetDMVaiTroDTO,
     GetDMViTriCongViecsHealthz400,
     GetDMViTriCongViecsHealthz401,
     GetDMViTriCongViecsHealthz403,
@@ -395,6 +396,256 @@ type AwaitedInput<T> = PromiseLike<T> | T
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+/**
+ * Lấy danh sách các vai trò theo từng ứng dụng
+ * @summary Vai trò - Danh sách
+ */
+export type getDMVaiTrosResponse200 = {
+    data: GetDMVaiTroDTO
+    status: 200
+}
+
+export type getDMVaiTrosResponseSuccess = getDMVaiTrosResponse200 & {
+    headers: Headers
+}
+
+export type getDMVaiTrosResponse = getDMVaiTrosResponseSuccess
+
+export const getGetDMVaiTrosUrl = () => {
+    return `/DM_VaiTros`
+}
+
+export const getDMVaiTros = async (options?: RequestInit): Promise<getDMVaiTrosResponse> => {
+    return customSystemFetch<getDMVaiTrosResponse>(getGetDMVaiTrosUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMVaiTrosQueryKey = () => {
+    return [`/DM_VaiTros`] as const
+}
+
+export const getGetDMVaiTrosQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMVaiTros>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetDMVaiTrosQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMVaiTros>>> = ({ signal }) =>
+        getDMVaiTros({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMVaiTros>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMVaiTrosQueryResult = NonNullable<Awaited<ReturnType<typeof getDMVaiTros>>>
+export type GetDMVaiTrosQueryError = unknown
+
+export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMVaiTros>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMVaiTros>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMVaiTros>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMVaiTros>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Vai trò - Danh sách
+ */
+
+export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMVaiTrosQueryOptions(options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Kiểm tra tình trạng API
+ * @summary Kiểm tra tình trạng API
+ */
+export type getDMVaiTrosHealthzResponse200 = {
+    data: void
+    status: 200
+}
+
+export type getDMVaiTrosHealthzResponseSuccess = getDMVaiTrosHealthzResponse200 & {
+    headers: Headers
+}
+
+export type getDMVaiTrosHealthzResponse = getDMVaiTrosHealthzResponseSuccess
+
+export const getGetDMVaiTrosHealthzUrl = () => {
+    return `/DM_VaiTros/healthz`
+}
+
+export const getDMVaiTrosHealthz = async (
+    options?: RequestInit
+): Promise<getDMVaiTrosHealthzResponse> => {
+    return customSystemFetch<getDMVaiTrosHealthzResponse>(getGetDMVaiTrosHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMVaiTrosHealthzQueryKey = () => {
+    return [`/DM_VaiTros/healthz`] as const
+}
+
+export const getGetDMVaiTrosHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetDMVaiTrosHealthzQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>> = ({ signal }) =>
+        getDMVaiTrosHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMVaiTrosHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>
+>
+export type GetDMVaiTrosHealthzQueryError = unknown
+
+export function useGetDMVaiTrosHealthz<
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMVaiTrosHealthz<
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMVaiTrosHealthz<
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Kiểm tra tình trạng API
+ */
+
+export function useGetDMVaiTrosHealthz<
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMVaiTrosHealthzQueryOptions(options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
 
 /**
  * Lấy danh sách các Cấp bậc

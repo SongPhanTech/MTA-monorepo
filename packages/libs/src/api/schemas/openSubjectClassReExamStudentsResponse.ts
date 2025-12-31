@@ -12,6 +12,7 @@ export interface OpenSubjectClassReExamStudentsResponse {
     code: string
     userProfile: OpenSubjectClassReExamStudentsResponseUserProfile
     fixedClass: OpenSubjectClassReExamStudentsResponseFixedClass
+    studentId: string
     /** @nullable */
     diem_cuoi: number | null
     withdrew: boolean

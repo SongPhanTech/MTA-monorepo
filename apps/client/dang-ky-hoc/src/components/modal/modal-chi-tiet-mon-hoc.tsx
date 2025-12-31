@@ -6,7 +6,7 @@ import { useSubjectClassStatusOptions } from '@hooks/subjectClassStatus'
 import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
 import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
 import { useSubjectVersionTypeOptions } from '@hooks/subjectVersionType'
-import { useFindUniqueSubject } from '@workspace/db/hooks'
+import { useFindUniqueSubject, useFindUniqueSubjectVersion } from '@workspace/db/hooks'
 import { Descriptions, Modal, Table, Tabs, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -16,7 +16,6 @@ dayjs.locale('vi')
 
 export default function ModalChiTietMonHoc() {
     const { isOpen, onClose, input } = useDisclosure<{
-        subjectId: string
         subjectVersionId?: string
     }>({
         tag: 'ModalChiTietMonHoc',
@@ -30,7 +29,7 @@ export default function ModalChiTietMonHoc() {
         tag: 'XemTaiLieu',
     })
 
-    const { subjectId, subjectVersionId } = input || {}
+    const { subjectVersionId } = input || {}
     const { getExamTypeLabel } = useExamTypeOptions()
     const { getSubjectClassTypeLabel } = useSubjectClassTypeOptions()
     const { getSubjectVersionTypeLabel } = useSubjectVersionTypeOptions()
@@ -38,7 +37,19 @@ export default function ModalChiTietMonHoc() {
         useSubjectClassStatusOptions()
     const { getSubjectRequirementTypeLabel } = useSubjectRequirementTypeOptions()
     const { getHistoryActionLabel, getHistoryActionColor } = useHistorySubjectVersionActionOptions()
+    const { data: subjectVersionData } = useFindUniqueSubjectVersion(
+        {
+            where: { id: subjectVersionId },
+            include: {
+                subject: true,
+            },
+        },
+        {
+            enabled: !!subjectVersionId && isOpen,
+        }
+    )
 
+    const subjectId = subjectVersionData?.subject?.id
     const { data: subjectData } = useFindUniqueSubject(
         {
             where: { id: subjectId },
@@ -1175,9 +1186,9 @@ export default function ModalChiTietMonHoc() {
             title={`Chi tiết môn học: ${subject?.name || ''}`}
             open={isOpen}
             onCancel={onClose}
-            width="90%"
+            width="w-[100vw]"
             footer={null}
-            style={{ top: 20 }}
+            style={{ top: 10 }}
         >
             <Tabs defaultActiveKey="1" items={items} />
         </Modal>

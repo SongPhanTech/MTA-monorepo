@@ -19,13 +19,13 @@ await prisma.planTrainingSubject.deleteMany({
         //         not: null,
         //     },
         // },
-        trainingBlockSubject:{
-            subject:{
-                deletedAt:{
+        trainingBlockSubject: {
+            subject: {
+                deletedAt: {
                     not: null,
                 },
-            }
-        }
+            },
+        },
     },
 })
 

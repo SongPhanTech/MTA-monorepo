@@ -1,8 +1,4 @@
-import {
-    CloseOutlined,
-    MenuOutlined,
-    UnorderedListOutlined,
-} from '@ant-design/icons'
+import { CloseOutlined, MenuOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import { Button, Layout, Typography } from 'antd'
 import { usePathname } from 'next/navigation'
 import APPS_TYPES from '@/navigations/header-content/app_types'

@@ -22,7 +22,6 @@ const ModalSoYeuLyLich = () => {
         tag: 'ModalSoYeuLyLich',
     })
 
-
     const handlePrint = useReactToPrint({
         contentRef: printRef,
         pageStyle: `

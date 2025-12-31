@@ -250,7 +250,6 @@ export default function SubjectList() {
     })
 
     const { onOpen: onOpenDetailSubject } = useDisclosure<{
-        subjectId: string
         subjectVersionId?: string
     }>({
         tag: 'ModalChiTietMonHoc',
@@ -702,7 +701,6 @@ export default function SubjectList() {
                                                     <ViewIcon
                                                         onClick={() =>
                                                             onOpenDetailSubject({
-                                                                subjectId,
                                                                 subjectVersionId,
                                                             })
                                                         }
@@ -763,26 +761,25 @@ export default function SubjectList() {
                             },
                         }}
                         headerRight={(record) => {
-                            if (isLocked) {
-                                return (
-                                    <Flex gap={8} align="center">
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
-                                            'XEM'
-                                        ) && (
-                                            <ViewIcon
-                                                onClick={() =>
-                                                    onOpenDetailSubject({
-                                                        subjectId: record.id,
-                                                    })
-                                                }
-                                                className="text-sm text-blue-700 cursor-pointer mr-8"
-                                            />
-                                        )}
-                                    </Flex>
-                                )
-                            }
-
+                            // if (isLocked) {
+                            //     return (
+                            //         <Flex gap={8} align="center">
+                            //             {can(
+                            //                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                            //                 'XEM'
+                            //             ) && (
+                            //                 <ViewIcon
+                            //                     onClick={() =>
+                            //                         onOpenDetailSubject({
+                            //                             subjectId: record.id,
+                            //                         })
+                            //                     }
+                            //                     className="text-sm text-blue-700 cursor-pointer mr-8"
+                            //                 />
+                            //             )}
+                            //         </Flex>
+                            //     )
+                            // }
                             return (
                                 <Flex gap={8} align="center">
                                     {can(

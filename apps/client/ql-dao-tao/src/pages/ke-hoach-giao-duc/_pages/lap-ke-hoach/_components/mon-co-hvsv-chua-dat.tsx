@@ -13,6 +13,7 @@ import {
 } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -34,6 +35,12 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { showSpinner, hideSpinner } = useSpinner()
+
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
 
     const { id: trainingCourseId } = useTrainingCourseStore()
     const { id: trainingMajorId } = useTrainingMajorStore()
@@ -243,7 +250,17 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
                                 title: 'Tên môn học',
                                 align: 'center',
                                 render: (__, record) => {
-                                    return <div className="text-left">{`${record?.name}`}</div>
+                                    return (
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenDetailSubject({
+                                                    subjectVersionId: record.id,
+                                                })
+                                            }}
+                                            className="text-left hover:text-primary cursor-pointer"
+                                        >{`${record?.name}`}</div>
+                                    )
                                 },
                             },
                             {

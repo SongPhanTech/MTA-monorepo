@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import {
+    AwardIcon,
     BarChart3,
     BinocularsIcon,
     BookOpenCheck,
@@ -26,7 +27,6 @@ import {
     ScrollText,
     Settings,
     User2Icon,
-    AwardIcon,
 } from 'lucide-react'
 import { DANG_KY_HOC_PERMISSION } from '../generated/dang-ky-hoc'
 import { KHAO_THI_PERMISSION } from '../generated/khao-thi'

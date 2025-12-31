@@ -12,6 +12,7 @@ export interface OpenSubjectClassRetakeStudentsResponse {
     code: string
     userProfile: OpenSubjectClassRetakeStudentsResponseUserProfile
     fixedClass: OpenSubjectClassRetakeStudentsResponseFixedClass
+    studentId: string
     /** @nullable */
     diem_cuoi: number | null
     withdrew: boolean

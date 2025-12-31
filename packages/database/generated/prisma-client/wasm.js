@@ -2127,7 +2127,8 @@ exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   name: 'name',
   type: 'type',
   trainingFormId: 'trainingFormId',
-  trainingLevelId: 'trainingLevelId'
+  trainingLevelId: 'trainingLevelId',
+  vaiTro: 'vaiTro'
 };
 
 exports.Prisma.PriorityObjectScalarFieldEnum = {
@@ -5804,7 +5805,8 @@ exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   trainingFormId: 'trainingFormId',
-  trainingLevelId: 'trainingLevelId'
+  trainingLevelId: 'trainingLevelId',
+  vaiTro: 'vaiTro'
 };
 
 exports.Prisma.PriorityObjectOrderByRelevanceFieldEnum = {
@@ -7374,7 +7376,6 @@ exports.EquivalencySide = exports.$Enums.EquivalencySide = {
 };
 
 exports.SubjectRequirementType = exports.$Enums.SubjectRequirementType = {
-  None: 'None',
   Mandatory: 'Mandatory',
   Optional: 'Optional'
 };

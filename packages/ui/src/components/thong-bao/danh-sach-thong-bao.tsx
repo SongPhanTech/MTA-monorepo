@@ -1,12 +1,21 @@
 import { NotificationOutlined } from '@ant-design/icons'
 import { useFindManyNotification } from '@workspace/db/hooks'
-import { Alert, Space } from 'antd'
+import { Alert, Empty, Space } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import dayjs from 'dayjs'
 
 function DanhSachThongBao() {
+    const today = dayjs().endOf('day').toDate()
     const { data = [] } = useFindManyNotification({
         where: {
             active: true,
+            publishedAt: {
+                lte: today,
+            },
+            OR: [{ expiresAt: null }, { expiresAt: { gte: today } }],
+        },
+        orderBy: {
+            publishedAt: 'desc',
         },
     })
     const { onOpen } = useDisclosure<string>({
@@ -21,9 +30,9 @@ function DanhSachThongBao() {
                 paddingRight: '8px',
             }}
         >
-            <Space direction="vertical">
-                {data?.length > 0 &&
-                    data?.map((item) => {
+            {data?.length > 0 ? (
+                <Space direction="vertical">
+                    {data?.map((item) => {
                         return (
                             <p
                                 key={item.id}
@@ -43,7 +52,12 @@ function DanhSachThongBao() {
                             </p>
                         )
                     })}
-            </Space>
+                </Space>
+            ) : (
+                <div className="flex justify-center items-center">
+                    <Empty description="Không có thông báo" />
+                </div>
+            )}
         </div>
     )
 }

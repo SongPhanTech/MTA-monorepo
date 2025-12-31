@@ -12,12 +12,11 @@ import {
     useCreateSubjectVersion,
     useCreateSubjectVersionHistory,
     useFindManySubject,
-    useFindManyTrainingObjectType,
     useFindUniqueSubject,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message, Radio, Row, Switch } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -41,7 +40,7 @@ export enum HistorySubjectVersionType {
 }
 
 const subjectVersionTypeOptions = [
-    { label: 'Môn thường', value: SubjectVersionType.Normal },
+    { label: 'Lý thuyết', value: SubjectVersionType.Normal },
     { label: 'Thí nghiệm/Thực hành', value: SubjectVersionType.Practice },
     { label: 'Thực tập', value: SubjectVersionType.Internship },
     { label: 'Chuyên đề nghiên cứu', value: SubjectVersionType.Research },
@@ -106,7 +105,7 @@ const PutVersionSubjectModal = () => {
         },
     })
 
-    const { data: trainingObjectType = [] } = useFindManyTrainingObjectType({
+    const { data: trainingObjectType = [] } = useFindManyTrainingObjectTypePermission({
         select: { id: true, name: true },
     })
 
@@ -119,7 +118,7 @@ const PutVersionSubjectModal = () => {
                 selectable: false,
                 children:
                     subject.subjectVersion.map((version: SubjectVersion) => ({
-                        title: version.name,
+                        title: [version.code,version.name].join(' - '),
                         value: version.id,
                     })) || [],
             })) || []
@@ -439,8 +438,8 @@ const PutVersionSubjectModal = () => {
             maskClosable={true}
             title={
                 subjectVersionId
-                    ? `Sửa phiên bản môn học - ${subject?.name}`
-                    : `Thêm phiên bản môn học - ${subject?.name}`
+                    ? `Sửa phiên bản môn học - ${subject?.name ?? ''}`
+                    : `Thêm phiên bản môn học - ${subject?.name ?? ''}`
             }
             className="w-[80vw]"
             okButtonProps={{ disabled: input?.isLocked }}

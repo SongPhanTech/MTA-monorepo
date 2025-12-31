@@ -12,12 +12,11 @@ import type { TrainingCourse, TrainingObjectType } from '@workspace/db/client'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
     useUpdateAcademicWarningRule,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -144,7 +143,7 @@ export default function AcademicWarningRule() {
         }
     }
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({
         orderBy: { name: 'asc' },
     })
 

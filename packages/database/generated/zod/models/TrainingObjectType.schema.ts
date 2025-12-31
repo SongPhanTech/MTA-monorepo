@@ -17,6 +17,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     type: TrainingObjectTypesSchema,
+    vaiTro: z.array(z.string()),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -30,6 +31,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     type: TrainingObjectTypesSchema,
+    vaiTro: z.array(z.string()),
 }
 ).strict();
 const relationSchema = z.object({
@@ -87,7 +89,8 @@ export const TrainingObjectTypePrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    type: TrainingObjectTypesSchema
+    type: TrainingObjectTypesSchema,
+    vaiTro: z.array(z.string())
 }).partial().passthrough();
 
 
@@ -95,7 +98,7 @@ export const TrainingObjectTypePrismaUpdateSchema = z.object({
  * `TrainingObjectType` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingObjectTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, vaiTro: true
 });
 
 

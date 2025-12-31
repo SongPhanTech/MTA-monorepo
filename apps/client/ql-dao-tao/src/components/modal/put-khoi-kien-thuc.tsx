@@ -3,7 +3,7 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { TrainingBlock, TrainingBlockOnCurriculumVersion } from '@workspace/db/client'
 import { useFindManyTrainingBlock, useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
-import { Col, Form, message, Row, TreeSelect } from 'antd'
+import { Col, Form, InputNumber, message, Row, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -15,6 +15,7 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 export type PutTrainingBlockOnCurriculumVersion = TrainingBlockOnCurriculumVersion & {
     trainingBlockIds: string[]
+    trainingBlockElectiveCreditsRequired: Record<string, number>
 }
 type TreeNode = {
     value: string
@@ -70,6 +71,13 @@ const PutTrainingBlockOnCurriculumVersion = () => {
 
             form.setFieldsValue({
                 trainingBlockIds: initialItems.map((item) => item.value),
+                trainingBlockElectiveCreditsRequired: initialValue?.trainingBlocks.reduce(
+                    (acc: Record<string, number>, curr: TrainingBlockOnCurriculumVersion & { trainingBlock: TrainingBlock }) => {
+                        acc[curr.trainingBlockId] = curr.electiveCreditsRequired || 0
+                        return acc
+                    },
+                    {}
+                ),
             })
         }
     }, [initialValue, form.setFieldsValue])
@@ -149,6 +157,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                             },
                             data: {
                                 priority: index + 1,
+                                electiveCreditsRequired: output.trainingBlockElectiveCreditsRequired[i.value] || 0,
                             },
                         },
                     }
@@ -224,6 +233,19 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             >
                 <GripVertical className="text-blue-400" />
                 <div className="ml-2 font-[500]">{item?.label}</div>
+                <FormItem className="ml-auto w-[200px]" form={form} name={['trainingBlockElectiveCreditsRequired', item.value]}>
+                    <InputNumber
+                        prefix="Số tín chỉ tự chọn: "
+                        controls={false}
+                        className="w-full"
+                        min={0}
+                        onKeyPress={(event) => {
+                            if (!/[0-9]/.test(event.key)) {
+                                event.preventDefault()
+                            }
+                        }}
+                    />
+                </FormItem>
             </div>
         )
     }
@@ -319,22 +341,20 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <Row gutter={[16, 16]}>
-                    <Col span={24} className="font-semibold pl-4">
+                <Row gutter={[8, 8]}>
+                    <Col span={24} className="font-semibold">
                         Danh sách khối kiến thức trong CTĐT
                     </Col>
                     <Col span={24}>
                         <DndProvider backend={HTML5Backend}>
-                            <div className=" mt-6">
-                                {items.map((item: Item, index: number) => (
-                                    <DraggableItem
-                                        key={item.value}
-                                        item={item}
-                                        index={index}
-                                        moveItem={moveItem}
-                                    />
-                                ))}
-                            </div>
+                            {items.map((item: Item, index: number) => (
+                                <DraggableItem
+                                    key={item.value}
+                                    item={item}
+                                    index={index}
+                                    moveItem={moveItem}
+                                />
+                            ))}
                         </DndProvider>
                     </Col>
                 </Row>

@@ -213,8 +213,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                     <Link className="text-[#2563EB] font-medium">Chọn tệp</Link> hoặc kéo và thả tệp
                     vào đây
                 </p>
-                <span className="text-[#4B5563] text-base font-normal">
-                    Định dạng {text} (tối đa 5MB)
+                <span className="text-[#4B5563] text-sm font-normal">
+                    Định dạng {text} (tối đa 50MB)
                 </span>
             </Dragger>
             <div className="flex flex-wrap gap-2 mt-2">

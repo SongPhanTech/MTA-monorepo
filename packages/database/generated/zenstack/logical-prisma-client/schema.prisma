@@ -147,7 +147,6 @@ enum EquivalencySide {
 
 /// loại bắt buộc
 enum SubjectRequirementType {
-  None
   Mandatory
   Optional
 
@@ -3391,7 +3390,7 @@ model TrainingBlockSubject {
   trainingBlockOnCurriculumVersion   TrainingBlockOnCurriculumVersion @relation(fields: [trainingBlockOnCurriculumVersionId], references: [id])
   trainingBlockOnCurriculumVersionId String
   semester                           Int?
-  type                               SubjectRequirementType           @default(None)
+  type                               SubjectRequirementType           @default(Mandatory)
   /// tính điểm thi cuối ~ !môn điều kiện ~ in trên bảng điểm
   useForFinalScore                   Boolean
   /// môn tốt nghiệp (dùng trong bảng tốt nghiệp, điểm đạt tốt nghiệp)
@@ -3667,6 +3666,7 @@ model TrainingObjectType {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   thesisSession        ThesisSession[]
+  vaiTro               String[]
 
   @@schema("ql-dao-tao")
 }

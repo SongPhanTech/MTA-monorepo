@@ -5280,7 +5280,6 @@ export namespace $Enums {
     };
     export type EquivalencySide = (typeof EquivalencySide)[keyof typeof EquivalencySide];
     export const SubjectRequirementType: {
-        None: 'None',
         Mandatory: 'Mandatory',
         Optional: 'Optional'
     };
@@ -7950,7 +7949,8 @@ export namespace Prisma {
         name: 'name',
         type: 'type',
         trainingFormId: 'trainingFormId',
-        trainingLevelId: 'trainingLevelId'
+        trainingLevelId: 'trainingLevelId',
+        vaiTro: 'vaiTro'
     };
     export const PriorityObjectScalarFieldEnum: {
         id: 'id',
@@ -11368,7 +11368,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         name: 'name',
         trainingFormId: 'trainingFormId',
-        trainingLevelId: 'trainingLevelId'
+        trainingLevelId: 'trainingLevelId',
+        vaiTro: 'vaiTro'
     };
     export const PriorityObjectOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -53452,6 +53453,7 @@ export namespace Prisma {
         readonly type: FieldRef<"TrainingObjectType", 'TrainingObjectTypes'>;
         readonly trainingFormId: FieldRef<"TrainingObjectType", 'String'>;
         readonly trainingLevelId: FieldRef<"TrainingObjectType", 'String'>;
+        readonly vaiTro: FieldRef<"TrainingObjectType", 'String[]'>;
     }
 
     export interface PriorityObjectDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -221415,6 +221417,7 @@ export namespace Prisma {
         type: number
         trainingFormId: number
         trainingLevelId: number
+        vaiTro: number
         _all: number
     };
     export type TrainingObjectTypeMinAggregateInputType = {
@@ -221458,6 +221461,7 @@ export namespace Prisma {
         type?: true
         trainingFormId?: true
         trainingLevelId?: true
+        vaiTro?: true
         _all?: true
     };
     export type TrainingObjectTypeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -221539,6 +221543,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId: string | null
         trainingLevelId: string | null
+        vaiTro: string[]
         _count: TrainingObjectTypeCountAggregateOutputType | null
         _min: TrainingObjectTypeMinAggregateOutputType | null
         _max: TrainingObjectTypeMaxAggregateOutputType | null
@@ -221568,6 +221573,7 @@ export namespace Prisma {
         type?: boolean
         trainingFormId?: boolean
         trainingLevelId?: boolean
+        vaiTro?: boolean
         trainingForm?: boolean | TrainingObjectType$trainingFormArgs<ExtArgs>
         trainingLevel?: boolean | TrainingObjectType$trainingLevelArgs<ExtArgs>
         trainingCourse?: boolean | TrainingObjectType$trainingCourseArgs<ExtArgs>
@@ -221596,6 +221602,7 @@ export namespace Prisma {
         type?: boolean
         trainingFormId?: boolean
         trainingLevelId?: boolean
+        vaiTro?: boolean
         trainingForm?: boolean | TrainingObjectType$trainingFormArgs<ExtArgs>
         trainingLevel?: boolean | TrainingObjectType$trainingLevelArgs<ExtArgs>
     }, ExtArgs["result"]["trainingObjectType"]>;
@@ -221612,6 +221619,7 @@ export namespace Prisma {
         type?: boolean
         trainingFormId?: boolean
         trainingLevelId?: boolean
+        vaiTro?: boolean
         trainingForm?: boolean | TrainingObjectType$trainingFormArgs<ExtArgs>
         trainingLevel?: boolean | TrainingObjectType$trainingLevelArgs<ExtArgs>
     }, ExtArgs["result"]["trainingObjectType"]>;
@@ -221628,8 +221636,9 @@ export namespace Prisma {
         type?: boolean
         trainingFormId?: boolean
         trainingLevelId?: boolean
+        vaiTro?: boolean
     };
-    export type TrainingObjectTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "type" | "trainingFormId" | "trainingLevelId", ExtArgs["result"]["trainingObjectType"]>;
+    export type TrainingObjectTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "type" | "trainingFormId" | "trainingLevelId" | "vaiTro", ExtArgs["result"]["trainingObjectType"]>;
     export type TrainingObjectTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingForm?: boolean | TrainingObjectType$trainingFormArgs<ExtArgs>
         trainingLevel?: boolean | TrainingObjectType$trainingLevelArgs<ExtArgs>
@@ -221684,6 +221693,7 @@ export namespace Prisma {
             type: $Enums.TrainingObjectTypes
             trainingFormId: string | null
             trainingLevelId: string | null
+            vaiTro: string[]
         }, ExtArgs["result"]["trainingObjectType"]>
         composites: {}
     };
@@ -348545,6 +348555,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFilter<"TrainingObjectType"> | $Enums.TrainingObjectTypes
         trainingFormId?: StringNullableFilter<"TrainingObjectType"> | string | null
         trainingLevelId?: StringNullableFilter<"TrainingObjectType"> | string | null
+        vaiTro?: StringNullableListFilter<"TrainingObjectType">
         trainingForm?: XOR<TrainingFormNullableScalarRelationFilter, TrainingFormWhereInput> | null
         trainingLevel?: XOR<TrainingLevelNullableScalarRelationFilter, TrainingLevelWhereInput> | null
         trainingCourse?: TrainingCourseListRelationFilter
@@ -348572,6 +348583,7 @@ export namespace Prisma {
         type?: SortOrder
         trainingFormId?: SortOrderInput | SortOrder
         trainingLevelId?: SortOrderInput | SortOrder
+        vaiTro?: SortOrder
         trainingForm?: TrainingFormOrderByWithRelationInput
         trainingLevel?: TrainingLevelOrderByWithRelationInput
         trainingCourse?: TrainingCourseOrderByRelationAggregateInput
@@ -348603,6 +348615,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFilter<"TrainingObjectType"> | $Enums.TrainingObjectTypes
         trainingFormId?: StringNullableFilter<"TrainingObjectType"> | string | null
         trainingLevelId?: StringNullableFilter<"TrainingObjectType"> | string | null
+        vaiTro?: StringNullableListFilter<"TrainingObjectType">
         trainingForm?: XOR<TrainingFormNullableScalarRelationFilter, TrainingFormWhereInput> | null
         trainingLevel?: XOR<TrainingLevelNullableScalarRelationFilter, TrainingLevelWhereInput> | null
         trainingCourse?: TrainingCourseListRelationFilter
@@ -348630,6 +348643,7 @@ export namespace Prisma {
         type?: SortOrder
         trainingFormId?: SortOrderInput | SortOrder
         trainingLevelId?: SortOrderInput | SortOrder
+        vaiTro?: SortOrder
         _count?: TrainingObjectTypeCountOrderByAggregateInput
         _max?: TrainingObjectTypeMaxOrderByAggregateInput
         _min?: TrainingObjectTypeMinOrderByAggregateInput
@@ -348650,6 +348664,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesWithAggregatesFilter<"TrainingObjectType"> | $Enums.TrainingObjectTypes
         trainingFormId?: StringNullableWithAggregatesFilter<"TrainingObjectType"> | string | null
         trainingLevelId?: StringNullableWithAggregatesFilter<"TrainingObjectType"> | string | null
+        vaiTro?: StringNullableListFilter<"TrainingObjectType">
     };
     export type PriorityObjectWhereInput = {
         AND?: PriorityObjectWhereInput | PriorityObjectWhereInput[]
@@ -377144,6 +377159,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -377171,6 +377187,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -377194,6 +377211,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -377221,6 +377239,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -377246,6 +377265,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     };
     export type TrainingObjectTypeUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -377258,6 +377278,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     };
     export type TrainingObjectTypeUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -377272,6 +377293,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     };
     export type PriorityObjectCreateInput = {
         id?: string
@@ -402249,6 +402271,13 @@ export namespace Prisma {
         notIn?: $Enums.TrainingObjectTypes[] | ListEnumTrainingObjectTypesFieldRefInput<$PrismaModel>
         not?: NestedEnumTrainingObjectTypesFilter<$PrismaModel> | $Enums.TrainingObjectTypes
     };
+    export type StringNullableListFilter<$PrismaModel = never> = {
+        equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        has?: string | StringFieldRefInput<$PrismaModel> | null
+        hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+        hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+        isEmpty?: boolean
+    };
     export type TrainingFormNullableScalarRelationFilter = {
         is?: TrainingFormWhereInput | null
         isNot?: TrainingFormWhereInput | null
@@ -402299,6 +402328,7 @@ export namespace Prisma {
         type?: SortOrder
         trainingFormId?: SortOrder
         trainingLevelId?: SortOrder
+        vaiTro?: SortOrder
     };
     export type TrainingObjectTypeMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -404537,13 +404567,6 @@ export namespace Prisma {
         in?: $Enums.CriteriaOperator[] | ListEnumCriteriaOperatorFieldRefInput<$PrismaModel>
         notIn?: $Enums.CriteriaOperator[] | ListEnumCriteriaOperatorFieldRefInput<$PrismaModel>
         not?: NestedEnumCriteriaOperatorFilter<$PrismaModel> | $Enums.CriteriaOperator
-    };
-    export type StringNullableListFilter<$PrismaModel = never> = {
-        equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-        has?: string | StringFieldRefInput<$PrismaModel> | null
-        hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-        hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-        isEmpty?: boolean
     };
     export type AcademicActionRuleSetScalarRelationFilter = {
         is?: AcademicActionRuleSetWhereInput
@@ -422261,6 +422284,9 @@ export namespace Prisma {
         connect?: ClassScheduleWhereUniqueInput
         update?: XOR<XOR<ClassScheduleUpdateToOneWithWhereWithoutOriginalScheduleInput, ClassScheduleUpdateWithoutOriginalScheduleInput>, ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput>
     };
+    export type TrainingObjectTypeCreatevaiTroInput = {
+        set: string[]
+    };
     export type TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput = {
         create?: XOR<TrainingFormCreateWithoutTrainingObjectTypeInput, TrainingFormUncheckedCreateWithoutTrainingObjectTypeInput>
         connectOrCreate?: TrainingFormCreateOrConnectWithoutTrainingObjectTypeInput
@@ -422405,6 +422431,10 @@ export namespace Prisma {
     };
     export type EnumTrainingObjectTypesFieldUpdateOperationsInput = {
         set?: $Enums.TrainingObjectTypes
+    };
+    export type TrainingObjectTypeUpdatevaiTroInput = {
+        set?: string[]
+        push?: string | string[]
     };
     export type TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput = {
         create?: XOR<TrainingFormCreateWithoutTrainingObjectTypeInput, TrainingFormUncheckedCreateWithoutTrainingObjectTypeInput>
@@ -480344,6 +480374,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -480370,6 +480401,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -480603,6 +480635,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -480629,6 +480662,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -487873,6 +487907,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
@@ -487899,6 +487934,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -488634,6 +488670,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -488660,6 +488697,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -491141,6 +491179,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -491167,6 +491206,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -491518,6 +491558,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -491544,6 +491585,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -491660,6 +491702,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -491686,6 +491729,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -492401,6 +492445,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -492427,6 +492472,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -493400,6 +493446,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -493426,6 +493473,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -494565,6 +494613,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -494591,6 +494640,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -497648,6 +497698,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -497674,6 +497725,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -498830,6 +498882,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -498856,6 +498909,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -503239,6 +503293,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
@@ -503264,6 +503319,7 @@ export namespace Prisma {
         name: string
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -503326,6 +503382,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFilter<"TrainingObjectType"> | $Enums.TrainingObjectTypes
         trainingFormId?: StringNullableFilter<"TrainingObjectType"> | string | null
         trainingLevelId?: StringNullableFilter<"TrainingObjectType"> | string | null
+        vaiTro?: StringNullableListFilter<"TrainingObjectType">
     };
     export type TrainingObjectTypeCreateWithoutTrainingFormInput = {
         id?: string
@@ -503338,6 +503395,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
@@ -503363,6 +503421,7 @@ export namespace Prisma {
         name: string
         type: $Enums.TrainingObjectTypes
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -505139,6 +505198,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -505165,6 +505225,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -505245,6 +505306,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -505271,6 +505333,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -506346,6 +506409,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -506372,6 +506436,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -506466,6 +506531,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -506492,6 +506558,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -516298,6 +516365,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -516324,6 +516392,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -516460,6 +516529,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -516486,6 +516556,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -521501,6 +521572,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -521527,6 +521599,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -521760,6 +521833,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -521786,6 +521860,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -541857,6 +541932,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
         trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
         trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -541883,6 +541959,7 @@ export namespace Prisma {
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -541974,6 +542051,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -542000,6 +542078,7 @@ export namespace Prisma {
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -589032,6 +589111,7 @@ export namespace Prisma {
         name: string
         type: $Enums.TrainingObjectTypes
         trainingFormId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     };
     export type CurriculumVersionUpdateWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -589167,6 +589247,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -589192,6 +589273,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -589216,6 +589298,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     };
     export type TrainingObjectTypeCreateManyTrainingFormInput = {
         id?: string
@@ -589229,6 +589312,7 @@ export namespace Prisma {
         name: string
         type: $Enums.TrainingObjectTypes
         trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     };
     export type TrainingObjectTypeUpdateWithoutTrainingFormInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -589241,6 +589325,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
         trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -589266,6 +589351,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
         trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -589290,6 +589376,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
         trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     };
     export type StudentCreateManyTrainingLocationInput = {
         id?: string

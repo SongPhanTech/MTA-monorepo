@@ -8,12 +8,12 @@ import {
     useFindManyDM_DonVi,
     useFindManyThesisSession,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import FormItem from '@components/commons/form-item'
 import { useFindManyFixedClass } from '@workspace/db/hooks'
 import { buildOrgTree } from '@lib/utils'
 import dayjs from 'dayjs'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 
 export type StudentGradeSystemForm = {
     trainingObjectTypeId: string[]
@@ -70,7 +70,7 @@ export default function StudentGradeSystem() {
         ],
     }
 
-    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectTypePermission()
     const { data: fixedClasses = [] } = useFindManyFixedClass()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
     const { data: thesisSessionData = [] } = useFindManyThesisSession()

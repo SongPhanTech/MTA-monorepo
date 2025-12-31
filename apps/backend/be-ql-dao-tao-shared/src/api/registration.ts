@@ -105,7 +105,7 @@ app.openapi(registration, async (c) => {
         class_data.map(async (cls) => {
             const subjectClass = await prisma.subjectClass.findUnique({
                 where: {
-                    id: cls, 
+                    id: cls,
                     semesterId: { in: semesterIds },
                 },
                 include: {
@@ -126,11 +126,10 @@ app.openapi(registration, async (c) => {
             }
 
             if (type_res === TYPE_RES.REGISTER) {
-                  console.log(subjectClass.maxStudent)
-                if (subjectClass._count.subjectClassStudent >= subjectClass.maxStudent) {      
+                console.log(subjectClass.maxStudent)
+                if (subjectClass._count.subjectClassStudent >= subjectClass.maxStudent) {
                     throw new Error(
                         `Lớp ${subjectClass.subject.name} ${cls} đã quá số lượng đăng ký`
-                        
                     )
                 }
 

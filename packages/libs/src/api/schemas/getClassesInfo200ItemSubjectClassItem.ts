@@ -27,6 +27,8 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     code: string
     name: string
     /** @nullable */
