@@ -38,7 +38,7 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
-import { BookCheckIcon, Presentation, Sheet } from 'lucide-react'
+import { BookCheckIcon, FileDown, Presentation, Sheet } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -255,6 +255,24 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
 
     const [isExporting, setIsExporting] = useState(false)
     const handleExportResult = async () => {
+        if (!sessionId) return
+        setIsExporting(true)
+        try {
+            const res = await graduationSessionDecision({ sessionId })
+
+            if (res.status === 200) {
+                saveAs(res.data, 'DANH_SACH_TOT_NGHIEP.xlsx')
+            } else {
+                message.error(res.data.message)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại')
+        } finally {
+            setIsExporting(false)
+        }
+    }
+    const handleExportTemplate = async () => {
         if (!sessionId) return
         setIsExporting(true)
         try {
@@ -552,6 +570,15 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                     </Popover>
                 </div>
                 <div className="flex align-middle items-center gap-2">
+                <Button
+                        type="primary"
+                        onClick={() => handleExportTemplate()}
+                        loading={isExporting}
+                    >
+                        <FileDown />
+                        
+                        Xuất mẫu in văn bằng
+                    </Button>
                     <Button
                         type="primary"
                         onClick={() => handleExportResult()}
