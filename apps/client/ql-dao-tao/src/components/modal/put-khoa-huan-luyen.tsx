@@ -18,7 +18,6 @@ import {
     useFindManySemester,
     useFindManyTrainingCourse,
     useFindManyTrainingLanguage,
-    useFindManyTrainingObjectType,
     useFindUniqueTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -29,6 +28,7 @@ import type { DocumentFile } from '@workspace/db/client'
 import { BadgeHelpIcon, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
     trainingCourseClone: string | null
@@ -61,7 +61,7 @@ const PutTrainingCourseModal = () => {
         orderBy: { createdAt: 'desc' },
     })
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({
         where: { active: true },
         orderBy: { name: 'asc' },
     })

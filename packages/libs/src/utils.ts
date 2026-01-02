@@ -61,6 +61,10 @@ export const getRuntimeEnv = (name: ConfigKeys): string => {
     return config
 }
 
+export const isDevEnvironment = () => {
+    return window?.location.host?.includes('localhost')
+}
+
 export const getMinioUrl = (uri: string | undefined | null) => {
     if (!uri) return ''
     const isAbsolutePath = uri.startsWith('http') || uri.startsWith('blob')

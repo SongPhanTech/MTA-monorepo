@@ -10,7 +10,6 @@ import {
     useCreateCurriculum,
     useFindManyDM_DonVi,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
     useFindUniqueCurriculum,
     useUpdateCurriculum,
 } from '@workspace/db/hooks'
@@ -18,7 +17,7 @@ import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
@@ -43,7 +42,7 @@ const PutCurriculum = () => {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({
         orderBy: { name: 'asc' },
     })
 
@@ -236,6 +235,7 @@ const PutCurriculum = () => {
                 >
                     <Select
                         placeholder="Đối tượng đào tạo"
+                        disabled
                         options={trainingObjectTypeData.map((i) => {
                             return {
                                 value: i.id,

@@ -15,7 +15,7 @@ const ExportStudentInFixedClass = ({
     const exportTemplate = async () => {
         // Tạo workbook mới
         const workbook = new ExcelJS.Workbook()
-        const worksheet = workbook.addWorksheet('HEQUANSU')
+        const worksheet = workbook.addWorksheet('DS')
 
         // Thiết lập style
         const golbalFontStyle = {

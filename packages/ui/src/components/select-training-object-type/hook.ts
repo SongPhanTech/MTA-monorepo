@@ -1,6 +1,14 @@
 import { Store, useStore } from '@tanstack/react-store'
 import { $Enums } from '@workspace/db'
-import { useEffect } from 'react'
+import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
+import { useGetUserPermissionsPermissionAppCodeUserId } from '@workspace/libs/api/system'
+import { getRuntimeEnv, isDevEnvironment } from '@workspace/libs/utils'
+import { useEffect, useMemo } from 'react'
+import type { Prisma } from '@workspace/db/client'
+import type { UseQueryOptions } from '@tanstack/react-query'
+import type { ExtraQueryOptions } from '@zenstackhq/tanstack-query/runtime-v5'
+import type { DefaultError } from '@tanstack/react-query'
+
 export type TrainingObjectTypeState = {
     selectedTrainingObjectTypeId?: string
 }
@@ -26,8 +34,8 @@ export const useTrainingObjectTypeStore = () => {
                 return 'Dân sự'
             case $Enums.TrainingObjectTypes.INTERNATIONAL_MILITARY:
                 return 'Quốc tế'
-            case $Enums.TrainingObjectTypes.MILITARY:
-                return 'Quân sự'
+            // case $Enums.TrainingObjectTypes.MILITARY:
+            //     return 'Quân sự'
             default:
                 return 'Quân sự'
         }
@@ -40,4 +48,43 @@ export const useTrainingObjectTypeStore = () => {
         }
     }, [])
     return { id: selectedTrainingObjectTypeId, onSelect: selectTrainingObjectType, getLabel }
+}
+
+export function useFindManyTrainingObjectTypePermission<
+    TArgs extends Prisma.TrainingObjectTypeFindManyArgs,
+    TQueryFnData = Array<Prisma.TrainingObjectTypeGetPayload<TArgs> & { $optimistic?: boolean }>,
+    TData = TQueryFnData,
+    TError = DefaultError,
+>(
+    args?: Prisma.SelectSubset<TArgs, Prisma.TrainingObjectTypeFindManyArgs>,
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions
+) {
+    const { data: permission } = useGetUserPermissionsPermissionAppCodeUserId(
+        getRuntimeEnv('NEXT_PUBLIC_APP_CODE'),
+        window?.contextData?.userId ?? ''
+    )
+
+    const permissions = useMemo(() => {
+        if (permission?.status !== 200) return []
+        return (permission?.data as any)?.Roles || []
+    }, [permission])
+
+    const res = useFindManyTrainingObjectType(
+        {
+            where: {
+                active: true,
+                ...(isDevEnvironment()
+                    ? {}
+                    : {
+                          vaiTro: {
+                              hasSome: permissions.map((item: any) => item.sRoleId).filter(Boolean),
+                          },
+                      }),
+            },
+            orderBy: { name: 'asc' },
+            ...(args as any),
+        },
+        options as any
+    )
+    return res
 }

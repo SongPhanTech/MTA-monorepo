@@ -147,7 +147,6 @@ enum EquivalencySide {
 
 /// loại bắt buộc
 enum SubjectRequirementType {
-  None
   Mandatory
   Optional
 
@@ -368,6 +367,13 @@ enum CouncilRole {
   REVIEWER_1
   REVIEWER_2
   MEMBER
+
+  @@schema("ql-dao-tao")
+}
+
+enum SupervisorRole {
+  SUPERVISOR
+  CO_SUPERVISOR
 
   @@schema("ql-dao-tao")
 }
@@ -3078,7 +3084,7 @@ model TrainingBlockSubject {
   trainingBlockOnCurriculumVersion   TrainingBlockOnCurriculumVersion @relation(fields: [trainingBlockOnCurriculumVersionId], references: [id])
   trainingBlockOnCurriculumVersionId String
   semester                           Int?
-  type                               SubjectRequirementType           @default(None)
+  type                               SubjectRequirementType           @default(Mandatory)
   /// tính điểm thi cuối ~ !môn điều kiện ~ in trên bảng điểm
   useForFinalScore                   Boolean
   /// môn tốt nghiệp (dùng trong bảng tốt nghiệp, điểm đạt tốt nghiệp)
@@ -3330,6 +3336,7 @@ model TrainingObjectType {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   thesisSession        ThesisSession[]
+  vaiTro               String[]
 
   @@schema("ql-dao-tao")
 }
@@ -4671,22 +4678,25 @@ model DefaultCouncilRolePayAmount {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now()) @updatedAt()
   createdBy   String?     @db.Uuid()
-  role        CouncilRole @unique()
+  role        CouncilRole
   amount      Decimal
+  inAcademy   Boolean     @default(true)
 
   @@schema("ql-dao-tao")
 }
 
 model DefaultSupervisorPayAmount {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String         @id() @default(cuid())
+  code        String?        @unique()
+  active      Boolean        @default(true)
+  description String?        @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt()
+  createdBy   String?        @db.Uuid()
+  role        SupervisorRole
   amount      Decimal
+  inAcademy   Boolean        @default(true)
 
   @@schema("ql-dao-tao")
 }

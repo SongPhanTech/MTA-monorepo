@@ -17,6 +17,7 @@ import {
 import { Button, Col, Flex, Form, Input, message, Row, Skeleton } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -29,6 +30,16 @@ export default function MonTheoKeHoachDuKien() {
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
+    const { onOpen: onOpenDetailFixedClass } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChiTietLopBienChe',
+    })
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
@@ -255,7 +266,15 @@ export default function MonTheoKeHoachDuKien() {
                                     onCell: (record) => ({ rowSpan: record.rowSpan }),
                                     render: (__, record) => {
                                         return (
-                                            <div className="text-left">
+                                            <div
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenDetailSubject({
+                                                        subjectVersionId: record.subjectVersionId,
+                                                    })
+                                                }}
+                                                className="text-left hover:text-primary cursor-pointer"
+                                            >
                                                 {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
                                                     ''}
                                             </div>
@@ -267,7 +286,19 @@ export default function MonTheoKeHoachDuKien() {
                                     align: 'center',
                                     width: 120,
                                     render: (__, record) => {
-                                        return `${record?.fixedClassCode} (${record?.fixedClassCount})`
+                                        return (
+                                            <span
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenDetailFixedClass({
+                                                        fixedClassId: record.fixedClassId,
+                                                    })
+                                                }}
+                                                className="hover:text-primary cursor-pointer"
+                                            >
+                                                {`${record?.fixedClassCode} (${record?.fixedClassCount})`}
+                                            </span>
+                                        )
                                     },
                                 },
                                 {

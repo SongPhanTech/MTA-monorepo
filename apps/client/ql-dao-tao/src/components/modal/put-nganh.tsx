@@ -9,7 +9,6 @@ import type { DocumentFile, TrainingField, TrainingObjectType } from '@workspace
 import {
     useCreateTrainingField,
     useFindManyDM_DonVi,
-    useFindManyTrainingObjectType,
     useFindUniqueTrainingField,
     useUpdateTrainingField,
 } from '@workspace/db/hooks'
@@ -20,6 +19,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DocumentPaths from '@components/commons/documentPaths'
 import TreeSelect from '@/components/commons/tree-select'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
     documentFiles?: DocumentFile[]
@@ -37,7 +37,7 @@ const PutTrainingFieldModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
     const { data: organizations = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
     const { mutateAsync: createTrainingField } = useCreateTrainingField()

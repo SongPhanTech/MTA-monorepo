@@ -20,12 +20,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ className }) => {
     }
 
     return (
-        <Button
-            type="primary"
-            icon={<LoginOutlined />}
-            onClick={handleLogin}
-            className={className}
-        >
+        <Button type="primary" icon={<LoginOutlined />} onClick={handleLogin} className={className}>
             Đăng nhập
         </Button>
     )

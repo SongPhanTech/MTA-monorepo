@@ -1,14 +1,12 @@
-import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
 import { Select, type SelectProps, Tooltip } from 'antd'
-import { useTrainingObjectTypeStore } from './hook'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from './hook'
 
 type AntdSelectProps = SelectProps
 
 const SelectTrainingObjectType = (props: AntdSelectProps) => {
-    const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
-        orderBy: { name: 'asc' },
-    })
     const { id, onSelect } = useTrainingObjectTypeStore()
+
+    const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectTypePermission()
 
     // useEffect(() => {
     //     if (!id && doiTuongDaoTao.length > 0 && doiTuongDaoTao?.[0]?.id) {

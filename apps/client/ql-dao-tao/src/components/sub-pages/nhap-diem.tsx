@@ -94,6 +94,9 @@ export default function NhapDiem({
         midtermScore: undefined,
         examScore: undefined,
     })
+    const { onOpen: onOpenDetailStudent } = useDisclosure<string>({
+        tag: 'ModalChiTietSinhVien',
+    })
 
     const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
         {
@@ -859,14 +862,34 @@ export default function NhapDiem({
                                 align: 'center',
                                 width: 150,
                                 type: 'input',
-                                render: (_, record) => record.student?.code || '',
+                                render: (_, record) => (
+                                    <span
+                                        className="cursor-pointer hover:text-primary"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            onOpenDetailStudent(record.student?.id)
+                                        }}
+                                    >
+                                        {record.student?.code || ''}
+                                    </span>
+                                ),
                             },
                             {
                                 title: 'Họ và tên',
                                 dataIndex: 'fullname',
                                 width: 150,
                                 type: 'input',
-                                render: (_, record) => record?.student?.userProfile?.fullname || '',
+                                render: (_, record) => (
+                                    <span
+                                        className="cursor-pointer hover:text-primary"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            onOpenDetailStudent(record.student?.id)
+                                        }}
+                                    >
+                                        {record?.student?.userProfile?.fullname || ''}
+                                    </span>
+                                ),
                             },
                             {
                                 title: 'Ngày sinh',

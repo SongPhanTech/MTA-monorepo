@@ -398,7 +398,7 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
                         ...evidence,
                         tag,
                         // Đảm bảo có evidence object
-                        evidence: evidence.evidence || {}
+                        evidence: evidence.evidence || {},
                     })
                     map.set(evidence.evidenceId, `[PM.${tag}]`)
                 }
@@ -578,7 +578,9 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
                         criterion?.evaluationCriterion?.strengths ||
                         ''
                     children.push(
-                        ...(await htmlToParagraphs(processHtmlContent(strengths, globalEvidenceTags)))
+                        ...(await htmlToParagraphs(
+                            processHtmlContent(strengths, globalEvidenceTags)
+                        ))
                     )
 
                     // 3. Điểm tồn tại
@@ -598,7 +600,9 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
                         criterion?.evaluationCriterion?.weakness ||
                         ''
                     children.push(
-                        ...(await htmlToParagraphs(processHtmlContent(weakness, globalEvidenceTags)))
+                        ...(await htmlToParagraphs(
+                            processHtmlContent(weakness, globalEvidenceTags)
+                        ))
                     )
 
                     // 4. Kế hoạch hành động
@@ -618,7 +622,9 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
                         criterion?.evaluationCriterion?.actionPlan ||
                         ''
                     children.push(
-                        ...(await htmlToParagraphs(processHtmlContent(actionPlan, globalEvidenceTags)))
+                        ...(await htmlToParagraphs(
+                            processHtmlContent(actionPlan, globalEvidenceTags)
+                        ))
                     )
 
                     // 5. Tự đánh giá

@@ -13,10 +13,12 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { TRAINING_OBJECT_TYPE } from '@constants/constants'
+import { useGetDMVaiTros } from '@workspace/libs/api/system'
+import type { GetDMVaiTroDTO } from '@workspace/libs/api/schemas'
 
 dayjs.locale('vi')
 const PutTrainingObjectTypeModal = () => {
@@ -41,6 +43,13 @@ const PutTrainingObjectTypeModal = () => {
         { select: { id: true, name: true } },
         { enabled: isOpen }
     )
+    const { data: role } = useGetDMVaiTros()
+
+    const roles = useMemo(() => {
+        if (role?.status !== 200) return []
+        return role?.data as unknown as GetDMVaiTroDTO[]
+    }, [role])
+
     //TODO: lưu thêm bậc đào tạo và hình thức đào tạo
     async function onOk({ ...rest }: TrainingObjectType) {
         try {
@@ -49,6 +58,7 @@ const PutTrainingObjectTypeModal = () => {
                 await updateTrainingObjectType({
                     data: {
                         ...rest,
+                        vaiTro: rest.vaiTro || [],
                     },
                     where: { id },
                 })
@@ -57,6 +67,7 @@ const PutTrainingObjectTypeModal = () => {
                 await createTrainingObjectType({
                     data: {
                         ...rest,
+                        vaiTro: rest.vaiTro || [],
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -76,7 +87,7 @@ const PutTrainingObjectTypeModal = () => {
         }
     }
 
-    const { data: level } = useFindUniqueTrainingObjectType(
+    const { data: trainingObjectType } = useFindUniqueTrainingObjectType(
         {
             where: { id },
         },
@@ -85,16 +96,16 @@ const PutTrainingObjectTypeModal = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (level) {
+        if (trainingObjectType) {
             form.setFieldsValue({
-                ...level,
+                ...trainingObjectType,
             })
         } else {
             form.setFieldsValue({
                 active: true,
             })
         }
-    }, [level])
+    }, [trainingObjectType])
 
     return (
         <PutFormModal
@@ -127,7 +138,7 @@ const PutTrainingObjectTypeModal = () => {
                     <Input placeholder="Nhập tên đối tượng đào tạo" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
                 <FormItem form={form} name="trainingFormId" label="Hình thức đào tạo" required>
                     <Select
                         placeholder="Chọn hình thức đào tạo"
@@ -138,13 +149,26 @@ const PutTrainingObjectTypeModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
                 <FormItem form={form} name="trainingLevelId" label="Bậc đào tạo">
                     <Select
+                        allowClear
                         placeholder="Chọn bậc đào tạo"
                         options={trainingLevels?.map((item) => ({
                             label: item.name,
                             value: item.id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="vaiTro" label="Quyền xem đối tượng đào tạo">
+                    <Select
+                        placeholder="Chọn vai trò"
+                        mode="multiple"
+                        options={roles?.map((item) => ({
+                            label: item.sTen,
+                            value: item.Id,
                         }))}
                     />
                 </FormItem>

@@ -24,11 +24,10 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -265,7 +264,7 @@ export default function GraduationDecisionDiploma() {
     const { data: organization = [] } = useFindManyDM_DonVi({
         orderBy: { sTen: 'asc' },
     })
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({
         orderBy: { name: 'asc' },
     })
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
@@ -449,7 +448,7 @@ export default function GraduationDecisionDiploma() {
                                 <Col span={4}>
                                     <Form.Item className="mb-0" name="fixedClassId">
                                         <Select
-                                            placeholder="Chọn lớp biên chế"
+                                            placeholder="Chọn lớp quản lý"
                                             options={fixedClassData.map((i: FixedClass) => ({
                                                 value: i.id,
                                                 label: i.name,

@@ -38,6 +38,10 @@ const PutFormModal = <T extends PutModalFormType>({
             maskClosable={false}
             onOk={onOk}
             {...rest}
+            style={{
+                top: 10,
+                ...rest.style,
+            }}
         >
             <Form
                 form={form}

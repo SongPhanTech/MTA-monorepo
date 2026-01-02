@@ -33,6 +33,16 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
+    const { onOpen: onOpenDetailFixedClass } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChiTietLopBienChe',
+    })
     const { data: semesterData } = useFindUniqueSemester(
         {
             where: { id: semesterId },
@@ -379,7 +389,16 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                             width: 120,
                             align: 'center',
                             render: (_, record) => (
-                                <div className="text-left">
+                                <div
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenDetailSubject({
+                                            subjectVersionId:
+                                                record.trainingBlockSubject?.subject?.id,
+                                        })
+                                    }}
+                                    className="text-left hover:text-primary cursor-pointer"
+                                >
                                     {record?.trainingBlockSubject?.subject?.name} (
                                     {record?.trainingBlockSubject?.subject?.credit})
                                 </div>
@@ -390,7 +409,17 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                             width: 120,
                             align: 'center',
                             render: (_, record) => (
-                                <div className="text-left">
+                                <div
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenDetailFixedClass({
+                                            fixedClassId: record?.trainingBlockSubject
+                                                ?.trainingBlockOnCurriculumVersion
+                                                ?.curriculumVersion?.fixedClass?.id as string,
+                                        })
+                                    }}
+                                    className="text-left hover:text-primary cursor-pointer"
+                                >
                                     {record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion
                                         ?.curriculumVersion?.fixedClass?.code || ''}
                                 </div>
