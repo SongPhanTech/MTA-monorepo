@@ -1,9 +1,9 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { getTemplateBuffer } from '@workspace/libs/server'
 import { read, utils } from 'xlsx'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { getTemplateBuffer } from '@workspace/libs/server'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -173,8 +173,6 @@ app.openapi(fixedClassStudentCount, async (c) => {
         },
     })
 
-    console.log(classes)
-
     const buffer = await getTemplateBuffer(prisma, 'THONG_KE_QUAN_SO_HOC_VIEN_THEO_KHOA')
     const template = new XlsxTemplate(buffer)
 
@@ -182,11 +180,12 @@ app.openapi(fixedClassStudentCount, async (c) => {
         ĐTĐT: trainingObjectType.name,
         KHOÁ: trainingCourse.name,
         data: classes.map((r, idx) => ({ no: idx + 1, count: r._count.students, ...r })),
+        total: classes.reduce((total, r) => total + r._count.students, 0),
     })
 
     const result = await template.generate({ type: 'arraybuffer' })
 
-    const fileName = `thong_ke_no_${trainingObjectType.name}_${trainingCourse.name}.xlsx`
+    const fileName = `QS theo khoá_${trainingObjectType.name}_${trainingCourse.name}.xlsx`
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result, 200, {

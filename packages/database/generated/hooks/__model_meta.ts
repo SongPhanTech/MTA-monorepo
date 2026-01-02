@@ -11536,6 +11536,10 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
+                }, vaiTro: {
+                    name: "vaiTro",
+                    type: "String",
+                    isArray: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17099,6 +17103,10 @@ const metadata: ModelMeta = {
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
+                }, inAcademy: {
+                    name: "inAcademy",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17107,9 +17115,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, role: {
-                    name: "role",
-                    fields: ["role"]
                 },
             },
         },
@@ -17150,9 +17155,16 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$DefaultSupervisorPayAmount$createdBy,
+                }, role: {
+                    name: "role",
+                    type: "SupervisorRole",
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
+                }, inAcademy: {
+                    name: "inAcademy",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 },
             }, uniqueConstraints: {
                 id: {

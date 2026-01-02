@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DefaultSupervisorPayAmountScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "amount"])
+export const DefaultSupervisorPayAmountScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "role", "amount", "inAcademy"])

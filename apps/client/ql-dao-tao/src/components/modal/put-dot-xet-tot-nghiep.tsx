@@ -5,7 +5,6 @@ import useSpinner from '@hooks/spinner'
 import { type GraduationSession, GraduationSessionStatus } from '@workspace/db/client'
 import {
     useCreateGraduationSession,
-    useFindManyTrainingObjectType,
     useFindUniqueGraduationSession,
     useUpdateGraduationSession,
 } from '@workspace/db/hooks'
@@ -17,6 +16,7 @@ import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import { useGraduationSessionStatusOptions } from '@hooks/graduationSessionStatus'
 import { useEffect } from 'react'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 export type PutGraduationSession = GraduationSession
 dayjs.locale('vi')
 
@@ -60,7 +60,7 @@ const PutGraduationSession = () => {
         }
     }, [graduationSession, form])
 
-    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectTypePermission()
 
     const { mutateAsync: createGraduationSession } = useCreateGraduationSession()
     const { mutateAsync: updateGraduationSession } = useUpdateGraduationSession()

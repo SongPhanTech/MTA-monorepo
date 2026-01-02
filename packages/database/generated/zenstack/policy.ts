@@ -42,6 +42,7 @@ import { StudentThesisRegistrationStatus } from "../prisma-client";
 import { DecisionType } from "../prisma-client";
 import { CouncilProposalStatus } from "../prisma-client";
 import { CouncilRole } from "../prisma-client";
+import { SupervisorRole } from "../prisma-client";
 import { PaymentStatus } from "../prisma-client";
 import { EvaluationPeriodStatus } from "../prisma-client";
 import { StandardCatalogType } from "../prisma-client";

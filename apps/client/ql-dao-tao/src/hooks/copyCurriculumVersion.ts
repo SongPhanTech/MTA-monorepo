@@ -1,6 +1,4 @@
-import type {
-    Prisma
-} from '@workspace/db/client'
+import type { Prisma } from '@workspace/db/client'
 import { useCreateCurriculumVersion } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { message } from 'antd'
@@ -15,8 +13,8 @@ export const useCloneCurriculumVersion = () => {
     const handleCloneCurriculumVersion = async (
         initialValue: Prisma.CurriculumVersionGetPayload<{
             include: {
-                documentFiles: true,
-                trainingBlocks:{
+                documentFiles: true
+                trainingBlocks: {
                     include: {
                         subjects: true
                     }
@@ -85,9 +83,7 @@ export const useCloneCurriculumVersion = () => {
                     : {}),
                 trainingBlocks: {
                     create:
-                        (
-                            originalVersion.trainingBlocks
-                        )?.map((block) => ({
+                        originalVersion.trainingBlocks?.map((block) => ({
                             priority: block.priority,
                             trainingBlock: { connect: { id: block.trainingBlockId } },
                             subjects: {

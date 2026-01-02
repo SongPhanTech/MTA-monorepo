@@ -12,7 +12,6 @@ import {
     useCountTrainingField,
     useFindManyDM_DonVi,
     useFindManyTrainingField,
-    useFindManyTrainingObjectType,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -23,6 +22,7 @@ import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 
 export default function TrainingMajorPage() {
     const { can, canSome } = useAbility()
@@ -261,7 +261,7 @@ export default function TrainingMajorPage() {
         }
     }
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
 
     return (
         <div>

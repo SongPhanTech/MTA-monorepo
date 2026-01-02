@@ -1436,32 +1436,6 @@ export default function PostgraduateProject({
                         rowKey="id"
                         columns={[
                             {
-                                title: '',
-                                width: 50,
-                                fixed: 'left',
-                                align: 'center',
-                                render: (_, record) => {
-                                    return (
-                                        <div className="flex justify-center items-center">
-                                            <SquarePen
-                                                size={24}
-                                                className="cursor-pointer"
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    openModalCauHinhLuanVan({
-                                                        thesisProjectId:
-                                                            record?.thesisRegistrations?.[0]
-                                                                ?.thesisProject?.id,
-                                                        thesisSessionId:
-                                                            thesisSessionSelected?.id || '',
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
                                 title: 'Khoa quản lí',
                                 dataIndex: 'organization',
                                 width: 240,
@@ -2207,7 +2181,20 @@ export default function PostgraduateProject({
                                                             }}
                                                         />
                                                     ) : null}
-
+                                                    <SquarePen
+                                                        size={24}
+                                                        className="cursor-pointer"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            openModalCauHinhLuanVan({
+                                                                thesisProjectId:
+                                                                    record?.thesisRegistrations?.[0]
+                                                                        ?.thesisProject?.id,
+                                                                thesisSessionId:
+                                                                    thesisSessionSelected?.id || '',
+                                                            })
+                                                        }}
+                                                    />
                                                     <DeleteIcon
                                                         title="Xóa"
                                                         size={24}

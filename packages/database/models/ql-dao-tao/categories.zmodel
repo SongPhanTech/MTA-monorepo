@@ -43,6 +43,7 @@ model TrainingObjectType extends Base {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   thesisSession        ThesisSession[]
+  vaiTro               String[] // Array of DM_VaiTro IDs
 
   @@schema("ql-dao-tao")
 }
@@ -188,7 +189,6 @@ model TrainingMajor extends Base {
   studentGraduationApplication StudentGraduationApplication[]
 
   surveyObjectTypes            SurveyObjectType[]
-  @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
 }
 

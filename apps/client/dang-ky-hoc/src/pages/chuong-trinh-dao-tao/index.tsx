@@ -352,7 +352,6 @@ export default function TrainingProgramSubjects() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
 
     const { onOpen: openChiTietMonHoc } = useDisclosure<{
-        subjectId: string
         subjectVersionId?: string
     }>({
         tag: 'ModalChiTietMonHoc',
@@ -419,7 +418,6 @@ export default function TrainingProgramSubjects() {
                                 ),
                                 onClick: () => {
                                     openChiTietMonHoc({
-                                        subjectId: subject?.subject?.subject?.id,
                                         subjectVersionId: subject?.subjectId,
                                     })
                                 },

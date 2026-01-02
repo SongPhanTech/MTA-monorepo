@@ -17,7 +17,6 @@ import {
     useFindManyStaff,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
     useFindUniqueCurriculumVersion,
     useFindUniqueFixedClass,
     useUpdateFixedClass,
@@ -29,7 +28,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
 import { buildOrgTree } from '@lib/utils'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import TreeSelect from '@/components/commons/tree-select'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
@@ -152,7 +151,7 @@ const PutFixedClassModal = () => {
     })
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType({
+        useFindManyTrainingObjectTypePermission({
             where: {
                 curriculumVersion: curriculumVersionIdForm
                     ? {
