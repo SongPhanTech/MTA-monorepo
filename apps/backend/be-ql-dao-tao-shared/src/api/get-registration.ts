@@ -2,7 +2,10 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
-
+const ErrorResponse = z.object({
+    result_code: z.string(),
+    result_desc: z.string(),
+})
 const getRegistration = createRoute({
     operationId: 'get-registration',
     tags: ['Get Registration'],
@@ -39,40 +42,77 @@ const getRegistration = createRoute({
                 },
             },
         },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: ErrorResponse,
+                },
+            },
+        },
     },
 })
-
 app.openapi(getRegistration, async (c) => {
     const { class_terms, students_code } = c.req.valid('json')
+    const student = await prisma.student.findUnique({
+        where: { code: students_code },
+    })
 
-    const logs = await prisma.subjectClass.findMany({
+    if (!student) {
+        return c.json(
+            {
+                result_code: 'STUDENT_NOT_FOUND',
+                result_desc: 'Sinh viên không tồn tại',
+            },
+            404
+        )
+    }
+    const sessions = await prisma.classRegisterSession.findMany({
         where: {
+            active: true,
+            deletedAt: null,
             semester: {
                 name: {
                     contains: class_terms.trim(),
                     mode: 'insensitive',
                 },
             },
+        },
+        select: { id: true },
+    })
 
-            subjectClassStudent: {
-                some: {
-                    student: {
-                        code: students_code,
-                    },
-                },
+    if (!sessions.length) {
+        return c.json(
+            {
+                result_code: 'SESSION_NOT_FOUND',
+                result_desc: 'Không có kỳ đăng ký phù hợp',
+            },
+            404
+        )
+    }
+
+    const sessionIds = sessions.map((s) => s.id)
+    const logs = await prisma.classRegisterLogs.findMany({
+        where: {
+            studentId: student.id,
+            classRegisterSessionId: { in: sessionIds },
+        },
+        include: {
+            subjectClass: {
+                select: { code: true },
             },
         },
-        select: {
-            code: true,
-        },
     })
 
-    const class_reg = logs.map((l) => l.code)
-    return c.json({
-        result_code: '000',
-        result_desc: 'success',
-        students_code,
-        class_reg,
-    })
+    return c.json(
+        {
+            result_code: '000',
+            result_desc: 'success',
+            students_code,
+            class_reg: logs.map((l) => l.subjectClass.code),
+        },
+        200
+    )
 })
+
 export default app
