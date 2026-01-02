@@ -117,7 +117,7 @@ app.openapi(postStudentSchedule, async (c) => {
     return c.json(
         {
             result_code: '000',
-            result_desc: 'success',
+            result_desc: 'success' as const,
             class_terms: class_terms ?? '',
             students_code: students_code ?? '',
             students_schedules: studentScheduleList,
