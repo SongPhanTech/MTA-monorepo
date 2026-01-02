@@ -1011,69 +1011,58 @@ export default function PostgraduateProject({
         }
     }
 
-    // hàm xử lý lấy ra danh sách thống kê cán bộ hướng dẫn LV
     const getExpertSupervisionStats = (): ExpertStat[] => {
-        // if (!allStudentsInClasses || allStudentsInClasses.length === 0) {
-        //     return []
-        // }
+        if (!allStudentsInClasses || allStudentsInClasses.length === 0) {
+            return []
+        }
 
-        // const expertStatsMap = new Map<string, ExpertStat>()
+        const expertStatsMap = new Map<string, ExpertStat>()
 
-        // for (const student of allStudentsInClasses) {
-        //     for (const registration of student.thesisRegistrations) {
-        //         const project = registration.thesisProject
+        const updateStats = (expert: any, amount: any, role: 'GVHD1' | 'GVHD2') => {
+            if (!expert) return
 
-        //         if (
-        //             !project
-        //             // !project ||
-        //             // !project.supervisorPayments ||
-        //             // project.thesisType !== ThesisType.THESIS
-        //         )
-        //             continue
+            const expertId = expert.id
+            const paymentAmount = Number(amount?.toString()) || 0
 
-        //         const countedExperts: { [expertId: string]: boolean } = {}
+            let stats = expertStatsMap.get(expertId)
+            if (!stats) {
+                stats = {
+                    expertId: expertId,
+                    name: expert.name ?? '',
+                    sDonvi: expert.organization ?? '',
+                    stk: expert.bankAccountNumber ?? '',
+                    tennganhang: expert.bankName ?? '',
+                    GVHD1Student: 0,
+                    GVHD2Student: 0,
+                    totalPayment: 0,
+                }
+                expertStatsMap.set(expertId, stats)
+            }
 
-        //         for (const payment of project.supervisorPayments) {
-        //             if (!payment.expert) continue
+            stats.totalPayment += paymentAmount
 
-        //             const expertId = payment.expert.id
-        //             const paymentAmount = Number.parseFloat(payment.amount.toString()) || 0
+            if (role === 'GVHD1') {
+                stats.GVHD1Student += 1
+            } else {
+                stats.GVHD2Student += 1
+            }
+        }
+        for (const student of allStudentsInClasses) {
+            for (const registration of student.thesisRegistrations) {
+                const project = registration.thesisProject
+                if (!project) continue
 
-        //             let newStats = expertStatsMap.get(expertId)
-        //             if (!newStats) {
-        //                 newStats = {
-        //                     expertId: expertId,
-        //                     name: payment.expert.name ?? '',
-        //                     sDonvi: payment.expert.organization ?? '',
-        //                     stk: payment.expert.bankAccountNumber ?? '',
-        //                     tennganhang: payment.expert.bankName ?? '',
-        //                     GVHD1Student: 0,
-        //                     GVHD2Student: 0,
-        //                     totalPayment: 0,
-        //                 }
-        //                 expertStatsMap.set(expertId, newStats)
-        //             }
+                if (project.supervisor) {
+                    updateStats(project.supervisor, project.supervisorPayment?.amount, 'GVHD1')
+                }
 
-        //             newStats.totalPayment += paymentAmount
+                if (project.coSupervisor) {
+                    updateStats(project.coSupervisor, project.coSupervisorPayment?.amount, 'GVHD2')
+                }
+            }
+        }
 
-        //             if (!countedExperts[expertId]) {
-        //                 if (payment.description === '1' && expertId === project.supervisorId) {
-        //                     newStats.GVHD1Student += 1
-        //                 } else if (
-        //                     payment.description === '2' &&
-        //                     expertId === project.coSupervisorId
-        //                 ) {
-        //                     newStats.GVHD2Student += 1
-        //                 }
-
-        //                 countedExperts[expertId] = true
-        //             }
-        //         }
-        //     }
-        // }
-
-        // return Array.from(expertStatsMap.values())
-        return [] as ExpertStat[]
+        return Array.from(expertStatsMap.values())
     }
     // hàm xử lý tạo dữ liệu mẫu
     const taodulieumau = async () => {
