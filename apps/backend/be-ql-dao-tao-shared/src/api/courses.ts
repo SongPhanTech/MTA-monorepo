@@ -224,7 +224,7 @@ app.openapi(getOpenCourses, async (c) => {
                             },
                             _count: {
                                 select: {
-                                    // classRegisterLogs: true,
+                                     classRegisterLogs: true,
                                     subjectClassStudent: true,
                                 },
                             },
@@ -246,10 +246,10 @@ app.openapi(getOpenCourses, async (c) => {
             return version.subjectClass
                 .filter((subjectClass) => {
                     if (type === TYPE_REGISTRABLE.REGISTRABLE) {
-                        return subjectClass._count.subjectClassStudent < subjectClass.maxStudent
+                        return subjectClass._count.classRegisterLogs < subjectClass.maxStudent
                     }
                     if (type === TYPE_REGISTRABLE.UN_REGISTRABLE) {
-                        return subjectClass._count.subjectClassStudent >= subjectClass.maxStudent
+                        return subjectClass._count.classRegisterLogs >= subjectClass.maxStudent
                     }
                     return true
                 })
@@ -293,7 +293,7 @@ app.openapi(getOpenCourses, async (c) => {
                         courses_name: version.name,
                         class_id: subjectClass.id,
                         class_students_reg: subjectClass.maxStudent,
-                        class_students_count: subjectClass._count.subjectClassStudent,
+                        class_students_count: subjectClass._count.classRegisterLogs,
                         class_teachers: [mainLecturer, extraLecturer].filter(Boolean).join(', '),
                         class_credit_hour:version.credit,
                         class_tuition: version.credit * s.tuitionPerCredit,
