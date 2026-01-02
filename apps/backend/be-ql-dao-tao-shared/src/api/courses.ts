@@ -395,6 +395,7 @@ app.openapi(getCoursesDetail, async (c) => {
                     },
                 },
             },
+            subjectClassTimes:true,
             classSchedules: true,
             subjectClassStudent: {
                 include: {
@@ -442,8 +443,8 @@ app.openapi(getCoursesDetail, async (c) => {
             .filter(Boolean)
             .join(' ')
 
-    const study_schedules = subjectClass.classSchedules.map((t) => ({
-        study_date: t.classDate,
+    const study_schedules = subjectClass.subjectClassTimes.map((t) => ({
+        study_date: t.dayOfWeek.toString(),
         study_period_start: t.startPeriod,
         study_period_end: t.endPeriod,
     }))
@@ -466,7 +467,7 @@ app.openapi(getCoursesDetail, async (c) => {
     return c.json(
         {
             result_code: '000',
-            result_desc: 'success' as const,
+            result_desc: "success" as const,
             ...response,
         },
         200

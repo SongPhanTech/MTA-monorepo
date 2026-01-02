@@ -191,7 +191,7 @@ app.openapi(registration, async (c) => {
     return c.json(
         {
             result_code: '000',
-            result_desc: 'success',
+            result_desc: 'success' as const,
             students_code,
             class_valid,
             class_invalid,
