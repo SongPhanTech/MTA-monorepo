@@ -118,6 +118,7 @@ enum CurriculumVersionType {
 /// loại hình thi
 enum ExamType {
   OfflineWritten
+  OnlineWritten
   Oral
   Practice
   Project
@@ -2660,7 +2661,6 @@ model Semester {
   evaluationPeriod        EvaluationPeriod[]
   exam                    Exam[]
 
-  @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
 }
 
@@ -2830,13 +2830,13 @@ model FixedClass {
 /// chương trình đào tạo
 model Curriculum {
   id                       String              @id() @default(cuid())
-  code                     String?             @unique()
   active                   Boolean             @default(true)
   description              String?             @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime            @default(now())
   updatedAt                DateTime            @default(now()) @updatedAt()
   createdBy                String?             @db.Uuid()
+  code                     String?
   name                     String
   englishName              String?
   managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
@@ -2856,13 +2856,13 @@ model Curriculum {
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion {
   id                               String                             @id() @default(cuid())
-  code                             String?                            @unique()
   active                           Boolean                            @default(true)
   description                      String?                            @db.Text()
   deletedAt                        DateTime?
   createdAt                        DateTime                           @default(now())
   updatedAt                        DateTime                           @default(now()) @updatedAt()
   createdBy                        String?                            @db.Uuid()
+  code                             String?
   name                             String
   shortName                        String?
   englishName                      String?
@@ -3550,7 +3550,6 @@ model TrainingMajor {
   studentGraduationApplication StudentGraduationApplication[]
   surveyObjectTypes            SurveyObjectType[]
 
-  @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
 }
 

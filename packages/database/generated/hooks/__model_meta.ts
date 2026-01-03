@@ -8685,9 +8685,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, schoolYearId_semesterType: {
-                    name: "schoolYearId_semesterType",
-                    fields: ["schoolYearId", "semesterType"]
                 },
             },
         },
@@ -9368,10 +9365,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -9398,6 +9391,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Curriculum$createdBy,
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9466,9 +9463,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             },
         },
@@ -9479,10 +9473,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -9509,6 +9499,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$CurriculumVersion$createdBy,
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9719,9 +9713,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             },
         },
@@ -12424,9 +12415,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, trainingFieldId_name: {
-                    name: "trainingFieldId_name",
-                    fields: ["trainingFieldId", "name"]
                 },
             },
         },

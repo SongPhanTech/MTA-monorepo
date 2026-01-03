@@ -430,6 +430,7 @@ model TrainingCourse extends Base {
   trainingObjectTypeId       String
 
   trainingCourseRegulation   TrainingCourseRegulation[]
+  curriculumVersion          CurriculumVersion[]
   fixedClass                 FixedClass[]
   scoreConverts              ScoreConvert[]
   academicRankingConvert     AcademicRankingConvert[]
@@ -496,7 +497,8 @@ model FixedClass extends Base {
 }
 
 /// chương trình đào tạo
-model Curriculum extends Base {
+model Curriculum extends BaseNoCode {
+  code                     String?
   name                     String
   englishName              String?
 
@@ -525,7 +527,8 @@ enum CurriculumVersionType {
 }
 
 /// Phiên bản chương trình đào tạo
-model CurriculumVersion extends Base {
+model CurriculumVersion extends BaseNoCode {
+  code                             String?
   name                             String
   shortName                        String?
   englishName                      String?
@@ -540,15 +543,17 @@ model CurriculumVersion extends Base {
   type                             CurriculumVersionType              @default(FULL_COURSE) // Loại chương trình đào tạo
   trainingObjectType               TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId             String
-  trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
-  trainingLevelId                  String
-  trainingType                     TrainingType                       @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId                   String
-  trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
-  trainingTimeId                   String
+  trainingCourse                   TrainingCourse?                    @relation(fields: [trainingCourseId], references: [id]) // Khoá học
+  trainingCourseId                 String?
+  trainingLevel                    TrainingLevel?                     @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
+  trainingLevelId                  String?
+  trainingType                     TrainingType?                      @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId                   String?
+  trainingTime                     TrainingTime?                      @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
+  trainingTimeId                   String?
 
-  diplomaType                      DiplomaType                        @relation(fields: [diplomaTypeId], references: [id]) // Loại văn bằng
-  diplomaTypeId                    String
+  diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id]) // Loại văn bằng
+  diplomaTypeId                    String?
 
   // TODO: Thêm các quy chế cho chương trình đào tạo
   requiredCredits                  Int? // Số tín chỉ bắt buộc
@@ -597,7 +602,7 @@ model Subject extends Base {
 // và gấp 1,5 lần số học viên dự thi đối với hình thức thi vấn đáp, thực hành.
 enum ExamType {
   OfflineWritten // thi viết (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
-  // OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
+  OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
   // OfflineChoices // thi trắc nghiệm
   // OnlineChoices // thi trắc nghiệm trực tuyến
   Oral // thi vấn đáp

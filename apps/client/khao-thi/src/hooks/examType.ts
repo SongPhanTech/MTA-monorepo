@@ -8,7 +8,7 @@ export type ExamTypeOption = {
 export const useExamTypeOptions = () => {
     const options: ExamTypeOption[] = [
         { value: ExamType.OfflineWritten, label: 'Thi viết' },
-        // { value: ExamType.OnlineWritten, label: 'Thi viết trực tuyến' },
+        { value: ExamType.OnlineWritten, label: 'Thi viết trực tuyến' },
         // { value: ExamType.OfflineChoices, label: 'Thi trắc nghiệm' },
         // { value: ExamType.OnlineChoices, label: 'Thi trắc nghiệm trực tuyến' },
         { value: ExamType.Oral, label: 'Thi vấn đáp' },
