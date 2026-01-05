@@ -205,8 +205,12 @@ model UserProfile extends Base {
   CPVJoinDate                          DateTime? // ngày vào Đảng
   officialCPVDate                      DateTime? // ngày chính thức
   CPVJoinPlace                         String? // nơi vào Đảng
-  positionCPV                          DM_ChucVu?                          @relation(fields: [positionCPVId], references: [Id])
+  // chức vụ Đảng (DM_ChucVu.iNhomChucVu = 1)
+  positionCPV                          DM_ChucVu?                          @relation("positionCPV", fields: [positionCPVId], references: [Id])
   positionCPVId                        String?                             @db.Uuid
+  // chức vụ chính quyền (DM_ChucVu.iNhomChucVu = 0)
+  chucVuChinhQuyen                     DM_ChucVu?                          @relation("chucVuChinhQuyen", fields: [chucVuChinhQuyenId], references: [Id])
+  chucVuChinhQuyenId                   String?                             @db.Uuid
   tenureDate                           DateTime? // ngày vào niên chế
   enlistmentDate                       DateTime? // ngày nhập ngũ
   reEnlistmentDate                     DateTime? // ngày tái nhập ngũ

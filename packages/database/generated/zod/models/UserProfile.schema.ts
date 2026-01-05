@@ -221,6 +221,7 @@ const relationSchema = z.object({
     dM_HinhThucKhenThuongChinhQuyen: z.record(z.string(), z.unknown()).optional(),
     dM_HinhThucKhenThuongDang: z.record(z.string(), z.unknown()).optional(),
     positionCPV: z.record(z.string(), z.unknown()).optional(),
+    chucVuChinhQuyen: z.record(z.string(), z.unknown()).optional(),
     relatives: z.array(z.unknown()).optional(),
     trinhDoLyLuanChinhTri: z.array(z.unknown()).optional(),
     trinhDoQuanLyNhaNuoc: z.array(z.unknown()).optional(),
@@ -310,6 +311,7 @@ const fkSchema = z.object({
     dM_HinhThucKhenThuongChinhQuyenId: z.string().nullish(),
     dM_HinhThucKhenThuongDangId: z.string().nullish(),
     positionCPVId: z.string().uuid().nullish(),
+    chucVuChinhQuyenId: z.string().uuid().nullish(),
     trinhDoHocVanId: z.string().nullish(),
 }
 );

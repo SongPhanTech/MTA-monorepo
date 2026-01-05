@@ -804,8 +804,10 @@ model UserProfile {
   CPVJoinDate                          DateTime?
   officialCPVDate                      DateTime?
   CPVJoinPlace                         String?
-  positionCPV                          DM_ChucVu?                          @relation(fields: [positionCPVId], references: [Id])
+  positionCPV                          DM_ChucVu?                          @relation("positionCPV", fields: [positionCPVId], references: [Id])
   positionCPVId                        String?                             @db.Uuid()
+  chucVuChinhQuyen                     DM_ChucVu?                          @relation("chucVuChinhQuyen", fields: [chucVuChinhQuyenId], references: [Id])
+  chucVuChinhQuyenId                   String?                             @db.Uuid()
   tenureDate                           DateTime?
   enlistmentDate                       DateTime?
   reEnlistmentDate                     DateTime?
@@ -1710,7 +1712,8 @@ model DM_ChucVu {
   sThietBiTao         String?
   sThietBiSua         String?
   iNhomChucVu         Int?                  @default(0)
-  userProfile         UserProfile[]
+  userProfileCPV      UserProfile[]         @relation("positionCPV")
+  userProfile         UserProfile[]         @relation("chucVuChinhQuyen")
   quaTrinhCongTac     QuaTrinhCongTac[]
   quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 
@@ -2756,6 +2759,7 @@ model TrainingCourse {
   trainingObjectType         TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String
   trainingCourseRegulation   TrainingCourseRegulation[]
+  curriculumVersion          CurriculumVersion[]
   fixedClass                 FixedClass[]
   scoreConverts              ScoreConvert[]
   academicRankingConvert     AcademicRankingConvert[]
@@ -2877,14 +2881,16 @@ model CurriculumVersion {
   type                             CurriculumVersionType              @default(FULL_COURSE)
   trainingObjectType               TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId             String
-  trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId                  String
-  trainingType                     TrainingType                       @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId                   String
-  trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
-  trainingTimeId                   String
-  diplomaType                      DiplomaType                        @relation(fields: [diplomaTypeId], references: [id])
-  diplomaTypeId                    String
+  trainingCourse                   TrainingCourse?                    @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId                 String?
+  trainingLevel                    TrainingLevel?                     @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId                  String?
+  trainingType                     TrainingType?                      @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId                   String?
+  trainingTime                     TrainingTime?                      @relation(fields: [trainingTimeId], references: [id])
+  trainingTimeId                   String?
+  diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId                    String?
   requiredCredits                  Int?
   electiveCredits                  Int?
   jobPosition                      String?
@@ -3336,6 +3342,7 @@ model TrainingObjectType {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   thesisSession        ThesisSession[]
+  trainingBlocks       TrainingBlock[]
   vaiTro               String[]
 
   @@schema("ql-dao-tao")
@@ -3573,22 +3580,25 @@ model TrainingMajorOnTrainingObjectType {
 
 /// khối kiến thức
 model TrainingBlock {
-  id                 String                             @id() @default(cuid())
-  code               String?                            @unique()
-  active             Boolean                            @default(true)
-  description        String?                            @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime                           @default(now())
-  updatedAt          DateTime                           @default(now()) @updatedAt()
-  createdBy          String?                            @db.Uuid()
-  name               String                             @unique()
+  id                   String                             @id() @default(cuid())
+  code                 String?                            @unique()
+  active               Boolean                            @default(true)
+  description          String?                            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                           @default(now())
+  updatedAt            DateTime                           @default(now()) @updatedAt()
+  createdBy            String?                            @db.Uuid()
+  name                 String
+  trainingObjectType   TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
   /// ưu tiên sắp xếp
-  priority           Int                                @default(0)
-  parent             TrainingBlock?                     @relation("ParentChild", fields: [parentId], references: [id])
-  parentId           String?
-  children           TrainingBlock[]                    @relation("ParentChild")
-  curriculumVersions TrainingBlockOnCurriculumVersion[]
+  priority             Int                                @default(0)
+  parent               TrainingBlock?                     @relation("ParentChild", fields: [parentId], references: [id])
+  parentId             String?
+  children             TrainingBlock[]                    @relation("ParentChild")
+  curriculumVersions   TrainingBlockOnCurriculumVersion[]
 
+  @@unique([trainingObjectTypeId, name])
   @@schema("ql-dao-tao")
 }
 

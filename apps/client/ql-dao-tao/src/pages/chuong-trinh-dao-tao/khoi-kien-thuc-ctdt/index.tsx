@@ -17,6 +17,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
@@ -56,6 +57,7 @@ type TrainingBlockType = Prisma.TrainingBlockGetPayload<{
 }>
 
 export default function TrainingBlock() {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -65,35 +67,39 @@ export default function TrainingBlock() {
         active: undefined,
     })
 
-    const { data: trainingBlockData, refetch } = useFindManyTrainingBlock({
-        where: {
-            ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
-            ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
-            ...(filters.active?.length === 1 ? { active: filters.active[0] } : {}),
-        },
-        include: {
-            curriculumVersions: {
-                include: {
-                    curriculumVersion: true,
-                    subjects: {
-                        include: {
-                            subject: {
-                                select: {
-                                    credit: true,
-                                    period: true,
+    const { data: trainingBlockData, refetch } = useFindManyTrainingBlock(
+        {
+            where: {
+                ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
+                ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
+                ...(filters.active?.length === 1 ? { active: filters.active[0] } : {}),
+                trainingObjectTypeId,
+            },
+            include: {
+                curriculumVersions: {
+                    include: {
+                        curriculumVersion: true,
+                        subjects: {
+                            include: {
+                                subject: {
+                                    select: {
+                                        credit: true,
+                                        period: true,
+                                    },
                                 },
                             },
                         },
                     },
                 },
             },
+            orderBy: { priority: 'asc' },
+            // take: numberOfPages,
+            // skip: (currentPage - 1) * numberOfPages,
         },
-        orderBy: {
-            priority: 'asc',
-        },
-        // take: numberOfPages,
-        // skip: (currentPage - 1) * numberOfPages,
-    })
+        {
+            enabled: !!trainingObjectTypeId,
+        }
+    )
 
     const { data: count, refetch: refetchCount } = useCountTrainingBlock({
         where: {

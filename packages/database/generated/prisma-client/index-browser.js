@@ -275,6 +275,7 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   officialCPVDate: 'officialCPVDate',
   CPVJoinPlace: 'CPVJoinPlace',
   positionCPVId: 'positionCPVId',
+  chucVuChinhQuyenId: 'chucVuChinhQuyenId',
   tenureDate: 'tenureDate',
   enlistmentDate: 'enlistmentDate',
   reEnlistmentDate: 'reEnlistmentDate',
@@ -1817,6 +1818,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   curriculumId: 'curriculumId',
   type: 'type',
   trainingObjectTypeId: 'trainingObjectTypeId',
+  trainingCourseId: 'trainingCourseId',
   trainingLevelId: 'trainingLevelId',
   trainingTypeId: 'trainingTypeId',
   trainingTimeId: 'trainingTimeId',
@@ -2299,6 +2301,7 @@ exports.Prisma.TrainingBlockScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   priority: 'priority',
   parentId: 'parentId'
 };
@@ -4653,6 +4656,7 @@ exports.Prisma.UserProfileOrderByRelevanceFieldEnum = {
   unionPlace: 'unionPlace',
   CPVJoinPlace: 'CPVJoinPlace',
   positionCPVId: 'positionCPVId',
+  chucVuChinhQuyenId: 'chucVuChinhQuyenId',
   recruitmentAgency: 'recruitmentAgency',
   mainJobAssigned: 'mainJobAssigned',
   originalPlace: 'originalPlace',
@@ -5629,6 +5633,7 @@ exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   trainingLanguageId: 'trainingLanguageId',
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
+  trainingCourseId: 'trainingCourseId',
   trainingLevelId: 'trainingLevelId',
   trainingTypeId: 'trainingTypeId',
   trainingTimeId: 'trainingTimeId',
@@ -5918,6 +5923,7 @@ exports.Prisma.TrainingBlockOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   parentId: 'parentId'
 };
 

@@ -53,8 +53,10 @@ model DM_ChucDanh extends CoreBase {
 }
 
 model DM_ChucVu extends CoreBase {
+  // 0: Chức vụ chính quyền, 1: Chức vụ Đảng
   iNhomChucVu         Int?                  @default(0)
-  userProfile         UserProfile[]
+  userProfileCPV      UserProfile[]         @relation("positionCPV")
+  userProfile         UserProfile[]         @relation("chucVuChinhQuyen")
   quaTrinhCongTac     QuaTrinhCongTac[]
   quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 

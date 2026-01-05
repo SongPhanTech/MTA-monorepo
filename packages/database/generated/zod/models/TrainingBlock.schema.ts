@@ -32,12 +32,14 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    trainingObjectType: z.record(z.string(), z.unknown()),
     parent: z.record(z.string(), z.unknown()).optional(),
     children: z.array(z.unknown()).optional(),
     curriculumVersions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
+    trainingObjectTypeId: z.string(),
     parentId: z.string().nullish(),
 }
 );
