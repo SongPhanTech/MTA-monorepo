@@ -118,6 +118,7 @@ enum CurriculumVersionType {
 /// loại hình thi
 enum ExamType {
   OfflineWritten
+  OnlineWritten
   Oral
   Practice
   Project
@@ -147,7 +148,6 @@ enum EquivalencySide {
 
 /// loại bắt buộc
 enum SubjectRequirementType {
-  None
   Mandatory
   Optional
 
@@ -368,6 +368,13 @@ enum CouncilRole {
   REVIEWER_1
   REVIEWER_2
   MEMBER
+
+  @@schema("ql-dao-tao")
+}
+
+enum SupervisorRole {
+  SUPERVISOR
+  CO_SUPERVISOR
 
   @@schema("ql-dao-tao")
 }
@@ -1098,6 +1105,8 @@ model QuaTrinhCuDiCongTac {
   dM_TinhTrangCongTacId     String?
   dM_LoaiTinhTrangCongTac   DM_LoaiTinhTrangCongTac? @relation(fields: [dM_LoaiTinhTrangCongTacId], references: [id])
   dM_LoaiTinhTrangCongTacId String?
+  dM_NuocCuDiHocTap         DM_NuocCuDiHocTap?       @relation(fields: [dM_NuocCuDiHocTapId], references: [id])
+  dM_NuocCuDiHocTapId       String?
   userProfile               UserProfile              @relation(fields: [userProfileId], references: [id])
   userProfileId             String
 
@@ -2652,7 +2661,6 @@ model Semester {
   evaluationPeriod        EvaluationPeriod[]
   exam                    Exam[]
 
-  @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
 }
 
@@ -2822,13 +2830,13 @@ model FixedClass {
 /// chương trình đào tạo
 model Curriculum {
   id                       String              @id() @default(cuid())
-  code                     String?             @unique()
   active                   Boolean             @default(true)
   description              String?             @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime            @default(now())
   updatedAt                DateTime            @default(now()) @updatedAt()
   createdBy                String?             @db.Uuid()
+  code                     String?
   name                     String
   englishName              String?
   managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
@@ -2848,13 +2856,13 @@ model Curriculum {
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion {
   id                               String                             @id() @default(cuid())
-  code                             String?                            @unique()
   active                           Boolean                            @default(true)
   description                      String?                            @db.Text()
   deletedAt                        DateTime?
   createdAt                        DateTime                           @default(now())
   updatedAt                        DateTime                           @default(now()) @updatedAt()
   createdBy                        String?                            @db.Uuid()
+  code                             String?
   name                             String
   shortName                        String?
   englishName                      String?
@@ -3076,7 +3084,7 @@ model TrainingBlockSubject {
   trainingBlockOnCurriculumVersion   TrainingBlockOnCurriculumVersion @relation(fields: [trainingBlockOnCurriculumVersionId], references: [id])
   trainingBlockOnCurriculumVersionId String
   semester                           Int?
-  type                               SubjectRequirementType           @default(None)
+  type                               SubjectRequirementType           @default(Mandatory)
   /// tính điểm thi cuối ~ !môn điều kiện ~ in trên bảng điểm
   useForFinalScore                   Boolean
   /// môn tốt nghiệp (dùng trong bảng tốt nghiệp, điểm đạt tốt nghiệp)
@@ -3328,6 +3336,7 @@ model TrainingObjectType {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   thesisSession        ThesisSession[]
+  vaiTro               String[]
 
   @@schema("ql-dao-tao")
 }
@@ -3541,7 +3550,6 @@ model TrainingMajor {
   studentGraduationApplication StudentGraduationApplication[]
   surveyObjectTypes            SurveyObjectType[]
 
-  @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
 }
 
@@ -4396,60 +4404,63 @@ model ThesisSession {
 }
 
 model ThesisProject {
-  id                 String                      @id() @default(cuid())
-  code               String?                     @unique()
-  active             Boolean                     @default(true)
-  description        String?                     @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime                    @default(now())
-  updatedAt          DateTime                    @default(now()) @updatedAt()
-  createdBy          String?                     @db.Uuid()
-  title              String?
-  titleEN            String?
-  summary            String?                     @db.Text()
-  objectives         String?                     @db.Text()
-  scope              String?                     @db.Text()
-  methodology        String?                     @db.Text()
-  expectedResults    String?                     @db.Text()
-  requirements       String?                     @db.Text()
-  technologies       String?                     @db.Text()
-  thesisType         ThesisType                  @default(PROJECT)
-  status             ThesisProjectStatus         @default(PROPOSED)
-  language           String?                     @db.Text()
-  type               String?                     @db.Text()
-  subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
-  subjectClassId     String?
-  thesisSession      ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
-  thesisSessionId    String?
-  /// Chuyên gia hướng dẫn
-  supervisor         ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
-  supervisorId       String?
-  /// Chuyên gia hướng dẫn phụ
-  coSupervisor       ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
-  coSupervisorId     String?
+  id                    String                      @id() @default(cuid())
+  code                  String?                     @unique()
+  active                Boolean                     @default(true)
+  description           String?                     @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime                    @default(now())
+  updatedAt             DateTime                    @default(now()) @updatedAt()
+  createdBy             String?                     @db.Uuid()
+  title                 String?
+  titleEN               String?
+  summary               String?                     @db.Text()
+  objectives            String?                     @db.Text()
+  scope                 String?                     @db.Text()
+  methodology           String?                     @db.Text()
+  expectedResults       String?                     @db.Text()
+  requirements          String?                     @db.Text()
+  technologies          String?                     @db.Text()
+  thesisType            ThesisType                  @default(PROJECT)
+  status                ThesisProjectStatus         @default(PROPOSED)
+  language              String?                     @db.Text()
+  type                  String?                     @db.Text()
+  subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
+  subjectClassId        String?
+  thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
+  thesisSessionId       String?
+  /// Chuyên gia hướng dẫn b 
+  supervisor            ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
+  supervisorId          String?
+  supervisorPayment     SupervisorPaymentRecord?    @relation("SupervisorToSupervisorPayment", fields: [supervisorPaymentId], references: [id])
+  supervisorPaymentId   String?
+  /// Chuyên gia hướng dẫn bảo vệ phụ
+  coSupervisor          ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
+  coSupervisorId        String?
+  coSupervisorPayment   SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
+  coSupervisorPaymentId String?
   /// Đơn vị quản lý
-  organization       DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
-  organizationId     String?                     @db.Uuid()
-  maxStudents        Int?
+  organization          DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
+  organizationId        String?                     @db.Uuid()
+  maxStudents           Int?
   /// Hội đồng đánh giá
-  council            Council?                    @relation(fields: [councilId], references: [id])
-  councilId          String?
+  council               Council?                    @relation(fields: [councilId], references: [id])
+  councilId             String?
   /// phòng bảo vệ
-  room               Room?                       @relation(fields: [roomId], references: [id])
-  roomId             String?
+  room                  Room?                       @relation(fields: [roomId], references: [id])
+  roomId                String?
   /// Ngày bảo vệ
-  defenseDate        DateTime?
-  defenseSession     DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
-  defenseSessionId   String?
-  registrationStart  DateTime?
-  registrationEnd    DateTime?
-  projectStart       DateTime?
-  projectEnd         DateTime?
-  defenseRecord      DefenseRecord?
-  librarySubmission  LibrarySubmission?
-  decisions          Decision[]
-  registrations      StudentThesisRegistration[]
-  supervisorPayments SupervisorPaymentRecord[]
+  defenseDate           DateTime?
+  defenseSession        DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
+  defenseSessionId      String?
+  registrationStart     DateTime?
+  registrationEnd       DateTime?
+  projectStart          DateTime?
+  projectEnd            DateTime?
+  defenseRecord         DefenseRecord?
+  librarySubmission     LibrarySubmission?
+  decisions             Decision[]
+  registrations         StudentThesisRegistration[]
 
   @@schema("ql-dao-tao")
 }
@@ -4502,36 +4513,36 @@ model StudentThesisRegistration {
 
 /// Model cho Chuyên gia (Giảng viên trong và ngoài trường)
 model ExpertProfile {
-  id                      String                    @id() @default(cuid())
-  code                    String?                   @unique()
-  active                  Boolean                   @default(true)
-  description             String?                   @db.Text()
-  deletedAt               DateTime?
-  createdAt               DateTime                  @default(now())
-  updatedAt               DateTime                  @default(now()) @updatedAt()
-  createdBy               String?                   @db.Uuid()
-  lecturer                Lecturer?                 @relation(fields: [lecturerId], references: [id])
-  lecturerId              String?                   @unique()
-  name                    String?
-  academicRank            String?
-  academicDegree          String?
-  organization            String?
-  position                String?
-  specialization          String?
-  major                   TrainingMajor[]
-  workplace               String?
-  phone                   String?
-  email                   String?
-  bankAccountNumber       String?
-  bankName                String?
-  eligiblePresident       Boolean
-  eligibleSecretary       Boolean
-  supervisedTheses        ThesisProject[]           @relation("SupervisorToThesis")
-  coSupervisedTheses      ThesisProject[]           @relation("CoSupervisorToThesis")
-  subjectClass            SubjectClass[]
-  councilMemberships      CouncilMember[]
-  payments                PaymentRecord[]
-  supervisorPaymentRecord SupervisorPaymentRecord[]
+  id                 String          @id() @default(cuid())
+  code               String?         @unique()
+  active             Boolean         @default(true)
+  description        String?         @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @default(now()) @updatedAt()
+  createdBy          String?         @db.Uuid()
+  lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
+  lecturerId         String?         @unique()
+  name               String?
+  academicRank       String?
+  academicDegree     String?
+  organization       String?
+  position           String?
+  specialization     String?
+  major              TrainingMajor[]
+  workplace          String?
+  phone              String?
+  email              String?
+  bankAccountNumber  String?
+  bankName           String?
+  projectExpert      Boolean         @default(true)
+  thesisExpert       Boolean         @default(true)
+  eligiblePresident  Boolean
+  eligibleSecretary  Boolean
+  supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
+  coSupervisedTheses ThesisProject[] @relation("CoSupervisorToThesis")
+  subjectClass       SubjectClass[]
+  councilMemberships CouncilMember[]
 
   @@schema("ql-dao-tao")
 }
@@ -4666,8 +4677,25 @@ model DefaultCouncilRolePayAmount {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now()) @updatedAt()
   createdBy   String?     @db.Uuid()
-  role        CouncilRole @unique()
+  role        CouncilRole
   amount      Decimal
+  inAcademy   Boolean     @default(true)
+
+  @@schema("ql-dao-tao")
+}
+
+model DefaultSupervisorPayAmount {
+  id          String         @id() @default(cuid())
+  code        String?        @unique()
+  active      Boolean        @default(true)
+  description String?        @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt()
+  createdBy   String?        @db.Uuid()
+  role        SupervisorRole
+  amount      Decimal
+  inAcademy   Boolean        @default(true)
 
   @@schema("ql-dao-tao")
 }
@@ -4686,8 +4714,6 @@ model PaymentRecord {
   status          PaymentStatus  @default(PENDING)
   paymentDate     DateTime?
   transactionCode String?
-  expert          ExpertProfile  @relation(fields: [expertId], references: [id])
-  expertId        String
   councilMemberId String?        @unique()
   councilMember   CouncilMember? @relation(fields: [councilMemberId], references: [id])
 
@@ -4696,22 +4722,20 @@ model PaymentRecord {
 
 /// Quản lý việc thanh toán hướng dẫn
 model SupervisorPaymentRecord {
-  id              String        @id() @default(cuid())
-  code            String?       @unique()
-  active          Boolean       @default(true)
-  description     String?       @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @default(now()) @updatedAt()
-  createdBy       String?       @db.Uuid()
-  thesisProject   ThesisProject @relation(fields: [thesisProjectId], references: [id])
-  thesisProjectId String
-  expert          ExpertProfile @relation(fields: [expertId], references: [id])
-  expertId        String
-  amount          Decimal
-  status          PaymentStatus @default(PENDING)
-  paymentDate     DateTime?
-  transactionCode String?
+  id               String          @id() @default(cuid())
+  code             String?         @unique()
+  active           Boolean         @default(true)
+  description      String?         @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt()
+  createdBy        String?         @db.Uuid()
+  amount           Decimal
+  status           PaymentStatus   @default(PENDING)
+  paymentDate      DateTime?
+  transactionCode  String?
+  thesisProjects   ThesisProject[] @relation("SupervisorToSupervisorPayment")
+  coThesisProjects ThesisProject[] @relation("CoSupervisorToSupervisorPayment")
 
   @@schema("ql-dao-tao")
 }
@@ -6365,15 +6389,16 @@ model DM_TinhTrangDiHocTap {
 }
 
 model DM_NuocCuDiHocTap {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  createdBy           String?               @db.Uuid()
+  name                String                @unique()
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 
   @@schema("ql-ho-so")
 }

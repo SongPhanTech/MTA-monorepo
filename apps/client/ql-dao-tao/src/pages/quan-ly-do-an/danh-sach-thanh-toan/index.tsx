@@ -89,9 +89,9 @@ export default function PaymentRecordPage() {
             ...where,
         },
         include: {
-            expert: true,
             councilMember: {
                 include: {
+                    expert: true,
                     council: {
                         include: {
                             thesis: {
@@ -224,7 +224,7 @@ export default function PaymentRecordPage() {
                                 width: 150,
                                 type: 'input',
                                 align: 'center',
-                                render: (_, record) => record.expert.name,
+                                render: (_, record) => record.councilMember.expert.name,
                             },
                             {
                                 title: 'Mã giao dịch',

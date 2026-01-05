@@ -466,6 +466,8 @@ model QuaTrinhCuDiCongTac extends Base {
   dM_LoaiTinhTrangCongTac   DM_LoaiTinhTrangCongTac? @relation(fields: [dM_LoaiTinhTrangCongTacId], references: [id])
   dM_LoaiTinhTrangCongTacId String?
 
+  dM_NuocCuDiHocTap         DM_NuocCuDiHocTap?       @relation(fields: [dM_NuocCuDiHocTapId], references: [id])
+  dM_NuocCuDiHocTapId       String?
 
   userProfile               UserProfile              @relation(fields: [userProfileId], references: [id])
   userProfileId             String

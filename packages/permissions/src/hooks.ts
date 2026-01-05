@@ -13,6 +13,7 @@ import {
     useGetUserPermissionsPermissionAppCodeUserId,
 } from '../../libs/src/api/system'
 import ability from './ability'
+import { getRuntimeEnv } from '../../libs/src/utils'
 
 declare global {
     interface Window {
@@ -368,7 +369,7 @@ function getDynamicBreadcrumb(
 
 const usePermissions = () => {
     const { data } = useGetUserPermissionsPermissionAppCodeUserId(
-        process.env.NEXT_PUBLIC_APP_CODE || 'lms',
+        getRuntimeEnv('NEXT_PUBLIC_APP_CODE'),
         window?.contextData?.userId ?? ''
     )
 
@@ -393,7 +394,7 @@ const usePermissions = () => {
 
 const useOrgPermissions = () => {
     const { data } = useGetUserPermissionsAccessLevelAppCodeUserId(
-        process.env.NEXT_PUBLIC_APP_CODE || 'lms',
+        getRuntimeEnv('NEXT_PUBLIC_APP_CODE'),
         window?.contextData?.userId ?? ''
     )
     if (data?.status !== 200) return undefined

@@ -6,7 +6,6 @@ import { type ThesisSession } from '@workspace/db/client'
 import {
     useCreateThesisSession,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
     useFindUniqueThesisSession,
     useUpdateThesisSession,
 } from '@workspace/db/hooks'
@@ -17,6 +16,7 @@ import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import { useEffect, useState } from 'react'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 export type PutThesisSession = ThesisSession
 dayjs.locale('vi')
 
@@ -61,7 +61,7 @@ const PutThesisSession = () => {
         }
     }, [thesisSession, form])
 
-    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectTypePermission()
     const [trainingObjectId, setTrainingObjectId] = useState<string | null>(null)
     const { data: trainingCourses = [] } = useFindManyTrainingCourse(
         {

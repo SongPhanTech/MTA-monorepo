@@ -93,7 +93,6 @@ app.openapi(getStudentScore, async (c) => {
                     },
                 },
             },
-            trainingObjectType: true,
         },
     })
 
@@ -190,7 +189,7 @@ app.openapi(getStudentScore, async (c) => {
                             subject_name: subjectStudent.subjectVersion.name,
                             credit: subjectStudent.subjectVersion.credit,
                             class_id: subjectClass.id,
-                            final_score: finalScore,
+                            final_score: subjectStudent.finalScore?.toNumber() ?? 0,
                             ...rest,
                             improvement_register: improvementRegister,
                         }

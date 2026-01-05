@@ -2,16 +2,11 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import {
-    SubjectRequirementType,
-    type SubjectVersion,
-    type TrainingBlockSubject,
-} from '@workspace/db/client'
+import { $Enums, type SubjectVersion, type TrainingBlockSubject } from '@workspace/db/client'
 import {
     useCreateManyTrainingBlockSubject,
     useFindManyDM_DonVi,
     useFindManySubjectVersion,
-    useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueTrainingBlockOnCurriculumVersion,
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
@@ -26,11 +21,12 @@ import { useTrainingObjectTypeStore } from '@workspace/ui'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
-export type PutTrainingBlockSubject = TrainingBlockSubject
+export type PutTrainingBlockSubject = TrainingBlockSubject & {
+    conditional?: boolean
+}
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
-    curriculumVersionId: string
     trainingBlockOnCurriculumVersionId: string
     trainingBlockSubjectId: string
 }
@@ -58,19 +54,22 @@ const PutTrainingBlockSubject = () => {
         { where: { id: input?.trainingBlockSubjectId } },
         { enabled: !!input?.trainingBlockSubjectId }
     )
-
-    const { data: trainingBlockOnCurriculumVersion } = useFindManyTrainingBlockOnCurriculumVersion(
-        {
-            where: { curriculumVersionId: input?.curriculumVersionId },
-            include: { trainingBlock: true },
-        },
-        { enabled: !!input?.curriculumVersionId }
-    )
-
     const { data: trainingBlockOnCurriculum } = useFindUniqueTrainingBlockOnCurriculumVersion(
         {
             where: { id: input?.trainingBlockOnCurriculumVersionId },
-            include: { trainingBlock: true },
+            include: {
+                trainingBlock: true,
+                curriculumVersion: {
+                    select: {
+                        trainingBlocks: {
+                            select: {
+                                id: true,
+                                trainingBlock: true,
+                            },
+                        },
+                    },
+                },
+            },
         },
         {
             enabled: !!input?.trainingBlockOnCurriculumVersionId,
@@ -93,15 +92,16 @@ const PutTrainingBlockSubject = () => {
             form.setFieldsValue({
                 ...initialValue,
                 useForFinalScore: initialValue.useForFinalScore,
+                conditional: !initialValue.useForFinalScore,
                 graduation: initialValue.graduation,
-                // print: initialValue.print,
             })
         } else {
             form.setFieldsValue({
-                useForFinalScore: false,
+                useForFinalScore: true,
+                conditional: false,
                 graduation: false,
-                // print: false,
                 active: true,
+                type: $Enums.SubjectRequirementType.Mandatory,
             })
         }
     }, [initialValue, form])
@@ -115,10 +115,12 @@ const PutTrainingBlockSubject = () => {
             showSpinner()
             const payload = {
                 subjectId: output.subjectId,
-                trainingBlockOnCurriculumVersionId: output.trainingBlockOnCurriculumVersionId,
+                trainingBlockOnCurriculumVersionId:
+                    output.trainingBlockOnCurriculumVersionId ??
+                    input?.trainingBlockOnCurriculumVersionId,
                 semester: output?.semester,
                 type: output?.type,
-                useForFinalScore: output?.useForFinalScore,
+                useForFinalScore: !output?.conditional,
                 graduation: output?.graduation,
                 // print: output?.print,
                 active: output?.active,
@@ -192,6 +194,11 @@ const PutTrainingBlockSubject = () => {
                     : 'Thêm mới môn học khối kiến thức'
             }
             className="min-w-[400px] w-[500px]"
+            formProps={{
+                onValuesChange: (changedValues) => {
+                    console.log('changedValues', changedValues)
+                },
+            }}
         >
             {!input?.trainingBlockSubjectId && (
                 <Col span={24}>
@@ -246,9 +253,14 @@ const PutTrainingBlockSubject = () => {
                             placeholder="Chọn khối kiến thức"
                             showSearch
                             onChange={(val) => handleFilterChange('managementOrganizationId', val)}
-                            options={trainingBlockOnCurriculumVersion?.map((item) => {
-                                return { label: item.trainingBlock.name, value: item.id }
-                            })}
+                            options={trainingBlockOnCurriculum?.curriculumVersion?.trainingBlocks?.map(
+                                (item) => {
+                                    return {
+                                        label: item.trainingBlock.name,
+                                        value: item.id,
+                                    }
+                                }
+                            )}
                         />
                     </FormItem>
                 </Col>
@@ -268,16 +280,14 @@ const PutTrainingBlockSubject = () => {
                     <Select
                         placeholder="Chọn loại môn học"
                         options={subjectRequirementTypeOptions}
-                        allowClear
-                        defaultValue={SubjectRequirementType.None}
                     />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
-                    name="useForFinalScore"
-                    label="Tính điểm thi cuối kỳ"
+                    name="conditional"
+                    label="Môn điều kiện"
                     layout="horizontal"
                     valuePropName="checked"
                     className="mb-0"

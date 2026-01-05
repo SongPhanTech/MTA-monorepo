@@ -11,13 +11,12 @@ import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type {
-    CurriculumVersion,
-    DocumentFile,
-    TrainingBlockOnCurriculumVersion,
-    TrainingCourse,
-    TrainingMajor,
-    TrainingTime,
+import {
+    type CurriculumVersion,
+    type Prisma,
+    type TrainingCourse,
+    type TrainingMajor,
+    type TrainingTime,
 } from '@workspace/db/client'
 import {
     useCountCurriculum,
@@ -40,7 +39,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
@@ -68,11 +66,12 @@ export default function TrainingProgramCatalog() {
             ...(filters.code && {
                 code: { contains: filters.code, mode: 'insensitive' as const },
             }),
-            ...(filters.trainingCourses && {
-                fixedClasses: {
-                    some: { trainingCourseId: { in: filters.trainingCourses } },
-                },
-            }),
+            ...(filters.trainingCourses &&
+                filters.trainingCourses.length > 0 && {
+                    fixedClass: {
+                        trainingCourseId: { in: filters.trainingCourses },
+                    },
+                }),
             ...(filters.trainingTime && {
                 trainingTimeId: { in: filters.trainingTime },
             }),
@@ -124,7 +123,7 @@ export default function TrainingProgramCatalog() {
                       },
                   }
                 : {}),
-        }
+        } satisfies Prisma.CurriculumVersionWhereInput
 
         return {
             deletedAt: null,
@@ -191,13 +190,11 @@ export default function TrainingProgramCatalog() {
                           }
                         : {}),
                     trainingObjectTypeId,
-                    ...(filters.trainingCourses
+                    ...(filters.trainingCourses && filters.trainingCourses.length > 0
                         ? {
-                              fixedClasses: {
-                                  some: {
-                                      trainingCourseId: {
-                                          in: filters.trainingCourses,
-                                      },
+                              fixedClass: {
+                                  trainingCourseId: {
+                                      in: filters.trainingCourses,
                                   },
                               },
                           }
@@ -404,21 +401,22 @@ export default function TrainingProgramCatalog() {
                                         allowClear
                                     />
                                 </Col>
-                                <Col span={8}>
-                                    <TreeSelect
-                                        placeholder="Chọn đơn vị quản lý"
-                                        allowClear
-                                        showSearch
-                                        treeDefaultExpandAll
-                                        onChange={(val) =>
+                                <Col span={6}>
+                                    <Select
+                                        className="w-full"
+                                        placeholder="Chọn khóa đào tạo"
+                                        options={trainingCourseData.map((i) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                        onChange={(val) => {
                                             setFilters({
                                                 ...filters,
-                                                managementOrganizationId: val,
+                                                trainingCourses: val,
                                             })
-                                        }
-                                        treeData={treeData}
-                                        maxTagCount={'responsive'}
-                                        className="w-full"
+                                        }}
+                                        mode="multiple"
+                                        allowClear
                                     />
                                 </Col>
                                 <Col span={6}>
@@ -485,12 +483,12 @@ export default function TrainingProgramCatalog() {
                                 <div>
                                     {code && (
                                         <div>
-                                            <strong>Code:</strong> {code}
+                                            <strong>Mã:</strong> {code}
                                         </div>
                                     )}
                                     {name && (
                                         <div>
-                                            <strong>Name:</strong> {name}
+                                            <strong>Tên:</strong> {name}
                                         </div>
                                     )}
                                     {managementOrganization?.sTen && (
@@ -541,25 +539,6 @@ export default function TrainingProgramCatalog() {
                                 width: 300,
                                 type: 'input',
                             },
-                            // {
-                            //     title: <Tooltip title="Đối tượng đào tạo">ĐTĐT</Tooltip>,
-                            //     dataIndex: 'trainingObjectTypes',
-                            //     align: 'center',
-                            //     width: 150,
-                            //     // type: 'select',
-                            //     // options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
-                            //     //     value: i.id,
-                            //     //     label: i.name,
-                            //     // })),
-                            //     render: (
-                            //         __,
-                            //         record: { trainingObjectType?: TrainingObjectType }
-                            //     ) => {
-                            //         return record.trainingObjectType
-                            //             ? record.trainingObjectType.name
-                            //             : ''
-                            //     },
-                            // },
                             {
                                 title: 'Khoá',
                                 align: 'center',
@@ -614,24 +593,94 @@ export default function TrainingProgramCatalog() {
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
                                 type: 'cmp',
-                                distinctFilters: ['electiveCredits', 'numberOfSemesters'],
+                                distinctFilters: ['requiredCredits'],
                                 width: 90,
+                                // render: ({ trainingBlocks = [] }) => {
+                                //     const totalCredit = trainingBlocks.reduce(
+                                //         (
+                                //             total: number,
+                                //             block: {
+                                //                 subjects?: {
+                                //                     type: SubjectRequirementType
+                                //                     subject: { credit?: number }
+                                //                 }[]
+                                //             }
+                                //         ) => {
+                                //             const blockCredit =
+                                //                 block?.subjects?.reduce(
+                                //                     (sum, { subject, type }) =>
+                                //                         sum +
+                                //                         (type ===
+                                //                         $Enums.SubjectRequirementType.Mandatory
+                                //                             ? subject?.credit || 0
+                                //                             : 0),
+                                //                     0
+                                //                 ) || 0
+                                //             return total + blockCredit
+                                //         },
+                                //         0
+                                //     )
+                                //     return totalCredit
+                                // },
                             },
                             {
                                 title: <Tooltip title="Số tín chỉ tự chọn">Số TCTC</Tooltip>,
-                                dataIndex: 'electiveCredits',
                                 align: 'center',
                                 type: 'cmp',
                                 width: 90,
-                                distinctFilters: ['numberOfSemesters', 'requiredCredits'],
+                                dataIndex: 'electiveCredits',
+                                distinctFilters: ['electiveCredits'],
+                                // render: ({ trainingBlocks = [] }) => {
+                                //     const totalCredit = trainingBlocks.reduce(
+                                //         (
+                                //             total: number,
+                                //             block: {
+                                //                 subjects?: {
+                                //                     type: SubjectRequirementType
+                                //                     subject: { credit?: number }
+                                //                 }[]
+                                //             }
+                                //         ) => {
+                                //             const blockCredit =
+                                //                 block?.subjects?.reduce(
+                                //                     (sum, { subject, type }) =>
+                                //                         sum +
+                                //                         (type ===
+                                //                         $Enums.SubjectRequirementType.Optional
+                                //                             ? subject?.credit || 0
+                                //                             : 0),
+                                //                     0
+                                //                 ) || 0
+                                //             return total + blockCredit
+                                //         },
+                                //         0
+                                //     )
+                                //     return totalCredit
+                                // },
                             },
                             {
                                 title: <Tooltip title="Số học kỳ">Số HK</Tooltip>,
                                 dataIndex: 'numberOfSemesters',
                                 align: 'center',
                                 type: 'cmp',
-                                distinctFilters: ['electiveCredits', 'requiredCredits'],
+                                distinctFilters: ['numberOfSemesters'],
                                 width: 90,
+                                // render: ({ trainingBlocks = [] }) => {
+                                //     const allSemester = trainingBlocks.flatMap(
+                                //         (block: {
+                                //             subjects?: {
+                                //                 semester: number
+                                //             }[]
+                                //         }) => {
+                                //             return (
+                                //                 block.subjects
+                                //                     ?.map((e) => e?.semester)
+                                //                     ?.filter?.(Boolean) || []
+                                //             )
+                                //         }
+                                //     )
+                                //     return allSemester?.length > 0 ? Math.max(...allSemester) : ''
+                                // },
                             },
                             {
                                 title: <Tooltip title="Thời gian đào tạo">TGĐT</Tooltip>,
@@ -721,12 +770,7 @@ export default function TrainingProgramCatalog() {
                                                             if (isLocked) {
                                                                 return
                                                             }
-                                                            handleCloneCurriculumVersion(
-                                                                record as CurriculumVersion & {
-                                                                    trainingBlocks: TrainingBlockOnCurriculumVersion[]
-                                                                    documentFiles: DocumentFile[]
-                                                                }
-                                                            )
+                                                            handleCloneCurriculumVersion(record)
                                                         }}
                                                     />
                                                 )}
@@ -742,9 +786,7 @@ export default function TrainingProgramCatalog() {
                                                                 return
                                                             }
                                                             onOpenCurriculumVersion({
-                                                                curriculumId: (
-                                                                    record as CurriculumVersion
-                                                                ).curriculumId,
+                                                                curriculumId: record.curriculumId,
                                                                 versionId: record?.id,
                                                             })
                                                         }}
@@ -851,6 +893,8 @@ export default function TrainingProgramCatalog() {
                             </div>
                         )}
                         data={data}
+                        scrollable
+                        maxHeight={'calc(100vh - 290px)'}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

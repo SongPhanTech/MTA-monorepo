@@ -44,8 +44,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     relationType,
     titleForm = 'documentFiles',
     multiple = true,
-    accept = '.doc,.docx,.xls,.xlsx,.pdf,.ppt,.txt',
-    text = 'DOC, DOCX, XLSX, XLS, PDF, PPT, TXT',
+    accept = '.doc,.docx,.xls,.xlsx,.pdf,.ppt,.pptx,.txt',
+    text = 'DOC, DOCX, XLSX, XLS, PDF, PPT, PPTX, TXT',
     onUploadingChange,
 }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
@@ -193,9 +193,9 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 multiple={multiple}
                 accept={accept}
                 beforeUpload={(file: File) => {
-                    const isLt5M = file.size / 1024 / 1024 < 5
+                    const isLt5M = file.size / 1024 / 1024 < 50
                     if (!isLt5M) {
-                        message.error(`${file.name} vượt quá 5MB.`)
+                        message.error(`${file.name} vượt quá 50MB.`)
                         return Upload.LIST_IGNORE
                     }
 
@@ -213,8 +213,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                     <Link className="text-[#2563EB] font-medium">Chọn tệp</Link> hoặc kéo và thả tệp
                     vào đây
                 </p>
-                <span className="text-[#4B5563] text-base font-normal">
-                    Định dạng {text} (tối đa 5MB)
+                <span className="text-[#4B5563] text-sm font-normal">
+                    Định dạng {text} (tối đa 50MB)
                 </span>
             </Dragger>
             <div className="flex flex-wrap gap-2 mt-2">

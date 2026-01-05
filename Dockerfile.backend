@@ -3,7 +3,7 @@ ARG PACKAGE
 FROM imbios/bun-node:23-debian AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN corepack enable pnpm
 
 FROM base AS pruner
 ARG PACKAGE
@@ -41,9 +41,8 @@ ARG PACKAGE
 ENV PACKAGE="${PACKAGE}"
 WORKDIR /app
 RUN apt update && apt install -y libssl3
-RUN bun add @opentelemetry/exporter-trace-otlp-http
 # COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
-COPY --from=builder /app/packages/database/generated/prisma-client/*.node /tmp/prisma-engines/
+COPY --from=builder /app/packages/database/generated/prisma-client/*.so.node /tmp/prisma-engines/
 COPY --from=builder /app/apps/backend/${PACKAGE}/dist .
 USER bun
 

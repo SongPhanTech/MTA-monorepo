@@ -479,6 +479,7 @@ exports.Prisma.QuaTrinhCuDiCongTacScalarFieldEnum = {
   chucVuId: 'chucVuId',
   dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
   dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
+  dM_NuocCuDiHocTapId: 'dM_NuocCuDiHocTapId',
   userProfileId: 'userProfileId'
 };
 
@@ -1780,13 +1781,13 @@ exports.Prisma.FixedClassScalarFieldEnum = {
 
 exports.Prisma.CurriculumScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -1798,13 +1799,13 @@ exports.Prisma.CurriculumScalarFieldEnum = {
 
 exports.Prisma.CurriculumVersionScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   shortName: 'shortName',
   englishName: 'englishName',
@@ -2126,7 +2127,8 @@ exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   name: 'name',
   type: 'type',
   trainingFormId: 'trainingFormId',
-  trainingLevelId: 'trainingLevelId'
+  trainingLevelId: 'trainingLevelId',
+  vaiTro: 'vaiTro'
 };
 
 exports.Prisma.PriorityObjectScalarFieldEnum = {
@@ -2885,7 +2887,9 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorId: 'supervisorId',
+  supervisorPaymentId: 'supervisorPaymentId',
   coSupervisorId: 'coSupervisorId',
+  coSupervisorPaymentId: 'coSupervisorPaymentId',
   organizationId: 'organizationId',
   maxStudents: 'maxStudents',
   councilId: 'councilId',
@@ -2953,6 +2957,8 @@ exports.Prisma.ExpertProfileScalarFieldEnum = {
   email: 'email',
   bankAccountNumber: 'bankAccountNumber',
   bankName: 'bankName',
+  projectExpert: 'projectExpert',
+  thesisExpert: 'thesisExpert',
   eligiblePresident: 'eligiblePresident',
   eligibleSecretary: 'eligibleSecretary'
 };
@@ -3055,7 +3061,22 @@ exports.Prisma.DefaultCouncilRolePayAmountScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   role: 'role',
-  amount: 'amount'
+  amount: 'amount',
+  inAcademy: 'inAcademy'
+};
+
+exports.Prisma.DefaultSupervisorPayAmountScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  role: 'role',
+  amount: 'amount',
+  inAcademy: 'inAcademy'
 };
 
 exports.Prisma.PaymentRecordScalarFieldEnum = {
@@ -3071,7 +3092,6 @@ exports.Prisma.PaymentRecordScalarFieldEnum = {
   status: 'status',
   paymentDate: 'paymentDate',
   transactionCode: 'transactionCode',
-  expertId: 'expertId',
   councilMemberId: 'councilMemberId'
 };
 
@@ -3084,8 +3104,6 @@ exports.Prisma.SupervisorPaymentRecordScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  thesisProjectId: 'thesisProjectId',
-  expertId: 'expertId',
   amount: 'amount',
   status: 'status',
   paymentDate: 'paymentDate',
@@ -4769,6 +4787,7 @@ exports.Prisma.QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum = {
   chucVuId: 'chucVuId',
   dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
   dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
+  dM_NuocCuDiHocTapId: 'dM_NuocCuDiHocTapId',
   userProfileId: 'userProfileId'
 };
 
@@ -5587,9 +5606,9 @@ exports.Prisma.FixedClassOrderByRelevanceFieldEnum = {
 
 exports.Prisma.CurriculumOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -5601,9 +5620,9 @@ exports.Prisma.CurriculumOrderByRelevanceFieldEnum = {
 
 exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   shortName: 'shortName',
   englishName: 'englishName',
@@ -5786,7 +5805,8 @@ exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   trainingFormId: 'trainingFormId',
-  trainingLevelId: 'trainingLevelId'
+  trainingLevelId: 'trainingLevelId',
+  vaiTro: 'vaiTro'
 };
 
 exports.Prisma.PriorityObjectOrderByRelevanceFieldEnum = {
@@ -6244,7 +6264,9 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorId: 'supervisorId',
+  supervisorPaymentId: 'supervisorPaymentId',
   coSupervisorId: 'coSupervisorId',
+  coSupervisorPaymentId: 'coSupervisorPaymentId',
   organizationId: 'organizationId',
   councilId: 'councilId',
   roomId: 'roomId',
@@ -6351,13 +6373,19 @@ exports.Prisma.DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy'
 };
 
+exports.Prisma.DefaultSupervisorPayAmountOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy'
+};
+
 exports.Prisma.PaymentRecordOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   transactionCode: 'transactionCode',
-  expertId: 'expertId',
   councilMemberId: 'councilMemberId'
 };
 
@@ -6366,8 +6394,6 @@ exports.Prisma.SupervisorPaymentRecordOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  thesisProjectId: 'thesisProjectId',
-  expertId: 'expertId',
   transactionCode: 'transactionCode'
 };
 
@@ -7329,6 +7355,7 @@ exports.CurriculumVersionType = exports.$Enums.CurriculumVersionType = {
 
 exports.ExamType = exports.$Enums.ExamType = {
   OfflineWritten: 'OfflineWritten',
+  OnlineWritten: 'OnlineWritten',
   Oral: 'Oral',
   Practice: 'Practice',
   Project: 'Project',
@@ -7350,7 +7377,6 @@ exports.EquivalencySide = exports.$Enums.EquivalencySide = {
 };
 
 exports.SubjectRequirementType = exports.$Enums.SubjectRequirementType = {
-  None: 'None',
   Mandatory: 'Mandatory',
   Optional: 'Optional'
 };
@@ -7549,6 +7575,11 @@ exports.CouncilRole = exports.$Enums.CouncilRole = {
   REVIEWER_1: 'REVIEWER_1',
   REVIEWER_2: 'REVIEWER_2',
   MEMBER: 'MEMBER'
+};
+
+exports.SupervisorRole = exports.$Enums.SupervisorRole = {
+  SUPERVISOR: 'SUPERVISOR',
+  CO_SUPERVISOR: 'CO_SUPERVISOR'
 };
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {
@@ -7844,6 +7875,7 @@ exports.Prisma.ModelName = {
   DefenseRecord: 'DefenseRecord',
   LibrarySubmission: 'LibrarySubmission',
   DefaultCouncilRolePayAmount: 'DefaultCouncilRolePayAmount',
+  DefaultSupervisorPayAmount: 'DefaultSupervisorPayAmount',
   PaymentRecord: 'PaymentRecord',
   SupervisorPaymentRecord: 'SupervisorPaymentRecord',
   EvaluationPeriod: 'EvaluationPeriod',

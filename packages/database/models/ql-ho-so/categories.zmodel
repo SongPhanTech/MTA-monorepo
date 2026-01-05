@@ -106,7 +106,9 @@ model DM_TinhTrangDiHocTap extends Base {
 }
 
 model DM_NuocCuDiHocTap extends Base {
-  name String @unique
+  name                String                @unique
+
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
   @@schema("ql-ho-so")
 }
 

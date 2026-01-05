@@ -40,12 +40,10 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    expert: z.record(z.string(), z.unknown()),
     councilMember: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    expertId: z.string(),
     councilMemberId: z.string().nullish(),
 }
 );

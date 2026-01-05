@@ -10,6 +10,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -38,6 +39,11 @@ export default function MonCham() {
             planTrainingDelaySubjects: 0, // Total count of subjects
         },
     }
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
@@ -217,7 +223,15 @@ export default function MonCham() {
                                     align: 'center',
                                     render: (_, record) => {
                                         return (
-                                            <div className="text-left">
+                                            <div
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenDetailSubject({
+                                                        subjectVersionId: record.subjectVersionId,
+                                                    })
+                                                }}
+                                                className="text-left hover:text-primary cursor-pointer"
+                                            >
                                                 {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
                                                     ''}
                                             </div>

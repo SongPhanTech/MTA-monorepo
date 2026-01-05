@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import {
+    AwardIcon,
     BarChart3,
     BinocularsIcon,
     BookOpenCheck,
@@ -26,7 +27,6 @@ import {
     ScrollText,
     Settings,
     User2Icon,
-    AwardIcon,
 } from 'lucide-react'
 import { DANG_KY_HOC_PERMISSION } from '../generated/dang-ky-hoc'
 import { KHAO_THI_PERMISSION } from '../generated/khao-thi'
@@ -643,6 +643,12 @@ const NAVIGATION: NavigationType = {
                 label: 'Thông báo',
                 path: ROUTER_PATH.QL_DAO_TAO.THONG_BAO,
                 description: 'Quản lý thông báo đào tạo',
+            },
+            {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THANH_TOAN,
+                label: 'Cấu hình thanh toán',
+                path: ROUTER_PATH.QL_DAO_TAO.CAU_HINH_THANH_TOAN,
+                description: 'Quản lý cấu hình thanh toán',
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,

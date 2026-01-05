@@ -29,6 +29,10 @@ const baseSchemaWithoutDefaults = z.object({
     name: z.string(),
 }
 ).strict();
+const relationSchema = z.object({
+    quaTrinhCuDiCongTac: z.array(z.unknown()).optional(),
+}
+);
 
 /**
  * `DM_NuocCuDiHocTap` schema excluding foreign keys and relations.
@@ -39,7 +43,7 @@ export const DM_NuocCuDiHocTapScalarSchema = baseSchema;
 /**
  * `DM_NuocCuDiHocTap` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DM_NuocCuDiHocTapSchema = DM_NuocCuDiHocTapScalarSchema;
+export const DM_NuocCuDiHocTapSchema = DM_NuocCuDiHocTapScalarSchema.merge(relationSchema.partial());
 
 
 /**

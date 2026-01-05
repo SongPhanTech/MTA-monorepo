@@ -160,6 +160,7 @@ export * from './council-member';
 export * from './defense-record';
 export * from './library-submission';
 export * from './default-council-role-pay-amount';
+export * from './default-supervisor-pay-amount';
 export * from './payment-record';
 export * from './supervisor-payment-record';
 export * from './evaluation-period';

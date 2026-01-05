@@ -55,7 +55,16 @@ const PutUpdatePaymentStatus = () => {
                 id: { in: paymentRecordIds },
             },
             include: {
-                expert: true,
+                thesisProjects: {
+                    include: {
+                        supervisor: true,
+                    },
+                },
+                coThesisProjects: {
+                    include: {
+                        coSupervisor: true,
+                    },
+                },
             },
         },
         {
@@ -152,7 +161,9 @@ const PutUpdatePaymentStatus = () => {
                             title: 'Tên chuyên gia',
                             width: 150,
                             align: 'center',
-                            render: (_, record) => record.expert.name,
+                            render: (_, record) =>
+                                record.thesisProjects?.supervisor.name ||
+                                record.coThesisProjects?.coSupervisor.name,
                         },
                         {
                             title: 'Số tiền thanh toán',

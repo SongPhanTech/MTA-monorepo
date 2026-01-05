@@ -1,28 +1,27 @@
+import TreeSelect from '@/components/commons/tree-select'
 import { queryClient } from '@api/index'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import Tabs from '@components/commons/tabar'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import { type DocumentFile, type SubjectVersion, SubjectVersionType } from '@workspace/db/client'
 import {
     useCreateSubjectVersion,
     useCreateSubjectVersionHistory,
     useFindManySubject,
-    useFindManyTrainingObjectType,
     useFindUniqueSubject,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message, Radio, Row, Switch } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import DocumentPaths from '@components/commons/documentPaths'
-import Tabs from '@components/commons/tabar'
-import { useExamTypeOptions } from '@hooks/examType'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
-import TreeSelect from '@/components/commons/tree-select'
 
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
@@ -41,7 +40,7 @@ export enum HistorySubjectVersionType {
 }
 
 const subjectVersionTypeOptions = [
-    { label: 'Môn thường', value: SubjectVersionType.Normal },
+    { label: 'Lý thuyết', value: SubjectVersionType.Normal },
     { label: 'Thí nghiệm/Thực hành', value: SubjectVersionType.Practice },
     { label: 'Thực tập', value: SubjectVersionType.Internship },
     { label: 'Chuyên đề nghiên cứu', value: SubjectVersionType.Research },
@@ -61,7 +60,6 @@ const PutVersionSubjectModal = () => {
         onClose: form.resetFields,
     })
 
-    const subjectId = input?.subjectId
     const subjectVersionId = input?.subjectVersionId
     const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
     const { mutateAsync: createSubjectVersionHistory } = useCreateSubjectVersionHistory()
@@ -73,10 +71,13 @@ const PutVersionSubjectModal = () => {
                 coRequisiteSubject: true,
                 documentFiles: true,
                 studentSubjectScore: { take: 1 },
+                subject: true,
             },
         },
         { enabled: !!subjectVersionId }
     )
+
+    const subjectId = input?.subjectId || subjectVersion?.subjectId || ''
 
     const isScored = useMemo(
         () => !!subjectVersion?.studentSubjectScore.length,
@@ -104,7 +105,7 @@ const PutVersionSubjectModal = () => {
         },
     })
 
-    const { data: trainingObjectType = [] } = useFindManyTrainingObjectType({
+    const { data: trainingObjectType = [] } = useFindManyTrainingObjectTypePermission({
         select: { id: true, name: true },
     })
 
@@ -117,7 +118,7 @@ const PutVersionSubjectModal = () => {
                 selectable: false,
                 children:
                     subject.subjectVersion.map((version: SubjectVersion) => ({
-                        title: version.name,
+                        title: [version.code,version.name].join(' - '),
                         value: version.id,
                     })) || [],
             })) || []
@@ -437,8 +438,8 @@ const PutVersionSubjectModal = () => {
             maskClosable={true}
             title={
                 subjectVersionId
-                    ? `Sửa phiên bản môn học - ${subject?.name}`
-                    : `Thêm phiên bản môn học - ${subject?.name}`
+                    ? `Sửa phiên bản môn học - ${subject?.name ?? ''}`
+                    : `Thêm phiên bản môn học - ${subject?.name ?? ''}`
             }
             className="w-[80vw]"
             okButtonProps={{ disabled: input?.isLocked }}
@@ -451,7 +452,7 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={4}>
-                    <FormItem form={form} name="codeTkb" label="Mã TKB" required>
+                    <FormItem form={form} name="codeTkb" label="Mã TKB">
                         <Input placeholder="Mã TKB" readOnly={input?.isLocked} />
                     </FormItem>
                 </Col>

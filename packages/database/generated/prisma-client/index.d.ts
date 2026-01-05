@@ -796,6 +796,11 @@ export type LibrarySubmission = $Result.DefaultSelection<Prisma.$LibrarySubmissi
  */
 export type DefaultCouncilRolePayAmount = $Result.DefaultSelection<Prisma.$DefaultCouncilRolePayAmountPayload>
 /**
+ * Model DefaultSupervisorPayAmount
+ * 
+ */
+export type DefaultSupervisorPayAmount = $Result.DefaultSelection<Prisma.$DefaultSupervisorPayAmountPayload>
+/**
  * Model PaymentRecord
  * Quản lý việc thanh toán hội đồng
  */
@@ -1394,6 +1399,7 @@ export type CurriculumVersionType = (typeof CurriculumVersionType)[keyof typeof 
 
 export const ExamType: {
   OfflineWritten: 'OfflineWritten',
+  OnlineWritten: 'OnlineWritten',
   Oral: 'Oral',
   Practice: 'Practice',
   Project: 'Project',
@@ -1424,7 +1430,6 @@ export type EquivalencySide = (typeof EquivalencySide)[keyof typeof EquivalencyS
 
 
 export const SubjectRequirementType: {
-  None: 'None',
   Mandatory: 'Mandatory',
   Optional: 'Optional'
 };
@@ -1668,6 +1673,14 @@ export const CouncilRole: {
 };
 
 export type CouncilRole = (typeof CouncilRole)[keyof typeof CouncilRole]
+
+
+export const SupervisorRole: {
+  SUPERVISOR: 'SUPERVISOR',
+  CO_SUPERVISOR: 'CO_SUPERVISOR'
+};
+
+export type SupervisorRole = (typeof SupervisorRole)[keyof typeof SupervisorRole]
 
 
 export const PaymentStatus: {
@@ -2052,6 +2065,10 @@ export const CouncilProposalStatus: typeof $Enums.CouncilProposalStatus
 export type CouncilRole = $Enums.CouncilRole
 
 export const CouncilRole: typeof $Enums.CouncilRole
+
+export type SupervisorRole = $Enums.SupervisorRole
+
+export const SupervisorRole: typeof $Enums.SupervisorRole
 
 export type PaymentStatus = $Enums.PaymentStatus
 
@@ -3829,6 +3846,16 @@ export class PrismaClient<
   get defaultCouncilRolePayAmount(): Prisma.DefaultCouncilRolePayAmountDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.defaultSupervisorPayAmount`: Exposes CRUD operations for the **DefaultSupervisorPayAmount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DefaultSupervisorPayAmounts
+    * const defaultSupervisorPayAmounts = await prisma.defaultSupervisorPayAmount.findMany()
+    * ```
+    */
+  get defaultSupervisorPayAmount(): Prisma.DefaultSupervisorPayAmountDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.paymentRecord`: Exposes CRUD operations for the **PaymentRecord** model.
     * Example usage:
     * ```ts
@@ -5393,6 +5420,7 @@ export namespace Prisma {
     DefenseRecord: 'DefenseRecord',
     LibrarySubmission: 'LibrarySubmission',
     DefaultCouncilRolePayAmount: 'DefaultCouncilRolePayAmount',
+    DefaultSupervisorPayAmount: 'DefaultSupervisorPayAmount',
     PaymentRecord: 'PaymentRecord',
     SupervisorPaymentRecord: 'SupervisorPaymentRecord',
     EvaluationPeriod: 'EvaluationPeriod',
@@ -5508,7 +5536,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -17056,6 +17084,80 @@ export namespace Prisma {
           }
         }
       }
+      DefaultSupervisorPayAmount: {
+        payload: Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>
+        fields: Prisma.DefaultSupervisorPayAmountFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DefaultSupervisorPayAmountFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DefaultSupervisorPayAmountFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+          }
+          findFirst: {
+            args: Prisma.DefaultSupervisorPayAmountFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DefaultSupervisorPayAmountFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+          }
+          findMany: {
+            args: Prisma.DefaultSupervisorPayAmountFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>[]
+          }
+          create: {
+            args: Prisma.DefaultSupervisorPayAmountCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+          }
+          createMany: {
+            args: Prisma.DefaultSupervisorPayAmountCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DefaultSupervisorPayAmountCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>[]
+          }
+          delete: {
+            args: Prisma.DefaultSupervisorPayAmountDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+          }
+          update: {
+            args: Prisma.DefaultSupervisorPayAmountUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+          }
+          deleteMany: {
+            args: Prisma.DefaultSupervisorPayAmountDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DefaultSupervisorPayAmountUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DefaultSupervisorPayAmountUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>[]
+          }
+          upsert: {
+            args: Prisma.DefaultSupervisorPayAmountUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DefaultSupervisorPayAmountPayload>
+          }
+          aggregate: {
+            args: Prisma.DefaultSupervisorPayAmountAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDefaultSupervisorPayAmount>
+          }
+          groupBy: {
+            args: Prisma.DefaultSupervisorPayAmountGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DefaultSupervisorPayAmountGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DefaultSupervisorPayAmountCountArgs<ExtArgs>
+            result: $Utils.Optional<DefaultSupervisorPayAmountCountAggregateOutputType> | number
+          }
+        }
+      }
       PaymentRecord: {
         payload: Prisma.$PaymentRecordPayload<ExtArgs>
         fields: Prisma.PaymentRecordFieldRefs
@@ -24478,6 +24580,7 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordOmit
     librarySubmission?: LibrarySubmissionOmit
     defaultCouncilRolePayAmount?: DefaultCouncilRolePayAmountOmit
+    defaultSupervisorPayAmount?: DefaultSupervisorPayAmountOmit
     paymentRecord?: PaymentRecordOmit
     supervisorPaymentRecord?: SupervisorPaymentRecordOmit
     evaluationPeriod?: EvaluationPeriodOmit
@@ -29199,13 +29302,11 @@ export namespace Prisma {
   export type ThesisProjectCountOutputType = {
     decisions: number
     registrations: number
-    supervisorPayments: number
   }
 
   export type ThesisProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     decisions?: boolean | ThesisProjectCountOutputTypeCountDecisionsArgs
     registrations?: boolean | ThesisProjectCountOutputTypeCountRegistrationsArgs
-    supervisorPayments?: boolean | ThesisProjectCountOutputTypeCountSupervisorPaymentsArgs
   }
 
   // Custom InputTypes
@@ -29231,13 +29332,6 @@ export namespace Prisma {
    */
   export type ThesisProjectCountOutputTypeCountRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentThesisRegistrationWhereInput
-  }
-
-  /**
-   * ThesisProjectCountOutputType without action
-   */
-  export type ThesisProjectCountOutputTypeCountSupervisorPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SupervisorPaymentRecordWhereInput
   }
 
 
@@ -29282,8 +29376,6 @@ export namespace Prisma {
     coSupervisedTheses: number
     subjectClass: number
     councilMemberships: number
-    payments: number
-    supervisorPaymentRecord: number
   }
 
   export type ExpertProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29292,8 +29384,6 @@ export namespace Prisma {
     coSupervisedTheses?: boolean | ExpertProfileCountOutputTypeCountCoSupervisedThesesArgs
     subjectClass?: boolean | ExpertProfileCountOutputTypeCountSubjectClassArgs
     councilMemberships?: boolean | ExpertProfileCountOutputTypeCountCouncilMembershipsArgs
-    payments?: boolean | ExpertProfileCountOutputTypeCountPaymentsArgs
-    supervisorPaymentRecord?: boolean | ExpertProfileCountOutputTypeCountSupervisorPaymentRecordArgs
   }
 
   // Custom InputTypes
@@ -29340,20 +29430,6 @@ export namespace Prisma {
    */
   export type ExpertProfileCountOutputTypeCountCouncilMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouncilMemberWhereInput
-  }
-
-  /**
-   * ExpertProfileCountOutputType without action
-   */
-  export type ExpertProfileCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PaymentRecordWhereInput
-  }
-
-  /**
-   * ExpertProfileCountOutputType without action
-   */
-  export type ExpertProfileCountOutputTypeCountSupervisorPaymentRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SupervisorPaymentRecordWhereInput
   }
 
 
@@ -29487,6 +29563,46 @@ export namespace Prisma {
    */
   export type LibrarySubmissionCountOutputTypeCountDocumentFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DocumentFileWhereInput
+  }
+
+
+  /**
+   * Count Type SupervisorPaymentRecordCountOutputType
+   */
+
+  export type SupervisorPaymentRecordCountOutputType = {
+    thesisProjects: number
+    coThesisProjects: number
+  }
+
+  export type SupervisorPaymentRecordCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    thesisProjects?: boolean | SupervisorPaymentRecordCountOutputTypeCountThesisProjectsArgs
+    coThesisProjects?: boolean | SupervisorPaymentRecordCountOutputTypeCountCoThesisProjectsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SupervisorPaymentRecordCountOutputType without action
+   */
+  export type SupervisorPaymentRecordCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupervisorPaymentRecordCountOutputType
+     */
+    select?: SupervisorPaymentRecordCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SupervisorPaymentRecordCountOutputType without action
+   */
+  export type SupervisorPaymentRecordCountOutputTypeCountThesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ThesisProjectWhereInput
+  }
+
+  /**
+   * SupervisorPaymentRecordCountOutputType without action
+   */
+  export type SupervisorPaymentRecordCountOutputTypeCountCoThesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ThesisProjectWhereInput
   }
 
 
@@ -31730,6 +31846,37 @@ export namespace Prisma {
    */
   export type DM_TinhTrangDiHocTapCountOutputTypeCountQuaTrinhCuDiDaoTaoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QuaTrinhCuDiDaoTaoWhereInput
+  }
+
+
+  /**
+   * Count Type DM_NuocCuDiHocTapCountOutputType
+   */
+
+  export type DM_NuocCuDiHocTapCountOutputType = {
+    quaTrinhCuDiCongTac: number
+  }
+
+  export type DM_NuocCuDiHocTapCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    quaTrinhCuDiCongTac?: boolean | DM_NuocCuDiHocTapCountOutputTypeCountQuaTrinhCuDiCongTacArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DM_NuocCuDiHocTapCountOutputType without action
+   */
+  export type DM_NuocCuDiHocTapCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_NuocCuDiHocTapCountOutputType
+     */
+    select?: DM_NuocCuDiHocTapCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DM_NuocCuDiHocTapCountOutputType without action
+   */
+  export type DM_NuocCuDiHocTapCountOutputTypeCountQuaTrinhCuDiCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuaTrinhCuDiCongTacWhereInput
   }
 
 
@@ -52667,6 +52814,7 @@ export namespace Prisma {
     chucVuId: string | null
     dM_TinhTrangCongTacId: string | null
     dM_LoaiTinhTrangCongTacId: string | null
+    dM_NuocCuDiHocTapId: string | null
     userProfileId: string | null
   }
 
@@ -52685,6 +52833,7 @@ export namespace Prisma {
     chucVuId: string | null
     dM_TinhTrangCongTacId: string | null
     dM_LoaiTinhTrangCongTacId: string | null
+    dM_NuocCuDiHocTapId: string | null
     userProfileId: string | null
   }
 
@@ -52703,6 +52852,7 @@ export namespace Prisma {
     chucVuId: number
     dM_TinhTrangCongTacId: number
     dM_LoaiTinhTrangCongTacId: number
+    dM_NuocCuDiHocTapId: number
     userProfileId: number
     _all: number
   }
@@ -52723,6 +52873,7 @@ export namespace Prisma {
     chucVuId?: true
     dM_TinhTrangCongTacId?: true
     dM_LoaiTinhTrangCongTacId?: true
+    dM_NuocCuDiHocTapId?: true
     userProfileId?: true
   }
 
@@ -52741,6 +52892,7 @@ export namespace Prisma {
     chucVuId?: true
     dM_TinhTrangCongTacId?: true
     dM_LoaiTinhTrangCongTacId?: true
+    dM_NuocCuDiHocTapId?: true
     userProfileId?: true
   }
 
@@ -52759,6 +52911,7 @@ export namespace Prisma {
     chucVuId?: true
     dM_TinhTrangCongTacId?: true
     dM_LoaiTinhTrangCongTacId?: true
+    dM_NuocCuDiHocTapId?: true
     userProfileId?: true
     _all?: true
   }
@@ -52850,6 +53003,7 @@ export namespace Prisma {
     chucVuId: string
     dM_TinhTrangCongTacId: string | null
     dM_LoaiTinhTrangCongTacId: string | null
+    dM_NuocCuDiHocTapId: string | null
     userProfileId: string
     _count: QuaTrinhCuDiCongTacCountAggregateOutputType | null
     _min: QuaTrinhCuDiCongTacMinAggregateOutputType | null
@@ -52885,10 +53039,12 @@ export namespace Prisma {
     chucVuId?: boolean
     dM_TinhTrangCongTacId?: boolean
     dM_LoaiTinhTrangCongTacId?: boolean
+    dM_NuocCuDiHocTapId?: boolean
     userProfileId?: boolean
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
     dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
     dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
+    dM_NuocCuDiHocTap?: boolean | QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCuDiCongTac"]>
 
@@ -52907,10 +53063,12 @@ export namespace Prisma {
     chucVuId?: boolean
     dM_TinhTrangCongTacId?: boolean
     dM_LoaiTinhTrangCongTacId?: boolean
+    dM_NuocCuDiHocTapId?: boolean
     userProfileId?: boolean
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
     dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
     dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
+    dM_NuocCuDiHocTap?: boolean | QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCuDiCongTac"]>
 
@@ -52929,10 +53087,12 @@ export namespace Prisma {
     chucVuId?: boolean
     dM_TinhTrangCongTacId?: boolean
     dM_LoaiTinhTrangCongTacId?: boolean
+    dM_NuocCuDiHocTapId?: boolean
     userProfileId?: boolean
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
     dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
     dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
+    dM_NuocCuDiHocTap?: boolean | QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCuDiCongTac"]>
 
@@ -52951,26 +53111,30 @@ export namespace Prisma {
     chucVuId?: boolean
     dM_TinhTrangCongTacId?: boolean
     dM_LoaiTinhTrangCongTacId?: boolean
+    dM_NuocCuDiHocTapId?: boolean
     userProfileId?: boolean
   }
 
-  export type QuaTrinhCuDiCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "tuThangNam" | "denThangNam" | "donVi" | "chucVuId" | "dM_TinhTrangCongTacId" | "dM_LoaiTinhTrangCongTacId" | "userProfileId", ExtArgs["result"]["quaTrinhCuDiCongTac"]>
+  export type QuaTrinhCuDiCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "tuThangNam" | "denThangNam" | "donVi" | "chucVuId" | "dM_TinhTrangCongTacId" | "dM_LoaiTinhTrangCongTacId" | "dM_NuocCuDiHocTapId" | "userProfileId", ExtArgs["result"]["quaTrinhCuDiCongTac"]>
   export type QuaTrinhCuDiCongTacInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
     dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
     dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
+    dM_NuocCuDiHocTap?: boolean | QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
   export type QuaTrinhCuDiCongTacIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
     dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
     dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
+    dM_NuocCuDiHocTap?: boolean | QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
   export type QuaTrinhCuDiCongTacIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
     dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
     dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
+    dM_NuocCuDiHocTap?: boolean | QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
 
@@ -52980,6 +53144,7 @@ export namespace Prisma {
       chucVu: Prisma.$DM_ChucVuPayload<ExtArgs>
       dM_TinhTrangCongTac: Prisma.$DM_TinhTrangCongTacPayload<ExtArgs> | null
       dM_LoaiTinhTrangCongTac: Prisma.$DM_LoaiTinhTrangCongTacPayload<ExtArgs> | null
+      dM_NuocCuDiHocTap: Prisma.$DM_NuocCuDiHocTapPayload<ExtArgs> | null
       userProfile: Prisma.$UserProfilePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -52997,6 +53162,7 @@ export namespace Prisma {
       chucVuId: string
       dM_TinhTrangCongTacId: string | null
       dM_LoaiTinhTrangCongTacId: string | null
+      dM_NuocCuDiHocTapId: string | null
       userProfileId: string
     }, ExtArgs["result"]["quaTrinhCuDiCongTac"]>
     composites: {}
@@ -53395,6 +53561,7 @@ export namespace Prisma {
     chucVu<T extends DM_ChucVuDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVuDefaultArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     dM_TinhTrangCongTac<T extends QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>>): Prisma__DM_TinhTrangCongTacClient<$Result.GetResult<Prisma.$DM_TinhTrangCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     dM_LoaiTinhTrangCongTac<T extends QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>>): Prisma__DM_LoaiTinhTrangCongTacClient<$Result.GetResult<Prisma.$DM_LoaiTinhTrangCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    dM_NuocCuDiHocTap<T extends QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs>>): Prisma__DM_NuocCuDiHocTapClient<$Result.GetResult<Prisma.$DM_NuocCuDiHocTapPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -53439,6 +53606,7 @@ export namespace Prisma {
     readonly chucVuId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>
     readonly dM_TinhTrangCongTacId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>
     readonly dM_LoaiTinhTrangCongTacId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>
+    readonly dM_NuocCuDiHocTapId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>
     readonly userProfileId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>
   }
     
@@ -53871,6 +54039,25 @@ export namespace Prisma {
      */
     include?: DM_LoaiTinhTrangCongTacInclude<ExtArgs> | null
     where?: DM_LoaiTinhTrangCongTacWhereInput
+  }
+
+  /**
+   * QuaTrinhCuDiCongTac.dM_NuocCuDiHocTap
+   */
+  export type QuaTrinhCuDiCongTac$dM_NuocCuDiHocTapArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_NuocCuDiHocTap
+     */
+    select?: DM_NuocCuDiHocTapSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_NuocCuDiHocTap
+     */
+    omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
+    where?: DM_NuocCuDiHocTapWhereInput
   }
 
   /**
@@ -144571,13 +144758,13 @@ export namespace Prisma {
 
   export type CurriculumMinAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
+    code: string | null
     name: string | null
     englishName: string | null
     managementOrganizationId: string | null
@@ -144589,13 +144776,13 @@ export namespace Prisma {
 
   export type CurriculumMaxAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
+    code: string | null
     name: string | null
     englishName: string | null
     managementOrganizationId: string | null
@@ -144607,13 +144794,13 @@ export namespace Prisma {
 
   export type CurriculumCountAggregateOutputType = {
     id: number
-    code: number
     active: number
     description: number
     deletedAt: number
     createdAt: number
     updatedAt: number
     createdBy: number
+    code: number
     name: number
     englishName: number
     managementOrganizationId: number
@@ -144627,13 +144814,13 @@ export namespace Prisma {
 
   export type CurriculumMinAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     name?: true
     englishName?: true
     managementOrganizationId?: true
@@ -144645,13 +144832,13 @@ export namespace Prisma {
 
   export type CurriculumMaxAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     name?: true
     englishName?: true
     managementOrganizationId?: true
@@ -144663,13 +144850,13 @@ export namespace Prisma {
 
   export type CurriculumCountAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     name?: true
     englishName?: true
     managementOrganizationId?: true
@@ -144754,13 +144941,13 @@ export namespace Prisma {
 
   export type CurriculumGroupByOutputType = {
     id: string
-    code: string | null
     active: boolean
     description: string | null
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     createdBy: string | null
+    code: string | null
     name: string
     englishName: string | null
     managementOrganizationId: string
@@ -144789,13 +144976,13 @@ export namespace Prisma {
 
   export type CurriculumSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     name?: boolean
     englishName?: boolean
     managementOrganizationId?: boolean
@@ -144813,13 +145000,13 @@ export namespace Prisma {
 
   export type CurriculumSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     name?: boolean
     englishName?: boolean
     managementOrganizationId?: boolean
@@ -144834,13 +145021,13 @@ export namespace Prisma {
 
   export type CurriculumSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     name?: boolean
     englishName?: boolean
     managementOrganizationId?: boolean
@@ -144855,13 +145042,13 @@ export namespace Prisma {
 
   export type CurriculumSelectScalar = {
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     name?: boolean
     englishName?: boolean
     managementOrganizationId?: boolean
@@ -144871,7 +145058,7 @@ export namespace Prisma {
     renderPath?: boolean
   }
 
-  export type CurriculumOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "englishName" | "managementOrganizationId" | "trainingMajorId" | "trainingObjectTypeId" | "information" | "renderPath", ExtArgs["result"]["curriculum"]>
+  export type CurriculumOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "englishName" | "managementOrganizationId" | "trainingMajorId" | "trainingObjectTypeId" | "information" | "renderPath", ExtArgs["result"]["curriculum"]>
   export type CurriculumInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     managementOrganization?: boolean | DM_DonViDefaultArgs<ExtArgs>
     trainingMajor?: boolean | TrainingMajorDefaultArgs<ExtArgs>
@@ -144902,13 +145089,13 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      code: string | null
       active: boolean
       description: string | null
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
       createdBy: string | null
+      code: string | null
       name: string
       englishName: string | null
       managementOrganizationId: string
@@ -145345,13 +145532,13 @@ export namespace Prisma {
    */
   interface CurriculumFieldRefs {
     readonly id: FieldRef<"Curriculum", 'String'>
-    readonly code: FieldRef<"Curriculum", 'String'>
     readonly active: FieldRef<"Curriculum", 'Boolean'>
     readonly description: FieldRef<"Curriculum", 'String'>
     readonly deletedAt: FieldRef<"Curriculum", 'DateTime'>
     readonly createdAt: FieldRef<"Curriculum", 'DateTime'>
     readonly updatedAt: FieldRef<"Curriculum", 'DateTime'>
     readonly createdBy: FieldRef<"Curriculum", 'String'>
+    readonly code: FieldRef<"Curriculum", 'String'>
     readonly name: FieldRef<"Curriculum", 'String'>
     readonly englishName: FieldRef<"Curriculum", 'String'>
     readonly managementOrganizationId: FieldRef<"Curriculum", 'String'>
@@ -145851,13 +146038,13 @@ export namespace Prisma {
 
   export type CurriculumVersionMinAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
+    code: string | null
     name: string | null
     shortName: string | null
     englishName: string | null
@@ -145890,13 +146077,13 @@ export namespace Prisma {
 
   export type CurriculumVersionMaxAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
+    code: string | null
     name: string | null
     shortName: string | null
     englishName: string | null
@@ -145929,13 +146116,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCountAggregateOutputType = {
     id: number
-    code: number
     active: number
     description: number
     deletedAt: number
     createdAt: number
     updatedAt: number
     createdBy: number
+    code: number
     name: number
     shortName: number
     englishName: number
@@ -145986,13 +146173,13 @@ export namespace Prisma {
 
   export type CurriculumVersionMinAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     name?: true
     shortName?: true
     englishName?: true
@@ -146025,13 +146212,13 @@ export namespace Prisma {
 
   export type CurriculumVersionMaxAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     name?: true
     shortName?: true
     englishName?: true
@@ -146064,13 +146251,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCountAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     name?: true
     shortName?: true
     englishName?: true
@@ -146190,13 +146377,13 @@ export namespace Prisma {
 
   export type CurriculumVersionGroupByOutputType = {
     id: string
-    code: string | null
     active: boolean
     description: string | null
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     createdBy: string | null
+    code: string | null
     name: string
     shortName: string | null
     englishName: string | null
@@ -146248,13 +146435,13 @@ export namespace Prisma {
 
   export type CurriculumVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     name?: boolean
     shortName?: boolean
     englishName?: boolean
@@ -146301,13 +146488,13 @@ export namespace Prisma {
 
   export type CurriculumVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     name?: boolean
     shortName?: boolean
     englishName?: boolean
@@ -146347,13 +146534,13 @@ export namespace Prisma {
 
   export type CurriculumVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     name?: boolean
     shortName?: boolean
     englishName?: boolean
@@ -146393,13 +146580,13 @@ export namespace Prisma {
 
   export type CurriculumVersionSelectScalar = {
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     name?: boolean
     shortName?: boolean
     englishName?: boolean
@@ -146430,7 +146617,7 @@ export namespace Prisma {
     renderPath?: boolean
   }
 
-  export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>
+  export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>
   export type CurriculumVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
@@ -146485,13 +146672,13 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      code: string | null
       active: boolean
       description: string | null
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
       createdBy: string | null
+      code: string | null
       name: string
       shortName: string | null
       englishName: string | null
@@ -146957,13 +147144,13 @@ export namespace Prisma {
    */
   interface CurriculumVersionFieldRefs {
     readonly id: FieldRef<"CurriculumVersion", 'String'>
-    readonly code: FieldRef<"CurriculumVersion", 'String'>
     readonly active: FieldRef<"CurriculumVersion", 'Boolean'>
     readonly description: FieldRef<"CurriculumVersion", 'String'>
     readonly deletedAt: FieldRef<"CurriculumVersion", 'DateTime'>
     readonly createdAt: FieldRef<"CurriculumVersion", 'DateTime'>
     readonly updatedAt: FieldRef<"CurriculumVersion", 'DateTime'>
     readonly createdBy: FieldRef<"CurriculumVersion", 'String'>
+    readonly code: FieldRef<"CurriculumVersion", 'String'>
     readonly name: FieldRef<"CurriculumVersion", 'String'>
     readonly shortName: FieldRef<"CurriculumVersion", 'String'>
     readonly englishName: FieldRef<"CurriculumVersion", 'String'>
@@ -166393,6 +166580,7 @@ export namespace Prisma {
     type: number
     trainingFormId: number
     trainingLevelId: number
+    vaiTro: number
     _all: number
   }
 
@@ -166440,6 +166628,7 @@ export namespace Prisma {
     type?: true
     trainingFormId?: true
     trainingLevelId?: true
+    vaiTro?: true
     _all?: true
   }
 
@@ -166528,6 +166717,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId: string | null
     trainingLevelId: string | null
+    vaiTro: string[]
     _count: TrainingObjectTypeCountAggregateOutputType | null
     _min: TrainingObjectTypeMinAggregateOutputType | null
     _max: TrainingObjectTypeMaxAggregateOutputType | null
@@ -166560,6 +166750,7 @@ export namespace Prisma {
     type?: boolean
     trainingFormId?: boolean
     trainingLevelId?: boolean
+    vaiTro?: boolean
     trainingForm?: boolean | TrainingObjectType$trainingFormArgs<ExtArgs>
     trainingLevel?: boolean | TrainingObjectType$trainingLevelArgs<ExtArgs>
     trainingCourse?: boolean | TrainingObjectType$trainingCourseArgs<ExtArgs>
@@ -166589,6 +166780,7 @@ export namespace Prisma {
     type?: boolean
     trainingFormId?: boolean
     trainingLevelId?: boolean
+    vaiTro?: boolean
     trainingForm?: boolean | TrainingObjectType$trainingFormArgs<ExtArgs>
     trainingLevel?: boolean | TrainingObjectType$trainingLevelArgs<ExtArgs>
   }, ExtArgs["result"]["trainingObjectType"]>
@@ -166606,6 +166798,7 @@ export namespace Prisma {
     type?: boolean
     trainingFormId?: boolean
     trainingLevelId?: boolean
+    vaiTro?: boolean
     trainingForm?: boolean | TrainingObjectType$trainingFormArgs<ExtArgs>
     trainingLevel?: boolean | TrainingObjectType$trainingLevelArgs<ExtArgs>
   }, ExtArgs["result"]["trainingObjectType"]>
@@ -166623,9 +166816,10 @@ export namespace Prisma {
     type?: boolean
     trainingFormId?: boolean
     trainingLevelId?: boolean
+    vaiTro?: boolean
   }
 
-  export type TrainingObjectTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "type" | "trainingFormId" | "trainingLevelId", ExtArgs["result"]["trainingObjectType"]>
+  export type TrainingObjectTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "type" | "trainingFormId" | "trainingLevelId" | "vaiTro", ExtArgs["result"]["trainingObjectType"]>
   export type TrainingObjectTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingForm?: boolean | TrainingObjectType$trainingFormArgs<ExtArgs>
     trainingLevel?: boolean | TrainingObjectType$trainingLevelArgs<ExtArgs>
@@ -166681,6 +166875,7 @@ export namespace Prisma {
       type: $Enums.TrainingObjectTypes
       trainingFormId: string | null
       trainingLevelId: string | null
+      vaiTro: string[]
     }, ExtArgs["result"]["trainingObjectType"]>
     composites: {}
   }
@@ -167129,6 +167324,7 @@ export namespace Prisma {
     readonly type: FieldRef<"TrainingObjectType", 'TrainingObjectTypes'>
     readonly trainingFormId: FieldRef<"TrainingObjectType", 'String'>
     readonly trainingLevelId: FieldRef<"TrainingObjectType", 'String'>
+    readonly vaiTro: FieldRef<"TrainingObjectType", 'String[]'>
   }
     
 
@@ -221027,7 +221223,9 @@ export namespace Prisma {
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorId: string | null
+    supervisorPaymentId: string | null
     coSupervisorId: string | null
+    coSupervisorPaymentId: string | null
     organizationId: string | null
     maxStudents: number | null
     councilId: string | null
@@ -221065,7 +221263,9 @@ export namespace Prisma {
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorId: string | null
+    supervisorPaymentId: string | null
     coSupervisorId: string | null
+    coSupervisorPaymentId: string | null
     organizationId: string | null
     maxStudents: number | null
     councilId: string | null
@@ -221103,7 +221303,9 @@ export namespace Prisma {
     subjectClassId: number
     thesisSessionId: number
     supervisorId: number
+    supervisorPaymentId: number
     coSupervisorId: number
+    coSupervisorPaymentId: number
     organizationId: number
     maxStudents: number
     councilId: number
@@ -221151,7 +221353,9 @@ export namespace Prisma {
     subjectClassId?: true
     thesisSessionId?: true
     supervisorId?: true
+    supervisorPaymentId?: true
     coSupervisorId?: true
+    coSupervisorPaymentId?: true
     organizationId?: true
     maxStudents?: true
     councilId?: true
@@ -221189,7 +221393,9 @@ export namespace Prisma {
     subjectClassId?: true
     thesisSessionId?: true
     supervisorId?: true
+    supervisorPaymentId?: true
     coSupervisorId?: true
+    coSupervisorPaymentId?: true
     organizationId?: true
     maxStudents?: true
     councilId?: true
@@ -221227,7 +221433,9 @@ export namespace Prisma {
     subjectClassId?: true
     thesisSessionId?: true
     supervisorId?: true
+    supervisorPaymentId?: true
     coSupervisorId?: true
+    coSupervisorPaymentId?: true
     organizationId?: true
     maxStudents?: true
     councilId?: true
@@ -221352,7 +221560,9 @@ export namespace Prisma {
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorId: string | null
+    supervisorPaymentId: string | null
     coSupervisorId: string | null
+    coSupervisorPaymentId: string | null
     organizationId: string | null
     maxStudents: number | null
     councilId: string | null
@@ -221409,7 +221619,9 @@ export namespace Prisma {
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorId?: boolean
+    supervisorPaymentId?: boolean
     coSupervisorId?: boolean
+    coSupervisorPaymentId?: boolean
     organizationId?: boolean
     maxStudents?: boolean
     councilId?: boolean
@@ -221423,7 +221635,9 @@ export namespace Prisma {
     subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
     thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
     supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+    supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
     coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+    coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
     organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
     council?: boolean | ThesisProject$councilArgs<ExtArgs>
     room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -221432,7 +221646,6 @@ export namespace Prisma {
     librarySubmission?: boolean | ThesisProject$librarySubmissionArgs<ExtArgs>
     decisions?: boolean | ThesisProject$decisionsArgs<ExtArgs>
     registrations?: boolean | ThesisProject$registrationsArgs<ExtArgs>
-    supervisorPayments?: boolean | ThesisProject$supervisorPaymentsArgs<ExtArgs>
     _count?: boolean | ThesisProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["thesisProject"]>
 
@@ -221461,7 +221674,9 @@ export namespace Prisma {
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorId?: boolean
+    supervisorPaymentId?: boolean
     coSupervisorId?: boolean
+    coSupervisorPaymentId?: boolean
     organizationId?: boolean
     maxStudents?: boolean
     councilId?: boolean
@@ -221475,7 +221690,9 @@ export namespace Prisma {
     subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
     thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
     supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+    supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
     coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+    coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
     organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
     council?: boolean | ThesisProject$councilArgs<ExtArgs>
     room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -221507,7 +221724,9 @@ export namespace Prisma {
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorId?: boolean
+    supervisorPaymentId?: boolean
     coSupervisorId?: boolean
+    coSupervisorPaymentId?: boolean
     organizationId?: boolean
     maxStudents?: boolean
     councilId?: boolean
@@ -221521,7 +221740,9 @@ export namespace Prisma {
     subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
     thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
     supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+    supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
     coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+    coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
     organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
     council?: boolean | ThesisProject$councilArgs<ExtArgs>
     room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -221553,7 +221774,9 @@ export namespace Prisma {
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorId?: boolean
+    supervisorPaymentId?: boolean
     coSupervisorId?: boolean
+    coSupervisorPaymentId?: boolean
     organizationId?: boolean
     maxStudents?: boolean
     councilId?: boolean
@@ -221566,12 +221789,14 @@ export namespace Prisma {
     projectEnd?: boolean
   }
 
-  export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "coSupervisorId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>
+  export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "supervisorPaymentId" | "coSupervisorId" | "coSupervisorPaymentId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>
   export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
     thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
     supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+    supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
     coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+    coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
     organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
     council?: boolean | ThesisProject$councilArgs<ExtArgs>
     room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -221580,14 +221805,15 @@ export namespace Prisma {
     librarySubmission?: boolean | ThesisProject$librarySubmissionArgs<ExtArgs>
     decisions?: boolean | ThesisProject$decisionsArgs<ExtArgs>
     registrations?: boolean | ThesisProject$registrationsArgs<ExtArgs>
-    supervisorPayments?: boolean | ThesisProject$supervisorPaymentsArgs<ExtArgs>
     _count?: boolean | ThesisProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ThesisProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
     thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
     supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+    supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
     coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+    coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
     organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
     council?: boolean | ThesisProject$councilArgs<ExtArgs>
     room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -221597,7 +221823,9 @@ export namespace Prisma {
     subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
     thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
     supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
+    supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
     coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
+    coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
     organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
     council?: boolean | ThesisProject$councilArgs<ExtArgs>
     room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -221610,13 +221838,15 @@ export namespace Prisma {
       subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
       thesisSession: Prisma.$ThesisSessionPayload<ExtArgs> | null
       /**
-       * Chuyên gia hướng dẫn
+       * Chuyên gia hướng dẫn b 
        */
       supervisor: Prisma.$ExpertProfilePayload<ExtArgs> | null
+      supervisorPayment: Prisma.$SupervisorPaymentRecordPayload<ExtArgs> | null
       /**
-       * Chuyên gia hướng dẫn phụ
+       * Chuyên gia hướng dẫn bảo vệ phụ
        */
       coSupervisor: Prisma.$ExpertProfilePayload<ExtArgs> | null
+      coSupervisorPayment: Prisma.$SupervisorPaymentRecordPayload<ExtArgs> | null
       /**
        * Đơn vị quản lý
        */
@@ -221634,7 +221864,6 @@ export namespace Prisma {
       librarySubmission: Prisma.$LibrarySubmissionPayload<ExtArgs> | null
       decisions: Prisma.$DecisionPayload<ExtArgs>[]
       registrations: Prisma.$StudentThesisRegistrationPayload<ExtArgs>[]
-      supervisorPayments: Prisma.$SupervisorPaymentRecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -221661,7 +221890,9 @@ export namespace Prisma {
       subjectClassId: string | null
       thesisSessionId: string | null
       supervisorId: string | null
+      supervisorPaymentId: string | null
       coSupervisorId: string | null
+      coSupervisorPaymentId: string | null
       organizationId: string | null
       maxStudents: number | null
       councilId: string | null
@@ -222072,7 +222303,9 @@ export namespace Prisma {
     subjectClass<T extends ThesisProject$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     thesisSession<T extends ThesisProject$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$thesisSessionArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     supervisor<T extends ThesisProject$supervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$supervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    supervisorPayment<T extends ThesisProject$supervisorPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$supervisorPaymentArgs<ExtArgs>>): Prisma__SupervisorPaymentRecordClient<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     coSupervisor<T extends ThesisProject$coSupervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$coSupervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    coSupervisorPayment<T extends ThesisProject$coSupervisorPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$coSupervisorPaymentArgs<ExtArgs>>): Prisma__SupervisorPaymentRecordClient<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     organization<T extends ThesisProject$organizationArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$organizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     council<T extends ThesisProject$councilArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$councilArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     room<T extends ThesisProject$roomArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -222081,7 +222314,6 @@ export namespace Prisma {
     librarySubmission<T extends ThesisProject$librarySubmissionArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$librarySubmissionArgs<ExtArgs>>): Prisma__LibrarySubmissionClient<$Result.GetResult<Prisma.$LibrarySubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     decisions<T extends ThesisProject$decisionsArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$decisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     registrations<T extends ThesisProject$registrationsArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentThesisRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    supervisorPayments<T extends ThesisProject$supervisorPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$supervisorPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -222135,7 +222367,9 @@ export namespace Prisma {
     readonly subjectClassId: FieldRef<"ThesisProject", 'String'>
     readonly thesisSessionId: FieldRef<"ThesisProject", 'String'>
     readonly supervisorId: FieldRef<"ThesisProject", 'String'>
+    readonly supervisorPaymentId: FieldRef<"ThesisProject", 'String'>
     readonly coSupervisorId: FieldRef<"ThesisProject", 'String'>
+    readonly coSupervisorPaymentId: FieldRef<"ThesisProject", 'String'>
     readonly organizationId: FieldRef<"ThesisProject", 'String'>
     readonly maxStudents: FieldRef<"ThesisProject", 'Int'>
     readonly councilId: FieldRef<"ThesisProject", 'String'>
@@ -222599,6 +222833,25 @@ export namespace Prisma {
   }
 
   /**
+   * ThesisProject.supervisorPayment
+   */
+  export type ThesisProject$supervisorPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupervisorPaymentRecord
+     */
+    select?: SupervisorPaymentRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupervisorPaymentRecord
+     */
+    omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupervisorPaymentRecordInclude<ExtArgs> | null
+    where?: SupervisorPaymentRecordWhereInput
+  }
+
+  /**
    * ThesisProject.coSupervisor
    */
   export type ThesisProject$coSupervisorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -222615,6 +222868,25 @@ export namespace Prisma {
      */
     include?: ExpertProfileInclude<ExtArgs> | null
     where?: ExpertProfileWhereInput
+  }
+
+  /**
+   * ThesisProject.coSupervisorPayment
+   */
+  export type ThesisProject$coSupervisorPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupervisorPaymentRecord
+     */
+    select?: SupervisorPaymentRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupervisorPaymentRecord
+     */
+    omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupervisorPaymentRecordInclude<ExtArgs> | null
+    where?: SupervisorPaymentRecordWhereInput
   }
 
   /**
@@ -222777,30 +223049,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentThesisRegistrationScalarFieldEnum | StudentThesisRegistrationScalarFieldEnum[]
-  }
-
-  /**
-   * ThesisProject.supervisorPayments
-   */
-  export type ThesisProject$supervisorPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SupervisorPaymentRecord
-     */
-    select?: SupervisorPaymentRecordSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SupervisorPaymentRecord
-     */
-    omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupervisorPaymentRecordInclude<ExtArgs> | null
-    where?: SupervisorPaymentRecordWhereInput
-    orderBy?: SupervisorPaymentRecordOrderByWithRelationInput | SupervisorPaymentRecordOrderByWithRelationInput[]
-    cursor?: SupervisorPaymentRecordWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SupervisorPaymentRecordScalarFieldEnum | SupervisorPaymentRecordScalarFieldEnum[]
   }
 
   /**
@@ -225300,6 +225548,8 @@ export namespace Prisma {
     email: string | null
     bankAccountNumber: string | null
     bankName: string | null
+    projectExpert: boolean | null
+    thesisExpert: boolean | null
     eligiblePresident: boolean | null
     eligibleSecretary: boolean | null
   }
@@ -225325,6 +225575,8 @@ export namespace Prisma {
     email: string | null
     bankAccountNumber: string | null
     bankName: string | null
+    projectExpert: boolean | null
+    thesisExpert: boolean | null
     eligiblePresident: boolean | null
     eligibleSecretary: boolean | null
   }
@@ -225350,6 +225602,8 @@ export namespace Prisma {
     email: number
     bankAccountNumber: number
     bankName: number
+    projectExpert: number
+    thesisExpert: number
     eligiblePresident: number
     eligibleSecretary: number
     _all: number
@@ -225377,6 +225631,8 @@ export namespace Prisma {
     email?: true
     bankAccountNumber?: true
     bankName?: true
+    projectExpert?: true
+    thesisExpert?: true
     eligiblePresident?: true
     eligibleSecretary?: true
   }
@@ -225402,6 +225658,8 @@ export namespace Prisma {
     email?: true
     bankAccountNumber?: true
     bankName?: true
+    projectExpert?: true
+    thesisExpert?: true
     eligiblePresident?: true
     eligibleSecretary?: true
   }
@@ -225427,6 +225685,8 @@ export namespace Prisma {
     email?: true
     bankAccountNumber?: true
     bankName?: true
+    projectExpert?: true
+    thesisExpert?: true
     eligiblePresident?: true
     eligibleSecretary?: true
     _all?: true
@@ -225525,6 +225785,8 @@ export namespace Prisma {
     email: string | null
     bankAccountNumber: string | null
     bankName: string | null
+    projectExpert: boolean
+    thesisExpert: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     _count: ExpertProfileCountAggregateOutputType | null
@@ -225567,6 +225829,8 @@ export namespace Prisma {
     email?: boolean
     bankAccountNumber?: boolean
     bankName?: boolean
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident?: boolean
     eligibleSecretary?: boolean
     lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -225575,8 +225839,6 @@ export namespace Prisma {
     coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
     subjectClass?: boolean | ExpertProfile$subjectClassArgs<ExtArgs>
     councilMemberships?: boolean | ExpertProfile$councilMembershipsArgs<ExtArgs>
-    payments?: boolean | ExpertProfile$paymentsArgs<ExtArgs>
-    supervisorPaymentRecord?: boolean | ExpertProfile$supervisorPaymentRecordArgs<ExtArgs>
     _count?: boolean | ExpertProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["expertProfile"]>
 
@@ -225601,6 +225863,8 @@ export namespace Prisma {
     email?: boolean
     bankAccountNumber?: boolean
     bankName?: boolean
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident?: boolean
     eligibleSecretary?: boolean
     lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -225627,6 +225891,8 @@ export namespace Prisma {
     email?: boolean
     bankAccountNumber?: boolean
     bankName?: boolean
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident?: boolean
     eligibleSecretary?: boolean
     lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -225653,11 +225919,13 @@ export namespace Prisma {
     email?: boolean
     bankAccountNumber?: boolean
     bankName?: boolean
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident?: boolean
     eligibleSecretary?: boolean
   }
 
-  export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "name" | "academicRank" | "academicDegree" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>
+  export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "name" | "academicRank" | "academicDegree" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "projectExpert" | "thesisExpert" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>
   export type ExpertProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
     major?: boolean | ExpertProfile$majorArgs<ExtArgs>
@@ -225665,8 +225933,6 @@ export namespace Prisma {
     coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
     subjectClass?: boolean | ExpertProfile$subjectClassArgs<ExtArgs>
     councilMemberships?: boolean | ExpertProfile$councilMembershipsArgs<ExtArgs>
-    payments?: boolean | ExpertProfile$paymentsArgs<ExtArgs>
-    supervisorPaymentRecord?: boolean | ExpertProfile$supervisorPaymentRecordArgs<ExtArgs>
     _count?: boolean | ExpertProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ExpertProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -225685,8 +225951,6 @@ export namespace Prisma {
       coSupervisedTheses: Prisma.$ThesisProjectPayload<ExtArgs>[]
       subjectClass: Prisma.$SubjectClassPayload<ExtArgs>[]
       councilMemberships: Prisma.$CouncilMemberPayload<ExtArgs>[]
-      payments: Prisma.$PaymentRecordPayload<ExtArgs>[]
-      supervisorPaymentRecord: Prisma.$SupervisorPaymentRecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -225709,6 +225973,8 @@ export namespace Prisma {
       email: string | null
       bankAccountNumber: string | null
       bankName: string | null
+      projectExpert: boolean
+      thesisExpert: boolean
       eligiblePresident: boolean
       eligibleSecretary: boolean
     }, ExtArgs["result"]["expertProfile"]>
@@ -226111,8 +226377,6 @@ export namespace Prisma {
     coSupervisedTheses<T extends ExpertProfile$coSupervisedThesesArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$coSupervisedThesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subjectClass<T extends ExpertProfile$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$subjectClassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     councilMemberships<T extends ExpertProfile$councilMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$councilMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    payments<T extends ExpertProfile$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    supervisorPaymentRecord<T extends ExpertProfile$supervisorPaymentRecordArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$supervisorPaymentRecordArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -226162,6 +226426,8 @@ export namespace Prisma {
     readonly email: FieldRef<"ExpertProfile", 'String'>
     readonly bankAccountNumber: FieldRef<"ExpertProfile", 'String'>
     readonly bankName: FieldRef<"ExpertProfile", 'String'>
+    readonly projectExpert: FieldRef<"ExpertProfile", 'Boolean'>
+    readonly thesisExpert: FieldRef<"ExpertProfile", 'Boolean'>
     readonly eligiblePresident: FieldRef<"ExpertProfile", 'Boolean'>
     readonly eligibleSecretary: FieldRef<"ExpertProfile", 'Boolean'>
   }
@@ -226696,54 +226962,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CouncilMemberScalarFieldEnum | CouncilMemberScalarFieldEnum[]
-  }
-
-  /**
-   * ExpertProfile.payments
-   */
-  export type ExpertProfile$paymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PaymentRecord
-     */
-    select?: PaymentRecordSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PaymentRecord
-     */
-    omit?: PaymentRecordOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PaymentRecordInclude<ExtArgs> | null
-    where?: PaymentRecordWhereInput
-    orderBy?: PaymentRecordOrderByWithRelationInput | PaymentRecordOrderByWithRelationInput[]
-    cursor?: PaymentRecordWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PaymentRecordScalarFieldEnum | PaymentRecordScalarFieldEnum[]
-  }
-
-  /**
-   * ExpertProfile.supervisorPaymentRecord
-   */
-  export type ExpertProfile$supervisorPaymentRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SupervisorPaymentRecord
-     */
-    select?: SupervisorPaymentRecordSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SupervisorPaymentRecord
-     */
-    omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupervisorPaymentRecordInclude<ExtArgs> | null
-    where?: SupervisorPaymentRecordWhereInput
-    orderBy?: SupervisorPaymentRecordOrderByWithRelationInput | SupervisorPaymentRecordOrderByWithRelationInput[]
-    cursor?: SupervisorPaymentRecordWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SupervisorPaymentRecordScalarFieldEnum | SupervisorPaymentRecordScalarFieldEnum[]
   }
 
   /**
@@ -233919,6 +234137,7 @@ export namespace Prisma {
     createdBy: string | null
     role: $Enums.CouncilRole | null
     amount: Decimal | null
+    inAcademy: boolean | null
   }
 
   export type DefaultCouncilRolePayAmountMaxAggregateOutputType = {
@@ -233932,6 +234151,7 @@ export namespace Prisma {
     createdBy: string | null
     role: $Enums.CouncilRole | null
     amount: Decimal | null
+    inAcademy: boolean | null
   }
 
   export type DefaultCouncilRolePayAmountCountAggregateOutputType = {
@@ -233945,6 +234165,7 @@ export namespace Prisma {
     createdBy: number
     role: number
     amount: number
+    inAcademy: number
     _all: number
   }
 
@@ -233968,6 +234189,7 @@ export namespace Prisma {
     createdBy?: true
     role?: true
     amount?: true
+    inAcademy?: true
   }
 
   export type DefaultCouncilRolePayAmountMaxAggregateInputType = {
@@ -233981,6 +234203,7 @@ export namespace Prisma {
     createdBy?: true
     role?: true
     amount?: true
+    inAcademy?: true
   }
 
   export type DefaultCouncilRolePayAmountCountAggregateInputType = {
@@ -233994,6 +234217,7 @@ export namespace Prisma {
     createdBy?: true
     role?: true
     amount?: true
+    inAcademy?: true
     _all?: true
   }
 
@@ -234094,6 +234318,7 @@ export namespace Prisma {
     createdBy: string | null
     role: $Enums.CouncilRole
     amount: Decimal
+    inAcademy: boolean
     _count: DefaultCouncilRolePayAmountCountAggregateOutputType | null
     _avg: DefaultCouncilRolePayAmountAvgAggregateOutputType | null
     _sum: DefaultCouncilRolePayAmountSumAggregateOutputType | null
@@ -234126,6 +234351,7 @@ export namespace Prisma {
     createdBy?: boolean
     role?: boolean
     amount?: boolean
+    inAcademy?: boolean
   }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>
 
   export type DefaultCouncilRolePayAmountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -234139,6 +234365,7 @@ export namespace Prisma {
     createdBy?: boolean
     role?: boolean
     amount?: boolean
+    inAcademy?: boolean
   }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>
 
   export type DefaultCouncilRolePayAmountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -234152,6 +234379,7 @@ export namespace Prisma {
     createdBy?: boolean
     role?: boolean
     amount?: boolean
+    inAcademy?: boolean
   }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>
 
   export type DefaultCouncilRolePayAmountSelectScalar = {
@@ -234165,9 +234393,10 @@ export namespace Prisma {
     createdBy?: boolean
     role?: boolean
     amount?: boolean
+    inAcademy?: boolean
   }
 
-  export type DefaultCouncilRolePayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount", ExtArgs["result"]["defaultCouncilRolePayAmount"]>
+  export type DefaultCouncilRolePayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount" | "inAcademy", ExtArgs["result"]["defaultCouncilRolePayAmount"]>
 
   export type $DefaultCouncilRolePayAmountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DefaultCouncilRolePayAmount"
@@ -234183,6 +234412,7 @@ export namespace Prisma {
       createdBy: string | null
       role: $Enums.CouncilRole
       amount: Prisma.Decimal
+      inAcademy: boolean
     }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>
     composites: {}
   }
@@ -234616,6 +234846,7 @@ export namespace Prisma {
     readonly createdBy: FieldRef<"DefaultCouncilRolePayAmount", 'String'>
     readonly role: FieldRef<"DefaultCouncilRolePayAmount", 'CouncilRole'>
     readonly amount: FieldRef<"DefaultCouncilRolePayAmount", 'Decimal'>
+    readonly inAcademy: FieldRef<"DefaultCouncilRolePayAmount", 'Boolean'>
   }
     
 
@@ -234983,6 +235214,1113 @@ export namespace Prisma {
 
 
   /**
+   * Model DefaultSupervisorPayAmount
+   */
+
+  export type AggregateDefaultSupervisorPayAmount = {
+    _count: DefaultSupervisorPayAmountCountAggregateOutputType | null
+    _avg: DefaultSupervisorPayAmountAvgAggregateOutputType | null
+    _sum: DefaultSupervisorPayAmountSumAggregateOutputType | null
+    _min: DefaultSupervisorPayAmountMinAggregateOutputType | null
+    _max: DefaultSupervisorPayAmountMaxAggregateOutputType | null
+  }
+
+  export type DefaultSupervisorPayAmountAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type DefaultSupervisorPayAmountSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type DefaultSupervisorPayAmountMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    role: $Enums.SupervisorRole | null
+    amount: Decimal | null
+    inAcademy: boolean | null
+  }
+
+  export type DefaultSupervisorPayAmountMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    role: $Enums.SupervisorRole | null
+    amount: Decimal | null
+    inAcademy: boolean | null
+  }
+
+  export type DefaultSupervisorPayAmountCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    role: number
+    amount: number
+    inAcademy: number
+    _all: number
+  }
+
+
+  export type DefaultSupervisorPayAmountAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type DefaultSupervisorPayAmountSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type DefaultSupervisorPayAmountMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    role?: true
+    amount?: true
+    inAcademy?: true
+  }
+
+  export type DefaultSupervisorPayAmountMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    role?: true
+    amount?: true
+    inAcademy?: true
+  }
+
+  export type DefaultSupervisorPayAmountCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    role?: true
+    amount?: true
+    inAcademy?: true
+    _all?: true
+  }
+
+  export type DefaultSupervisorPayAmountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DefaultSupervisorPayAmount to aggregate.
+     */
+    where?: DefaultSupervisorPayAmountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DefaultSupervisorPayAmounts to fetch.
+     */
+    orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DefaultSupervisorPayAmounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DefaultSupervisorPayAmounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DefaultSupervisorPayAmounts
+    **/
+    _count?: true | DefaultSupervisorPayAmountCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DefaultSupervisorPayAmountAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DefaultSupervisorPayAmountSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DefaultSupervisorPayAmountMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DefaultSupervisorPayAmountMaxAggregateInputType
+  }
+
+  export type GetDefaultSupervisorPayAmountAggregateType<T extends DefaultSupervisorPayAmountAggregateArgs> = {
+        [P in keyof T & keyof AggregateDefaultSupervisorPayAmount]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDefaultSupervisorPayAmount[P]>
+      : GetScalarType<T[P], AggregateDefaultSupervisorPayAmount[P]>
+  }
+
+
+
+
+  export type DefaultSupervisorPayAmountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DefaultSupervisorPayAmountWhereInput
+    orderBy?: DefaultSupervisorPayAmountOrderByWithAggregationInput | DefaultSupervisorPayAmountOrderByWithAggregationInput[]
+    by: DefaultSupervisorPayAmountScalarFieldEnum[] | DefaultSupervisorPayAmountScalarFieldEnum
+    having?: DefaultSupervisorPayAmountScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DefaultSupervisorPayAmountCountAggregateInputType | true
+    _avg?: DefaultSupervisorPayAmountAvgAggregateInputType
+    _sum?: DefaultSupervisorPayAmountSumAggregateInputType
+    _min?: DefaultSupervisorPayAmountMinAggregateInputType
+    _max?: DefaultSupervisorPayAmountMaxAggregateInputType
+  }
+
+  export type DefaultSupervisorPayAmountGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    role: $Enums.SupervisorRole
+    amount: Decimal
+    inAcademy: boolean
+    _count: DefaultSupervisorPayAmountCountAggregateOutputType | null
+    _avg: DefaultSupervisorPayAmountAvgAggregateOutputType | null
+    _sum: DefaultSupervisorPayAmountSumAggregateOutputType | null
+    _min: DefaultSupervisorPayAmountMinAggregateOutputType | null
+    _max: DefaultSupervisorPayAmountMaxAggregateOutputType | null
+  }
+
+  type GetDefaultSupervisorPayAmountGroupByPayload<T extends DefaultSupervisorPayAmountGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DefaultSupervisorPayAmountGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DefaultSupervisorPayAmountGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DefaultSupervisorPayAmountGroupByOutputType[P]>
+            : GetScalarType<T[P], DefaultSupervisorPayAmountGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DefaultSupervisorPayAmountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    role?: boolean
+    amount?: boolean
+    inAcademy?: boolean
+  }, ExtArgs["result"]["defaultSupervisorPayAmount"]>
+
+  export type DefaultSupervisorPayAmountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    role?: boolean
+    amount?: boolean
+    inAcademy?: boolean
+  }, ExtArgs["result"]["defaultSupervisorPayAmount"]>
+
+  export type DefaultSupervisorPayAmountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    role?: boolean
+    amount?: boolean
+    inAcademy?: boolean
+  }, ExtArgs["result"]["defaultSupervisorPayAmount"]>
+
+  export type DefaultSupervisorPayAmountSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    role?: boolean
+    amount?: boolean
+    inAcademy?: boolean
+  }
+
+  export type DefaultSupervisorPayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount" | "inAcademy", ExtArgs["result"]["defaultSupervisorPayAmount"]>
+
+  export type $DefaultSupervisorPayAmountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DefaultSupervisorPayAmount"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      role: $Enums.SupervisorRole
+      amount: Prisma.Decimal
+      inAcademy: boolean
+    }, ExtArgs["result"]["defaultSupervisorPayAmount"]>
+    composites: {}
+  }
+
+  type DefaultSupervisorPayAmountGetPayload<S extends boolean | null | undefined | DefaultSupervisorPayAmountDefaultArgs> = $Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload, S>
+
+  type DefaultSupervisorPayAmountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DefaultSupervisorPayAmountFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DefaultSupervisorPayAmountCountAggregateInputType | true
+    }
+
+  export interface DefaultSupervisorPayAmountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DefaultSupervisorPayAmount'], meta: { name: 'DefaultSupervisorPayAmount' } }
+    /**
+     * Find zero or one DefaultSupervisorPayAmount that matches the filter.
+     * @param {DefaultSupervisorPayAmountFindUniqueArgs} args - Arguments to find a DefaultSupervisorPayAmount
+     * @example
+     * // Get one DefaultSupervisorPayAmount
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DefaultSupervisorPayAmountFindUniqueArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountFindUniqueArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DefaultSupervisorPayAmount that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DefaultSupervisorPayAmountFindUniqueOrThrowArgs} args - Arguments to find a DefaultSupervisorPayAmount
+     * @example
+     * // Get one DefaultSupervisorPayAmount
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DefaultSupervisorPayAmountFindUniqueOrThrowArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DefaultSupervisorPayAmount that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DefaultSupervisorPayAmountFindFirstArgs} args - Arguments to find a DefaultSupervisorPayAmount
+     * @example
+     * // Get one DefaultSupervisorPayAmount
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DefaultSupervisorPayAmountFindFirstArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountFindFirstArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DefaultSupervisorPayAmount that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DefaultSupervisorPayAmountFindFirstOrThrowArgs} args - Arguments to find a DefaultSupervisorPayAmount
+     * @example
+     * // Get one DefaultSupervisorPayAmount
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DefaultSupervisorPayAmountFindFirstOrThrowArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountFindFirstOrThrowArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DefaultSupervisorPayAmounts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DefaultSupervisorPayAmountFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DefaultSupervisorPayAmounts
+     * const defaultSupervisorPayAmounts = await prisma.defaultSupervisorPayAmount.findMany()
+     * 
+     * // Get first 10 DefaultSupervisorPayAmounts
+     * const defaultSupervisorPayAmounts = await prisma.defaultSupervisorPayAmount.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const defaultSupervisorPayAmountWithIdOnly = await prisma.defaultSupervisorPayAmount.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DefaultSupervisorPayAmountFindManyArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DefaultSupervisorPayAmount.
+     * @param {DefaultSupervisorPayAmountCreateArgs} args - Arguments to create a DefaultSupervisorPayAmount.
+     * @example
+     * // Create one DefaultSupervisorPayAmount
+     * const DefaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.create({
+     *   data: {
+     *     // ... data to create a DefaultSupervisorPayAmount
+     *   }
+     * })
+     * 
+     */
+    create<T extends DefaultSupervisorPayAmountCreateArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountCreateArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DefaultSupervisorPayAmounts.
+     * @param {DefaultSupervisorPayAmountCreateManyArgs} args - Arguments to create many DefaultSupervisorPayAmounts.
+     * @example
+     * // Create many DefaultSupervisorPayAmounts
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DefaultSupervisorPayAmountCreateManyArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DefaultSupervisorPayAmounts and returns the data saved in the database.
+     * @param {DefaultSupervisorPayAmountCreateManyAndReturnArgs} args - Arguments to create many DefaultSupervisorPayAmounts.
+     * @example
+     * // Create many DefaultSupervisorPayAmounts
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DefaultSupervisorPayAmounts and only return the `id`
+     * const defaultSupervisorPayAmountWithIdOnly = await prisma.defaultSupervisorPayAmount.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DefaultSupervisorPayAmountCreateManyAndReturnArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DefaultSupervisorPayAmount.
+     * @param {DefaultSupervisorPayAmountDeleteArgs} args - Arguments to delete one DefaultSupervisorPayAmount.
+     * @example
+     * // Delete one DefaultSupervisorPayAmount
+     * const DefaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.delete({
+     *   where: {
+     *     // ... filter to delete one DefaultSupervisorPayAmount
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DefaultSupervisorPayAmountDeleteArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountDeleteArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DefaultSupervisorPayAmount.
+     * @param {DefaultSupervisorPayAmountUpdateArgs} args - Arguments to update one DefaultSupervisorPayAmount.
+     * @example
+     * // Update one DefaultSupervisorPayAmount
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DefaultSupervisorPayAmountUpdateArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountUpdateArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DefaultSupervisorPayAmounts.
+     * @param {DefaultSupervisorPayAmountDeleteManyArgs} args - Arguments to filter DefaultSupervisorPayAmounts to delete.
+     * @example
+     * // Delete a few DefaultSupervisorPayAmounts
+     * const { count } = await prisma.defaultSupervisorPayAmount.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DefaultSupervisorPayAmountDeleteManyArgs>(args?: SelectSubset<T, DefaultSupervisorPayAmountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DefaultSupervisorPayAmounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DefaultSupervisorPayAmountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DefaultSupervisorPayAmounts
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DefaultSupervisorPayAmountUpdateManyArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DefaultSupervisorPayAmounts and returns the data updated in the database.
+     * @param {DefaultSupervisorPayAmountUpdateManyAndReturnArgs} args - Arguments to update many DefaultSupervisorPayAmounts.
+     * @example
+     * // Update many DefaultSupervisorPayAmounts
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DefaultSupervisorPayAmounts and only return the `id`
+     * const defaultSupervisorPayAmountWithIdOnly = await prisma.defaultSupervisorPayAmount.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DefaultSupervisorPayAmountUpdateManyAndReturnArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DefaultSupervisorPayAmount.
+     * @param {DefaultSupervisorPayAmountUpsertArgs} args - Arguments to update or create a DefaultSupervisorPayAmount.
+     * @example
+     * // Update or create a DefaultSupervisorPayAmount
+     * const defaultSupervisorPayAmount = await prisma.defaultSupervisorPayAmount.upsert({
+     *   create: {
+     *     // ... data to create a DefaultSupervisorPayAmount
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DefaultSupervisorPayAmount we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DefaultSupervisorPayAmountUpsertArgs>(args: SelectSubset<T, DefaultSupervisorPayAmountUpsertArgs<ExtArgs>>): Prisma__DefaultSupervisorPayAmountClient<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DefaultSupervisorPayAmounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DefaultSupervisorPayAmountCountArgs} args - Arguments to filter DefaultSupervisorPayAmounts to count.
+     * @example
+     * // Count the number of DefaultSupervisorPayAmounts
+     * const count = await prisma.defaultSupervisorPayAmount.count({
+     *   where: {
+     *     // ... the filter for the DefaultSupervisorPayAmounts we want to count
+     *   }
+     * })
+    **/
+    count<T extends DefaultSupervisorPayAmountCountArgs>(
+      args?: Subset<T, DefaultSupervisorPayAmountCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DefaultSupervisorPayAmountCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DefaultSupervisorPayAmount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DefaultSupervisorPayAmountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DefaultSupervisorPayAmountAggregateArgs>(args: Subset<T, DefaultSupervisorPayAmountAggregateArgs>): Prisma.PrismaPromise<GetDefaultSupervisorPayAmountAggregateType<T>>
+
+    /**
+     * Group by DefaultSupervisorPayAmount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DefaultSupervisorPayAmountGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DefaultSupervisorPayAmountGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DefaultSupervisorPayAmountGroupByArgs['orderBy'] }
+        : { orderBy?: DefaultSupervisorPayAmountGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DefaultSupervisorPayAmountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDefaultSupervisorPayAmountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DefaultSupervisorPayAmount model
+   */
+  readonly fields: DefaultSupervisorPayAmountFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DefaultSupervisorPayAmount.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DefaultSupervisorPayAmountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DefaultSupervisorPayAmount model
+   */
+  interface DefaultSupervisorPayAmountFieldRefs {
+    readonly id: FieldRef<"DefaultSupervisorPayAmount", 'String'>
+    readonly code: FieldRef<"DefaultSupervisorPayAmount", 'String'>
+    readonly active: FieldRef<"DefaultSupervisorPayAmount", 'Boolean'>
+    readonly description: FieldRef<"DefaultSupervisorPayAmount", 'String'>
+    readonly deletedAt: FieldRef<"DefaultSupervisorPayAmount", 'DateTime'>
+    readonly createdAt: FieldRef<"DefaultSupervisorPayAmount", 'DateTime'>
+    readonly updatedAt: FieldRef<"DefaultSupervisorPayAmount", 'DateTime'>
+    readonly createdBy: FieldRef<"DefaultSupervisorPayAmount", 'String'>
+    readonly role: FieldRef<"DefaultSupervisorPayAmount", 'SupervisorRole'>
+    readonly amount: FieldRef<"DefaultSupervisorPayAmount", 'Decimal'>
+    readonly inAcademy: FieldRef<"DefaultSupervisorPayAmount", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DefaultSupervisorPayAmount findUnique
+   */
+  export type DefaultSupervisorPayAmountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * Filter, which DefaultSupervisorPayAmount to fetch.
+     */
+    where: DefaultSupervisorPayAmountWhereUniqueInput
+  }
+
+  /**
+   * DefaultSupervisorPayAmount findUniqueOrThrow
+   */
+  export type DefaultSupervisorPayAmountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * Filter, which DefaultSupervisorPayAmount to fetch.
+     */
+    where: DefaultSupervisorPayAmountWhereUniqueInput
+  }
+
+  /**
+   * DefaultSupervisorPayAmount findFirst
+   */
+  export type DefaultSupervisorPayAmountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * Filter, which DefaultSupervisorPayAmount to fetch.
+     */
+    where?: DefaultSupervisorPayAmountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DefaultSupervisorPayAmounts to fetch.
+     */
+    orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DefaultSupervisorPayAmounts.
+     */
+    cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DefaultSupervisorPayAmounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DefaultSupervisorPayAmounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DefaultSupervisorPayAmounts.
+     */
+    distinct?: DefaultSupervisorPayAmountScalarFieldEnum | DefaultSupervisorPayAmountScalarFieldEnum[]
+  }
+
+  /**
+   * DefaultSupervisorPayAmount findFirstOrThrow
+   */
+  export type DefaultSupervisorPayAmountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * Filter, which DefaultSupervisorPayAmount to fetch.
+     */
+    where?: DefaultSupervisorPayAmountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DefaultSupervisorPayAmounts to fetch.
+     */
+    orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DefaultSupervisorPayAmounts.
+     */
+    cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DefaultSupervisorPayAmounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DefaultSupervisorPayAmounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DefaultSupervisorPayAmounts.
+     */
+    distinct?: DefaultSupervisorPayAmountScalarFieldEnum | DefaultSupervisorPayAmountScalarFieldEnum[]
+  }
+
+  /**
+   * DefaultSupervisorPayAmount findMany
+   */
+  export type DefaultSupervisorPayAmountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * Filter, which DefaultSupervisorPayAmounts to fetch.
+     */
+    where?: DefaultSupervisorPayAmountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DefaultSupervisorPayAmounts to fetch.
+     */
+    orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DefaultSupervisorPayAmounts.
+     */
+    cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DefaultSupervisorPayAmounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DefaultSupervisorPayAmounts.
+     */
+    skip?: number
+    distinct?: DefaultSupervisorPayAmountScalarFieldEnum | DefaultSupervisorPayAmountScalarFieldEnum[]
+  }
+
+  /**
+   * DefaultSupervisorPayAmount create
+   */
+  export type DefaultSupervisorPayAmountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * The data needed to create a DefaultSupervisorPayAmount.
+     */
+    data: XOR<DefaultSupervisorPayAmountCreateInput, DefaultSupervisorPayAmountUncheckedCreateInput>
+  }
+
+  /**
+   * DefaultSupervisorPayAmount createMany
+   */
+  export type DefaultSupervisorPayAmountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DefaultSupervisorPayAmounts.
+     */
+    data: DefaultSupervisorPayAmountCreateManyInput | DefaultSupervisorPayAmountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DefaultSupervisorPayAmount createManyAndReturn
+   */
+  export type DefaultSupervisorPayAmountCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * The data used to create many DefaultSupervisorPayAmounts.
+     */
+    data: DefaultSupervisorPayAmountCreateManyInput | DefaultSupervisorPayAmountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DefaultSupervisorPayAmount update
+   */
+  export type DefaultSupervisorPayAmountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * The data needed to update a DefaultSupervisorPayAmount.
+     */
+    data: XOR<DefaultSupervisorPayAmountUpdateInput, DefaultSupervisorPayAmountUncheckedUpdateInput>
+    /**
+     * Choose, which DefaultSupervisorPayAmount to update.
+     */
+    where: DefaultSupervisorPayAmountWhereUniqueInput
+  }
+
+  /**
+   * DefaultSupervisorPayAmount updateMany
+   */
+  export type DefaultSupervisorPayAmountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DefaultSupervisorPayAmounts.
+     */
+    data: XOR<DefaultSupervisorPayAmountUpdateManyMutationInput, DefaultSupervisorPayAmountUncheckedUpdateManyInput>
+    /**
+     * Filter which DefaultSupervisorPayAmounts to update
+     */
+    where?: DefaultSupervisorPayAmountWhereInput
+    /**
+     * Limit how many DefaultSupervisorPayAmounts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DefaultSupervisorPayAmount updateManyAndReturn
+   */
+  export type DefaultSupervisorPayAmountUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * The data used to update DefaultSupervisorPayAmounts.
+     */
+    data: XOR<DefaultSupervisorPayAmountUpdateManyMutationInput, DefaultSupervisorPayAmountUncheckedUpdateManyInput>
+    /**
+     * Filter which DefaultSupervisorPayAmounts to update
+     */
+    where?: DefaultSupervisorPayAmountWhereInput
+    /**
+     * Limit how many DefaultSupervisorPayAmounts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DefaultSupervisorPayAmount upsert
+   */
+  export type DefaultSupervisorPayAmountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * The filter to search for the DefaultSupervisorPayAmount to update in case it exists.
+     */
+    where: DefaultSupervisorPayAmountWhereUniqueInput
+    /**
+     * In case the DefaultSupervisorPayAmount found by the `where` argument doesn't exist, create a new DefaultSupervisorPayAmount with this data.
+     */
+    create: XOR<DefaultSupervisorPayAmountCreateInput, DefaultSupervisorPayAmountUncheckedCreateInput>
+    /**
+     * In case the DefaultSupervisorPayAmount was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DefaultSupervisorPayAmountUpdateInput, DefaultSupervisorPayAmountUncheckedUpdateInput>
+  }
+
+  /**
+   * DefaultSupervisorPayAmount delete
+   */
+  export type DefaultSupervisorPayAmountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+    /**
+     * Filter which DefaultSupervisorPayAmount to delete.
+     */
+    where: DefaultSupervisorPayAmountWhereUniqueInput
+  }
+
+  /**
+   * DefaultSupervisorPayAmount deleteMany
+   */
+  export type DefaultSupervisorPayAmountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DefaultSupervisorPayAmounts to delete
+     */
+    where?: DefaultSupervisorPayAmountWhereInput
+    /**
+     * Limit how many DefaultSupervisorPayAmounts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DefaultSupervisorPayAmount without action
+   */
+  export type DefaultSupervisorPayAmountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DefaultSupervisorPayAmount
+     */
+    select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DefaultSupervisorPayAmount
+     */
+    omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model PaymentRecord
    */
 
@@ -235015,7 +236353,6 @@ export namespace Prisma {
     status: $Enums.PaymentStatus | null
     paymentDate: Date | null
     transactionCode: string | null
-    expertId: string | null
     councilMemberId: string | null
   }
 
@@ -235032,7 +236369,6 @@ export namespace Prisma {
     status: $Enums.PaymentStatus | null
     paymentDate: Date | null
     transactionCode: string | null
-    expertId: string | null
     councilMemberId: string | null
   }
 
@@ -235049,7 +236385,6 @@ export namespace Prisma {
     status: number
     paymentDate: number
     transactionCode: number
-    expertId: number
     councilMemberId: number
     _all: number
   }
@@ -235076,7 +236411,6 @@ export namespace Prisma {
     status?: true
     paymentDate?: true
     transactionCode?: true
-    expertId?: true
     councilMemberId?: true
   }
 
@@ -235093,7 +236427,6 @@ export namespace Prisma {
     status?: true
     paymentDate?: true
     transactionCode?: true
-    expertId?: true
     councilMemberId?: true
   }
 
@@ -235110,7 +236443,6 @@ export namespace Prisma {
     status?: true
     paymentDate?: true
     transactionCode?: true
-    expertId?: true
     councilMemberId?: true
     _all?: true
   }
@@ -235214,7 +236546,6 @@ export namespace Prisma {
     status: $Enums.PaymentStatus
     paymentDate: Date | null
     transactionCode: string | null
-    expertId: string
     councilMemberId: string | null
     _count: PaymentRecordCountAggregateOutputType | null
     _avg: PaymentRecordAvgAggregateOutputType | null
@@ -235250,9 +236581,7 @@ export namespace Prisma {
     status?: boolean
     paymentDate?: boolean
     transactionCode?: boolean
-    expertId?: boolean
     councilMemberId?: boolean
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
     councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
   }, ExtArgs["result"]["paymentRecord"]>
 
@@ -235269,9 +236598,7 @@ export namespace Prisma {
     status?: boolean
     paymentDate?: boolean
     transactionCode?: boolean
-    expertId?: boolean
     councilMemberId?: boolean
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
     councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
   }, ExtArgs["result"]["paymentRecord"]>
 
@@ -235288,9 +236615,7 @@ export namespace Prisma {
     status?: boolean
     paymentDate?: boolean
     transactionCode?: boolean
-    expertId?: boolean
     councilMemberId?: boolean
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
     councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
   }, ExtArgs["result"]["paymentRecord"]>
 
@@ -235307,28 +236632,23 @@ export namespace Prisma {
     status?: boolean
     paymentDate?: boolean
     transactionCode?: boolean
-    expertId?: boolean
     councilMemberId?: boolean
   }
 
-  export type PaymentRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "amount" | "status" | "paymentDate" | "transactionCode" | "expertId" | "councilMemberId", ExtArgs["result"]["paymentRecord"]>
+  export type PaymentRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "amount" | "status" | "paymentDate" | "transactionCode" | "councilMemberId", ExtArgs["result"]["paymentRecord"]>
   export type PaymentRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
     councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
   }
   export type PaymentRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
     councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
   }
   export type PaymentRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
     councilMember?: boolean | PaymentRecord$councilMemberArgs<ExtArgs>
   }
 
   export type $PaymentRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PaymentRecord"
     objects: {
-      expert: Prisma.$ExpertProfilePayload<ExtArgs>
       councilMember: Prisma.$CouncilMemberPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -235344,7 +236664,6 @@ export namespace Prisma {
       status: $Enums.PaymentStatus
       paymentDate: Date | null
       transactionCode: string | null
-      expertId: string
       councilMemberId: string | null
     }, ExtArgs["result"]["paymentRecord"]>
     composites: {}
@@ -235740,7 +237059,6 @@ export namespace Prisma {
    */
   export interface Prisma__PaymentRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    expert<T extends ExpertProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfileDefaultArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     councilMember<T extends PaymentRecord$councilMemberArgs<ExtArgs> = {}>(args?: Subset<T, PaymentRecord$councilMemberArgs<ExtArgs>>): Prisma__CouncilMemberClient<$Result.GetResult<Prisma.$CouncilMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -235783,7 +237101,6 @@ export namespace Prisma {
     readonly status: FieldRef<"PaymentRecord", 'PaymentStatus'>
     readonly paymentDate: FieldRef<"PaymentRecord", 'DateTime'>
     readonly transactionCode: FieldRef<"PaymentRecord", 'String'>
-    readonly expertId: FieldRef<"PaymentRecord", 'String'>
     readonly councilMemberId: FieldRef<"PaymentRecord", 'String'>
   }
     
@@ -236247,8 +237564,6 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
-    thesisProjectId: string | null
-    expertId: string | null
     amount: Decimal | null
     status: $Enums.PaymentStatus | null
     paymentDate: Date | null
@@ -236264,8 +237579,6 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
-    thesisProjectId: string | null
-    expertId: string | null
     amount: Decimal | null
     status: $Enums.PaymentStatus | null
     paymentDate: Date | null
@@ -236281,8 +237594,6 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     createdBy: number
-    thesisProjectId: number
-    expertId: number
     amount: number
     status: number
     paymentDate: number
@@ -236308,8 +237619,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    thesisProjectId?: true
-    expertId?: true
     amount?: true
     status?: true
     paymentDate?: true
@@ -236325,8 +237634,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    thesisProjectId?: true
-    expertId?: true
     amount?: true
     status?: true
     paymentDate?: true
@@ -236342,8 +237649,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    thesisProjectId?: true
-    expertId?: true
     amount?: true
     status?: true
     paymentDate?: true
@@ -236446,8 +237751,6 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     createdBy: string | null
-    thesisProjectId: string
-    expertId: string
     amount: Decimal
     status: $Enums.PaymentStatus
     paymentDate: Date | null
@@ -236482,14 +237785,13 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    thesisProjectId?: boolean
-    expertId?: boolean
     amount?: boolean
     status?: boolean
     paymentDate?: boolean
     transactionCode?: boolean
-    thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+    thesisProjects?: boolean | SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>
+    coThesisProjects?: boolean | SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>
+    _count?: boolean | SupervisorPaymentRecordCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supervisorPaymentRecord"]>
 
   export type SupervisorPaymentRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -236501,14 +237803,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    thesisProjectId?: boolean
-    expertId?: boolean
     amount?: boolean
     status?: boolean
     paymentDate?: boolean
     transactionCode?: boolean
-    thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supervisorPaymentRecord"]>
 
   export type SupervisorPaymentRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -236520,14 +237818,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    thesisProjectId?: boolean
-    expertId?: boolean
     amount?: boolean
     status?: boolean
     paymentDate?: boolean
     transactionCode?: boolean
-    thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supervisorPaymentRecord"]>
 
   export type SupervisorPaymentRecordSelectScalar = {
@@ -236539,33 +237833,26 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    thesisProjectId?: boolean
-    expertId?: boolean
     amount?: boolean
     status?: boolean
     paymentDate?: boolean
     transactionCode?: boolean
   }
 
-  export type SupervisorPaymentRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "thesisProjectId" | "expertId" | "amount" | "status" | "paymentDate" | "transactionCode", ExtArgs["result"]["supervisorPaymentRecord"]>
+  export type SupervisorPaymentRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "amount" | "status" | "paymentDate" | "transactionCode", ExtArgs["result"]["supervisorPaymentRecord"]>
   export type SupervisorPaymentRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+    thesisProjects?: boolean | SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>
+    coThesisProjects?: boolean | SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>
+    _count?: boolean | SupervisorPaymentRecordCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type SupervisorPaymentRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
-  }
-  export type SupervisorPaymentRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
-  }
+  export type SupervisorPaymentRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type SupervisorPaymentRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $SupervisorPaymentRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SupervisorPaymentRecord"
     objects: {
-      thesisProject: Prisma.$ThesisProjectPayload<ExtArgs>
-      expert: Prisma.$ExpertProfilePayload<ExtArgs>
+      thesisProjects: Prisma.$ThesisProjectPayload<ExtArgs>[]
+      coThesisProjects: Prisma.$ThesisProjectPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -236576,8 +237863,6 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       createdBy: string | null
-      thesisProjectId: string
-      expertId: string
       amount: Prisma.Decimal
       status: $Enums.PaymentStatus
       paymentDate: Date | null
@@ -236976,8 +238261,8 @@ export namespace Prisma {
    */
   export interface Prisma__SupervisorPaymentRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    thesisProject<T extends ThesisProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProjectDefaultArgs<ExtArgs>>): Prisma__ThesisProjectClient<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    expert<T extends ExpertProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfileDefaultArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    thesisProjects<T extends SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs> = {}>(args?: Subset<T, SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    coThesisProjects<T extends SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs> = {}>(args?: Subset<T, SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -237015,8 +238300,6 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SupervisorPaymentRecord", 'DateTime'>
     readonly updatedAt: FieldRef<"SupervisorPaymentRecord", 'DateTime'>
     readonly createdBy: FieldRef<"SupervisorPaymentRecord", 'String'>
-    readonly thesisProjectId: FieldRef<"SupervisorPaymentRecord", 'String'>
-    readonly expertId: FieldRef<"SupervisorPaymentRecord", 'String'>
     readonly amount: FieldRef<"SupervisorPaymentRecord", 'Decimal'>
     readonly status: FieldRef<"SupervisorPaymentRecord", 'PaymentStatus'>
     readonly paymentDate: FieldRef<"SupervisorPaymentRecord", 'DateTime'>
@@ -237270,10 +238553,6 @@ export namespace Prisma {
      */
     data: SupervisorPaymentRecordCreateManyInput | SupervisorPaymentRecordCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupervisorPaymentRecordIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -237344,10 +238623,6 @@ export namespace Prisma {
      * Limit how many SupervisorPaymentRecords to update.
      */
     limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupervisorPaymentRecordIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -237414,6 +238689,54 @@ export namespace Prisma {
      * Limit how many SupervisorPaymentRecords to delete.
      */
     limit?: number
+  }
+
+  /**
+   * SupervisorPaymentRecord.thesisProjects
+   */
+  export type SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ThesisProject
+     */
+    select?: ThesisProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ThesisProject
+     */
+    omit?: ThesisProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ThesisProjectInclude<ExtArgs> | null
+    where?: ThesisProjectWhereInput
+    orderBy?: ThesisProjectOrderByWithRelationInput | ThesisProjectOrderByWithRelationInput[]
+    cursor?: ThesisProjectWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
+  }
+
+  /**
+   * SupervisorPaymentRecord.coThesisProjects
+   */
+  export type SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ThesisProject
+     */
+    select?: ThesisProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ThesisProject
+     */
+    omit?: ThesisProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ThesisProjectInclude<ExtArgs> | null
+    where?: ThesisProjectWhereInput
+    orderBy?: ThesisProjectOrderByWithRelationInput | ThesisProjectOrderByWithRelationInput[]
+    cursor?: ThesisProjectWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
   }
 
   /**
@@ -332647,6 +333970,8 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    quaTrinhCuDiCongTac?: boolean | DM_NuocCuDiHocTap$quaTrinhCuDiCongTacArgs<ExtArgs>
+    _count?: boolean | DM_NuocCuDiHocTapCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dM_NuocCuDiHocTap"]>
 
   export type DM_NuocCuDiHocTapSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -332686,10 +334011,18 @@ export namespace Prisma {
   }
 
   export type DM_NuocCuDiHocTapOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["dM_NuocCuDiHocTap"]>
+  export type DM_NuocCuDiHocTapInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    quaTrinhCuDiCongTac?: boolean | DM_NuocCuDiHocTap$quaTrinhCuDiCongTacArgs<ExtArgs>
+    _count?: boolean | DM_NuocCuDiHocTapCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DM_NuocCuDiHocTapIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type DM_NuocCuDiHocTapIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $DM_NuocCuDiHocTapPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DM_NuocCuDiHocTap"
-    objects: {}
+    objects: {
+      quaTrinhCuDiCongTac: Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       code: string | null
@@ -333094,6 +334427,7 @@ export namespace Prisma {
    */
   export interface Prisma__DM_NuocCuDiHocTapClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    quaTrinhCuDiCongTac<T extends DM_NuocCuDiHocTap$quaTrinhCuDiCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_NuocCuDiHocTap$quaTrinhCuDiCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -333149,6 +334483,10 @@ export namespace Prisma {
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
+    /**
      * Filter, which DM_NuocCuDiHocTap to fetch.
      */
     where: DM_NuocCuDiHocTapWhereUniqueInput
@@ -333167,6 +334505,10 @@ export namespace Prisma {
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
+    /**
      * Filter, which DM_NuocCuDiHocTap to fetch.
      */
     where: DM_NuocCuDiHocTapWhereUniqueInput
@@ -333184,6 +334526,10 @@ export namespace Prisma {
      * Omit specific fields from the DM_NuocCuDiHocTap
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
     /**
      * Filter, which DM_NuocCuDiHocTap to fetch.
      */
@@ -333233,6 +334579,10 @@ export namespace Prisma {
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
+    /**
      * Filter, which DM_NuocCuDiHocTap to fetch.
      */
     where?: DM_NuocCuDiHocTapWhereInput
@@ -333281,6 +334631,10 @@ export namespace Prisma {
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
+    /**
      * Filter, which DM_NuocCuDiHocTaps to fetch.
      */
     where?: DM_NuocCuDiHocTapWhereInput
@@ -333323,6 +334677,10 @@ export namespace Prisma {
      * Omit specific fields from the DM_NuocCuDiHocTap
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
     /**
      * The data needed to create a DM_NuocCuDiHocTap.
      */
@@ -333371,6 +334729,10 @@ export namespace Prisma {
      * Omit specific fields from the DM_NuocCuDiHocTap
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
     /**
      * The data needed to update a DM_NuocCuDiHocTap.
      */
@@ -333438,6 +334800,10 @@ export namespace Prisma {
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
+    /**
      * The filter to search for the DM_NuocCuDiHocTap to update in case it exists.
      */
     where: DM_NuocCuDiHocTapWhereUniqueInput
@@ -333464,6 +334830,10 @@ export namespace Prisma {
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
+    /**
      * Filter which DM_NuocCuDiHocTap to delete.
      */
     where: DM_NuocCuDiHocTapWhereUniqueInput
@@ -333484,6 +334854,30 @@ export namespace Prisma {
   }
 
   /**
+   * DM_NuocCuDiHocTap.quaTrinhCuDiCongTac
+   */
+  export type DM_NuocCuDiHocTap$quaTrinhCuDiCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuaTrinhCuDiCongTac
+     */
+    select?: QuaTrinhCuDiCongTacSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuaTrinhCuDiCongTac
+     */
+    omit?: QuaTrinhCuDiCongTacOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuaTrinhCuDiCongTacInclude<ExtArgs> | null
+    where?: QuaTrinhCuDiCongTacWhereInput
+    orderBy?: QuaTrinhCuDiCongTacOrderByWithRelationInput | QuaTrinhCuDiCongTacOrderByWithRelationInput[]
+    cursor?: QuaTrinhCuDiCongTacWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuaTrinhCuDiCongTacScalarFieldEnum | QuaTrinhCuDiCongTacScalarFieldEnum[]
+  }
+
+  /**
    * DM_NuocCuDiHocTap without action
    */
   export type DM_NuocCuDiHocTapDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -333495,6 +334889,10 @@ export namespace Prisma {
      * Omit specific fields from the DM_NuocCuDiHocTap
      */
     omit?: DM_NuocCuDiHocTapOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_NuocCuDiHocTapInclude<ExtArgs> | null
   }
 
 
@@ -351855,6 +353253,7 @@ export namespace Prisma {
     chucVuId: 'chucVuId',
     dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
     dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
+    dM_NuocCuDiHocTapId: 'dM_NuocCuDiHocTapId',
     userProfileId: 'userProfileId'
   };
 
@@ -353375,13 +354774,13 @@ export namespace Prisma {
 
   export const CurriculumScalarFieldEnum: {
     id: 'id',
-    code: 'code',
     active: 'active',
     description: 'description',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
+    code: 'code',
     name: 'name',
     englishName: 'englishName',
     managementOrganizationId: 'managementOrganizationId',
@@ -353396,13 +354795,13 @@ export namespace Prisma {
 
   export const CurriculumVersionScalarFieldEnum: {
     id: 'id',
-    code: 'code',
     active: 'active',
     description: 'description',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
+    code: 'code',
     name: 'name',
     shortName: 'shortName',
     englishName: 'englishName',
@@ -353769,7 +355168,8 @@ export namespace Prisma {
     name: 'name',
     type: 'type',
     trainingFormId: 'trainingFormId',
-    trainingLevelId: 'trainingLevelId'
+    trainingLevelId: 'trainingLevelId',
+    vaiTro: 'vaiTro'
   };
 
   export type TrainingObjectTypeScalarFieldEnum = (typeof TrainingObjectTypeScalarFieldEnum)[keyof typeof TrainingObjectTypeScalarFieldEnum]
@@ -354654,7 +356054,9 @@ export namespace Prisma {
     subjectClassId: 'subjectClassId',
     thesisSessionId: 'thesisSessionId',
     supervisorId: 'supervisorId',
+    supervisorPaymentId: 'supervisorPaymentId',
     coSupervisorId: 'coSupervisorId',
+    coSupervisorPaymentId: 'coSupervisorPaymentId',
     organizationId: 'organizationId',
     maxStudents: 'maxStudents',
     councilId: 'councilId',
@@ -354731,6 +356133,8 @@ export namespace Prisma {
     email: 'email',
     bankAccountNumber: 'bankAccountNumber',
     bankName: 'bankName',
+    projectExpert: 'projectExpert',
+    thesisExpert: 'thesisExpert',
     eligiblePresident: 'eligiblePresident',
     eligibleSecretary: 'eligibleSecretary'
   };
@@ -354854,10 +356258,28 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
     role: 'role',
-    amount: 'amount'
+    amount: 'amount',
+    inAcademy: 'inAcademy'
   };
 
   export type DefaultCouncilRolePayAmountScalarFieldEnum = (typeof DefaultCouncilRolePayAmountScalarFieldEnum)[keyof typeof DefaultCouncilRolePayAmountScalarFieldEnum]
+
+
+  export const DefaultSupervisorPayAmountScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    role: 'role',
+    amount: 'amount',
+    inAcademy: 'inAcademy'
+  };
+
+  export type DefaultSupervisorPayAmountScalarFieldEnum = (typeof DefaultSupervisorPayAmountScalarFieldEnum)[keyof typeof DefaultSupervisorPayAmountScalarFieldEnum]
 
 
   export const PaymentRecordScalarFieldEnum: {
@@ -354873,7 +356295,6 @@ export namespace Prisma {
     status: 'status',
     paymentDate: 'paymentDate',
     transactionCode: 'transactionCode',
-    expertId: 'expertId',
     councilMemberId: 'councilMemberId'
   };
 
@@ -354889,8 +356310,6 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
-    thesisProjectId: 'thesisProjectId',
-    expertId: 'expertId',
     amount: 'amount',
     status: 'status',
     paymentDate: 'paymentDate',
@@ -356919,6 +358338,7 @@ export namespace Prisma {
     chucVuId: 'chucVuId',
     dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
     dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
+    dM_NuocCuDiHocTapId: 'dM_NuocCuDiHocTapId',
     userProfileId: 'userProfileId'
   };
 
@@ -357956,9 +359376,9 @@ export namespace Prisma {
 
   export const CurriculumOrderByRelevanceFieldEnum: {
     id: 'id',
-    code: 'code',
     description: 'description',
     createdBy: 'createdBy',
+    code: 'code',
     name: 'name',
     englishName: 'englishName',
     managementOrganizationId: 'managementOrganizationId',
@@ -357973,9 +359393,9 @@ export namespace Prisma {
 
   export const CurriculumVersionOrderByRelevanceFieldEnum: {
     id: 'id',
-    code: 'code',
     description: 'description',
     createdBy: 'createdBy',
+    code: 'code',
     name: 'name',
     shortName: 'shortName',
     englishName: 'englishName',
@@ -358203,7 +359623,8 @@ export namespace Prisma {
     createdBy: 'createdBy',
     name: 'name',
     trainingFormId: 'trainingFormId',
-    trainingLevelId: 'trainingLevelId'
+    trainingLevelId: 'trainingLevelId',
+    vaiTro: 'vaiTro'
   };
 
   export type TrainingObjectTypeOrderByRelevanceFieldEnum = (typeof TrainingObjectTypeOrderByRelevanceFieldEnum)[keyof typeof TrainingObjectTypeOrderByRelevanceFieldEnum]
@@ -358787,7 +360208,9 @@ export namespace Prisma {
     subjectClassId: 'subjectClassId',
     thesisSessionId: 'thesisSessionId',
     supervisorId: 'supervisorId',
+    supervisorPaymentId: 'supervisorPaymentId',
     coSupervisorId: 'coSupervisorId',
+    coSupervisorPaymentId: 'coSupervisorPaymentId',
     organizationId: 'organizationId',
     councilId: 'councilId',
     roomId: 'roomId',
@@ -358927,13 +360350,22 @@ export namespace Prisma {
   export type DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum = (typeof DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum)[keyof typeof DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum]
 
 
+  export const DefaultSupervisorPayAmountOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    createdBy: 'createdBy'
+  };
+
+  export type DefaultSupervisorPayAmountOrderByRelevanceFieldEnum = (typeof DefaultSupervisorPayAmountOrderByRelevanceFieldEnum)[keyof typeof DefaultSupervisorPayAmountOrderByRelevanceFieldEnum]
+
+
   export const PaymentRecordOrderByRelevanceFieldEnum: {
     id: 'id',
     code: 'code',
     description: 'description',
     createdBy: 'createdBy',
     transactionCode: 'transactionCode',
-    expertId: 'expertId',
     councilMemberId: 'councilMemberId'
   };
 
@@ -358945,8 +360377,6 @@ export namespace Prisma {
     code: 'code',
     description: 'description',
     createdBy: 'createdBy',
-    thesisProjectId: 'thesisProjectId',
-    expertId: 'expertId',
     transactionCode: 'transactionCode'
   };
 
@@ -360747,6 +362177,20 @@ export namespace Prisma {
    * Reference to a field of type 'CouncilRole[]'
    */
   export type ListEnumCouncilRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouncilRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupervisorRole'
+   */
+  export type EnumSupervisorRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupervisorRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupervisorRole[]'
+   */
+  export type ListEnumSupervisorRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupervisorRole[]'>
     
 
 
@@ -363261,10 +364705,12 @@ export namespace Prisma {
     chucVuId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
     dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
+    dM_NuocCuDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
     chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
     dM_TinhTrangCongTac?: XOR<DM_TinhTrangCongTacNullableScalarRelationFilter, DM_TinhTrangCongTacWhereInput> | null
     dM_LoaiTinhTrangCongTac?: XOR<DM_LoaiTinhTrangCongTacNullableScalarRelationFilter, DM_LoaiTinhTrangCongTacWhereInput> | null
+    dM_NuocCuDiHocTap?: XOR<DM_NuocCuDiHocTapNullableScalarRelationFilter, DM_NuocCuDiHocTapWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -363283,10 +364729,12 @@ export namespace Prisma {
     chucVuId?: SortOrder
     dM_TinhTrangCongTacId?: SortOrderInput | SortOrder
     dM_LoaiTinhTrangCongTacId?: SortOrderInput | SortOrder
+    dM_NuocCuDiHocTapId?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
     chucVu?: DM_ChucVuOrderByWithRelationInput
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacOrderByWithRelationInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacOrderByWithRelationInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapOrderByWithRelationInput
     userProfile?: UserProfileOrderByWithRelationInput
     _relevance?: QuaTrinhCuDiCongTacOrderByRelevanceInput
   }
@@ -363309,10 +364757,12 @@ export namespace Prisma {
     chucVuId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
     dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
+    dM_NuocCuDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
     chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
     dM_TinhTrangCongTac?: XOR<DM_TinhTrangCongTacNullableScalarRelationFilter, DM_TinhTrangCongTacWhereInput> | null
     dM_LoaiTinhTrangCongTac?: XOR<DM_LoaiTinhTrangCongTacNullableScalarRelationFilter, DM_LoaiTinhTrangCongTacWhereInput> | null
+    dM_NuocCuDiHocTap?: XOR<DM_NuocCuDiHocTapNullableScalarRelationFilter, DM_NuocCuDiHocTapWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -363331,6 +364781,7 @@ export namespace Prisma {
     chucVuId?: SortOrder
     dM_TinhTrangCongTacId?: SortOrderInput | SortOrder
     dM_LoaiTinhTrangCongTacId?: SortOrderInput | SortOrder
+    dM_NuocCuDiHocTapId?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
     _count?: QuaTrinhCuDiCongTacCountOrderByAggregateInput
     _max?: QuaTrinhCuDiCongTacMaxOrderByAggregateInput
@@ -363355,6 +364806,7 @@ export namespace Prisma {
     chucVuId?: UuidWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string
     dM_TinhTrangCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_LoaiTinhTrangCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string | null
+    dM_NuocCuDiHocTapId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string | null
     userProfileId?: StringWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string
   }
 
@@ -370701,7 +372153,6 @@ export namespace Prisma {
   export type SemesterWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    schoolYearId_semesterType?: SemesterSchoolYearIdSemesterTypeCompoundUniqueInput
     AND?: SemesterWhereInput | SemesterWhereInput[]
     OR?: SemesterWhereInput[]
     NOT?: SemesterWhereInput | SemesterWhereInput[]
@@ -370731,7 +372182,7 @@ export namespace Prisma {
     survey?: SurveyListRelationFilter
     evaluationPeriod?: EvaluationPeriodListRelationFilter
     exam?: ExamListRelationFilter
-  }, "id" | "code" | "schoolYearId_semesterType">
+  }, "id" | "code">
 
   export type SemesterOrderByWithAggregationInput = {
     id?: SortOrder
@@ -371470,13 +372921,13 @@ export namespace Prisma {
     OR?: CurriculumWhereInput[]
     NOT?: CurriculumWhereInput | CurriculumWhereInput[]
     id?: StringFilter<"Curriculum"> | string
-    code?: StringNullableFilter<"Curriculum"> | string | null
     active?: BoolFilter<"Curriculum"> | boolean
     description?: StringNullableFilter<"Curriculum"> | string | null
     deletedAt?: DateTimeNullableFilter<"Curriculum"> | Date | string | null
     createdAt?: DateTimeFilter<"Curriculum"> | Date | string
     updatedAt?: DateTimeFilter<"Curriculum"> | Date | string
     createdBy?: UuidNullableFilter<"Curriculum"> | string | null
+    code?: StringNullableFilter<"Curriculum"> | string | null
     name?: StringFilter<"Curriculum"> | string
     englishName?: StringNullableFilter<"Curriculum"> | string | null
     managementOrganizationId?: UuidFilter<"Curriculum"> | string
@@ -371493,13 +372944,13 @@ export namespace Prisma {
 
   export type CurriculumOrderByWithRelationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
+    code?: SortOrderInput | SortOrder
     name?: SortOrder
     englishName?: SortOrderInput | SortOrder
     managementOrganizationId?: SortOrder
@@ -371517,7 +372968,6 @@ export namespace Prisma {
 
   export type CurriculumWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    code?: string
     AND?: CurriculumWhereInput | CurriculumWhereInput[]
     OR?: CurriculumWhereInput[]
     NOT?: CurriculumWhereInput | CurriculumWhereInput[]
@@ -371527,6 +372977,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Curriculum"> | Date | string
     updatedAt?: DateTimeFilter<"Curriculum"> | Date | string
     createdBy?: UuidNullableFilter<"Curriculum"> | string | null
+    code?: StringNullableFilter<"Curriculum"> | string | null
     name?: StringFilter<"Curriculum"> | string
     englishName?: StringNullableFilter<"Curriculum"> | string | null
     managementOrganizationId?: UuidFilter<"Curriculum"> | string
@@ -371539,17 +372990,17 @@ export namespace Prisma {
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
     documentFiles?: DocumentFileListRelationFilter
     curriculumVersion?: CurriculumVersionListRelationFilter
-  }, "id" | "code">
+  }, "id">
 
   export type CurriculumOrderByWithAggregationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
+    code?: SortOrderInput | SortOrder
     name?: SortOrder
     englishName?: SortOrderInput | SortOrder
     managementOrganizationId?: SortOrder
@@ -371567,13 +373018,13 @@ export namespace Prisma {
     OR?: CurriculumScalarWhereWithAggregatesInput[]
     NOT?: CurriculumScalarWhereWithAggregatesInput | CurriculumScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Curriculum"> | string
-    code?: StringNullableWithAggregatesFilter<"Curriculum"> | string | null
     active?: BoolWithAggregatesFilter<"Curriculum"> | boolean
     description?: StringNullableWithAggregatesFilter<"Curriculum"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Curriculum"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Curriculum"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Curriculum"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"Curriculum"> | string | null
+    code?: StringNullableWithAggregatesFilter<"Curriculum"> | string | null
     name?: StringWithAggregatesFilter<"Curriculum"> | string
     englishName?: StringNullableWithAggregatesFilter<"Curriculum"> | string | null
     managementOrganizationId?: UuidWithAggregatesFilter<"Curriculum"> | string
@@ -371588,13 +373039,13 @@ export namespace Prisma {
     OR?: CurriculumVersionWhereInput[]
     NOT?: CurriculumVersionWhereInput | CurriculumVersionWhereInput[]
     id?: StringFilter<"CurriculumVersion"> | string
-    code?: StringNullableFilter<"CurriculumVersion"> | string | null
     active?: BoolFilter<"CurriculumVersion"> | boolean
     description?: StringNullableFilter<"CurriculumVersion"> | string | null
     deletedAt?: DateTimeNullableFilter<"CurriculumVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
     updatedAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
     createdBy?: UuidNullableFilter<"CurriculumVersion"> | string | null
+    code?: StringNullableFilter<"CurriculumVersion"> | string | null
     name?: StringFilter<"CurriculumVersion"> | string
     shortName?: StringNullableFilter<"CurriculumVersion"> | string | null
     englishName?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -371640,13 +373091,13 @@ export namespace Prisma {
 
   export type CurriculumVersionOrderByWithRelationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
+    code?: SortOrderInput | SortOrder
     name?: SortOrder
     shortName?: SortOrderInput | SortOrder
     englishName?: SortOrderInput | SortOrder
@@ -371693,7 +373144,6 @@ export namespace Prisma {
 
   export type CurriculumVersionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    code?: string
     AND?: CurriculumVersionWhereInput | CurriculumVersionWhereInput[]
     OR?: CurriculumVersionWhereInput[]
     NOT?: CurriculumVersionWhereInput | CurriculumVersionWhereInput[]
@@ -371703,6 +373153,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
     updatedAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
     createdBy?: UuidNullableFilter<"CurriculumVersion"> | string | null
+    code?: StringNullableFilter<"CurriculumVersion"> | string | null
     name?: StringFilter<"CurriculumVersion"> | string
     shortName?: StringNullableFilter<"CurriculumVersion"> | string | null
     englishName?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -371744,17 +373195,17 @@ export namespace Prisma {
     fixedClass?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
     students?: StudentListRelationFilter
     studentCurriculumVersionParallel?: StudentListRelationFilter
-  }, "id" | "code">
+  }, "id">
 
   export type CurriculumVersionOrderByWithAggregationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
+    code?: SortOrderInput | SortOrder
     name?: SortOrder
     shortName?: SortOrderInput | SortOrder
     englishName?: SortOrderInput | SortOrder
@@ -371795,13 +373246,13 @@ export namespace Prisma {
     OR?: CurriculumVersionScalarWhereWithAggregatesInput[]
     NOT?: CurriculumVersionScalarWhereWithAggregatesInput | CurriculumVersionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"CurriculumVersion"> | string
-    code?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
     active?: BoolWithAggregatesFilter<"CurriculumVersion"> | boolean
     description?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"CurriculumVersion"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CurriculumVersion"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CurriculumVersion"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
+    code?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
     name?: StringWithAggregatesFilter<"CurriculumVersion"> | string
     shortName?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
     englishName?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
@@ -373647,6 +375098,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFilter<"TrainingObjectType"> | $Enums.TrainingObjectTypes
     trainingFormId?: StringNullableFilter<"TrainingObjectType"> | string | null
     trainingLevelId?: StringNullableFilter<"TrainingObjectType"> | string | null
+    vaiTro?: StringNullableListFilter<"TrainingObjectType">
     trainingForm?: XOR<TrainingFormNullableScalarRelationFilter, TrainingFormWhereInput> | null
     trainingLevel?: XOR<TrainingLevelNullableScalarRelationFilter, TrainingLevelWhereInput> | null
     trainingCourse?: TrainingCourseListRelationFilter
@@ -373675,6 +375127,7 @@ export namespace Prisma {
     type?: SortOrder
     trainingFormId?: SortOrderInput | SortOrder
     trainingLevelId?: SortOrderInput | SortOrder
+    vaiTro?: SortOrder
     trainingForm?: TrainingFormOrderByWithRelationInput
     trainingLevel?: TrainingLevelOrderByWithRelationInput
     trainingCourse?: TrainingCourseOrderByRelationAggregateInput
@@ -373707,6 +375160,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFilter<"TrainingObjectType"> | $Enums.TrainingObjectTypes
     trainingFormId?: StringNullableFilter<"TrainingObjectType"> | string | null
     trainingLevelId?: StringNullableFilter<"TrainingObjectType"> | string | null
+    vaiTro?: StringNullableListFilter<"TrainingObjectType">
     trainingForm?: XOR<TrainingFormNullableScalarRelationFilter, TrainingFormWhereInput> | null
     trainingLevel?: XOR<TrainingLevelNullableScalarRelationFilter, TrainingLevelWhereInput> | null
     trainingCourse?: TrainingCourseListRelationFilter
@@ -373735,6 +375189,7 @@ export namespace Prisma {
     type?: SortOrder
     trainingFormId?: SortOrderInput | SortOrder
     trainingLevelId?: SortOrderInput | SortOrder
+    vaiTro?: SortOrder
     _count?: TrainingObjectTypeCountOrderByAggregateInput
     _max?: TrainingObjectTypeMaxOrderByAggregateInput
     _min?: TrainingObjectTypeMinOrderByAggregateInput
@@ -373756,6 +375211,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesWithAggregatesFilter<"TrainingObjectType"> | $Enums.TrainingObjectTypes
     trainingFormId?: StringNullableWithAggregatesFilter<"TrainingObjectType"> | string | null
     trainingLevelId?: StringNullableWithAggregatesFilter<"TrainingObjectType"> | string | null
+    vaiTro?: StringNullableListFilter<"TrainingObjectType">
   }
 
   export type PriorityObjectWhereInput = {
@@ -374644,7 +376100,6 @@ export namespace Prisma {
   export type TrainingMajorWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    trainingFieldId_name?: TrainingMajorTrainingFieldIdNameCompoundUniqueInput
     AND?: TrainingMajorWhereInput | TrainingMajorWhereInput[]
     OR?: TrainingMajorWhereInput[]
     NOT?: TrainingMajorWhereInput | TrainingMajorWhereInput[]
@@ -374674,7 +376129,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileListRelationFilter
     studentGraduationApplication?: StudentGraduationApplicationListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
-  }, "id" | "code" | "trainingFieldId_name">
+  }, "id" | "code">
 
   export type TrainingMajorOrderByWithAggregationInput = {
     id?: SortOrder
@@ -378544,7 +379999,9 @@ export namespace Prisma {
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+    supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
     coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+    coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
     organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
     maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
     councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -378558,7 +380015,9 @@ export namespace Prisma {
     subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     thesisSession?: XOR<ThesisSessionNullableScalarRelationFilter, ThesisSessionWhereInput> | null
     supervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+    supervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
     coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+    coSupervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
     organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     council?: XOR<CouncilNullableScalarRelationFilter, CouncilWhereInput> | null
     room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
@@ -378567,7 +380026,6 @@ export namespace Prisma {
     librarySubmission?: XOR<LibrarySubmissionNullableScalarRelationFilter, LibrarySubmissionWhereInput> | null
     decisions?: DecisionListRelationFilter
     registrations?: StudentThesisRegistrationListRelationFilter
-    supervisorPayments?: SupervisorPaymentRecordListRelationFilter
   }
 
   export type ThesisProjectOrderByWithRelationInput = {
@@ -378595,7 +380053,9 @@ export namespace Prisma {
     subjectClassId?: SortOrderInput | SortOrder
     thesisSessionId?: SortOrderInput | SortOrder
     supervisorId?: SortOrderInput | SortOrder
+    supervisorPaymentId?: SortOrderInput | SortOrder
     coSupervisorId?: SortOrderInput | SortOrder
+    coSupervisorPaymentId?: SortOrderInput | SortOrder
     organizationId?: SortOrderInput | SortOrder
     maxStudents?: SortOrderInput | SortOrder
     councilId?: SortOrderInput | SortOrder
@@ -378609,7 +380069,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassOrderByWithRelationInput
     thesisSession?: ThesisSessionOrderByWithRelationInput
     supervisor?: ExpertProfileOrderByWithRelationInput
+    supervisorPayment?: SupervisorPaymentRecordOrderByWithRelationInput
     coSupervisor?: ExpertProfileOrderByWithRelationInput
+    coSupervisorPayment?: SupervisorPaymentRecordOrderByWithRelationInput
     organization?: DM_DonViOrderByWithRelationInput
     council?: CouncilOrderByWithRelationInput
     room?: RoomOrderByWithRelationInput
@@ -378618,7 +380080,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionOrderByWithRelationInput
     decisions?: DecisionOrderByRelationAggregateInput
     registrations?: StudentThesisRegistrationOrderByRelationAggregateInput
-    supervisorPayments?: SupervisorPaymentRecordOrderByRelationAggregateInput
     _relevance?: ThesisProjectOrderByRelevanceInput
   }
 
@@ -378650,7 +380111,9 @@ export namespace Prisma {
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+    supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
     coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+    coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
     organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
     maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
     councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -378664,7 +380127,9 @@ export namespace Prisma {
     subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     thesisSession?: XOR<ThesisSessionNullableScalarRelationFilter, ThesisSessionWhereInput> | null
     supervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+    supervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
     coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+    coSupervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
     organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     council?: XOR<CouncilNullableScalarRelationFilter, CouncilWhereInput> | null
     room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
@@ -378673,7 +380138,6 @@ export namespace Prisma {
     librarySubmission?: XOR<LibrarySubmissionNullableScalarRelationFilter, LibrarySubmissionWhereInput> | null
     decisions?: DecisionListRelationFilter
     registrations?: StudentThesisRegistrationListRelationFilter
-    supervisorPayments?: SupervisorPaymentRecordListRelationFilter
   }, "id" | "code">
 
   export type ThesisProjectOrderByWithAggregationInput = {
@@ -378701,7 +380165,9 @@ export namespace Prisma {
     subjectClassId?: SortOrderInput | SortOrder
     thesisSessionId?: SortOrderInput | SortOrder
     supervisorId?: SortOrderInput | SortOrder
+    supervisorPaymentId?: SortOrderInput | SortOrder
     coSupervisorId?: SortOrderInput | SortOrder
+    coSupervisorPaymentId?: SortOrderInput | SortOrder
     organizationId?: SortOrderInput | SortOrder
     maxStudents?: SortOrderInput | SortOrder
     councilId?: SortOrderInput | SortOrder
@@ -378747,7 +380213,9 @@ export namespace Prisma {
     subjectClassId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     supervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+    supervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     coSupervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+    coSupervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     organizationId?: UuidNullableWithAggregatesFilter<"ThesisProject"> | string | null
     maxStudents?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
     councilId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -378999,6 +380467,8 @@ export namespace Prisma {
     email?: StringNullableFilter<"ExpertProfile"> | string | null
     bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
     bankName?: StringNullableFilter<"ExpertProfile"> | string | null
+    projectExpert?: BoolFilter<"ExpertProfile"> | boolean
+    thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
     eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
     eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
     lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -379007,8 +380477,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectListRelationFilter
     subjectClass?: SubjectClassListRelationFilter
     councilMemberships?: CouncilMemberListRelationFilter
-    payments?: PaymentRecordListRelationFilter
-    supervisorPaymentRecord?: SupervisorPaymentRecordListRelationFilter
   }
 
   export type ExpertProfileOrderByWithRelationInput = {
@@ -379032,6 +380500,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     bankAccountNumber?: SortOrderInput | SortOrder
     bankName?: SortOrderInput | SortOrder
+    projectExpert?: SortOrder
+    thesisExpert?: SortOrder
     eligiblePresident?: SortOrder
     eligibleSecretary?: SortOrder
     lecturer?: LecturerOrderByWithRelationInput
@@ -379040,8 +380510,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectOrderByRelationAggregateInput
     subjectClass?: SubjectClassOrderByRelationAggregateInput
     councilMemberships?: CouncilMemberOrderByRelationAggregateInput
-    payments?: PaymentRecordOrderByRelationAggregateInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordOrderByRelationAggregateInput
     _relevance?: ExpertProfileOrderByRelevanceInput
   }
 
@@ -379069,6 +380537,8 @@ export namespace Prisma {
     email?: StringNullableFilter<"ExpertProfile"> | string | null
     bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
     bankName?: StringNullableFilter<"ExpertProfile"> | string | null
+    projectExpert?: BoolFilter<"ExpertProfile"> | boolean
+    thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
     eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
     eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
     lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -379077,8 +380547,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectListRelationFilter
     subjectClass?: SubjectClassListRelationFilter
     councilMemberships?: CouncilMemberListRelationFilter
-    payments?: PaymentRecordListRelationFilter
-    supervisorPaymentRecord?: SupervisorPaymentRecordListRelationFilter
   }, "id" | "code" | "lecturerId">
 
   export type ExpertProfileOrderByWithAggregationInput = {
@@ -379102,6 +380570,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     bankAccountNumber?: SortOrderInput | SortOrder
     bankName?: SortOrderInput | SortOrder
+    projectExpert?: SortOrder
+    thesisExpert?: SortOrder
     eligiblePresident?: SortOrder
     eligibleSecretary?: SortOrder
     _count?: ExpertProfileCountOrderByAggregateInput
@@ -379133,6 +380603,8 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
     bankAccountNumber?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
     bankName?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
+    projectExpert?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
+    thesisExpert?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
     eligiblePresident?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
     eligibleSecretary?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
   }
@@ -379714,6 +381186,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
     role?: EnumCouncilRoleFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
     amount?: DecimalFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFilter<"DefaultCouncilRolePayAmount"> | boolean
   }
 
   export type DefaultCouncilRolePayAmountOrderByWithRelationInput = {
@@ -379727,13 +381200,13 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     role?: SortOrder
     amount?: SortOrder
+    inAcademy?: SortOrder
     _relevance?: DefaultCouncilRolePayAmountOrderByRelevanceInput
   }
 
   export type DefaultCouncilRolePayAmountWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    role?: $Enums.CouncilRole
     AND?: DefaultCouncilRolePayAmountWhereInput | DefaultCouncilRolePayAmountWhereInput[]
     OR?: DefaultCouncilRolePayAmountWhereInput[]
     NOT?: DefaultCouncilRolePayAmountWhereInput | DefaultCouncilRolePayAmountWhereInput[]
@@ -379743,8 +381216,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"DefaultCouncilRolePayAmount"> | Date | string
     updatedAt?: DateTimeFilter<"DefaultCouncilRolePayAmount"> | Date | string
     createdBy?: UuidNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
+    role?: EnumCouncilRoleFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
     amount?: DecimalFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
-  }, "id" | "code" | "role">
+    inAcademy?: BoolFilter<"DefaultCouncilRolePayAmount"> | boolean
+  }, "id" | "code">
 
   export type DefaultCouncilRolePayAmountOrderByWithAggregationInput = {
     id?: SortOrder
@@ -379757,6 +381232,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     role?: SortOrder
     amount?: SortOrder
+    inAcademy?: SortOrder
     _count?: DefaultCouncilRolePayAmountCountOrderByAggregateInput
     _avg?: DefaultCouncilRolePayAmountAvgOrderByAggregateInput
     _max?: DefaultCouncilRolePayAmountMaxOrderByAggregateInput
@@ -379778,6 +381254,92 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | string | null
     role?: EnumCouncilRoleWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
     amount?: DecimalWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | boolean
+  }
+
+  export type DefaultSupervisorPayAmountWhereInput = {
+    AND?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
+    OR?: DefaultSupervisorPayAmountWhereInput[]
+    NOT?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
+    id?: StringFilter<"DefaultSupervisorPayAmount"> | string
+    code?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+    active?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+    description?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+    deletedAt?: DateTimeNullableFilter<"DefaultSupervisorPayAmount"> | Date | string | null
+    createdAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+    updatedAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+    createdBy?: UuidNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+    role?: EnumSupervisorRoleFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
+    amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+  }
+
+  export type DefaultSupervisorPayAmountOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    role?: SortOrder
+    amount?: SortOrder
+    inAcademy?: SortOrder
+    _relevance?: DefaultSupervisorPayAmountOrderByRelevanceInput
+  }
+
+  export type DefaultSupervisorPayAmountWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
+    OR?: DefaultSupervisorPayAmountWhereInput[]
+    NOT?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
+    active?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+    description?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+    deletedAt?: DateTimeNullableFilter<"DefaultSupervisorPayAmount"> | Date | string | null
+    createdAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+    updatedAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+    createdBy?: UuidNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+    role?: EnumSupervisorRoleFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
+    amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+  }, "id" | "code">
+
+  export type DefaultSupervisorPayAmountOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    role?: SortOrder
+    amount?: SortOrder
+    inAcademy?: SortOrder
+    _count?: DefaultSupervisorPayAmountCountOrderByAggregateInput
+    _avg?: DefaultSupervisorPayAmountAvgOrderByAggregateInput
+    _max?: DefaultSupervisorPayAmountMaxOrderByAggregateInput
+    _min?: DefaultSupervisorPayAmountMinOrderByAggregateInput
+    _sum?: DefaultSupervisorPayAmountSumOrderByAggregateInput
+  }
+
+  export type DefaultSupervisorPayAmountScalarWhereWithAggregatesInput = {
+    AND?: DefaultSupervisorPayAmountScalarWhereWithAggregatesInput | DefaultSupervisorPayAmountScalarWhereWithAggregatesInput[]
+    OR?: DefaultSupervisorPayAmountScalarWhereWithAggregatesInput[]
+    NOT?: DefaultSupervisorPayAmountScalarWhereWithAggregatesInput | DefaultSupervisorPayAmountScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string
+    code?: StringNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string | null
+    active?: BoolWithAggregatesFilter<"DefaultSupervisorPayAmount"> | boolean
+    description?: StringNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string | null
+    role?: EnumSupervisorRoleWithAggregatesFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
+    amount?: DecimalWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolWithAggregatesFilter<"DefaultSupervisorPayAmount"> | boolean
   }
 
   export type PaymentRecordWhereInput = {
@@ -379796,9 +381358,7 @@ export namespace Prisma {
     status?: EnumPaymentStatusFilter<"PaymentRecord"> | $Enums.PaymentStatus
     paymentDate?: DateTimeNullableFilter<"PaymentRecord"> | Date | string | null
     transactionCode?: StringNullableFilter<"PaymentRecord"> | string | null
-    expertId?: StringFilter<"PaymentRecord"> | string
     councilMemberId?: StringNullableFilter<"PaymentRecord"> | string | null
-    expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
     councilMember?: XOR<CouncilMemberNullableScalarRelationFilter, CouncilMemberWhereInput> | null
   }
 
@@ -379815,9 +381375,7 @@ export namespace Prisma {
     status?: SortOrder
     paymentDate?: SortOrderInput | SortOrder
     transactionCode?: SortOrderInput | SortOrder
-    expertId?: SortOrder
     councilMemberId?: SortOrderInput | SortOrder
-    expert?: ExpertProfileOrderByWithRelationInput
     councilMember?: CouncilMemberOrderByWithRelationInput
     _relevance?: PaymentRecordOrderByRelevanceInput
   }
@@ -379839,8 +381397,6 @@ export namespace Prisma {
     status?: EnumPaymentStatusFilter<"PaymentRecord"> | $Enums.PaymentStatus
     paymentDate?: DateTimeNullableFilter<"PaymentRecord"> | Date | string | null
     transactionCode?: StringNullableFilter<"PaymentRecord"> | string | null
-    expertId?: StringFilter<"PaymentRecord"> | string
-    expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
     councilMember?: XOR<CouncilMemberNullableScalarRelationFilter, CouncilMemberWhereInput> | null
   }, "id" | "code" | "councilMemberId">
 
@@ -379857,7 +381413,6 @@ export namespace Prisma {
     status?: SortOrder
     paymentDate?: SortOrderInput | SortOrder
     transactionCode?: SortOrderInput | SortOrder
-    expertId?: SortOrder
     councilMemberId?: SortOrderInput | SortOrder
     _count?: PaymentRecordCountOrderByAggregateInput
     _avg?: PaymentRecordAvgOrderByAggregateInput
@@ -379882,7 +381437,6 @@ export namespace Prisma {
     status?: EnumPaymentStatusWithAggregatesFilter<"PaymentRecord"> | $Enums.PaymentStatus
     paymentDate?: DateTimeNullableWithAggregatesFilter<"PaymentRecord"> | Date | string | null
     transactionCode?: StringNullableWithAggregatesFilter<"PaymentRecord"> | string | null
-    expertId?: StringWithAggregatesFilter<"PaymentRecord"> | string
     councilMemberId?: StringNullableWithAggregatesFilter<"PaymentRecord"> | string | null
   }
 
@@ -379898,14 +381452,12 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
     updatedAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
     createdBy?: UuidNullableFilter<"SupervisorPaymentRecord"> | string | null
-    thesisProjectId?: StringFilter<"SupervisorPaymentRecord"> | string
-    expertId?: StringFilter<"SupervisorPaymentRecord"> | string
     amount?: DecimalFilter<"SupervisorPaymentRecord"> | Decimal | DecimalJsLike | number | string
     status?: EnumPaymentStatusFilter<"SupervisorPaymentRecord"> | $Enums.PaymentStatus
     paymentDate?: DateTimeNullableFilter<"SupervisorPaymentRecord"> | Date | string | null
     transactionCode?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-    thesisProject?: XOR<ThesisProjectScalarRelationFilter, ThesisProjectWhereInput>
-    expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
+    thesisProjects?: ThesisProjectListRelationFilter
+    coThesisProjects?: ThesisProjectListRelationFilter
   }
 
   export type SupervisorPaymentRecordOrderByWithRelationInput = {
@@ -379917,14 +381469,12 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
-    thesisProjectId?: SortOrder
-    expertId?: SortOrder
     amount?: SortOrder
     status?: SortOrder
     paymentDate?: SortOrderInput | SortOrder
     transactionCode?: SortOrderInput | SortOrder
-    thesisProject?: ThesisProjectOrderByWithRelationInput
-    expert?: ExpertProfileOrderByWithRelationInput
+    thesisProjects?: ThesisProjectOrderByRelationAggregateInput
+    coThesisProjects?: ThesisProjectOrderByRelationAggregateInput
     _relevance?: SupervisorPaymentRecordOrderByRelevanceInput
   }
 
@@ -379940,14 +381490,12 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
     updatedAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
     createdBy?: UuidNullableFilter<"SupervisorPaymentRecord"> | string | null
-    thesisProjectId?: StringFilter<"SupervisorPaymentRecord"> | string
-    expertId?: StringFilter<"SupervisorPaymentRecord"> | string
     amount?: DecimalFilter<"SupervisorPaymentRecord"> | Decimal | DecimalJsLike | number | string
     status?: EnumPaymentStatusFilter<"SupervisorPaymentRecord"> | $Enums.PaymentStatus
     paymentDate?: DateTimeNullableFilter<"SupervisorPaymentRecord"> | Date | string | null
     transactionCode?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-    thesisProject?: XOR<ThesisProjectScalarRelationFilter, ThesisProjectWhereInput>
-    expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
+    thesisProjects?: ThesisProjectListRelationFilter
+    coThesisProjects?: ThesisProjectListRelationFilter
   }, "id" | "code">
 
   export type SupervisorPaymentRecordOrderByWithAggregationInput = {
@@ -379959,8 +381507,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
-    thesisProjectId?: SortOrder
-    expertId?: SortOrder
     amount?: SortOrder
     status?: SortOrder
     paymentDate?: SortOrderInput | SortOrder
@@ -379984,8 +381530,6 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SupervisorPaymentRecord"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SupervisorPaymentRecord"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"SupervisorPaymentRecord"> | string | null
-    thesisProjectId?: StringWithAggregatesFilter<"SupervisorPaymentRecord"> | string
-    expertId?: StringWithAggregatesFilter<"SupervisorPaymentRecord"> | string
     amount?: DecimalWithAggregatesFilter<"SupervisorPaymentRecord"> | Decimal | DecimalJsLike | number | string
     status?: EnumPaymentStatusWithAggregatesFilter<"SupervisorPaymentRecord"> | $Enums.PaymentStatus
     paymentDate?: DateTimeNullableWithAggregatesFilter<"SupervisorPaymentRecord"> | Date | string | null
@@ -387697,6 +389241,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"DM_NuocCuDiHocTap"> | Date | string
     createdBy?: UuidNullableFilter<"DM_NuocCuDiHocTap"> | string | null
     name?: StringFilter<"DM_NuocCuDiHocTap"> | string
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
   }
 
   export type DM_NuocCuDiHocTapOrderByWithRelationInput = {
@@ -387709,6 +389254,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacOrderByRelationAggregateInput
     _relevance?: DM_NuocCuDiHocTapOrderByRelevanceInput
   }
 
@@ -387725,6 +389271,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"DM_NuocCuDiHocTap"> | Date | string
     updatedAt?: DateTimeFilter<"DM_NuocCuDiHocTap"> | Date | string
     createdBy?: UuidNullableFilter<"DM_NuocCuDiHocTap"> | string | null
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
   }, "id" | "code" | "name">
 
   export type DM_NuocCuDiHocTapOrderByWithAggregationInput = {
@@ -391525,6 +393072,7 @@ export namespace Prisma {
     chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
   }
 
@@ -391543,6 +393091,7 @@ export namespace Prisma {
     chucVuId: string
     dM_TinhTrangCongTacId?: string | null
     dM_LoaiTinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
     userProfileId: string
   }
 
@@ -391561,6 +393110,7 @@ export namespace Prisma {
     chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
     userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
   }
 
@@ -391579,6 +393129,7 @@ export namespace Prisma {
     chucVuId?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -391597,6 +393148,7 @@ export namespace Prisma {
     chucVuId: string
     dM_TinhTrangCongTacId?: string | null
     dM_LoaiTinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
     userProfileId: string
   }
 
@@ -391629,6 +393181,7 @@ export namespace Prisma {
     chucVuId?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -401130,13 +402683,13 @@ export namespace Prisma {
 
   export type CurriculumCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     information?: string | null
@@ -401150,13 +402703,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     managementOrganizationId: string
@@ -401170,13 +402723,13 @@ export namespace Prisma {
 
   export type CurriculumUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -401190,13 +402743,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -401210,13 +402763,13 @@ export namespace Prisma {
 
   export type CurriculumCreateManyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     managementOrganizationId: string
@@ -401228,13 +402781,13 @@ export namespace Prisma {
 
   export type CurriculumUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -401243,13 +402796,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -401261,13 +402814,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -401306,13 +402859,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -401351,13 +402904,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -401396,13 +402949,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -401441,13 +402994,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateManyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -401480,13 +403033,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -401512,13 +403065,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -403624,6 +405177,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -403652,6 +405206,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -403676,6 +405231,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -403704,6 +405260,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -403730,6 +405287,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
   }
 
   export type TrainingObjectTypeUpdateManyMutationInput = {
@@ -403743,6 +405301,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
   }
 
   export type TrainingObjectTypeUncheckedUpdateManyInput = {
@@ -403758,6 +405317,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
   }
 
   export type PriorityObjectCreateInput = {
@@ -409218,7 +410778,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -409227,7 +410789,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateInput = {
@@ -409255,7 +410816,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -409270,7 +410833,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUpdateInput = {
@@ -409304,7 +410866,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -409313,7 +410877,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateInput = {
@@ -409341,7 +410904,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -409356,7 +410921,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectCreateManyInput = {
@@ -409384,7 +410948,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -409452,7 +411018,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -409727,6 +411295,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -409735,8 +411305,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileUncheckedCreateInput = {
@@ -409760,6 +411328,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -409767,8 +411337,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileUpdateInput = {
@@ -409791,6 +411359,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -409799,8 +411369,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateInput = {
@@ -409824,6 +411392,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -409831,8 +411401,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileCreateManyInput = {
@@ -409856,6 +411424,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
   }
@@ -409880,6 +411450,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -409905,6 +411477,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -410557,6 +412131,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     amount: Decimal | DecimalJsLike | number | string
+    inAcademy?: boolean
   }
 
   export type DefaultCouncilRolePayAmountUncheckedCreateInput = {
@@ -410570,6 +412145,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     amount: Decimal | DecimalJsLike | number | string
+    inAcademy?: boolean
   }
 
   export type DefaultCouncilRolePayAmountUpdateInput = {
@@ -410583,6 +412159,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DefaultCouncilRolePayAmountUncheckedUpdateInput = {
@@ -410596,6 +412173,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DefaultCouncilRolePayAmountCreateManyInput = {
@@ -410609,6 +412187,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     amount: Decimal | DecimalJsLike | number | string
+    inAcademy?: boolean
   }
 
   export type DefaultCouncilRolePayAmountUpdateManyMutationInput = {
@@ -410622,6 +412201,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DefaultCouncilRolePayAmountUncheckedUpdateManyInput = {
@@ -410635,6 +412215,105 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type DefaultSupervisorPayAmountCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    role: $Enums.SupervisorRole
+    amount: Decimal | DecimalJsLike | number | string
+    inAcademy?: boolean
+  }
+
+  export type DefaultSupervisorPayAmountUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    role: $Enums.SupervisorRole
+    amount: Decimal | DecimalJsLike | number | string
+    inAcademy?: boolean
+  }
+
+  export type DefaultSupervisorPayAmountUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type DefaultSupervisorPayAmountUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type DefaultSupervisorPayAmountCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    role: $Enums.SupervisorRole
+    amount: Decimal | DecimalJsLike | number | string
+    inAcademy?: boolean
+  }
+
+  export type DefaultSupervisorPayAmountUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type DefaultSupervisorPayAmountUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    inAcademy?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PaymentRecordCreateInput = {
@@ -410650,7 +412329,6 @@ export namespace Prisma {
     status?: $Enums.PaymentStatus
     paymentDate?: Date | string | null
     transactionCode?: string | null
-    expert: ExpertProfileCreateNestedOneWithoutPaymentsInput
     councilMember?: CouncilMemberCreateNestedOneWithoutPaymentInput
   }
 
@@ -410667,7 +412345,6 @@ export namespace Prisma {
     status?: $Enums.PaymentStatus
     paymentDate?: Date | string | null
     transactionCode?: string | null
-    expertId: string
     councilMemberId?: string | null
   }
 
@@ -410684,7 +412361,6 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    expert?: ExpertProfileUpdateOneRequiredWithoutPaymentsNestedInput
     councilMember?: CouncilMemberUpdateOneWithoutPaymentNestedInput
   }
 
@@ -410701,7 +412377,6 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    expertId?: StringFieldUpdateOperationsInput | string
     councilMemberId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -410718,7 +412393,6 @@ export namespace Prisma {
     status?: $Enums.PaymentStatus
     paymentDate?: Date | string | null
     transactionCode?: string | null
-    expertId: string
     councilMemberId?: string | null
   }
 
@@ -410750,7 +412424,6 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    expertId?: StringFieldUpdateOperationsInput | string
     councilMemberId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -410767,8 +412440,8 @@ export namespace Prisma {
     status?: $Enums.PaymentStatus
     paymentDate?: Date | string | null
     transactionCode?: string | null
-    thesisProject: ThesisProjectCreateNestedOneWithoutSupervisorPaymentsInput
-    expert: ExpertProfileCreateNestedOneWithoutSupervisorPaymentRecordInput
+    thesisProjects?: ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput
+    coThesisProjects?: ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput
   }
 
   export type SupervisorPaymentRecordUncheckedCreateInput = {
@@ -410780,12 +412453,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    thesisProjectId: string
-    expertId: string
     amount: Decimal | DecimalJsLike | number | string
     status?: $Enums.PaymentStatus
     paymentDate?: Date | string | null
     transactionCode?: string | null
+    thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput
+    coThesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput
   }
 
   export type SupervisorPaymentRecordUpdateInput = {
@@ -410801,8 +412474,8 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisProject?: ThesisProjectUpdateOneRequiredWithoutSupervisorPaymentsNestedInput
-    expert?: ExpertProfileUpdateOneRequiredWithoutSupervisorPaymentRecordNestedInput
+    thesisProjects?: ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput
+    coThesisProjects?: ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput
   }
 
   export type SupervisorPaymentRecordUncheckedUpdateInput = {
@@ -410814,12 +412487,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisProjectId?: StringFieldUpdateOperationsInput | string
-    expertId?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput
+    coThesisProjects?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput
   }
 
   export type SupervisorPaymentRecordCreateManyInput = {
@@ -410831,8 +412504,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    thesisProjectId: string
-    expertId: string
     amount: Decimal | DecimalJsLike | number | string
     status?: $Enums.PaymentStatus
     paymentDate?: Date | string | null
@@ -410863,8 +412534,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisProjectId?: StringFieldUpdateOperationsInput | string
-    expertId?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -419533,6 +421202,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutDM_NuocCuDiHocTapInput
   }
 
   export type DM_NuocCuDiHocTapUncheckedCreateInput = {
@@ -419545,6 +421215,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutDM_NuocCuDiHocTapInput
   }
 
   export type DM_NuocCuDiHocTapUpdateInput = {
@@ -419557,6 +421228,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutDM_NuocCuDiHocTapNestedInput
   }
 
   export type DM_NuocCuDiHocTapUncheckedUpdateInput = {
@@ -419569,6 +421241,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_NuocCuDiHocTapNestedInput
   }
 
   export type DM_NuocCuDiHocTapCreateManyInput = {
@@ -423097,6 +424770,11 @@ export namespace Prisma {
     isNot?: DM_LoaiTinhTrangCongTacWhereInput | null
   }
 
+  export type DM_NuocCuDiHocTapNullableScalarRelationFilter = {
+    is?: DM_NuocCuDiHocTapWhereInput | null
+    isNot?: DM_NuocCuDiHocTapWhereInput | null
+  }
+
   export type QuaTrinhCuDiCongTacOrderByRelevanceInput = {
     fields: QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum | QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -423118,6 +424796,7 @@ export namespace Prisma {
     chucVuId?: SortOrder
     dM_TinhTrangCongTacId?: SortOrder
     dM_LoaiTinhTrangCongTacId?: SortOrder
+    dM_NuocCuDiHocTapId?: SortOrder
     userProfileId?: SortOrder
   }
 
@@ -423136,6 +424815,7 @@ export namespace Prisma {
     chucVuId?: SortOrder
     dM_TinhTrangCongTacId?: SortOrder
     dM_LoaiTinhTrangCongTacId?: SortOrder
+    dM_NuocCuDiHocTapId?: SortOrder
     userProfileId?: SortOrder
   }
 
@@ -423154,6 +424834,7 @@ export namespace Prisma {
     chucVuId?: SortOrder
     dM_TinhTrangCongTacId?: SortOrder
     dM_LoaiTinhTrangCongTacId?: SortOrder
+    dM_NuocCuDiHocTapId?: SortOrder
     userProfileId?: SortOrder
   }
 
@@ -428340,11 +430021,6 @@ export namespace Prisma {
     search: string
   }
 
-  export type SemesterSchoolYearIdSemesterTypeCompoundUniqueInput = {
-    schoolYearId: string
-    semesterType: $Enums.SemesterType
-  }
-
   export type SemesterCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
@@ -428967,13 +430643,13 @@ export namespace Prisma {
 
   export type CurriculumCountOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     englishName?: SortOrder
     managementOrganizationId?: SortOrder
@@ -428985,13 +430661,13 @@ export namespace Prisma {
 
   export type CurriculumMaxOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     englishName?: SortOrder
     managementOrganizationId?: SortOrder
@@ -429003,13 +430679,13 @@ export namespace Prisma {
 
   export type CurriculumMinOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     englishName?: SortOrder
     managementOrganizationId?: SortOrder
@@ -429084,13 +430760,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCountOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     shortName?: SortOrder
     englishName?: SortOrder
@@ -429131,13 +430807,13 @@ export namespace Prisma {
 
   export type CurriculumVersionMaxOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     shortName?: SortOrder
     englishName?: SortOrder
@@ -429170,13 +430846,13 @@ export namespace Prisma {
 
   export type CurriculumVersionMinOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     name?: SortOrder
     shortName?: SortOrder
     englishName?: SortOrder
@@ -430573,6 +432249,14 @@ export namespace Prisma {
     not?: NestedEnumTrainingObjectTypesFilter<$PrismaModel> | $Enums.TrainingObjectTypes
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type TrainingFormNullableScalarRelationFilter = {
     is?: TrainingFormWhereInput | null
     isNot?: TrainingFormWhereInput | null
@@ -430632,6 +432316,7 @@ export namespace Prisma {
     type?: SortOrder
     trainingFormId?: SortOrder
     trainingLevelId?: SortOrder
+    vaiTro?: SortOrder
   }
 
   export type TrainingObjectTypeMaxOrderByAggregateInput = {
@@ -431177,11 +432862,6 @@ export namespace Prisma {
     fields: TrainingMajorOrderByRelevanceFieldEnum | TrainingMajorOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
-  }
-
-  export type TrainingMajorTrainingFieldIdNameCompoundUniqueInput = {
-    trainingFieldId: string
-    name: string
   }
 
   export type TrainingMajorCountOrderByAggregateInput = {
@@ -433104,14 +434784,6 @@ export namespace Prisma {
     not?: NestedEnumCriteriaOperatorFilter<$PrismaModel> | $Enums.CriteriaOperator
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type AcademicActionRuleSetScalarRelationFilter = {
     is?: AcademicActionRuleSetWhereInput
     isNot?: AcademicActionRuleSetWhereInput
@@ -434092,6 +435764,11 @@ export namespace Prisma {
     isNot?: ExpertProfileWhereInput | null
   }
 
+  export type SupervisorPaymentRecordNullableScalarRelationFilter = {
+    is?: SupervisorPaymentRecordWhereInput | null
+    isNot?: SupervisorPaymentRecordWhereInput | null
+  }
+
   export type CouncilNullableScalarRelationFilter = {
     is?: CouncilWhereInput | null
     isNot?: CouncilWhereInput | null
@@ -434108,17 +435785,7 @@ export namespace Prisma {
     none?: DecisionWhereInput
   }
 
-  export type SupervisorPaymentRecordListRelationFilter = {
-    every?: SupervisorPaymentRecordWhereInput
-    some?: SupervisorPaymentRecordWhereInput
-    none?: SupervisorPaymentRecordWhereInput
-  }
-
   export type DecisionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type SupervisorPaymentRecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -434153,7 +435820,9 @@ export namespace Prisma {
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorId?: SortOrder
+    supervisorPaymentId?: SortOrder
     coSupervisorId?: SortOrder
+    coSupervisorPaymentId?: SortOrder
     organizationId?: SortOrder
     maxStudents?: SortOrder
     councilId?: SortOrder
@@ -434195,7 +435864,9 @@ export namespace Prisma {
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorId?: SortOrder
+    supervisorPaymentId?: SortOrder
     coSupervisorId?: SortOrder
+    coSupervisorPaymentId?: SortOrder
     organizationId?: SortOrder
     maxStudents?: SortOrder
     councilId?: SortOrder
@@ -434233,7 +435904,9 @@ export namespace Prisma {
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorId?: SortOrder
+    supervisorPaymentId?: SortOrder
     coSupervisorId?: SortOrder
+    coSupervisorPaymentId?: SortOrder
     organizationId?: SortOrder
     maxStudents?: SortOrder
     councilId?: SortOrder
@@ -434422,17 +436095,7 @@ export namespace Prisma {
     none?: CouncilMemberWhereInput
   }
 
-  export type PaymentRecordListRelationFilter = {
-    every?: PaymentRecordWhereInput
-    some?: PaymentRecordWhereInput
-    none?: PaymentRecordWhereInput
-  }
-
   export type CouncilMemberOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PaymentRecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -434463,6 +436126,8 @@ export namespace Prisma {
     email?: SortOrder
     bankAccountNumber?: SortOrder
     bankName?: SortOrder
+    projectExpert?: SortOrder
+    thesisExpert?: SortOrder
     eligiblePresident?: SortOrder
     eligibleSecretary?: SortOrder
   }
@@ -434488,6 +436153,8 @@ export namespace Prisma {
     email?: SortOrder
     bankAccountNumber?: SortOrder
     bankName?: SortOrder
+    projectExpert?: SortOrder
+    thesisExpert?: SortOrder
     eligiblePresident?: SortOrder
     eligibleSecretary?: SortOrder
   }
@@ -434513,6 +436180,8 @@ export namespace Prisma {
     email?: SortOrder
     bankAccountNumber?: SortOrder
     bankName?: SortOrder
+    projectExpert?: SortOrder
+    thesisExpert?: SortOrder
     eligiblePresident?: SortOrder
     eligibleSecretary?: SortOrder
   }
@@ -434928,6 +436597,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     role?: SortOrder
     amount?: SortOrder
+    inAcademy?: SortOrder
   }
 
   export type DefaultCouncilRolePayAmountAvgOrderByAggregateInput = {
@@ -434945,6 +436615,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     role?: SortOrder
     amount?: SortOrder
+    inAcademy?: SortOrder
   }
 
   export type DefaultCouncilRolePayAmountMinOrderByAggregateInput = {
@@ -434958,10 +436629,84 @@ export namespace Prisma {
     createdBy?: SortOrder
     role?: SortOrder
     amount?: SortOrder
+    inAcademy?: SortOrder
   }
 
   export type DefaultCouncilRolePayAmountSumOrderByAggregateInput = {
     amount?: SortOrder
+  }
+
+  export type EnumSupervisorRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupervisorRole | EnumSupervisorRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupervisorRoleFilter<$PrismaModel> | $Enums.SupervisorRole
+  }
+
+  export type DefaultSupervisorPayAmountOrderByRelevanceInput = {
+    fields: DefaultSupervisorPayAmountOrderByRelevanceFieldEnum | DefaultSupervisorPayAmountOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type DefaultSupervisorPayAmountCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    role?: SortOrder
+    amount?: SortOrder
+    inAcademy?: SortOrder
+  }
+
+  export type DefaultSupervisorPayAmountAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type DefaultSupervisorPayAmountMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    role?: SortOrder
+    amount?: SortOrder
+    inAcademy?: SortOrder
+  }
+
+  export type DefaultSupervisorPayAmountMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    role?: SortOrder
+    amount?: SortOrder
+    inAcademy?: SortOrder
+  }
+
+  export type DefaultSupervisorPayAmountSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type EnumSupervisorRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupervisorRole | EnumSupervisorRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupervisorRoleWithAggregatesFilter<$PrismaModel> | $Enums.SupervisorRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupervisorRoleFilter<$PrismaModel>
+    _max?: NestedEnumSupervisorRoleFilter<$PrismaModel>
   }
 
   export type EnumPaymentStatusFilter<$PrismaModel = never> = {
@@ -434995,7 +436740,6 @@ export namespace Prisma {
     status?: SortOrder
     paymentDate?: SortOrder
     transactionCode?: SortOrder
-    expertId?: SortOrder
     councilMemberId?: SortOrder
   }
 
@@ -435016,7 +436760,6 @@ export namespace Prisma {
     status?: SortOrder
     paymentDate?: SortOrder
     transactionCode?: SortOrder
-    expertId?: SortOrder
     councilMemberId?: SortOrder
   }
 
@@ -435033,7 +436776,6 @@ export namespace Prisma {
     status?: SortOrder
     paymentDate?: SortOrder
     transactionCode?: SortOrder
-    expertId?: SortOrder
     councilMemberId?: SortOrder
   }
 
@@ -435066,8 +436808,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    thesisProjectId?: SortOrder
-    expertId?: SortOrder
     amount?: SortOrder
     status?: SortOrder
     paymentDate?: SortOrder
@@ -435087,8 +436827,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    thesisProjectId?: SortOrder
-    expertId?: SortOrder
     amount?: SortOrder
     status?: SortOrder
     paymentDate?: SortOrder
@@ -435104,8 +436842,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    thesisProjectId?: SortOrder
-    expertId?: SortOrder
     amount?: SortOrder
     status?: SortOrder
     paymentDate?: SortOrder
@@ -443951,6 +445687,12 @@ export namespace Prisma {
     connect?: DM_LoaiTinhTrangCongTacWhereUniqueInput
   }
 
+  export type DM_NuocCuDiHocTapCreateNestedOneWithoutQuaTrinhCuDiCongTacInput = {
+    create?: XOR<DM_NuocCuDiHocTapCreateWithoutQuaTrinhCuDiCongTacInput, DM_NuocCuDiHocTapUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+    connectOrCreate?: DM_NuocCuDiHocTapCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
+    connect?: DM_NuocCuDiHocTapWhereUniqueInput
+  }
+
   export type UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput = {
     create?: XOR<UserProfileCreateWithoutQuaTrinhCuDiCongTacInput, UserProfileUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
     connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
@@ -443983,6 +445725,16 @@ export namespace Prisma {
     delete?: DM_LoaiTinhTrangCongTacWhereInput | boolean
     connect?: DM_LoaiTinhTrangCongTacWhereUniqueInput
     update?: XOR<XOR<DM_LoaiTinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput>, DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+  }
+
+  export type DM_NuocCuDiHocTapUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput = {
+    create?: XOR<DM_NuocCuDiHocTapCreateWithoutQuaTrinhCuDiCongTacInput, DM_NuocCuDiHocTapUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+    connectOrCreate?: DM_NuocCuDiHocTapCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
+    upsert?: DM_NuocCuDiHocTapUpsertWithoutQuaTrinhCuDiCongTacInput
+    disconnect?: DM_NuocCuDiHocTapWhereInput | boolean
+    delete?: DM_NuocCuDiHocTapWhereInput | boolean
+    connect?: DM_NuocCuDiHocTapWhereUniqueInput
+    update?: XOR<XOR<DM_NuocCuDiHocTapUpdateToOneWithWhereWithoutQuaTrinhCuDiCongTacInput, DM_NuocCuDiHocTapUpdateWithoutQuaTrinhCuDiCongTacInput>, DM_NuocCuDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
   }
 
   export type UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput = {
@@ -452809,6 +454561,10 @@ export namespace Prisma {
     update?: XOR<XOR<ClassScheduleUpdateToOneWithWhereWithoutOriginalScheduleInput, ClassScheduleUpdateWithoutOriginalScheduleInput>, ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput>
   }
 
+  export type TrainingObjectTypeCreatevaiTroInput = {
+    set: string[]
+  }
+
   export type TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput = {
     create?: XOR<TrainingFormCreateWithoutTrainingObjectTypeInput, TrainingFormUncheckedCreateWithoutTrainingObjectTypeInput>
     connectOrCreate?: TrainingFormCreateOrConnectWithoutTrainingObjectTypeInput
@@ -452977,6 +454733,11 @@ export namespace Prisma {
 
   export type EnumTrainingObjectTypesFieldUpdateOperationsInput = {
     set?: $Enums.TrainingObjectTypes
+  }
+
+  export type TrainingObjectTypeUpdatevaiTroInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput = {
@@ -458572,10 +460333,22 @@ export namespace Prisma {
     connect?: ExpertProfileWhereUniqueInput
   }
 
+  export type SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput = {
+    create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput>
+    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectsInput
+    connect?: SupervisorPaymentRecordWhereUniqueInput
+  }
+
   export type ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput = {
     create?: XOR<ExpertProfileCreateWithoutCoSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutCoSupervisedThesesInput>
     connectOrCreate?: ExpertProfileCreateOrConnectWithoutCoSupervisedThesesInput
     connect?: ExpertProfileWhereUniqueInput
+  }
+
+  export type SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput = {
+    create?: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
+    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutCoThesisProjectsInput
+    connect?: SupervisorPaymentRecordWhereUniqueInput
   }
 
   export type DM_DonViCreateNestedOneWithoutThesisProjectsInput = {
@@ -458628,13 +460401,6 @@ export namespace Prisma {
     connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
   }
 
-  export type SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput = {
-    create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput> | SupervisorPaymentRecordCreateWithoutThesisProjectInput[] | SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput[]
-    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput | SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput[]
-    createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
-    connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-  }
-
   export type DefenseRecordUncheckedCreateNestedOneWithoutThesisInput = {
     create?: XOR<DefenseRecordCreateWithoutThesisInput, DefenseRecordUncheckedCreateWithoutThesisInput>
     connectOrCreate?: DefenseRecordCreateOrConnectWithoutThesisInput
@@ -458659,13 +460425,6 @@ export namespace Prisma {
     connectOrCreate?: StudentThesisRegistrationCreateOrConnectWithoutThesisProjectInput | StudentThesisRegistrationCreateOrConnectWithoutThesisProjectInput[]
     createMany?: StudentThesisRegistrationCreateManyThesisProjectInputEnvelope
     connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
-  }
-
-  export type SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput = {
-    create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput> | SupervisorPaymentRecordCreateWithoutThesisProjectInput[] | SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput[]
-    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput | SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput[]
-    createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
-    connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
   }
 
   export type EnumThesisTypeFieldUpdateOperationsInput = {
@@ -458706,6 +460465,16 @@ export namespace Prisma {
     update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutSupervisedThesesInput, ExpertProfileUpdateWithoutSupervisedThesesInput>, ExpertProfileUncheckedUpdateWithoutSupervisedThesesInput>
   }
 
+  export type SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput = {
+    create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput>
+    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectsInput
+    upsert?: SupervisorPaymentRecordUpsertWithoutThesisProjectsInput
+    disconnect?: SupervisorPaymentRecordWhereInput | boolean
+    delete?: SupervisorPaymentRecordWhereInput | boolean
+    connect?: SupervisorPaymentRecordWhereUniqueInput
+    update?: XOR<XOR<SupervisorPaymentRecordUpdateToOneWithWhereWithoutThesisProjectsInput, SupervisorPaymentRecordUpdateWithoutThesisProjectsInput>, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput>
+  }
+
   export type ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput = {
     create?: XOR<ExpertProfileCreateWithoutCoSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutCoSupervisedThesesInput>
     connectOrCreate?: ExpertProfileCreateOrConnectWithoutCoSupervisedThesesInput
@@ -458714,6 +460483,16 @@ export namespace Prisma {
     delete?: ExpertProfileWhereInput | boolean
     connect?: ExpertProfileWhereUniqueInput
     update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutCoSupervisedThesesInput, ExpertProfileUpdateWithoutCoSupervisedThesesInput>, ExpertProfileUncheckedUpdateWithoutCoSupervisedThesesInput>
+  }
+
+  export type SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput = {
+    create?: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
+    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutCoThesisProjectsInput
+    upsert?: SupervisorPaymentRecordUpsertWithoutCoThesisProjectsInput
+    disconnect?: SupervisorPaymentRecordWhereInput | boolean
+    delete?: SupervisorPaymentRecordWhereInput | boolean
+    connect?: SupervisorPaymentRecordWhereUniqueInput
+    update?: XOR<XOR<SupervisorPaymentRecordUpdateToOneWithWhereWithoutCoThesisProjectsInput, SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput>, SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput>
   }
 
   export type DM_DonViUpdateOneWithoutThesisProjectsNestedInput = {
@@ -458804,20 +460583,6 @@ export namespace Prisma {
     deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
   }
 
-  export type SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput = {
-    create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput> | SupervisorPaymentRecordCreateWithoutThesisProjectInput[] | SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput[]
-    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput | SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput[]
-    upsert?: SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput | SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput[]
-    createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
-    set?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    disconnect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    delete?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    update?: SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput | SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput[]
-    updateMany?: SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput | SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput[]
-    deleteMany?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
-  }
-
   export type DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput = {
     create?: XOR<DefenseRecordCreateWithoutThesisInput, DefenseRecordUncheckedCreateWithoutThesisInput>
     connectOrCreate?: DefenseRecordCreateOrConnectWithoutThesisInput
@@ -458864,20 +460629,6 @@ export namespace Prisma {
     update?: StudentThesisRegistrationUpdateWithWhereUniqueWithoutThesisProjectInput | StudentThesisRegistrationUpdateWithWhereUniqueWithoutThesisProjectInput[]
     updateMany?: StudentThesisRegistrationUpdateManyWithWhereWithoutThesisProjectInput | StudentThesisRegistrationUpdateManyWithWhereWithoutThesisProjectInput[]
     deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
-  }
-
-  export type SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput = {
-    create?: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput> | SupervisorPaymentRecordCreateWithoutThesisProjectInput[] | SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput[]
-    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput | SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput[]
-    upsert?: SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput | SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput[]
-    createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
-    set?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    disconnect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    delete?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    update?: SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput | SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput[]
-    updateMany?: SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput | SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput[]
-    deleteMany?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
   }
 
   export type ThesisProjectCreateNestedManyWithoutDefenseSessionInput = {
@@ -459057,20 +460808,6 @@ export namespace Prisma {
     connect?: CouncilMemberWhereUniqueInput | CouncilMemberWhereUniqueInput[]
   }
 
-  export type PaymentRecordCreateNestedManyWithoutExpertInput = {
-    create?: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput> | PaymentRecordCreateWithoutExpertInput[] | PaymentRecordUncheckedCreateWithoutExpertInput[]
-    connectOrCreate?: PaymentRecordCreateOrConnectWithoutExpertInput | PaymentRecordCreateOrConnectWithoutExpertInput[]
-    createMany?: PaymentRecordCreateManyExpertInputEnvelope
-    connect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-  }
-
-  export type SupervisorPaymentRecordCreateNestedManyWithoutExpertInput = {
-    create?: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput> | SupervisorPaymentRecordCreateWithoutExpertInput[] | SupervisorPaymentRecordUncheckedCreateWithoutExpertInput[]
-    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutExpertInput | SupervisorPaymentRecordCreateOrConnectWithoutExpertInput[]
-    createMany?: SupervisorPaymentRecordCreateManyExpertInputEnvelope
-    connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-  }
-
   export type TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput = {
     create?: XOR<TrainingMajorCreateWithoutExpertProfileInput, TrainingMajorUncheckedCreateWithoutExpertProfileInput> | TrainingMajorCreateWithoutExpertProfileInput[] | TrainingMajorUncheckedCreateWithoutExpertProfileInput[]
     connectOrCreate?: TrainingMajorCreateOrConnectWithoutExpertProfileInput | TrainingMajorCreateOrConnectWithoutExpertProfileInput[]
@@ -459102,20 +460839,6 @@ export namespace Prisma {
     connectOrCreate?: CouncilMemberCreateOrConnectWithoutExpertInput | CouncilMemberCreateOrConnectWithoutExpertInput[]
     createMany?: CouncilMemberCreateManyExpertInputEnvelope
     connect?: CouncilMemberWhereUniqueInput | CouncilMemberWhereUniqueInput[]
-  }
-
-  export type PaymentRecordUncheckedCreateNestedManyWithoutExpertInput = {
-    create?: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput> | PaymentRecordCreateWithoutExpertInput[] | PaymentRecordUncheckedCreateWithoutExpertInput[]
-    connectOrCreate?: PaymentRecordCreateOrConnectWithoutExpertInput | PaymentRecordCreateOrConnectWithoutExpertInput[]
-    createMany?: PaymentRecordCreateManyExpertInputEnvelope
-    connect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-  }
-
-  export type SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput = {
-    create?: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput> | SupervisorPaymentRecordCreateWithoutExpertInput[] | SupervisorPaymentRecordUncheckedCreateWithoutExpertInput[]
-    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutExpertInput | SupervisorPaymentRecordCreateOrConnectWithoutExpertInput[]
-    createMany?: SupervisorPaymentRecordCreateManyExpertInputEnvelope
-    connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
   }
 
   export type LecturerUpdateOneWithoutExpertProfileNestedInput = {
@@ -459196,34 +460919,6 @@ export namespace Prisma {
     deleteMany?: CouncilMemberScalarWhereInput | CouncilMemberScalarWhereInput[]
   }
 
-  export type PaymentRecordUpdateManyWithoutExpertNestedInput = {
-    create?: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput> | PaymentRecordCreateWithoutExpertInput[] | PaymentRecordUncheckedCreateWithoutExpertInput[]
-    connectOrCreate?: PaymentRecordCreateOrConnectWithoutExpertInput | PaymentRecordCreateOrConnectWithoutExpertInput[]
-    upsert?: PaymentRecordUpsertWithWhereUniqueWithoutExpertInput | PaymentRecordUpsertWithWhereUniqueWithoutExpertInput[]
-    createMany?: PaymentRecordCreateManyExpertInputEnvelope
-    set?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    disconnect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    delete?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    connect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    update?: PaymentRecordUpdateWithWhereUniqueWithoutExpertInput | PaymentRecordUpdateWithWhereUniqueWithoutExpertInput[]
-    updateMany?: PaymentRecordUpdateManyWithWhereWithoutExpertInput | PaymentRecordUpdateManyWithWhereWithoutExpertInput[]
-    deleteMany?: PaymentRecordScalarWhereInput | PaymentRecordScalarWhereInput[]
-  }
-
-  export type SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput = {
-    create?: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput> | SupervisorPaymentRecordCreateWithoutExpertInput[] | SupervisorPaymentRecordUncheckedCreateWithoutExpertInput[]
-    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutExpertInput | SupervisorPaymentRecordCreateOrConnectWithoutExpertInput[]
-    upsert?: SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput | SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput[]
-    createMany?: SupervisorPaymentRecordCreateManyExpertInputEnvelope
-    set?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    disconnect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    delete?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    update?: SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput | SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput[]
-    updateMany?: SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput | SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput[]
-    deleteMany?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
-  }
-
   export type TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput = {
     create?: XOR<TrainingMajorCreateWithoutExpertProfileInput, TrainingMajorUncheckedCreateWithoutExpertProfileInput> | TrainingMajorCreateWithoutExpertProfileInput[] | TrainingMajorUncheckedCreateWithoutExpertProfileInput[]
     connectOrCreate?: TrainingMajorCreateOrConnectWithoutExpertProfileInput | TrainingMajorCreateOrConnectWithoutExpertProfileInput[]
@@ -459290,34 +460985,6 @@ export namespace Prisma {
     update?: CouncilMemberUpdateWithWhereUniqueWithoutExpertInput | CouncilMemberUpdateWithWhereUniqueWithoutExpertInput[]
     updateMany?: CouncilMemberUpdateManyWithWhereWithoutExpertInput | CouncilMemberUpdateManyWithWhereWithoutExpertInput[]
     deleteMany?: CouncilMemberScalarWhereInput | CouncilMemberScalarWhereInput[]
-  }
-
-  export type PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput = {
-    create?: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput> | PaymentRecordCreateWithoutExpertInput[] | PaymentRecordUncheckedCreateWithoutExpertInput[]
-    connectOrCreate?: PaymentRecordCreateOrConnectWithoutExpertInput | PaymentRecordCreateOrConnectWithoutExpertInput[]
-    upsert?: PaymentRecordUpsertWithWhereUniqueWithoutExpertInput | PaymentRecordUpsertWithWhereUniqueWithoutExpertInput[]
-    createMany?: PaymentRecordCreateManyExpertInputEnvelope
-    set?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    disconnect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    delete?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    connect?: PaymentRecordWhereUniqueInput | PaymentRecordWhereUniqueInput[]
-    update?: PaymentRecordUpdateWithWhereUniqueWithoutExpertInput | PaymentRecordUpdateWithWhereUniqueWithoutExpertInput[]
-    updateMany?: PaymentRecordUpdateManyWithWhereWithoutExpertInput | PaymentRecordUpdateManyWithWhereWithoutExpertInput[]
-    deleteMany?: PaymentRecordScalarWhereInput | PaymentRecordScalarWhereInput[]
-  }
-
-  export type SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput = {
-    create?: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput> | SupervisorPaymentRecordCreateWithoutExpertInput[] | SupervisorPaymentRecordUncheckedCreateWithoutExpertInput[]
-    connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutExpertInput | SupervisorPaymentRecordCreateOrConnectWithoutExpertInput[]
-    upsert?: SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput | SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput[]
-    createMany?: SupervisorPaymentRecordCreateManyExpertInputEnvelope
-    set?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    disconnect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    delete?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
-    update?: SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput | SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput[]
-    updateMany?: SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput | SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput[]
-    deleteMany?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
   }
 
   export type DocumentFileCreateNestedManyWithoutDecisionInput = {
@@ -459706,10 +461373,8 @@ export namespace Prisma {
     deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
   }
 
-  export type ExpertProfileCreateNestedOneWithoutPaymentsInput = {
-    create?: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
-    connectOrCreate?: ExpertProfileCreateOrConnectWithoutPaymentsInput
-    connect?: ExpertProfileWhereUniqueInput
+  export type EnumSupervisorRoleFieldUpdateOperationsInput = {
+    set?: $Enums.SupervisorRole
   }
 
   export type CouncilMemberCreateNestedOneWithoutPaymentInput = {
@@ -459722,14 +461387,6 @@ export namespace Prisma {
     set?: $Enums.PaymentStatus
   }
 
-  export type ExpertProfileUpdateOneRequiredWithoutPaymentsNestedInput = {
-    create?: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
-    connectOrCreate?: ExpertProfileCreateOrConnectWithoutPaymentsInput
-    upsert?: ExpertProfileUpsertWithoutPaymentsInput
-    connect?: ExpertProfileWhereUniqueInput
-    update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutPaymentsInput, ExpertProfileUpdateWithoutPaymentsInput>, ExpertProfileUncheckedUpdateWithoutPaymentsInput>
-  }
-
   export type CouncilMemberUpdateOneWithoutPaymentNestedInput = {
     create?: XOR<CouncilMemberCreateWithoutPaymentInput, CouncilMemberUncheckedCreateWithoutPaymentInput>
     connectOrCreate?: CouncilMemberCreateOrConnectWithoutPaymentInput
@@ -459740,32 +461397,88 @@ export namespace Prisma {
     update?: XOR<XOR<CouncilMemberUpdateToOneWithWhereWithoutPaymentInput, CouncilMemberUpdateWithoutPaymentInput>, CouncilMemberUncheckedUpdateWithoutPaymentInput>
   }
 
-  export type ThesisProjectCreateNestedOneWithoutSupervisorPaymentsInput = {
-    create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput>
-    connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentsInput
-    connect?: ThesisProjectWhereUniqueInput
+  export type ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput = {
+    create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
+    connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
+    createMany?: ThesisProjectCreateManySupervisorPaymentInputEnvelope
+    connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
   }
 
-  export type ExpertProfileCreateNestedOneWithoutSupervisorPaymentRecordInput = {
-    create?: XOR<ExpertProfileCreateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput>
-    connectOrCreate?: ExpertProfileCreateOrConnectWithoutSupervisorPaymentRecordInput
-    connect?: ExpertProfileWhereUniqueInput
+  export type ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput = {
+    create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
+    connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
+    createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+    connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
   }
 
-  export type ThesisProjectUpdateOneRequiredWithoutSupervisorPaymentsNestedInput = {
-    create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput>
-    connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentsInput
-    upsert?: ThesisProjectUpsertWithoutSupervisorPaymentsInput
-    connect?: ThesisProjectWhereUniqueInput
-    update?: XOR<XOR<ThesisProjectUpdateToOneWithWhereWithoutSupervisorPaymentsInput, ThesisProjectUpdateWithoutSupervisorPaymentsInput>, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentsInput>
+  export type ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput = {
+    create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
+    connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
+    createMany?: ThesisProjectCreateManySupervisorPaymentInputEnvelope
+    connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
   }
 
-  export type ExpertProfileUpdateOneRequiredWithoutSupervisorPaymentRecordNestedInput = {
-    create?: XOR<ExpertProfileCreateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput>
-    connectOrCreate?: ExpertProfileCreateOrConnectWithoutSupervisorPaymentRecordInput
-    upsert?: ExpertProfileUpsertWithoutSupervisorPaymentRecordInput
-    connect?: ExpertProfileWhereUniqueInput
-    update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutSupervisorPaymentRecordInput, ExpertProfileUpdateWithoutSupervisorPaymentRecordInput>, ExpertProfileUncheckedUpdateWithoutSupervisorPaymentRecordInput>
+  export type ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput = {
+    create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
+    connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
+    createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+    connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+  }
+
+  export type ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput = {
+    create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
+    connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
+    upsert?: ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput[]
+    createMany?: ThesisProjectCreateManySupervisorPaymentInputEnvelope
+    set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    update?: ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput[]
+    updateMany?: ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput[]
+    deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+  }
+
+  export type ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput = {
+    create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
+    connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
+    upsert?: ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput[]
+    createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+    set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    update?: ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput[]
+    updateMany?: ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput[]
+    deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+  }
+
+  export type ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput = {
+    create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
+    connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
+    upsert?: ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput[]
+    createMany?: ThesisProjectCreateManySupervisorPaymentInputEnvelope
+    set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    update?: ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput[]
+    updateMany?: ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput[]
+    deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+  }
+
+  export type ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput = {
+    create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
+    connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
+    upsert?: ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput[]
+    createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+    set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    update?: ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput[]
+    updateMany?: ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput[]
+    deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
   }
 
   export type SemesterCreateNestedOneWithoutEvaluationPeriodInput = {
@@ -466036,6 +467749,48 @@ export namespace Prisma {
     deleteMany?: QuaTrinhCuDiDaoTaoScalarWhereInput | QuaTrinhCuDiDaoTaoScalarWhereInput[]
   }
 
+  export type QuaTrinhCuDiCongTacCreateNestedManyWithoutDM_NuocCuDiHocTapInput = {
+    create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput> | QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput[]
+    connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput[]
+    createMany?: QuaTrinhCuDiCongTacCreateManyDM_NuocCuDiHocTapInputEnvelope
+    connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+  }
+
+  export type QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutDM_NuocCuDiHocTapInput = {
+    create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput> | QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput[]
+    connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput[]
+    createMany?: QuaTrinhCuDiCongTacCreateManyDM_NuocCuDiHocTapInputEnvelope
+    connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+  }
+
+  export type QuaTrinhCuDiCongTacUpdateManyWithoutDM_NuocCuDiHocTapNestedInput = {
+    create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput> | QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput[]
+    connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput[]
+    upsert?: QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_NuocCuDiHocTapInput[]
+    createMany?: QuaTrinhCuDiCongTacCreateManyDM_NuocCuDiHocTapInputEnvelope
+    set?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    disconnect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    delete?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    update?: QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_NuocCuDiHocTapInput[]
+    updateMany?: QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_NuocCuDiHocTapInput[]
+    deleteMany?: QuaTrinhCuDiCongTacScalarWhereInput | QuaTrinhCuDiCongTacScalarWhereInput[]
+  }
+
+  export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_NuocCuDiHocTapNestedInput = {
+    create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput> | QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput[]
+    connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput[]
+    upsert?: QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_NuocCuDiHocTapInput[]
+    createMany?: QuaTrinhCuDiCongTacCreateManyDM_NuocCuDiHocTapInputEnvelope
+    set?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    disconnect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    delete?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    update?: QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_NuocCuDiHocTapInput[]
+    updateMany?: QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_NuocCuDiHocTapInput[]
+    deleteMany?: QuaTrinhCuDiCongTacScalarWhereInput | QuaTrinhCuDiCongTacScalarWhereInput[]
+  }
+
   export type UserProfileCreateNestedManyWithoutDM_ChucDanhCMNVGiangVienInput = {
     create?: XOR<UserProfileCreateWithoutDM_ChucDanhCMNVGiangVienInput, UserProfileUncheckedCreateWithoutDM_ChucDanhCMNVGiangVienInput> | UserProfileCreateWithoutDM_ChucDanhCMNVGiangVienInput[] | UserProfileUncheckedCreateWithoutDM_ChucDanhCMNVGiangVienInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutDM_ChucDanhCMNVGiangVienInput | UserProfileCreateOrConnectWithoutDM_ChucDanhCMNVGiangVienInput[]
@@ -467739,6 +469494,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumCouncilRoleFilter<$PrismaModel>
     _max?: NestedEnumCouncilRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSupervisorRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupervisorRole | EnumSupervisorRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupervisorRoleFilter<$PrismaModel> | $Enums.SupervisorRole
+  }
+
+  export type NestedEnumSupervisorRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupervisorRole | EnumSupervisorRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupervisorRole[] | ListEnumSupervisorRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupervisorRoleWithAggregatesFilter<$PrismaModel> | $Enums.SupervisorRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupervisorRoleFilter<$PrismaModel>
+    _max?: NestedEnumSupervisorRoleFilter<$PrismaModel>
   }
 
   export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
@@ -470955,6 +472727,7 @@ export namespace Prisma {
     chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
   }
 
   export type QuaTrinhCuDiCongTacUncheckedCreateWithoutUserProfileInput = {
@@ -470972,6 +472745,7 @@ export namespace Prisma {
     chucVuId: string
     dM_TinhTrangCongTacId?: string | null
     dM_LoaiTinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
   }
 
   export type QuaTrinhCuDiCongTacCreateOrConnectWithoutUserProfileInput = {
@@ -475062,6 +476836,7 @@ export namespace Prisma {
     chucVuId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
     dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
+    dM_NuocCuDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
   }
 
@@ -484525,6 +486300,35 @@ export namespace Prisma {
     create: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
   }
 
+  export type DM_NuocCuDiHocTapCreateWithoutQuaTrinhCuDiCongTacInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
+  export type DM_NuocCuDiHocTapUncheckedCreateWithoutQuaTrinhCuDiCongTacInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
+  export type DM_NuocCuDiHocTapCreateOrConnectWithoutQuaTrinhCuDiCongTacInput = {
+    where: DM_NuocCuDiHocTapWhereUniqueInput
+    create: XOR<DM_NuocCuDiHocTapCreateWithoutQuaTrinhCuDiCongTacInput, DM_NuocCuDiHocTapUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+  }
+
   export type UserProfileCreateWithoutQuaTrinhCuDiCongTacInput = {
     id?: string
     code?: string | null
@@ -484984,6 +486788,41 @@ export namespace Prisma {
   }
 
   export type DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DM_NuocCuDiHocTapUpsertWithoutQuaTrinhCuDiCongTacInput = {
+    update: XOR<DM_NuocCuDiHocTapUpdateWithoutQuaTrinhCuDiCongTacInput, DM_NuocCuDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+    create: XOR<DM_NuocCuDiHocTapCreateWithoutQuaTrinhCuDiCongTacInput, DM_NuocCuDiHocTapUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+    where?: DM_NuocCuDiHocTapWhereInput
+  }
+
+  export type DM_NuocCuDiHocTapUpdateToOneWithWhereWithoutQuaTrinhCuDiCongTacInput = {
+    where?: DM_NuocCuDiHocTapWhereInput
+    data: XOR<DM_NuocCuDiHocTapUpdateWithoutQuaTrinhCuDiCongTacInput, DM_NuocCuDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+  }
+
+  export type DM_NuocCuDiHocTapUpdateWithoutQuaTrinhCuDiCongTacInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DM_NuocCuDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -502118,6 +503957,7 @@ export namespace Prisma {
     donVi: string
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
   }
 
@@ -502135,6 +503975,7 @@ export namespace Prisma {
     donVi: string
     dM_TinhTrangCongTacId?: string | null
     dM_LoaiTinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
     userProfileId: string
   }
 
@@ -503684,13 +505525,13 @@ export namespace Prisma {
 
   export type CurriculumCreateWithoutManagementOrganizationInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     information?: string | null
@@ -503703,13 +505544,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedCreateWithoutManagementOrganizationInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     trainingMajorId: string
@@ -504275,7 +506116,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
     defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -504283,7 +506126,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutOrganizationInput = {
@@ -504311,7 +506153,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     maxStudents?: number | null
     councilId?: string | null
     roomId?: string | null
@@ -504325,7 +506169,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutOrganizationInput = {
@@ -504509,13 +506352,13 @@ export namespace Prisma {
     OR?: CurriculumScalarWhereInput[]
     NOT?: CurriculumScalarWhereInput | CurriculumScalarWhereInput[]
     id?: StringFilter<"Curriculum"> | string
-    code?: StringNullableFilter<"Curriculum"> | string | null
     active?: BoolFilter<"Curriculum"> | boolean
     description?: StringNullableFilter<"Curriculum"> | string | null
     deletedAt?: DateTimeNullableFilter<"Curriculum"> | Date | string | null
     createdAt?: DateTimeFilter<"Curriculum"> | Date | string
     updatedAt?: DateTimeFilter<"Curriculum"> | Date | string
     createdBy?: UuidNullableFilter<"Curriculum"> | string | null
+    code?: StringNullableFilter<"Curriculum"> | string | null
     name?: StringFilter<"Curriculum"> | string
     englishName?: StringNullableFilter<"Curriculum"> | string | null
     managementOrganizationId?: UuidFilter<"Curriculum"> | string
@@ -504854,7 +506697,9 @@ export namespace Prisma {
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+    supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
     coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+    coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
     organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
     maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
     councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -514109,6 +515954,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -514136,6 +515982,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -514383,6 +516230,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -514410,6 +516258,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -521811,13 +523660,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutTrainingLanguageInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -521855,13 +523704,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutTrainingLanguageInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -521944,13 +523793,13 @@ export namespace Prisma {
     OR?: CurriculumVersionScalarWhereInput[]
     NOT?: CurriculumVersionScalarWhereInput | CurriculumVersionScalarWhereInput[]
     id?: StringFilter<"CurriculumVersion"> | string
-    code?: StringNullableFilter<"CurriculumVersion"> | string | null
     active?: BoolFilter<"CurriculumVersion"> | boolean
     description?: StringNullableFilter<"CurriculumVersion"> | string | null
     deletedAt?: DateTimeNullableFilter<"CurriculumVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
     updatedAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
     createdBy?: UuidNullableFilter<"CurriculumVersion"> | string | null
+    code?: StringNullableFilter<"CurriculumVersion"> | string | null
     name?: StringFilter<"CurriculumVersion"> | string
     shortName?: StringNullableFilter<"CurriculumVersion"> | string | null
     englishName?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -522086,6 +523935,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
@@ -522113,6 +523963,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -522909,6 +524760,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -522936,6 +524788,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -524302,13 +526155,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutFixedClassInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -524346,13 +526199,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutFixedClassInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -525263,13 +527116,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutFixedClassInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -525307,13 +527160,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutFixedClassInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -525552,6 +527405,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -525579,6 +527433,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -525676,13 +527531,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutCurriculumInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -525720,13 +527575,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutCurriculumInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -525950,6 +527805,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -525977,6 +527833,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -526054,13 +527911,13 @@ export namespace Prisma {
 
   export type CurriculumCreateWithoutCurriculumVersionInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     information?: string | null
@@ -526073,13 +527930,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedCreateWithoutCurriculumVersionInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     managementOrganizationId: string
@@ -526106,6 +527963,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -526133,6 +527991,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -526837,13 +528696,13 @@ export namespace Prisma {
 
   export type CurriculumUpdateWithoutCurriculumVersionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -526856,13 +528715,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateWithoutCurriculumVersionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -526895,6 +528754,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -526922,6 +528782,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -527975,6 +529836,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -528002,6 +529864,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -529208,6 +531071,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -529235,6 +531099,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -532460,6 +534325,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -532487,6 +534353,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -533158,7 +535025,9 @@ export namespace Prisma {
     projectEnd?: Date | string | null
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -533167,7 +535036,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutSubjectClassInput = {
@@ -533194,7 +535062,9 @@ export namespace Prisma {
     type?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -533209,7 +535079,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutSubjectClassInput = {
@@ -533242,6 +535111,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -533249,8 +535120,6 @@ export namespace Prisma {
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
     councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileUncheckedCreateWithoutSubjectClassInput = {
@@ -533274,14 +535143,14 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
     councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileCreateOrConnectWithoutSubjectClassInput = {
@@ -533710,6 +535579,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -533737,6 +535607,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -534316,6 +536187,8 @@ export namespace Prisma {
     email?: StringNullableFilter<"ExpertProfile"> | string | null
     bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
     bankName?: StringNullableFilter<"ExpertProfile"> | string | null
+    projectExpert?: BoolFilter<"ExpertProfile"> | boolean
+    thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
     eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
     eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
   }
@@ -537059,13 +538932,13 @@ export namespace Prisma {
 
   export type CurriculumCreateWithoutTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     information?: string | null
@@ -537078,13 +538951,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedCreateWithoutTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     managementOrganizationId: string
@@ -537107,13 +538980,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -537151,13 +539024,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -538142,13 +540015,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutTrainingTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -538186,13 +540059,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutTrainingTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -538256,13 +540129,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutTrainingLevelInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -538300,13 +540173,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutTrainingLevelInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -538363,6 +540236,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
@@ -538389,6 +540263,7 @@ export namespace Prisma {
     name: string
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -538460,6 +540335,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFilter<"TrainingObjectType"> | $Enums.TrainingObjectTypes
     trainingFormId?: StringNullableFilter<"TrainingObjectType"> | string | null
     trainingLevelId?: StringNullableFilter<"TrainingObjectType"> | string | null
+    vaiTro?: StringNullableListFilter<"TrainingObjectType">
   }
 
   export type TrainingObjectTypeCreateWithoutTrainingFormInput = {
@@ -538473,6 +540349,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
@@ -538499,6 +540376,7 @@ export namespace Prisma {
     name: string
     type: $Enums.TrainingObjectTypes
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -539588,7 +541466,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -539596,7 +541476,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutRoomInput = {
@@ -539624,7 +541503,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -539638,7 +541519,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutRoomInput = {
@@ -540408,6 +542288,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -540435,6 +542316,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -540523,6 +542405,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -540550,6 +542433,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -540902,13 +542786,13 @@ export namespace Prisma {
 
   export type CurriculumCreateWithoutTrainingMajorInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     information?: string | null
@@ -540921,13 +542805,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedCreateWithoutTrainingMajorInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     managementOrganizationId: string
@@ -541026,6 +542910,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -541033,8 +542919,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileUncheckedCreateWithoutMajorInput = {
@@ -541058,14 +542942,14 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileCreateOrConnectWithoutMajorInput = {
@@ -541698,6 +543582,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -541725,6 +543610,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -541827,6 +543713,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -541854,6 +543741,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -542108,13 +543996,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutTrainingBlocksInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -542152,13 +544040,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutTrainingBlocksInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -542297,13 +544185,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutTrainingBlocksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -542341,13 +544229,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutTrainingBlocksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -542401,13 +544289,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutTrainingTimeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -542445,13 +544333,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutTrainingTimeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -543017,13 +544905,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutDiplomaTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -543061,13 +544949,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutDiplomaTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -543663,13 +545551,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutOutputStandardOnCurriculumInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -543707,13 +545595,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutOutputStandardOnCurriculumInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -543804,13 +545692,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutOutputStandardOnCurriculumInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543848,13 +545736,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutOutputStandardOnCurriculumInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544597,13 +546485,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutStudentsInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -544641,13 +546529,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutStudentsInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -544690,13 +546578,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutStudentCurriculumVersionParallelInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -544734,13 +546622,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutStudentCurriculumVersionParallelInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -546489,13 +548377,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546533,13 +548421,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546588,13 +548476,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutStudentCurriculumVersionParallelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546632,13 +548520,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutStudentCurriculumVersionParallelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -548872,13 +550760,13 @@ export namespace Prisma {
 
   export type CurriculumCreateWithoutDocumentFilesInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     information?: string | null
@@ -548891,13 +550779,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedCreateWithoutDocumentFilesInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     managementOrganizationId: string
@@ -548915,13 +550803,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateWithoutDocumentFilesInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -548959,13 +550847,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedCreateWithoutDocumentFilesInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -549995,13 +551883,13 @@ export namespace Prisma {
 
   export type CurriculumUpdateWithoutDocumentFilesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -550014,13 +551902,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateWithoutDocumentFilesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -550044,13 +551932,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutDocumentFilesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -550088,13 +551976,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutDocumentFilesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -552322,6 +554210,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -552349,6 +554238,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -552497,6 +554387,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -552524,6 +554415,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -554505,6 +556397,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
@@ -554512,8 +556406,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileUncheckedCreateWithoutLecturerInput = {
@@ -554536,6 +556428,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -554543,8 +556437,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileCreateOrConnectWithoutLecturerInput = {
@@ -557821,6 +559713,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -557848,6 +559741,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -558004,7 +559898,9 @@ export namespace Prisma {
     projectEnd?: Date | string | null
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -558013,7 +559909,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutThesisSessionInput = {
@@ -558040,7 +559935,9 @@ export namespace Prisma {
     type?: string | null
     subjectClassId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -558055,7 +559952,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutThesisSessionInput = {
@@ -558090,6 +559986,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -558117,6 +560014,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -558444,6 +560342,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -558451,8 +560351,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileUncheckedCreateWithoutSupervisedThesesInput = {
@@ -558476,19 +560374,56 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileCreateOrConnectWithoutSupervisedThesesInput = {
     where: ExpertProfileWhereUniqueInput
     create: XOR<ExpertProfileCreateWithoutSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutSupervisedThesesInput>
+  }
+
+  export type SupervisorPaymentRecordCreateWithoutThesisProjectsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    coThesisProjects?: ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput
+  }
+
+  export type SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    coThesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput
+  }
+
+  export type SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectsInput = {
+    where: SupervisorPaymentRecordWhereUniqueInput
+    create: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput>
   }
 
   export type ExpertProfileCreateWithoutCoSupervisedThesesInput = {
@@ -558511,6 +560446,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -558518,8 +560455,6 @@ export namespace Prisma {
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileUncheckedCreateWithoutCoSupervisedThesesInput = {
@@ -558543,19 +560478,56 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
     councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileCreateOrConnectWithoutCoSupervisedThesesInput = {
     where: ExpertProfileWhereUniqueInput
     create: XOR<ExpertProfileCreateWithoutCoSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutCoSupervisedThesesInput>
+  }
+
+  export type SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    thesisProjects?: ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput
+  }
+
+  export type SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput
+  }
+
+  export type SupervisorPaymentRecordCreateOrConnectWithoutCoThesisProjectsInput = {
+    where: SupervisorPaymentRecordWhereUniqueInput
+    create: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
   }
 
   export type DM_DonViCreateWithoutThesisProjectsInput = {
@@ -558926,48 +560898,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SupervisorPaymentRecordCreateWithoutThesisProjectInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
-    expert: ExpertProfileCreateNestedOneWithoutSupervisorPaymentRecordInput
-  }
-
-  export type SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    expertId: string
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
-  }
-
-  export type SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectInput = {
-    where: SupervisorPaymentRecordWhereUniqueInput
-    create: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput>
-  }
-
-  export type SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope = {
-    data: SupervisorPaymentRecordCreateManyThesisProjectInput | SupervisorPaymentRecordCreateManyThesisProjectInput[]
-    skipDuplicates?: boolean
-  }
-
   export type SubjectClassUpsertWithoutThesisProjectsInput = {
     update: XOR<SubjectClassUpdateWithoutThesisProjectsInput, SubjectClassUncheckedUpdateWithoutThesisProjectsInput>
     create: XOR<SubjectClassCreateWithoutThesisProjectsInput, SubjectClassUncheckedCreateWithoutThesisProjectsInput>
@@ -559175,6 +561105,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -559182,8 +561114,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateWithoutSupervisedThesesInput = {
@@ -559207,14 +561137,57 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
     coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
+  }
+
+  export type SupervisorPaymentRecordUpsertWithoutThesisProjectsInput = {
+    update: XOR<SupervisorPaymentRecordUpdateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput>
+    create: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput>
+    where?: SupervisorPaymentRecordWhereInput
+  }
+
+  export type SupervisorPaymentRecordUpdateToOneWithWhereWithoutThesisProjectsInput = {
+    where?: SupervisorPaymentRecordWhereInput
+    data: XOR<SupervisorPaymentRecordUpdateWithoutThesisProjectsInput, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput>
+  }
+
+  export type SupervisorPaymentRecordUpdateWithoutThesisProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    coThesisProjects?: ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput
+  }
+
+  export type SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    coThesisProjects?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput
   }
 
   export type ExpertProfileUpsertWithoutCoSupervisedThesesInput = {
@@ -559248,6 +561221,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -559255,8 +561230,6 @@ export namespace Prisma {
     supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateWithoutCoSupervisedThesesInput = {
@@ -559280,14 +561253,57 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
     supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
+  }
+
+  export type SupervisorPaymentRecordUpsertWithoutCoThesisProjectsInput = {
+    update: XOR<SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput>
+    create: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
+    where?: SupervisorPaymentRecordWhereInput
+  }
+
+  export type SupervisorPaymentRecordUpdateToOneWithWhereWithoutCoThesisProjectsInput = {
+    where?: SupervisorPaymentRecordWhereInput
+    data: XOR<SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput>
+  }
+
+  export type SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisProjects?: ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput
+  }
+
+  export type SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput
   }
 
   export type DM_DonViUpsertWithoutThesisProjectsInput = {
@@ -559651,42 +561667,6 @@ export namespace Prisma {
     data: XOR<StudentThesisRegistrationUpdateManyMutationInput, StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectInput>
   }
 
-  export type SupervisorPaymentRecordUpsertWithWhereUniqueWithoutThesisProjectInput = {
-    where: SupervisorPaymentRecordWhereUniqueInput
-    update: XOR<SupervisorPaymentRecordUpdateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectInput>
-    create: XOR<SupervisorPaymentRecordCreateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectInput>
-  }
-
-  export type SupervisorPaymentRecordUpdateWithWhereUniqueWithoutThesisProjectInput = {
-    where: SupervisorPaymentRecordWhereUniqueInput
-    data: XOR<SupervisorPaymentRecordUpdateWithoutThesisProjectInput, SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectInput>
-  }
-
-  export type SupervisorPaymentRecordUpdateManyWithWhereWithoutThesisProjectInput = {
-    where: SupervisorPaymentRecordScalarWhereInput
-    data: XOR<SupervisorPaymentRecordUpdateManyMutationInput, SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectInput>
-  }
-
-  export type SupervisorPaymentRecordScalarWhereInput = {
-    AND?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
-    OR?: SupervisorPaymentRecordScalarWhereInput[]
-    NOT?: SupervisorPaymentRecordScalarWhereInput | SupervisorPaymentRecordScalarWhereInput[]
-    id?: StringFilter<"SupervisorPaymentRecord"> | string
-    code?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-    active?: BoolFilter<"SupervisorPaymentRecord"> | boolean
-    description?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-    deletedAt?: DateTimeNullableFilter<"SupervisorPaymentRecord"> | Date | string | null
-    createdAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
-    updatedAt?: DateTimeFilter<"SupervisorPaymentRecord"> | Date | string
-    createdBy?: UuidNullableFilter<"SupervisorPaymentRecord"> | string | null
-    thesisProjectId?: StringFilter<"SupervisorPaymentRecord"> | string
-    expertId?: StringFilter<"SupervisorPaymentRecord"> | string
-    amount?: DecimalFilter<"SupervisorPaymentRecord"> | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFilter<"SupervisorPaymentRecord"> | $Enums.PaymentStatus
-    paymentDate?: DateTimeNullableFilter<"SupervisorPaymentRecord"> | Date | string | null
-    transactionCode?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
-  }
-
   export type ThesisProjectCreateWithoutDefenseSessionInput = {
     id?: string
     code?: string | null
@@ -559718,7 +561698,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -559726,7 +561708,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutDefenseSessionInput = {
@@ -559754,7 +561735,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -559768,7 +561751,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutDefenseSessionInput = {
@@ -560052,7 +562034,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -560060,7 +562044,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutRegistrationsInput = {
@@ -560088,7 +562071,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -560102,7 +562087,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutRegistrationsInput = {
@@ -560498,7 +562482,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -560506,7 +562492,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutRegistrationsInput = {
@@ -560534,7 +562519,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -560548,7 +562535,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type LecturerUpsertWithoutReviewedThesisRegistrationsInput = {
@@ -560835,7 +562821,9 @@ export namespace Prisma {
     projectEnd?: Date | string | null
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -560844,7 +562832,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutSupervisorInput = {
@@ -560871,7 +562858,9 @@ export namespace Prisma {
     type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -560886,7 +562875,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutSupervisorInput = {
@@ -560930,6 +562918,8 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -560938,7 +562928,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutCoSupervisorInput = {
@@ -560966,6 +562955,8 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -560980,7 +562971,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutCoSupervisorInput = {
@@ -561143,90 +563133,6 @@ export namespace Prisma {
 
   export type CouncilMemberCreateManyExpertInputEnvelope = {
     data: CouncilMemberCreateManyExpertInput | CouncilMemberCreateManyExpertInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PaymentRecordCreateWithoutExpertInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
-    councilMember?: CouncilMemberCreateNestedOneWithoutPaymentInput
-  }
-
-  export type PaymentRecordUncheckedCreateWithoutExpertInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
-    councilMemberId?: string | null
-  }
-
-  export type PaymentRecordCreateOrConnectWithoutExpertInput = {
-    where: PaymentRecordWhereUniqueInput
-    create: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput>
-  }
-
-  export type PaymentRecordCreateManyExpertInputEnvelope = {
-    data: PaymentRecordCreateManyExpertInput | PaymentRecordCreateManyExpertInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type SupervisorPaymentRecordCreateWithoutExpertInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
-    thesisProject: ThesisProjectCreateNestedOneWithoutSupervisorPaymentsInput
-  }
-
-  export type SupervisorPaymentRecordUncheckedCreateWithoutExpertInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    thesisProjectId: string
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
-  }
-
-  export type SupervisorPaymentRecordCreateOrConnectWithoutExpertInput = {
-    where: SupervisorPaymentRecordWhereUniqueInput
-    create: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput>
-  }
-
-  export type SupervisorPaymentRecordCreateManyExpertInputEnvelope = {
-    data: SupervisorPaymentRecordCreateManyExpertInput | SupervisorPaymentRecordCreateManyExpertInput[]
     skipDuplicates?: boolean
   }
 
@@ -561408,58 +563314,6 @@ export namespace Prisma {
     expertId?: StringFilter<"CouncilMember"> | string
   }
 
-  export type PaymentRecordUpsertWithWhereUniqueWithoutExpertInput = {
-    where: PaymentRecordWhereUniqueInput
-    update: XOR<PaymentRecordUpdateWithoutExpertInput, PaymentRecordUncheckedUpdateWithoutExpertInput>
-    create: XOR<PaymentRecordCreateWithoutExpertInput, PaymentRecordUncheckedCreateWithoutExpertInput>
-  }
-
-  export type PaymentRecordUpdateWithWhereUniqueWithoutExpertInput = {
-    where: PaymentRecordWhereUniqueInput
-    data: XOR<PaymentRecordUpdateWithoutExpertInput, PaymentRecordUncheckedUpdateWithoutExpertInput>
-  }
-
-  export type PaymentRecordUpdateManyWithWhereWithoutExpertInput = {
-    where: PaymentRecordScalarWhereInput
-    data: XOR<PaymentRecordUpdateManyMutationInput, PaymentRecordUncheckedUpdateManyWithoutExpertInput>
-  }
-
-  export type PaymentRecordScalarWhereInput = {
-    AND?: PaymentRecordScalarWhereInput | PaymentRecordScalarWhereInput[]
-    OR?: PaymentRecordScalarWhereInput[]
-    NOT?: PaymentRecordScalarWhereInput | PaymentRecordScalarWhereInput[]
-    id?: StringFilter<"PaymentRecord"> | string
-    code?: StringNullableFilter<"PaymentRecord"> | string | null
-    active?: BoolFilter<"PaymentRecord"> | boolean
-    description?: StringNullableFilter<"PaymentRecord"> | string | null
-    deletedAt?: DateTimeNullableFilter<"PaymentRecord"> | Date | string | null
-    createdAt?: DateTimeFilter<"PaymentRecord"> | Date | string
-    updatedAt?: DateTimeFilter<"PaymentRecord"> | Date | string
-    createdBy?: UuidNullableFilter<"PaymentRecord"> | string | null
-    amount?: DecimalFilter<"PaymentRecord"> | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFilter<"PaymentRecord"> | $Enums.PaymentStatus
-    paymentDate?: DateTimeNullableFilter<"PaymentRecord"> | Date | string | null
-    transactionCode?: StringNullableFilter<"PaymentRecord"> | string | null
-    expertId?: StringFilter<"PaymentRecord"> | string
-    councilMemberId?: StringNullableFilter<"PaymentRecord"> | string | null
-  }
-
-  export type SupervisorPaymentRecordUpsertWithWhereUniqueWithoutExpertInput = {
-    where: SupervisorPaymentRecordWhereUniqueInput
-    update: XOR<SupervisorPaymentRecordUpdateWithoutExpertInput, SupervisorPaymentRecordUncheckedUpdateWithoutExpertInput>
-    create: XOR<SupervisorPaymentRecordCreateWithoutExpertInput, SupervisorPaymentRecordUncheckedCreateWithoutExpertInput>
-  }
-
-  export type SupervisorPaymentRecordUpdateWithWhereUniqueWithoutExpertInput = {
-    where: SupervisorPaymentRecordWhereUniqueInput
-    data: XOR<SupervisorPaymentRecordUpdateWithoutExpertInput, SupervisorPaymentRecordUncheckedUpdateWithoutExpertInput>
-  }
-
-  export type SupervisorPaymentRecordUpdateManyWithWhereWithoutExpertInput = {
-    where: SupervisorPaymentRecordScalarWhereInput
-    data: XOR<SupervisorPaymentRecordUpdateManyMutationInput, SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertInput>
-  }
-
   export type DocumentFileCreateWithoutDecisionInput = {
     id?: string
     code?: string | null
@@ -561569,7 +563423,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -561577,7 +563433,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutDecisionsInput = {
@@ -561605,7 +563460,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -561619,7 +563476,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutDecisionsInput = {
@@ -561685,7 +563541,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -561693,7 +563551,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutDecisionsInput = {
@@ -561721,7 +563578,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561735,7 +563594,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type CouncilMemberCreateWithoutInvitationsInput = {
@@ -561894,7 +563752,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
     defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -561902,7 +563762,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutCouncilInput = {
@@ -561930,7 +563789,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     roomId?: string | null
@@ -561944,7 +563805,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutCouncilInput = {
@@ -562139,6 +563999,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -562146,8 +564008,6 @@ export namespace Prisma {
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
-    payments?: PaymentRecordCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileUncheckedCreateWithoutCouncilMembershipsInput = {
@@ -562171,14 +564031,14 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
-    payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
   }
 
   export type ExpertProfileCreateOrConnectWithoutCouncilMembershipsInput = {
@@ -562199,7 +564059,6 @@ export namespace Prisma {
     status?: $Enums.PaymentStatus
     paymentDate?: Date | string | null
     transactionCode?: string | null
-    expert: ExpertProfileCreateNestedOneWithoutPaymentsInput
   }
 
   export type PaymentRecordUncheckedCreateWithoutCouncilMemberInput = {
@@ -562215,7 +564074,6 @@ export namespace Prisma {
     status?: $Enums.PaymentStatus
     paymentDate?: Date | string | null
     transactionCode?: string | null
-    expertId: string
   }
 
   export type PaymentRecordCreateOrConnectWithoutCouncilMemberInput = {
@@ -562326,6 +564184,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -562333,8 +564193,6 @@ export namespace Prisma {
     supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
     coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
-    payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateWithoutCouncilMembershipsInput = {
@@ -562358,14 +564216,14 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
     supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
     coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
-    payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
   }
 
   export type PaymentRecordUpsertWithoutCouncilMemberInput = {
@@ -562392,7 +564250,6 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    expert?: ExpertProfileUpdateOneRequiredWithoutPaymentsNestedInput
   }
 
   export type PaymentRecordUncheckedUpdateWithoutCouncilMemberInput = {
@@ -562408,7 +564265,6 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    expertId?: StringFieldUpdateOperationsInput | string
   }
 
   export type InvitationUpsertWithoutCouncilMemberInput = {
@@ -562479,7 +564335,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -562487,7 +564345,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutDefenseRecordInput = {
@@ -562515,7 +564372,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -562529,7 +564388,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutDefenseRecordInput = {
@@ -562657,7 +564515,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -562665,7 +564525,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutDefenseRecordInput = {
@@ -562693,7 +564552,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562707,7 +564568,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type DocumentFileUpsertWithWhereUniqueWithoutDefenseRecordInput = {
@@ -562757,7 +564617,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -562765,7 +564627,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
     decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectUncheckedCreateWithoutLibrarySubmissionInput = {
@@ -562793,7 +564654,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -562807,7 +564670,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
     decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
   export type ThesisProjectCreateOrConnectWithoutLibrarySubmissionInput = {
@@ -562935,7 +564797,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -562943,7 +564807,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutLibrarySubmissionInput = {
@@ -562971,7 +564834,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562985,7 +564850,6 @@ export namespace Prisma {
     defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type DocumentFileUpsertWithWhereUniqueWithoutLibrarySubmissionInput = {
@@ -563002,73 +564866,6 @@ export namespace Prisma {
   export type DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput = {
     where: DocumentFileScalarWhereInput
     data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionInput>
-  }
-
-  export type ExpertProfileCreateWithoutPaymentsInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    name?: string | null
-    academicRank?: string | null
-    academicDegree?: string | null
-    organization?: string | null
-    position?: string | null
-    specialization?: string | null
-    workplace?: string | null
-    phone?: string | null
-    email?: string | null
-    bankAccountNumber?: string | null
-    bankName?: string | null
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
-    lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
-    major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
-    supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
-    coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
-    subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
-    councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordCreateNestedManyWithoutExpertInput
-  }
-
-  export type ExpertProfileUncheckedCreateWithoutPaymentsInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    lecturerId?: string | null
-    name?: string | null
-    academicRank?: string | null
-    academicDegree?: string | null
-    organization?: string | null
-    position?: string | null
-    specialization?: string | null
-    workplace?: string | null
-    phone?: string | null
-    email?: string | null
-    bankAccountNumber?: string | null
-    bankName?: string | null
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
-    major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
-    supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
-    coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
-    subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
-    councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutExpertInput
-  }
-
-  export type ExpertProfileCreateOrConnectWithoutPaymentsInput = {
-    where: ExpertProfileWhereUniqueInput
-    create: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
   }
 
   export type CouncilMemberCreateWithoutPaymentInput = {
@@ -563104,79 +564901,6 @@ export namespace Prisma {
   export type CouncilMemberCreateOrConnectWithoutPaymentInput = {
     where: CouncilMemberWhereUniqueInput
     create: XOR<CouncilMemberCreateWithoutPaymentInput, CouncilMemberUncheckedCreateWithoutPaymentInput>
-  }
-
-  export type ExpertProfileUpsertWithoutPaymentsInput = {
-    update: XOR<ExpertProfileUpdateWithoutPaymentsInput, ExpertProfileUncheckedUpdateWithoutPaymentsInput>
-    create: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
-    where?: ExpertProfileWhereInput
-  }
-
-  export type ExpertProfileUpdateToOneWithWhereWithoutPaymentsInput = {
-    where?: ExpertProfileWhereInput
-    data: XOR<ExpertProfileUpdateWithoutPaymentsInput, ExpertProfileUncheckedUpdateWithoutPaymentsInput>
-  }
-
-  export type ExpertProfileUpdateWithoutPaymentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-    academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    specialization?: NullableStringFieldUpdateOperationsInput | string | null
-    workplace?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    bankName?: NullableStringFieldUpdateOperationsInput | string | null
-    eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
-    eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
-    lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
-    major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
-    supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
-    coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
-    subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
-    councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
-  }
-
-  export type ExpertProfileUncheckedUpdateWithoutPaymentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-    academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    specialization?: NullableStringFieldUpdateOperationsInput | string | null
-    workplace?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    bankName?: NullableStringFieldUpdateOperationsInput | string | null
-    eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
-    eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
-    major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
-    supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
-    coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
-    subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
-    councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
   }
 
   export type CouncilMemberUpsertWithoutPaymentInput = {
@@ -563220,7 +564944,7 @@ export namespace Prisma {
     invitations?: InvitationUncheckedUpdateOneWithoutCouncilMemberNestedInput
   }
 
-  export type ThesisProjectCreateWithoutSupervisorPaymentsInput = {
+  export type ThesisProjectCreateWithoutSupervisorPaymentInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -563252,6 +564976,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
     supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
     coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
     organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
     council?: CouncilCreateNestedOneWithoutThesisInput
     room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -563262,7 +564987,7 @@ export namespace Prisma {
     registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
   }
 
-  export type ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput = {
+  export type ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -563288,6 +565013,7 @@ export namespace Prisma {
     thesisSessionId?: string | null
     supervisorId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -563304,12 +565030,17 @@ export namespace Prisma {
     registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
-  export type ThesisProjectCreateOrConnectWithoutSupervisorPaymentsInput = {
+  export type ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput = {
     where: ThesisProjectWhereUniqueInput
-    create: XOR<ThesisProjectCreateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput>
+    create: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput>
   }
 
-  export type ExpertProfileCreateWithoutSupervisorPaymentRecordInput = {
+  export type ThesisProjectCreateManySupervisorPaymentInputEnvelope = {
+    data: ThesisProjectCreateManySupervisorPaymentInput | ThesisProjectCreateManySupervisorPaymentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ThesisProjectCreateWithoutCoSupervisorPaymentInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -563318,29 +565049,41 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    name?: string | null
-    academicRank?: string | null
-    academicDegree?: string | null
-    organization?: string | null
-    position?: string | null
-    specialization?: string | null
-    workplace?: string | null
-    phone?: string | null
-    email?: string | null
-    bankAccountNumber?: string | null
-    bankName?: string | null
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
-    lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
-    major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
-    supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
-    coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
-    subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
-    councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordCreateNestedManyWithoutExpertInput
+    title?: string | null
+    titleEN?: string | null
+    summary?: string | null
+    objectives?: string | null
+    scope?: string | null
+    methodology?: string | null
+    expectedResults?: string | null
+    requirements?: string | null
+    technologies?: string | null
+    thesisType?: $Enums.ThesisType
+    status?: $Enums.ThesisProjectStatus
+    language?: string | null
+    type?: string | null
+    maxStudents?: number | null
+    defenseDate?: Date | string | null
+    registrationStart?: Date | string | null
+    registrationEnd?: Date | string | null
+    projectStart?: Date | string | null
+    projectEnd?: Date | string | null
+    subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+    thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
+    supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+    supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
+    coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+    organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
+    council?: CouncilCreateNestedOneWithoutThesisInput
+    room?: RoomCreateNestedOneWithoutThesisProjectInput
+    defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
+    defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
+    librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
+    decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
+    registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
   }
 
-  export type ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput = {
+  export type ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -563349,199 +565092,80 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    lecturerId?: string | null
-    name?: string | null
-    academicRank?: string | null
-    academicDegree?: string | null
-    organization?: string | null
-    position?: string | null
-    specialization?: string | null
-    workplace?: string | null
-    phone?: string | null
-    email?: string | null
-    bankAccountNumber?: string | null
-    bankName?: string | null
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
-    major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
-    supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
-    coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
-    subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
-    councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
-    payments?: PaymentRecordUncheckedCreateNestedManyWithoutExpertInput
+    title?: string | null
+    titleEN?: string | null
+    summary?: string | null
+    objectives?: string | null
+    scope?: string | null
+    methodology?: string | null
+    expectedResults?: string | null
+    requirements?: string | null
+    technologies?: string | null
+    thesisType?: $Enums.ThesisType
+    status?: $Enums.ThesisProjectStatus
+    language?: string | null
+    type?: string | null
+    subjectClassId?: string | null
+    thesisSessionId?: string | null
+    supervisorId?: string | null
+    supervisorPaymentId?: string | null
+    coSupervisorId?: string | null
+    organizationId?: string | null
+    maxStudents?: number | null
+    councilId?: string | null
+    roomId?: string | null
+    defenseDate?: Date | string | null
+    defenseSessionId?: string | null
+    registrationStart?: Date | string | null
+    registrationEnd?: Date | string | null
+    projectStart?: Date | string | null
+    projectEnd?: Date | string | null
+    defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
+    librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
+    decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
+    registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
   }
 
-  export type ExpertProfileCreateOrConnectWithoutSupervisorPaymentRecordInput = {
-    where: ExpertProfileWhereUniqueInput
-    create: XOR<ExpertProfileCreateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput>
+  export type ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput = {
+    where: ThesisProjectWhereUniqueInput
+    create: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput>
   }
 
-  export type ThesisProjectUpsertWithoutSupervisorPaymentsInput = {
-    update: XOR<ThesisProjectUpdateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentsInput>
-    create: XOR<ThesisProjectCreateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentsInput>
-    where?: ThesisProjectWhereInput
+  export type ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope = {
+    data: ThesisProjectCreateManyCoSupervisorPaymentInput | ThesisProjectCreateManyCoSupervisorPaymentInput[]
+    skipDuplicates?: boolean
   }
 
-  export type ThesisProjectUpdateToOneWithWhereWithoutSupervisorPaymentsInput = {
-    where?: ThesisProjectWhereInput
-    data: XOR<ThesisProjectUpdateWithoutSupervisorPaymentsInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentsInput>
+  export type ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput = {
+    where: ThesisProjectWhereUniqueInput
+    update: XOR<ThesisProjectUpdateWithoutSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentInput>
+    create: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput>
   }
 
-  export type ThesisProjectUpdateWithoutSupervisorPaymentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    titleEN?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
-    objectives?: NullableStringFieldUpdateOperationsInput | string | null
-    scope?: NullableStringFieldUpdateOperationsInput | string | null
-    methodology?: NullableStringFieldUpdateOperationsInput | string | null
-    expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
-    requirements?: NullableStringFieldUpdateOperationsInput | string | null
-    technologies?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
-    status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-    language?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
-    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
-    thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
-    supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
-    coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
-    organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
-    council?: CouncilUpdateOneWithoutThesisNestedInput
-    room?: RoomUpdateOneWithoutThesisProjectNestedInput
-    defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
-    defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
-    librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
-    decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
-    registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+  export type ThesisProjectUpdateWithWhereUniqueWithoutSupervisorPaymentInput = {
+    where: ThesisProjectWhereUniqueInput
+    data: XOR<ThesisProjectUpdateWithoutSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentInput>
   }
 
-  export type ThesisProjectUncheckedUpdateWithoutSupervisorPaymentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    titleEN?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
-    objectives?: NullableStringFieldUpdateOperationsInput | string | null
-    scope?: NullableStringFieldUpdateOperationsInput | string | null
-    methodology?: NullableStringFieldUpdateOperationsInput | string | null
-    expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
-    requirements?: NullableStringFieldUpdateOperationsInput | string | null
-    technologies?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
-    status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-    language?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
-    supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
-    coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
-    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
-    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
-    councilId?: NullableStringFieldUpdateOperationsInput | string | null
-    roomId?: NullableStringFieldUpdateOperationsInput | string | null
-    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
-    registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
-    librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
-    registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+  export type ThesisProjectUpdateManyWithWhereWithoutSupervisorPaymentInput = {
+    where: ThesisProjectScalarWhereInput
+    data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentInput>
   }
 
-  export type ExpertProfileUpsertWithoutSupervisorPaymentRecordInput = {
-    update: XOR<ExpertProfileUpdateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedUpdateWithoutSupervisorPaymentRecordInput>
-    create: XOR<ExpertProfileCreateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedCreateWithoutSupervisorPaymentRecordInput>
-    where?: ExpertProfileWhereInput
+  export type ThesisProjectUpsertWithWhereUniqueWithoutCoSupervisorPaymentInput = {
+    where: ThesisProjectWhereUniqueInput
+    update: XOR<ThesisProjectUpdateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutCoSupervisorPaymentInput>
+    create: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput>
   }
 
-  export type ExpertProfileUpdateToOneWithWhereWithoutSupervisorPaymentRecordInput = {
-    where?: ExpertProfileWhereInput
-    data: XOR<ExpertProfileUpdateWithoutSupervisorPaymentRecordInput, ExpertProfileUncheckedUpdateWithoutSupervisorPaymentRecordInput>
+  export type ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput = {
+    where: ThesisProjectWhereUniqueInput
+    data: XOR<ThesisProjectUpdateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutCoSupervisorPaymentInput>
   }
 
-  export type ExpertProfileUpdateWithoutSupervisorPaymentRecordInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-    academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    specialization?: NullableStringFieldUpdateOperationsInput | string | null
-    workplace?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    bankName?: NullableStringFieldUpdateOperationsInput | string | null
-    eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
-    eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
-    lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
-    major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
-    supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
-    coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
-    subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
-    councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-  }
-
-  export type ExpertProfileUncheckedUpdateWithoutSupervisorPaymentRecordInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-    academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    specialization?: NullableStringFieldUpdateOperationsInput | string | null
-    workplace?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    bankName?: NullableStringFieldUpdateOperationsInput | string | null
-    eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
-    eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
-    major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
-    supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
-    coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
-    subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
-    councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
+  export type ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput = {
+    where: ThesisProjectScalarWhereInput
+    data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentInput>
   }
 
   export type SemesterCreateWithoutEvaluationPeriodInput = {
@@ -579768,6 +581392,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
     trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
     trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
@@ -579795,6 +581420,7 @@ export namespace Prisma {
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -579894,6 +581520,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -579921,6 +581548,7 @@ export namespace Prisma {
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -590195,6 +591823,7 @@ export namespace Prisma {
     donVi: string
     chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
   }
 
@@ -590212,6 +591841,7 @@ export namespace Prisma {
     donVi: string
     chucVuId: string
     dM_LoaiTinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
     userProfileId: string
   }
 
@@ -590255,6 +591885,7 @@ export namespace Prisma {
     donVi: string
     chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
   }
 
@@ -590272,6 +591903,7 @@ export namespace Prisma {
     donVi: string
     chucVuId: string
     dM_TinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
     userProfileId: string
   }
 
@@ -590423,6 +592055,68 @@ export namespace Prisma {
   export type QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutDM_TinhTrangDiHocTapInput = {
     where: QuaTrinhCuDiDaoTaoScalarWhereInput
     data: XOR<QuaTrinhCuDiDaoTaoUpdateManyMutationInput, QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutDM_TinhTrangDiHocTapInput>
+  }
+
+  export type QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    tuThangNam?: Date | string | null
+    denThangNam?: Date | string | null
+    donVi: string
+    chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+    dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+    dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+    userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+  }
+
+  export type QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    tuThangNam?: Date | string | null
+    denThangNam?: Date | string | null
+    donVi: string
+    chucVuId: string
+    dM_TinhTrangCongTacId?: string | null
+    dM_LoaiTinhTrangCongTacId?: string | null
+    userProfileId: string
+  }
+
+  export type QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_NuocCuDiHocTapInput = {
+    where: QuaTrinhCuDiCongTacWhereUniqueInput
+    create: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput>
+  }
+
+  export type QuaTrinhCuDiCongTacCreateManyDM_NuocCuDiHocTapInputEnvelope = {
+    data: QuaTrinhCuDiCongTacCreateManyDM_NuocCuDiHocTapInput | QuaTrinhCuDiCongTacCreateManyDM_NuocCuDiHocTapInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_NuocCuDiHocTapInput = {
+    where: QuaTrinhCuDiCongTacWhereUniqueInput
+    update: XOR<QuaTrinhCuDiCongTacUpdateWithoutDM_NuocCuDiHocTapInput, QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_NuocCuDiHocTapInput>
+    create: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_NuocCuDiHocTapInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_NuocCuDiHocTapInput>
+  }
+
+  export type QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_NuocCuDiHocTapInput = {
+    where: QuaTrinhCuDiCongTacWhereUniqueInput
+    data: XOR<QuaTrinhCuDiCongTacUpdateWithoutDM_NuocCuDiHocTapInput, QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_NuocCuDiHocTapInput>
+  }
+
+  export type QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_NuocCuDiHocTapInput = {
+    where: QuaTrinhCuDiCongTacScalarWhereInput
+    data: XOR<QuaTrinhCuDiCongTacUpdateManyMutationInput, QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_NuocCuDiHocTapInput>
   }
 
   export type UserProfileCreateWithoutDM_ChucDanhCMNVGiangVienInput = {
@@ -593637,6 +595331,7 @@ export namespace Prisma {
     chucVuId: string
     dM_TinhTrangCongTacId?: string | null
     dM_LoaiTinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
   }
 
   export type QuaTrinhCuDiDaoTaoCreateManyUserProfileInput = {
@@ -594581,6 +596276,7 @@ export namespace Prisma {
     chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
   }
 
   export type QuaTrinhCuDiCongTacUncheckedUpdateWithoutUserProfileInput = {
@@ -594598,6 +596294,7 @@ export namespace Prisma {
     chucVuId?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileInput = {
@@ -594615,6 +596312,7 @@ export namespace Prisma {
     chucVuId?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuaTrinhCuDiDaoTaoUpdateWithoutUserProfileInput = {
@@ -599205,6 +600903,7 @@ export namespace Prisma {
     donVi: string
     dM_TinhTrangCongTacId?: string | null
     dM_LoaiTinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
     userProfileId: string
   }
 
@@ -599756,6 +601455,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
     userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
   }
 
@@ -599773,6 +601473,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -599790,6 +601491,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -601848,13 +603550,13 @@ export namespace Prisma {
 
   export type CurriculumCreateManyManagementOrganizationInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     trainingMajorId: string
@@ -602061,7 +603763,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     maxStudents?: number | null
     councilId?: string | null
     roomId?: string | null
@@ -602310,13 +604014,13 @@ export namespace Prisma {
 
   export type CurriculumUpdateWithoutManagementOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -602329,13 +604033,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateWithoutManagementOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     trainingMajorId?: StringFieldUpdateOperationsInput | string
@@ -602348,13 +604052,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateManyWithoutManagementOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     trainingMajorId?: StringFieldUpdateOperationsInput | string
@@ -603001,7 +604705,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
     defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -603009,7 +604715,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutOrganizationInput = {
@@ -603037,7 +604742,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -603051,7 +604758,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutOrganizationInput = {
@@ -603079,7 +604785,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620317,13 +622025,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateManyTrainingLanguageInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -620498,13 +622206,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutTrainingLanguageInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620542,13 +622250,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutTrainingLanguageInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620586,13 +622294,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateManyWithoutTrainingLanguageInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622120,13 +623828,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateManyCurriculumInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -622260,13 +623968,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutCurriculumInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622304,13 +624012,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutCurriculumInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622348,13 +624056,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateManyWithoutCurriculumInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -625454,7 +627162,9 @@ export namespace Prisma {
     type?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -625820,7 +627530,9 @@ export namespace Prisma {
     projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -625829,7 +627541,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutSubjectClassInput = {
@@ -625856,7 +627567,9 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -625871,7 +627584,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutSubjectClassInput = {
@@ -625898,7 +627610,9 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -625931,6 +627645,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -625938,8 +627654,6 @@ export namespace Prisma {
     supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
     coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
     councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateWithoutSubjectClassInput = {
@@ -625963,14 +627677,14 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
     supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
     coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
     councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateManyWithoutSubjectClassInput = {
@@ -625994,6 +627708,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -626846,13 +628562,13 @@ export namespace Prisma {
 
   export type CurriculumCreateManyTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     managementOrganizationId: string
@@ -626863,13 +628579,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateManyTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -627213,13 +628929,13 @@ export namespace Prisma {
 
   export type CurriculumUpdateWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -627232,13 +628948,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -627251,13 +628967,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -627268,13 +628984,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -627312,13 +629028,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -627356,13 +629072,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628146,13 +629862,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateManyTrainingTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -628184,13 +629900,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutTrainingTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628228,13 +629944,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutTrainingTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628272,13 +629988,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateManyWithoutTrainingTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628310,13 +630026,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateManyTrainingLevelInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -628358,17 +630074,18 @@ export namespace Prisma {
     name: string
     type: $Enums.TrainingObjectTypes
     trainingFormId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
   }
 
   export type CurriculumVersionUpdateWithoutTrainingLevelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628406,13 +630123,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutTrainingLevelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628450,13 +630167,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateManyWithoutTrainingLevelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628497,6 +630214,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -628523,6 +630241,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -628548,6 +630267,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
   }
 
   export type TrainingObjectTypeCreateManyTrainingFormInput = {
@@ -628562,6 +630282,7 @@ export namespace Prisma {
     name: string
     type: $Enums.TrainingObjectTypes
     trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
   }
 
   export type TrainingObjectTypeUpdateWithoutTrainingFormInput = {
@@ -628575,6 +630296,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
     trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -628601,6 +630323,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
     trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -628626,6 +630349,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
     trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
   }
 
   export type StudentCreateManyTrainingLocationInput = {
@@ -629258,7 +630982,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -629642,7 +631368,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -629650,7 +631378,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutRoomInput = {
@@ -629678,7 +631405,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629692,7 +631421,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutRoomInput = {
@@ -629720,7 +631448,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630197,13 +631927,13 @@ export namespace Prisma {
 
   export type CurriculumCreateManyTrainingMajorInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     englishName?: string | null
     managementOrganizationId: string
@@ -630292,13 +632022,13 @@ export namespace Prisma {
 
   export type CurriculumUpdateWithoutTrainingMajorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630311,13 +632041,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateWithoutTrainingMajorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -630330,13 +632060,13 @@ export namespace Prisma {
 
   export type CurriculumUncheckedUpdateManyWithoutTrainingMajorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -630435,6 +632165,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -630442,8 +632174,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateWithoutMajorInput = {
@@ -630467,14 +632197,14 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
     coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateManyWithoutMajorInput = {
@@ -630498,6 +632228,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -630809,13 +632541,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateManyTrainingTimeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -630847,13 +632579,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutTrainingTimeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630891,13 +632623,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutTrainingTimeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630935,13 +632667,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateManyWithoutTrainingTimeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631214,13 +632946,13 @@ export namespace Prisma {
 
   export type CurriculumVersionCreateManyDiplomaTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code?: string | null
     name: string
     shortName?: string | null
     englishName?: string | null
@@ -631294,13 +633026,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUpdateWithoutDiplomaTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631338,13 +633070,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateWithoutDiplomaTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631382,13 +633114,13 @@ export namespace Prisma {
 
   export type CurriculumVersionUncheckedUpdateManyWithoutDiplomaTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -634976,6 +636708,8 @@ export namespace Prisma {
     email?: string | null
     bankAccountNumber?: string | null
     bankName?: string | null
+    projectExpert?: boolean
+    thesisExpert?: boolean
     eligiblePresident: boolean
     eligibleSecretary: boolean
   }
@@ -636018,6 +637752,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
@@ -636025,8 +637761,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateWithoutLecturerInput = {
@@ -636049,6 +637783,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -636056,8 +637792,6 @@ export namespace Prisma {
     coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
     councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
-    payments?: PaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
-    supervisorPaymentRecord?: SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertNestedInput
   }
 
   export type ExpertProfileUncheckedUpdateManyWithoutLecturerInput = {
@@ -636080,6 +637814,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    projectExpert?: BoolFieldUpdateOperationsInput | boolean
+    thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -636677,7 +638413,9 @@ export namespace Prisma {
     type?: string | null
     subjectClassId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -636720,7 +638458,9 @@ export namespace Prisma {
     projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -636729,7 +638469,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutThesisSessionInput = {
@@ -636756,7 +638495,9 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -636771,7 +638512,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutThesisSessionInput = {
@@ -636798,7 +638538,9 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -636843,22 +638585,6 @@ export namespace Prisma {
     reviewedAt?: Date | string | null
     reviewedById?: string | null
     reviewNote?: string | null
-  }
-
-  export type SupervisorPaymentRecordCreateManyThesisProjectInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    expertId: string
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
   }
 
   export type DecisionUpdateWithoutThesisProjectInput = {
@@ -636967,54 +638693,6 @@ export namespace Prisma {
     reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type SupervisorPaymentRecordUpdateWithoutThesisProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    expert?: ExpertProfileUpdateOneRequiredWithoutSupervisorPaymentRecordNestedInput
-  }
-
-  export type SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    expertId?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    expertId?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type ThesisProjectCreateManyDefenseSessionInput = {
     id?: string
     code?: string | null
@@ -637040,7 +638718,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -637083,7 +638763,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -637091,7 +638773,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutDefenseSessionInput = {
@@ -637119,7 +638800,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637133,7 +638816,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutDefenseSessionInput = {
@@ -637161,7 +638843,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637197,7 +638881,9 @@ export namespace Prisma {
     type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -637235,6 +638921,8 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     councilId?: string | null
@@ -637258,38 +638946,6 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     councilId: string
-  }
-
-  export type PaymentRecordCreateManyExpertInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
-    councilMemberId?: string | null
-  }
-
-  export type SupervisorPaymentRecordCreateManyExpertInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    thesisProjectId: string
-    amount: Decimal | DecimalJsLike | number | string
-    status?: $Enums.PaymentStatus
-    paymentDate?: Date | string | null
-    transactionCode?: string | null
   }
 
   export type TrainingMajorUpdateWithoutExpertProfileInput = {
@@ -637395,7 +639051,9 @@ export namespace Prisma {
     projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -637404,7 +639062,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutSupervisorInput = {
@@ -637431,7 +639088,9 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637446,7 +639105,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutSupervisorInput = {
@@ -637473,7 +639131,9 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637517,6 +639177,8 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     council?: CouncilUpdateOneWithoutThesisNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -637525,7 +639187,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutCoSupervisorInput = {
@@ -637553,6 +639214,8 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637567,7 +639230,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutCoSupervisorInput = {
@@ -637595,6 +639257,8 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637802,102 +639466,6 @@ export namespace Prisma {
     councilId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type PaymentRecordUpdateWithoutExpertInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    councilMember?: CouncilMemberUpdateOneWithoutPaymentNestedInput
-  }
-
-  export type PaymentRecordUncheckedUpdateWithoutExpertInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    councilMemberId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PaymentRecordUncheckedUpdateManyWithoutExpertInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    councilMemberId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type SupervisorPaymentRecordUpdateWithoutExpertInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisProject?: ThesisProjectUpdateOneRequiredWithoutSupervisorPaymentsNestedInput
-  }
-
-  export type SupervisorPaymentRecordUncheckedUpdateWithoutExpertInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisProjectId?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type SupervisorPaymentRecordUncheckedUpdateManyWithoutExpertInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    thesisProjectId?: StringFieldUpdateOperationsInput | string
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type DocumentFileCreateManyDecisionInput = {
     id?: string
     code?: string | null
@@ -638059,7 +639627,9 @@ export namespace Prisma {
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
+    supervisorPaymentId?: string | null
     coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
     organizationId?: string | null
     maxStudents?: number | null
     roomId?: string | null
@@ -638115,7 +639685,9 @@ export namespace Prisma {
     subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
     thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
     supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
     coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
     organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
     room?: RoomUpdateOneWithoutThesisProjectNestedInput
     defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -638123,7 +639695,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateWithoutCouncilInput = {
@@ -638151,7 +639722,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638165,7 +639738,6 @@ export namespace Prisma {
     librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
     decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
     registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
-    supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutCouncilInput = {
@@ -638193,7 +639765,9 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638518,6 +640092,334 @@ export namespace Prisma {
     studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ThesisProjectCreateManySupervisorPaymentInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title?: string | null
+    titleEN?: string | null
+    summary?: string | null
+    objectives?: string | null
+    scope?: string | null
+    methodology?: string | null
+    expectedResults?: string | null
+    requirements?: string | null
+    technologies?: string | null
+    thesisType?: $Enums.ThesisType
+    status?: $Enums.ThesisProjectStatus
+    language?: string | null
+    type?: string | null
+    subjectClassId?: string | null
+    thesisSessionId?: string | null
+    supervisorId?: string | null
+    coSupervisorId?: string | null
+    coSupervisorPaymentId?: string | null
+    organizationId?: string | null
+    maxStudents?: number | null
+    councilId?: string | null
+    roomId?: string | null
+    defenseDate?: Date | string | null
+    defenseSessionId?: string | null
+    registrationStart?: Date | string | null
+    registrationEnd?: Date | string | null
+    projectStart?: Date | string | null
+    projectEnd?: Date | string | null
+  }
+
+  export type ThesisProjectCreateManyCoSupervisorPaymentInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title?: string | null
+    titleEN?: string | null
+    summary?: string | null
+    objectives?: string | null
+    scope?: string | null
+    methodology?: string | null
+    expectedResults?: string | null
+    requirements?: string | null
+    technologies?: string | null
+    thesisType?: $Enums.ThesisType
+    status?: $Enums.ThesisProjectStatus
+    language?: string | null
+    type?: string | null
+    subjectClassId?: string | null
+    thesisSessionId?: string | null
+    supervisorId?: string | null
+    supervisorPaymentId?: string | null
+    coSupervisorId?: string | null
+    organizationId?: string | null
+    maxStudents?: number | null
+    councilId?: string | null
+    roomId?: string | null
+    defenseDate?: Date | string | null
+    defenseSessionId?: string | null
+    registrationStart?: Date | string | null
+    registrationEnd?: Date | string | null
+    projectStart?: Date | string | null
+    projectEnd?: Date | string | null
+  }
+
+  export type ThesisProjectUpdateWithoutSupervisorPaymentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+    status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+    thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+    supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+    organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
+    council?: CouncilUpdateOneWithoutThesisNestedInput
+    room?: RoomUpdateOneWithoutThesisProjectNestedInput
+    defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
+    defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
+    librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
+    decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
+    registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+  }
+
+  export type ThesisProjectUncheckedUpdateWithoutSupervisorPaymentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+    status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    councilId?: NullableStringFieldUpdateOperationsInput | string | null
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
+    librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
+    decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
+    registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+  }
+
+  export type ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+    status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    councilId?: NullableStringFieldUpdateOperationsInput | string | null
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ThesisProjectUpdateWithoutCoSupervisorPaymentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+    status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+    thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+    supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+    supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
+    coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+    organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
+    council?: CouncilUpdateOneWithoutThesisNestedInput
+    room?: RoomUpdateOneWithoutThesisProjectNestedInput
+    defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
+    defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
+    librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
+    decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
+    registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+  }
+
+  export type ThesisProjectUncheckedUpdateWithoutCoSupervisorPaymentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+    status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    councilId?: NullableStringFieldUpdateOperationsInput | string | null
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
+    librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
+    decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
+    registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+  }
+
+  export type ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+    status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    councilId?: NullableStringFieldUpdateOperationsInput | string | null
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type StandardPeriodCreateManyPeriodInput = {
@@ -649432,6 +651334,7 @@ export namespace Prisma {
     donVi: string
     chucVuId: string
     dM_LoaiTinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
     userProfileId: string
   }
 
@@ -649449,6 +651352,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
     dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
     userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
   }
 
@@ -649466,6 +651370,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     chucVuId?: StringFieldUpdateOperationsInput | string
     dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -649483,6 +651388,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     chucVuId?: StringFieldUpdateOperationsInput | string
     dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -649500,6 +651406,7 @@ export namespace Prisma {
     donVi: string
     chucVuId: string
     dM_TinhTrangCongTacId?: string | null
+    dM_NuocCuDiHocTapId?: string | null
     userProfileId: string
   }
 
@@ -649517,6 +651424,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
     dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+    dM_NuocCuDiHocTap?: DM_NuocCuDiHocTapUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
     userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
   }
 
@@ -649534,6 +651442,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     chucVuId?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -649551,6 +651460,7 @@ export namespace Prisma {
     donVi?: StringFieldUpdateOperationsInput | string
     chucVuId?: StringFieldUpdateOperationsInput | string
     dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -649695,6 +651605,78 @@ export namespace Prisma {
     denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     vanBang?: NullableStringFieldUpdateOperationsInput | string | null
     loaiId?: StringFieldUpdateOperationsInput | string
+    userProfileId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type QuaTrinhCuDiCongTacCreateManyDM_NuocCuDiHocTapInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    tuThangNam?: Date | string | null
+    denThangNam?: Date | string | null
+    donVi: string
+    chucVuId: string
+    dM_TinhTrangCongTacId?: string | null
+    dM_LoaiTinhTrangCongTacId?: string | null
+    userProfileId: string
+  }
+
+  export type QuaTrinhCuDiCongTacUpdateWithoutDM_NuocCuDiHocTapInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    donVi?: StringFieldUpdateOperationsInput | string
+    chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
+    dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+    dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+    userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
+  }
+
+  export type QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_NuocCuDiHocTapInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    donVi?: StringFieldUpdateOperationsInput | string
+    chucVuId?: StringFieldUpdateOperationsInput | string
+    dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    userProfileId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_NuocCuDiHocTapInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    donVi?: StringFieldUpdateOperationsInput | string
+    chucVuId?: StringFieldUpdateOperationsInput | string
+    dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 

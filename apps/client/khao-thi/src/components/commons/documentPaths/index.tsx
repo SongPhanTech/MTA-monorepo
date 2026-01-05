@@ -4,7 +4,7 @@ import {
     DownloadOutlined,
     PaperClipOutlined,
 } from '@ant-design/icons'
-import type { DocumentFile, EvidenceFile, Prisma } from '@workspace/db'
+import type { DocumentFile, Prisma } from '@workspace/db/client'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { getMinioUrl, getRuntimeEnv } from '@workspace/libs/utils'
 import { message, Tooltip, Typography, Upload } from 'antd'
@@ -18,11 +18,9 @@ const { Link } = Typography
 
 interface DocumentPathsComponentProps {
     form: FormInstance
-    data: EvidenceFile[] | DocumentFile[]
+    data: DocumentFile[]
     relationId: string
-    relationType:
-        | Extract<Prisma.EvidenceFileScalarFieldEnum, `${string}Id`>
-        | Extract<Prisma.DocumentFileScalarFieldEnum, `${string}Id`>
+    relationType: Extract<Prisma.DocumentFileScalarFieldEnum, `${string}Id`>
     titleForm?: string
     multiple?: boolean
     accept?: string
@@ -30,7 +28,7 @@ interface DocumentPathsComponentProps {
     onUploadingChange?: (count: number) => void
 }
 
-interface UploadedFileItem {
+export type UploadedFileItem = {
     file: File | null
     name: string
     path: string
@@ -44,15 +42,16 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     data,
     relationId,
     relationType,
-    titleForm = 'evidenceFile',
+    titleForm = 'documentFiles',
     multiple = true,
-    accept = '.doc,.docx,.xls,.xlsx',
-    text = 'DOC, DOCX, XLSX, XLS',
+    accept = '.doc,.docx,.xls,.xlsx,.pdf,.ppt,.pptx,.txt',
+    text = 'DOC, DOCX, XLSX, XLS, PDF, PPT, PPTX, TXT',
     onUploadingChange,
 }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
     const [uploadingCount, setUploadingCount] = useState<number>(0)
 
+    // Thông báo parent component khi số file đang upload thay đổi
     useEffect(() => {
         if (onUploadingChange) {
             onUploadingChange(uploadingCount)
@@ -98,10 +97,12 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
 
     const handleCustomUpload = async (file: File) => {
         try {
+            // Tăng số file đang upload
             setUploadingCount((prev) => prev + 1)
+
             const extension = file.name.split('.').pop() || ''
             const resPresignedUrl = await generatePresignedUrl({
-                path: 'tai-lieu-khao-thi',
+                path: 'tai-lieu-ctdt',
                 extension: extension,
             })
 
@@ -132,16 +133,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 [relationType]: relationId,
             }
 
-            const newList = multiple ? [...fileList, newItem] : [newItem]
-
-            const evidenceFile = newList.map((item) => ({
-                name: item.name,
-                path: item.path,
-                size: item.size,
-                mimeType: item.mimeType,
-                [relationType]: relationId,
-            }))
-
+            // Sử dụng callback để lấy giá trị mới nhất của fileList
             setFileList((prevList) => {
                 const newList = multiple ? [...prevList, newItem] : [newItem]
 
@@ -159,16 +151,18 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 return newList
             })
 
+            // Giảm số file đang upload khi hoàn thành
             setUploadingCount((prev) => prev - 1)
         } catch (err) {
             console.error(err)
             message.error(`Không thể upload ${file.name}.`)
+            // Giảm số file đang upload khi lỗi
             setUploadingCount((prev) => prev - 1)
         }
     }
 
     useEffect(() => {
-        const initial = data.map((file) => ({
+        const initial: UploadedFileItem[] = data.map((file) => ({
             file: null,
             name: file.name,
             path: file.path,
@@ -199,9 +193,9 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 multiple={multiple}
                 accept={accept}
                 beforeUpload={(file: File) => {
-                    const isLt5M = file.size / 1024 / 1024 < 5
+                    const isLt5M = file.size / 1024 / 1024 < 50
                     if (!isLt5M) {
-                        message.error(`${file.name} vượt quá 5MB.`)
+                        message.error(`${file.name} vượt quá 50MB.`)
                         return Upload.LIST_IGNORE
                     }
 
@@ -219,8 +213,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                     <Link className="text-[#2563EB] font-medium">Chọn tệp</Link> hoặc kéo và thả tệp
                     vào đây
                 </p>
-                <span className="text-[#4B5563] text-base font-normal">
-                    Định dạng {text} (tối đa 5MB)
+                <span className="text-[#4B5563] text-sm font-normal">
+                    Định dạng {text} (tối đa 50MB)
                 </span>
             </Dragger>
             <div className="flex flex-wrap gap-2 mt-2">

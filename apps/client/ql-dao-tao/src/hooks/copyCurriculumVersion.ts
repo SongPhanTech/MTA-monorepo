@@ -1,10 +1,4 @@
-import type {
-    CurriculumVersion,
-    DocumentFile,
-    Prisma,
-    TrainingBlockOnCurriculumVersion,
-    TrainingBlockSubject,
-} from '@workspace/db/client'
+import type { Prisma } from '@workspace/db/client'
 import { useCreateCurriculumVersion } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { message } from 'antd'
@@ -17,10 +11,16 @@ export const useCloneCurriculumVersion = () => {
     const router = useRouter()
 
     const handleCloneCurriculumVersion = async (
-        initialValue: CurriculumVersion & {
-            trainingBlocks: TrainingBlockOnCurriculumVersion[]
-            documentFiles: DocumentFile[]
-        }
+        initialValue: Prisma.CurriculumVersionGetPayload<{
+            include: {
+                documentFiles: true
+                trainingBlocks: {
+                    include: {
+                        subjects: true
+                    }
+                }
+            }
+        }>
     ) => {
         try {
             showSpinner()
@@ -83,16 +83,12 @@ export const useCloneCurriculumVersion = () => {
                     : {}),
                 trainingBlocks: {
                     create:
-                        (
-                            originalVersion.trainingBlocks as (TrainingBlockOnCurriculumVersion & {
-                                subjects?: TrainingBlockSubject[]
-                            })[]
-                        )?.map((block) => ({
+                        originalVersion.trainingBlocks?.map((block) => ({
                             priority: block.priority,
                             trainingBlock: { connect: { id: block.trainingBlockId } },
                             subjects: {
                                 create:
-                                    block.subjects?.map((subject: TrainingBlockSubject) => ({
+                                    block.subjects?.map((subject) => ({
                                         semester: subject.semester,
                                         type: subject.type,
                                         useForFinalScore: subject.useForFinalScore,

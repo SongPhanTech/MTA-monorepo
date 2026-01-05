@@ -107,7 +107,8 @@ const PutPaymentRecordDetail = () => {
             className="w-[45vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="expertId" label="Chuyên gia">
+                {/* TODO: Fix */}
+                <FormItem form={form} name="councilMemberId" label="Chuyên gia">
                     <Select
                         placeholder="Chọn chuyên gia"
                         options={expert.map((item) => ({

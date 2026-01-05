@@ -31,7 +31,9 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: me } = useSession()
+    // const userId = '1fdeb41e-932b-47f2-92b5-85b271c1596c'
     const userId = me?.sDM_NhanVienId || ''
+
     const { data: userProfile } = useFindUniqueUserProfile(
         {
             where: { id: userId },
@@ -350,7 +352,6 @@ export default function TrainingProgramSubjects() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
 
     const { onOpen: openChiTietMonHoc } = useDisclosure<{
-        subjectId: string
         subjectVersionId?: string
     }>({
         tag: 'ModalChiTietMonHoc',
@@ -417,7 +418,6 @@ export default function TrainingProgramSubjects() {
                                 ),
                                 onClick: () => {
                                     openChiTietMonHoc({
-                                        subjectId: subject?.subject?.subject?.id,
                                         subjectVersionId: subject?.subjectId,
                                     })
                                 },

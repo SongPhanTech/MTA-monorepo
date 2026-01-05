@@ -7,13 +7,13 @@
 import { z } from 'zod/v3';
 const baseSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
     information: z.string().nullish(),
@@ -22,13 +22,13 @@ const baseSchema = z.object({
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
     information: z.string().nullish(),
@@ -75,13 +75,13 @@ export const CurriculumPrismaCreateSchema = baseSchemaWithoutDefaults.partial().
  */
 export const CurriculumPrismaUpdateSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
     information: z.string().nullish(),

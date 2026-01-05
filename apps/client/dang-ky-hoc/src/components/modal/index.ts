@@ -9,6 +9,7 @@ import ModalChiTietLopBienChe from './modal-chi-tiet-lop-bien-che'
 import ModalChiTietMonHoc from './modal-chi-tiet-mon-hoc'
 import ModalChiTietSinhVien from './modal-chi-tiet-sinh-vien'
 import PutOneSubjectClassModal from './put-one-subject-class'
+import { XemTaiLieu } from '@workspace/ui'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -21,4 +22,5 @@ export {
     ModalChiTietMonHoc,
     ModalChiTietSinhVien,
     PutOneSubjectClassModal,
+    XemTaiLieu,
 }

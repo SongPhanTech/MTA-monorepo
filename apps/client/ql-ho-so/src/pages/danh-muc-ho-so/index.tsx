@@ -135,7 +135,7 @@ export default function DanhMucHoSo() {
                 },
                 {
                     id: 'coutries-sending-for-study',
-                    label: 'Học tập',
+                    label: 'Các nước cử đi học tập',
                     icon: <School style={{ fontSize: '24px' }} />,
                     path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_CAC_NUOC_CU_DI_HOC_TAP,
                     description: 'Các nước cử đi học tập',
@@ -170,7 +170,7 @@ export default function DanhMucHoSo() {
                 },
                 {
                     id: 'undergraduate-training-majors',
-                    label: 'Đào tạo bậc đại học',
+                    label: 'Chuyên ngành đào tạo bậc đại học',
                     icon: <Boxes style={{ fontSize: '24px' }} />,
                     path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_CAC_CHUYEN_NGANH_DAO_TAO_BAC_DAI_HOC,
                     description: 'Các chuyên ngành đào tạo bậc đại học',
@@ -526,7 +526,10 @@ export default function DanhMucHoSo() {
                                                                     )
                                                                 ) {
                                                                     if (item?.id === 'dao-tao') {
-                                                                        window.open(`/lms${i.path}`, '_blank')
+                                                                        window.open(
+                                                                            `/lms${i.path}`,
+                                                                            '_blank'
+                                                                        )
                                                                         return
                                                                     }
                                                                     router.push(i.path)

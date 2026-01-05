@@ -63,6 +63,9 @@ const PutOneSubjectClassModal = () => {
         tag: 'PutOneSubjectClassModal',
         onClose: form.resetFields,
     })
+    const { onOpen: onOpenDetailStudent } = useDisclosure<string>({
+        tag: 'ModalChiTietSinhVien',
+    })
     const { options } = useExamTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
     const [_dataSubmit, _setDataSubmit] = useState<(SubjectClass & { key: number })[]>([])
@@ -780,6 +783,13 @@ const PutOneSubjectClassModal = () => {
                             setFilters={setFilterTable}
                             rowKey="id"
                             className="m-0"
+                            onRow={(record) => ({
+                                onClick: (e) => {
+                                    e.preventDefault()
+                                    onOpenDetailStudent(record.student?.id || '')
+                                },
+                                className: 'cursor-pointer hover:text-primary',
+                            })}
                             columns={[
                                 {
                                     title: 'STT',

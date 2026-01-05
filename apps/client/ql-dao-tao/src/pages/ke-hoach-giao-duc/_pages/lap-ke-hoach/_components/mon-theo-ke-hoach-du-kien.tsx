@@ -17,6 +17,7 @@ import {
 import { Button, Col, Flex, Form, Input, message, Row, Skeleton } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -29,6 +30,16 @@ export default function MonTheoKeHoachDuKien() {
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
+    const { onOpen: onOpenDetailFixedClass } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChiTietLopBienChe',
+    })
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
@@ -41,14 +52,14 @@ export default function MonTheoKeHoachDuKien() {
     } = useOpenSubjectClass(
         {
             semesterId: semesterId as string,
-            search: searchText,
-            trainingCourseId: trainingCourseId ?? '',
+            search: searchText || undefined,
+            trainingCourseId: trainingCourseId || '',
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             nextSemester: 0,
             fixedClassId: fixedClassId,
         },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
+        { query: { enabled: !!semesterId && !!trainingObjectTypeId && !!trainingCourseId } }
     )
 
     const data = useMemo(() => {
@@ -86,6 +97,7 @@ export default function MonTheoKeHoachDuKien() {
             queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectVersion'] })
         }, 500),
         []
     )
@@ -116,11 +128,6 @@ export default function MonTheoKeHoachDuKien() {
                         },
                         select: {
                             id: true,
-                            planTrainingSubjects: {
-                                where: {
-                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
-                                },
-                            },
                         },
                     },
                 },
@@ -259,7 +266,15 @@ export default function MonTheoKeHoachDuKien() {
                                     onCell: (record) => ({ rowSpan: record.rowSpan }),
                                     render: (__, record) => {
                                         return (
-                                            <div className="text-left">
+                                            <div
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenDetailSubject({
+                                                        subjectVersionId: record.subjectVersionId,
+                                                    })
+                                                }}
+                                                className="text-left hover:text-primary cursor-pointer"
+                                            >
                                                 {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
                                                     ''}
                                             </div>
@@ -271,7 +286,19 @@ export default function MonTheoKeHoachDuKien() {
                                     align: 'center',
                                     width: 120,
                                     render: (__, record) => {
-                                        return `${record?.fixedClassCode} (${record?.fixedClassCount})`
+                                        return (
+                                            <span
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenDetailFixedClass({
+                                                        fixedClassId: record.fixedClassId,
+                                                    })
+                                                }}
+                                                className="hover:text-primary cursor-pointer"
+                                            >
+                                                {`${record?.fixedClassCode} (${record?.fixedClassCount})`}
+                                            </span>
+                                        )
                                     },
                                 },
                                 {

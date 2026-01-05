@@ -16,6 +16,10 @@ export default function ModalChiTietLopBienChe() {
         tag: 'ModalChiTietLopBienChe',
     })
 
+    const { onOpen: onOpenDetailStudent } = useDisclosure<string>({
+        tag: 'ModalChiTietSinhVien',
+    })
+
     const { fixedClassId } = input || {}
     const { getSubjectClassTypeLabel } = useSubjectClassTypeOptions()
     const { getSubjectClassStatusLabel, getSubjectClassStatusColor } =
@@ -256,6 +260,15 @@ export default function ModalChiTietLopBienChe() {
                     dataSource={fixedClassData?.students || []}
                     scroll={{ x: 2400, y: 400 }}
                     pagination={false}
+                    onRow={(record) => {
+                        return {
+                            onClick: (e) => {
+                                e.preventDefault()
+                                onOpenDetailStudent(record.id)
+                            },
+                            className: 'cursor-pointer hover:text-primary',
+                        }
+                    }}
                     columns={[
                         {
                             title: 'STT',
@@ -654,7 +667,7 @@ export default function ModalChiTietLopBienChe() {
         <Modal
             title={
                 <div className="text-lg font-semibold">
-                    Chi tiết lớp biên chế: {fixedClassData?.name || ''}
+                    Chi tiết lớp quản lý: {fixedClassData?.name || ''}
                 </div>
             }
             open={isOpen}

@@ -1,3 +1,4 @@
+import ViewIcon from '@components/icons/view'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useHistorySubjectVersionActionOptions } from '@hooks/historySubjectVersionAction'
 import useSpinner from '@hooks/spinner'
@@ -5,7 +6,7 @@ import { useSubjectClassStatusOptions } from '@hooks/subjectClassStatus'
 import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
 import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
 import { useSubjectVersionTypeOptions } from '@hooks/subjectVersionType'
-import { useFindUniqueSubject } from '@workspace/db/hooks'
+import { useFindUniqueSubject, useFindUniqueSubjectVersion } from '@workspace/db/hooks'
 import { Descriptions, Modal, Table, Tabs, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -15,13 +16,20 @@ dayjs.locale('vi')
 
 export default function ModalChiTietMonHoc() {
     const { isOpen, onClose, input } = useDisclosure<{
-        subjectId: string
         subjectVersionId?: string
     }>({
         tag: 'ModalChiTietMonHoc',
     })
 
-    const { subjectId, subjectVersionId } = input || {}
+    const { onOpen: openXemTaiLieu } = useDisclosure<{
+        uri: string
+        mimeType?: string
+        name?: string
+    }>({
+        tag: 'XemTaiLieu',
+    })
+
+    const { subjectVersionId } = input || {}
     const { getExamTypeLabel } = useExamTypeOptions()
     const { getSubjectClassTypeLabel } = useSubjectClassTypeOptions()
     const { getSubjectVersionTypeLabel } = useSubjectVersionTypeOptions()
@@ -29,7 +37,19 @@ export default function ModalChiTietMonHoc() {
         useSubjectClassStatusOptions()
     const { getSubjectRequirementTypeLabel } = useSubjectRequirementTypeOptions()
     const { getHistoryActionLabel, getHistoryActionColor } = useHistorySubjectVersionActionOptions()
+    const { data: subjectVersionData } = useFindUniqueSubjectVersion(
+        {
+            where: { id: subjectVersionId },
+            include: {
+                subject: true,
+            },
+        },
+        {
+            enabled: !!subjectVersionId && isOpen,
+        }
+    )
 
+    const subjectId = subjectVersionData?.subject?.id
     const { data: subjectData } = useFindUniqueSubject(
         {
             where: { id: subjectId },
@@ -1023,14 +1043,9 @@ export default function ModalChiTietMonHoc() {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Tên file',
+                            title: 'Tên tài liệu',
                             dataIndex: 'name',
                             width: 300,
-                        },
-                        {
-                            title: 'Loại file',
-                            dataIndex: 'mimeType',
-                            width: 120,
                         },
                         {
                             title: 'Kích thước',
@@ -1042,6 +1057,21 @@ export default function ModalChiTietMonHoc() {
                                 if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)} KB`
                                 return `${(size / (1024 * 1024)).toFixed(2)} MB`
                             },
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 100,
+                            render: (_: any, record: any) => (
+                                <ViewIcon
+                                    onClick={() => {
+                                        openXemTaiLieu({
+                                            uri: record?.path,
+                                            mimeType: record?.name?.split('.').pop(),
+                                            name: record?.name,
+                                        })
+                                    }}
+                                />
+                            ),
                         },
                     ]}
                 />
@@ -1098,57 +1128,57 @@ export default function ModalChiTietMonHoc() {
         //         />
         //     ),
         // },
-        {
-            key: '13',
-            label: `Lịch sử thay đổi (${currentVersion?.subjectVersionHistory.length || 0})`,
-            children: (
-                <Table
-                    size="small"
-                    dataSource={currentVersion?.subjectVersionHistory}
-                    rowKey="id"
-                    pagination={{
-                        pageSize: 10,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
-                    }}
-                    scroll={{ x: 'max-content' }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            render: (_, __, index) => index + 1,
-                        },
-                        {
-                            title: 'Thao tác',
-                            dataIndex: 'action',
-                            width: 120,
-                            render: (value) => (
-                                <Tag color={getHistoryActionColor(value)}>
-                                    {getHistoryActionLabel(value)}
-                                </Tag>
-                            ),
-                        },
-                        {
-                            title: 'Nội dung',
-                            dataIndex: 'content',
-                            width: 400,
-                        },
-                        {
-                            title: 'Người thực hiện',
-                            width: 200,
-                            render: (_: any, record: any) => record.updatedBy?.fullName,
-                        },
-                        {
-                            title: 'Thời gian',
-                            dataIndex: 'updatedAt',
-                            width: 150,
-                            render: (value) =>
-                                value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
-                        },
-                    ]}
-                />
-            ),
-        },
+        // {
+        //     key: '13',
+        //     label: `Lịch sử thay đổi (${currentVersion?.subjectVersionHistory.length || 0})`,
+        //     children: (
+        //         <Table
+        //             size="small"
+        //             dataSource={currentVersion?.subjectVersionHistory}
+        //             rowKey="id"
+        //             pagination={{
+        //                 pageSize: 10,
+        //                 showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+        //             }}
+        //             scroll={{ x: 'max-content' }}
+        //             columns={[
+        //                 {
+        //                     title: 'STT',
+        //                     width: 60,
+        //                     align: 'center',
+        //                     render: (_, __, index) => index + 1,
+        //                 },
+        //                 {
+        //                     title: 'Thao tác',
+        //                     dataIndex: 'action',
+        //                     width: 120,
+        //                     render: (value) => (
+        //                         <Tag color={getHistoryActionColor(value)}>
+        //                             {getHistoryActionLabel(value)}
+        //                         </Tag>
+        //                     ),
+        //                 },
+        //                 {
+        //                     title: 'Nội dung',
+        //                     dataIndex: 'content',
+        //                     width: 400,
+        //                 },
+        //                 {
+        //                     title: 'Người thực hiện',
+        //                     width: 200,
+        //                     render: (_: any, record: any) => record.updatedBy?.fullName,
+        //                 },
+        //                 {
+        //                     title: 'Thời gian',
+        //                     dataIndex: 'updatedAt',
+        //                     width: 150,
+        //                     render: (value) =>
+        //                         value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
+        //                 },
+        //             ]}
+        //         />
+        //     ),
+        // },
     ]
 
     return (
@@ -1156,9 +1186,9 @@ export default function ModalChiTietMonHoc() {
             title={`Chi tiết môn học: ${subject?.name || ''}`}
             open={isOpen}
             onCancel={onClose}
-            width="90%"
+            width="w-[100vw]"
             footer={null}
-            style={{ top: 20 }}
+            style={{ top: 10 }}
         >
             <Tabs defaultActiveKey="1" items={items} />
         </Modal>

@@ -105,8 +105,10 @@ import PutNoiDungTinhTaiModal from './put-noi-dung-tinh-tai'
 import ModalChiTietSinhVien from './modal-chi-tiet-sinh-vien'
 import ModalChiTietMonHoc from './modal-chi-tiet-mon-hoc'
 import ModalChiTietLopBienChe from './modal-chi-tiet-lop-bien-che'
+import ModalChiTietGiangVien from './modal-chi-tiet-giang-vien'
 export {
     ModalChiTietLopBienChe,
+    ModalChiTietGiangVien,
     ModalChiTietMonHoc,
     ModalChiTietSinhVien,
     PutNoiDungTinhTaiModal,

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SubjectRequirementTypeSchema = z.enum(["None", "Mandatory", "Optional"])
+export const SubjectRequirementTypeSchema = z.enum(["Mandatory", "Optional"])
