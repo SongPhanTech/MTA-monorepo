@@ -9,6 +9,7 @@ import {
     useFindUniqueTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -56,6 +57,7 @@ const PutTrainingBlock = () => {
                 name: output.name.trim(),
                 active: output.active,
                 parentId: output.parentId,
+                trainingObjectTypeId,
             }
 
             if (id) {
