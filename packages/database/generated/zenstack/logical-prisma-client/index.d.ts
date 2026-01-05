@@ -5259,6 +5259,7 @@ export namespace $Enums {
     export type CurriculumVersionType = (typeof CurriculumVersionType)[keyof typeof CurriculumVersionType];
     export const ExamType: {
         OfflineWritten: 'OfflineWritten',
+        OnlineWritten: 'OnlineWritten',
         Oral: 'Oral',
         Practice: 'Practice',
         Project: 'Project',
@@ -7619,13 +7620,13 @@ export namespace Prisma {
     };
     export const CurriculumScalarFieldEnum: {
         id: 'id',
-        code: 'code',
         active: 'active',
         description: 'description',
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
+        code: 'code',
         name: 'name',
         englishName: 'englishName',
         managementOrganizationId: 'managementOrganizationId',
@@ -7636,13 +7637,13 @@ export namespace Prisma {
     };
     export const CurriculumVersionScalarFieldEnum: {
         id: 'id',
-        code: 'code',
         active: 'active',
         description: 'description',
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
+        code: 'code',
         name: 'name',
         shortName: 'shortName',
         englishName: 'englishName',
@@ -11185,9 +11186,9 @@ export namespace Prisma {
     };
     export const CurriculumOrderByRelevanceFieldEnum: {
         id: 'id',
-        code: 'code',
         description: 'description',
         createdBy: 'createdBy',
+        code: 'code',
         name: 'name',
         englishName: 'englishName',
         managementOrganizationId: 'managementOrganizationId',
@@ -11198,9 +11199,9 @@ export namespace Prisma {
     };
     export const CurriculumVersionOrderByRelevanceFieldEnum: {
         id: 'id',
-        code: 'code',
         description: 'description',
         createdBy: 'createdBy',
+        code: 'code',
         name: 'name',
         shortName: 'shortName',
         englishName: 'englishName',
@@ -47123,13 +47124,13 @@ export namespace Prisma {
      */
     interface CurriculumFieldRefs {
         readonly id: FieldRef<"Curriculum", 'String'>;
-        readonly code: FieldRef<"Curriculum", 'String'>;
         readonly active: FieldRef<"Curriculum", 'Boolean'>;
         readonly description: FieldRef<"Curriculum", 'String'>;
         readonly deletedAt: FieldRef<"Curriculum", 'DateTime'>;
         readonly createdAt: FieldRef<"Curriculum", 'DateTime'>;
         readonly updatedAt: FieldRef<"Curriculum", 'DateTime'>;
         readonly createdBy: FieldRef<"Curriculum", 'String'>;
+        readonly code: FieldRef<"Curriculum", 'String'>;
         readonly name: FieldRef<"Curriculum", 'String'>;
         readonly englishName: FieldRef<"Curriculum", 'String'>;
         readonly managementOrganizationId: FieldRef<"Curriculum", 'String'>;
@@ -47522,13 +47523,13 @@ export namespace Prisma {
      */
     interface CurriculumVersionFieldRefs {
         readonly id: FieldRef<"CurriculumVersion", 'String'>;
-        readonly code: FieldRef<"CurriculumVersion", 'String'>;
         readonly active: FieldRef<"CurriculumVersion", 'Boolean'>;
         readonly description: FieldRef<"CurriculumVersion", 'String'>;
         readonly deletedAt: FieldRef<"CurriculumVersion", 'DateTime'>;
         readonly createdAt: FieldRef<"CurriculumVersion", 'DateTime'>;
         readonly updatedAt: FieldRef<"CurriculumVersion", 'DateTime'>;
         readonly createdBy: FieldRef<"CurriculumVersion", 'String'>;
+        readonly code: FieldRef<"CurriculumVersion", 'String'>;
         readonly name: FieldRef<"CurriculumVersion", 'String'>;
         readonly shortName: FieldRef<"CurriculumVersion", 'String'>;
         readonly englishName: FieldRef<"CurriculumVersion", 'String'>;
@@ -207408,13 +207409,13 @@ export namespace Prisma {
     };
     export type CurriculumMinAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
+        code: string | null
         name: string | null
         englishName: string | null
         managementOrganizationId: string | null
@@ -207425,13 +207426,13 @@ export namespace Prisma {
     };
     export type CurriculumMaxAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
+        code: string | null
         name: string | null
         englishName: string | null
         managementOrganizationId: string | null
@@ -207442,13 +207443,13 @@ export namespace Prisma {
     };
     export type CurriculumCountAggregateOutputType = {
         id: number
-        code: number
         active: number
         description: number
         deletedAt: number
         createdAt: number
         updatedAt: number
         createdBy: number
+        code: number
         name: number
         englishName: number
         managementOrganizationId: number
@@ -207460,13 +207461,13 @@ export namespace Prisma {
     };
     export type CurriculumMinAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         englishName?: true
         managementOrganizationId?: true
@@ -207477,13 +207478,13 @@ export namespace Prisma {
     };
     export type CurriculumMaxAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         englishName?: true
         managementOrganizationId?: true
@@ -207494,13 +207495,13 @@ export namespace Prisma {
     };
     export type CurriculumCountAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         englishName?: true
         managementOrganizationId?: true
@@ -207578,13 +207579,13 @@ export namespace Prisma {
     };
     export type CurriculumGroupByOutputType = {
         id: string
-        code: string | null
         active: boolean
         description: string | null
         deletedAt: Date | null
         createdAt: Date
         updatedAt: Date
         createdBy: string | null
+        code: string | null
         name: string
         englishName: string | null
         managementOrganizationId: string
@@ -207610,13 +207611,13 @@ export namespace Prisma {
     >;
     export type CurriculumSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         englishName?: boolean
         managementOrganizationId?: boolean
@@ -207633,13 +207634,13 @@ export namespace Prisma {
     }, ExtArgs["result"]["curriculum"]>;
     export type CurriculumSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         englishName?: boolean
         managementOrganizationId?: boolean
@@ -207653,13 +207654,13 @@ export namespace Prisma {
     }, ExtArgs["result"]["curriculum"]>;
     export type CurriculumSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         englishName?: boolean
         managementOrganizationId?: boolean
@@ -207673,13 +207674,13 @@ export namespace Prisma {
     }, ExtArgs["result"]["curriculum"]>;
     export type CurriculumSelectScalar = {
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         englishName?: boolean
         managementOrganizationId?: boolean
@@ -207688,7 +207689,7 @@ export namespace Prisma {
         information?: boolean
         renderPath?: boolean
     };
-    export type CurriculumOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "englishName" | "managementOrganizationId" | "trainingMajorId" | "trainingObjectTypeId" | "information" | "renderPath", ExtArgs["result"]["curriculum"]>;
+    export type CurriculumOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "englishName" | "managementOrganizationId" | "trainingMajorId" | "trainingObjectTypeId" | "information" | "renderPath", ExtArgs["result"]["curriculum"]>;
     export type CurriculumInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         managementOrganization?: boolean | DM_DonViDefaultArgs<ExtArgs>
         trainingMajor?: boolean | TrainingMajorDefaultArgs<ExtArgs>
@@ -207718,13 +207719,13 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            code: string | null
             active: boolean
             description: string | null
             deletedAt: Date | null
             createdAt: Date
             updatedAt: Date
             createdBy: string | null
+            code: string | null
             name: string
             englishName: string | null
             managementOrganizationId: string
@@ -208205,13 +208206,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionMinAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
+        code: string | null
         name: string | null
         shortName: string | null
         englishName: string | null
@@ -208243,13 +208244,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionMaxAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
+        code: string | null
         name: string | null
         shortName: string | null
         englishName: string | null
@@ -208281,13 +208282,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCountAggregateOutputType = {
         id: number
-        code: number
         active: number
         description: number
         deletedAt: number
         createdAt: number
         updatedAt: number
         createdBy: number
+        code: number
         name: number
         shortName: number
         englishName: number
@@ -208334,13 +208335,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionMinAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         shortName?: true
         englishName?: true
@@ -208372,13 +208373,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionMaxAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         shortName?: true
         englishName?: true
@@ -208410,13 +208411,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCountAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         shortName?: true
         englishName?: true
@@ -208529,13 +208530,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionGroupByOutputType = {
         id: string
-        code: string | null
         active: boolean
         description: string | null
         deletedAt: Date | null
         createdAt: Date
         updatedAt: Date
         createdBy: string | null
+        code: string | null
         name: string
         shortName: string | null
         englishName: string | null
@@ -208584,13 +208585,13 @@ export namespace Prisma {
     >;
     export type CurriculumVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         shortName?: boolean
         englishName?: boolean
@@ -208636,13 +208637,13 @@ export namespace Prisma {
     }, ExtArgs["result"]["curriculumVersion"]>;
     export type CurriculumVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         shortName?: boolean
         englishName?: boolean
@@ -208681,13 +208682,13 @@ export namespace Prisma {
     }, ExtArgs["result"]["curriculumVersion"]>;
     export type CurriculumVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         shortName?: boolean
         englishName?: boolean
@@ -208726,13 +208727,13 @@ export namespace Prisma {
     }, ExtArgs["result"]["curriculumVersion"]>;
     export type CurriculumVersionSelectScalar = {
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         shortName?: boolean
         englishName?: boolean
@@ -208762,7 +208763,7 @@ export namespace Prisma {
         guide?: boolean
         renderPath?: boolean
     };
-    export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>;
+    export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>;
     export type CurriculumVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
         curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
@@ -208816,13 +208817,13 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            code: string | null
             active: boolean
             description: string | null
             deletedAt: Date | null
             createdAt: Date
             updatedAt: Date
             createdBy: string | null
+            code: string | null
             name: string
             shortName: string | null
             englishName: string | null
@@ -345717,7 +345718,6 @@ export namespace Prisma {
     export type SemesterWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        schoolYearId_semesterType?: SemesterSchoolYearIdSemesterTypeCompoundUniqueInput
         AND?: SemesterWhereInput | SemesterWhereInput[]
         OR?: SemesterWhereInput[]
         NOT?: SemesterWhereInput | SemesterWhereInput[]
@@ -345747,7 +345747,7 @@ export namespace Prisma {
         survey?: SurveyListRelationFilter
         evaluationPeriod?: EvaluationPeriodListRelationFilter
         exam?: ExamListRelationFilter
-    }, "id" | "code" | "schoolYearId_semesterType">;
+    }, "id" | "code">;
     export type SemesterOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -346458,13 +346458,13 @@ export namespace Prisma {
         OR?: CurriculumWhereInput[]
         NOT?: CurriculumWhereInput | CurriculumWhereInput[]
         id?: StringFilter<"Curriculum"> | string
-        code?: StringNullableFilter<"Curriculum"> | string | null
         active?: BoolFilter<"Curriculum"> | boolean
         description?: StringNullableFilter<"Curriculum"> | string | null
         deletedAt?: DateTimeNullableFilter<"Curriculum"> | Date | string | null
         createdAt?: DateTimeFilter<"Curriculum"> | Date | string
         updatedAt?: DateTimeFilter<"Curriculum"> | Date | string
         createdBy?: UuidNullableFilter<"Curriculum"> | string | null
+        code?: StringNullableFilter<"Curriculum"> | string | null
         name?: StringFilter<"Curriculum"> | string
         englishName?: StringNullableFilter<"Curriculum"> | string | null
         managementOrganizationId?: UuidFilter<"Curriculum"> | string
@@ -346480,13 +346480,13 @@ export namespace Prisma {
     };
     export type CurriculumOrderByWithRelationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
+        code?: SortOrderInput | SortOrder
         name?: SortOrder
         englishName?: SortOrderInput | SortOrder
         managementOrganizationId?: SortOrder
@@ -346503,7 +346503,6 @@ export namespace Prisma {
     };
     export type CurriculumWhereUniqueInput = Prisma.AtLeast<{
         id?: string
-        code?: string
         AND?: CurriculumWhereInput | CurriculumWhereInput[]
         OR?: CurriculumWhereInput[]
         NOT?: CurriculumWhereInput | CurriculumWhereInput[]
@@ -346513,6 +346512,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"Curriculum"> | Date | string
         updatedAt?: DateTimeFilter<"Curriculum"> | Date | string
         createdBy?: UuidNullableFilter<"Curriculum"> | string | null
+        code?: StringNullableFilter<"Curriculum"> | string | null
         name?: StringFilter<"Curriculum"> | string
         englishName?: StringNullableFilter<"Curriculum"> | string | null
         managementOrganizationId?: UuidFilter<"Curriculum"> | string
@@ -346525,16 +346525,16 @@ export namespace Prisma {
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         documentFiles?: DocumentFileListRelationFilter
         curriculumVersion?: CurriculumVersionListRelationFilter
-    }, "id" | "code">;
+    }, "id">;
     export type CurriculumOrderByWithAggregationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
+        code?: SortOrderInput | SortOrder
         name?: SortOrder
         englishName?: SortOrderInput | SortOrder
         managementOrganizationId?: SortOrder
@@ -346551,13 +346551,13 @@ export namespace Prisma {
         OR?: CurriculumScalarWhereWithAggregatesInput[]
         NOT?: CurriculumScalarWhereWithAggregatesInput | CurriculumScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"Curriculum"> | string
-        code?: StringNullableWithAggregatesFilter<"Curriculum"> | string | null
         active?: BoolWithAggregatesFilter<"Curriculum"> | boolean
         description?: StringNullableWithAggregatesFilter<"Curriculum"> | string | null
         deletedAt?: DateTimeNullableWithAggregatesFilter<"Curriculum"> | Date | string | null
         createdAt?: DateTimeWithAggregatesFilter<"Curriculum"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"Curriculum"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"Curriculum"> | string | null
+        code?: StringNullableWithAggregatesFilter<"Curriculum"> | string | null
         name?: StringWithAggregatesFilter<"Curriculum"> | string
         englishName?: StringNullableWithAggregatesFilter<"Curriculum"> | string | null
         managementOrganizationId?: UuidWithAggregatesFilter<"Curriculum"> | string
@@ -346571,13 +346571,13 @@ export namespace Prisma {
         OR?: CurriculumVersionWhereInput[]
         NOT?: CurriculumVersionWhereInput | CurriculumVersionWhereInput[]
         id?: StringFilter<"CurriculumVersion"> | string
-        code?: StringNullableFilter<"CurriculumVersion"> | string | null
         active?: BoolFilter<"CurriculumVersion"> | boolean
         description?: StringNullableFilter<"CurriculumVersion"> | string | null
         deletedAt?: DateTimeNullableFilter<"CurriculumVersion"> | Date | string | null
         createdAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
         updatedAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
         createdBy?: UuidNullableFilter<"CurriculumVersion"> | string | null
+        code?: StringNullableFilter<"CurriculumVersion"> | string | null
         name?: StringFilter<"CurriculumVersion"> | string
         shortName?: StringNullableFilter<"CurriculumVersion"> | string | null
         englishName?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -346622,13 +346622,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionOrderByWithRelationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
+        code?: SortOrderInput | SortOrder
         name?: SortOrder
         shortName?: SortOrderInput | SortOrder
         englishName?: SortOrderInput | SortOrder
@@ -346674,7 +346674,6 @@ export namespace Prisma {
     };
     export type CurriculumVersionWhereUniqueInput = Prisma.AtLeast<{
         id?: string
-        code?: string
         AND?: CurriculumVersionWhereInput | CurriculumVersionWhereInput[]
         OR?: CurriculumVersionWhereInput[]
         NOT?: CurriculumVersionWhereInput | CurriculumVersionWhereInput[]
@@ -346684,6 +346683,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
         updatedAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
         createdBy?: UuidNullableFilter<"CurriculumVersion"> | string | null
+        code?: StringNullableFilter<"CurriculumVersion"> | string | null
         name?: StringFilter<"CurriculumVersion"> | string
         shortName?: StringNullableFilter<"CurriculumVersion"> | string | null
         englishName?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -346725,16 +346725,16 @@ export namespace Prisma {
         fixedClass?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
         students?: StudentListRelationFilter
         studentCurriculumVersionParallel?: StudentListRelationFilter
-    }, "id" | "code">;
+    }, "id">;
     export type CurriculumVersionOrderByWithAggregationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
+        code?: SortOrderInput | SortOrder
         name?: SortOrder
         shortName?: SortOrderInput | SortOrder
         englishName?: SortOrderInput | SortOrder
@@ -346774,13 +346774,13 @@ export namespace Prisma {
         OR?: CurriculumVersionScalarWhereWithAggregatesInput[]
         NOT?: CurriculumVersionScalarWhereWithAggregatesInput | CurriculumVersionScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"CurriculumVersion"> | string
-        code?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
         active?: BoolWithAggregatesFilter<"CurriculumVersion"> | boolean
         description?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
         deletedAt?: DateTimeNullableWithAggregatesFilter<"CurriculumVersion"> | Date | string | null
         createdAt?: DateTimeWithAggregatesFilter<"CurriculumVersion"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"CurriculumVersion"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
+        code?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
         name?: StringWithAggregatesFilter<"CurriculumVersion"> | string
         shortName?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
         englishName?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
@@ -349505,7 +349505,6 @@ export namespace Prisma {
     export type TrainingMajorWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        trainingFieldId_name?: TrainingMajorTrainingFieldIdNameCompoundUniqueInput
         AND?: TrainingMajorWhereInput | TrainingMajorWhereInput[]
         OR?: TrainingMajorWhereInput[]
         NOT?: TrainingMajorWhereInput | TrainingMajorWhereInput[]
@@ -349535,7 +349534,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileListRelationFilter
         studentGraduationApplication?: StudentGraduationApplicationListRelationFilter
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
-    }, "id" | "code" | "trainingFieldId_name">;
+    }, "id" | "code">;
     export type TrainingMajorOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -374777,13 +374776,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         information?: string | null
@@ -374796,13 +374795,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         managementOrganizationId: string
@@ -374815,13 +374814,13 @@ export namespace Prisma {
     };
     export type CurriculumUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -374834,13 +374833,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -374853,13 +374852,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateManyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         managementOrganizationId: string
@@ -374870,13 +374869,13 @@ export namespace Prisma {
     };
     export type CurriculumUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -374884,13 +374883,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -374901,13 +374900,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -374945,13 +374944,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -374989,13 +374988,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -375033,13 +375032,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -375077,13 +375076,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateManyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -375115,13 +375114,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -375146,13 +375145,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -400245,10 +400244,6 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
-    export type SemesterSchoolYearIdSemesterTypeCompoundUniqueInput = {
-        schoolYearId: string
-        semesterType: $Enums.SemesterType
-    };
     export type SemesterCountOrderByAggregateInput = {
         id?: SortOrder
         code?: SortOrder
@@ -400810,13 +400805,13 @@ export namespace Prisma {
     };
     export type CurriculumCountOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         englishName?: SortOrder
         managementOrganizationId?: SortOrder
@@ -400827,13 +400822,13 @@ export namespace Prisma {
     };
     export type CurriculumMaxOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         englishName?: SortOrder
         managementOrganizationId?: SortOrder
@@ -400844,13 +400839,13 @@ export namespace Prisma {
     };
     export type CurriculumMinOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         englishName?: SortOrder
         managementOrganizationId?: SortOrder
@@ -400912,13 +400907,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCountOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         shortName?: SortOrder
         englishName?: SortOrder
@@ -400957,13 +400952,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionMaxOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         shortName?: SortOrder
         englishName?: SortOrder
@@ -400995,13 +400990,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionMinOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         shortName?: SortOrder
         englishName?: SortOrder
@@ -402819,10 +402814,6 @@ export namespace Prisma {
         fields: TrainingMajorOrderByRelevanceFieldEnum | TrainingMajorOrderByRelevanceFieldEnum[]
         sort: SortOrder
         search: string
-    };
-    export type TrainingMajorTrainingFieldIdNameCompoundUniqueInput = {
-        trainingFieldId: string
-        name: string
     };
     export type TrainingMajorCountOrderByAggregateInput = {
         id?: SortOrder
@@ -470277,13 +470268,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateWithoutManagementOrganizationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         information?: string | null
@@ -470295,13 +470286,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedCreateWithoutManagementOrganizationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         trainingMajorId: string
@@ -471044,13 +471035,13 @@ export namespace Prisma {
         OR?: CurriculumScalarWhereInput[]
         NOT?: CurriculumScalarWhereInput | CurriculumScalarWhereInput[]
         id?: StringFilter<"Curriculum"> | string
-        code?: StringNullableFilter<"Curriculum"> | string | null
         active?: BoolFilter<"Curriculum"> | boolean
         description?: StringNullableFilter<"Curriculum"> | string | null
         deletedAt?: DateTimeNullableFilter<"Curriculum"> | Date | string | null
         createdAt?: DateTimeFilter<"Curriculum"> | Date | string
         updatedAt?: DateTimeFilter<"Curriculum"> | Date | string
         createdBy?: UuidNullableFilter<"Curriculum"> | string | null
+        code?: StringNullableFilter<"Curriculum"> | string | null
         name?: StringFilter<"Curriculum"> | string
         englishName?: StringNullableFilter<"Curriculum"> | string | null
         managementOrganizationId?: UuidFilter<"Curriculum"> | string
@@ -487649,13 +487640,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutTrainingLanguageInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -487692,13 +487683,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutTrainingLanguageInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -487772,13 +487763,13 @@ export namespace Prisma {
         OR?: CurriculumVersionScalarWhereInput[]
         NOT?: CurriculumVersionScalarWhereInput | CurriculumVersionScalarWhereInput[]
         id?: StringFilter<"CurriculumVersion"> | string
-        code?: StringNullableFilter<"CurriculumVersion"> | string | null
         active?: BoolFilter<"CurriculumVersion"> | boolean
         description?: StringNullableFilter<"CurriculumVersion"> | string | null
         deletedAt?: DateTimeNullableFilter<"CurriculumVersion"> | Date | string | null
         createdAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
         updatedAt?: DateTimeFilter<"CurriculumVersion"> | Date | string
         createdBy?: UuidNullableFilter<"CurriculumVersion"> | string | null
+        code?: StringNullableFilter<"CurriculumVersion"> | string | null
         name?: StringFilter<"CurriculumVersion"> | string
         shortName?: StringNullableFilter<"CurriculumVersion"> | string | null
         englishName?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -489987,13 +489978,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -490030,13 +490021,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -490907,13 +490898,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -490950,13 +490941,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -491298,13 +491289,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutCurriculumInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -491341,13 +491332,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutCurriculumInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -491653,13 +491644,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateWithoutCurriculumVersionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         information?: string | null
@@ -491671,13 +491662,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedCreateWithoutCurriculumVersionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         managementOrganizationId: string
@@ -492391,13 +492382,13 @@ export namespace Prisma {
     };
     export type CurriculumUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -492409,13 +492400,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -502090,13 +502081,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateWithoutTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         information?: string | null
@@ -502108,13 +502099,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         managementOrganizationId: string
@@ -502134,13 +502125,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -502177,13 +502168,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -503083,13 +503074,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutTrainingTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -503126,13 +503117,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutTrainingTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -503190,13 +503181,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutTrainingLevelInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -503233,13 +503224,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutTrainingLevelInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -505669,13 +505660,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateWithoutTrainingMajorInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         information?: string | null
@@ -505687,13 +505678,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedCreateWithoutTrainingMajorInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         managementOrganizationId: string
@@ -506787,13 +506778,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutTrainingBlocksInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -506830,13 +506821,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutTrainingBlocksInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -506963,13 +506954,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutTrainingBlocksInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507006,13 +506997,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutTrainingBlocksInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507062,13 +507053,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutTrainingTimeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -507105,13 +507096,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutTrainingTimeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -507621,13 +507612,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutDiplomaTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -507664,13 +507655,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutDiplomaTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -508221,13 +508212,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutOutputStandardOnCurriculumInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -508264,13 +508255,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutOutputStandardOnCurriculumInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -508353,13 +508344,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutOutputStandardOnCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508396,13 +508387,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutOutputStandardOnCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -509119,13 +509110,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutStudentsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -509162,13 +509153,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutStudentsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -509209,13 +509200,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutStudentCurriculumVersionParallelInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -509252,13 +509243,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutStudentCurriculumVersionParallelInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -510894,13 +510885,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutStudentsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -510937,13 +510928,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutStudentsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -510989,13 +510980,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutStudentCurriculumVersionParallelInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -511032,13 +511023,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutStudentCurriculumVersionParallelInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -513128,13 +513119,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateWithoutDocumentFilesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         information?: string | null
@@ -513146,13 +513137,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedCreateWithoutDocumentFilesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         managementOrganizationId: string
@@ -513168,13 +513159,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateWithoutDocumentFilesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -513211,13 +513202,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedCreateWithoutDocumentFilesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -514186,13 +514177,13 @@ export namespace Prisma {
     };
     export type CurriculumUpdateWithoutDocumentFilesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -514204,13 +514195,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateWithoutDocumentFilesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -514231,13 +514222,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutDocumentFilesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -514274,13 +514265,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutDocumentFilesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563167,13 +563158,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateManyManagementOrganizationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         trainingMajorId: string
@@ -563609,13 +563600,13 @@ export namespace Prisma {
     };
     export type CurriculumUpdateWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563627,13 +563618,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: StringFieldUpdateOperationsInput | string
@@ -563645,13 +563636,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateManyWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: StringFieldUpdateOperationsInput | string
@@ -581340,13 +581331,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateManyTrainingLanguageInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -581517,13 +581508,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutTrainingLanguageInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581560,13 +581551,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutTrainingLanguageInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581603,13 +581594,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateManyWithoutTrainingLanguageInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583073,13 +583064,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateManyCurriculumInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -583209,13 +583200,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583252,13 +583243,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583295,13 +583286,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateManyWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -587650,13 +587641,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateManyTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         managementOrganizationId: string
@@ -587666,13 +587657,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateManyTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -588004,13 +587995,13 @@ export namespace Prisma {
     };
     export type CurriculumUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -588022,13 +588013,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -588040,13 +588031,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -588056,13 +588047,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -588099,13 +588090,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -588142,13 +588133,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -588904,13 +588895,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateManyTrainingTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -588941,13 +588932,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutTrainingTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -588984,13 +588975,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutTrainingTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -589027,13 +589018,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateManyWithoutTrainingTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -589064,13 +589055,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateManyTrainingLevelInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -589115,13 +589106,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -589158,13 +589149,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -589201,13 +589192,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateManyWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -590902,13 +590893,13 @@ export namespace Prisma {
     };
     export type CurriculumCreateManyTrainingMajorInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         englishName?: string | null
         managementOrganizationId: string
@@ -590991,13 +590982,13 @@ export namespace Prisma {
     };
     export type CurriculumUpdateWithoutTrainingMajorInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
@@ -591009,13 +591000,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateWithoutTrainingMajorInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -591027,13 +591018,13 @@ export namespace Prisma {
     };
     export type CurriculumUncheckedUpdateManyWithoutTrainingMajorInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: StringFieldUpdateOperationsInput | string
@@ -591483,13 +591474,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateManyTrainingTimeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -591520,13 +591511,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutTrainingTimeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -591563,13 +591554,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutTrainingTimeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -591606,13 +591597,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateManyWithoutTrainingTimeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -591869,13 +591860,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionCreateManyDiplomaTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         shortName?: string | null
         englishName?: string | null
@@ -591946,13 +591937,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUpdateWithoutDiplomaTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -591989,13 +591980,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateWithoutDiplomaTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -592032,13 +592023,13 @@ export namespace Prisma {
     };
     export type CurriculumVersionUncheckedUpdateManyWithoutDiplomaTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         shortName?: NullableStringFieldUpdateOperationsInput | string | null
         englishName?: NullableStringFieldUpdateOperationsInput | string | null

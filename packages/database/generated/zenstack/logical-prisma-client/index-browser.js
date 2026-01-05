@@ -1781,13 +1781,13 @@ exports.Prisma.FixedClassScalarFieldEnum = {
 
 exports.Prisma.CurriculumScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -1799,13 +1799,13 @@ exports.Prisma.CurriculumScalarFieldEnum = {
 
 exports.Prisma.CurriculumVersionScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   shortName: 'shortName',
   englishName: 'englishName',
@@ -5606,9 +5606,9 @@ exports.Prisma.FixedClassOrderByRelevanceFieldEnum = {
 
 exports.Prisma.CurriculumOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -5620,9 +5620,9 @@ exports.Prisma.CurriculumOrderByRelevanceFieldEnum = {
 
 exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   shortName: 'shortName',
   englishName: 'englishName',
@@ -7355,6 +7355,7 @@ exports.CurriculumVersionType = exports.$Enums.CurriculumVersionType = {
 
 exports.ExamType = exports.$Enums.ExamType = {
   OfflineWritten: 'OfflineWritten',
+  OnlineWritten: 'OnlineWritten',
   Oral: 'Oral',
   Practice: 'Practice',
   Project: 'Project',

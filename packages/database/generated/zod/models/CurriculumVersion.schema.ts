@@ -9,13 +9,13 @@ import { CurriculumVersionType } from '../../zenstack/models';
 import { CurriculumVersionTypeSchema } from '../enums/CurriculumVersionType.schema';
 const baseSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),
@@ -41,13 +41,13 @@ const baseSchema = z.object({
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),
@@ -123,13 +123,13 @@ export const CurriculumVersionPrismaCreateSchema = baseSchemaWithoutDefaults.par
  */
 export const CurriculumVersionPrismaUpdateSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    code: z.string().nullish(),
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),

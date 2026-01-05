@@ -1,3 +1,4 @@
+
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { prisma } from '..'
 import { ErrorCode, FailedResponseSchema } from '../dto/base'
@@ -87,6 +88,11 @@ app.openapi(registration, async (c) => {
                 some: { id: student.fixedClass.trainingCourseId },
             },
         },
+        orderBy: { startDate: 'desc' },
+        select: {
+            id: true,
+            semesterId: true,
+        },
     })
 
     if (!registerSession.length) {
@@ -99,106 +105,93 @@ app.openapi(registration, async (c) => {
         )
     }
 
-    const semesterIds = registerSession.map((item) => item.semesterId)
-
-    const results = await Promise.allSettled(
-        class_data.map(async (cls) => {
-            const subjectClass = await prisma.subjectClass.findUnique({
-                where: {
-                    id: cls,
-                    semesterId: { in: semesterIds },
-                },
-                include: {
-                    subject: true,
-                    subjectClassStudent: {
-                        select: { student: { select: { code: true } } },
-                    },
-                    _count: {
-                        select: {
-                            subjectClassStudent: true,
-                        },
-                    },
-                },
-            })
-
-            if (!subjectClass) {
-                throw new Error(`Lớp học ${cls} không hợp lệ`)
-            }
-
-            if (type_res === TYPE_RES.REGISTER) {
-                console.log(subjectClass.maxStudent)
-                if (subjectClass._count.subjectClassStudent >= subjectClass.maxStudent) {
-                    throw new Error(
-                        `Lớp ${subjectClass.subject.name} ${cls} đã quá số lượng đăng ký`
-                    )
-                }
-
-                if (
-                    subjectClass.subjectClassStudent.some(
-                        (item) => item.student.code === student.code
-                    )
-                ) {
-                    throw new Error(`Lớp ${subjectClass.subject.name} ${cls} không hợp lệ`)
-                }
-
-                try {
-                    await prisma.studentSubjectScore.create({
-                        data: {
-                            studentId: student.id,
-                            subjectClassId: subjectClass.id,
-                            subjectVersionId: subjectClass.subjectId,
-                        },
-                    })
-                } catch (error) {
-                    console.error(error)
-                    throw new Error(`Lớp ${subjectClass.subject.name} ${cls} không hợp lệ`)
-                }
-            }
-
-            if (type_res === TYPE_RES.CANCEL) {
-                if (
-                    !subjectClass.subjectClassStudent.some(
-                        (item) => item.student.code === student.code
-                    )
-                ) {
-                    throw new Error(`Lớp ${subjectClass.subject.name} ${cls} không hợp lệ`)
-                }
-
-                try {
-                    await prisma.studentSubjectScore.delete({
-                        where: {
-                            subjectClassId_studentId: {
-                                studentId: student.id,
-                                subjectClassId: subjectClass.id,
-                            },
-                        },
-                    })
-                } catch (error) {
-                    console.error(error)
-                    throw new Error(`Lớp ${subjectClass.subject.name} ${cls} không hợp lệ`)
-                }
-            }
-
-            return cls
-        })
-    )
+    const currentSession = registerSession[0]
+    if (!currentSession) {
+        return c.json(
+            {
+                result_code: ErrorCode.SESSION_NOT_FOUND,
+                result_desc: 'không có đợt đăng ký',
+            },
+            404
+        )
+    }
+    const sessionId = currentSession.id
+    const semesterIds = registerSession.map((s) => s.semesterId)
     const class_valid: string[] = []
     const class_invalid: string[] = []
     const descriptions: string[] = []
-    for (const [idx, result] of results.entries()) {
-        if (result.status === 'fulfilled') {
-            class_valid.push(result.value)
-        } else {
-            const reason = result.reason as Error
-            class_invalid.push(class_data[idx] as string)
-            descriptions.push(reason.message)
+    await prisma.$transaction(async (tx) => {
+        for (const cls of class_data) {
+            try {
+                const subjectClass = await tx.subjectClass.findFirst({
+                    where: {
+                        id: cls,
+                        semesterId: { in: semesterIds },
+                    },
+                    include: {
+                        subject: true,
+                    },
+                })
+
+                if (!subjectClass) {
+                    throw new Error(`Lớp học ${cls} không hợp lệ`)
+                }
+
+ 
+                const existed = await tx.classRegisterLogs.findFirst({
+                    where: {
+                        studentId: student.id,
+                        subjectClassId: subjectClass.id,
+                        classRegisterSessionId: sessionId,
+                    },
+                })
+
+                if (type_res === TYPE_RES.REGISTER) {
+                    if (existed) {
+                        throw new Error(`Bạn đã đăng ký lớp ${subjectClass.subject.name}`)
+                    }
+
+                    const registeredCount = await tx.classRegisterLogs.count({
+                        where: {
+                            subjectClassId: subjectClass.id,
+                            classRegisterSessionId: sessionId,
+                        },
+                    })
+
+                    if (registeredCount >= subjectClass.maxStudent) {
+                        throw new Error(`Lớp ${subjectClass.subject.name} đã đủ số lượng`)
+                    }
+                    await tx.classRegisterLogs.create({
+                        data: {
+                            studentId: student.id,
+                            subjectClassId: subjectClass.id,
+                            classRegisterSessionId: sessionId,
+                        },
+                    })
+                }
+                
+                if (type_res === TYPE_RES.CANCEL) {
+                    if (!existed) {
+                        throw new Error(`Bạn chưa đăng ký lớp ${subjectClass.subject.name}`)
+                    }
+
+                    await tx.classRegisterLogs.delete({
+                        where: { id: existed.id },
+                    })
+                }
+
+                class_valid.push(cls)
+            } catch (err) {
+                class_invalid.push(cls)
+                descriptions.push((err as Error).message)
+            }
         }
-    }
+    })
 
     return c.json(
         {
             result_code: '000',
-            result_desc: 'success',
+            result_desc: 'success' as const,
             students_code,
             class_valid,
             class_invalid,

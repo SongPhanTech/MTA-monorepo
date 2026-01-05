@@ -223,7 +223,7 @@ app.openapi(getOpenCourses, async (c) => {
                             },
                             _count: {
                                 select: {
-                                    // classRegisterLogs: true,
+                                     classRegisterLogs: true,
                                     subjectClassStudent: true,
                                 },
                             },
@@ -244,10 +244,10 @@ app.openapi(getOpenCourses, async (c) => {
             return version.subjectClass
                 .filter((subjectClass) => {
                     if (type === TYPE_REGISTRABLE.REGISTRABLE) {
-                        return subjectClass._count.subjectClassStudent < subjectClass.maxStudent
+                        return subjectClass._count.classRegisterLogs < subjectClass.maxStudent
                     }
                     if (type === TYPE_REGISTRABLE.UN_REGISTRABLE) {
-                        return subjectClass._count.subjectClassStudent >= subjectClass.maxStudent
+                        return subjectClass._count.classRegisterLogs >= subjectClass.maxStudent
                     }
                     return true
                 })
@@ -291,7 +291,7 @@ app.openapi(getOpenCourses, async (c) => {
                         courses_name: version.name,
                         class_id: subjectClass.id,
                         class_students_reg: subjectClass.maxStudent,
-                        class_students_count: subjectClass._count.subjectClassStudent,
+                        class_students_count: subjectClass._count.classRegisterLogs,
                         class_teachers: [mainLecturer, extraLecturer].filter(Boolean).join(', '),
                         class_credit_hour: version.credit,
                         class_tuition: version.credit * s.tuitionPerCredit,
@@ -393,6 +393,7 @@ app.openapi(getCoursesDetail, async (c) => {
                     },
                 },
             },
+            subjectClassTimes:true,
             classSchedules: true,
             subjectClassStudent: {
                 include: {
@@ -440,8 +441,8 @@ app.openapi(getCoursesDetail, async (c) => {
             .filter(Boolean)
             .join(' ')
 
-    const study_schedules = subjectClass.classSchedules.map((t) => ({
-        study_date: t.classDate,
+    const study_schedules = subjectClass.subjectClassTimes.map((t) => ({
+        study_date: t.dayOfWeek.toString(),
         study_period_start: t.startPeriod,
         study_period_end: t.endPeriod,
     }))
@@ -464,7 +465,7 @@ app.openapi(getCoursesDetail, async (c) => {
     return c.json(
         {
             result_code: '000',
-            result_desc: 'success' as const,
+            result_desc: "success" as const,
             ...response,
         },
         200

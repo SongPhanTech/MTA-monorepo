@@ -107,11 +107,7 @@ const ModalPreviewUpload = () => {
 
     return (
         <Modal
-            title={
-                <div className="text-xl font-semibold">
-                    Danh sách dữ liệu - {filteredData.length} môn học
-                </div>
-            }
+            title={`Danh sách dữ liệu - ${filteredData.length} môn học`}
             open={isOpen}
             onCancel={onClose}
             className="w-[100vw]"
@@ -133,14 +129,7 @@ const ModalPreviewUpload = () => {
             <div className="h-[85vh] overflow-auto">
                 {allErrors?.length > 0 && (
                     <Collapse defaultActiveKey={['1']} className="mb-4">
-                        <Panel
-                            header={
-                                <div className="text-lg font-[500] text-red-500">
-                                    Danh sách lỗi ({allErrors.length} lỗi)
-                                </div>
-                            }
-                            key="1"
-                        >
+                        <Panel header={`Danh sách lỗi (${allErrors.length} lỗi)`} key="1">
                             <Table
                                 className="p-0 m-0"
                                 columns={[
