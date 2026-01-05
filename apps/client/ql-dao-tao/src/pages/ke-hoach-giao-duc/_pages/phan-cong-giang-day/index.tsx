@@ -417,6 +417,15 @@ export default function PhanCongGiangDay({
             deletedAt: null,
             cancelled: false,
             type: type,
+            ...(trainingCourseId
+                ? {
+                      fixedClasses: {
+                          some: {
+                              trainingCourseId,
+                          },
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -428,6 +437,15 @@ export default function PhanCongGiangDay({
             deletedAt: null,
             cancelled: false,
             type: type,
+            ...(trainingCourseId
+                ? {
+                      fixedClasses: {
+                          some: {
+                              trainingCourseId,
+                          },
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -800,10 +818,20 @@ export default function PhanCongGiangDay({
                                                                         extraLecturerId: {
                                                                             not: null,
                                                                         },
+
                                                                         cancelled: false,
                                                                         active: true,
                                                                         deletedAt: null,
                                                                         type: type,
+                                                                        ...(trainingCourseId
+                                                                            ? {
+                                                                                  fixedClasses: {
+                                                                                      some: {
+                                                                                          trainingCourseId,
+                                                                                      },
+                                                                                  },
+                                                                              }
+                                                                            : {}),
                                                                     },
                                                                     data: {
                                                                         status: e.target.checked
