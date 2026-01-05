@@ -204,7 +204,8 @@ model TrainingMajorOnTrainingObjectType extends Base {
 }
 
 /// khối kiến thức
-model TrainingBlock extends Base {
+model TrainingBlock extends BaseNoCode {
+  code                 String?
   name                 String
 
   trainingObjectType   TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
