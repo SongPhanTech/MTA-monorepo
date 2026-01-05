@@ -484,9 +484,9 @@ const NAVIGATION: NavigationType = {
                         description: 'Đợt xét đồ án',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
+                        id: QL_DAO_TAO_PERMISSION.QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN,
                         label: 'Quản lý đồ án',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN,
                         description: 'Quản lý đồ án',
                     },
                     {
@@ -513,6 +513,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_THONG_KE,
                         description: 'Thống kê kết quả bảo vệ',
                     },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THANH_TOAN_DO_AN,
+                        label: 'Cấu hình thanh toán',
+                        path: ROUTER_PATH.QL_DAO_TAO.CAU_HINH_THANH_TOAN_DO_AN,
+                        description: 'Cấu hình thanh toán',
+                    },
                 ],
             },
             {
@@ -521,21 +527,21 @@ const NAVIGATION: NavigationType = {
                 icon: FileCheck2,
                 children: [
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN,
+                        id: QL_DAO_TAO_PERMISSION.QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                         label: 'Đợt xét luận văn',
-                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                         description: 'Đợt xét luận văn',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
+                        id: QL_DAO_TAO_PERMISSION.QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN,
                         label: 'Quản lý luận văn/đề án',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN,
                         description: 'Quản lý luận văn/đề án',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
+                        id: QL_DAO_TAO_PERMISSION.QUAN_LY_LUAN_VAN_DANH_SACH_CHUYEN_GIA,
                         label: 'Danh sách chuyên gia',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_CHUYEN_GIA,
                         description: 'Danh sách chuyên gia',
                     },
                     {
@@ -555,6 +561,12 @@ const NAVIGATION: NavigationType = {
                         label: 'Thống kê kết quả bảo vệ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_THONG_KE,
                         description: 'Thống kê kết quả bảo vệ',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THANH_TOAN_LUAN_VAN,
+                        label: 'Cấu hình thanh toán',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_THANH_TOAN_LUAN_VAN,
+                        description: 'Cấu hình thanh toán',
                     },
                 ],
             },
@@ -643,12 +655,6 @@ const NAVIGATION: NavigationType = {
                 label: 'Thông báo',
                 path: ROUTER_PATH.QL_DAO_TAO.THONG_BAO,
                 description: 'Quản lý thông báo đào tạo',
-            },
-            {
-                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THANH_TOAN,
-                label: 'Cấu hình thanh toán',
-                path: ROUTER_PATH.QL_DAO_TAO.CAU_HINH_THANH_TOAN,
-                description: 'Quản lý cấu hình thanh toán',
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,

@@ -1,3 +1,4 @@
+import { removeVietnameseTones } from '@/utils/removeVietnamese'
 import { ClipboardButton } from '@components/commons/clipboard'
 import FormItem from '@components/commons/form-item'
 import Table from '@components/commons/table'
@@ -21,7 +22,8 @@ import {
     generateDiplomaNumber,
     graduationSessionDecision,
 } from '@workspace/libs/api/training'
-import { genOriginalDiplomaNumber } from '@workspace/libs/utils'
+import { exportFromTemplate } from '@workspace/libs/template-excel'
+import { genOriginalDiplomaNumber, getMinioUrl } from '@workspace/libs/utils'
 import {
     Button,
     Col,
@@ -38,7 +40,7 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
-import { BookCheckIcon, Presentation, Sheet } from 'lucide-react'
+import { BookCheckIcon, FileDown, Presentation, Sheet } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -150,7 +152,16 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         include: {
             diplomaType: true,
             application: true,
-            trainingMajor: true,
+            trainingMajor: {
+                include: {
+                    trainingField: {
+                        select: {
+                            name: true,
+                            englishName: true,
+                        },
+                    },
+                },
+            },
             finalRanking: true,
             student: {
                 include: {
@@ -270,6 +281,53 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
             message.error('Đã xảy ra lỗi, vui lòng thử lại')
         } finally {
             setIsExporting(false)
+        }
+    }
+    const [isExportingTemplate, setIsExportingTemplate] = useState(false)
+    const handleExportTemplate = async () => {
+        if (!sessionId || !data) return
+        setIsExportingTemplate(true)
+
+        try {
+            const allSheetOptions = data.map((item) => {
+                const { student, trainingMajor, diplomaNumber, diplomaIssueDate, id } = item
+                const profile = student?.userProfile
+                const dob = dayjs(profile?.dateOfBirth)
+                const ngayCap = diplomaIssueDate
+                    ? dayjs(diplomaIssueDate).format('D MMMM YYYY')
+                    : ''
+
+                return {
+                    sheet: `${id}`,
+                    tableStartCell: { row: 24, col: 1 },
+                    rows: [{ cells: [{ value: null, colSpan: 18, border: false }] }],
+                    data: {
+                        tennganhtienganh: trainingMajor?.trainingField?.englishName ?? '',
+                        tennganhtiengviet: trainingMajor?.trainingField?.name ?? '',
+                        tentienganh: removeVietnameseTones(profile?.fullname ?? ''),
+                        tentiengviet: profile?.fullname ?? '',
+                        ngaysinhta: dob.locale('en').format('D MMMM YYYY'),
+                        ngaysinhtv: dob.format('DD/MM/YYYY'),
+                        sohieuvanbang: diplomaNumber ?? '',
+                        thoigian: ngayCap ? `Hà Nội, ${ngayCap}` : '',
+                    },
+                }
+            })
+
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/mau-in-van-bang.xlsx'),
+                sheets: allSheetOptions,
+                fileName: `PhoiBangTotNghiep_${dayjs().format('HH[h]mm[m]ss[s]')}`,
+                mergeSheetsToOne: true,
+                sheetName: 'XetTotNghiep',
+            })
+
+            message.success('Xuất file thành công')
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại')
+        } finally {
+            setIsExportingTemplate(false)
         }
     }
 
@@ -552,6 +610,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                     </Popover>
                 </div>
                 <div className="flex align-middle items-center gap-2">
+                    <Button
+                        type="primary"
+                        onClick={() => handleExportTemplate()}
+                        loading={isExportingTemplate}
+                    >
+                        <FileDown />
+                        Xuất mẫu in văn bằng
+                    </Button>
                     <Button
                         type="primary"
                         onClick={() => handleExportResult()}

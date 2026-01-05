@@ -8,7 +8,7 @@ import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import {
-    // CouncilProposalStatus,
+    CouncilProposalStatus,
     CouncilRole,
     ThesisProjectStatus,
     ThesisType,
@@ -95,7 +95,6 @@ export default function PostgraduateProject({
         onChange: (newSelectedRowKeys: React.Key[]) => {
             setSelectedRowKeys(newSelectedRowKeys)
         },
-        // type: 'checkbox' là mặc định, nếu muốn radio thì dùng 'radio'
     }
     // state cho số lượng trang để phân trang
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -291,7 +290,6 @@ export default function PostgraduateProject({
             trainingCourseId: trainingCourseSelected ?? '',
         },
     })
-    // hàm xử lý lấy ra danh sách chuyên gia hướng dẫn
     const { data: expertProfileData } = useFindManyExpertProfile({
         include: {
             lecturer: {
@@ -404,14 +402,8 @@ export default function PostgraduateProject({
                                 coSupervisor: true,
                                 room: true,
                                 defenseRecord: true,
-                                // supervisorPayments: {
-                                //     include: {
-                                //         expert: true,
-                                //     },
-                                //     orderBy: {
-                                //         description: 'asc',
-                                //     },
-                                // },
+                                supervisorPayment: true,
+                                coSupervisorPayment: true,
                                 council: {
                                     include: { members: { include: { expert: true } } },
                                 },
@@ -451,6 +443,7 @@ export default function PostgraduateProject({
     // hàm xử lý lấy ra danh sách session
     const { data: thesisSessionData } = useFindManyThesisSession({
         orderBy: { startDate: 'desc' },
+
         where: {
             trainingObjectTypeId: trainingObjectId,
         },
@@ -482,207 +475,207 @@ export default function PostgraduateProject({
 
     // hàm xử lý xuất file sao QĐ HDLV
     const saoQDHDLV = async () => {
-        // if (!students?.length && !allStudentsInClasses?.length) {
-        //     message.error('Không có dữ liệu để sao QĐ HDLV')
-        //     return
-        // }
-        // showSpinner()
-        // const presentDay = dayjs().format('DD/MM/YYYY')
-        // const ngayQD = presentDay.split('/')[0]
-        // const thangQD = presentDay.split('/')[1]
-        // const namQD = presentDay.split('/')[2]
-        // try {
-        //     const allSheetOptions = allStudentsInClasses?.map((student) => {
-        //         const supervisor =
-        //             student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-        //         if (!supervisor) {
-        //             return null
-        //         }
-        //         const coSupervisor =
-        //             student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
-        //         const data = {
-        //             ngayQD: ngayQD,
-        //             thangQD: thangQD,
-        //             namQD: namQD,
-        //             type:
-        //                 student?.thesisRegistrations?.[0]?.thesisProject?.description
-        //                     ?.split('-')[1]
-        //                     .trim()
-        //                     .split(':')[1] || '',
-        //             khoa: student?.fixedClass?.trainingCourse?.name || '',
-        //             chuyennganh:
-        //                 student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-        //                 '',
-        //             nganh:
-        //                 student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-        //                     ?.trainingField?.name || '',
-        //             detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
-        //             hoten: student?.userProfile?.fullname,
-        //             canbohuongdan1: supervisor ? `1. ${supervisor}` : '',
-        //             canbohuongdan2: coSupervisor ? `2. ${coSupervisor}` : '',
-        //             khoaquanli:
-        //                 student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || '',
-        //             ngay: ngayQD,
-        //             thang: thangQD,
-        //             nam: namQD,
-        //         }
-        //         const gapRow: TableRow = {
-        //             cells: [{ value: null, colSpan: 18, border: false }],
-        //         }
-        //         return {
-        //             sheet: `${student.userProfile?.code} `,
-        //             data: data,
-        //             tableStartCell: { row: 40, col: 1 },
-        //             rows: [gapRow],
-        //         }
-        //     })
-        //     await exportFromTemplate({
-        //         templateUrl: getMinioUrl('mta/template/BanSaoQDHuongDanLuanVan.xlsx'),
-        //         sheets: allSheetOptions?.filter((item) => item !== null) ?? [],
-        //         fileName: 'BanSaoQDHuongDanLuanVan',
-        //         mergeSheetsToOne: true,
-        //         sheetName: 'BanSaoQDHuongDanLuanVan',
-        //     })
-        //     message.success('Xuất file thành công')
-        // } catch (error) {
-        //     message.error('Vui lòng kiểm tra lại dữ liệu đầu vào')
-        // } finally {
-        //     hideSpinner()
-        // }
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để sao QĐ HDLV')
+            return
+        }
+        showSpinner()
+        const presentDay = dayjs().format('DD/MM/YYYY')
+        const ngayQD = presentDay.split('/')[0]
+        const thangQD = presentDay.split('/')[1]
+        const namQD = presentDay.split('/')[2]
+        try {
+            const allSheetOptions = allStudentsInClasses?.map((student) => {
+                const supervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+                if (!supervisor) {
+                    return null
+                }
+                const coSupervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
+                const data = {
+                    ngayQD: ngayQD,
+                    thangQD: thangQD,
+                    namQD: namQD,
+                    type:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1] || '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    nganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.name || '',
+                    detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    hoten: student?.userProfile?.fullname,
+                    canbohuongdan1: supervisor ? `1. ${supervisor}` : '',
+                    canbohuongdan2: coSupervisor ? `2. ${coSupervisor}` : '',
+                    khoaquanli:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || '',
+                    ngay: ngayQD,
+                    thang: thangQD,
+                    nam: namQD,
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.code} `,
+                    data: data,
+                    tableStartCell: { row: 40, col: 1 },
+                    rows: [gapRow],
+                }
+            })
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/BanSaoQDHuongDanLuanVan.xlsx'),
+                sheets: allSheetOptions?.filter((item) => item !== null) ?? [],
+                fileName: 'BanSaoQDHuongDanLuanVan',
+                mergeSheetsToOne: true,
+                sheetName: 'BanSaoQDHuongDanLuanVan',
+            })
+            message.success('Xuất file thành công')
+        } catch (error) {
+            message.error('Vui lòng kiểm tra lại dữ liệu đầu vào')
+        } finally {
+            hideSpinner()
+        }
     }
     // hàm xử lý xuất file giấy mời HDLV
     const giaymoihdlv = async () => {
-        // if (!students?.length && !allStudentsInClasses?.length) {
-        //     message.error('Không có dữ liệu để tạo giấy mời HDLV')
-        //     return
-        // }
-        // showSpinner()
-        // const presentDay = dayjs().format('DD/MM/YYYY')
-        // const ngay = presentDay.split('/')[0]
-        // const thang = presentDay.split('/')[1]
-        // const nam = presentDay.split('/')[2]
-        // try {
-        //     const allSheetOptions = allStudentsInClasses?.map((student) => {
-        //         const supervisor =
-        //             student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-        //         const data = {
-        //             ngay: ngay,
-        //             thang: thang,
-        //             nam: nam,
-        //             tenhocvien: student?.userProfile?.fullname,
-        //             tenhuongdan: supervisor ? ` ${supervisor}` : '',
-        //             khoa: student?.fixedClass?.trainingCourse?.name || '',
-        //             chuyennganh:
-        //                 student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-        //                 '',
-        //             tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
-        //             type:
-        //                 student?.thesisRegistrations?.[0]?.thesisProject?.description
-        //                     ?.split('-')[1]
-        //                     .trim()
-        //                     .split(':')[1]
-        //                     .trim()
-        //                     .toLowerCase() || '',
-        //         }
-        //         const gapRow: TableRow = {
-        //             cells: [{ value: null, colSpan: 18, border: false }],
-        //         }
-        //         return {
-        //             sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
-        //             data: data,
-        //             tableStartCell: { row: 25, col: 1 },
-        //             rows: [gapRow],
-        //         }
-        //     })
-        //     await exportFromTemplate({
-        //         templateUrl: getMinioUrl('mta/template/GiayMoiHDLV.xlsx'),
-        //         sheets: allSheetOptions ?? [],
-        //         fileName: 'GiayMoiHDLV',
-        //         mergeSheetsToOne: true,
-        //         sheetName: 'GiayMoiHDLV',
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để tạo giấy mời HDLV')
+            return
+        }
+        showSpinner()
+        const presentDay = dayjs().format('DD/MM/YYYY')
+        const ngay = presentDay.split('/')[0]
+        const thang = presentDay.split('/')[1]
+        const nam = presentDay.split('/')[2]
+        try {
+            const allSheetOptions = allStudentsInClasses?.map((student) => {
+                const supervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+                const data = {
+                    ngay: ngay,
+                    thang: thang,
+                    nam: nam,
+                    tenhocvien: student?.userProfile?.fullname,
+                    tenhuongdan: supervisor ? ` ${supervisor}` : '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    type:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1]
+                            .trim()
+                            .toLowerCase() || '',
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+                    data: data,
+                    tableStartCell: { row: 25, col: 1 },
+                    rows: [gapRow],
+                }
+            })
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/GiayMoiHDLV.xlsx'),
+                sheets: allSheetOptions ?? [],
+                fileName: 'GiayMoiHDLV',
+                mergeSheetsToOne: true,
+                sheetName: 'GiayMoiHDLV',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
     // hàm xử lý xuất file hồ sơ bảo vệ LV
     const hosobvlv = async () => {
-        // if (!students?.length && !allStudentsInClasses?.length) {
-        //     message.error('Không có dữ liệu để tạo hồ sơ bảo vệ LV')
-        //     return
-        // }
-        // showSpinner()
-        // try {
-        //     const allSheetOptions = allStudentsInClasses?.map((student) => {
-        //         const thanhvienhoidong =
-        //             student?.thesisRegistrations?.[0]?.thesisProject?.council?.members
-        //         const phanbien1 = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.REVIEWER_1
-        //         )
-        //         const phanbien2 = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.REVIEWER_2
-        //         )
-        //         const chutich = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.CHAIRMAN
-        //         )
-        //         const thuky = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.SECRETARY
-        //         )
-        //         const uyvien = thanhvienhoidong?.find(
-        //             (member) => member.role === CouncilRole.MEMBER
-        //         )
-        //         const data = {
-        //             tenhocvien: student.userProfile?.fullname || '',
-        //             type:
-        //                 student.thesisRegistrations?.[0]?.thesisProject?.description
-        //                     ?.split('-')[1]
-        //                     .trim()
-        //                     .split(':')[1]
-        //                     .trim()
-        //                     .toLowerCase() || '',
-        //             khoa: student?.fixedClass?.trainingCourse?.name || '',
-        //             chuyennganh:
-        //                 student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-        //                 '',
-        //             nganh:
-        //                 student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-        //                     ?.trainingField?.name || '',
-        //             detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
-        //             ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-        //                 ? dayjs(
-        //                       student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-        //                   ).format('DD/MM/YYYY')
-        //                 : '',
-        //             phanbien1: phanbien1?.expert?.name || '',
-        //             phanbien2: phanbien2?.expert?.name || '',
-        //             chutich: chutich?.expert?.name || '',
-        //             thuky: thuky?.expert?.name || '',
-        //             uyvien: uyvien?.expert?.name || '',
-        //         }
-        //         const gapRow: TableRow = {
-        //             cells: [{ value: null, colSpan: 18, border: false }],
-        //         }
-        //         return {
-        //             sheet: `${student.userProfile?.code}`,
-        //             data: data,
-        //             tableStartCell: { row: 104, col: 1 },
-        //             rows: [gapRow],
-        //         }
-        //     })
-        //     await exportFromTemplate({
-        //         templateUrl: getMinioUrl('mta/template/HoSoBVLVTN.xlsx'),
-        //         sheets: allSheetOptions ?? [],
-        //         fileName: 'Hosobvlv',
-        //         mergeSheetsToOne: true,
-        //         sheetName: 'Hosobvlv',
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để tạo hồ sơ bảo vệ LV')
+            return
+        }
+        showSpinner()
+        try {
+            const allSheetOptions = allStudentsInClasses?.map((student) => {
+                const thanhvienhoidong =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.council?.members
+                const phanbien1 = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.REVIEWER_1
+                )
+                const phanbien2 = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.REVIEWER_2
+                )
+                const chutich = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.CHAIRMAN
+                )
+                const thuky = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.SECRETARY
+                )
+                const uyvien = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.MEMBER
+                )
+                const data = {
+                    tenhocvien: student.userProfile?.fullname || '',
+                    type:
+                        student.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1]
+                            .trim()
+                            .toLowerCase() || '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    nganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.name || '',
+                    detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+                        ? dayjs(
+                              student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+                          ).format('DD/MM/YYYY')
+                        : '',
+                    phanbien1: phanbien1?.expert?.name || '',
+                    phanbien2: phanbien2?.expert?.name || '',
+                    chutich: chutich?.expert?.name || '',
+                    thuky: thuky?.expert?.name || '',
+                    uyvien: uyvien?.expert?.name || '',
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.code}`,
+                    data: data,
+                    tableStartCell: { row: 104, col: 1 },
+                    rows: [gapRow],
+                }
+            })
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/HoSoBVLVTN.xlsx'),
+                sheets: allSheetOptions ?? [],
+                fileName: 'Hosobvlv',
+                mergeSheetsToOne: true,
+                sheetName: 'Hosobvlv',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
     // hàm xử lý xuất file danh sách bảo vệ LV
     const danhsachbaove = async () => {
@@ -691,104 +684,104 @@ export default function PostgraduateProject({
             return
         }
         showSpinner()
-        // try {
-        //     const row: TableRow[] =
-        //         allStudentsInClasses?.map((student, index) => {
-        //             return {
-        //                 cells: [
-        //                     { value: index + 1, border: true, align: 'center' },
-        //                     {
-        //                         value:
-        //                             student?.fixedClass?.curriculumVersion?.curriculum
-        //                                 ?.trainingMajor?.name || '',
-        //                         border: true,
-        //                         align: 'center',
-        //                     },
-        //                     {
-        //                         value:
-        //                             student?.fixedClass?.trainingCourse?.trainingObjectType?.name ||
-        //                             '',
-        //                         border: true,
-        //                         align: 'center',
-        //                     },
-        //                     {
-        //                         value: student.userProfile?.lastName || '',
-        //                         border: true,
-        //                         align: 'center',
-        //                     },
-        //                     {
-        //                         value: student.userProfile?.firstName || '',
-        //                         border: true,
-        //                         align: 'center',
-        //                     },
-        //                     { value: '', border: true, align: 'center' },
-        //                     {
-        //                         value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-        //                             ? dayjs(
-        //                                   student?.thesisRegistrations?.[0]?.thesisProject
-        //                                       ?.defenseDate
-        //                               ).format('DD/MM/YYYY')
-        //                             : '',
-        //                         border: true,
-        //                         align: 'center',
-        //                     },
-        //                     {
-        //                         value: student?.thesisRegistrations?.[0]?.thesisProject
-        //                             ?.defenseSession?.startTime
-        //                             ? dayjs(
-        //                                   student?.thesisRegistrations?.[0]?.thesisProject
-        //                                       ?.defenseSession?.startTime
-        //                               ).format('HH:mm')
-        //                             : '',
-        //                         border: true,
-        //                         align: 'center',
-        //                     },
-        //                     {
-        //                         value:
-        //                             student?.thesisRegistrations?.[0]?.thesisProject?.room?.name ||
-        //                             '',
-        //                         border: true,
-        //                         align: 'center',
-        //                     },
-        //                     { value: '', border: true },
-        //                     { value: '', border: true },
-        //                     { value: '', border: true },
-        //                 ],
-        //             }
-        //         }) ?? []
-        //     const gapRow: TableRow = {
-        //         cells: [{ value: null, border: false }],
-        //     }
-        //     const totalRow: TableRow = {
-        //         cells: [
-        //             {
-        //                 value: `(Tổng số: ${allStudentsInClasses?.length} học viên)`,
-        //                 align: 'center',
-        //                 colSpan: 13,
-        //                 border: false,
-        //                 bold: true,
-        //             },
-        //         ],
-        //     }
-        //     await exportFromTemplate({
-        //         templateUrl: getMinioUrl('mta/template/DanhSachBaoVe.xlsx'),
-        //         sheets: [
-        //             {
-        //                 sheet: 'DanhSachBaoVe',
-        //                 rows: [...row, gapRow, totalRow],
-        //                 tableStartCell: { row: 7, col: 1 },
-        //                 data: {
-        //                     dotxet: thesisSessionSelected?.name || '',
-        //                 },
-        //             },
-        //         ],
-        //         fileName: 'DanhSachBaoVe',
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        try {
+            const row: TableRow[] =
+                allStudentsInClasses?.map((student, index) => {
+                    return {
+                        cells: [
+                            { value: index + 1, border: true, align: 'center' },
+                            {
+                                value:
+                                    student?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.name || '',
+                                border: true,
+                                align: 'center',
+                            },
+                            {
+                                value:
+                                    student?.fixedClass?.trainingCourse?.trainingObjectType?.name ||
+                                    '',
+                                border: true,
+                                align: 'center',
+                            },
+                            {
+                                value: student.userProfile?.lastName || '',
+                                border: true,
+                                align: 'center',
+                            },
+                            {
+                                value: student.userProfile?.firstName || '',
+                                border: true,
+                                align: 'center',
+                            },
+                            { value: '', border: true, align: 'center' },
+                            {
+                                value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+                                    ? dayjs(
+                                          student?.thesisRegistrations?.[0]?.thesisProject
+                                              ?.defenseDate
+                                      ).format('DD/MM/YYYY')
+                                    : '',
+                                border: true,
+                                align: 'center',
+                            },
+                            {
+                                value: student?.thesisRegistrations?.[0]?.thesisProject
+                                    ?.defenseSession?.startTime
+                                    ? dayjs(
+                                          student?.thesisRegistrations?.[0]?.thesisProject
+                                              ?.defenseSession?.startTime
+                                      ).format('HH:mm')
+                                    : '',
+                                border: true,
+                                align: 'center',
+                            },
+                            {
+                                value:
+                                    student?.thesisRegistrations?.[0]?.thesisProject?.room?.name ||
+                                    '',
+                                border: true,
+                                align: 'center',
+                            },
+                            { value: '', border: true },
+                            { value: '', border: true },
+                            { value: '', border: true },
+                        ],
+                    }
+                }) ?? []
+            const gapRow: TableRow = {
+                cells: [{ value: null, border: false }],
+            }
+            const totalRow: TableRow = {
+                cells: [
+                    {
+                        value: `(Tổng số: ${allStudentsInClasses?.length} học viên)`,
+                        align: 'center',
+                        colSpan: 13,
+                        border: false,
+                        bold: true,
+                    },
+                ],
+            }
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/DanhSachBaoVe.xlsx'),
+                sheets: [
+                    {
+                        sheet: 'DanhSachBaoVe',
+                        rows: [...row, gapRow, totalRow],
+                        tableStartCell: { row: 7, col: 1 },
+                        data: {
+                            dotxet: thesisSessionSelected?.name || '',
+                        },
+                    },
+                ],
+                fileName: 'DanhSachBaoVe',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
     // hàm xử lý xuất file thống kê cán bộ hướng dẫn LV
     const thongkecbhdlv = async () => {
@@ -894,268 +887,257 @@ export default function PostgraduateProject({
     }
     // hàm xử lý xuất file phụ lục ds luận văn
     const phulucdsluanvan = async () => {
-        // showSpinner()
-        // if (!allStudentsInClasses?.length) {
-        //     message.error('Không có dữ liệu để xuất phụ lục danh sách luận văn')
-        //     hideSpinner()
-        //     return
-        // }
-        // const organizationMap = new Map<string, any>()
-        // let dotxet = ''
-        // allStudentsInClasses.forEach((student) => {
-        //     dotxet =
-        //         dotxet ||
-        //         student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name ||
-        //         ''
-        //     const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
-        //     if (!thesisProject) return
-        //     const organizationId = thesisProject.organization?.Id || ''
-        //     const organizationName = thesisProject.organization?.sTen || 'Chưa có đơn vị'
-        //     const organizationCode = thesisProject.organization?.sCode || ''
-        //     if (!organizationMap.has(organizationId)) {
-        //         organizationMap.set(organizationId, {
-        //             organizationId: organizationId === '' ? null : organizationId,
-        //             sTen: organizationName || '',
-        //             sCode: organizationCode || '',
-        //             thesisProject: [],
-        //         })
-        //     }
-        //     const orgData = organizationMap.get(organizationId)
-        //     orgData.thesisProject.push({
-        //         hovatenhocvien: student.userProfile?.fullname || '',
-        //         ngaysinh: student.userProfile?.dateOfBirth
-        //             ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY')
-        //             : '',
-        //         doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
-        //         khoa: student.fixedClass?.trainingCourse?.name || '',
-        //         tendetai: thesisProject.title || '',
-        //         gvhd1: thesisProject.supervisor?.name || '',
-        //         gvhd2: thesisProject.coSupervisor?.name || '',
-        //         isThesis:
-        //             thesisProject.description?.split('-')[1].trim().split(':')[1] ||
-        //             ''.toLowerCase(),
-        //         language:
-        //             thesisProject.description?.split('-')[0].trim().split(':')[1] ||
-        //             ''.toLowerCase(),
-        //     })
-        // })
-        // // Convert Map to Array
-        // const result = Array.from(organizationMap.values())
-        // if (result.length === 0) {
-        //     message.error('Không có dữ liệu để xuất phụ lục danh sách luận văn')
-        //     hideSpinner()
-        //     return
-        // }
-        // let count = 1
-        // const dataRows: TableRow[] = result.flatMap((item: any) => {
-        //     const orgRow: TableRow = {
-        //         cells: [
-        //             {
-        //                 value: `${item.sCode} - ${item.sTen}`,
-        //                 border: true,
-        //                 align: 'center',
-        //                 colSpan: 6,
-        //                 bold: true,
-        //             },
-        //         ],
-        //     }
-        //     const thesisRows: TableRow[] = item.thesisProject.map((thesis: any) => {
-        //         return {
-        //             cells: [
-        //                 { value: count++, border: true, align: 'center' },
-        //                 {
-        //                     value: `${thesis.hovatenhocvien}\n${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
-        //                     border: true,
-        //                     align: 'left',
-        //                 },
-        //                 { value: `${thesis.tendetai}`, border: true, align: 'left' },
-        //                 {
-        //                     value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ''}\n${
-        //                         thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ''
-        //                     }`,
-        //                     border: true,
-        //                     align: 'left',
-        //                 },
-        //                 { value: `${thesis.isThesis}`, border: true, align: 'center' },
-        //                 { value: `${thesis.language}`, border: true, align: 'center' },
-        //             ],
-        //         }
-        //     })
-        //     return [orgRow, ...thesisRows]
-        // })
-        // const gapRow: TableRow = {
-        //     cells: [{ value: null, border: false }],
-        // }
-        // const totalRow: TableRow = {
-        //     cells: [
-        //         {
-        //             value: `(Tổng số: ${count - 1} học viên)`,
-        //             align: 'center',
-        //             colSpan: 6,
-        //             border: false,
-        //         },
-        //     ],
-        // }
-        // try {
-        //     await exportFromTemplate({
-        //         templateUrl: getMinioUrl('mta/template/phulucluanvanthacsi.xlsx'),
-        //         sheets: [
-        //             {
-        //                 sheet: 'phulucluanvanthacsi',
-        //                 rows: [...dataRows, gapRow, totalRow],
-        //                 tableStartCell: { row: 7, col: 1 },
-        //                 data: {
-        //                     dotxet: dotxet || '',
-        //                 },
-        //             },
-        //         ],
-        //         fileName: 'PhuLucDsLuanVan',
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        showSpinner()
+        if (!allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để xuất phụ lục danh sách luận văn')
+            hideSpinner()
+            return
+        }
+        const organizationMap = new Map<string, any>()
+        let dotxet = ''
+        allStudentsInClasses.forEach((student) => {
+            dotxet =
+                dotxet ||
+                student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name ||
+                ''
+            const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
+            if (!thesisProject) return
+            const organizationId = thesisProject.organization?.Id || ''
+            const organizationName = thesisProject.organization?.sTen || 'Chưa có đơn vị'
+            const organizationCode = thesisProject.organization?.sCode || ''
+            if (!organizationMap.has(organizationId)) {
+                organizationMap.set(organizationId, {
+                    organizationId: organizationId === '' ? null : organizationId,
+                    sTen: organizationName || '',
+                    sCode: organizationCode || '',
+                    thesisProject: [],
+                })
+            }
+            const orgData = organizationMap.get(organizationId)
+            orgData.thesisProject.push({
+                hovatenhocvien: student.userProfile?.fullname || '',
+                ngaysinh: student.userProfile?.dateOfBirth
+                    ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                    : '',
+                doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
+                khoa: student.fixedClass?.trainingCourse?.name || '',
+                tendetai: thesisProject.title || '',
+                gvhd1: thesisProject.supervisor?.name || '',
+                gvhd2: thesisProject.coSupervisor?.name || '',
+                isThesis:
+                    thesisProject.description?.split('-')[1].trim().split(':')[1] ||
+                    ''.toLowerCase(),
+                language:
+                    thesisProject.description?.split('-')[0].trim().split(':')[1] ||
+                    ''.toLowerCase(),
+            })
+        })
+        // Convert Map to Array
+        const result = Array.from(organizationMap.values())
+        if (result.length === 0) {
+            message.error('Không có dữ liệu để xuất phụ lục danh sách luận văn')
+            hideSpinner()
+            return
+        }
+        let count = 1
+        const dataRows: TableRow[] = result.flatMap((item: any) => {
+            const orgRow: TableRow = {
+                cells: [
+                    {
+                        value: `${item.sCode} - ${item.sTen}`,
+                        border: true,
+                        align: 'center',
+                        colSpan: 6,
+                        bold: true,
+                    },
+                ],
+            }
+            const thesisRows: TableRow[] = item.thesisProject.map((thesis: any) => {
+                return {
+                    cells: [
+                        { value: count++, border: true, align: 'center' },
+                        {
+                            value: `${thesis.hovatenhocvien}\n${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
+                            border: true,
+                            align: 'left',
+                        },
+                        { value: `${thesis.tendetai}`, border: true, align: 'left' },
+                        {
+                            value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ''}\n${
+                                thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ''
+                            }`,
+                            border: true,
+                            align: 'left',
+                        },
+                        { value: `${thesis.isThesis}`, border: true, align: 'center' },
+                        { value: `${thesis.language}`, border: true, align: 'center' },
+                    ],
+                }
+            })
+            return [orgRow, ...thesisRows]
+        })
+        const gapRow: TableRow = {
+            cells: [{ value: null, border: false }],
+        }
+        const totalRow: TableRow = {
+            cells: [
+                {
+                    value: `(Tổng số: ${count - 1} học viên)`,
+                    align: 'center',
+                    colSpan: 6,
+                    border: false,
+                },
+            ],
+        }
+        try {
+            await exportFromTemplate({
+                templateUrl: getMinioUrl('mta/template/phulucluanvanthacsi.xlsx'),
+                sheets: [
+                    {
+                        sheet: 'phulucluanvanthacsi',
+                        rows: [...dataRows, gapRow, totalRow],
+                        tableStartCell: { row: 7, col: 1 },
+                        data: {
+                            dotxet: dotxet || '',
+                        },
+                    },
+                ],
+                fileName: 'PhuLucDsLuanVan',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
 
-    // hàm xử lý lấy ra danh sách thống kê cán bộ hướng dẫn LV
     const getExpertSupervisionStats = (): ExpertStat[] => {
-        // if (!allStudentsInClasses || allStudentsInClasses.length === 0) {
-        //     return []
-        // }
+        if (!allStudentsInClasses || allStudentsInClasses.length === 0) {
+            return []
+        }
 
-        // const expertStatsMap = new Map<string, ExpertStat>()
+        const expertStatsMap = new Map<string, ExpertStat>()
 
-        // for (const student of allStudentsInClasses) {
-        //     for (const registration of student.thesisRegistrations) {
-        //         const project = registration.thesisProject
+        const updateStats = (expert: any, amount: any, role: 'GVHD1' | 'GVHD2') => {
+            if (!expert) return
 
-        //         if (
-        //             !project
-        //             // !project ||
-        //             // !project.supervisorPayments ||
-        //             // project.thesisType !== ThesisType.THESIS
-        //         )
-        //             continue
+            const expertId = expert.id
+            const paymentAmount = Number(amount?.toString()) || 0
 
-        //         const countedExperts: { [expertId: string]: boolean } = {}
+            let stats = expertStatsMap.get(expertId)
+            if (!stats) {
+                stats = {
+                    expertId: expertId,
+                    name: expert.name ?? '',
+                    sDonvi: expert.organization ?? '',
+                    stk: expert.bankAccountNumber ?? '',
+                    tennganhang: expert.bankName ?? '',
+                    GVHD1Student: 0,
+                    GVHD2Student: 0,
+                    totalPayment: 0,
+                }
+                expertStatsMap.set(expertId, stats)
+            }
 
-        //         for (const payment of project.supervisorPayments) {
-        //             if (!payment.expert) continue
+            stats.totalPayment += paymentAmount
 
-        //             const expertId = payment.expert.id
-        //             const paymentAmount = Number.parseFloat(payment.amount.toString()) || 0
+            if (role === 'GVHD1') {
+                stats.GVHD1Student += 1
+            } else {
+                stats.GVHD2Student += 1
+            }
+        }
+        for (const student of allStudentsInClasses) {
+            for (const registration of student.thesisRegistrations) {
+                const project = registration.thesisProject
+                if (!project) continue
 
-        //             let newStats = expertStatsMap.get(expertId)
-        //             if (!newStats) {
-        //                 newStats = {
-        //                     expertId: expertId,
-        //                     name: payment.expert.name ?? '',
-        //                     sDonvi: payment.expert.organization ?? '',
-        //                     stk: payment.expert.bankAccountNumber ?? '',
-        //                     tennganhang: payment.expert.bankName ?? '',
-        //                     GVHD1Student: 0,
-        //                     GVHD2Student: 0,
-        //                     totalPayment: 0,
-        //                 }
-        //                 expertStatsMap.set(expertId, newStats)
-        //             }
+                if (project.supervisor) {
+                    updateStats(project.supervisor, project.supervisorPayment?.amount, 'GVHD1')
+                }
 
-        //             newStats.totalPayment += paymentAmount
+                if (project.coSupervisor) {
+                    updateStats(project.coSupervisor, project.coSupervisorPayment?.amount, 'GVHD2')
+                }
+            }
+        }
 
-        //             if (!countedExperts[expertId]) {
-        //                 if (payment.description === '1' && expertId === project.supervisorId) {
-        //                     newStats.GVHD1Student += 1
-        //                 } else if (
-        //                     payment.description === '2' &&
-        //                     expertId === project.coSupervisorId
-        //                 ) {
-        //                     newStats.GVHD2Student += 1
-        //                 }
-
-        //                 countedExperts[expertId] = true
-        //             }
-        //         }
-        //     }
-        // }
-
-        // return Array.from(expertStatsMap.values())
-        return [] as ExpertStat[]
+        return Array.from(expertStatsMap.values())
     }
     // hàm xử lý tạo dữ liệu mẫu
     const taodulieumau = async () => {
-        // showSpinner()
-        // setNeedAllStudents(true)
-        // const createPromises = allStudentsInClasses?.map(async (student) => {
-        //     const hasThesisRegistration = student.thesisRegistrations?.some(
-        //         (registration) => registration.thesisProject?.thesisType === ThesisType.THESIS
-        //     )
-        //     if (hasThesisRegistration) {
-        //         return null
-        //     }
-        //     const payload = {
-        //         title: '',
-        //         summary: '',
-        //         titleEN: '',
-        //         maxStudents: 1,
-        //         language: 'Tiếng Việt',
-        //         type: 'Luận văn',
-        //         // description: "Ngôn ngữ: Tiếng Việt - Luận án/Đề án: Luận văn",
-        //         thesisSession: {
-        //             connect: {
-        //                 id: thesisSessionSelected?.id ?? '',
-        //             },
-        //         },
-        //         thesisType: ThesisType.THESIS,
-        //         librarySubmission: {
-        //             create: {
-        //                 isHardcopy: false,
-        //                 isSoftcopy: false,
-        //                 librarianNote: '',
-        //             },
-        //         },
-        //         council: {
-        //             create: {
-        //                 proposedDate: new Date(),
-        //                 status: CouncilProposalStatus.PENDING,
-        //             },
-        //         },
-        //         defenseRecord: {
-        //             create: {
-        //                 isProfileComplete: false,
-        //             },
-        //         },
-        //     }
-        //     const response = await createThesisProject({
-        //         data: {
-        //             ...payload,
-        //         },
-        //     })
-        //     const payloadRegistration = {
-        //         thesisProjectId: response?.id ?? '',
-        //         studentId: student.id,
-        //     }
-        //     const responseRegistration = await createStudentThesisRegistration({
-        //         data: payloadRegistration,
-        //     })
-        //     return { response, responseRegistration }
-        // })
-        // try {
-        //     const validPromises = (createPromises || []).filter((p) => p !== null)
-        //     await Promise.all(validPromises)
-        //     const skippedCount = (createPromises?.length || 0) - validPromises.length
-        //     if (skippedCount > 0) {
-        //         message.success(
-        //             `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn.`
-        //         )
-        //     } else {
-        //         message.success('Tạo dữ liệu mẫu thành công')
-        //     }
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu')
-        // } finally {
-        //     hideSpinner()
-        // }
+        showSpinner()
+        setNeedAllStudents(true)
+        const createPromises = allStudentsInClasses?.map(async (student) => {
+            const hasThesisRegistration = student.thesisRegistrations?.some(
+                (registration) => registration.thesisProject?.thesisType === ThesisType.THESIS
+            )
+            if (hasThesisRegistration) {
+                return null
+            }
+            const payload = {
+                title: '',
+                summary: '',
+                titleEN: '',
+                maxStudents: 1,
+                language: 'Tiếng Việt',
+                type: 'Luận văn',
+                // description: "Ngôn ngữ: Tiếng Việt - Luận án/Đề án: Luận văn",
+                thesisSession: {
+                    connect: {
+                        id: thesisSessionSelected?.id ?? '',
+                    },
+                },
+                thesisType: ThesisType.THESIS,
+                librarySubmission: {
+                    create: {
+                        isHardcopy: false,
+                        isSoftcopy: false,
+                        librarianNote: '',
+                    },
+                },
+                council: {
+                    create: {
+                        proposedDate: new Date(),
+                        status: CouncilProposalStatus.PENDING,
+                    },
+                },
+                defenseRecord: {
+                    create: {
+                        isProfileComplete: false,
+                    },
+                },
+            }
+            const response = await createThesisProject({
+                data: {
+                    ...payload,
+                },
+            })
+            const payloadRegistration = {
+                thesisProjectId: response?.id ?? '',
+                studentId: student.id,
+            }
+            const responseRegistration = await createStudentThesisRegistration({
+                data: payloadRegistration,
+            })
+            return { response, responseRegistration }
+        })
+        try {
+            const validPromises = (createPromises || []).filter((p) => p !== null)
+            await Promise.all(validPromises)
+            const skippedCount = (createPromises?.length || 0) - validPromises.length
+            if (skippedCount > 0) {
+                message.success(
+                    `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn.`
+                )
+            } else {
+                message.success('Tạo dữ liệu mẫu thành công')
+            }
+        } catch (error) {
+            message.error('Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu')
+        } finally {
+            hideSpinner()
+        }
     }
     // hàm xử lý lấy ra danh sách button
     const buttonList = [
@@ -1473,8 +1455,11 @@ export default function PostgraduateProject({
                                         )
                                     }
                                     return (
-                                        record?.thesisRegistrations?.[0]?.thesisProject
-                                            ?.organization?.sMa || ''
+                                        `${
+                                            record?.thesisRegistrations?.[0]?.thesisProject
+                                                ?.organization?.sMa
+                                        } - ${record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen}` ||
+                                        ''
                                     )
                                 },
                             },
