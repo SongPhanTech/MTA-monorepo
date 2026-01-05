@@ -60,6 +60,8 @@ import PutTrinhDoQuanLyHanhChinhModal from './quan-ly-ho-so/modals/put-trinh-do-
 import PutTrinhDoQuanLyNhaNuocModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
 import QuanHeThanNhanModal from './danh-muc-chung/put-quan-he-than-nhan'
 import LoaiTinhTrangCongTacModal from './danh-muc-chung/put-loai-tinh-trang-cong-tac'
+import PutChucVuChinhQuyenModal from '@components/modal/quan-ly-ho-so/modals/put-chuc-vu-chinh-quyen'
+import PutChucVuDangModal from '@components/modal/quan-ly-ho-so/modals/put-chuc-vu-dang'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -123,4 +125,6 @@ export {
     ModalSoYeuLyLich,
     QuanHeThanNhanModal,
     LoaiTinhTrangCongTacModal,
+    PutChucVuChinhQuyenModal,
+    PutChucVuDangModal,
 }

@@ -56,6 +56,8 @@ import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import ChucVuChinhQuyenForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-chinh-quyen'
+import ChucVuDangForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-dang'
 
 dayjs.locale('vi')
 interface itemType {
@@ -68,6 +70,8 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 export type SubmitForm = Prisma.UserProfileGetPayload<{
     include: {
+        quaTrinhChucVuChinhQuyen: true
+        quaTrinhChucVuDang: true
         tinHoc: true
         hocVi: true
         hocHam: true
@@ -183,6 +187,24 @@ export default function CreateUserPage() {
             render: (
                 <Form.Item name="hocHam" className="mb-0">
                     <HocHamForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Chức vụ chính quyền',
+            id: 'quaTrinhChucVuChinhQuyen',
+            render: (
+                <Form.Item name="quaTrinhChucVuChinhQuyen" className="mb-0">
+                    <ChucVuChinhQuyenForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Chức vụ Đảng',
+            id: 'quaTrinhChucVuDang',
+            render: (
+                <Form.Item name="quaTrinhChucVuDang" className="mb-0">
+                    <ChucVuDangForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
         },
@@ -412,6 +434,35 @@ export default function CreateUserPage() {
         lecturerTypeId,
         staffTypeId,
         staffPositionId,
+        // Loại bỏ tất cả relation fields khỏi spread để tránh lỗi Prisma
+        tinHoc,
+        hocVi,
+        hocHam,
+        trinhDoLyLuanChinhTri,
+        trinhDoQuanLyHanhChinh,
+        trinhDoQuanLyNhaNuoc,
+        ngoaiNgu,
+        boiDuongQuocPhongAnNinh,
+        capBac,
+        doanDang,
+        doiTuongChinhSach,
+        keKhaiTaiSan,
+        quaTrinhCongTac,
+        quaTrinhCuDiCongTac,
+        quaTrinhCuDiDaoTao,
+        khenThuong,
+        kyLuat,
+        relatives,
+        tiengDanToc,
+        chienDau,
+        diNuocNgoai,
+        thuongTat,
+        danhHieu,
+        quaTrinhHocTap,
+        ToChucXaHoi,
+        QuaTrinhLuong,
+        quaTrinhChucVuChinhQuyen,
+        quaTrinhChucVuDang,
         ...values
     }: SubmitForm) => {
         if (!values) return
@@ -477,24 +528,24 @@ export default function CreateUserPage() {
                 let rank = null
                 let hocvi = null
                 let hocham = null
-                if (values.capBac?.length > 0) {
-                    if (values.capBac?.length === 1) {
-                        rank = values.capBac[0]
+                if (capBac?.length > 0) {
+                    if (capBac?.length === 1) {
+                        rank = capBac[0]
                     }
-                    rank = findLatestQuyetDinh(values?.capBac)
+                    rank = findLatestQuyetDinh(capBac)
                 }
 
-                if (values.hocVi?.length > 0) {
-                    if (values.hocVi?.length === 1) {
-                        hocvi = values.hocVi[0]
+                if (hocVi?.length > 0) {
+                    if (hocVi?.length === 1) {
+                        hocvi = hocVi[0]
                     }
-                    hocvi = findLatestHocVi(values?.hocVi)
+                    hocvi = findLatestHocVi(hocVi)
                 }
-                if (values.hocHam?.length > 0) {
-                    if (values.hocHam?.length === 1) {
-                        hocham = values.hocHam[0]
+                if (hocHam?.length > 0) {
+                    if (hocHam?.length === 1) {
+                        hocham = hocHam[0]
                     }
-                    hocham = findLatestHocHam(values?.hocHam)
+                    hocham = findLatestHocHam(hocHam)
                 }
                 const resProfile = await createUserProfile({
                     data: {
@@ -532,310 +583,333 @@ export default function CreateUserPage() {
                             {
                                 hocVi: {
                                     createMany: {
-                                        data: values.hocVi?.map((item) => ({
+                                        data: hocVi?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
 
-                            !!values.hocVi
+                            !!hocVi
                         ),
                         ...emptyObjectIf(
                             {
                                 hocHam: {
                                     createMany: {
-                                        data: values.hocHam?.map((item) => ({
+                                        data: hocHam?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
 
-                            !!values.hocHam
+                            !!hocHam
                         ),
                         ...emptyObjectIf(
                             {
                                 relatives: {
                                     createMany: {
-                                        data: values.relatives?.map((item) => ({
+                                        data: relatives?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-
-                            !!values.relatives
+                            !!relatives
+                        ),
+                        ...emptyObjectIf(
+                            {
+                                quaTrinhChucVuChinhQuyen: {
+                                    createMany: {
+                                        data: quaTrinhChucVuChinhQuyen?.map((item) => ({
+                                            ...item,
+                                        })),
+                                    },
+                                },
+                            },
+                            !!quaTrinhChucVuChinhQuyen
+                        ),
+                        ...emptyObjectIf(
+                            {
+                                quaTrinhChucVuDang: {
+                                    createMany: {
+                                        data: quaTrinhChucVuDang?.map((item) => ({
+                                            ...item,
+                                        })),
+                                    },
+                                },
+                            },
+                            !!quaTrinhChucVuDang
                         ),
                         ...emptyObjectIf(
                             {
                                 trinhDoLyLuanChinhTri: {
                                     createMany: {
-                                        data: values.trinhDoLyLuanChinhTri?.map((item) => ({
+                                        data: trinhDoLyLuanChinhTri?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
 
-                            !!values.trinhDoLyLuanChinhTri
+                            !!trinhDoLyLuanChinhTri
                         ),
                         ...emptyObjectIf(
                             {
                                 trinhDoQuanLyNhaNuoc: {
                                     createMany: {
-                                        data: values.trinhDoQuanLyNhaNuoc?.map((item) => ({
+                                        data: trinhDoQuanLyNhaNuoc?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
 
-                            !!values.trinhDoQuanLyNhaNuoc
+                            !!trinhDoQuanLyNhaNuoc
                         ),
                         ...emptyObjectIf(
                             {
                                 ngoaiNgu: {
                                     createMany: {
-                                        data: values.ngoaiNgu?.map((item) => ({
+                                        data: ngoaiNgu?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
 
-                            !!values.ngoaiNgu
+                            !!ngoaiNgu
                         ),
                         ...emptyObjectIf(
                             {
                                 boiDuongQuocPhongAnNinh: {
                                     createMany: {
-                                        data: values.boiDuongQuocPhongAnNinh?.map((item) => ({
+                                        data: boiDuongQuocPhongAnNinh?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
 
-                            !!values.boiDuongQuocPhongAnNinh
+                            !!boiDuongQuocPhongAnNinh
                         ),
                         ...emptyObjectIf(
                             {
                                 capBac: {
                                     createMany: {
-                                        data: values.capBac?.map((item) => ({
+                                        data: capBac?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
 
-                            !!values.capBac
+                            !!capBac
                         ),
                         ...emptyObjectIf(
                             {
                                 quaTrinhCongTac: {
                                     createMany: {
-                                        data: values.quaTrinhCongTac?.map((item) => ({
+                                        data: quaTrinhCongTac?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
 
-                            !!values.quaTrinhCongTac
+                            !!quaTrinhCongTac
                         ),
                         ...emptyObjectIf(
                             {
                                 quaTrinhCuDiCongTac: {
                                     createMany: {
-                                        data: values.quaTrinhCuDiCongTac?.map((item) => ({
+                                        data: quaTrinhCuDiCongTac?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.quaTrinhCuDiCongTac
+                            !!quaTrinhCuDiCongTac
                         ),
                         ...emptyObjectIf(
                             {
                                 quaTrinhCuDiDaoTao: {
                                     createMany: {
-                                        data: values.quaTrinhCuDiDaoTao?.map((item) => ({
+                                        data: quaTrinhCuDiDaoTao?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.quaTrinhCuDiDaoTao
+                            !!quaTrinhCuDiDaoTao
                         ),
                         ...emptyObjectIf(
                             {
                                 khenThuong: {
                                     createMany: {
-                                        data: values.khenThuong?.map((item) => ({
+                                        data: khenThuong?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.khenThuong
+                            !!khenThuong
                         ),
                         ...emptyObjectIf(
                             {
                                 kyLuat: {
                                     createMany: {
-                                        data: values.kyLuat?.map((item) => ({
+                                        data: kyLuat?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.kyLuat
+                            !!kyLuat
                         ),
                         ...emptyObjectIf(
                             {
                                 doiTuongChinhSach: {
                                     createMany: {
-                                        data: values.doiTuongChinhSach?.map((item) => ({
+                                        data: doiTuongChinhSach?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.doiTuongChinhSach
+                            !!doiTuongChinhSach
                         ),
                         ...emptyObjectIf(
                             {
                                 keKhaiTaiSan: {
                                     createMany: {
-                                        data: values.keKhaiTaiSan?.map((item) => ({
+                                        data: keKhaiTaiSan?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.keKhaiTaiSan
+                            !!keKhaiTaiSan
                         ),
                         ...emptyObjectIf(
                             {
                                 tinHoc: {
                                     createMany: {
-                                        data: values.tinHoc?.map((item) => ({
+                                        data: tinHoc?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.tinHoc
+                            !!tinHoc
                         ),
                         ...emptyObjectIf(
                             {
                                 chienDau: {
                                     createMany: {
-                                        data: values.chienDau?.map((item) => ({
+                                        data: chienDau?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.chienDau
+                            !!chienDau
                         ),
                         ...emptyObjectIf(
                             {
                                 diNuocNgoai: {
                                     createMany: {
-                                        data: values.diNuocNgoai?.map((item) => ({
+                                        data: diNuocNgoai?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.diNuocNgoai
+                            !!diNuocNgoai
                         ),
                         ...emptyObjectIf(
                             {
                                 thuongTat: {
                                     createMany: {
-                                        data: values.thuongTat?.map((item) => ({
+                                        data: thuongTat?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.thuongTat
+                            !!thuongTat
                         ),
                         ...emptyObjectIf(
                             {
                                 danhHieu: {
                                     createMany: {
-                                        data: values.danhHieu?.map((item) => ({
+                                        data: danhHieu?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.danhHieu
+                            !!danhHieu
                         ),
                         ...emptyObjectIf(
                             {
                                 tiengDanToc: {
                                     createMany: {
-                                        data: values.tiengDanToc?.map((item) => ({
+                                        data: tiengDanToc?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.tiengDanToc
+                            !!tiengDanToc
                         ),
                         ...emptyObjectIf(
                             {
                                 ToChucXaHoi: {
                                     createMany: {
-                                        data: values.ToChucXaHoi?.map((item) => ({
+                                        data: ToChucXaHoi?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.ToChucXaHoi
+                            !!ToChucXaHoi
                         ),
                         ...emptyObjectIf(
                             {
                                 danhHieu: {
                                     createMany: {
-                                        data: values.danhHieu?.map((item) => ({
+                                        data: danhHieu?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.danhHieu
+                            !!danhHieu
                         ),
                         ...emptyObjectIf(
                             {
                                 QuaTrinhLuong: {
                                     createMany: {
-                                        data: values.QuaTrinhLuong?.map((item) => ({
+                                        data: QuaTrinhLuong?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.QuaTrinhLuong
+                            !!QuaTrinhLuong
                         ),
                         ...emptyObjectIf(
                             {
                                 quaTrinhHocTap: {
                                     createMany: {
-                                        data: values.quaTrinhHocTap?.map((item) => ({
+                                        data: quaTrinhHocTap?.map((item) => ({
                                             ...item,
                                         })),
                                     },
                                 },
                             },
-                            !!values.quaTrinhHocTap
+                            !!quaTrinhHocTap
                         ),
                     },
                 })

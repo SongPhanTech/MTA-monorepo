@@ -56,6 +56,8 @@ import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import ChucVuChinhQuyenForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-chinh-quyen'
+import ChucVuDangForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-dang'
 
 dayjs.locale('vi')
 interface itemType {
@@ -130,6 +132,24 @@ export default function UpdateUserPage() {
                 render: (
                     <Form.Item name="hocHam" className="mb-0">
                         <HocHamForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Chức vụ chính quyền',
+                id: 'quaTrinhChucVuChinhQuyen',
+                render: (
+                    <Form.Item name="quaTrinhChucVuChinhQuyen" className="mb-0">
+                        <ChucVuChinhQuyenForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Chức vụ Đảng',
+                id: 'quaTrinhChucVuDang',
+                render: (
+                    <Form.Item name="quaTrinhChucVuDang" className="mb-0">
+                        <ChucVuDangForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
             },
@@ -381,6 +401,15 @@ export default function UpdateUserPage() {
         ethnicityId,
         bLaGiangVien,
         lecturerTypeId,
+        tinhTrangHonNhanId,
+        dM_ChucDanhCMNVGiangVienId,
+        dM_ChucDanhCMNVKySuId,
+        dM_ChucDanhCMNVNghienCuuVienId,
+        dM_XepLoaiDanhGiaChatLuongDangVienId,
+        dM_XepLoaiDanhGiaCanBoId,
+        dM_HinhThucKhenThuongChinhQuyenId,
+        dM_HinhThucKhenThuongDangId,
+        trangThaiLamViecId,
         // staffTypeId,
         // staffPositionId,
         ...values
@@ -456,6 +485,7 @@ export default function UpdateUserPage() {
                 }
                 hocham = findLatestHocHam(values?.hocHam)
             }
+
             // if (res.status === 200) {
             let listTransaction: any = [
                 {
@@ -490,6 +520,8 @@ export default function UpdateUserPage() {
                             ToChucXaHoi: { deleteMany: {} },
                             QuaTrinhLuong: { deleteMany: {} },
                             quaTrinhHocTap: { deleteMany: {} },
+                            quaTrinhChucVuChinhQuyen: { deleteMany: {} },
+                            quaTrinhChucVuDang: { deleteMany: {} },
                         },
                     },
                 },
@@ -508,6 +540,15 @@ export default function UpdateUserPage() {
                             trinhDoHocVanId,
                             nhomMauId,
                             ethnicityId,
+                            tinhTrangHonNhanId,
+                            dM_ChucDanhCMNVGiangVienId,
+                            dM_ChucDanhCMNVKySuId,
+                            dM_ChucDanhCMNVNghienCuuVienId,
+                            dM_XepLoaiDanhGiaChatLuongDangVienId,
+                            dM_XepLoaiDanhGiaCanBoId,
+                            dM_HinhThucKhenThuongChinhQuyenId,
+                            dM_HinhThucKhenThuongDangId,
+                            trangThaiLamViecId,
                         },
                     },
                 },
@@ -592,7 +633,34 @@ export default function UpdateUserPage() {
                                           },
                                       }
                                     : undefined,
-
+                            quaTrinhChucVuChinhQuyen:
+                                values.quaTrinhChucVuChinhQuyen &&
+                                values.quaTrinhChucVuChinhQuyen.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhChucVuChinhQuyen.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+                            quaTrinhChucVuDang:
+                                values.quaTrinhChucVuDang &&
+                                values.quaTrinhChucVuDang.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhChucVuDang.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
                             trinhDoLyLuanChinhTri:
                                 values.trinhDoLyLuanChinhTri &&
                                 values.trinhDoLyLuanChinhTri.length > 0
@@ -1066,6 +1134,8 @@ export default function UpdateUserPage() {
                 nhomMau: true,
                 trinhDoHocVan: true,
                 lecturer: true,
+                quaTrinhChucVuChinhQuyen: true,
+                quaTrinhChucVuDang: true,
                 // staffs: true,
             },
         },

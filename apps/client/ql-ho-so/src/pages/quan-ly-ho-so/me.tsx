@@ -55,6 +55,8 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import './tao-moi/index.css'
 import { getRuntimeEnv } from '@workspace/libs/utils'
+import ChucVuChinhQuyenForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-chinh-quyen'
+import ChucVuDangForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-dang'
 
 interface itemType {
     id: string
@@ -129,6 +131,24 @@ export default function UpdateUserPage() {
                 render: (
                     <Form.Item name="hocHam" className="mb-0">
                         <HocHamForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Chức vụ chính quyền',
+                id: 'quaTrinhChucVuChinhQuyen',
+                render: (
+                    <Form.Item name="quaTrinhChucVuChinhQuyen" className="mb-0">
+                        <ChucVuChinhQuyenForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Chức vụ Đảng',
+                id: 'quaTrinhChucVuDang',
+                render: (
+                    <Form.Item name="quaTrinhChucVuDang" className="mb-0">
+                        <ChucVuDangForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
             },
@@ -489,6 +509,8 @@ export default function UpdateUserPage() {
                             ToChucXaHoi: { deleteMany: {} },
                             QuaTrinhLuong: { deleteMany: {} },
                             quaTrinhHocTap: { deleteMany: {} },
+                            quaTrinhChucVuChinhQuyen: { deleteMany: {} },
+                            quaTrinhChucVuDang: { deleteMany: {} },
                         },
                     },
                 },
@@ -888,6 +910,35 @@ export default function UpdateUserPage() {
                                           },
                                       }
                                     : undefined,
+
+                            quaTrinhChucVuChinhQuyen:
+                                values.quaTrinhChucVuChinhQuyen &&
+                                values.quaTrinhChucVuChinhQuyen.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhChucVuChinhQuyen.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            quaTrinhChucVuDang:
+                                values.quaTrinhChucVuDang && values.quaTrinhChucVuDang.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhChucVuDang.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
                         },
                     },
                 },
@@ -1062,6 +1113,8 @@ export default function UpdateUserPage() {
                 ToChucXaHoi: true,
                 QuaTrinhLuong: true,
                 quaTrinhHocTap: true,
+                quaTrinhChucVuChinhQuyen: true,
+                quaTrinhChucVuDang: true,
                 nhomMau: true,
                 trinhDoHocVan: true,
                 lecturer: true,
