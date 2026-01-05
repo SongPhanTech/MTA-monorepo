@@ -43,19 +43,17 @@ const postStudentSchedule = createRoute({
 app.openapi(postStudentSchedule, async (c) => {
     const { class_terms, students_code } = c.req.valid('json')
 
-    const student = await prisma.classSchedule.findMany({
+    const student = await prisma.subjectClass.findMany({
         where: {
-            subjectClass: {
-                subjectClassStudent: {
-                    some: {
-                        student: {
-                            code: students_code,
-                        },
+            subjectClassStudent: {
+                some: {
+                    student: {
+                        code: students_code,
                     },
                 },
-                semester: {
-                    name: class_terms,
-                },
+            },
+            semester: {
+                name: class_terms,
             },
         },
 
@@ -66,50 +64,36 @@ app.openapi(postStudentSchedule, async (c) => {
                     code: true,
                 },
             },
-            subjectClass: {
+
+            subjectClassTimes: {
                 select: {
-                    subjectClassTimes: {
-                        select: {
-                            dayOfWeek: true,
-                            startPeriod: true,
-                            endPeriod: true,
-                        },
-                    },
-                    code: true,
-                    subject: {
-                        select: {
-                            name: true,
-                            code: true,
-                            credit: true,
-                        },
-                    },
+                    dayOfWeek: true,
+                    startPeriod: true,
+                    endPeriod: true,
                 },
             },
-            userProfiles: {
+            code: true,
+            subject: {
                 select: {
-                    educationAndTraining: {
-                        select: {
-                            code: true,
-                        },
-                    },
+                    name: true,
+                    code: true,
+                    credit: true,
                 },
             },
         },
     })
 
     const studentScheduleList = student.map((item) => {
-        const subjectClass = item.subjectClass
-
-        const class_time = subjectClass?.subjectClassTimes
+        const class_time = item.subjectClassTimes
             .map((t) => `T${t.dayOfWeek}(${t.startPeriod}-${t.endPeriod})`)
             .join(', ')
 
         return {
-            courses_code: subjectClass?.subject.code ?? '',
-            courses_name: subjectClass?.subject.name ?? '',
-            class_credit_hour: subjectClass?.subject.credit ?? 0,
-            class_id: subjectClass?.code ?? '',
-            class_time: class_time ?? '',
+            courses_code: item.subject.code ?? '',
+            courses_name: item.subject.name ?? '',
+            class_credit_hour: item.subject.credit ?? 0,
+            class_id: item.code,
+            class_time: class_time,
             class_classroom: item.room?.name ?? '',
         }
     })

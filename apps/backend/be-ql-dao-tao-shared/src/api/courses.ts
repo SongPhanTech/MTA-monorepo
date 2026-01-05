@@ -114,7 +114,7 @@ app.openapi(getOpenCourses, async (c) => {
         student.curriculumVersionId || student.fixedClass.curriculumVersionId
 
     const curriculumVersion = program_code
-        ? await prisma.curriculumVersion.findUnique({
+        ? await prisma.curriculumVersion.findFirst({
               where: { code: program_code },
               include: {
                   trainingBlocks: { include: { subjects: { include: { subject: true } } } },
@@ -393,6 +393,11 @@ app.openapi(getCoursesDetail, async (c) => {
                     },
                 },
             },
+            classRegisterLogs:{
+                  select:{
+                    studentId:true
+                  }
+            },
             subjectClassTimes:true,
             classSchedules: true,
             subjectClassStudent: {
@@ -447,7 +452,10 @@ app.openapi(getCoursesDetail, async (c) => {
         study_period_end: t.endPeriod,
     }))
 
-    const students_list = subjectClass.subjectClassStudent.map((s) => s.student.id)
+    const students_list = subjectClass.classRegisterLogs.map(
+  (s) => s.studentId
+)
+
 
     const response = {
         class_terms: subjectClass.semester.name,

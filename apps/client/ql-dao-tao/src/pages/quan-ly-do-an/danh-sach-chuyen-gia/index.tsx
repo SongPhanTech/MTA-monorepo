@@ -1,6 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import type { PutExpertProfileProps } from '@components/modal/put-chuyen-gia'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -35,6 +36,7 @@ export default function ExpertProfile() {
 
     const where = useMemo(
         () => ({
+            projectExpert: true,
             ...(filters.code
                 ? { code: { contains: filters.code, mode: 'insensitive' as const } }
                 : {}),
@@ -136,14 +138,17 @@ export default function ExpertProfile() {
         },
     })
 
-    const { onOpen } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<PutExpertProfileProps>({
         tag: 'PutExpertProfile',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen()
+        const input: PutExpertProfileProps = {
+            thesisExpert: false,
+        }
+        onOpen(input)
     }
     const { mutateAsync: updateExpertProfile } = useUpdateExpertProfile()
     async function handleDelete(id: string) {
@@ -282,7 +287,9 @@ export default function ExpertProfile() {
                                                     'SUA'
                                                 ) && (
                                                     <EditIcon
-                                                        onClick={onOpen.bind(null, id)}
+                                                        onClick={() =>
+                                                            onOpen({ id, thesisExpert: false })
+                                                        }
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
                                                 )}
