@@ -57,7 +57,7 @@ const PutTrainingBlock = () => {
                 name: output.name.trim(),
                 active: output.active,
                 parentId: output.parentId,
-                trainingObjectTypeId,
+                trainingObjectTypeId: trainingObjectTypeId ?? '',
             }
 
             if (id) {
@@ -68,7 +68,9 @@ const PutTrainingBlock = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createTrainingBlock({
-                    data: payload,
+                    data: {
+                        ...payload,
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
