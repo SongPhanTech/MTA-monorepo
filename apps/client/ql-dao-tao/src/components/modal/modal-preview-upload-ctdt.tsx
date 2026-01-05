@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import type { $Enums } from '@workspace/db/client'
 import { useFindManySubject, useFindManySubjectVersion } from '@workspace/db/hooks'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
-import { Button, Collapse, Modal, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Collapse, Modal, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -172,34 +172,37 @@ const ModalPreviewUpload = () => {
                     columns={[
                         {
                             title: 'TT',
-                            dataIndex: 'stt',
-                            key: 'stt',
                             width: 35,
                             align: 'center',
                             render: (_, __, index: number) =>
                                 index + 1 + (currentPage - 1) * numberOfPages,
                         },
                         {
-                            title: 'Trạng thái',
-                            dataIndex: 'status',
-                            key: 'status',
-                            width: 100,
+                            title: 'Môn mới',
+                            width: 70,
                             align: 'center',
-                            render: (status: 'new' | 'new-version' | 'duplicate') => {
-                                if (status === 'new') {
-                                    return <Tag color="green">Nhóm học mới</Tag>
-                                }
-                                if (status === 'new-version') {
-                                    return <Tag color="blue">Môn học mới</Tag>
-                                }
-                                return <Tag color="orange">Đã có môn học</Tag>
+                            render: (_,record) => {
+                                // if (record.status === 'new') {
+                                //     return <Tag color="green">Nhóm học mới</Tag>
+                                // }
+                                // if (record.status === 'new-version') {
+                                //     return <Tag color="blue">Môn học mới</Tag>
+                                // }
+                                return <Checkbox checked={record.status.includes('new')} />
+                                // return <Tag color="orange">Đã có môn học</Tag>
                             },
                         },
                         {
+                            title: 'Bắt buộc',
+                            align: 'center',
+                            width: 100,
+                            render: (_,record) => mapSubjectRequirementType(record.type),
+                        },
+                        {
                             title: 'Khối kiến thức',
-                            dataIndex: 'trainingBlockName',
-                            key: 'knowledgeBlock',
+                            // dataIndex: 'trainingBlockName',
                             width: 200,
+                            render: (_, record) => record.trainingBlockName || '---',
                         },
                         {
                             title: <Tooltip title="Mã môn học">Mã MH</Tooltip>,
@@ -214,129 +217,109 @@ const ModalPreviewUpload = () => {
                             width: 270,
                             render: (_, record) => record?.name,
                         },
-                        {
-                            title: 'Bắt buộc',
-                            dataIndex: 'type',
-                            key: 'required',
-                            align: 'center',
-                            width: 100,
-                            render: (value) => mapSubjectRequirementType(value),
-                        },
+
                         {
                             title: 'HP điều kiện',
-                            dataIndex: 'useForFinalScore',
-                            key: 'useForFinalScore',
                             align: 'center',
                             width: 100,
-                            render: (value: boolean | undefined) => {
-                                if (value === true) return '0'
-                                if (value === false) return '1'
-                                return ''
+                            render: (_,record) => {
+                                return <Checkbox checked={record.useForFinalScore} />
                             },
                         },
                         {
                             title: 'Loại học phần',
-                            dataIndex: 'subjectVersionType',
+                            // dataIndex: 'subjectVersionType',
                             key: 'type',
-                            width: 120,
-                            render: (value) => mapSubjectVersionType(value),
+                            width: 110,
+                            render: (_,record) => mapSubjectVersionType(record.subjectVersionType),
                         },
 
                         {
-                            title: 'Khoa, Viện phụ trách',
-                            dataIndex: 'organizationCode',
-                            key: 'managementOrganization',
+                            title: <Tooltip title="Khoa, Viện phụ trách">ĐVPT</Tooltip>,
+                            // dataIndex: 'organizationCode',
                             align: 'center',
-                            width: 180,
+                            width: 80,
+                            render: (_, record) => record.organizationCode,
                         },
                         {
-                            title: 'Số tín chỉ',
-                            dataIndex: 'credit',
-                            key: 'credit',
-                            width: 100,
+                            title: <Tooltip title="Số tín chỉ">STC</Tooltip>,
+                            // dataIndex: 'credit',
+                            width: 50,
                             align: 'center',
+                            render: (_, record) => record.credit,
                         },
                         {
-                            title: 'Số tiết CTĐT',
-                            dataIndex: 'period',
-                            key: 'periodCtdt',
-                            width: 120,
+                            title: 'Số tiết',
+                            // dataIndex: 'period',
+                            // key: 'periodCtdt',
+                            width: 60,
                             align: 'center',
+                            render: (_, record) => record.period,
                         },
-                        {
-                            title: 'Số tiết TKB',
-                            dataIndex: 'period',
-                            key: 'periodTkb',
-                            width: 120,
-                            align: 'center',
-                        },
+                        // {
+                        //     title: 'Số tiết TKB',
+                        //     // dataIndex: 'period',
+                        //     key: 'periodTkb',
+                        //     width: 120,
+                        //     align: 'center',
+                        //     render: (_, record) => record.period
+                        // },
                         {
                             title: 'LT',
-                            dataIndex: 'numberOfTheory',
-                            key: 'theory',
-                            width: 100,
+                            width: 60,
                             align: 'center',
+                            render: (_, record) => record.numberOfTheory,
                         },
                         {
                             title: 'TL,BT',
-                            dataIndex: 'numberOfPractical',
-                            key: 'practice',
-                            width: 100,
+                            width: 60,
                             align: 'center',
+                            render: (_, record) => record.numberOfPractical,
                         },
                         {
                             title: 'ThL',
-                            dataIndex: 'numberOfSelfStudy',
-                            key: 'discussion',
-                            width: 100,
+                            width: 80,
                             align: 'center',
+                            render: (_, record) => record.numberOfSelfStudy,
                         },
                         {
                             title: 'TN,TH',
-                            dataIndex: 'numberOfPractice',
-                            key: 'experiment',
-                            width: 100,
+                            // dataIndex: 'numberOfPractice',
+                            // key: 'experiment',
+                            width: 60,
                             align: 'center',
+                            render: (_, record) => record.numberOfPractice,
                         },
                         {
                             title: 'Ôn',
-                            dataIndex: 'numberOfReview',
-                            key: 'review',
-                            width: 100,
+                            width: 60,
                             align: 'center',
+                            render: (_, record) => record.numberOfReview,
                         },
                         {
                             title: 'KT,Thi',
-                            dataIndex: 'numberOfExam',
-                            key: 'exam',
-                            width: 80,
+                            width: 60,
                             align: 'center',
+                            render: (_, record) => record.numberOfExam,
                         },
                         {
-                            title: 'Học kỳ dự kiến',
-                            dataIndex: 'semester',
-                            key: 'semester',
+                            title: <Tooltip title="Học kỳ dự kiến">HKDK</Tooltip>,
                             align: 'center',
-                            width: 180,
+                            width: 60,
+                            render: (_, record) => record.semester,
                         },
                         {
                             title: 'Hình thức thi',
-                            dataIndex: 'examType',
-                            key: 'examType',
                             align: 'center',
-                            width: 170,
+                            width: 100,
                             render: (value) => mapExamType(value),
                         },
                         {
                             title: 'Một đầu điểm',
-                            dataIndex: 'onePoint',
-                            key: 'gradePoints',
                             align: 'center',
-                            width: 170,
-                            render: (value: boolean | undefined) => {
-                                if (value === true) return '1'
-                                if (value === false) return '0'
-                                return ''
+                            width: 100,
+                            render: (_, record) => {
+                                return <Checkbox checked={record.onePoint} />
                             },
                         },
                     ]}
