@@ -68,6 +68,7 @@ export const EXAM_TYPE = {
     Practice: 3,
     Project: 4,
     Other: 5,
+    OnlineWritten:6
 } as const satisfies Record<ExamType, number>
 
 export const CoursesDetailResponse = SuccessResponseSchema.extend({
