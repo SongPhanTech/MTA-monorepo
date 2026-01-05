@@ -181,6 +181,7 @@ export default function SettingCouncil() {
   }, [expertProfileData, experts]);
   const handleSearchRoom = (value: string) => {
     setSearchRoom(value);
+    debouncedRefetch();
   };
   const handleCreateCouncil = () => {
     console.log("create council");
@@ -211,32 +212,25 @@ export default function SettingCouncil() {
     );
     setSelectedRightKeys([]);
   };
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      refetch();
+    }, 500),
+    []
+  );
   if (thesisSession) {
     return (
       <Col span={24} className="p-2">
-        <div className="flex justify-end">
-          <Button onClick={() => handleCreateCouncil()} type="primary">
-            Tạo hội đồng
-          </Button>
-        </div>
-
-        <Form
-          form={form}
-          layout="horizontal"
-          labelCol={{ span: 4 }}
-          wrapperCol={{ span: 24 }}
-          className="max-w-2xl"
-        >
-          <div className="flex flex-col gap-y-2">
+        <Form form={form} layout="horizontal" className="w-full mb-6">
+          <div className="flex items-end gap-x-4">
             <Form.Item
               name="defenseSessionIds"
-              label="Ca bảo vệ"
-              labelAlign="left"
-              className="mb-0"
+              label={<span className="font-semibold">Ca bảo vệ</span>}
+              className="mb-0 flex-1"
             >
               <Select
                 mode="multiple"
-                placeholder="Chọn danh sách ca bảo vệ"
+                placeholder="Chọn ca bảo vệ"
                 options={defenseSession?.map((item) => ({
                   label: item.startTime
                     ? dayjs(item.startTime).format("HH:mm")
@@ -246,55 +240,47 @@ export default function SettingCouncil() {
                 showSearch
                 allowClear
                 className="w-full"
-                onChange={(values: string[]) => {
-                  setSelectedDefenseSessionIds(values);
-                }}
+                onChange={(values: string[]) =>
+                  setSelectedDefenseSessionIds(values)
+                }
               />
             </Form.Item>
+
             <Form.Item
               name="defenseDate"
-              label="Thời gian bảo vệ"
-              labelAlign="left"
-              className="mb-0"
+              label={<span className="font-semibold">Thời gian bảo vệ</span>}
+              className="mb-0 flex-1"
             >
               <DatePicker
                 multiple
                 format="DD/MM/YYYY"
-                placeholder="Chọn các ngày bảo vệ"
+                placeholder="Chọn các ngày"
                 className="w-full"
                 maxTagCount="responsive"
-                onChange={(date: Dayjs, dateString: string[] | string) => {
+                onChange={(_date: Dayjs, dateString: string[] | string) => {
                   setSelectedDefenseDate(dateString as string[]);
                 }}
               />
             </Form.Item>
+
             <Form.Item
               name="roomIds"
-              labelAlign="left"
-              label="Phòng bảo vệ"
-              className="mb-0"
+              label={<span className="font-semibold">Phòng bảo vệ</span>}
+              className="mb-0 flex-1"
               dependencies={["defenseSessionIds", "defenseDate"]}
               rules={[
                 {
                   validator: async (_, values) => {
                     const selectedRoomCount = values?.length || 0;
-
                     if (
                       selectedDefenseSessionIds.length === 0 ||
                       selectedDefenseDate.length === 0
                     ) {
                       return Promise.resolve();
                     }
-
                     if (selectedRoomCount < minRoomsRequired) {
                       return Promise.reject(
-                        new Error(
-                          `Với ${
-                            thesisSession?.thesisProject.length || 0
-                          } đề tài, ${selectedDefenseDate.length} ngày và ${
-                            selectedDefenseSessionIds.length
-                          } ca/ngày, bạn cần ít nhất ${minRoomsRequired} phòng.`
-                        )
+                        new Error(`Cần ít nhất ${minRoomsRequired} phòng.`)
                       );
                     }
                     return Promise.resolve();
@@ -304,7 +290,7 @@ export default function SettingCouncil() {
             >
               <Select
                 mode="multiple"
-                placeholder="Chọn danh sách phòng"
+                placeholder="Chọn phòng"
                 options={room.map((item) => ({
                   label: item.name,
                   value: item.id,
@@ -314,15 +300,23 @@ export default function SettingCouncil() {
                 filterOption={false}
                 allowClear
                 className="w-full"
-                onChange={(values: string[]) => {
-                  setSelectedRoomIds(values);
-                }}
+                onChange={(values: string[]) => setSelectedRoomIds(values)}
               />
             </Form.Item>
+
+            <div className="flex-none">
+              <Button
+                onClick={() => handleCreateCouncil()}
+                type="primary"
+                className="h-[32px]"
+              >
+                Tạo hội đồng bảo vệ
+              </Button>
+            </div>
           </div>
         </Form>
-        <Col span={24} className="flex flex-row gap-2">
-          <Col span={12}>
+        <Col span={24} className="flex flex-row h-[200px] gap-2">
+          <Col span={11}>
             <div
               style={{
                 fontWeight: "bold",
@@ -330,6 +324,7 @@ export default function SettingCouncil() {
             >
               Danh sách chuyên gia
             </div>
+
             <Table
               rowKey="id"
               id="expert-profile"
@@ -405,7 +400,7 @@ export default function SettingCouncil() {
             />
           </Col>
           <Col
-            span={1}
+            span={2}
             style={{
               display: "flex",
               flexDirection: "column",
