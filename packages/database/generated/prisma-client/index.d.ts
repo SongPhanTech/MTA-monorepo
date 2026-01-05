@@ -363099,7 +363099,7 @@ export namespace Prisma {
     officialCPVDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     CPVJoinPlace?: StringNullableFilter<"UserProfile"> | string | null
     positionCPVId?: UuidNullableFilter<"UserProfile"> | string | null
-    chucVuChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
+    chucVuChinhQuyenId?: UuidNullableFilter<"UserProfile"> | string | null
     tenureDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     enlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     reEnlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
@@ -363539,7 +363539,7 @@ export namespace Prisma {
     officialCPVDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     CPVJoinPlace?: StringNullableFilter<"UserProfile"> | string | null
     positionCPVId?: UuidNullableFilter<"UserProfile"> | string | null
-    chucVuChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
+    chucVuChinhQuyenId?: UuidNullableFilter<"UserProfile"> | string | null
     tenureDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     enlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     reEnlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
@@ -363896,7 +363896,7 @@ export namespace Prisma {
     officialCPVDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     CPVJoinPlace?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     positionCPVId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
-    chucVuChinhQuyenId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
+    chucVuChinhQuyenId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
     tenureDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     enlistmentDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     reEnlistmentDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
@@ -498522,7 +498522,7 @@ export namespace Prisma {
     officialCPVDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     CPVJoinPlace?: StringNullableFilter<"UserProfile"> | string | null
     positionCPVId?: UuidNullableFilter<"UserProfile"> | string | null
-    chucVuChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
+    chucVuChinhQuyenId?: UuidNullableFilter<"UserProfile"> | string | null
     tenureDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     enlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     reEnlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null

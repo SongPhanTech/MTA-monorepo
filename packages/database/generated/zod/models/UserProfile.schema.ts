@@ -311,7 +311,7 @@ const fkSchema = z.object({
     dM_HinhThucKhenThuongChinhQuyenId: z.string().nullish(),
     dM_HinhThucKhenThuongDangId: z.string().nullish(),
     positionCPVId: z.string().uuid().nullish(),
-    chucVuChinhQuyenId: z.string().nullish(),
+    chucVuChinhQuyenId: z.string().uuid().nullish(),
     trinhDoHocVanId: z.string().nullish(),
 }
 );

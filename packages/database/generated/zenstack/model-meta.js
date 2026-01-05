@@ -1165,6 +1165,7 @@ const metadata = {
                     name: "chucVuChinhQuyenId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'chucVuChinhQuyen',
                 }, tenureDate: {

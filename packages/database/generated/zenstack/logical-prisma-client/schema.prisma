@@ -817,7 +817,7 @@ model UserProfile {
   positionCPV                          DM_ChucVu?                          @relation("positionCPV", fields: [positionCPVId], references: [Id])
   positionCPVId                        String?                             @db.Uuid()
   chucVuChinhQuyen                     DM_ChucVu?                          @relation("chucVuChinhQuyen", fields: [chucVuChinhQuyenId], references: [Id])
-  chucVuChinhQuyenId                   String?
+  chucVuChinhQuyenId                   String?                             @db.Uuid()
   tenureDate                           DateTime?
   enlistmentDate                       DateTime?
   reEnlistmentDate                     DateTime?
