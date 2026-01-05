@@ -2,6 +2,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import SettingsIcon from '@components/icons/settings'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -13,13 +14,12 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { BsGear } from 'react-icons/bs'
 import { useRouter } from 'next/router'
 
 export default function ThesisSession() {
@@ -256,12 +256,10 @@ export default function ThesisSession() {
                                                         onClick={(e) => e.stopPropagation()}
                                                     />
                                                 )}
-                                                <Tooltip title="Cấu hình lớp đồ án" placement="top">
-                                                    <BsGear
-                                                        className="cursor-pointer"
-                                                        onClick={() => handleNavigateSetting(id)}
-                                                    />
-                                                </Tooltip>
+                                                <SettingsIcon
+                                                    title="Cấu hình đợt xét luận văn"
+                                                    onClick={() => handleNavigateSetting(id)}
+                                                />
                                             </Row>
                                         )
                                     }
