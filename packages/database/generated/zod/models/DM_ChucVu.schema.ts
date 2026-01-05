@@ -44,6 +44,7 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    userProfileCPV: z.array(z.unknown()).optional(),
     userProfile: z.array(z.unknown()).optional(),
     quaTrinhCongTac: z.array(z.unknown()).optional(),
     quaTrinhCuDiCongTac: z.array(z.unknown()).optional(),

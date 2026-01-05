@@ -1141,8 +1141,8 @@ const metadata = {
                     type: "DM_ChucVu",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'userProfile',
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "positionCPV" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfileCPV',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "positionCPVId" },
                 }, positionCPVId: {
@@ -1152,6 +1152,21 @@ const metadata = {
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'positionCPV',
+                }, chucVuChinhQuyen: {
+                    name: "chucVuChinhQuyen",
+                    type: "DM_ChucVu",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "chucVuChinhQuyen" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "chucVuChinhQuyenId" },
+                }, chucVuChinhQuyenId: {
+                    name: "chucVuChinhQuyenId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'chucVuChinhQuyen',
                 }, tenureDate: {
                     name: "tenureDate",
                     type: "DateTime",
@@ -5241,12 +5256,20 @@ const metadata = {
                     type: "Int",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, userProfileCPV: {
+                    name: "userProfileCPV",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "positionCPV" }] }],
+                    backLink: 'positionCPV',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'positionCPV',
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "chucVuChinhQuyen" }] }],
+                    backLink: 'chucVuChinhQuyen',
                 }, quaTrinhCongTac: {
                     name: "quaTrinhCongTac",
                     type: "QuaTrinhCongTac",
@@ -9453,6 +9476,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingCourse',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
@@ -10042,10 +10071,26 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'curriculumVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
                 }, trainingLevel: {
                     name: "trainingLevel",
                     type: "TrainingLevel",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
@@ -10053,12 +10098,14 @@ const metadata = {
                 }, trainingLevelId: {
                     name: "trainingLevelId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingLevel',
                 }, trainingType: {
                     name: "trainingType",
                     type: "TrainingType",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
@@ -10066,12 +10113,14 @@ const metadata = {
                 }, trainingTypeId: {
                     name: "trainingTypeId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingType',
                 }, trainingTime: {
                     name: "trainingTime",
                     type: "TrainingTime",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
@@ -10079,12 +10128,14 @@ const metadata = {
                 }, trainingTimeId: {
                     name: "trainingTimeId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingTime',
                 }, diplomaType: {
                     name: "diplomaType",
                     type: "DiplomaType",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
@@ -10092,6 +10143,7 @@ const metadata = {
                 }, diplomaTypeId: {
                     name: "diplomaTypeId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaType',
                 }, requiredCredits: {
@@ -12095,6 +12147,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
+                }, trainingBlocks: {
+                    name: "trainingBlocks",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
                 }, vaiTro: {
                     name: "vaiTro",
                     type: "String",
@@ -13164,7 +13222,19 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, priority: {
                     name: "priority",
                     type: "Int",
@@ -13205,12 +13275,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
+                }, trainingObjectTypeId_name: {
+                    name: "trainingObjectTypeId_name",
+                    fields: ["trainingObjectTypeId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingBlockOnCurriculumVersion: {
             name: 'TrainingBlockOnCurriculumVersion', fields: {

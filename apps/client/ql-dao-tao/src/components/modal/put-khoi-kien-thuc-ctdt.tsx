@@ -17,6 +17,7 @@ import { useEffect } from 'react'
 export type PutTrainingBlock = TrainingBlock
 dayjs.locale('vi')
 const PutTrainingBlock = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<PutTrainingBlock>()
     const {
         isOpen,
@@ -95,6 +96,9 @@ const PutTrainingBlock = () => {
             title={id ? 'Chỉnh sửa khối kiến thức CTĐT' : 'Thêm mới khối kiến thức CTĐT'}
             className="min-w-[400px] w-[500px]"
         >
+            <FormItem form={form} name="trainingObjectTypeId" label="Mã khối kiến thức" hidden>
+                <Input value={trainingObjectTypeId} />
+            </FormItem>
             <Col span={24}>
                 <FormItem form={form} name="code" label="Mã khối kiến thức" required>
                     <Input placeholder="Nhập mã khối kiến thức" />

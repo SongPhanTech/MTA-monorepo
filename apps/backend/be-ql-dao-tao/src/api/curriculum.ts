@@ -88,6 +88,7 @@ app.openapi(importCurriculumVersion, async (c) => {
 
     const trainingBlockMap = await buildTrainingBlockMapOrThrow(
         prisma,
+        trainingObjectTypeId,
         data.trainingBlocks.map(({ name }) => name)
     )
 

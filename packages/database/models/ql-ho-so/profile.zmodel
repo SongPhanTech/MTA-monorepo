@@ -198,12 +198,6 @@ model UserProfile extends Base {
   dM_HinhThucKhenThuongDang            DM_HinhThucKhenThuongDang?          @relation(fields: [dM_HinhThucKhenThuongDangId], references: [id])
   dM_HinhThucKhenThuongDangId          String?
 
-  dM_ChucVuChinhQuyen                  DM_ChucVuChinhQuyen?                @relation(fields: [dM_ChucVuChinhQuyenId], references: [Id])
-  dM_ChucVuChinhQuyenId                String?
-
-  dM_ChucVuDang                        DM_ChucVuDang?                      @relation(fields: [dM_ChucVuDangId], references: [Id])
-  dM_ChucVuDangId                      String?
-
   // thông tin đoàn thể
   unionDate                            DateTime? // ngày vào Đoàn
   unionPlace                           String? // nơi vào Đoàn
@@ -211,8 +205,12 @@ model UserProfile extends Base {
   CPVJoinDate                          DateTime? // ngày vào Đảng
   officialCPVDate                      DateTime? // ngày chính thức
   CPVJoinPlace                         String? // nơi vào Đảng
-  positionCPV                          DM_ChucVu?                          @relation(fields: [positionCPVId], references: [Id])
+  // chức vụ Đảng (DM_ChucVu.iNhomChucVu = 1)
+  positionCPV                          DM_ChucVu?                          @relation("positionCPV", fields: [positionCPVId], references: [Id])
   positionCPVId                        String?                             @db.Uuid
+  // chức vụ chính quyền (DM_ChucVu.iNhomChucVu = 0)
+  chucVuChinhQuyen                     DM_ChucVu?                          @relation("chucVuChinhQuyen", fields: [chucVuChinhQuyenId], references: [Id])
+  chucVuChinhQuyenId                   String?
   tenureDate                           DateTime? // ngày vào niên chế
   enlistmentDate                       DateTime? // ngày nhập ngũ
   reEnlistmentDate                     DateTime? // ngày tái nhập ngũ

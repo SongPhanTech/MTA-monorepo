@@ -43,6 +43,7 @@ model TrainingObjectType extends Base {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   thesisSession        ThesisSession[]
+  trainingBlocks       TrainingBlock[]
   vaiTro               String[] // Array of DM_VaiTro IDs
 
   @@schema("ql-dao-tao")
@@ -204,15 +205,21 @@ model TrainingMajorOnTrainingObjectType extends Base {
 
 /// khối kiến thức
 model TrainingBlock extends Base {
-  name               String                             @unique
+  name                 String
+
+  trainingObjectType   TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
   /// ưu tiên sắp xếp
-  priority           Int                                @default(0)
+  priority             Int                                @default(0)
 
-  parent             TrainingBlock?                     @relation("ParentChild", fields: [parentId], references: [id])
-  parentId           String?
-  children           TrainingBlock[]                    @relation("ParentChild")
+  parent               TrainingBlock?                     @relation("ParentChild", fields: [parentId], references: [id])
+  parentId             String?
+  children             TrainingBlock[]                    @relation("ParentChild")
 
-  curriculumVersions TrainingBlockOnCurriculumVersion[]
+  curriculumVersions   TrainingBlockOnCurriculumVersion[]
+
+  @@unique([trainingObjectTypeId, name])
   @@schema("ql-dao-tao")
 }
 

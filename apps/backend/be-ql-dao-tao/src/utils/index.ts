@@ -1,5 +1,4 @@
 import type { $Enums, PrismaClient } from '@workspace/db'
-import { createId } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
 
 export function parseDate(input?: number | string | Date): Date | null {
@@ -248,7 +247,11 @@ export const buildCurriculumMapOrThrow = async (
     return new Map(existing.map(({ name, id }) => [name, id]))
 }
 
-export const buildTrainingBlockMapOrThrow = async (prisma: PrismaClient, names: string[]) => {
+export const buildTrainingBlockMapOrThrow = async (
+    prisma: PrismaClient,
+    trainingObjectTypeId: string,
+    names: string[]
+) => {
     const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
     // await prisma.trainingBlock.createMany({
@@ -257,7 +260,7 @@ export const buildTrainingBlockMapOrThrow = async (prisma: PrismaClient, names: 
     // })
 
     const existing = await prisma.trainingBlock.findMany({
-        where: { name: { in: uniqNames, mode: 'insensitive' } },
+        where: { name: { in: uniqNames, trainingObjectTypeId, mode: 'insensitive' } },
         select: { name: true, id: true },
     })
 

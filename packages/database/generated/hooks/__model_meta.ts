@@ -1058,7 +1058,7 @@ const metadata: ModelMeta = {
                     type: "DM_ChucVu",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'userProfile',
+                    backLink: 'userProfileCPV',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "positionCPVId" },
                 }, positionCPVId: {
@@ -1067,6 +1067,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'positionCPV',
+                }, chucVuChinhQuyen: {
+                    name: "chucVuChinhQuyen",
+                    type: "DM_ChucVu",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "chucVuChinhQuyenId" },
+                }, chucVuChinhQuyenId: {
+                    name: "chucVuChinhQuyenId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'chucVuChinhQuyen',
                 }, tenureDate: {
                     name: "tenureDate",
                     type: "DateTime",
@@ -4953,12 +4967,18 @@ const metadata: ModelMeta = {
                     type: "Int",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, userProfileCPV: {
+                    name: "userProfileCPV",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'positionCPV',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'positionCPV',
+                    backLink: 'chucVuChinhQuyen',
                 }, quaTrinhCongTac: {
                     name: "quaTrinhCongTac",
                     type: "QuaTrinhCongTac",
@@ -9011,6 +9031,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingCourse',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
@@ -9572,52 +9598,74 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'curriculumVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
                 }, trainingLevel: {
                     name: "trainingLevel",
                     type: "TrainingLevel",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingLevelId" },
                 }, trainingLevelId: {
                     name: "trainingLevelId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingLevel',
                 }, trainingType: {
                     name: "trainingType",
                     type: "TrainingType",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingTypeId" },
                 }, trainingTypeId: {
                     name: "trainingTypeId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingType',
                 }, trainingTime: {
                     name: "trainingTime",
                     type: "TrainingTime",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingTimeId" },
                 }, trainingTimeId: {
                     name: "trainingTimeId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingTime',
                 }, diplomaType: {
                     name: "diplomaType",
                     type: "DiplomaType",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaTypeId" },
                 }, diplomaTypeId: {
                     name: "diplomaTypeId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaType',
                 }, requiredCredits: {
@@ -11527,6 +11575,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
+                }, trainingBlocks: {
+                    name: "trainingBlocks",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
                 }, vaiTro: {
                     name: "vaiTro",
                     type: "String",
@@ -12533,6 +12587,18 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'trainingBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, priority: {
                     name: "priority",
                     type: "Int",
@@ -12571,9 +12637,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
+                }, trainingObjectTypeId_name: {
+                    name: "trainingObjectTypeId_name",
+                    fields: ["trainingObjectTypeId", "name"]
                 },
             },
         },

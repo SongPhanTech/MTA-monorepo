@@ -25558,12 +25558,14 @@ export namespace Prisma {
    */
 
   export type DM_ChucVuCountOutputType = {
+    userProfileCPV: number
     userProfile: number
     quaTrinhCongTac: number
     quaTrinhCuDiCongTac: number
   }
 
   export type DM_ChucVuCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    userProfileCPV?: boolean | DM_ChucVuCountOutputTypeCountUserProfileCPVArgs
     userProfile?: boolean | DM_ChucVuCountOutputTypeCountUserProfileArgs
     quaTrinhCongTac?: boolean | DM_ChucVuCountOutputTypeCountQuaTrinhCongTacArgs
     quaTrinhCuDiCongTac?: boolean | DM_ChucVuCountOutputTypeCountQuaTrinhCuDiCongTacArgs
@@ -25578,6 +25580,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the DM_ChucVuCountOutputType
      */
     select?: DM_ChucVuCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DM_ChucVuCountOutputType without action
+   */
+  export type DM_ChucVuCountOutputTypeCountUserProfileCPVArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserProfileWhereInput
   }
 
   /**
@@ -26923,6 +26932,7 @@ export namespace Prisma {
 
   export type TrainingCourseCountOutputType = {
     trainingCourseRegulation: number
+    curriculumVersion: number
     fixedClass: number
     scoreConverts: number
     academicRankingConvert: number
@@ -26939,6 +26949,7 @@ export namespace Prisma {
 
   export type TrainingCourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingCourseRegulation?: boolean | TrainingCourseCountOutputTypeCountTrainingCourseRegulationArgs
+    curriculumVersion?: boolean | TrainingCourseCountOutputTypeCountCurriculumVersionArgs
     fixedClass?: boolean | TrainingCourseCountOutputTypeCountFixedClassArgs
     scoreConverts?: boolean | TrainingCourseCountOutputTypeCountScoreConvertsArgs
     academicRankingConvert?: boolean | TrainingCourseCountOutputTypeCountAcademicRankingConvertArgs
@@ -26969,6 +26980,13 @@ export namespace Prisma {
    */
   export type TrainingCourseCountOutputTypeCountTrainingCourseRegulationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TrainingCourseRegulationWhereInput
+  }
+
+  /**
+   * TrainingCourseCountOutputType without action
+   */
+  export type TrainingCourseCountOutputTypeCountCurriculumVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CurriculumVersionWhereInput
   }
 
   /**
@@ -27728,6 +27746,7 @@ export namespace Prisma {
     subjectVersion: number
     planTraining: number
     thesisSession: number
+    trainingBlocks: number
   }
 
   export type TrainingObjectTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -27742,6 +27761,7 @@ export namespace Prisma {
     subjectVersion?: boolean | TrainingObjectTypeCountOutputTypeCountSubjectVersionArgs
     planTraining?: boolean | TrainingObjectTypeCountOutputTypeCountPlanTrainingArgs
     thesisSession?: boolean | TrainingObjectTypeCountOutputTypeCountThesisSessionArgs
+    trainingBlocks?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingBlocksArgs
   }
 
   // Custom InputTypes
@@ -27830,6 +27850,13 @@ export namespace Prisma {
    */
   export type TrainingObjectTypeCountOutputTypeCountThesisSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ThesisSessionWhereInput
+  }
+
+  /**
+   * TrainingObjectTypeCountOutputType without action
+   */
+  export type TrainingObjectTypeCountOutputTypeCountTrainingBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingBlockWhereInput
   }
 
 
@@ -35704,6 +35731,7 @@ export namespace Prisma {
     officialCPVDate: Date | null
     CPVJoinPlace: string | null
     positionCPVId: string | null
+    chucVuChinhQuyenId: string | null
     tenureDate: Date | null
     enlistmentDate: Date | null
     reEnlistmentDate: Date | null
@@ -35834,6 +35862,7 @@ export namespace Prisma {
     officialCPVDate: Date | null
     CPVJoinPlace: string | null
     positionCPVId: string | null
+    chucVuChinhQuyenId: string | null
     tenureDate: Date | null
     enlistmentDate: Date | null
     reEnlistmentDate: Date | null
@@ -35964,6 +35993,7 @@ export namespace Prisma {
     officialCPVDate: number
     CPVJoinPlace: number
     positionCPVId: number
+    chucVuChinhQuyenId: number
     tenureDate: number
     enlistmentDate: number
     reEnlistmentDate: number
@@ -36110,6 +36140,7 @@ export namespace Prisma {
     officialCPVDate?: true
     CPVJoinPlace?: true
     positionCPVId?: true
+    chucVuChinhQuyenId?: true
     tenureDate?: true
     enlistmentDate?: true
     reEnlistmentDate?: true
@@ -36240,6 +36271,7 @@ export namespace Prisma {
     officialCPVDate?: true
     CPVJoinPlace?: true
     positionCPVId?: true
+    chucVuChinhQuyenId?: true
     tenureDate?: true
     enlistmentDate?: true
     reEnlistmentDate?: true
@@ -36370,6 +36402,7 @@ export namespace Prisma {
     officialCPVDate?: true
     CPVJoinPlace?: true
     positionCPVId?: true
+    chucVuChinhQuyenId?: true
     tenureDate?: true
     enlistmentDate?: true
     reEnlistmentDate?: true
@@ -36587,6 +36620,7 @@ export namespace Prisma {
     officialCPVDate: Date | null
     CPVJoinPlace: string | null
     positionCPVId: string | null
+    chucVuChinhQuyenId: string | null
     tenureDate: Date | null
     enlistmentDate: Date | null
     reEnlistmentDate: Date | null
@@ -36736,6 +36770,7 @@ export namespace Prisma {
     officialCPVDate?: boolean
     CPVJoinPlace?: boolean
     positionCPVId?: boolean
+    chucVuChinhQuyenId?: boolean
     tenureDate?: boolean
     enlistmentDate?: boolean
     reEnlistmentDate?: boolean
@@ -36791,6 +36826,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
     dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
     positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
+    chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
     relatives?: boolean | UserProfile$relativesArgs<ExtArgs>
     trinhDoLyLuanChinhTri?: boolean | UserProfile$trinhDoLyLuanChinhTriArgs<ExtArgs>
     trinhDoQuanLyNhaNuoc?: boolean | UserProfile$trinhDoQuanLyNhaNuocArgs<ExtArgs>
@@ -36953,6 +36989,7 @@ export namespace Prisma {
     officialCPVDate?: boolean
     CPVJoinPlace?: boolean
     positionCPVId?: boolean
+    chucVuChinhQuyenId?: boolean
     tenureDate?: boolean
     enlistmentDate?: boolean
     reEnlistmentDate?: boolean
@@ -37008,6 +37045,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
     dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
     positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
+    chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
     trinhDoHocVan?: boolean | UserProfile$trinhDoHocVanArgs<ExtArgs>
   }, ExtArgs["result"]["userProfile"]>
 
@@ -37127,6 +37165,7 @@ export namespace Prisma {
     officialCPVDate?: boolean
     CPVJoinPlace?: boolean
     positionCPVId?: boolean
+    chucVuChinhQuyenId?: boolean
     tenureDate?: boolean
     enlistmentDate?: boolean
     reEnlistmentDate?: boolean
@@ -37182,6 +37221,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
     dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
     positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
+    chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
     trinhDoHocVan?: boolean | UserProfile$trinhDoHocVanArgs<ExtArgs>
   }, ExtArgs["result"]["userProfile"]>
 
@@ -37301,6 +37341,7 @@ export namespace Prisma {
     officialCPVDate?: boolean
     CPVJoinPlace?: boolean
     positionCPVId?: boolean
+    chucVuChinhQuyenId?: boolean
     tenureDate?: boolean
     enlistmentDate?: boolean
     reEnlistmentDate?: boolean
@@ -37315,7 +37356,7 @@ export namespace Prisma {
     trinhDoHocVanId?: boolean
   }
 
-  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongChinhQuyenId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>
+  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongChinhQuyenId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>
   export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     group?: boolean | UserProfile$groupArgs<ExtArgs>
     provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
@@ -37360,6 +37401,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
     dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
     positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
+    chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
     relatives?: boolean | UserProfile$relativesArgs<ExtArgs>
     trinhDoLyLuanChinhTri?: boolean | UserProfile$trinhDoLyLuanChinhTriArgs<ExtArgs>
     trinhDoQuanLyNhaNuoc?: boolean | UserProfile$trinhDoQuanLyNhaNuocArgs<ExtArgs>
@@ -37449,6 +37491,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
     dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
     positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
+    chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
     trinhDoHocVan?: boolean | UserProfile$trinhDoHocVanArgs<ExtArgs>
   }
   export type UserProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -37495,6 +37538,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
     dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
     positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
+    chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
     trinhDoHocVan?: boolean | UserProfile$trinhDoHocVanArgs<ExtArgs>
   }
 
@@ -37544,6 +37588,7 @@ export namespace Prisma {
       dM_HinhThucKhenThuongChinhQuyen: Prisma.$DM_HinhThucKhenThuongChinhQuyenPayload<ExtArgs> | null
       dM_HinhThucKhenThuongDang: Prisma.$DM_HinhThucKhenThuongDangPayload<ExtArgs> | null
       positionCPV: Prisma.$DM_ChucVuPayload<ExtArgs> | null
+      chucVuChinhQuyen: Prisma.$DM_ChucVuPayload<ExtArgs> | null
       relatives: Prisma.$RelativePayload<ExtArgs>[]
       trinhDoLyLuanChinhTri: Prisma.$TrinhDoLyLuanChinhTriPayload<ExtArgs>[]
       trinhDoQuanLyNhaNuoc: Prisma.$TrinhDoQuanLyNhaNuocPayload<ExtArgs>[]
@@ -37716,6 +37761,7 @@ export namespace Prisma {
       officialCPVDate: Date | null
       CPVJoinPlace: string | null
       positionCPVId: string | null
+      chucVuChinhQuyenId: string | null
       tenureDate: Date | null
       enlistmentDate: Date | null
       reEnlistmentDate: Date | null
@@ -38165,6 +38211,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen<T extends UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>>): Prisma__DM_HinhThucKhenThuongChinhQuyenClient<$Result.GetResult<Prisma.$DM_HinhThucKhenThuongChinhQuyenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     dM_HinhThucKhenThuongDang<T extends UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>>): Prisma__DM_HinhThucKhenThuongDangClient<$Result.GetResult<Prisma.$DM_HinhThucKhenThuongDangPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     positionCPV<T extends UserProfile$positionCPVArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$positionCPVArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    chucVuChinhQuyen<T extends UserProfile$chucVuChinhQuyenArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$chucVuChinhQuyenArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     relatives<T extends UserProfile$relativesArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$relativesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RelativePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     trinhDoLyLuanChinhTri<T extends UserProfile$trinhDoLyLuanChinhTriArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$trinhDoLyLuanChinhTriArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrinhDoLyLuanChinhTriPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     trinhDoQuanLyNhaNuoc<T extends UserProfile$trinhDoQuanLyNhaNuocArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$trinhDoQuanLyNhaNuocArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrinhDoQuanLyNhaNuocPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -38352,6 +38399,7 @@ export namespace Prisma {
     readonly officialCPVDate: FieldRef<"UserProfile", 'DateTime'>
     readonly CPVJoinPlace: FieldRef<"UserProfile", 'String'>
     readonly positionCPVId: FieldRef<"UserProfile", 'String'>
+    readonly chucVuChinhQuyenId: FieldRef<"UserProfile", 'String'>
     readonly tenureDate: FieldRef<"UserProfile", 'DateTime'>
     readonly enlistmentDate: FieldRef<"UserProfile", 'DateTime'>
     readonly reEnlistmentDate: FieldRef<"UserProfile", 'DateTime'>
@@ -39561,6 +39609,25 @@ export namespace Prisma {
    * UserProfile.positionCPV
    */
   export type UserProfile$positionCPVArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_ChucVu
+     */
+    select?: DM_ChucVuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_ChucVu
+     */
+    omit?: DM_ChucVuOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_ChucVuInclude<ExtArgs> | null
+    where?: DM_ChucVuWhereInput
+  }
+
+  /**
+   * UserProfile.chucVuChinhQuyen
+   */
+  export type UserProfile$chucVuChinhQuyenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the DM_ChucVu
      */
@@ -88963,6 +89030,7 @@ export namespace Prisma {
     sThietBiTao?: boolean
     sThietBiSua?: boolean
     iNhomChucVu?: boolean
+    userProfileCPV?: boolean | DM_ChucVu$userProfileCPVArgs<ExtArgs>
     userProfile?: boolean | DM_ChucVu$userProfileArgs<ExtArgs>
     quaTrinhCongTac?: boolean | DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>
     quaTrinhCuDiCongTac?: boolean | DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>
@@ -89028,6 +89096,7 @@ export namespace Prisma {
 
   export type DM_ChucVuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "sMa" | "sTen" | "sGhiChu" | "iSTT" | "bActive" | "bDeleted" | "bSystem" | "iDictionaryKey" | "dNgayTao" | "dNgaySua" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "iNhomChucVu", ExtArgs["result"]["dM_ChucVu"]>
   export type DM_ChucVuInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    userProfileCPV?: boolean | DM_ChucVu$userProfileCPVArgs<ExtArgs>
     userProfile?: boolean | DM_ChucVu$userProfileArgs<ExtArgs>
     quaTrinhCongTac?: boolean | DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>
     quaTrinhCuDiCongTac?: boolean | DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>
@@ -89039,6 +89108,7 @@ export namespace Prisma {
   export type $DM_ChucVuPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DM_ChucVu"
     objects: {
+      userProfileCPV: Prisma.$UserProfilePayload<ExtArgs>[]
       userProfile: Prisma.$UserProfilePayload<ExtArgs>[]
       quaTrinhCongTac: Prisma.$QuaTrinhCongTacPayload<ExtArgs>[]
       quaTrinhCuDiCongTac: Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>[]
@@ -89454,6 +89524,7 @@ export namespace Prisma {
    */
   export interface Prisma__DM_ChucVuClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    userProfileCPV<T extends DM_ChucVu$userProfileCPVArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$userProfileCPVArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userProfile<T extends DM_ChucVu$userProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$userProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     quaTrinhCongTac<T extends DM_ChucVu$quaTrinhCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     quaTrinhCuDiCongTac<T extends DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -89887,6 +89958,30 @@ export namespace Prisma {
      * Limit how many DM_ChucVus to delete.
      */
     limit?: number
+  }
+
+  /**
+   * DM_ChucVu.userProfileCPV
+   */
+  export type DM_ChucVu$userProfileCPVArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserProfile
+     */
+    select?: UserProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserProfile
+     */
+    omit?: UserProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserProfileInclude<ExtArgs> | null
+    where?: UserProfileWhereInput
+    orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
+    cursor?: UserProfileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
   }
 
   /**
@@ -140539,6 +140634,7 @@ export namespace Prisma {
     trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     trainingCourseRegulation?: boolean | TrainingCourse$trainingCourseRegulationArgs<ExtArgs>
+    curriculumVersion?: boolean | TrainingCourse$curriculumVersionArgs<ExtArgs>
     fixedClass?: boolean | TrainingCourse$fixedClassArgs<ExtArgs>
     scoreConverts?: boolean | TrainingCourse$scoreConvertsArgs<ExtArgs>
     academicRankingConvert?: boolean | TrainingCourse$academicRankingConvertArgs<ExtArgs>
@@ -140686,6 +140782,7 @@ export namespace Prisma {
     trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     trainingCourseRegulation?: boolean | TrainingCourse$trainingCourseRegulationArgs<ExtArgs>
+    curriculumVersion?: boolean | TrainingCourse$curriculumVersionArgs<ExtArgs>
     fixedClass?: boolean | TrainingCourse$fixedClassArgs<ExtArgs>
     scoreConverts?: boolean | TrainingCourse$scoreConvertsArgs<ExtArgs>
     academicRankingConvert?: boolean | TrainingCourse$academicRankingConvertArgs<ExtArgs>
@@ -140718,6 +140815,7 @@ export namespace Prisma {
       trainingLanguage: Prisma.$TrainingLanguagePayload<ExtArgs> | null
       trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
       trainingCourseRegulation: Prisma.$TrainingCourseRegulationPayload<ExtArgs>[]
+      curriculumVersion: Prisma.$CurriculumVersionPayload<ExtArgs>[]
       fixedClass: Prisma.$FixedClassPayload<ExtArgs>[]
       scoreConverts: Prisma.$ScoreConvertPayload<ExtArgs>[]
       academicRankingConvert: Prisma.$AcademicRankingConvertPayload<ExtArgs>[]
@@ -141203,6 +141301,7 @@ export namespace Prisma {
     trainingLanguage<T extends TrainingCourse$trainingLanguageArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$trainingLanguageArgs<ExtArgs>>): Prisma__TrainingLanguageClient<$Result.GetResult<Prisma.$TrainingLanguagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     trainingCourseRegulation<T extends TrainingCourse$trainingCourseRegulationArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$trainingCourseRegulationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    curriculumVersion<T extends TrainingCourse$curriculumVersionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$curriculumVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fixedClass<T extends TrainingCourse$fixedClassArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$fixedClassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     scoreConverts<T extends TrainingCourse$scoreConvertsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$scoreConvertsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreConvertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     academicRankingConvert<T extends TrainingCourse$academicRankingConvertArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$academicRankingConvertArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AcademicRankingConvertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -141717,6 +141816,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TrainingCourseRegulationScalarFieldEnum | TrainingCourseRegulationScalarFieldEnum[]
+  }
+
+  /**
+   * TrainingCourse.curriculumVersion
+   */
+  export type TrainingCourse$curriculumVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CurriculumVersion
+     */
+    select?: CurriculumVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CurriculumVersion
+     */
+    omit?: CurriculumVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculumVersionInclude<ExtArgs> | null
+    where?: CurriculumVersionWhereInput
+    orderBy?: CurriculumVersionOrderByWithRelationInput | CurriculumVersionOrderByWithRelationInput[]
+    cursor?: CurriculumVersionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CurriculumVersionScalarFieldEnum | CurriculumVersionScalarFieldEnum[]
   }
 
   /**
@@ -146056,6 +146179,7 @@ export namespace Prisma {
     curriculumId: string | null
     type: $Enums.CurriculumVersionType | null
     trainingObjectTypeId: string | null
+    trainingCourseId: string | null
     trainingLevelId: string | null
     trainingTypeId: string | null
     trainingTimeId: string | null
@@ -146095,6 +146219,7 @@ export namespace Prisma {
     curriculumId: string | null
     type: $Enums.CurriculumVersionType | null
     trainingObjectTypeId: string | null
+    trainingCourseId: string | null
     trainingLevelId: string | null
     trainingTypeId: string | null
     trainingTimeId: string | null
@@ -146134,6 +146259,7 @@ export namespace Prisma {
     curriculumId: number
     type: number
     trainingObjectTypeId: number
+    trainingCourseId: number
     trainingLevelId: number
     trainingTypeId: number
     trainingTimeId: number
@@ -146191,6 +146317,7 @@ export namespace Prisma {
     curriculumId?: true
     type?: true
     trainingObjectTypeId?: true
+    trainingCourseId?: true
     trainingLevelId?: true
     trainingTypeId?: true
     trainingTimeId?: true
@@ -146230,6 +146357,7 @@ export namespace Prisma {
     curriculumId?: true
     type?: true
     trainingObjectTypeId?: true
+    trainingCourseId?: true
     trainingLevelId?: true
     trainingTypeId?: true
     trainingTimeId?: true
@@ -146269,6 +146397,7 @@ export namespace Prisma {
     curriculumId?: true
     type?: true
     trainingObjectTypeId?: true
+    trainingCourseId?: true
     trainingLevelId?: true
     trainingTypeId?: true
     trainingTimeId?: true
@@ -146395,10 +146524,11 @@ export namespace Prisma {
     curriculumId: string
     type: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId: string | null
+    trainingLevelId: string | null
+    trainingTypeId: string | null
+    trainingTimeId: string | null
+    diplomaTypeId: string | null
     requiredCredits: number | null
     electiveCredits: number | null
     jobPosition: string | null
@@ -146453,6 +146583,7 @@ export namespace Prisma {
     curriculumId?: boolean
     type?: boolean
     trainingObjectTypeId?: boolean
+    trainingCourseId?: boolean
     trainingLevelId?: boolean
     trainingTypeId?: boolean
     trainingTimeId?: boolean
@@ -146473,10 +146604,11 @@ export namespace Prisma {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingLevel?: boolean | TrainingLevelDefaultArgs<ExtArgs>
-    trainingType?: boolean | TrainingTypeDefaultArgs<ExtArgs>
-    trainingTime?: boolean | TrainingTimeDefaultArgs<ExtArgs>
-    diplomaType?: boolean | DiplomaTypeDefaultArgs<ExtArgs>
+    trainingCourse?: boolean | CurriculumVersion$trainingCourseArgs<ExtArgs>
+    trainingLevel?: boolean | CurriculumVersion$trainingLevelArgs<ExtArgs>
+    trainingType?: boolean | CurriculumVersion$trainingTypeArgs<ExtArgs>
+    trainingTime?: boolean | CurriculumVersion$trainingTimeArgs<ExtArgs>
+    diplomaType?: boolean | CurriculumVersion$diplomaTypeArgs<ExtArgs>
     outputStandardOnCurriculum?: boolean | CurriculumVersion$outputStandardOnCurriculumArgs<ExtArgs>
     documentFiles?: boolean | CurriculumVersion$documentFilesArgs<ExtArgs>
     trainingBlocks?: boolean | CurriculumVersion$trainingBlocksArgs<ExtArgs>
@@ -146506,6 +146638,7 @@ export namespace Prisma {
     curriculumId?: boolean
     type?: boolean
     trainingObjectTypeId?: boolean
+    trainingCourseId?: boolean
     trainingLevelId?: boolean
     trainingTypeId?: boolean
     trainingTimeId?: boolean
@@ -146526,10 +146659,11 @@ export namespace Prisma {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingLevel?: boolean | TrainingLevelDefaultArgs<ExtArgs>
-    trainingType?: boolean | TrainingTypeDefaultArgs<ExtArgs>
-    trainingTime?: boolean | TrainingTimeDefaultArgs<ExtArgs>
-    diplomaType?: boolean | DiplomaTypeDefaultArgs<ExtArgs>
+    trainingCourse?: boolean | CurriculumVersion$trainingCourseArgs<ExtArgs>
+    trainingLevel?: boolean | CurriculumVersion$trainingLevelArgs<ExtArgs>
+    trainingType?: boolean | CurriculumVersion$trainingTypeArgs<ExtArgs>
+    trainingTime?: boolean | CurriculumVersion$trainingTimeArgs<ExtArgs>
+    diplomaType?: boolean | CurriculumVersion$diplomaTypeArgs<ExtArgs>
   }, ExtArgs["result"]["curriculumVersion"]>
 
   export type CurriculumVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -146552,6 +146686,7 @@ export namespace Prisma {
     curriculumId?: boolean
     type?: boolean
     trainingObjectTypeId?: boolean
+    trainingCourseId?: boolean
     trainingLevelId?: boolean
     trainingTypeId?: boolean
     trainingTimeId?: boolean
@@ -146572,10 +146707,11 @@ export namespace Prisma {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingLevel?: boolean | TrainingLevelDefaultArgs<ExtArgs>
-    trainingType?: boolean | TrainingTypeDefaultArgs<ExtArgs>
-    trainingTime?: boolean | TrainingTimeDefaultArgs<ExtArgs>
-    diplomaType?: boolean | DiplomaTypeDefaultArgs<ExtArgs>
+    trainingCourse?: boolean | CurriculumVersion$trainingCourseArgs<ExtArgs>
+    trainingLevel?: boolean | CurriculumVersion$trainingLevelArgs<ExtArgs>
+    trainingType?: boolean | CurriculumVersion$trainingTypeArgs<ExtArgs>
+    trainingTime?: boolean | CurriculumVersion$trainingTimeArgs<ExtArgs>
+    diplomaType?: boolean | CurriculumVersion$diplomaTypeArgs<ExtArgs>
   }, ExtArgs["result"]["curriculumVersion"]>
 
   export type CurriculumVersionSelectScalar = {
@@ -146598,6 +146734,7 @@ export namespace Prisma {
     curriculumId?: boolean
     type?: boolean
     trainingObjectTypeId?: boolean
+    trainingCourseId?: boolean
     trainingLevelId?: boolean
     trainingTypeId?: boolean
     trainingTimeId?: boolean
@@ -146617,15 +146754,16 @@ export namespace Prisma {
     renderPath?: boolean
   }
 
-  export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>
+  export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingCourseId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>
   export type CurriculumVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingLevel?: boolean | TrainingLevelDefaultArgs<ExtArgs>
-    trainingType?: boolean | TrainingTypeDefaultArgs<ExtArgs>
-    trainingTime?: boolean | TrainingTimeDefaultArgs<ExtArgs>
-    diplomaType?: boolean | DiplomaTypeDefaultArgs<ExtArgs>
+    trainingCourse?: boolean | CurriculumVersion$trainingCourseArgs<ExtArgs>
+    trainingLevel?: boolean | CurriculumVersion$trainingLevelArgs<ExtArgs>
+    trainingType?: boolean | CurriculumVersion$trainingTypeArgs<ExtArgs>
+    trainingTime?: boolean | CurriculumVersion$trainingTimeArgs<ExtArgs>
+    diplomaType?: boolean | CurriculumVersion$diplomaTypeArgs<ExtArgs>
     outputStandardOnCurriculum?: boolean | CurriculumVersion$outputStandardOnCurriculumArgs<ExtArgs>
     documentFiles?: boolean | CurriculumVersion$documentFilesArgs<ExtArgs>
     trainingBlocks?: boolean | CurriculumVersion$trainingBlocksArgs<ExtArgs>
@@ -146638,19 +146776,21 @@ export namespace Prisma {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingLevel?: boolean | TrainingLevelDefaultArgs<ExtArgs>
-    trainingType?: boolean | TrainingTypeDefaultArgs<ExtArgs>
-    trainingTime?: boolean | TrainingTimeDefaultArgs<ExtArgs>
-    diplomaType?: boolean | DiplomaTypeDefaultArgs<ExtArgs>
+    trainingCourse?: boolean | CurriculumVersion$trainingCourseArgs<ExtArgs>
+    trainingLevel?: boolean | CurriculumVersion$trainingLevelArgs<ExtArgs>
+    trainingType?: boolean | CurriculumVersion$trainingTypeArgs<ExtArgs>
+    trainingTime?: boolean | CurriculumVersion$trainingTimeArgs<ExtArgs>
+    diplomaType?: boolean | CurriculumVersion$diplomaTypeArgs<ExtArgs>
   }
   export type CurriculumVersionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingLevel?: boolean | TrainingLevelDefaultArgs<ExtArgs>
-    trainingType?: boolean | TrainingTypeDefaultArgs<ExtArgs>
-    trainingTime?: boolean | TrainingTimeDefaultArgs<ExtArgs>
-    diplomaType?: boolean | DiplomaTypeDefaultArgs<ExtArgs>
+    trainingCourse?: boolean | CurriculumVersion$trainingCourseArgs<ExtArgs>
+    trainingLevel?: boolean | CurriculumVersion$trainingLevelArgs<ExtArgs>
+    trainingType?: boolean | CurriculumVersion$trainingTypeArgs<ExtArgs>
+    trainingTime?: boolean | CurriculumVersion$trainingTimeArgs<ExtArgs>
+    diplomaType?: boolean | CurriculumVersion$diplomaTypeArgs<ExtArgs>
   }
 
   export type $CurriculumVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -146659,10 +146799,11 @@ export namespace Prisma {
       trainingLanguage: Prisma.$TrainingLanguagePayload<ExtArgs> | null
       curriculum: Prisma.$CurriculumPayload<ExtArgs>
       trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
-      trainingLevel: Prisma.$TrainingLevelPayload<ExtArgs>
-      trainingType: Prisma.$TrainingTypePayload<ExtArgs>
-      trainingTime: Prisma.$TrainingTimePayload<ExtArgs>
-      diplomaType: Prisma.$DiplomaTypePayload<ExtArgs>
+      trainingCourse: Prisma.$TrainingCoursePayload<ExtArgs> | null
+      trainingLevel: Prisma.$TrainingLevelPayload<ExtArgs> | null
+      trainingType: Prisma.$TrainingTypePayload<ExtArgs> | null
+      trainingTime: Prisma.$TrainingTimePayload<ExtArgs> | null
+      diplomaType: Prisma.$DiplomaTypePayload<ExtArgs> | null
       outputStandardOnCurriculum: Prisma.$OutputStandardOnCurriculumPayload<ExtArgs>[]
       documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
       trainingBlocks: Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>[]
@@ -146690,10 +146831,11 @@ export namespace Prisma {
       curriculumId: string
       type: $Enums.CurriculumVersionType
       trainingObjectTypeId: string
-      trainingLevelId: string
-      trainingTypeId: string
-      trainingTimeId: string
-      diplomaTypeId: string
+      trainingCourseId: string | null
+      trainingLevelId: string | null
+      trainingTypeId: string | null
+      trainingTimeId: string | null
+      diplomaTypeId: string | null
       requiredCredits: number | null
       electiveCredits: number | null
       jobPosition: string | null
@@ -147104,10 +147246,11 @@ export namespace Prisma {
     trainingLanguage<T extends CurriculumVersion$trainingLanguageArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$trainingLanguageArgs<ExtArgs>>): Prisma__TrainingLanguageClient<$Result.GetResult<Prisma.$TrainingLanguagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     curriculum<T extends CurriculumDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumDefaultArgs<ExtArgs>>): Prisma__CurriculumClient<$Result.GetResult<Prisma.$CurriculumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    trainingLevel<T extends TrainingLevelDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLevelDefaultArgs<ExtArgs>>): Prisma__TrainingLevelClient<$Result.GetResult<Prisma.$TrainingLevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    trainingType<T extends TrainingTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingTypeDefaultArgs<ExtArgs>>): Prisma__TrainingTypeClient<$Result.GetResult<Prisma.$TrainingTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    trainingTime<T extends TrainingTimeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingTimeDefaultArgs<ExtArgs>>): Prisma__TrainingTimeClient<$Result.GetResult<Prisma.$TrainingTimePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    diplomaType<T extends DiplomaTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DiplomaTypeDefaultArgs<ExtArgs>>): Prisma__DiplomaTypeClient<$Result.GetResult<Prisma.$DiplomaTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    trainingCourse<T extends CurriculumVersion$trainingCourseArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$trainingCourseArgs<ExtArgs>>): Prisma__TrainingCourseClient<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    trainingLevel<T extends CurriculumVersion$trainingLevelArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$trainingLevelArgs<ExtArgs>>): Prisma__TrainingLevelClient<$Result.GetResult<Prisma.$TrainingLevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    trainingType<T extends CurriculumVersion$trainingTypeArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$trainingTypeArgs<ExtArgs>>): Prisma__TrainingTypeClient<$Result.GetResult<Prisma.$TrainingTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    trainingTime<T extends CurriculumVersion$trainingTimeArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$trainingTimeArgs<ExtArgs>>): Prisma__TrainingTimeClient<$Result.GetResult<Prisma.$TrainingTimePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    diplomaType<T extends CurriculumVersion$diplomaTypeArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$diplomaTypeArgs<ExtArgs>>): Prisma__DiplomaTypeClient<$Result.GetResult<Prisma.$DiplomaTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     outputStandardOnCurriculum<T extends CurriculumVersion$outputStandardOnCurriculumArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$outputStandardOnCurriculumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutputStandardOnCurriculumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     documentFiles<T extends CurriculumVersion$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     trainingBlocks<T extends CurriculumVersion$trainingBlocksArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersion$trainingBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -147162,6 +147305,7 @@ export namespace Prisma {
     readonly curriculumId: FieldRef<"CurriculumVersion", 'String'>
     readonly type: FieldRef<"CurriculumVersion", 'CurriculumVersionType'>
     readonly trainingObjectTypeId: FieldRef<"CurriculumVersion", 'String'>
+    readonly trainingCourseId: FieldRef<"CurriculumVersion", 'String'>
     readonly trainingLevelId: FieldRef<"CurriculumVersion", 'String'>
     readonly trainingTypeId: FieldRef<"CurriculumVersion", 'String'>
     readonly trainingTimeId: FieldRef<"CurriculumVersion", 'String'>
@@ -147591,6 +147735,101 @@ export namespace Prisma {
      */
     include?: TrainingLanguageInclude<ExtArgs> | null
     where?: TrainingLanguageWhereInput
+  }
+
+  /**
+   * CurriculumVersion.trainingCourse
+   */
+  export type CurriculumVersion$trainingCourseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourse
+     */
+    select?: TrainingCourseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourse
+     */
+    omit?: TrainingCourseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseInclude<ExtArgs> | null
+    where?: TrainingCourseWhereInput
+  }
+
+  /**
+   * CurriculumVersion.trainingLevel
+   */
+  export type CurriculumVersion$trainingLevelArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingLevel
+     */
+    select?: TrainingLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingLevel
+     */
+    omit?: TrainingLevelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingLevelInclude<ExtArgs> | null
+    where?: TrainingLevelWhereInput
+  }
+
+  /**
+   * CurriculumVersion.trainingType
+   */
+  export type CurriculumVersion$trainingTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingType
+     */
+    select?: TrainingTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingType
+     */
+    omit?: TrainingTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingTypeInclude<ExtArgs> | null
+    where?: TrainingTypeWhereInput
+  }
+
+  /**
+   * CurriculumVersion.trainingTime
+   */
+  export type CurriculumVersion$trainingTimeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingTime
+     */
+    select?: TrainingTimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingTime
+     */
+    omit?: TrainingTimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingTimeInclude<ExtArgs> | null
+    where?: TrainingTimeWhereInput
+  }
+
+  /**
+   * CurriculumVersion.diplomaType
+   */
+  export type CurriculumVersion$diplomaTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiplomaType
+     */
+    select?: DiplomaTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DiplomaType
+     */
+    omit?: DiplomaTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiplomaTypeInclude<ExtArgs> | null
+    where?: DiplomaTypeWhereInput
   }
 
   /**
@@ -166764,6 +167003,7 @@ export namespace Prisma {
     subjectVersion?: boolean | TrainingObjectType$subjectVersionArgs<ExtArgs>
     planTraining?: boolean | TrainingObjectType$planTrainingArgs<ExtArgs>
     thesisSession?: boolean | TrainingObjectType$thesisSessionArgs<ExtArgs>
+    trainingBlocks?: boolean | TrainingObjectType$trainingBlocksArgs<ExtArgs>
     _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingObjectType"]>
 
@@ -166834,6 +167074,7 @@ export namespace Prisma {
     subjectVersion?: boolean | TrainingObjectType$subjectVersionArgs<ExtArgs>
     planTraining?: boolean | TrainingObjectType$planTrainingArgs<ExtArgs>
     thesisSession?: boolean | TrainingObjectType$thesisSessionArgs<ExtArgs>
+    trainingBlocks?: boolean | TrainingObjectType$trainingBlocksArgs<ExtArgs>
     _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TrainingObjectTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -166861,6 +167102,7 @@ export namespace Prisma {
       subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>[]
       planTraining: Prisma.$PlanTrainingPayload<ExtArgs>[]
       thesisSession: Prisma.$ThesisSessionPayload<ExtArgs>[]
+      trainingBlocks: Prisma.$TrainingBlockPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -167283,6 +167525,7 @@ export namespace Prisma {
     subjectVersion<T extends TrainingObjectType$subjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$subjectVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     planTraining<T extends TrainingObjectType$planTrainingArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$planTrainingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     thesisSession<T extends TrainingObjectType$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$thesisSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    trainingBlocks<T extends TrainingObjectType$trainingBlocksArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$trainingBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -168020,6 +168263,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ThesisSessionScalarFieldEnum | ThesisSessionScalarFieldEnum[]
+  }
+
+  /**
+   * TrainingObjectType.trainingBlocks
+   */
+  export type TrainingObjectType$trainingBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingBlock
+     */
+    select?: TrainingBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingBlock
+     */
+    omit?: TrainingBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingBlockInclude<ExtArgs> | null
+    where?: TrainingBlockWhereInput
+    orderBy?: TrainingBlockOrderByWithRelationInput | TrainingBlockOrderByWithRelationInput[]
+    cursor?: TrainingBlockWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TrainingBlockScalarFieldEnum | TrainingBlockScalarFieldEnum[]
   }
 
   /**
@@ -181525,6 +181792,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    trainingObjectTypeId: string | null
     priority: number | null
     parentId: string | null
   }
@@ -181539,6 +181807,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    trainingObjectTypeId: string | null
     priority: number | null
     parentId: string | null
   }
@@ -181553,6 +181822,7 @@ export namespace Prisma {
     updatedAt: number
     createdBy: number
     name: number
+    trainingObjectTypeId: number
     priority: number
     parentId: number
     _all: number
@@ -181577,6 +181847,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    trainingObjectTypeId?: true
     priority?: true
     parentId?: true
   }
@@ -181591,6 +181862,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    trainingObjectTypeId?: true
     priority?: true
     parentId?: true
   }
@@ -181605,6 +181877,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    trainingObjectTypeId?: true
     priority?: true
     parentId?: true
     _all?: true
@@ -181706,6 +181979,7 @@ export namespace Prisma {
     updatedAt: Date
     createdBy: string | null
     name: string
+    trainingObjectTypeId: string
     priority: number
     parentId: string | null
     _count: TrainingBlockCountAggregateOutputType | null
@@ -181739,8 +182013,10 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    trainingObjectTypeId?: boolean
     priority?: boolean
     parentId?: boolean
+    trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
     children?: boolean | TrainingBlock$childrenArgs<ExtArgs>
     curriculumVersions?: boolean | TrainingBlock$curriculumVersionsArgs<ExtArgs>
@@ -181757,8 +182033,10 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    trainingObjectTypeId?: boolean
     priority?: boolean
     parentId?: boolean
+    trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
   }, ExtArgs["result"]["trainingBlock"]>
 
@@ -181772,8 +182050,10 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    trainingObjectTypeId?: boolean
     priority?: boolean
     parentId?: boolean
+    trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
   }, ExtArgs["result"]["trainingBlock"]>
 
@@ -181787,27 +182067,32 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    trainingObjectTypeId?: boolean
     priority?: boolean
     parentId?: boolean
   }
 
-  export type TrainingBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "priority" | "parentId", ExtArgs["result"]["trainingBlock"]>
+  export type TrainingBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "trainingObjectTypeId" | "priority" | "parentId", ExtArgs["result"]["trainingBlock"]>
   export type TrainingBlockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
     children?: boolean | TrainingBlock$childrenArgs<ExtArgs>
     curriculumVersions?: boolean | TrainingBlock$curriculumVersionsArgs<ExtArgs>
     _count?: boolean | TrainingBlockCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TrainingBlockIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
   }
   export type TrainingBlockIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
   }
 
   export type $TrainingBlockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "TrainingBlock"
     objects: {
+      trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
       parent: Prisma.$TrainingBlockPayload<ExtArgs> | null
       children: Prisma.$TrainingBlockPayload<ExtArgs>[]
       curriculumVersions: Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>[]
@@ -181822,6 +182107,7 @@ export namespace Prisma {
       updatedAt: Date
       createdBy: string | null
       name: string
+      trainingObjectTypeId: string
       /**
        * ưu tiên sắp xếp
        */
@@ -182221,6 +182507,7 @@ export namespace Prisma {
    */
   export interface Prisma__TrainingBlockClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     parent<T extends TrainingBlock$parentArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlock$parentArgs<ExtArgs>>): Prisma__TrainingBlockClient<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     children<T extends TrainingBlock$childrenArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlock$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     curriculumVersions<T extends TrainingBlock$curriculumVersionsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlock$curriculumVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -182262,6 +182549,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"TrainingBlock", 'DateTime'>
     readonly createdBy: FieldRef<"TrainingBlock", 'String'>
     readonly name: FieldRef<"TrainingBlock", 'String'>
+    readonly trainingObjectTypeId: FieldRef<"TrainingBlock", 'String'>
     readonly priority: FieldRef<"TrainingBlock", 'Int'>
     readonly parentId: FieldRef<"TrainingBlock", 'String'>
   }
@@ -353016,6 +353304,7 @@ export namespace Prisma {
     officialCPVDate: 'officialCPVDate',
     CPVJoinPlace: 'CPVJoinPlace',
     positionCPVId: 'positionCPVId',
+    chucVuChinhQuyenId: 'chucVuChinhQuyenId',
     tenureDate: 'tenureDate',
     enlistmentDate: 'enlistmentDate',
     reEnlistmentDate: 'reEnlistmentDate',
@@ -354813,6 +355102,7 @@ export namespace Prisma {
     curriculumId: 'curriculumId',
     type: 'type',
     trainingObjectTypeId: 'trainingObjectTypeId',
+    trainingCourseId: 'trainingCourseId',
     trainingLevelId: 'trainingLevelId',
     trainingTypeId: 'trainingTypeId',
     trainingTimeId: 'trainingTimeId',
@@ -355376,6 +355666,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
     name: 'name',
+    trainingObjectTypeId: 'trainingObjectTypeId',
     priority: 'priority',
     parentId: 'parentId'
   };
@@ -358171,6 +358462,7 @@ export namespace Prisma {
     unionPlace: 'unionPlace',
     CPVJoinPlace: 'CPVJoinPlace',
     positionCPVId: 'positionCPVId',
+    chucVuChinhQuyenId: 'chucVuChinhQuyenId',
     recruitmentAgency: 'recruitmentAgency',
     mainJobAssigned: 'mainJobAssigned',
     originalPlace: 'originalPlace',
@@ -359402,6 +359694,7 @@ export namespace Prisma {
     trainingLanguageId: 'trainingLanguageId',
     curriculumId: 'curriculumId',
     trainingObjectTypeId: 'trainingObjectTypeId',
+    trainingCourseId: 'trainingCourseId',
     trainingLevelId: 'trainingLevelId',
     trainingTypeId: 'trainingTypeId',
     trainingTimeId: 'trainingTimeId',
@@ -359772,6 +360065,7 @@ export namespace Prisma {
     description: 'description',
     createdBy: 'createdBy',
     name: 'name',
+    trainingObjectTypeId: 'trainingObjectTypeId',
     parentId: 'parentId'
   };
 
@@ -362805,6 +363099,7 @@ export namespace Prisma {
     officialCPVDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     CPVJoinPlace?: StringNullableFilter<"UserProfile"> | string | null
     positionCPVId?: UuidNullableFilter<"UserProfile"> | string | null
+    chucVuChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
     tenureDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     enlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     reEnlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
@@ -362860,6 +363155,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: XOR<DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter, DM_HinhThucKhenThuongChinhQuyenWhereInput> | null
     dM_HinhThucKhenThuongDang?: XOR<DM_HinhThucKhenThuongDangNullableScalarRelationFilter, DM_HinhThucKhenThuongDangWhereInput> | null
     positionCPV?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
+    chucVuChinhQuyen?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     relatives?: RelativeListRelationFilter
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriListRelationFilter
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocListRelationFilter
@@ -363021,6 +363317,7 @@ export namespace Prisma {
     officialCPVDate?: SortOrderInput | SortOrder
     CPVJoinPlace?: SortOrderInput | SortOrder
     positionCPVId?: SortOrderInput | SortOrder
+    chucVuChinhQuyenId?: SortOrderInput | SortOrder
     tenureDate?: SortOrderInput | SortOrder
     enlistmentDate?: SortOrderInput | SortOrder
     reEnlistmentDate?: SortOrderInput | SortOrder
@@ -363076,6 +363373,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenOrderByWithRelationInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangOrderByWithRelationInput
     positionCPV?: DM_ChucVuOrderByWithRelationInput
+    chucVuChinhQuyen?: DM_ChucVuOrderByWithRelationInput
     relatives?: RelativeOrderByRelationAggregateInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriOrderByRelationAggregateInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocOrderByRelationAggregateInput
@@ -363241,6 +363539,7 @@ export namespace Prisma {
     officialCPVDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     CPVJoinPlace?: StringNullableFilter<"UserProfile"> | string | null
     positionCPVId?: UuidNullableFilter<"UserProfile"> | string | null
+    chucVuChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
     tenureDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     enlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     reEnlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
@@ -363296,6 +363595,7 @@ export namespace Prisma {
     dM_HinhThucKhenThuongChinhQuyen?: XOR<DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter, DM_HinhThucKhenThuongChinhQuyenWhereInput> | null
     dM_HinhThucKhenThuongDang?: XOR<DM_HinhThucKhenThuongDangNullableScalarRelationFilter, DM_HinhThucKhenThuongDangWhereInput> | null
     positionCPV?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
+    chucVuChinhQuyen?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     relatives?: RelativeListRelationFilter
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriListRelationFilter
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocListRelationFilter
@@ -363457,6 +363757,7 @@ export namespace Prisma {
     officialCPVDate?: SortOrderInput | SortOrder
     CPVJoinPlace?: SortOrderInput | SortOrder
     positionCPVId?: SortOrderInput | SortOrder
+    chucVuChinhQuyenId?: SortOrderInput | SortOrder
     tenureDate?: SortOrderInput | SortOrder
     enlistmentDate?: SortOrderInput | SortOrder
     reEnlistmentDate?: SortOrderInput | SortOrder
@@ -363595,6 +363896,7 @@ export namespace Prisma {
     officialCPVDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     CPVJoinPlace?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     positionCPVId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
+    chucVuChinhQuyenId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     tenureDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     enlistmentDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     reEnlistmentDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
@@ -367707,6 +368009,7 @@ export namespace Prisma {
     sThietBiTao?: StringNullableFilter<"DM_ChucVu"> | string | null
     sThietBiSua?: StringNullableFilter<"DM_ChucVu"> | string | null
     iNhomChucVu?: IntNullableFilter<"DM_ChucVu"> | number | null
+    userProfileCPV?: UserProfileListRelationFilter
     userProfile?: UserProfileListRelationFilter
     quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
@@ -367729,6 +368032,7 @@ export namespace Prisma {
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
     iNhomChucVu?: SortOrderInput | SortOrder
+    userProfileCPV?: UserProfileOrderByRelationAggregateInput
     userProfile?: UserProfileOrderByRelationAggregateInput
     quaTrinhCongTac?: QuaTrinhCongTacOrderByRelationAggregateInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacOrderByRelationAggregateInput
@@ -367755,6 +368059,7 @@ export namespace Prisma {
     sThietBiTao?: StringNullableFilter<"DM_ChucVu"> | string | null
     sThietBiSua?: StringNullableFilter<"DM_ChucVu"> | string | null
     iNhomChucVu?: IntNullableFilter<"DM_ChucVu"> | number | null
+    userProfileCPV?: UserProfileListRelationFilter
     userProfile?: UserProfileListRelationFilter
     quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
@@ -372451,6 +372756,7 @@ export namespace Prisma {
     trainingLanguage?: XOR<TrainingLanguageNullableScalarRelationFilter, TrainingLanguageWhereInput> | null
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
     trainingCourseRegulation?: TrainingCourseRegulationListRelationFilter
+    curriculumVersion?: CurriculumVersionListRelationFilter
     fixedClass?: FixedClassListRelationFilter
     scoreConverts?: ScoreConvertListRelationFilter
     academicRankingConvert?: AcademicRankingConvertListRelationFilter
@@ -372507,6 +372813,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageOrderByWithRelationInput
     trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
     trainingCourseRegulation?: TrainingCourseRegulationOrderByRelationAggregateInput
+    curriculumVersion?: CurriculumVersionOrderByRelationAggregateInput
     fixedClass?: FixedClassOrderByRelationAggregateInput
     scoreConverts?: ScoreConvertOrderByRelationAggregateInput
     academicRankingConvert?: AcademicRankingConvertOrderByRelationAggregateInput
@@ -372567,6 +372874,7 @@ export namespace Prisma {
     trainingLanguage?: XOR<TrainingLanguageNullableScalarRelationFilter, TrainingLanguageWhereInput> | null
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
     trainingCourseRegulation?: TrainingCourseRegulationListRelationFilter
+    curriculumVersion?: CurriculumVersionListRelationFilter
     fixedClass?: FixedClassListRelationFilter
     scoreConverts?: ScoreConvertListRelationFilter
     academicRankingConvert?: AcademicRankingConvertListRelationFilter
@@ -373057,10 +373365,11 @@ export namespace Prisma {
     curriculumId?: StringFilter<"CurriculumVersion"> | string
     type?: EnumCurriculumVersionTypeFilter<"CurriculumVersion"> | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
-    trainingLevelId?: StringFilter<"CurriculumVersion"> | string
-    trainingTypeId?: StringFilter<"CurriculumVersion"> | string
-    trainingTimeId?: StringFilter<"CurriculumVersion"> | string
-    diplomaTypeId?: StringFilter<"CurriculumVersion"> | string
+    trainingCourseId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingLevelId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingTypeId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingTimeId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    diplomaTypeId?: StringNullableFilter<"CurriculumVersion"> | string | null
     requiredCredits?: IntNullableFilter<"CurriculumVersion"> | number | null
     electiveCredits?: IntNullableFilter<"CurriculumVersion"> | number | null
     jobPosition?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -373077,10 +373386,11 @@ export namespace Prisma {
     trainingLanguage?: XOR<TrainingLanguageNullableScalarRelationFilter, TrainingLanguageWhereInput> | null
     curriculum?: XOR<CurriculumScalarRelationFilter, CurriculumWhereInput>
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
-    trainingLevel?: XOR<TrainingLevelScalarRelationFilter, TrainingLevelWhereInput>
-    trainingType?: XOR<TrainingTypeScalarRelationFilter, TrainingTypeWhereInput>
-    trainingTime?: XOR<TrainingTimeScalarRelationFilter, TrainingTimeWhereInput>
-    diplomaType?: XOR<DiplomaTypeScalarRelationFilter, DiplomaTypeWhereInput>
+    trainingCourse?: XOR<TrainingCourseNullableScalarRelationFilter, TrainingCourseWhereInput> | null
+    trainingLevel?: XOR<TrainingLevelNullableScalarRelationFilter, TrainingLevelWhereInput> | null
+    trainingType?: XOR<TrainingTypeNullableScalarRelationFilter, TrainingTypeWhereInput> | null
+    trainingTime?: XOR<TrainingTimeNullableScalarRelationFilter, TrainingTimeWhereInput> | null
+    diplomaType?: XOR<DiplomaTypeNullableScalarRelationFilter, DiplomaTypeWhereInput> | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
     trainingBlocks?: TrainingBlockOnCurriculumVersionListRelationFilter
@@ -373109,10 +373419,11 @@ export namespace Prisma {
     curriculumId?: SortOrder
     type?: SortOrder
     trainingObjectTypeId?: SortOrder
-    trainingLevelId?: SortOrder
-    trainingTypeId?: SortOrder
-    trainingTimeId?: SortOrder
-    diplomaTypeId?: SortOrder
+    trainingCourseId?: SortOrderInput | SortOrder
+    trainingLevelId?: SortOrderInput | SortOrder
+    trainingTypeId?: SortOrderInput | SortOrder
+    trainingTimeId?: SortOrderInput | SortOrder
+    diplomaTypeId?: SortOrderInput | SortOrder
     requiredCredits?: SortOrderInput | SortOrder
     electiveCredits?: SortOrderInput | SortOrder
     jobPosition?: SortOrderInput | SortOrder
@@ -373129,6 +373440,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageOrderByWithRelationInput
     curriculum?: CurriculumOrderByWithRelationInput
     trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
+    trainingCourse?: TrainingCourseOrderByWithRelationInput
     trainingLevel?: TrainingLevelOrderByWithRelationInput
     trainingType?: TrainingTypeOrderByWithRelationInput
     trainingTime?: TrainingTimeOrderByWithRelationInput
@@ -373165,10 +373477,11 @@ export namespace Prisma {
     curriculumId?: StringFilter<"CurriculumVersion"> | string
     type?: EnumCurriculumVersionTypeFilter<"CurriculumVersion"> | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
-    trainingLevelId?: StringFilter<"CurriculumVersion"> | string
-    trainingTypeId?: StringFilter<"CurriculumVersion"> | string
-    trainingTimeId?: StringFilter<"CurriculumVersion"> | string
-    diplomaTypeId?: StringFilter<"CurriculumVersion"> | string
+    trainingCourseId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingLevelId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingTypeId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingTimeId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    diplomaTypeId?: StringNullableFilter<"CurriculumVersion"> | string | null
     requiredCredits?: IntNullableFilter<"CurriculumVersion"> | number | null
     electiveCredits?: IntNullableFilter<"CurriculumVersion"> | number | null
     jobPosition?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -373185,10 +373498,11 @@ export namespace Prisma {
     trainingLanguage?: XOR<TrainingLanguageNullableScalarRelationFilter, TrainingLanguageWhereInput> | null
     curriculum?: XOR<CurriculumScalarRelationFilter, CurriculumWhereInput>
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
-    trainingLevel?: XOR<TrainingLevelScalarRelationFilter, TrainingLevelWhereInput>
-    trainingType?: XOR<TrainingTypeScalarRelationFilter, TrainingTypeWhereInput>
-    trainingTime?: XOR<TrainingTimeScalarRelationFilter, TrainingTimeWhereInput>
-    diplomaType?: XOR<DiplomaTypeScalarRelationFilter, DiplomaTypeWhereInput>
+    trainingCourse?: XOR<TrainingCourseNullableScalarRelationFilter, TrainingCourseWhereInput> | null
+    trainingLevel?: XOR<TrainingLevelNullableScalarRelationFilter, TrainingLevelWhereInput> | null
+    trainingType?: XOR<TrainingTypeNullableScalarRelationFilter, TrainingTypeWhereInput> | null
+    trainingTime?: XOR<TrainingTimeNullableScalarRelationFilter, TrainingTimeWhereInput> | null
+    diplomaType?: XOR<DiplomaTypeNullableScalarRelationFilter, DiplomaTypeWhereInput> | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
     trainingBlocks?: TrainingBlockOnCurriculumVersionListRelationFilter
@@ -373217,10 +373531,11 @@ export namespace Prisma {
     curriculumId?: SortOrder
     type?: SortOrder
     trainingObjectTypeId?: SortOrder
-    trainingLevelId?: SortOrder
-    trainingTypeId?: SortOrder
-    trainingTimeId?: SortOrder
-    diplomaTypeId?: SortOrder
+    trainingCourseId?: SortOrderInput | SortOrder
+    trainingLevelId?: SortOrderInput | SortOrder
+    trainingTypeId?: SortOrderInput | SortOrder
+    trainingTimeId?: SortOrderInput | SortOrder
+    diplomaTypeId?: SortOrderInput | SortOrder
     requiredCredits?: SortOrderInput | SortOrder
     electiveCredits?: SortOrderInput | SortOrder
     jobPosition?: SortOrderInput | SortOrder
@@ -373264,10 +373579,11 @@ export namespace Prisma {
     curriculumId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
     type?: EnumCurriculumVersionTypeWithAggregatesFilter<"CurriculumVersion"> | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
-    trainingLevelId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
-    trainingTypeId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
-    trainingTimeId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
-    diplomaTypeId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
+    trainingCourseId?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
+    trainingLevelId?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
+    trainingTypeId?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
+    trainingTimeId?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
+    diplomaTypeId?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
     requiredCredits?: IntNullableWithAggregatesFilter<"CurriculumVersion"> | number | null
     electiveCredits?: IntNullableWithAggregatesFilter<"CurriculumVersion"> | number | null
     jobPosition?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
@@ -375112,6 +375428,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionListRelationFilter
     planTraining?: PlanTrainingListRelationFilter
     thesisSession?: ThesisSessionListRelationFilter
+    trainingBlocks?: TrainingBlockListRelationFilter
   }
 
   export type TrainingObjectTypeOrderByWithRelationInput = {
@@ -375141,6 +375458,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionOrderByRelationAggregateInput
     planTraining?: PlanTrainingOrderByRelationAggregateInput
     thesisSession?: ThesisSessionOrderByRelationAggregateInput
+    trainingBlocks?: TrainingBlockOrderByRelationAggregateInput
     _relevance?: TrainingObjectTypeOrderByRelevanceInput
   }
 
@@ -375174,6 +375492,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionListRelationFilter
     planTraining?: PlanTrainingListRelationFilter
     thesisSession?: ThesisSessionListRelationFilter
+    trainingBlocks?: TrainingBlockListRelationFilter
   }, "id" | "code" | "name">
 
   export type TrainingObjectTypeOrderByWithAggregationInput = {
@@ -376279,8 +376598,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"TrainingBlock"> | Date | string
     createdBy?: UuidNullableFilter<"TrainingBlock"> | string | null
     name?: StringFilter<"TrainingBlock"> | string
+    trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
     priority?: IntFilter<"TrainingBlock"> | number
     parentId?: StringNullableFilter<"TrainingBlock"> | string | null
+    trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
     parent?: XOR<TrainingBlockNullableScalarRelationFilter, TrainingBlockWhereInput> | null
     children?: TrainingBlockListRelationFilter
     curriculumVersions?: TrainingBlockOnCurriculumVersionListRelationFilter
@@ -376296,8 +376617,10 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    trainingObjectTypeId?: SortOrder
     priority?: SortOrder
     parentId?: SortOrderInput | SortOrder
+    trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
     parent?: TrainingBlockOrderByWithRelationInput
     children?: TrainingBlockOrderByRelationAggregateInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionOrderByRelationAggregateInput
@@ -376307,7 +376630,7 @@ export namespace Prisma {
   export type TrainingBlockWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    name?: string
+    trainingObjectTypeId_name?: TrainingBlockTrainingObjectTypeIdNameCompoundUniqueInput
     AND?: TrainingBlockWhereInput | TrainingBlockWhereInput[]
     OR?: TrainingBlockWhereInput[]
     NOT?: TrainingBlockWhereInput | TrainingBlockWhereInput[]
@@ -376317,12 +376640,15 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TrainingBlock"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingBlock"> | Date | string
     createdBy?: UuidNullableFilter<"TrainingBlock"> | string | null
+    name?: StringFilter<"TrainingBlock"> | string
+    trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
     priority?: IntFilter<"TrainingBlock"> | number
     parentId?: StringNullableFilter<"TrainingBlock"> | string | null
+    trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
     parent?: XOR<TrainingBlockNullableScalarRelationFilter, TrainingBlockWhereInput> | null
     children?: TrainingBlockListRelationFilter
     curriculumVersions?: TrainingBlockOnCurriculumVersionListRelationFilter
-  }, "id" | "code" | "name">
+  }, "id" | "code" | "trainingObjectTypeId_name">
 
   export type TrainingBlockOrderByWithAggregationInput = {
     id?: SortOrder
@@ -376334,6 +376660,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    trainingObjectTypeId?: SortOrder
     priority?: SortOrder
     parentId?: SortOrderInput | SortOrder
     _count?: TrainingBlockCountOrderByAggregateInput
@@ -376356,6 +376683,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"TrainingBlock"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"TrainingBlock"> | string | null
     name?: StringWithAggregatesFilter<"TrainingBlock"> | string
+    trainingObjectTypeId?: StringWithAggregatesFilter<"TrainingBlock"> | string
     priority?: IntWithAggregatesFilter<"TrainingBlock"> | number
     parentId?: StringNullableWithAggregatesFilter<"TrainingBlock"> | string | null
   }
@@ -390947,7 +391275,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -391109,6 +391438,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -391291,7 +391621,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -391453,6 +391784,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -391625,6 +391957,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -391841,6 +392174,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -396484,7 +396818,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
-    userProfile?: UserProfileCreateNestedManyWithoutPositionCPVInput
+    userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
+    userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
   }
@@ -396506,7 +396841,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
-    userProfile?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+    userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+    userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
   }
@@ -396528,7 +396864,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
-    userProfile?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+    userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+    userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
   }
@@ -396550,7 +396887,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
-    userProfile?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+    userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+    userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
   }
@@ -402131,6 +402469,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -402184,6 +402523,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -402237,6 +402577,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -402290,6 +402631,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -402845,10 +403187,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -402877,10 +403220,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -402935,10 +403279,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -402967,10 +403312,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -403012,10 +403358,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -403083,10 +403430,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -405191,6 +405539,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateInput = {
@@ -405218,6 +405567,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUpdateInput = {
@@ -405245,6 +405595,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateInput = {
@@ -405272,6 +405623,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeCreateManyInput = {
@@ -406520,6 +406872,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     priority?: number
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
     parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
     children?: TrainingBlockCreateNestedManyWithoutParentInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
@@ -406535,6 +406888,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    trainingObjectTypeId: string
     priority?: number
     parentId?: string | null
     children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
@@ -406552,6 +406906,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
     parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
     children?: TrainingBlockUpdateManyWithoutParentNestedInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
@@ -406567,6 +406922,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
@@ -406583,6 +406939,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    trainingObjectTypeId: string
     priority?: number
     parentId?: string | null
   }
@@ -406610,6 +406967,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -423768,6 +424126,7 @@ export namespace Prisma {
     officialCPVDate?: SortOrder
     CPVJoinPlace?: SortOrder
     positionCPVId?: SortOrder
+    chucVuChinhQuyenId?: SortOrder
     tenureDate?: SortOrder
     enlistmentDate?: SortOrder
     reEnlistmentDate?: SortOrder
@@ -423905,6 +424264,7 @@ export namespace Prisma {
     officialCPVDate?: SortOrder
     CPVJoinPlace?: SortOrder
     positionCPVId?: SortOrder
+    chucVuChinhQuyenId?: SortOrder
     tenureDate?: SortOrder
     enlistmentDate?: SortOrder
     reEnlistmentDate?: SortOrder
@@ -424035,6 +424395,7 @@ export namespace Prisma {
     officialCPVDate?: SortOrder
     CPVJoinPlace?: SortOrder
     positionCPVId?: SortOrder
+    chucVuChinhQuyenId?: SortOrder
     tenureDate?: SortOrder
     enlistmentDate?: SortOrder
     reEnlistmentDate?: SortOrder
@@ -430707,24 +431068,24 @@ export namespace Prisma {
     isNot?: CurriculumWhereInput
   }
 
-  export type TrainingLevelScalarRelationFilter = {
-    is?: TrainingLevelWhereInput
-    isNot?: TrainingLevelWhereInput
+  export type TrainingLevelNullableScalarRelationFilter = {
+    is?: TrainingLevelWhereInput | null
+    isNot?: TrainingLevelWhereInput | null
   }
 
-  export type TrainingTypeScalarRelationFilter = {
-    is?: TrainingTypeWhereInput
-    isNot?: TrainingTypeWhereInput
+  export type TrainingTypeNullableScalarRelationFilter = {
+    is?: TrainingTypeWhereInput | null
+    isNot?: TrainingTypeWhereInput | null
   }
 
-  export type TrainingTimeScalarRelationFilter = {
-    is?: TrainingTimeWhereInput
-    isNot?: TrainingTimeWhereInput
+  export type TrainingTimeNullableScalarRelationFilter = {
+    is?: TrainingTimeWhereInput | null
+    isNot?: TrainingTimeWhereInput | null
   }
 
-  export type DiplomaTypeScalarRelationFilter = {
-    is?: DiplomaTypeWhereInput
-    isNot?: DiplomaTypeWhereInput
+  export type DiplomaTypeNullableScalarRelationFilter = {
+    is?: DiplomaTypeWhereInput | null
+    isNot?: DiplomaTypeWhereInput | null
   }
 
   export type OutputStandardOnCurriculumListRelationFilter = {
@@ -430778,6 +431139,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     type?: SortOrder
     trainingObjectTypeId?: SortOrder
+    trainingCourseId?: SortOrder
     trainingLevelId?: SortOrder
     trainingTypeId?: SortOrder
     trainingTimeId?: SortOrder
@@ -430825,6 +431187,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     type?: SortOrder
     trainingObjectTypeId?: SortOrder
+    trainingCourseId?: SortOrder
     trainingLevelId?: SortOrder
     trainingTypeId?: SortOrder
     trainingTimeId?: SortOrder
@@ -430864,6 +431227,7 @@ export namespace Prisma {
     curriculumId?: SortOrder
     type?: SortOrder
     trainingObjectTypeId?: SortOrder
+    trainingCourseId?: SortOrder
     trainingLevelId?: SortOrder
     trainingTypeId?: SortOrder
     trainingTimeId?: SortOrder
@@ -432262,11 +432626,6 @@ export namespace Prisma {
     isNot?: TrainingFormWhereInput | null
   }
 
-  export type TrainingLevelNullableScalarRelationFilter = {
-    is?: TrainingLevelWhereInput | null
-    isNot?: TrainingLevelWhereInput | null
-  }
-
   export type TrainingMajorOnTrainingObjectTypeListRelationFilter = {
     every?: TrainingMajorOnTrainingObjectTypeWhereInput
     some?: TrainingMajorOnTrainingObjectTypeWhereInput
@@ -432285,6 +432644,12 @@ export namespace Prisma {
     none?: GraduationSessionWhereInput
   }
 
+  export type TrainingBlockListRelationFilter = {
+    every?: TrainingBlockWhereInput
+    some?: TrainingBlockWhereInput
+    none?: TrainingBlockWhereInput
+  }
+
   export type TrainingMajorOnTrainingObjectTypeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -432294,6 +432659,10 @@ export namespace Prisma {
   }
 
   export type GraduationSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TrainingBlockOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -432994,20 +433363,15 @@ export namespace Prisma {
     isNot?: TrainingBlockWhereInput | null
   }
 
-  export type TrainingBlockListRelationFilter = {
-    every?: TrainingBlockWhereInput
-    some?: TrainingBlockWhereInput
-    none?: TrainingBlockWhereInput
-  }
-
-  export type TrainingBlockOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type TrainingBlockOrderByRelevanceInput = {
     fields: TrainingBlockOrderByRelevanceFieldEnum | TrainingBlockOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type TrainingBlockTrainingObjectTypeIdNameCompoundUniqueInput = {
+    trainingObjectTypeId: string
+    name: string
   }
 
   export type TrainingBlockCountOrderByAggregateInput = {
@@ -433020,6 +433384,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    trainingObjectTypeId?: SortOrder
     priority?: SortOrder
     parentId?: SortOrder
   }
@@ -433038,6 +433403,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    trainingObjectTypeId?: SortOrder
     priority?: SortOrder
     parentId?: SortOrder
   }
@@ -433052,6 +433418,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    trainingObjectTypeId?: SortOrder
     priority?: SortOrder
     parentId?: SortOrder
   }
@@ -440061,11 +440428,6 @@ export namespace Prisma {
     isNot?: TrainingMajorWhereInput | null
   }
 
-  export type DiplomaTypeNullableScalarRelationFilter = {
-    is?: DiplomaTypeWhereInput | null
-    isNot?: DiplomaTypeWhereInput | null
-  }
-
   export type ApplicationCheckResultListRelationFilter = {
     every?: ApplicationCheckResultWhereInput
     some?: ApplicationCheckResultWhereInput
@@ -443123,6 +443485,12 @@ export namespace Prisma {
     connect?: DM_HinhThucKhenThuongDangWhereUniqueInput
   }
 
+  export type DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput = {
+    create?: XOR<DM_ChucVuCreateWithoutUserProfileCPVInput, DM_ChucVuUncheckedCreateWithoutUserProfileCPVInput>
+    connectOrCreate?: DM_ChucVuCreateOrConnectWithoutUserProfileCPVInput
+    connect?: DM_ChucVuWhereUniqueInput
+  }
+
   export type DM_ChucVuCreateNestedOneWithoutUserProfileInput = {
     create?: XOR<DM_ChucVuCreateWithoutUserProfileInput, DM_ChucVuUncheckedCreateWithoutUserProfileInput>
     connectOrCreate?: DM_ChucVuCreateOrConnectWithoutUserProfileInput
@@ -444147,6 +444515,16 @@ export namespace Prisma {
     delete?: DM_HinhThucKhenThuongDangWhereInput | boolean
     connect?: DM_HinhThucKhenThuongDangWhereUniqueInput
     update?: XOR<XOR<DM_HinhThucKhenThuongDangUpdateToOneWithWhereWithoutUserProfileInput, DM_HinhThucKhenThuongDangUpdateWithoutUserProfileInput>, DM_HinhThucKhenThuongDangUncheckedUpdateWithoutUserProfileInput>
+  }
+
+  export type DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput = {
+    create?: XOR<DM_ChucVuCreateWithoutUserProfileCPVInput, DM_ChucVuUncheckedCreateWithoutUserProfileCPVInput>
+    connectOrCreate?: DM_ChucVuCreateOrConnectWithoutUserProfileCPVInput
+    upsert?: DM_ChucVuUpsertWithoutUserProfileCPVInput
+    disconnect?: DM_ChucVuWhereInput | boolean
+    delete?: DM_ChucVuWhereInput | boolean
+    connect?: DM_ChucVuWhereUniqueInput
+    update?: XOR<XOR<DM_ChucVuUpdateToOneWithWhereWithoutUserProfileCPVInput, DM_ChucVuUpdateWithoutUserProfileCPVInput>, DM_ChucVuUncheckedUpdateWithoutUserProfileCPVInput>
   }
 
   export type DM_ChucVuUpdateOneWithoutUserProfileNestedInput = {
@@ -447062,6 +447440,13 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
   }
 
+  export type UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput = {
+    create?: XOR<UserProfileCreateWithoutChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput> | UserProfileCreateWithoutChucVuChinhQuyenInput[] | UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput[]
+    connectOrCreate?: UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput | UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput[]
+    createMany?: UserProfileCreateManyChucVuChinhQuyenInputEnvelope
+    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+  }
+
   export type QuaTrinhCongTacCreateNestedManyWithoutChucVuInput = {
     create?: XOR<QuaTrinhCongTacCreateWithoutChucVuInput, QuaTrinhCongTacUncheckedCreateWithoutChucVuInput> | QuaTrinhCongTacCreateWithoutChucVuInput[] | QuaTrinhCongTacUncheckedCreateWithoutChucVuInput[]
     connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutChucVuInput | QuaTrinhCongTacCreateOrConnectWithoutChucVuInput[]
@@ -447080,6 +447465,13 @@ export namespace Prisma {
     create?: XOR<UserProfileCreateWithoutPositionCPVInput, UserProfileUncheckedCreateWithoutPositionCPVInput> | UserProfileCreateWithoutPositionCPVInput[] | UserProfileUncheckedCreateWithoutPositionCPVInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutPositionCPVInput | UserProfileCreateOrConnectWithoutPositionCPVInput[]
     createMany?: UserProfileCreateManyPositionCPVInputEnvelope
+    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+  }
+
+  export type UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput = {
+    create?: XOR<UserProfileCreateWithoutChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput> | UserProfileCreateWithoutChucVuChinhQuyenInput[] | UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput[]
+    connectOrCreate?: UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput | UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput[]
+    createMany?: UserProfileCreateManyChucVuChinhQuyenInputEnvelope
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
   }
 
@@ -447108,6 +447500,20 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
     update?: UserProfileUpdateWithWhereUniqueWithoutPositionCPVInput | UserProfileUpdateWithWhereUniqueWithoutPositionCPVInput[]
     updateMany?: UserProfileUpdateManyWithWhereWithoutPositionCPVInput | UserProfileUpdateManyWithWhereWithoutPositionCPVInput[]
+    deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+  }
+
+  export type UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput = {
+    create?: XOR<UserProfileCreateWithoutChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput> | UserProfileCreateWithoutChucVuChinhQuyenInput[] | UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput[]
+    connectOrCreate?: UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput | UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput[]
+    upsert?: UserProfileUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput | UserProfileUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput[]
+    createMany?: UserProfileCreateManyChucVuChinhQuyenInputEnvelope
+    set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    update?: UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput | UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput[]
+    updateMany?: UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput | UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput[]
     deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
   }
 
@@ -447150,6 +447556,20 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
     update?: UserProfileUpdateWithWhereUniqueWithoutPositionCPVInput | UserProfileUpdateWithWhereUniqueWithoutPositionCPVInput[]
     updateMany?: UserProfileUpdateManyWithWhereWithoutPositionCPVInput | UserProfileUpdateManyWithWhereWithoutPositionCPVInput[]
+    deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+  }
+
+  export type UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput = {
+    create?: XOR<UserProfileCreateWithoutChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput> | UserProfileCreateWithoutChucVuChinhQuyenInput[] | UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput[]
+    connectOrCreate?: UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput | UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput[]
+    upsert?: UserProfileUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput | UserProfileUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput[]
+    createMany?: UserProfileCreateManyChucVuChinhQuyenInputEnvelope
+    set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    update?: UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput | UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput[]
+    updateMany?: UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput | UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput[]
     deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
   }
 
@@ -451266,6 +451686,13 @@ export namespace Prisma {
     connect?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
   }
 
+  export type CurriculumVersionCreateNestedManyWithoutTrainingCourseInput = {
+    create?: XOR<CurriculumVersionCreateWithoutTrainingCourseInput, CurriculumVersionUncheckedCreateWithoutTrainingCourseInput> | CurriculumVersionCreateWithoutTrainingCourseInput[] | CurriculumVersionUncheckedCreateWithoutTrainingCourseInput[]
+    connectOrCreate?: CurriculumVersionCreateOrConnectWithoutTrainingCourseInput | CurriculumVersionCreateOrConnectWithoutTrainingCourseInput[]
+    createMany?: CurriculumVersionCreateManyTrainingCourseInputEnvelope
+    connect?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+  }
+
   export type FixedClassCreateNestedManyWithoutTrainingCourseInput = {
     create?: XOR<FixedClassCreateWithoutTrainingCourseInput, FixedClassUncheckedCreateWithoutTrainingCourseInput> | FixedClassCreateWithoutTrainingCourseInput[] | FixedClassUncheckedCreateWithoutTrainingCourseInput[]
     connectOrCreate?: FixedClassCreateOrConnectWithoutTrainingCourseInput | FixedClassCreateOrConnectWithoutTrainingCourseInput[]
@@ -451352,6 +451779,13 @@ export namespace Prisma {
     connectOrCreate?: TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput | TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput[]
     createMany?: TrainingCourseRegulationCreateManyTrainingCourseInputEnvelope
     connect?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+  }
+
+  export type CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput = {
+    create?: XOR<CurriculumVersionCreateWithoutTrainingCourseInput, CurriculumVersionUncheckedCreateWithoutTrainingCourseInput> | CurriculumVersionCreateWithoutTrainingCourseInput[] | CurriculumVersionUncheckedCreateWithoutTrainingCourseInput[]
+    connectOrCreate?: CurriculumVersionCreateOrConnectWithoutTrainingCourseInput | CurriculumVersionCreateOrConnectWithoutTrainingCourseInput[]
+    createMany?: CurriculumVersionCreateManyTrainingCourseInputEnvelope
+    connect?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
   }
 
   export type FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput = {
@@ -451477,6 +451911,20 @@ export namespace Prisma {
     update?: TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput | TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput[]
     updateMany?: TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput | TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput[]
     deleteMany?: TrainingCourseRegulationScalarWhereInput | TrainingCourseRegulationScalarWhereInput[]
+  }
+
+  export type CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput = {
+    create?: XOR<CurriculumVersionCreateWithoutTrainingCourseInput, CurriculumVersionUncheckedCreateWithoutTrainingCourseInput> | CurriculumVersionCreateWithoutTrainingCourseInput[] | CurriculumVersionUncheckedCreateWithoutTrainingCourseInput[]
+    connectOrCreate?: CurriculumVersionCreateOrConnectWithoutTrainingCourseInput | CurriculumVersionCreateOrConnectWithoutTrainingCourseInput[]
+    upsert?: CurriculumVersionUpsertWithWhereUniqueWithoutTrainingCourseInput | CurriculumVersionUpsertWithWhereUniqueWithoutTrainingCourseInput[]
+    createMany?: CurriculumVersionCreateManyTrainingCourseInputEnvelope
+    set?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+    disconnect?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+    delete?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+    connect?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+    update?: CurriculumVersionUpdateWithWhereUniqueWithoutTrainingCourseInput | CurriculumVersionUpdateWithWhereUniqueWithoutTrainingCourseInput[]
+    updateMany?: CurriculumVersionUpdateManyWithWhereWithoutTrainingCourseInput | CurriculumVersionUpdateManyWithWhereWithoutTrainingCourseInput[]
+    deleteMany?: CurriculumVersionScalarWhereInput | CurriculumVersionScalarWhereInput[]
   }
 
   export type FixedClassUpdateManyWithoutTrainingCourseNestedInput = {
@@ -451656,6 +452104,20 @@ export namespace Prisma {
     update?: TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput | TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput[]
     updateMany?: TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput | TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput[]
     deleteMany?: TrainingCourseRegulationScalarWhereInput | TrainingCourseRegulationScalarWhereInput[]
+  }
+
+  export type CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput = {
+    create?: XOR<CurriculumVersionCreateWithoutTrainingCourseInput, CurriculumVersionUncheckedCreateWithoutTrainingCourseInput> | CurriculumVersionCreateWithoutTrainingCourseInput[] | CurriculumVersionUncheckedCreateWithoutTrainingCourseInput[]
+    connectOrCreate?: CurriculumVersionCreateOrConnectWithoutTrainingCourseInput | CurriculumVersionCreateOrConnectWithoutTrainingCourseInput[]
+    upsert?: CurriculumVersionUpsertWithWhereUniqueWithoutTrainingCourseInput | CurriculumVersionUpsertWithWhereUniqueWithoutTrainingCourseInput[]
+    createMany?: CurriculumVersionCreateManyTrainingCourseInputEnvelope
+    set?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+    disconnect?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+    delete?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+    connect?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
+    update?: CurriculumVersionUpdateWithWhereUniqueWithoutTrainingCourseInput | CurriculumVersionUpdateWithWhereUniqueWithoutTrainingCourseInput[]
+    updateMany?: CurriculumVersionUpdateManyWithWhereWithoutTrainingCourseInput | CurriculumVersionUpdateManyWithWhereWithoutTrainingCourseInput[]
+    deleteMany?: CurriculumVersionScalarWhereInput | CurriculumVersionScalarWhereInput[]
   }
 
   export type FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput = {
@@ -452247,6 +452709,12 @@ export namespace Prisma {
     connect?: TrainingObjectTypeWhereUniqueInput
   }
 
+  export type TrainingCourseCreateNestedOneWithoutCurriculumVersionInput = {
+    create?: XOR<TrainingCourseCreateWithoutCurriculumVersionInput, TrainingCourseUncheckedCreateWithoutCurriculumVersionInput>
+    connectOrCreate?: TrainingCourseCreateOrConnectWithoutCurriculumVersionInput
+    connect?: TrainingCourseWhereUniqueInput
+  }
+
   export type TrainingLevelCreateNestedOneWithoutCurriculumVersionInput = {
     create?: XOR<TrainingLevelCreateWithoutCurriculumVersionInput, TrainingLevelUncheckedCreateWithoutCurriculumVersionInput>
     connectOrCreate?: TrainingLevelCreateOrConnectWithoutCurriculumVersionInput
@@ -452383,34 +452851,52 @@ export namespace Prisma {
     update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutCurriculumVersionInput, TrainingObjectTypeUpdateWithoutCurriculumVersionInput>, TrainingObjectTypeUncheckedUpdateWithoutCurriculumVersionInput>
   }
 
-  export type TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput = {
+  export type TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput = {
+    create?: XOR<TrainingCourseCreateWithoutCurriculumVersionInput, TrainingCourseUncheckedCreateWithoutCurriculumVersionInput>
+    connectOrCreate?: TrainingCourseCreateOrConnectWithoutCurriculumVersionInput
+    upsert?: TrainingCourseUpsertWithoutCurriculumVersionInput
+    disconnect?: TrainingCourseWhereInput | boolean
+    delete?: TrainingCourseWhereInput | boolean
+    connect?: TrainingCourseWhereUniqueInput
+    update?: XOR<XOR<TrainingCourseUpdateToOneWithWhereWithoutCurriculumVersionInput, TrainingCourseUpdateWithoutCurriculumVersionInput>, TrainingCourseUncheckedUpdateWithoutCurriculumVersionInput>
+  }
+
+  export type TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput = {
     create?: XOR<TrainingLevelCreateWithoutCurriculumVersionInput, TrainingLevelUncheckedCreateWithoutCurriculumVersionInput>
     connectOrCreate?: TrainingLevelCreateOrConnectWithoutCurriculumVersionInput
     upsert?: TrainingLevelUpsertWithoutCurriculumVersionInput
+    disconnect?: TrainingLevelWhereInput | boolean
+    delete?: TrainingLevelWhereInput | boolean
     connect?: TrainingLevelWhereUniqueInput
     update?: XOR<XOR<TrainingLevelUpdateToOneWithWhereWithoutCurriculumVersionInput, TrainingLevelUpdateWithoutCurriculumVersionInput>, TrainingLevelUncheckedUpdateWithoutCurriculumVersionInput>
   }
 
-  export type TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput = {
+  export type TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput = {
     create?: XOR<TrainingTypeCreateWithoutCurriculumVersionInput, TrainingTypeUncheckedCreateWithoutCurriculumVersionInput>
     connectOrCreate?: TrainingTypeCreateOrConnectWithoutCurriculumVersionInput
     upsert?: TrainingTypeUpsertWithoutCurriculumVersionInput
+    disconnect?: TrainingTypeWhereInput | boolean
+    delete?: TrainingTypeWhereInput | boolean
     connect?: TrainingTypeWhereUniqueInput
     update?: XOR<XOR<TrainingTypeUpdateToOneWithWhereWithoutCurriculumVersionInput, TrainingTypeUpdateWithoutCurriculumVersionInput>, TrainingTypeUncheckedUpdateWithoutCurriculumVersionInput>
   }
 
-  export type TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput = {
+  export type TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput = {
     create?: XOR<TrainingTimeCreateWithoutCurriculumVersionInput, TrainingTimeUncheckedCreateWithoutCurriculumVersionInput>
     connectOrCreate?: TrainingTimeCreateOrConnectWithoutCurriculumVersionInput
     upsert?: TrainingTimeUpsertWithoutCurriculumVersionInput
+    disconnect?: TrainingTimeWhereInput | boolean
+    delete?: TrainingTimeWhereInput | boolean
     connect?: TrainingTimeWhereUniqueInput
     update?: XOR<XOR<TrainingTimeUpdateToOneWithWhereWithoutCurriculumVersionInput, TrainingTimeUpdateWithoutCurriculumVersionInput>, TrainingTimeUncheckedUpdateWithoutCurriculumVersionInput>
   }
 
-  export type DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput = {
+  export type DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput = {
     create?: XOR<DiplomaTypeCreateWithoutCurriculumVersionInput, DiplomaTypeUncheckedCreateWithoutCurriculumVersionInput>
     connectOrCreate?: DiplomaTypeCreateOrConnectWithoutCurriculumVersionInput
     upsert?: DiplomaTypeUpsertWithoutCurriculumVersionInput
+    disconnect?: DiplomaTypeWhereInput | boolean
+    delete?: DiplomaTypeWhereInput | boolean
     connect?: DiplomaTypeWhereUniqueInput
     update?: XOR<XOR<DiplomaTypeUpdateToOneWithWhereWithoutCurriculumVersionInput, DiplomaTypeUpdateWithoutCurriculumVersionInput>, DiplomaTypeUncheckedUpdateWithoutCurriculumVersionInput>
   }
@@ -454654,6 +455140,13 @@ export namespace Prisma {
     connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
   }
 
+  export type TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput = {
+    create?: XOR<TrainingBlockCreateWithoutTrainingObjectTypeInput, TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingBlockCreateWithoutTrainingObjectTypeInput[] | TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput[]
+    connectOrCreate?: TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput | TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput[]
+    createMany?: TrainingBlockCreateManyTrainingObjectTypeInputEnvelope
+    connect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+  }
+
   export type TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
     create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
     connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -454729,6 +455222,13 @@ export namespace Prisma {
     connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput | ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput[]
     createMany?: ThesisSessionCreateManyTrainingObjectTypeInputEnvelope
     connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+  }
+
+  export type TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
+    create?: XOR<TrainingBlockCreateWithoutTrainingObjectTypeInput, TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingBlockCreateWithoutTrainingObjectTypeInput[] | TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput[]
+    connectOrCreate?: TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput | TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput[]
+    createMany?: TrainingBlockCreateManyTrainingObjectTypeInputEnvelope
+    connect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
   }
 
   export type EnumTrainingObjectTypesFieldUpdateOperationsInput = {
@@ -454914,6 +455414,20 @@ export namespace Prisma {
     deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
   }
 
+  export type TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput = {
+    create?: XOR<TrainingBlockCreateWithoutTrainingObjectTypeInput, TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingBlockCreateWithoutTrainingObjectTypeInput[] | TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput[]
+    connectOrCreate?: TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput | TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput[]
+    upsert?: TrainingBlockUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | TrainingBlockUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+    createMany?: TrainingBlockCreateManyTrainingObjectTypeInputEnvelope
+    set?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    disconnect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    delete?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    connect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    update?: TrainingBlockUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | TrainingBlockUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+    updateMany?: TrainingBlockUpdateManyWithWhereWithoutTrainingObjectTypeInput | TrainingBlockUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+    deleteMany?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
+  }
+
   export type TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
     create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
     connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -455066,6 +455580,20 @@ export namespace Prisma {
     update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
     updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingObjectTypeInput | ThesisSessionUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
     deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
+  }
+
+  export type TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
+    create?: XOR<TrainingBlockCreateWithoutTrainingObjectTypeInput, TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingBlockCreateWithoutTrainingObjectTypeInput[] | TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput[]
+    connectOrCreate?: TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput | TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput[]
+    upsert?: TrainingBlockUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | TrainingBlockUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+    createMany?: TrainingBlockCreateManyTrainingObjectTypeInputEnvelope
+    set?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    disconnect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    delete?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    connect?: TrainingBlockWhereUniqueInput | TrainingBlockWhereUniqueInput[]
+    update?: TrainingBlockUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | TrainingBlockUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+    updateMany?: TrainingBlockUpdateManyWithWhereWithoutTrainingObjectTypeInput | TrainingBlockUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+    deleteMany?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
   }
 
   export type StudentCreateNestedManyWithoutPriorityObjectInput = {
@@ -456250,6 +456778,12 @@ export namespace Prisma {
     update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutTrainingMajorsInput, TrainingObjectTypeUpdateWithoutTrainingMajorsInput>, TrainingObjectTypeUncheckedUpdateWithoutTrainingMajorsInput>
   }
 
+  export type TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput = {
+    create?: XOR<TrainingObjectTypeCreateWithoutTrainingBlocksInput, TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput>
+    connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutTrainingBlocksInput
+    connect?: TrainingObjectTypeWhereUniqueInput
+  }
+
   export type TrainingBlockCreateNestedOneWithoutChildrenInput = {
     create?: XOR<TrainingBlockCreateWithoutChildrenInput, TrainingBlockUncheckedCreateWithoutChildrenInput>
     connectOrCreate?: TrainingBlockCreateOrConnectWithoutChildrenInput
@@ -456282,6 +456816,14 @@ export namespace Prisma {
     connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutTrainingBlockInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutTrainingBlockInput[]
     createMany?: TrainingBlockOnCurriculumVersionCreateManyTrainingBlockInputEnvelope
     connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+  }
+
+  export type TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput = {
+    create?: XOR<TrainingObjectTypeCreateWithoutTrainingBlocksInput, TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput>
+    connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutTrainingBlocksInput
+    upsert?: TrainingObjectTypeUpsertWithoutTrainingBlocksInput
+    connect?: TrainingObjectTypeWhereUniqueInput
+    update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutTrainingBlocksInput, TrainingObjectTypeUpdateWithoutTrainingBlocksInput>, TrainingObjectTypeUncheckedUpdateWithoutTrainingBlocksInput>
   }
 
   export type TrainingBlockUpdateOneWithoutChildrenNestedInput = {
@@ -469911,7 +470453,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -470072,6 +470615,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -470269,7 +470813,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -470430,6 +470975,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -472319,6 +472865,55 @@ export namespace Prisma {
     create: XOR<DM_HinhThucKhenThuongDangCreateWithoutUserProfileInput, DM_HinhThucKhenThuongDangUncheckedCreateWithoutUserProfileInput>
   }
 
+  export type DM_ChucVuCreateWithoutUserProfileCPVInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    iNhomChucVu?: number | null
+    userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
+  }
+
+  export type DM_ChucVuUncheckedCreateWithoutUserProfileCPVInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    iNhomChucVu?: number | null
+    userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
+  }
+
+  export type DM_ChucVuCreateOrConnectWithoutUserProfileCPVInput = {
+    where: DM_ChucVuWhereUniqueInput
+    create: XOR<DM_ChucVuCreateWithoutUserProfileCPVInput, DM_ChucVuUncheckedCreateWithoutUserProfileCPVInput>
+  }
+
   export type DM_ChucVuCreateWithoutUserProfileInput = {
     Id?: string
     sMa?: string | null
@@ -472336,6 +472931,7 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
+    userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
   }
@@ -472357,6 +472953,7 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
+    userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
   }
@@ -476456,6 +477053,61 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
   }
 
+  export type DM_ChucVuUpsertWithoutUserProfileCPVInput = {
+    update: XOR<DM_ChucVuUpdateWithoutUserProfileCPVInput, DM_ChucVuUncheckedUpdateWithoutUserProfileCPVInput>
+    create: XOR<DM_ChucVuCreateWithoutUserProfileCPVInput, DM_ChucVuUncheckedCreateWithoutUserProfileCPVInput>
+    where?: DM_ChucVuWhereInput
+  }
+
+  export type DM_ChucVuUpdateToOneWithWhereWithoutUserProfileCPVInput = {
+    where?: DM_ChucVuWhereInput
+    data: XOR<DM_ChucVuUpdateWithoutUserProfileCPVInput, DM_ChucVuUncheckedUpdateWithoutUserProfileCPVInput>
+  }
+
+  export type DM_ChucVuUpdateWithoutUserProfileCPVInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
+  }
+
+  export type DM_ChucVuUncheckedUpdateWithoutUserProfileCPVInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+  }
+
   export type DM_ChucVuUpsertWithoutUserProfileInput = {
     update: XOR<DM_ChucVuUpdateWithoutUserProfileInput, DM_ChucVuUncheckedUpdateWithoutUserProfileInput>
     create: XOR<DM_ChucVuCreateWithoutUserProfileInput, DM_ChucVuUncheckedCreateWithoutUserProfileInput>
@@ -476484,6 +477136,7 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
   }
@@ -476505,6 +477158,7 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
   }
@@ -478296,7 +478950,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -478457,6 +479112,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -478703,7 +479359,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -478864,6 +479521,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -479166,7 +479824,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -479327,6 +479986,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -479663,7 +480323,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -479824,6 +480485,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -480034,7 +480696,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
     ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
@@ -480195,6 +480858,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -480427,7 +481091,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
     ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
@@ -480588,6 +481253,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -480769,7 +481435,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
     ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
@@ -480930,6 +481597,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -481156,7 +481824,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
     ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
@@ -481317,6 +481986,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -481533,7 +482203,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
@@ -481694,6 +482365,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -481920,7 +482592,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
@@ -482081,6 +482754,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482381,7 +483055,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -482542,6 +483217,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -482835,7 +483511,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -482996,6 +483673,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -483218,7 +483896,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -483379,6 +484058,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -483623,7 +484303,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -483784,6 +484465,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -483965,7 +484647,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -484126,6 +484809,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -484323,7 +485007,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -484484,6 +485169,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -484708,7 +485394,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -484869,6 +485556,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -485115,7 +485803,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -485276,6 +485965,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -485348,7 +486038,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
-    userProfile?: UserProfileCreateNestedManyWithoutPositionCPVInput
+    userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
+    userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
   }
 
@@ -485369,7 +486060,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
-    userProfile?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+    userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+    userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
   }
 
@@ -485533,7 +486225,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -485694,6 +486387,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -485782,7 +486476,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
-    userProfile?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+    userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+    userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
   }
 
@@ -485803,7 +486498,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
-    userProfile?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+    userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+    userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
   }
 
@@ -485979,7 +486675,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -486140,6 +486837,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -486212,7 +486910,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
-    userProfile?: UserProfileCreateNestedManyWithoutPositionCPVInput
+    userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
+    userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
   }
 
@@ -486233,7 +486932,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
-    userProfile?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+    userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+    userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
   }
 
@@ -486455,7 +487155,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -486616,6 +487317,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -486704,7 +487406,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
-    userProfile?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+    userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+    userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
   }
 
@@ -486725,7 +487428,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
-    userProfile?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+    userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+    userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
   }
 
@@ -486971,7 +487675,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -487132,6 +487837,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -487371,7 +488077,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -487532,6 +488239,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -487799,7 +488507,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -487960,6 +488669,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -488141,7 +488851,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -488302,6 +489013,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -488499,7 +489211,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -488660,6 +489373,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -488841,7 +489555,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -489002,6 +489717,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -489199,7 +489915,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -489360,6 +490077,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -489541,7 +490259,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -489702,6 +490421,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -489899,7 +490619,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -490060,6 +490781,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -490241,7 +490963,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -490402,6 +491125,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -490599,7 +491323,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -490760,6 +491485,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -490988,7 +491714,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -491149,6 +491876,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -491399,7 +492127,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -491560,6 +492289,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -491741,7 +492471,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -491902,6 +492633,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -492099,7 +492831,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -492260,6 +492993,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -492488,7 +493222,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -492649,6 +493384,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -492899,7 +493635,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -493060,6 +493797,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -493270,7 +494008,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -493431,6 +494170,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -493663,7 +494403,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -493824,6 +494565,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -494005,7 +494747,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -494166,6 +494909,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -494363,7 +495107,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -494524,6 +495269,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -494794,7 +495540,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -494955,6 +495702,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -495259,7 +496007,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -495420,6 +496169,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -495630,7 +496380,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -495791,6 +496542,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -496023,7 +496775,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -496184,6 +496937,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -496423,7 +497177,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -496584,6 +497339,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -496851,7 +497607,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -497012,6 +497769,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -497311,7 +498069,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -497472,6 +498231,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -497762,6 +498522,7 @@ export namespace Prisma {
     officialCPVDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     CPVJoinPlace?: StringNullableFilter<"UserProfile"> | string | null
     positionCPVId?: UuidNullableFilter<"UserProfile"> | string | null
+    chucVuChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
     tenureDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     enlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     reEnlistmentDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
@@ -498164,7 +498925,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -498325,6 +499087,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -498511,7 +499274,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -498672,6 +499436,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -498938,7 +499703,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -499099,6 +499865,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -499291,7 +500058,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -499452,6 +500220,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -499888,7 +500657,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -500049,6 +500819,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -500235,7 +501006,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -500396,6 +501168,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -500638,7 +501411,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -500799,6 +501573,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -500991,7 +501766,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -501152,6 +501928,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -501417,7 +502194,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -501578,6 +502356,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -501885,7 +502664,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -502046,6 +502826,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -502872,7 +503653,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -503033,6 +503815,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -503296,7 +504079,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -503457,6 +504241,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -503665,6 +504450,7 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -503825,6 +504611,7 @@ export namespace Prisma {
     CPVJoinDate?: Date | string | null
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -503888,6 +504675,360 @@ export namespace Prisma {
 
   export type UserProfileCreateManyPositionCPVInputEnvelope = {
     data: UserProfileCreateManyPositionCPVInput | UserProfileCreateManyPositionCPVInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserProfileCreateWithoutChucVuChinhQuyenInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    bLaNguoiDung?: boolean | null
+    bLaGiangVien?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    permanentAddress?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    officerNumber?: string | null
+    rankDate?: Date | string | null
+    academicDegreeDate?: Date | string | null
+    academicRankDate?: Date | string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    group?: GroupCreateNestedOneWithoutUserProfileInput
+    provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+    districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+    communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+    provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+    districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+    communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+    religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+    ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+    provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+    districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+    communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+    newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+    newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+    rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+    level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+    sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+    nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+    tinhTrangHonNhan?: DM_TinhTrangHonNhanCreateNestedOneWithoutUserProfileInput
+    trangThaiLamViec?: DM_TrangThaiLamViecCreateNestedOneWithoutUserProfileInput
+    dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienCreateNestedOneWithoutUserProfileInput
+    dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
+    dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
+    dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
+    dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
+    dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
+    dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+    trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+    educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+    studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
+    staffs?: StaffCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
+    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
+    subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
+    changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+    surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+    evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+    classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    bLaNguoiDung?: boolean | null
+    bLaGiangVien?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    groupId?: string | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    tinhTrangHonNhanId?: string | null
+    trangThaiLamViecId?: string | null
+    dM_ChucDanhCMNVGiangVienId?: string | null
+    dM_ChucDanhCMNVNghienCuuVienId?: string | null
+    dM_ChucDanhCMNVKySuId?: string | null
+    dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
+    dM_XepLoaiDanhGiaCanBoId?: string | null
+    dM_HinhThucKhenThuongChinhQuyenId?: string | null
+    dM_HinhThucKhenThuongDangId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+    relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+    educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+    staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+    subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+    changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+    surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+    evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+    classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput>
+  }
+
+  export type UserProfileCreateManyChucVuChinhQuyenInputEnvelope = {
+    data: UserProfileCreateManyChucVuChinhQuyenInput | UserProfileCreateManyChucVuChinhQuyenInput[]
     skipDuplicates?: boolean
   }
 
@@ -504003,6 +505144,22 @@ export namespace Prisma {
   export type UserProfileUpdateManyWithWhereWithoutPositionCPVInput = {
     where: UserProfileScalarWhereInput
     data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutPositionCPVInput>
+  }
+
+  export type UserProfileUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput = {
+    where: UserProfileWhereUniqueInput
+    update: XOR<UserProfileUpdateWithoutChucVuChinhQuyenInput, UserProfileUncheckedUpdateWithoutChucVuChinhQuyenInput>
+    create: XOR<UserProfileCreateWithoutChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput>
+  }
+
+  export type UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput = {
+    where: UserProfileWhereUniqueInput
+    data: XOR<UserProfileUpdateWithoutChucVuChinhQuyenInput, UserProfileUncheckedUpdateWithoutChucVuChinhQuyenInput>
+  }
+
+  export type UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput = {
+    where: UserProfileScalarWhereInput
+    data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenInput>
   }
 
   export type QuaTrinhCongTacUpsertWithWhereUniqueWithoutChucVuInput = {
@@ -504162,7 +505319,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -504323,6 +505481,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -504588,7 +505747,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -504749,6 +505909,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -505014,7 +506175,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -505175,6 +506337,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -507095,7 +508258,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -507256,6 +508420,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -507581,7 +508746,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -507742,6 +508908,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -508135,7 +509302,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -508296,6 +509464,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -508575,7 +509744,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -508736,6 +509906,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -508927,7 +510098,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -509088,6 +510260,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -509279,7 +510452,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -509440,6 +510614,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -509631,7 +510806,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -509792,6 +510968,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -510122,7 +511299,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -510283,6 +511461,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -510474,7 +511653,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -510635,6 +511815,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -510826,7 +512007,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -510987,6 +512169,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -511178,7 +512361,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -511339,6 +512523,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -511652,7 +512837,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -511813,6 +512999,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -512004,7 +513191,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -512165,6 +513353,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -512356,7 +513545,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -512517,6 +513707,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -512708,7 +513899,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -512869,6 +514061,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -513124,7 +514317,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -513285,6 +514479,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -513476,7 +514671,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -513637,6 +514833,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -513828,7 +515025,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -513989,6 +515187,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -514180,7 +515379,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -514341,6 +515541,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -514596,7 +515797,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -514757,6 +515959,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -514948,7 +516151,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -515109,6 +516313,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -515300,7 +516505,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -515461,6 +516667,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -515652,7 +516859,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -515813,6 +517021,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -515967,6 +517176,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutPlanTrainingInput = {
@@ -515993,6 +517203,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutPlanTrainingInput = {
@@ -516102,6 +517313,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -516154,6 +517366,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -516243,6 +517456,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingInput = {
@@ -516269,6 +517483,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SemesterUpsertWithoutPlanTrainingInput = {
@@ -516390,6 +517605,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -516442,6 +517658,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -519006,7 +520223,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -519167,6 +520385,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -519449,7 +520668,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -519610,6 +520830,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -522270,6 +523491,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -522322,6 +523544,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -523582,6 +524805,7 @@ export namespace Prisma {
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -523634,6 +524858,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -523690,10 +524915,11 @@ export namespace Prisma {
     renderPath?: string | null
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -523721,10 +524947,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -523811,10 +525038,11 @@ export namespace Prisma {
     curriculumId?: StringFilter<"CurriculumVersion"> | string
     type?: EnumCurriculumVersionTypeFilter<"CurriculumVersion"> | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
-    trainingLevelId?: StringFilter<"CurriculumVersion"> | string
-    trainingTypeId?: StringFilter<"CurriculumVersion"> | string
-    trainingTimeId?: StringFilter<"CurriculumVersion"> | string
-    diplomaTypeId?: StringFilter<"CurriculumVersion"> | string
+    trainingCourseId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingLevelId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingTypeId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    trainingTimeId?: StringNullableFilter<"CurriculumVersion"> | string | null
+    diplomaTypeId?: StringNullableFilter<"CurriculumVersion"> | string | null
     requiredCredits?: IntNullableFilter<"CurriculumVersion"> | number | null
     electiveCredits?: IntNullableFilter<"CurriculumVersion"> | number | null
     jobPosition?: StringNullableFilter<"CurriculumVersion"> | string | null
@@ -523948,6 +525176,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingCourseInput = {
@@ -523974,6 +525203,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingCourseInput = {
@@ -524014,6 +525244,106 @@ export namespace Prisma {
 
   export type TrainingCourseRegulationCreateManyTrainingCourseInputEnvelope = {
     data: TrainingCourseRegulationCreateManyTrainingCourseInput | TrainingCourseRegulationCreateManyTrainingCourseInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CurriculumVersionCreateWithoutTrainingCourseInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    code?: string | null
+    name: string
+    shortName?: string | null
+    englishName?: string | null
+    numberOfSemesters?: number | null
+    yearCreation?: number | null
+    yearApplication?: number | null
+    isLock?: boolean
+    type?: $Enums.CurriculumVersionType
+    requiredCredits?: number | null
+    electiveCredits?: number | null
+    jobPosition?: string | null
+    objectives?: string | null
+    learningOutcome?: string | null
+    inputStandard?: string | null
+    time?: string | null
+    structure?: string | null
+    matrixLearningOutcome?: string | null
+    summary?: string | null
+    learningDiagram?: string | null
+    guide?: string | null
+    renderPath?: string | null
+    trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
+    curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
+    trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
+    fixedClass?: FixedClassCreateNestedOneWithoutCurriculumVersionInput
+    students?: StudentCreateNestedManyWithoutCurriculumVersionInput
+    studentCurriculumVersionParallel?: StudentCreateNestedManyWithoutCurriculumVersionParallelInput
+  }
+
+  export type CurriculumVersionUncheckedCreateWithoutTrainingCourseInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    code?: string | null
+    name: string
+    shortName?: string | null
+    englishName?: string | null
+    trainingLanguageId?: string | null
+    numberOfSemesters?: number | null
+    yearCreation?: number | null
+    yearApplication?: number | null
+    isLock?: boolean
+    curriculumId: string
+    type?: $Enums.CurriculumVersionType
+    trainingObjectTypeId: string
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
+    requiredCredits?: number | null
+    electiveCredits?: number | null
+    jobPosition?: string | null
+    objectives?: string | null
+    learningOutcome?: string | null
+    inputStandard?: string | null
+    time?: string | null
+    structure?: string | null
+    matrixLearningOutcome?: string | null
+    summary?: string | null
+    learningDiagram?: string | null
+    guide?: string | null
+    renderPath?: string | null
+    outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
+    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
+    fixedClass?: FixedClassUncheckedCreateNestedOneWithoutCurriculumVersionInput
+    students?: StudentUncheckedCreateNestedManyWithoutCurriculumVersionInput
+    studentCurriculumVersionParallel?: StudentUncheckedCreateNestedManyWithoutCurriculumVersionParallelInput
+  }
+
+  export type CurriculumVersionCreateOrConnectWithoutTrainingCourseInput = {
+    where: CurriculumVersionWhereUniqueInput
+    create: XOR<CurriculumVersionCreateWithoutTrainingCourseInput, CurriculumVersionUncheckedCreateWithoutTrainingCourseInput>
+  }
+
+  export type CurriculumVersionCreateManyTrainingCourseInputEnvelope = {
+    data: CurriculumVersionCreateManyTrainingCourseInput | CurriculumVersionCreateManyTrainingCourseInput[]
     skipDuplicates?: boolean
   }
 
@@ -524773,6 +526103,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingCourseInput = {
@@ -524799,6 +526130,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput = {
@@ -524832,6 +526164,22 @@ export namespace Prisma {
     code?: StringFilter<"TrainingCourseRegulation"> | string
     name?: StringFilter<"TrainingCourseRegulation"> | string
     value?: FloatFilter<"TrainingCourseRegulation"> | number
+  }
+
+  export type CurriculumVersionUpsertWithWhereUniqueWithoutTrainingCourseInput = {
+    where: CurriculumVersionWhereUniqueInput
+    update: XOR<CurriculumVersionUpdateWithoutTrainingCourseInput, CurriculumVersionUncheckedUpdateWithoutTrainingCourseInput>
+    create: XOR<CurriculumVersionCreateWithoutTrainingCourseInput, CurriculumVersionUncheckedCreateWithoutTrainingCourseInput>
+  }
+
+  export type CurriculumVersionUpdateWithWhereUniqueWithoutTrainingCourseInput = {
+    where: CurriculumVersionWhereUniqueInput
+    data: XOR<CurriculumVersionUpdateWithoutTrainingCourseInput, CurriculumVersionUncheckedUpdateWithoutTrainingCourseInput>
+  }
+
+  export type CurriculumVersionUpdateManyWithWhereWithoutTrainingCourseInput = {
+    where: CurriculumVersionScalarWhereInput
+    data: XOR<CurriculumVersionUpdateManyMutationInput, CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseInput>
   }
 
   export type FixedClassUpsertWithWhereUniqueWithoutTrainingCourseInput = {
@@ -525219,6 +526567,7 @@ export namespace Prisma {
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -525271,6 +526620,7 @@ export namespace Prisma {
     reduceReExamScore?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -525339,6 +526689,7 @@ export namespace Prisma {
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -525391,6 +526742,7 @@ export namespace Prisma {
     reduceReExamScore?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -525734,6 +527086,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
@@ -525786,6 +527139,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -526186,10 +527540,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -526217,10 +527572,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -526805,6 +528161,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
@@ -526857,6 +528214,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -527147,10 +528505,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -527178,10 +528537,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -527418,6 +528778,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutCurriculumInput = {
@@ -527444,6 +528805,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutCurriculumInput = {
@@ -527561,10 +528923,11 @@ export namespace Prisma {
     renderPath?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -527592,10 +528955,11 @@ export namespace Prisma {
     isLock?: boolean
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -527818,6 +529182,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumInput = {
@@ -527844,6 +529209,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type DocumentFileUpsertWithWhereUniqueWithoutCurriculumInput = {
@@ -527976,6 +529342,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutCurriculumVersionInput = {
@@ -528002,11 +529369,123 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutCurriculumVersionInput = {
     where: TrainingObjectTypeWhereUniqueInput
     create: XOR<TrainingObjectTypeCreateWithoutCurriculumVersionInput, TrainingObjectTypeUncheckedCreateWithoutCurriculumVersionInput>
+  }
+
+  export type TrainingCourseCreateWithoutCurriculumVersionInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    startYear?: number | null
+    endYear?: number | null
+    academicYear?: string | null
+    maxTrainingTime?: number | null
+    admissionQuota?: number | null
+    admissionStartDate?: Date | string | null
+    admissionEndDate?: Date | string | null
+    admissionDecision?: string | null
+    studentRecognitionDecision?: string | null
+    regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
+    baseScore: $Enums.AcademicRankingBaseType
+    coef_1?: number
+    coef_2?: number
+    coef_3?: number
+    scoreToTakeExam?: number
+    scoreToPass?: number
+    scoreToPassConditional?: number
+    scoreToTakeGraduation?: number
+    scoreToPassGraduation?: number
+    maxReExamScore?: number
+    reduceReExamScore?: number
+    scoreToRetain?: number
+    semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
+    trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
+    scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
+    academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
+    scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
+    academicWarningRule?: AcademicWarningRuleCreateNestedManyWithoutTrainingCourseInput
+    academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
+    notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+    classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
+  }
+
+  export type TrainingCourseUncheckedCreateWithoutCurriculumVersionInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    semesterStartId: string
+    startYear?: number | null
+    endYear?: number | null
+    academicYear?: string | null
+    maxTrainingTime?: number | null
+    admissionQuota?: number | null
+    admissionStartDate?: Date | string | null
+    admissionEndDate?: Date | string | null
+    admissionDecision?: string | null
+    studentRecognitionDecision?: string | null
+    regulation?: string | null
+    trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
+    baseScore: $Enums.AcademicRankingBaseType
+    coef_1?: number
+    coef_2?: number
+    coef_3?: number
+    scoreToTakeExam?: number
+    scoreToPass?: number
+    scoreToPassConditional?: number
+    scoreToTakeGraduation?: number
+    scoreToPassGraduation?: number
+    maxReExamScore?: number
+    reduceReExamScore?: number
+    scoreToRetain?: number
+    trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
+    scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
+    academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
+    scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
+    academicWarningRule?: AcademicWarningRuleUncheckedCreateNestedManyWithoutTrainingCourseInput
+    academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+    classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
+  }
+
+  export type TrainingCourseCreateOrConnectWithoutCurriculumVersionInput = {
+    where: TrainingCourseWhereUniqueInput
+    create: XOR<TrainingCourseCreateWithoutCurriculumVersionInput, TrainingCourseUncheckedCreateWithoutCurriculumVersionInput>
   }
 
   export type TrainingLevelCreateWithoutCurriculumVersionInput = {
@@ -528767,6 +530246,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumVersionInput = {
@@ -528793,6 +530273,124 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+  }
+
+  export type TrainingCourseUpsertWithoutCurriculumVersionInput = {
+    update: XOR<TrainingCourseUpdateWithoutCurriculumVersionInput, TrainingCourseUncheckedUpdateWithoutCurriculumVersionInput>
+    create: XOR<TrainingCourseCreateWithoutCurriculumVersionInput, TrainingCourseUncheckedCreateWithoutCurriculumVersionInput>
+    where?: TrainingCourseWhereInput
+  }
+
+  export type TrainingCourseUpdateToOneWithWhereWithoutCurriculumVersionInput = {
+    where?: TrainingCourseWhereInput
+    data: XOR<TrainingCourseUpdateWithoutCurriculumVersionInput, TrainingCourseUncheckedUpdateWithoutCurriculumVersionInput>
+  }
+
+  export type TrainingCourseUpdateWithoutCurriculumVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
+    endYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
+    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+    coef_1?: FloatFieldUpdateOperationsInput | number
+    coef_2?: FloatFieldUpdateOperationsInput | number
+    coef_3?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    scoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+    maxReExamScore?: FloatFieldUpdateOperationsInput | number
+    reduceReExamScore?: FloatFieldUpdateOperationsInput | number
+    scoreToRetain?: FloatFieldUpdateOperationsInput | number
+    semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
+    trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
+    scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
+    academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
+    scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
+    academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
+    academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
+    notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+    classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
+  }
+
+  export type TrainingCourseUncheckedUpdateWithoutCurriculumVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
+    endYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
+    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+    coef_1?: FloatFieldUpdateOperationsInput | number
+    coef_2?: FloatFieldUpdateOperationsInput | number
+    coef_3?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    scoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+    maxReExamScore?: FloatFieldUpdateOperationsInput | number
+    reduceReExamScore?: FloatFieldUpdateOperationsInput | number
+    scoreToRetain?: FloatFieldUpdateOperationsInput | number
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+    classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
   }
 
   export type TrainingLevelUpsertWithoutCurriculumVersionInput = {
@@ -529849,6 +531447,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutSubjectVersionInput = {
@@ -529875,6 +531474,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutSubjectVersionInput = {
@@ -531084,6 +532684,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionInput = {
@@ -531110,6 +532711,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SubjectVersionCategoryUpsertWithoutSubjectVersionsInput = {
@@ -531708,7 +533310,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -531869,6 +533472,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -532181,7 +533785,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -532342,6 +533947,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -533321,6 +534927,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -533373,6 +534980,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -534338,6 +535946,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutSubjectClassInput = {
@@ -534364,6 +535973,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutSubjectClassInput = {
@@ -535592,6 +537202,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutSubjectClassInput = {
@@ -535618,6 +537229,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SemesterUpsertWithoutSubjectClassesInput = {
@@ -536568,7 +538180,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -536729,6 +538342,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -537045,7 +538659,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -537206,6 +538821,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -537933,7 +539549,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -538094,6 +539711,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -538854,6 +540472,7 @@ export namespace Prisma {
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -538906,6 +540525,7 @@ export namespace Prisma {
     reduceReExamScore?: number
     scoreToRetain?: number
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -539010,10 +540630,11 @@ export namespace Prisma {
     renderPath?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -539041,10 +540662,11 @@ export namespace Prisma {
     isLock?: boolean
     curriculumId: string
     type?: $Enums.CurriculumVersionType
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -539552,6 +541174,48 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TrainingBlockCreateWithoutTrainingObjectTypeInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    priority?: number
+    parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
+    children?: TrainingBlockCreateNestedManyWithoutParentInput
+    curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
+  }
+
+  export type TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    priority?: number
+    parentId?: string | null
+    children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
+    curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
+  }
+
+  export type TrainingBlockCreateOrConnectWithoutTrainingObjectTypeInput = {
+    where: TrainingBlockWhereUniqueInput
+    create: XOR<TrainingBlockCreateWithoutTrainingObjectTypeInput, TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput>
+  }
+
+  export type TrainingBlockCreateManyTrainingObjectTypeInputEnvelope = {
+    data: TrainingBlockCreateManyTrainingObjectTypeInput | TrainingBlockCreateManyTrainingObjectTypeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TrainingFormUpsertWithoutTrainingObjectTypeInput = {
     update: XOR<TrainingFormUpdateWithoutTrainingObjectTypeInput, TrainingFormUncheckedUpdateWithoutTrainingObjectTypeInput>
     create: XOR<TrainingFormCreateWithoutTrainingObjectTypeInput, TrainingFormUncheckedCreateWithoutTrainingObjectTypeInput>
@@ -539852,6 +541516,40 @@ export namespace Prisma {
     data: XOR<ThesisSessionUpdateManyMutationInput, ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeInput>
   }
 
+  export type TrainingBlockUpsertWithWhereUniqueWithoutTrainingObjectTypeInput = {
+    where: TrainingBlockWhereUniqueInput
+    update: XOR<TrainingBlockUpdateWithoutTrainingObjectTypeInput, TrainingBlockUncheckedUpdateWithoutTrainingObjectTypeInput>
+    create: XOR<TrainingBlockCreateWithoutTrainingObjectTypeInput, TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput>
+  }
+
+  export type TrainingBlockUpdateWithWhereUniqueWithoutTrainingObjectTypeInput = {
+    where: TrainingBlockWhereUniqueInput
+    data: XOR<TrainingBlockUpdateWithoutTrainingObjectTypeInput, TrainingBlockUncheckedUpdateWithoutTrainingObjectTypeInput>
+  }
+
+  export type TrainingBlockUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
+    where: TrainingBlockScalarWhereInput
+    data: XOR<TrainingBlockUpdateManyMutationInput, TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeInput>
+  }
+
+  export type TrainingBlockScalarWhereInput = {
+    AND?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
+    OR?: TrainingBlockScalarWhereInput[]
+    NOT?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
+    id?: StringFilter<"TrainingBlock"> | string
+    code?: StringNullableFilter<"TrainingBlock"> | string | null
+    active?: BoolFilter<"TrainingBlock"> | boolean
+    description?: StringNullableFilter<"TrainingBlock"> | string | null
+    deletedAt?: DateTimeNullableFilter<"TrainingBlock"> | Date | string | null
+    createdAt?: DateTimeFilter<"TrainingBlock"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingBlock"> | Date | string
+    createdBy?: UuidNullableFilter<"TrainingBlock"> | string | null
+    name?: StringFilter<"TrainingBlock"> | string
+    trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
+    priority?: IntFilter<"TrainingBlock"> | number
+    parentId?: StringNullableFilter<"TrainingBlock"> | string | null
+  }
+
   export type StudentCreateWithoutPriorityObjectInput = {
     id?: string
     code?: string | null
@@ -540046,9 +541744,10 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -540077,9 +541776,10 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -540160,9 +541860,10 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -540191,9 +541892,10 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -540249,6 +541951,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingLevelInput = {
@@ -540275,6 +541978,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingLevelInput = {
@@ -540362,6 +542066,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingFormInput = {
@@ -540388,6 +542093,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingFormInput = {
@@ -542301,6 +544007,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput = {
@@ -542327,6 +544034,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput = {
@@ -542418,6 +544126,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput = {
@@ -542444,6 +544153,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type DM_DonViCreateWithoutTrainingMajorsInput = {
@@ -543595,6 +545305,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingMajorsInput = {
@@ -543621,6 +545332,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingMajorsInput = {
@@ -543726,6 +545438,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingMajorsInput = {
@@ -543752,6 +545465,66 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+  }
+
+  export type TrainingObjectTypeCreateWithoutTrainingBlocksInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
+    trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
+    trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
+    curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
+    graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
+    planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
+    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+  }
+
+  export type TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    type: $Enums.TrainingObjectTypes
+    trainingFormId?: string | null
+    trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
+    trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+  }
+
+  export type TrainingObjectTypeCreateOrConnectWithoutTrainingBlocksInput = {
+    where: TrainingObjectTypeWhereUniqueInput
+    create: XOR<TrainingObjectTypeCreateWithoutTrainingBlocksInput, TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput>
   }
 
   export type TrainingBlockCreateWithoutChildrenInput = {
@@ -543765,6 +545538,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     priority?: number
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
     parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
   }
@@ -543779,6 +545553,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    trainingObjectTypeId: string
     priority?: number
     parentId?: string | null
     curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
@@ -543800,6 +545575,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     priority?: number
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
     children?: TrainingBlockCreateNestedManyWithoutParentInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutTrainingBlockInput
   }
@@ -543814,6 +545590,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    trainingObjectTypeId: string
     priority?: number
     children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
@@ -543869,6 +545646,71 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TrainingObjectTypeUpsertWithoutTrainingBlocksInput = {
+    update: XOR<TrainingObjectTypeUpdateWithoutTrainingBlocksInput, TrainingObjectTypeUncheckedUpdateWithoutTrainingBlocksInput>
+    create: XOR<TrainingObjectTypeCreateWithoutTrainingBlocksInput, TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput>
+    where?: TrainingObjectTypeWhereInput
+  }
+
+  export type TrainingObjectTypeUpdateToOneWithWhereWithoutTrainingBlocksInput = {
+    where?: TrainingObjectTypeWhereInput
+    data: XOR<TrainingObjectTypeUpdateWithoutTrainingBlocksInput, TrainingObjectTypeUncheckedUpdateWithoutTrainingBlocksInput>
+  }
+
+  export type TrainingObjectTypeUpdateWithoutTrainingBlocksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
+    trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
+    trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
+    curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
+    graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+    planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
+    thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+  }
+
+  export type TrainingObjectTypeUncheckedUpdateWithoutTrainingBlocksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
+    trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+  }
+
   export type TrainingBlockUpsertWithoutChildrenInput = {
     update: XOR<TrainingBlockUpdateWithoutChildrenInput, TrainingBlockUncheckedUpdateWithoutChildrenInput>
     create: XOR<TrainingBlockCreateWithoutChildrenInput, TrainingBlockUncheckedCreateWithoutChildrenInput>
@@ -543891,6 +545733,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
     parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
   }
@@ -543905,6 +545748,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
@@ -543924,23 +545768,6 @@ export namespace Prisma {
   export type TrainingBlockUpdateManyWithWhereWithoutParentInput = {
     where: TrainingBlockScalarWhereInput
     data: XOR<TrainingBlockUpdateManyMutationInput, TrainingBlockUncheckedUpdateManyWithoutParentInput>
-  }
-
-  export type TrainingBlockScalarWhereInput = {
-    AND?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
-    OR?: TrainingBlockScalarWhereInput[]
-    NOT?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
-    id?: StringFilter<"TrainingBlock"> | string
-    code?: StringNullableFilter<"TrainingBlock"> | string | null
-    active?: BoolFilter<"TrainingBlock"> | boolean
-    description?: StringNullableFilter<"TrainingBlock"> | string | null
-    deletedAt?: DateTimeNullableFilter<"TrainingBlock"> | Date | string | null
-    createdAt?: DateTimeFilter<"TrainingBlock"> | Date | string
-    updatedAt?: DateTimeFilter<"TrainingBlock"> | Date | string
-    createdBy?: UuidNullableFilter<"TrainingBlock"> | string | null
-    name?: StringFilter<"TrainingBlock"> | string
-    priority?: IntFilter<"TrainingBlock"> | number
-    parentId?: StringNullableFilter<"TrainingBlock"> | string | null
   }
 
   export type TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutTrainingBlockInput = {
@@ -543970,6 +545797,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     priority?: number
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
     parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
     children?: TrainingBlockCreateNestedManyWithoutParentInput
   }
@@ -543984,6 +545812,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    trainingObjectTypeId: string
     priority?: number
     parentId?: string | null
     children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
@@ -544027,10 +545856,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     fixedClass?: FixedClassCreateNestedOneWithoutCurriculumVersionInput
@@ -544058,10 +545888,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -544153,6 +545984,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
     parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
     children?: TrainingBlockUpdateManyWithoutParentNestedInput
   }
@@ -544167,6 +545999,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
@@ -544216,10 +546049,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     fixedClass?: FixedClassUpdateOneWithoutCurriculumVersionNestedInput
@@ -544247,10 +546081,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544320,9 +546155,10 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -544351,9 +546187,10 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -544936,9 +546773,10 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -544967,9 +546805,10 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -545206,6 +547045,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
@@ -545258,6 +547098,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -545326,6 +547167,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
@@ -545378,6 +547220,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -545582,10 +547425,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
     fixedClass?: FixedClassCreateNestedOneWithoutCurriculumVersionInput
@@ -545613,10 +547457,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -545723,10 +547568,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
     fixedClass?: FixedClassUpdateOneWithoutCurriculumVersionNestedInput
@@ -545754,10 +547600,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546219,7 +548066,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -546380,6 +548228,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -546516,10 +548365,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -546547,10 +548397,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -546609,10 +548460,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
@@ -546640,10 +548492,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -548099,7 +549952,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -548260,6 +550114,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -548408,10 +550263,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -548439,10 +550295,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -548507,10 +550364,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -548538,10 +550396,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -550153,6 +552012,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -550205,6 +552065,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -550649,6 +552510,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -550701,6 +552563,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -550834,10 +552697,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
-    trainingType: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
-    trainingTime: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
-    diplomaType: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingCourse?: TrainingCourseCreateNestedOneWithoutCurriculumVersionInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
+    trainingType?: TrainingTypeCreateNestedOneWithoutCurriculumVersionInput
+    trainingTime?: TrainingTimeCreateNestedOneWithoutCurriculumVersionInput
+    diplomaType?: DiplomaTypeCreateNestedOneWithoutCurriculumVersionInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumVersionInput
     fixedClass?: FixedClassCreateNestedOneWithoutCurriculumVersionInput
@@ -550865,10 +552729,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -551760,6 +553625,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -551812,6 +553678,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -551963,10 +553830,11 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
     fixedClass?: FixedClassUpdateOneWithoutCurriculumVersionNestedInput
@@ -551994,10 +553862,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -552912,6 +554781,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -552964,6 +554834,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -553118,6 +554989,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -553170,6 +555042,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -554223,6 +556096,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingScoreSessionInput = {
@@ -554249,6 +556123,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingScoreSessionInput = {
@@ -554400,6 +556275,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingScoreSessionInput = {
@@ -554426,6 +556302,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type StudentTrainingScoreUpsertWithWhereUniqueWithoutTrainingScoreSessionInput = {
@@ -555332,7 +557209,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -555493,6 +557371,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -557009,7 +558888,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -557170,6 +559050,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -557908,7 +559789,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -558069,6 +559951,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -558384,7 +560267,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -558545,6 +560429,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -559726,6 +561611,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput = {
@@ -559752,6 +561638,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutThesisSessionInput = {
@@ -559798,6 +561685,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -559850,6 +561738,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -559999,6 +561888,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput = {
@@ -560025,6 +561915,7 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingCourseUpsertWithoutThesisSessionInput = {
@@ -560077,6 +561968,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -560129,6 +562021,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -566147,7 +568040,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -566308,6 +568202,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -566632,7 +568527,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -566793,6 +568689,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -569175,7 +571072,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -569336,6 +571234,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -569576,7 +571475,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -569737,6 +571637,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -570073,6 +571974,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -570125,6 +572027,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -572991,7 +574894,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -573152,6 +575056,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -573644,7 +575549,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -573805,6 +575711,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -578424,7 +580331,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -578585,6 +580493,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -578991,7 +580900,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -579152,6 +581062,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -579516,7 +581427,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -579677,6 +581589,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -580023,7 +581936,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -580184,6 +582098,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -580445,6 +582360,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -580497,6 +582413,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -580651,6 +582568,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -580703,6 +582621,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -581405,6 +583324,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutGraduationSessionInput = {
@@ -581431,6 +583351,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutGraduationSessionInput = {
@@ -581533,6 +583454,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutGraduationSessionInput = {
@@ -581559,6 +583481,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutSessionInput = {
@@ -584329,6 +586252,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
@@ -584381,6 +586305,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -584847,6 +586772,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
@@ -584899,6 +586825,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -587546,6 +589473,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
     trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -587598,6 +589526,7 @@ export namespace Prisma {
     scoreToRetain?: number
     trainingObjectTypeId: string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -587703,6 +589632,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -587755,6 +589685,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -589113,7 +591044,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -589274,6 +591206,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -589596,7 +591529,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -589757,6 +591691,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -590026,7 +591961,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -590187,6 +592123,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -590394,7 +592331,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -590555,6 +592493,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -590762,7 +592701,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -590923,6 +592863,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -591130,7 +593071,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -591291,6 +593233,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -591498,7 +593441,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -591659,6 +593603,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -592244,7 +594189,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -592405,6 +594351,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -592612,7 +594559,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -592773,6 +594721,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -592980,7 +594929,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -593141,6 +595091,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -593530,7 +595481,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -593691,6 +595643,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -593898,7 +595851,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -594059,6 +596013,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -594266,7 +596221,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -594427,6 +596383,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -594634,7 +596591,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
     relatives?: RelativeCreateNestedManyWithoutUserProfileInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
@@ -594795,6 +596753,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -598188,6 +600147,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -598481,7 +600441,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -598642,6 +600603,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -598813,6 +600775,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -599594,6 +601557,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -599748,7 +601712,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -599909,6 +601874,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600080,6 +602046,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600254,6 +602221,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -600393,7 +602361,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -600554,6 +602523,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600725,6 +602695,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600854,6 +602825,137 @@ export namespace Prisma {
     CPVJoinDate?: Date | string | null
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
+    chucVuChinhQuyenId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+  }
+
+  export type UserProfileCreateManyChucVuChinhQuyenInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    bLaNguoiDung?: boolean | null
+    bLaGiangVien?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    groupId?: string | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    tinhTrangHonNhanId?: string | null
+    trangThaiLamViecId?: string | null
+    dM_ChucDanhCMNVGiangVienId?: string | null
+    dM_ChucDanhCMNVNghienCuuVienId?: string | null
+    dM_ChucDanhCMNVKySuId?: string | null
+    dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
+    dM_XepLoaiDanhGiaCanBoId?: string | null
+    dM_HinhThucKhenThuongChinhQuyenId?: string | null
+    dM_HinhThucKhenThuongDangId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -601033,6 +603135,7 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -601193,6 +603296,7 @@ export namespace Prisma {
     CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -601364,6 +603468,481 @@ export namespace Prisma {
     CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserProfileUpdateWithoutChucVuChinhQuyenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: GroupUpdateOneWithoutUserProfileNestedInput
+    provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+    provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+    religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+    ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+    provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+    districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+    communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+    newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+    newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+    rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+    level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+    sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+    nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+    tinhTrangHonNhan?: DM_TinhTrangHonNhanUpdateOneWithoutUserProfileNestedInput
+    trangThaiLamViec?: DM_TrangThaiLamViecUpdateOneWithoutUserProfileNestedInput
+    dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienUpdateOneWithoutUserProfileNestedInput
+    dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
+    dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
+    dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
+    dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
+    dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
+    dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+    trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+    studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
+    staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
+    subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
+    changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+    surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+    evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+    classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutChucVuChinhQuyenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
+    trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+    relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+    staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+    subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+    changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+    surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+    evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+    classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
+    trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -601610,6 +604189,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -601765,7 +604345,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -601926,6 +604507,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -602097,6 +604679,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -602274,6 +604857,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -602429,7 +605013,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -602590,6 +605175,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -602761,6 +605347,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -602938,6 +605525,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -603092,7 +605680,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -603253,6 +605842,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -603424,6 +606014,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -605269,6 +607860,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -605408,7 +608000,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -605569,6 +608162,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -605740,6 +608334,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -606001,6 +608596,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -606140,7 +608736,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -606301,6 +608898,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -606472,6 +609070,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -606673,6 +609272,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -606875,7 +609475,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -607036,6 +609637,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -607207,6 +609809,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -607381,6 +609984,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -607510,6 +610114,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -607639,6 +610244,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -607768,6 +610374,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -607920,7 +610527,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -608081,6 +610689,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -608252,6 +610861,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -608391,7 +611001,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -608552,6 +611163,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -608723,6 +611335,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -608862,7 +611475,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -609023,6 +611637,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609194,6 +611809,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609333,7 +611949,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -609494,6 +612111,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609665,6 +612283,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609839,6 +612458,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -609968,6 +612588,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -610097,6 +612718,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -610226,6 +612848,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -610378,7 +613001,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -610539,6 +613163,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -610710,6 +613335,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -610849,7 +613475,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -611010,6 +613637,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -611181,6 +613809,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -611320,7 +613949,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -611481,6 +614111,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -611652,6 +614283,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -611791,7 +614423,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -611952,6 +614585,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -612123,6 +614757,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -612297,6 +614932,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -612426,6 +615062,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -612555,6 +615192,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -612684,6 +615322,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -612823,7 +615462,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -612984,6 +615624,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613155,6 +615796,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613294,7 +615936,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -613455,6 +616098,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613626,6 +616270,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613765,7 +616410,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -613926,6 +616572,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614097,6 +616744,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614236,7 +616884,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -614397,6 +617046,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614568,6 +617218,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614697,6 +617348,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -614826,6 +617478,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -614955,6 +617608,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -615084,6 +617738,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -615223,7 +617878,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -615384,6 +618040,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -615555,6 +618212,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -615694,7 +618352,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -615855,6 +618514,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -616026,6 +618686,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -616165,7 +618826,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -616326,6 +618988,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -616497,6 +619160,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -616636,7 +619300,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -616797,6 +619462,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -616968,6 +619634,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -617097,6 +619764,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -617226,6 +619894,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -617355,6 +620024,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -617484,6 +620154,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -617623,7 +620294,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -617784,6 +620456,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -617955,6 +620628,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -618094,7 +620768,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -618255,6 +620930,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -618426,6 +621102,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -618565,7 +621242,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -618726,6 +621404,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -618897,6 +621576,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -619036,7 +621716,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -619197,6 +621878,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -619368,6 +622050,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -621238,6 +623921,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -621290,6 +623974,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -622042,10 +624727,11 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -622099,6 +624785,7 @@ export namespace Prisma {
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -622151,6 +624838,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -622236,10 +624924,11 @@ export namespace Prisma {
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -622267,10 +624956,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622311,10 +625001,11 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622341,6 +625032,45 @@ export namespace Prisma {
     code: string
     name: string
     value: number
+  }
+
+  export type CurriculumVersionCreateManyTrainingCourseInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    code?: string | null
+    name: string
+    shortName?: string | null
+    englishName?: string | null
+    trainingLanguageId?: string | null
+    numberOfSemesters?: number | null
+    yearCreation?: number | null
+    yearApplication?: number | null
+    isLock?: boolean
+    curriculumId: string
+    type?: $Enums.CurriculumVersionType
+    trainingObjectTypeId: string
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
+    requiredCredits?: number | null
+    electiveCredits?: number | null
+    jobPosition?: string | null
+    objectives?: string | null
+    learningOutcome?: string | null
+    inputStandard?: string | null
+    time?: string | null
+    structure?: string | null
+    matrixLearningOutcome?: string | null
+    summary?: string | null
+    learningDiagram?: string | null
+    guide?: string | null
+    renderPath?: string | null
   }
 
   export type FixedClassCreateManyTrainingCourseInput = {
@@ -622557,6 +625287,135 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     value?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type CurriculumVersionUpdateWithoutTrainingCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
+    yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
+    yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+    isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
+    requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    inputStandard?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableStringFieldUpdateOperationsInput | string | null
+    structure?: NullableStringFieldUpdateOperationsInput | string | null
+    matrixLearningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
+    guide?: NullableStringFieldUpdateOperationsInput | string | null
+    renderPath?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
+    curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
+    outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
+    trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
+    fixedClass?: FixedClassUpdateOneWithoutCurriculumVersionNestedInput
+    students?: StudentUpdateManyWithoutCurriculumVersionNestedInput
+    studentCurriculumVersionParallel?: StudentUpdateManyWithoutCurriculumVersionParallelNestedInput
+  }
+
+  export type CurriculumVersionUncheckedUpdateWithoutTrainingCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
+    yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
+    yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+    isLock?: BoolFieldUpdateOperationsInput | boolean
+    curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    inputStandard?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableStringFieldUpdateOperationsInput | string | null
+    structure?: NullableStringFieldUpdateOperationsInput | string | null
+    matrixLearningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
+    guide?: NullableStringFieldUpdateOperationsInput | string | null
+    renderPath?: NullableStringFieldUpdateOperationsInput | string | null
+    outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
+    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
+    fixedClass?: FixedClassUncheckedUpdateOneWithoutCurriculumVersionNestedInput
+    students?: StudentUncheckedUpdateManyWithoutCurriculumVersionNestedInput
+    studentCurriculumVersionParallel?: StudentUncheckedUpdateManyWithoutCurriculumVersionParallelNestedInput
+  }
+
+  export type CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
+    yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
+    yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+    isLock?: BoolFieldUpdateOperationsInput | boolean
+    curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    inputStandard?: NullableStringFieldUpdateOperationsInput | string | null
+    time?: NullableStringFieldUpdateOperationsInput | string | null
+    structure?: NullableStringFieldUpdateOperationsInput | string | null
+    matrixLearningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
+    guide?: NullableStringFieldUpdateOperationsInput | string | null
+    renderPath?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FixedClassUpdateWithoutTrainingCourseInput = {
@@ -623845,10 +626704,11 @@ export namespace Prisma {
     isLock?: boolean
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -623998,10 +626858,11 @@ export namespace Prisma {
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -624029,10 +626890,11 @@ export namespace Prisma {
     isLock?: BoolFieldUpdateOperationsInput | boolean
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -624073,10 +626935,11 @@ export namespace Prisma {
     isLock?: BoolFieldUpdateOperationsInput | boolean
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -626934,6 +629797,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -626986,6 +629850,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -628175,7 +631040,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -628336,6 +631202,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -628507,6 +631374,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -628596,10 +631464,11 @@ export namespace Prisma {
     isLock?: boolean
     curriculumId: string
     type?: $Enums.CurriculumVersionType
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -628784,6 +631653,20 @@ export namespace Prisma {
     chief?: string | null
   }
 
+  export type TrainingBlockCreateManyTrainingObjectTypeInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    priority?: number
+    parentId?: string | null
+  }
+
   export type TrainingCourseUpdateWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628822,6 +631705,7 @@ export namespace Prisma {
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -628874,6 +631758,7 @@ export namespace Prisma {
     reduceReExamScore?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -629014,10 +631899,11 @@ export namespace Prisma {
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -629045,10 +631931,11 @@ export namespace Prisma {
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629089,10 +631976,11 @@ export namespace Prisma {
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629673,6 +632561,52 @@ export namespace Prisma {
     chief?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type TrainingBlockUpdateWithoutTrainingObjectTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
+    children?: TrainingBlockUpdateManyWithoutParentNestedInput
+    curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
+  }
+
+  export type TrainingBlockUncheckedUpdateWithoutTrainingObjectTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
+    curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
+  }
+
+  export type TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type StudentUpdateWithoutPriorityObjectInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629880,9 +632814,10 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -629931,9 +632866,10 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -629962,9 +632898,10 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630006,9 +632943,10 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630044,9 +632982,10 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingTypeId: string
-    trainingTimeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -630110,9 +633049,10 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -630141,9 +633081,10 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630185,9 +633126,10 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630227,6 +633169,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingLevelInput = {
@@ -630253,6 +633196,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingLevelInput = {
@@ -630309,6 +633253,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFormInput = {
@@ -630335,6 +633280,7 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFormInput = {
@@ -632369,6 +635315,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    trainingObjectTypeId: string
     priority?: number
   }
 
@@ -632397,6 +635344,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
     children?: TrainingBlockUpdateManyWithoutParentNestedInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionUpdateManyWithoutTrainingBlockNestedInput
   }
@@ -632411,6 +635359,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
     children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
     curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
@@ -632426,6 +635375,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
   }
 
@@ -632559,9 +635509,10 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    diplomaTypeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    diplomaTypeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -632610,9 +635561,10 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    diplomaType?: DiplomaTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    diplomaType?: DiplomaTypeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -632641,9 +635593,10 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -632685,9 +635638,10 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    diplomaTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -632964,9 +635918,10 @@ export namespace Prisma {
     curriculumId: string
     type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
-    trainingLevelId: string
-    trainingTypeId: string
-    trainingTimeId: string
+    trainingCourseId?: string | null
+    trainingLevelId?: string | null
+    trainingTypeId?: string | null
+    trainingTimeId?: string | null
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -633057,9 +636012,10 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingType?: TrainingTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
-    trainingTime?: TrainingTimeUpdateOneRequiredWithoutCurriculumVersionNestedInput
+    trainingCourse?: TrainingCourseUpdateOneWithoutCurriculumVersionNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutCurriculumVersionNestedInput
+    trainingType?: TrainingTypeUpdateOneWithoutCurriculumVersionNestedInput
+    trainingTime?: TrainingTimeUpdateOneWithoutCurriculumVersionNestedInput
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumVersionNestedInput
@@ -633088,9 +636044,10 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -633132,9 +636089,10 @@ export namespace Prisma {
     curriculumId?: StringFieldUpdateOperationsInput | string
     type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingLevelId?: StringFieldUpdateOperationsInput | string
-    trainingTypeId?: StringFieldUpdateOperationsInput | string
-    trainingTimeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingTimeId?: NullableStringFieldUpdateOperationsInput | string | null
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635135,6 +638093,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -635187,6 +638146,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -641767,6 +644727,7 @@ export namespace Prisma {
     trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
     trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -641819,6 +644780,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -646952,6 +649914,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -647091,7 +650054,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -647252,6 +650216,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -647423,6 +650388,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -647679,6 +650645,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -647818,7 +650785,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -647979,6 +650947,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -648150,6 +651119,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -648351,6 +651321,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -648490,7 +651461,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -648651,6 +651623,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -648822,6 +651795,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -648951,6 +651925,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -649090,7 +652065,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -649251,6 +652227,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -649422,6 +652399,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -649551,6 +652529,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -649690,7 +652669,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -649851,6 +652831,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -650022,6 +653003,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -650151,6 +653133,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -650290,7 +653273,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -650451,6 +653435,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -650622,6 +653607,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -650751,6 +653737,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -650890,7 +653877,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -651051,6 +654039,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -651222,6 +654211,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -651795,6 +654785,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -651934,7 +654925,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -652095,6 +655087,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -652266,6 +655259,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -652395,6 +655389,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -652534,7 +655529,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -652695,6 +655691,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -652866,6 +655863,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -652995,6 +655993,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -653134,7 +656133,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -653295,6 +656295,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -653466,6 +656467,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -653803,6 +656805,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -653942,7 +656945,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -654103,6 +657107,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -654274,6 +657279,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -654403,6 +657409,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -654542,7 +657549,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -654703,6 +657711,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -654874,6 +657883,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -655003,6 +658013,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -655142,7 +658153,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -655303,6 +658315,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -655474,6 +658487,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -655603,6 +658617,7 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -655742,7 +658757,8 @@ export namespace Prisma {
     dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
     dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
     relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
     trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
     trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
@@ -655903,6 +658919,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -656074,6 +659091,7 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

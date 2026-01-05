@@ -85,6 +85,7 @@ const relationSchema = z.object({
     trainingLanguage: z.record(z.string(), z.unknown()).optional(),
     trainingObjectType: z.record(z.string(), z.unknown()),
     trainingCourseRegulation: z.array(z.unknown()).optional(),
+    curriculumVersion: z.array(z.unknown()).optional(),
     fixedClass: z.array(z.unknown()).optional(),
     scoreConverts: z.array(z.unknown()).optional(),
     academicRankingConvert: z.array(z.unknown()).optional(),
