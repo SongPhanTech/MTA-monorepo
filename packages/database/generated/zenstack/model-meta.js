@@ -1356,6 +1356,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'userProfile',
+                }, quaTrinhChucVuChinhQuyen: {
+                    name: "quaTrinhChucVuChinhQuyen",
+                    type: "ChucVuChinhQuyen",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'userProfile',
+                }, quaTrinhChucVuDang: {
+                    name: "quaTrinhChucVuDang",
+                    type: "ChucVuDang",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'userProfile',
                 }, trinhDoHocVan: {
                     name: "trinhDoHocVan",
                     type: "DM_TrinhDoHocVan",
@@ -1583,6 +1595,174 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'userProfile',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
+        },
+        chucVuChinhQuyen: {
+            name: 'ChucVuChinhQuyen', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ChucVuChinhQuyen$createdBy,
+                }, chucVuChinhQuyen: {
+                    name: "chucVuChinhQuyen",
+                    type: "DM_ChucVu",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'chucVuChinhQuyen',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "chucVuChinhQuyenId" },
+                }, chucVuChinhQuyenId: {
+                    name: "chucVuChinhQuyenId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'chucVuChinhQuyen',
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'quaTrinhChucVuChinhQuyen',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'userProfile',
+                }, address: {
+                    name: "address",
+                    type: "String",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
+        },
+        chucVuDang: {
+            name: 'ChucVuDang', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ChucVuDang$createdBy,
+                }, chucVuDang: {
+                    name: "chucVuDang",
+                    type: "DM_ChucVu",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'chucVuDang',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "chucVuDangId" },
+                }, chucVuDangId: {
+                    name: "chucVuDangId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'chucVuDang',
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'quaTrinhChucVuDang',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'userProfile',
+                }, address: {
+                    name: "address",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -5283,6 +5463,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'chucVu',
+                }, chucVuChinhQuyen: {
+                    name: "chucVuChinhQuyen",
+                    type: "ChucVuChinhQuyen",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'chucVuChinhQuyen',
+                }, chucVuDang: {
+                    name: "chucVuDang",
+                    type: "ChucVuDang",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'chucVuDang',
                 },
             }, uniqueConstraints: {
                 Id: {
@@ -13188,11 +13380,6 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -13220,6 +13407,10 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$TrainingBlock$createdBy,
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -13273,9 +13464,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, trainingObjectTypeId_name: {
                     name: "trainingObjectTypeId_name",
                     fields: ["trainingObjectTypeId", "name"]
@@ -26584,6 +26772,12 @@ function $default$UserProfile$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$HocHam$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ChucVuChinhQuyen$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ChucVuDang$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$HocVi$createdBy(user) {

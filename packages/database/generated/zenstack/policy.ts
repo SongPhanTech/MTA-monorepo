@@ -166,6 +166,46 @@ const policy: PolicyDef = {
             },
 
         },
+        chucVuChinhQuyen: {
+            modelLevel: {
+                read: { guard: ChucVuChinhQuyen_read, },
+                create: { guard: ChucVuChinhQuyen_create, inputChecker: ChucVuChinhQuyen_create_input, },
+                update: { guard: ChucVuChinhQuyen_update, },
+                postUpdate: { guard: ChucVuChinhQuyen_postUpdate, },
+                delete: { guard: ChucVuChinhQuyen_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        chucVuDang: {
+            modelLevel: {
+                read: { guard: ChucVuDang_read, },
+                create: { guard: ChucVuDang_create, inputChecker: ChucVuDang_create_input, },
+                update: { guard: ChucVuDang_update, },
+                postUpdate: { guard: ChucVuDang_postUpdate, },
+                delete: { guard: ChucVuDang_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         hocVi: {
             modelLevel: {
                 read: { guard: HocVi_read, },
@@ -5153,6 +5193,8 @@ const policy: PolicyDef = {
         changeLog: { hasValidation: false },
         userProfile: { hasValidation: false },
         hocHam: { hasValidation: false },
+        chucVuChinhQuyen: { hasValidation: false },
+        chucVuDang: { hasValidation: false },
         hocVi: { hasValidation: false },
         relative: { hasValidation: false },
         trinhDoLyLuanChinhTri: { hasValidation: false },
@@ -5704,6 +5746,136 @@ function HocHam_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_HocHam_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ChucVuChinhQuyen_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ChucVuChinhQuyen_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ChucVuChinhQuyen_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ChucVuChinhQuyen_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ChucVuChinhQuyen_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ChucVuChinhQuyen_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ChucVuChinhQuyen_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ChucVuChinhQuyen_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ChucVuChinhQuyen_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ChucVuChinhQuyen_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ChucVuChinhQuyen_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ChucVuDang_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ChucVuDang_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ChucVuDang_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ChucVuDang_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ChucVuDang_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ChucVuDang_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ChucVuDang_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ChucVuDang_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ChucVuDang_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ChucVuDang_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ChucVuDang_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

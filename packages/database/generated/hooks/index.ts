@@ -9,6 +9,8 @@ export * from './suggestion';
 export * from './change-log';
 export * from './user-profile';
 export * from './hoc-ham';
+export * from './chuc-vu-chinh-quyen';
+export * from './chuc-vu-dang';
 export * from './hoc-vi';
 export * from './relative';
 export * from './trinh-do-ly-luan-chinh-tri';

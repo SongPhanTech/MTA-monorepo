@@ -59,6 +59,8 @@ model DM_ChucVu extends CoreBase {
   userProfile         UserProfile[]         @relation("chucVuChinhQuyen")
   quaTrinhCongTac     QuaTrinhCongTac[]
   quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
+  chucVuChinhQuyen    ChucVuChinhQuyen[]
+  chucVuDang          ChucVuDang[]
 
   @@schema("mta")
 }

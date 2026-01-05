@@ -70,6 +70,32 @@ const policy = {
                 update: {},
             },
         },
+        chucVuChinhQuyen: {
+            modelLevel: {
+                read: { guard: ChucVuChinhQuyen_read, },
+                create: { guard: ChucVuChinhQuyen_create, inputChecker: ChucVuChinhQuyen_create_input, },
+                update: { guard: ChucVuChinhQuyen_update, },
+                postUpdate: { guard: ChucVuChinhQuyen_postUpdate, },
+                delete: { guard: ChucVuChinhQuyen_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        chucVuDang: {
+            modelLevel: {
+                read: { guard: ChucVuDang_read, },
+                create: { guard: ChucVuDang_create, inputChecker: ChucVuDang_create_input, },
+                update: { guard: ChucVuDang_update, },
+                postUpdate: { guard: ChucVuDang_postUpdate, },
+                delete: { guard: ChucVuDang_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         hocVi: {
             modelLevel: {
                 read: { guard: HocVi_read, },
@@ -3314,6 +3340,8 @@ const policy = {
         changeLog: { hasValidation: false },
         userProfile: { hasValidation: false },
         hocHam: { hasValidation: false },
+        chucVuChinhQuyen: { hasValidation: false },
+        chucVuDang: { hasValidation: false },
         hocVi: { hasValidation: false },
         relative: { hasValidation: false },
         trinhDoLyLuanChinhTri: { hasValidation: false },
@@ -3903,6 +3931,162 @@ function HocHam_delete(context, db) {
     return { OR: [] };
 }
 function $check_HocHam_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChucVuChinhQuyen_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ChucVuChinhQuyen_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChucVuChinhQuyen_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChucVuChinhQuyen_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChucVuChinhQuyen_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ChucVuChinhQuyen_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChucVuChinhQuyen_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChucVuChinhQuyen_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ChucVuChinhQuyen_postUpdate(input, context) {
+    return true;
+}
+function ChucVuChinhQuyen_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChucVuChinhQuyen_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChucVuDang_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ChucVuDang_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChucVuDang_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChucVuDang_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChucVuDang_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ChucVuDang_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChucVuDang_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChucVuDang_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ChucVuDang_postUpdate(input, context) {
+    return true;
+}
+function ChucVuDang_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChucVuDang_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

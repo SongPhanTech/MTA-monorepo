@@ -246,6 +246,8 @@ const relationSchema = z.object({
     quaTrinhHocTap: z.array(z.unknown()).optional(),
     ToChucXaHoi: z.array(z.unknown()).optional(),
     QuaTrinhLuong: z.array(z.unknown()).optional(),
+    quaTrinhChucVuChinhQuyen: z.array(z.unknown()).optional(),
+    quaTrinhChucVuDang: z.array(z.unknown()).optional(),
     trinhDoHocVan: z.record(z.string(), z.unknown()).optional(),
     educationAndTraining: z.array(z.unknown()).optional(),
     lecturer: z.record(z.string(), z.unknown()).optional(),

@@ -59,6 +59,26 @@ export type UserProfile = $Result.DefaultSelection<Prisma.$UserProfilePayload>;
  */
 export type HocHam = $Result.DefaultSelection<Prisma.$HocHamPayload>;
 /**
+ * Model ChucVuChinhQuyen
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ChucVuChinhQuyen = $Result.DefaultSelection<Prisma.$ChucVuChinhQuyenPayload>;
+/**
+ * Model ChucVuDang
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ChucVuDang = $Result.DefaultSelection<Prisma.$ChucVuDangPayload>;
+/**
  * Model HocVi
  * @
  * @allow ('all', auth() != null)
@@ -70,6 +90,7 @@ export type HocHam = $Result.DefaultSelection<Prisma.$HocHamPayload>;
 export type HocVi = $Result.DefaultSelection<Prisma.$HocViPayload>;
 /**
  * Model Relative
+ * Thân nhân
  * @
  * @allow ('all', auth() != null)
  * @
@@ -2792,6 +2813,24 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get hocHam(): Prisma.HocHamDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.chucVuChinhQuyen`: Exposes CRUD operations for the **ChucVuChinhQuyen** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ChucVuChinhQuyens
+     * const chucVuChinhQuyens = await prisma.chucVuChinhQuyen.findMany()
+     * ```
+     */
+    get chucVuChinhQuyen(): Prisma.ChucVuChinhQuyenDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.chucVuDang`: Exposes CRUD operations for the **ChucVuDang** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ChucVuDangs
+     * const chucVuDangs = await prisma.chucVuDang.findMany()
+     * ```
+     */
+    get chucVuDang(): Prisma.ChucVuDangDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.hocVi`: Exposes CRUD operations for the **HocVi** model.
      * Example usage:
@@ -5786,6 +5825,8 @@ export namespace Prisma {
         ChangeLog: 'ChangeLog',
         UserProfile: 'UserProfile',
         HocHam: 'HocHam',
+        ChucVuChinhQuyen: 'ChucVuChinhQuyen',
+        ChucVuDang: 'ChucVuDang',
         HocVi: 'HocVi',
         Relative: 'Relative',
         TrinhDoLyLuanChinhTri: 'TrinhDoLyLuanChinhTri',
@@ -6227,6 +6268,32 @@ export namespace Prisma {
         from: 'from',
         to: 'to',
         userProfileId: 'userProfileId'
+    };
+    export const ChucVuChinhQuyenScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        chucVuChinhQuyenId: 'chucVuChinhQuyenId',
+        userProfileId: 'userProfileId',
+        address: 'address'
+    };
+    export const ChucVuDangScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        chucVuDangId: 'chucVuDangId',
+        userProfileId: 'userProfileId',
+        address: 'address'
     };
     export const HocViScalarFieldEnum: {
         id: 'id',
@@ -8104,13 +8171,13 @@ export namespace Prisma {
     };
     export const TrainingBlockScalarFieldEnum: {
         id: 'id',
-        code: 'code',
         active: 'active',
         description: 'description',
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
+        code: 'code',
         name: 'name',
         trainingObjectTypeId: 'trainingObjectTypeId',
         priority: 'priority',
@@ -10338,6 +10405,24 @@ export namespace Prisma {
         soQuyetDinh: 'soQuyetDinh',
         userProfileId: 'userProfileId'
     };
+    export const ChucVuChinhQuyenOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        chucVuChinhQuyenId: 'chucVuChinhQuyenId',
+        userProfileId: 'userProfileId',
+        address: 'address'
+    };
+    export const ChucVuDangOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        chucVuDangId: 'chucVuDangId',
+        userProfileId: 'userProfileId',
+        address: 'address'
+    };
     export const HocViOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
@@ -11471,9 +11556,9 @@ export namespace Prisma {
     };
     export const TrainingBlockOrderByRelevanceFieldEnum: {
         id: 'id',
-        code: 'code',
         description: 'description',
         createdBy: 'createdBy',
+        code: 'code',
         name: 'name',
         trainingObjectTypeId: 'trainingObjectTypeId',
         parentId: 'parentId'
@@ -14319,6 +14404,8 @@ export namespace Prisma {
         quaTrinhHocTap<T extends UserProfile$quaTrinhHocTapArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$quaTrinhHocTapArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhHocTapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         ToChucXaHoi<T extends UserProfile$ToChucXaHoiArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$ToChucXaHoiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ToChucXaHoiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         QuaTrinhLuong<T extends UserProfile$QuaTrinhLuongArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$QuaTrinhLuongArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhLuongPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        quaTrinhChucVuChinhQuyen<T extends UserProfile$quaTrinhChucVuChinhQuyenArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$quaTrinhChucVuChinhQuyenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        quaTrinhChucVuDang<T extends UserProfile$quaTrinhChucVuDangArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$quaTrinhChucVuDangArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         trinhDoHocVan<T extends UserProfile$trinhDoHocVanArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$trinhDoHocVanArgs<ExtArgs>>): Prisma__DM_TrinhDoHocVanClient<$Result.GetResult<Prisma.$DM_TrinhDoHocVanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         educationAndTraining<T extends UserProfile$educationAndTrainingArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$educationAndTrainingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         lecturer<T extends UserProfile$lecturerArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$lecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -14879,6 +14966,774 @@ export namespace Prisma {
         readonly from: FieldRef<"HocHam", 'DateTime'>;
         readonly to: FieldRef<"HocHam", 'DateTime'>;
         readonly userProfileId: FieldRef<"HocHam", 'String'>;
+    }
+
+    export interface ChucVuChinhQuyenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ChucVuChinhQuyen'], meta: { name: 'ChucVuChinhQuyen' } };
+        /**
+         * Fields of the ChucVuChinhQuyen model
+         */
+        readonly fields: ChucVuChinhQuyenFieldRefs;
+        /**
+         * Find zero or one ChucVuChinhQuyen that matches the filter.
+         * @param {ChucVuChinhQuyenFindUniqueArgs} args - Arguments to find a ChucVuChinhQuyen
+         * @example
+         * // Get one ChucVuChinhQuyen
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ChucVuChinhQuyenFindUniqueArgs>(args: SelectSubset<T, ChucVuChinhQuyenFindUniqueArgs<ExtArgs>>): Prisma__ChucVuChinhQuyenClient<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ChucVuChinhQuyen that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ChucVuChinhQuyenFindUniqueOrThrowArgs} args - Arguments to find a ChucVuChinhQuyen
+         * @example
+         * // Get one ChucVuChinhQuyen
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ChucVuChinhQuyenFindUniqueOrThrowArgs>(args: SelectSubset<T, ChucVuChinhQuyenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChucVuChinhQuyenClient<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ChucVuChinhQuyen that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuChinhQuyenFindFirstArgs} args - Arguments to find a ChucVuChinhQuyen
+         * @example
+         * // Get one ChucVuChinhQuyen
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ChucVuChinhQuyenFindFirstArgs>(args?: SelectSubset<T, ChucVuChinhQuyenFindFirstArgs<ExtArgs>>): Prisma__ChucVuChinhQuyenClient<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ChucVuChinhQuyen that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuChinhQuyenFindFirstOrThrowArgs} args - Arguments to find a ChucVuChinhQuyen
+         * @example
+         * // Get one ChucVuChinhQuyen
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ChucVuChinhQuyenFindFirstOrThrowArgs>(args?: SelectSubset<T, ChucVuChinhQuyenFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChucVuChinhQuyenClient<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ChucVuChinhQuyens that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuChinhQuyenFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ChucVuChinhQuyens
+         * const chucVuChinhQuyens = await prisma.chucVuChinhQuyen.findMany()
+         *
+         * // Get first 10 ChucVuChinhQuyens
+         * const chucVuChinhQuyens = await prisma.chucVuChinhQuyen.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const chucVuChinhQuyenWithIdOnly = await prisma.chucVuChinhQuyen.findMany({ select: { id: true } })
+         */
+        findMany<T extends ChucVuChinhQuyenFindManyArgs>(args?: SelectSubset<T, ChucVuChinhQuyenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ChucVuChinhQuyen.
+         * @param {ChucVuChinhQuyenCreateArgs} args - Arguments to create a ChucVuChinhQuyen.
+         * @example
+         * // Create one ChucVuChinhQuyen
+         * const ChucVuChinhQuyen = await prisma.chucVuChinhQuyen.create({
+         *   data: {
+         *     // ... data to create a ChucVuChinhQuyen
+         *   }
+         * })
+         */
+        create<T extends ChucVuChinhQuyenCreateArgs>(args: SelectSubset<T, ChucVuChinhQuyenCreateArgs<ExtArgs>>): Prisma__ChucVuChinhQuyenClient<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ChucVuChinhQuyens.
+         * @param {ChucVuChinhQuyenCreateManyArgs} args - Arguments to create many ChucVuChinhQuyens.
+         * @example
+         * // Create many ChucVuChinhQuyens
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ChucVuChinhQuyenCreateManyArgs>(args?: SelectSubset<T, ChucVuChinhQuyenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ChucVuChinhQuyens and returns the data saved in the database.
+         * @param {ChucVuChinhQuyenCreateManyAndReturnArgs} args - Arguments to create many ChucVuChinhQuyens.
+         * @example
+         * // Create many ChucVuChinhQuyens
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ChucVuChinhQuyens and only return the `id`
+         * const chucVuChinhQuyenWithIdOnly = await prisma.chucVuChinhQuyen.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ChucVuChinhQuyenCreateManyAndReturnArgs>(args?: SelectSubset<T, ChucVuChinhQuyenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ChucVuChinhQuyen.
+         * @param {ChucVuChinhQuyenDeleteArgs} args - Arguments to delete one ChucVuChinhQuyen.
+         * @example
+         * // Delete one ChucVuChinhQuyen
+         * const ChucVuChinhQuyen = await prisma.chucVuChinhQuyen.delete({
+         *   where: {
+         *     // ... filter to delete one ChucVuChinhQuyen
+         *   }
+         * })
+         */
+        delete<T extends ChucVuChinhQuyenDeleteArgs>(args: SelectSubset<T, ChucVuChinhQuyenDeleteArgs<ExtArgs>>): Prisma__ChucVuChinhQuyenClient<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ChucVuChinhQuyen.
+         * @param {ChucVuChinhQuyenUpdateArgs} args - Arguments to update one ChucVuChinhQuyen.
+         * @example
+         * // Update one ChucVuChinhQuyen
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ChucVuChinhQuyenUpdateArgs>(args: SelectSubset<T, ChucVuChinhQuyenUpdateArgs<ExtArgs>>): Prisma__ChucVuChinhQuyenClient<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ChucVuChinhQuyens.
+         * @param {ChucVuChinhQuyenDeleteManyArgs} args - Arguments to filter ChucVuChinhQuyens to delete.
+         * @example
+         * // Delete a few ChucVuChinhQuyens
+         * const { count } = await prisma.chucVuChinhQuyen.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ChucVuChinhQuyenDeleteManyArgs>(args?: SelectSubset<T, ChucVuChinhQuyenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ChucVuChinhQuyens.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuChinhQuyenUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ChucVuChinhQuyens
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ChucVuChinhQuyenUpdateManyArgs>(args: SelectSubset<T, ChucVuChinhQuyenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ChucVuChinhQuyens and returns the data updated in the database.
+         * @param {ChucVuChinhQuyenUpdateManyAndReturnArgs} args - Arguments to update many ChucVuChinhQuyens.
+         * @example
+         * // Update many ChucVuChinhQuyens
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ChucVuChinhQuyens and only return the `id`
+         * const chucVuChinhQuyenWithIdOnly = await prisma.chucVuChinhQuyen.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ChucVuChinhQuyenUpdateManyAndReturnArgs>(args: SelectSubset<T, ChucVuChinhQuyenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ChucVuChinhQuyen.
+         * @param {ChucVuChinhQuyenUpsertArgs} args - Arguments to update or create a ChucVuChinhQuyen.
+         * @example
+         * // Update or create a ChucVuChinhQuyen
+         * const chucVuChinhQuyen = await prisma.chucVuChinhQuyen.upsert({
+         *   create: {
+         *     // ... data to create a ChucVuChinhQuyen
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ChucVuChinhQuyen we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ChucVuChinhQuyenUpsertArgs>(args: SelectSubset<T, ChucVuChinhQuyenUpsertArgs<ExtArgs>>): Prisma__ChucVuChinhQuyenClient<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ChucVuChinhQuyens.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuChinhQuyenCountArgs} args - Arguments to filter ChucVuChinhQuyens to count.
+         * @example
+         * // Count the number of ChucVuChinhQuyens
+         * const count = await prisma.chucVuChinhQuyen.count({
+         *   where: {
+         *     // ... the filter for the ChucVuChinhQuyens we want to count
+         *   }
+         * })
+         */
+        count<T extends ChucVuChinhQuyenCountArgs>(args?: Subset<T, ChucVuChinhQuyenCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ChucVuChinhQuyenCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ChucVuChinhQuyen.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuChinhQuyenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ChucVuChinhQuyenAggregateArgs>(args: Subset<T, ChucVuChinhQuyenAggregateArgs>): Prisma.PrismaPromise<GetChucVuChinhQuyenAggregateType<T>>;
+        /**
+         * Group by ChucVuChinhQuyen.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuChinhQuyenGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ChucVuChinhQuyenGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ChucVuChinhQuyenGroupByArgs['orderBy'] }
+        : { orderBy?: ChucVuChinhQuyenGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ChucVuChinhQuyenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChucVuChinhQuyenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ChucVuChinhQuyen.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ChucVuChinhQuyenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        chucVuChinhQuyen<T extends ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs> = {}>(args?: Subset<T, ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ChucVuChinhQuyen model
+     */
+    interface ChucVuChinhQuyenFieldRefs {
+        readonly id: FieldRef<"ChucVuChinhQuyen", 'String'>;
+        readonly code: FieldRef<"ChucVuChinhQuyen", 'String'>;
+        readonly active: FieldRef<"ChucVuChinhQuyen", 'Boolean'>;
+        readonly description: FieldRef<"ChucVuChinhQuyen", 'String'>;
+        readonly deletedAt: FieldRef<"ChucVuChinhQuyen", 'DateTime'>;
+        readonly createdAt: FieldRef<"ChucVuChinhQuyen", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ChucVuChinhQuyen", 'DateTime'>;
+        readonly createdBy: FieldRef<"ChucVuChinhQuyen", 'String'>;
+        readonly chucVuChinhQuyenId: FieldRef<"ChucVuChinhQuyen", 'String'>;
+        readonly userProfileId: FieldRef<"ChucVuChinhQuyen", 'String'>;
+        readonly address: FieldRef<"ChucVuChinhQuyen", 'String'>;
+    }
+
+    export interface ChucVuDangDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ChucVuDang'], meta: { name: 'ChucVuDang' } };
+        /**
+         * Fields of the ChucVuDang model
+         */
+        readonly fields: ChucVuDangFieldRefs;
+        /**
+         * Find zero or one ChucVuDang that matches the filter.
+         * @param {ChucVuDangFindUniqueArgs} args - Arguments to find a ChucVuDang
+         * @example
+         * // Get one ChucVuDang
+         * const chucVuDang = await prisma.chucVuDang.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ChucVuDangFindUniqueArgs>(args: SelectSubset<T, ChucVuDangFindUniqueArgs<ExtArgs>>): Prisma__ChucVuDangClient<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ChucVuDang that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ChucVuDangFindUniqueOrThrowArgs} args - Arguments to find a ChucVuDang
+         * @example
+         * // Get one ChucVuDang
+         * const chucVuDang = await prisma.chucVuDang.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ChucVuDangFindUniqueOrThrowArgs>(args: SelectSubset<T, ChucVuDangFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChucVuDangClient<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ChucVuDang that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuDangFindFirstArgs} args - Arguments to find a ChucVuDang
+         * @example
+         * // Get one ChucVuDang
+         * const chucVuDang = await prisma.chucVuDang.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ChucVuDangFindFirstArgs>(args?: SelectSubset<T, ChucVuDangFindFirstArgs<ExtArgs>>): Prisma__ChucVuDangClient<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ChucVuDang that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuDangFindFirstOrThrowArgs} args - Arguments to find a ChucVuDang
+         * @example
+         * // Get one ChucVuDang
+         * const chucVuDang = await prisma.chucVuDang.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ChucVuDangFindFirstOrThrowArgs>(args?: SelectSubset<T, ChucVuDangFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChucVuDangClient<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ChucVuDangs that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuDangFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ChucVuDangs
+         * const chucVuDangs = await prisma.chucVuDang.findMany()
+         *
+         * // Get first 10 ChucVuDangs
+         * const chucVuDangs = await prisma.chucVuDang.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const chucVuDangWithIdOnly = await prisma.chucVuDang.findMany({ select: { id: true } })
+         */
+        findMany<T extends ChucVuDangFindManyArgs>(args?: SelectSubset<T, ChucVuDangFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ChucVuDang.
+         * @param {ChucVuDangCreateArgs} args - Arguments to create a ChucVuDang.
+         * @example
+         * // Create one ChucVuDang
+         * const ChucVuDang = await prisma.chucVuDang.create({
+         *   data: {
+         *     // ... data to create a ChucVuDang
+         *   }
+         * })
+         */
+        create<T extends ChucVuDangCreateArgs>(args: SelectSubset<T, ChucVuDangCreateArgs<ExtArgs>>): Prisma__ChucVuDangClient<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ChucVuDangs.
+         * @param {ChucVuDangCreateManyArgs} args - Arguments to create many ChucVuDangs.
+         * @example
+         * // Create many ChucVuDangs
+         * const chucVuDang = await prisma.chucVuDang.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ChucVuDangCreateManyArgs>(args?: SelectSubset<T, ChucVuDangCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ChucVuDangs and returns the data saved in the database.
+         * @param {ChucVuDangCreateManyAndReturnArgs} args - Arguments to create many ChucVuDangs.
+         * @example
+         * // Create many ChucVuDangs
+         * const chucVuDang = await prisma.chucVuDang.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ChucVuDangs and only return the `id`
+         * const chucVuDangWithIdOnly = await prisma.chucVuDang.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ChucVuDangCreateManyAndReturnArgs>(args?: SelectSubset<T, ChucVuDangCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ChucVuDang.
+         * @param {ChucVuDangDeleteArgs} args - Arguments to delete one ChucVuDang.
+         * @example
+         * // Delete one ChucVuDang
+         * const ChucVuDang = await prisma.chucVuDang.delete({
+         *   where: {
+         *     // ... filter to delete one ChucVuDang
+         *   }
+         * })
+         */
+        delete<T extends ChucVuDangDeleteArgs>(args: SelectSubset<T, ChucVuDangDeleteArgs<ExtArgs>>): Prisma__ChucVuDangClient<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ChucVuDang.
+         * @param {ChucVuDangUpdateArgs} args - Arguments to update one ChucVuDang.
+         * @example
+         * // Update one ChucVuDang
+         * const chucVuDang = await prisma.chucVuDang.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ChucVuDangUpdateArgs>(args: SelectSubset<T, ChucVuDangUpdateArgs<ExtArgs>>): Prisma__ChucVuDangClient<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ChucVuDangs.
+         * @param {ChucVuDangDeleteManyArgs} args - Arguments to filter ChucVuDangs to delete.
+         * @example
+         * // Delete a few ChucVuDangs
+         * const { count } = await prisma.chucVuDang.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ChucVuDangDeleteManyArgs>(args?: SelectSubset<T, ChucVuDangDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ChucVuDangs.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuDangUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ChucVuDangs
+         * const chucVuDang = await prisma.chucVuDang.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ChucVuDangUpdateManyArgs>(args: SelectSubset<T, ChucVuDangUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ChucVuDangs and returns the data updated in the database.
+         * @param {ChucVuDangUpdateManyAndReturnArgs} args - Arguments to update many ChucVuDangs.
+         * @example
+         * // Update many ChucVuDangs
+         * const chucVuDang = await prisma.chucVuDang.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ChucVuDangs and only return the `id`
+         * const chucVuDangWithIdOnly = await prisma.chucVuDang.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ChucVuDangUpdateManyAndReturnArgs>(args: SelectSubset<T, ChucVuDangUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ChucVuDang.
+         * @param {ChucVuDangUpsertArgs} args - Arguments to update or create a ChucVuDang.
+         * @example
+         * // Update or create a ChucVuDang
+         * const chucVuDang = await prisma.chucVuDang.upsert({
+         *   create: {
+         *     // ... data to create a ChucVuDang
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ChucVuDang we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ChucVuDangUpsertArgs>(args: SelectSubset<T, ChucVuDangUpsertArgs<ExtArgs>>): Prisma__ChucVuDangClient<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ChucVuDangs.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuDangCountArgs} args - Arguments to filter ChucVuDangs to count.
+         * @example
+         * // Count the number of ChucVuDangs
+         * const count = await prisma.chucVuDang.count({
+         *   where: {
+         *     // ... the filter for the ChucVuDangs we want to count
+         *   }
+         * })
+         */
+        count<T extends ChucVuDangCountArgs>(args?: Subset<T, ChucVuDangCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ChucVuDangCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ChucVuDang.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuDangAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ChucVuDangAggregateArgs>(args: Subset<T, ChucVuDangAggregateArgs>): Prisma.PrismaPromise<GetChucVuDangAggregateType<T>>;
+        /**
+         * Group by ChucVuDang.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ChucVuDangGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ChucVuDangGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ChucVuDangGroupByArgs['orderBy'] }
+        : { orderBy?: ChucVuDangGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ChucVuDangGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChucVuDangGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ChucVuDang.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ChucVuDangClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        chucVuDang<T extends ChucVuDang$chucVuDangArgs<ExtArgs> = {}>(args?: Subset<T, ChucVuDang$chucVuDangArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ChucVuDang model
+     */
+    interface ChucVuDangFieldRefs {
+        readonly id: FieldRef<"ChucVuDang", 'String'>;
+        readonly code: FieldRef<"ChucVuDang", 'String'>;
+        readonly active: FieldRef<"ChucVuDang", 'Boolean'>;
+        readonly description: FieldRef<"ChucVuDang", 'String'>;
+        readonly deletedAt: FieldRef<"ChucVuDang", 'DateTime'>;
+        readonly createdAt: FieldRef<"ChucVuDang", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ChucVuDang", 'DateTime'>;
+        readonly createdBy: FieldRef<"ChucVuDang", 'String'>;
+        readonly chucVuDangId: FieldRef<"ChucVuDang", 'String'>;
+        readonly userProfileId: FieldRef<"ChucVuDang", 'String'>;
+        readonly address: FieldRef<"ChucVuDang", 'String'>;
     }
 
     export interface HocViDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -30303,6 +31158,8 @@ export namespace Prisma {
         userProfile<T extends DM_ChucVu$userProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$userProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         quaTrinhCongTac<T extends DM_ChucVu$quaTrinhCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         quaTrinhCuDiCongTac<T extends DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        chucVuChinhQuyen<T extends DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        chucVuDang<T extends DM_ChucVu$chucVuDangArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$chucVuDangArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuDangPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -58087,13 +58944,13 @@ export namespace Prisma {
      */
     interface TrainingBlockFieldRefs {
         readonly id: FieldRef<"TrainingBlock", 'String'>;
-        readonly code: FieldRef<"TrainingBlock", 'String'>;
         readonly active: FieldRef<"TrainingBlock", 'Boolean'>;
         readonly description: FieldRef<"TrainingBlock", 'String'>;
         readonly deletedAt: FieldRef<"TrainingBlock", 'DateTime'>;
         readonly createdAt: FieldRef<"TrainingBlock", 'DateTime'>;
         readonly updatedAt: FieldRef<"TrainingBlock", 'DateTime'>;
         readonly createdBy: FieldRef<"TrainingBlock", 'String'>;
+        readonly code: FieldRef<"TrainingBlock", 'String'>;
         readonly name: FieldRef<"TrainingBlock", 'String'>;
         readonly trainingObjectTypeId: FieldRef<"TrainingBlock", 'String'>;
         readonly priority: FieldRef<"TrainingBlock", 'Int'>;
@@ -111742,7 +112599,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -112113,6 +112970,154 @@ export namespace Prisma {
                     count: {
                         args: Prisma.HocHamCountArgs<ExtArgs>
                         result: $Utils.Optional<HocHamCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ChucVuChinhQuyen: {
+                payload: Prisma.$ChucVuChinhQuyenPayload<ExtArgs>
+                fields: Prisma.ChucVuChinhQuyenFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ChucVuChinhQuyenFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ChucVuChinhQuyenFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ChucVuChinhQuyenFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ChucVuChinhQuyenFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ChucVuChinhQuyenFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ChucVuChinhQuyenCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ChucVuChinhQuyenCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ChucVuChinhQuyenCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ChucVuChinhQuyenDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>
+                    }
+                    update: {
+                        args: Prisma.ChucVuChinhQuyenUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ChucVuChinhQuyenDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ChucVuChinhQuyenUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ChucVuChinhQuyenUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ChucVuChinhQuyenUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuChinhQuyenPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ChucVuChinhQuyenAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateChucVuChinhQuyen>
+                    }
+                    groupBy: {
+                        args: Prisma.ChucVuChinhQuyenGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ChucVuChinhQuyenGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ChucVuChinhQuyenCountArgs<ExtArgs>
+                        result: $Utils.Optional<ChucVuChinhQuyenCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ChucVuDang: {
+                payload: Prisma.$ChucVuDangPayload<ExtArgs>
+                fields: Prisma.ChucVuDangFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ChucVuDangFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ChucVuDangFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ChucVuDangFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ChucVuDangFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ChucVuDangFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ChucVuDangCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ChucVuDangCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ChucVuDangCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ChucVuDangDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>
+                    }
+                    update: {
+                        args: Prisma.ChucVuDangUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ChucVuDangDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ChucVuDangUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ChucVuDangUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ChucVuDangUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ChucVuDangPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ChucVuDangAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateChucVuDang>
+                    }
+                    groupBy: {
+                        args: Prisma.ChucVuDangGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ChucVuDangGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ChucVuDangCountArgs<ExtArgs>
+                        result: $Utils.Optional<ChucVuDangCountAggregateOutputType> | number
                     }
                 }
             }
@@ -130578,6 +131583,8 @@ export namespace Prisma {
         changeLog?: ChangeLogOmit
         userProfile?: UserProfileOmit
         hocHam?: HocHamOmit
+        chucVuChinhQuyen?: ChucVuChinhQuyenOmit
+        chucVuDang?: ChucVuDangOmit
         hocVi?: HocViOmit
         relative?: RelativeOmit
         trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriOmit
@@ -130925,6 +131932,8 @@ export namespace Prisma {
         quaTrinhHocTap: number
         ToChucXaHoi: number
         QuaTrinhLuong: number
+        quaTrinhChucVuChinhQuyen: number
+        quaTrinhChucVuDang: number
         educationAndTraining: number
         lecturerHistory: number
         studentSubjectScoreHistory: number
@@ -130967,6 +131976,8 @@ export namespace Prisma {
         quaTrinhHocTap?: boolean | UserProfileCountOutputTypeCountQuaTrinhHocTapArgs
         ToChucXaHoi?: boolean | UserProfileCountOutputTypeCountToChucXaHoiArgs
         QuaTrinhLuong?: boolean | UserProfileCountOutputTypeCountQuaTrinhLuongArgs
+        quaTrinhChucVuChinhQuyen?: boolean | UserProfileCountOutputTypeCountQuaTrinhChucVuChinhQuyenArgs
+        quaTrinhChucVuDang?: boolean | UserProfileCountOutputTypeCountQuaTrinhChucVuDangArgs
         educationAndTraining?: boolean | UserProfileCountOutputTypeCountEducationAndTrainingArgs
         lecturerHistory?: boolean | UserProfileCountOutputTypeCountLecturerHistoryArgs
         studentSubjectScoreHistory?: boolean | UserProfileCountOutputTypeCountStudentSubjectScoreHistoryArgs
@@ -131136,6 +132147,18 @@ export namespace Prisma {
      */
     export type UserProfileCountOutputTypeCountQuaTrinhLuongArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: QuaTrinhLuongWhereInput
+    };
+    /**
+     * UserProfileCountOutputType without action
+     */
+    export type UserProfileCountOutputTypeCountQuaTrinhChucVuChinhQuyenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ChucVuChinhQuyenWhereInput
+    };
+    /**
+     * UserProfileCountOutputType without action
+     */
+    export type UserProfileCountOutputTypeCountQuaTrinhChucVuDangArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ChucVuDangWhereInput
     };
     /**
      * UserProfileCountOutputType without action
@@ -131561,12 +132584,16 @@ export namespace Prisma {
         userProfile: number
         quaTrinhCongTac: number
         quaTrinhCuDiCongTac: number
+        chucVuChinhQuyen: number
+        chucVuDang: number
     };
     export type DM_ChucVuCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         userProfileCPV?: boolean | DM_ChucVuCountOutputTypeCountUserProfileCPVArgs
         userProfile?: boolean | DM_ChucVuCountOutputTypeCountUserProfileArgs
         quaTrinhCongTac?: boolean | DM_ChucVuCountOutputTypeCountQuaTrinhCongTacArgs
         quaTrinhCuDiCongTac?: boolean | DM_ChucVuCountOutputTypeCountQuaTrinhCuDiCongTacArgs
+        chucVuChinhQuyen?: boolean | DM_ChucVuCountOutputTypeCountChucVuChinhQuyenArgs
+        chucVuDang?: boolean | DM_ChucVuCountOutputTypeCountChucVuDangArgs
     };
     /**
      * DM_ChucVuCountOutputType without action
@@ -131600,6 +132627,18 @@ export namespace Prisma {
      */
     export type DM_ChucVuCountOutputTypeCountQuaTrinhCuDiCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: QuaTrinhCuDiCongTacWhereInput
+    };
+    /**
+     * DM_ChucVuCountOutputType without action
+     */
+    export type DM_ChucVuCountOutputTypeCountChucVuChinhQuyenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ChucVuChinhQuyenWhereInput
+    };
+    /**
+     * DM_ChucVuCountOutputType without action
+     */
+    export type DM_ChucVuCountOutputTypeCountChucVuDangArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ChucVuDangWhereInput
     };
     /**
      * Count Type DM_HocHamCountOutputType
@@ -140135,6 +141174,8 @@ export namespace Prisma {
         quaTrinhHocTap?: boolean | UserProfile$quaTrinhHocTapArgs<ExtArgs>
         ToChucXaHoi?: boolean | UserProfile$ToChucXaHoiArgs<ExtArgs>
         QuaTrinhLuong?: boolean | UserProfile$QuaTrinhLuongArgs<ExtArgs>
+        quaTrinhChucVuChinhQuyen?: boolean | UserProfile$quaTrinhChucVuChinhQuyenArgs<ExtArgs>
+        quaTrinhChucVuDang?: boolean | UserProfile$quaTrinhChucVuDangArgs<ExtArgs>
         trinhDoHocVan?: boolean | UserProfile$trinhDoHocVanArgs<ExtArgs>
         educationAndTraining?: boolean | UserProfile$educationAndTrainingArgs<ExtArgs>
         lecturer?: boolean | UserProfile$lecturerArgs<ExtArgs>
@@ -140706,6 +141747,8 @@ export namespace Prisma {
         quaTrinhHocTap?: boolean | UserProfile$quaTrinhHocTapArgs<ExtArgs>
         ToChucXaHoi?: boolean | UserProfile$ToChucXaHoiArgs<ExtArgs>
         QuaTrinhLuong?: boolean | UserProfile$QuaTrinhLuongArgs<ExtArgs>
+        quaTrinhChucVuChinhQuyen?: boolean | UserProfile$quaTrinhChucVuChinhQuyenArgs<ExtArgs>
+        quaTrinhChucVuDang?: boolean | UserProfile$quaTrinhChucVuDangArgs<ExtArgs>
         trinhDoHocVan?: boolean | UserProfile$trinhDoHocVanArgs<ExtArgs>
         educationAndTraining?: boolean | UserProfile$educationAndTrainingArgs<ExtArgs>
         lecturer?: boolean | UserProfile$lecturerArgs<ExtArgs>
@@ -140892,6 +141935,8 @@ export namespace Prisma {
             quaTrinhHocTap: Prisma.$QuaTrinhHocTapPayload<ExtArgs>[]
             ToChucXaHoi: Prisma.$ToChucXaHoiPayload<ExtArgs>[]
             QuaTrinhLuong: Prisma.$QuaTrinhLuongPayload<ExtArgs>[]
+            quaTrinhChucVuChinhQuyen: Prisma.$ChucVuChinhQuyenPayload<ExtArgs>[]
+            quaTrinhChucVuDang: Prisma.$ChucVuDangPayload<ExtArgs>[]
             trinhDoHocVan: Prisma.$DM_TrinhDoHocVanPayload<ExtArgs> | null
             /**
              * hồ sơ đào tạo
@@ -142782,6 +143827,52 @@ export namespace Prisma {
         distinct?: QuaTrinhLuongScalarFieldEnum | QuaTrinhLuongScalarFieldEnum[]
     };
     /**
+     * UserProfile.quaTrinhChucVuChinhQuyen
+     */
+    export type UserProfile$quaTrinhChucVuChinhQuyenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        where?: ChucVuChinhQuyenWhereInput
+        orderBy?: ChucVuChinhQuyenOrderByWithRelationInput | ChucVuChinhQuyenOrderByWithRelationInput[]
+        cursor?: ChucVuChinhQuyenWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ChucVuChinhQuyenScalarFieldEnum | ChucVuChinhQuyenScalarFieldEnum[]
+    };
+    /**
+     * UserProfile.quaTrinhChucVuDang
+     */
+    export type UserProfile$quaTrinhChucVuDangArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        where?: ChucVuDangWhereInput
+        orderBy?: ChucVuDangOrderByWithRelationInput | ChucVuDangOrderByWithRelationInput[]
+        cursor?: ChucVuDangWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ChucVuDangScalarFieldEnum | ChucVuDangScalarFieldEnum[]
+    };
+    /**
      * UserProfile.trinhDoHocVan
      */
     export type UserProfile$trinhDoHocVanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -143945,6 +145036,1386 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: HocHamInclude<ExtArgs> | null
+    };
+    /**
+     * Model ChucVuChinhQuyen
+     */
+    export type AggregateChucVuChinhQuyen = {
+        _count: ChucVuChinhQuyenCountAggregateOutputType | null
+        _min: ChucVuChinhQuyenMinAggregateOutputType | null
+        _max: ChucVuChinhQuyenMaxAggregateOutputType | null
+    };
+    export type ChucVuChinhQuyenMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        chucVuChinhQuyenId: string | null
+        userProfileId: string | null
+        address: string | null
+    };
+    export type ChucVuChinhQuyenMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        chucVuChinhQuyenId: string | null
+        userProfileId: string | null
+        address: string | null
+    };
+    export type ChucVuChinhQuyenCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        chucVuChinhQuyenId: number
+        userProfileId: number
+        address: number
+        _all: number
+    };
+    export type ChucVuChinhQuyenMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        chucVuChinhQuyenId?: true
+        userProfileId?: true
+        address?: true
+    };
+    export type ChucVuChinhQuyenMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        chucVuChinhQuyenId?: true
+        userProfileId?: true
+        address?: true
+    };
+    export type ChucVuChinhQuyenCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        chucVuChinhQuyenId?: true
+        userProfileId?: true
+        address?: true
+        _all?: true
+    };
+    export type ChucVuChinhQuyenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ChucVuChinhQuyen to aggregate.
+         */
+        where?: ChucVuChinhQuyenWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ChucVuChinhQuyens to fetch.
+         */
+        orderBy?: ChucVuChinhQuyenOrderByWithRelationInput | ChucVuChinhQuyenOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ChucVuChinhQuyenWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ChucVuChinhQuyens from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ChucVuChinhQuyens.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ChucVuChinhQuyens
+        **/
+        _count?: true | ChucVuChinhQuyenCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ChucVuChinhQuyenMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ChucVuChinhQuyenMaxAggregateInputType
+    };
+    export type GetChucVuChinhQuyenAggregateType<T extends ChucVuChinhQuyenAggregateArgs> = {
+        [P in keyof T & keyof AggregateChucVuChinhQuyen]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateChucVuChinhQuyen[P]>
+        : GetScalarType<T[P], AggregateChucVuChinhQuyen[P]>
+    };
+    export type ChucVuChinhQuyenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ChucVuChinhQuyenWhereInput
+        orderBy?: ChucVuChinhQuyenOrderByWithAggregationInput | ChucVuChinhQuyenOrderByWithAggregationInput[]
+        by: ChucVuChinhQuyenScalarFieldEnum[] | ChucVuChinhQuyenScalarFieldEnum
+        having?: ChucVuChinhQuyenScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ChucVuChinhQuyenCountAggregateInputType | true
+        _min?: ChucVuChinhQuyenMinAggregateInputType
+        _max?: ChucVuChinhQuyenMaxAggregateInputType
+    };
+    export type ChucVuChinhQuyenGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        chucVuChinhQuyenId: string | null
+        userProfileId: string
+        address: string | null
+        _count: ChucVuChinhQuyenCountAggregateOutputType | null
+        _min: ChucVuChinhQuyenMinAggregateOutputType | null
+        _max: ChucVuChinhQuyenMaxAggregateOutputType | null
+    };
+    type GetChucVuChinhQuyenGroupByPayload<T extends ChucVuChinhQuyenGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ChucVuChinhQuyenGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ChucVuChinhQuyenGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ChucVuChinhQuyenGroupByOutputType[P]>
+                : GetScalarType<T[P], ChucVuChinhQuyenGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ChucVuChinhQuyenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        chucVuChinhQuyenId?: boolean
+        userProfileId?: boolean
+        address?: boolean
+        chucVuChinhQuyen?: boolean | ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["chucVuChinhQuyen"]>;
+    export type ChucVuChinhQuyenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        chucVuChinhQuyenId?: boolean
+        userProfileId?: boolean
+        address?: boolean
+        chucVuChinhQuyen?: boolean | ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["chucVuChinhQuyen"]>;
+    export type ChucVuChinhQuyenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        chucVuChinhQuyenId?: boolean
+        userProfileId?: boolean
+        address?: boolean
+        chucVuChinhQuyen?: boolean | ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["chucVuChinhQuyen"]>;
+    export type ChucVuChinhQuyenSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        chucVuChinhQuyenId?: boolean
+        userProfileId?: boolean
+        address?: boolean
+    };
+    export type ChucVuChinhQuyenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "chucVuChinhQuyenId" | "userProfileId" | "address", ExtArgs["result"]["chucVuChinhQuyen"]>;
+    export type ChucVuChinhQuyenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        chucVuChinhQuyen?: boolean | ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type ChucVuChinhQuyenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        chucVuChinhQuyen?: boolean | ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type ChucVuChinhQuyenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        chucVuChinhQuyen?: boolean | ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type $ChucVuChinhQuyenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ChucVuChinhQuyen"
+        objects: {
+            chucVuChinhQuyen: Prisma.$DM_ChucVuPayload<ExtArgs> | null
+            userProfile: Prisma.$UserProfilePayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            chucVuChinhQuyenId: string | null
+            userProfileId: string
+            address: string | null
+        }, ExtArgs["result"]["chucVuChinhQuyen"]>
+        composites: {}
+    };
+    type ChucVuChinhQuyenGetPayload<S extends boolean | null | undefined | ChucVuChinhQuyenDefaultArgs> = $Result.GetResult<Prisma.$ChucVuChinhQuyenPayload, S>;
+    type ChucVuChinhQuyenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ChucVuChinhQuyenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ChucVuChinhQuyenCountAggregateInputType | true
+    };
+    /**
+     * ChucVuChinhQuyen findUnique
+     */
+    export type ChucVuChinhQuyenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuChinhQuyen to fetch.
+         */
+        where: ChucVuChinhQuyenWhereUniqueInput
+    };
+    /**
+     * ChucVuChinhQuyen findUniqueOrThrow
+     */
+    export type ChucVuChinhQuyenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuChinhQuyen to fetch.
+         */
+        where: ChucVuChinhQuyenWhereUniqueInput
+    };
+    /**
+     * ChucVuChinhQuyen findFirst
+     */
+    export type ChucVuChinhQuyenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuChinhQuyen to fetch.
+         */
+        where?: ChucVuChinhQuyenWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ChucVuChinhQuyens to fetch.
+         */
+        orderBy?: ChucVuChinhQuyenOrderByWithRelationInput | ChucVuChinhQuyenOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ChucVuChinhQuyens.
+         */
+        cursor?: ChucVuChinhQuyenWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ChucVuChinhQuyens from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ChucVuChinhQuyens.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ChucVuChinhQuyens.
+         */
+        distinct?: ChucVuChinhQuyenScalarFieldEnum | ChucVuChinhQuyenScalarFieldEnum[]
+    };
+    /**
+     * ChucVuChinhQuyen findFirstOrThrow
+     */
+    export type ChucVuChinhQuyenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuChinhQuyen to fetch.
+         */
+        where?: ChucVuChinhQuyenWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ChucVuChinhQuyens to fetch.
+         */
+        orderBy?: ChucVuChinhQuyenOrderByWithRelationInput | ChucVuChinhQuyenOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ChucVuChinhQuyens.
+         */
+        cursor?: ChucVuChinhQuyenWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ChucVuChinhQuyens from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ChucVuChinhQuyens.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ChucVuChinhQuyens.
+         */
+        distinct?: ChucVuChinhQuyenScalarFieldEnum | ChucVuChinhQuyenScalarFieldEnum[]
+    };
+    /**
+     * ChucVuChinhQuyen findMany
+     */
+    export type ChucVuChinhQuyenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuChinhQuyens to fetch.
+         */
+        where?: ChucVuChinhQuyenWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ChucVuChinhQuyens to fetch.
+         */
+        orderBy?: ChucVuChinhQuyenOrderByWithRelationInput | ChucVuChinhQuyenOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ChucVuChinhQuyens.
+         */
+        cursor?: ChucVuChinhQuyenWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ChucVuChinhQuyens from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ChucVuChinhQuyens.
+         */
+        skip?: number
+        distinct?: ChucVuChinhQuyenScalarFieldEnum | ChucVuChinhQuyenScalarFieldEnum[]
+    };
+    /**
+     * ChucVuChinhQuyen create
+     */
+    export type ChucVuChinhQuyenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ChucVuChinhQuyen.
+         */
+        data: XOR<ChucVuChinhQuyenCreateInput, ChucVuChinhQuyenUncheckedCreateInput>
+    };
+    /**
+     * ChucVuChinhQuyen createMany
+     */
+    export type ChucVuChinhQuyenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ChucVuChinhQuyens.
+         */
+        data: ChucVuChinhQuyenCreateManyInput | ChucVuChinhQuyenCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ChucVuChinhQuyen createManyAndReturn
+     */
+    export type ChucVuChinhQuyenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * The data used to create many ChucVuChinhQuyens.
+         */
+        data: ChucVuChinhQuyenCreateManyInput | ChucVuChinhQuyenCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ChucVuChinhQuyen update
+     */
+    export type ChucVuChinhQuyenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ChucVuChinhQuyen.
+         */
+        data: XOR<ChucVuChinhQuyenUpdateInput, ChucVuChinhQuyenUncheckedUpdateInput>
+        /**
+         * Choose, which ChucVuChinhQuyen to update.
+         */
+        where: ChucVuChinhQuyenWhereUniqueInput
+    };
+    /**
+     * ChucVuChinhQuyen updateMany
+     */
+    export type ChucVuChinhQuyenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ChucVuChinhQuyens.
+         */
+        data: XOR<ChucVuChinhQuyenUpdateManyMutationInput, ChucVuChinhQuyenUncheckedUpdateManyInput>
+        /**
+         * Filter which ChucVuChinhQuyens to update
+         */
+        where?: ChucVuChinhQuyenWhereInput
+        /**
+         * Limit how many ChucVuChinhQuyens to update.
+         */
+        limit?: number
+    };
+    /**
+     * ChucVuChinhQuyen updateManyAndReturn
+     */
+    export type ChucVuChinhQuyenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * The data used to update ChucVuChinhQuyens.
+         */
+        data: XOR<ChucVuChinhQuyenUpdateManyMutationInput, ChucVuChinhQuyenUncheckedUpdateManyInput>
+        /**
+         * Filter which ChucVuChinhQuyens to update
+         */
+        where?: ChucVuChinhQuyenWhereInput
+        /**
+         * Limit how many ChucVuChinhQuyens to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ChucVuChinhQuyen upsert
+     */
+    export type ChucVuChinhQuyenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ChucVuChinhQuyen to update in case it exists.
+         */
+        where: ChucVuChinhQuyenWhereUniqueInput
+        /**
+         * In case the ChucVuChinhQuyen found by the `where` argument doesn't exist, create a new ChucVuChinhQuyen with this data.
+         */
+        create: XOR<ChucVuChinhQuyenCreateInput, ChucVuChinhQuyenUncheckedCreateInput>
+        /**
+         * In case the ChucVuChinhQuyen was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ChucVuChinhQuyenUpdateInput, ChucVuChinhQuyenUncheckedUpdateInput>
+    };
+    /**
+     * ChucVuChinhQuyen delete
+     */
+    export type ChucVuChinhQuyenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        /**
+         * Filter which ChucVuChinhQuyen to delete.
+         */
+        where: ChucVuChinhQuyenWhereUniqueInput
+    };
+    /**
+     * ChucVuChinhQuyen deleteMany
+     */
+    export type ChucVuChinhQuyenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ChucVuChinhQuyens to delete
+         */
+        where?: ChucVuChinhQuyenWhereInput
+        /**
+         * Limit how many ChucVuChinhQuyens to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ChucVuChinhQuyen.chucVuChinhQuyen
+     */
+    export type ChucVuChinhQuyen$chucVuChinhQuyenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_ChucVu
+         */
+        select?: DM_ChucVuSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_ChucVu
+         */
+        omit?: DM_ChucVuOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_ChucVuInclude<ExtArgs> | null
+        where?: DM_ChucVuWhereInput
+    };
+    /**
+     * ChucVuChinhQuyen without action
+     */
+    export type ChucVuChinhQuyenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+    };
+    /**
+     * Model ChucVuDang
+     */
+    export type AggregateChucVuDang = {
+        _count: ChucVuDangCountAggregateOutputType | null
+        _min: ChucVuDangMinAggregateOutputType | null
+        _max: ChucVuDangMaxAggregateOutputType | null
+    };
+    export type ChucVuDangMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        chucVuDangId: string | null
+        userProfileId: string | null
+        address: string | null
+    };
+    export type ChucVuDangMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        chucVuDangId: string | null
+        userProfileId: string | null
+        address: string | null
+    };
+    export type ChucVuDangCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        chucVuDangId: number
+        userProfileId: number
+        address: number
+        _all: number
+    };
+    export type ChucVuDangMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        chucVuDangId?: true
+        userProfileId?: true
+        address?: true
+    };
+    export type ChucVuDangMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        chucVuDangId?: true
+        userProfileId?: true
+        address?: true
+    };
+    export type ChucVuDangCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        chucVuDangId?: true
+        userProfileId?: true
+        address?: true
+        _all?: true
+    };
+    export type ChucVuDangAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ChucVuDang to aggregate.
+         */
+        where?: ChucVuDangWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ChucVuDangs to fetch.
+         */
+        orderBy?: ChucVuDangOrderByWithRelationInput | ChucVuDangOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ChucVuDangWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ChucVuDangs from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ChucVuDangs.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ChucVuDangs
+        **/
+        _count?: true | ChucVuDangCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ChucVuDangMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ChucVuDangMaxAggregateInputType
+    };
+    export type GetChucVuDangAggregateType<T extends ChucVuDangAggregateArgs> = {
+        [P in keyof T & keyof AggregateChucVuDang]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateChucVuDang[P]>
+        : GetScalarType<T[P], AggregateChucVuDang[P]>
+    };
+    export type ChucVuDangGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ChucVuDangWhereInput
+        orderBy?: ChucVuDangOrderByWithAggregationInput | ChucVuDangOrderByWithAggregationInput[]
+        by: ChucVuDangScalarFieldEnum[] | ChucVuDangScalarFieldEnum
+        having?: ChucVuDangScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ChucVuDangCountAggregateInputType | true
+        _min?: ChucVuDangMinAggregateInputType
+        _max?: ChucVuDangMaxAggregateInputType
+    };
+    export type ChucVuDangGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        chucVuDangId: string | null
+        userProfileId: string
+        address: string | null
+        _count: ChucVuDangCountAggregateOutputType | null
+        _min: ChucVuDangMinAggregateOutputType | null
+        _max: ChucVuDangMaxAggregateOutputType | null
+    };
+    type GetChucVuDangGroupByPayload<T extends ChucVuDangGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ChucVuDangGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ChucVuDangGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ChucVuDangGroupByOutputType[P]>
+                : GetScalarType<T[P], ChucVuDangGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ChucVuDangSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        chucVuDangId?: boolean
+        userProfileId?: boolean
+        address?: boolean
+        chucVuDang?: boolean | ChucVuDang$chucVuDangArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["chucVuDang"]>;
+    export type ChucVuDangSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        chucVuDangId?: boolean
+        userProfileId?: boolean
+        address?: boolean
+        chucVuDang?: boolean | ChucVuDang$chucVuDangArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["chucVuDang"]>;
+    export type ChucVuDangSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        chucVuDangId?: boolean
+        userProfileId?: boolean
+        address?: boolean
+        chucVuDang?: boolean | ChucVuDang$chucVuDangArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["chucVuDang"]>;
+    export type ChucVuDangSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        chucVuDangId?: boolean
+        userProfileId?: boolean
+        address?: boolean
+    };
+    export type ChucVuDangOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "chucVuDangId" | "userProfileId" | "address", ExtArgs["result"]["chucVuDang"]>;
+    export type ChucVuDangInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        chucVuDang?: boolean | ChucVuDang$chucVuDangArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type ChucVuDangIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        chucVuDang?: boolean | ChucVuDang$chucVuDangArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type ChucVuDangIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        chucVuDang?: boolean | ChucVuDang$chucVuDangArgs<ExtArgs>
+        userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type $ChucVuDangPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ChucVuDang"
+        objects: {
+            chucVuDang: Prisma.$DM_ChucVuPayload<ExtArgs> | null
+            userProfile: Prisma.$UserProfilePayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            chucVuDangId: string | null
+            userProfileId: string
+            address: string | null
+        }, ExtArgs["result"]["chucVuDang"]>
+        composites: {}
+    };
+    type ChucVuDangGetPayload<S extends boolean | null | undefined | ChucVuDangDefaultArgs> = $Result.GetResult<Prisma.$ChucVuDangPayload, S>;
+    type ChucVuDangCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ChucVuDangFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ChucVuDangCountAggregateInputType | true
+    };
+    /**
+     * ChucVuDang findUnique
+     */
+    export type ChucVuDangFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuDang to fetch.
+         */
+        where: ChucVuDangWhereUniqueInput
+    };
+    /**
+     * ChucVuDang findUniqueOrThrow
+     */
+    export type ChucVuDangFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuDang to fetch.
+         */
+        where: ChucVuDangWhereUniqueInput
+    };
+    /**
+     * ChucVuDang findFirst
+     */
+    export type ChucVuDangFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuDang to fetch.
+         */
+        where?: ChucVuDangWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ChucVuDangs to fetch.
+         */
+        orderBy?: ChucVuDangOrderByWithRelationInput | ChucVuDangOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ChucVuDangs.
+         */
+        cursor?: ChucVuDangWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ChucVuDangs from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ChucVuDangs.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ChucVuDangs.
+         */
+        distinct?: ChucVuDangScalarFieldEnum | ChucVuDangScalarFieldEnum[]
+    };
+    /**
+     * ChucVuDang findFirstOrThrow
+     */
+    export type ChucVuDangFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuDang to fetch.
+         */
+        where?: ChucVuDangWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ChucVuDangs to fetch.
+         */
+        orderBy?: ChucVuDangOrderByWithRelationInput | ChucVuDangOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ChucVuDangs.
+         */
+        cursor?: ChucVuDangWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ChucVuDangs from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ChucVuDangs.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ChucVuDangs.
+         */
+        distinct?: ChucVuDangScalarFieldEnum | ChucVuDangScalarFieldEnum[]
+    };
+    /**
+     * ChucVuDang findMany
+     */
+    export type ChucVuDangFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * Filter, which ChucVuDangs to fetch.
+         */
+        where?: ChucVuDangWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ChucVuDangs to fetch.
+         */
+        orderBy?: ChucVuDangOrderByWithRelationInput | ChucVuDangOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ChucVuDangs.
+         */
+        cursor?: ChucVuDangWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ChucVuDangs from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ChucVuDangs.
+         */
+        skip?: number
+        distinct?: ChucVuDangScalarFieldEnum | ChucVuDangScalarFieldEnum[]
+    };
+    /**
+     * ChucVuDang create
+     */
+    export type ChucVuDangCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ChucVuDang.
+         */
+        data: XOR<ChucVuDangCreateInput, ChucVuDangUncheckedCreateInput>
+    };
+    /**
+     * ChucVuDang createMany
+     */
+    export type ChucVuDangCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ChucVuDangs.
+         */
+        data: ChucVuDangCreateManyInput | ChucVuDangCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ChucVuDang createManyAndReturn
+     */
+    export type ChucVuDangCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * The data used to create many ChucVuDangs.
+         */
+        data: ChucVuDangCreateManyInput | ChucVuDangCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ChucVuDang update
+     */
+    export type ChucVuDangUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ChucVuDang.
+         */
+        data: XOR<ChucVuDangUpdateInput, ChucVuDangUncheckedUpdateInput>
+        /**
+         * Choose, which ChucVuDang to update.
+         */
+        where: ChucVuDangWhereUniqueInput
+    };
+    /**
+     * ChucVuDang updateMany
+     */
+    export type ChucVuDangUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ChucVuDangs.
+         */
+        data: XOR<ChucVuDangUpdateManyMutationInput, ChucVuDangUncheckedUpdateManyInput>
+        /**
+         * Filter which ChucVuDangs to update
+         */
+        where?: ChucVuDangWhereInput
+        /**
+         * Limit how many ChucVuDangs to update.
+         */
+        limit?: number
+    };
+    /**
+     * ChucVuDang updateManyAndReturn
+     */
+    export type ChucVuDangUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * The data used to update ChucVuDangs.
+         */
+        data: XOR<ChucVuDangUpdateManyMutationInput, ChucVuDangUncheckedUpdateManyInput>
+        /**
+         * Filter which ChucVuDangs to update
+         */
+        where?: ChucVuDangWhereInput
+        /**
+         * Limit how many ChucVuDangs to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ChucVuDang upsert
+     */
+    export type ChucVuDangUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ChucVuDang to update in case it exists.
+         */
+        where: ChucVuDangWhereUniqueInput
+        /**
+         * In case the ChucVuDang found by the `where` argument doesn't exist, create a new ChucVuDang with this data.
+         */
+        create: XOR<ChucVuDangCreateInput, ChucVuDangUncheckedCreateInput>
+        /**
+         * In case the ChucVuDang was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ChucVuDangUpdateInput, ChucVuDangUncheckedUpdateInput>
+    };
+    /**
+     * ChucVuDang delete
+     */
+    export type ChucVuDangDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        /**
+         * Filter which ChucVuDang to delete.
+         */
+        where: ChucVuDangWhereUniqueInput
+    };
+    /**
+     * ChucVuDang deleteMany
+     */
+    export type ChucVuDangDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ChucVuDangs to delete
+         */
+        where?: ChucVuDangWhereInput
+        /**
+         * Limit how many ChucVuDangs to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ChucVuDang.chucVuDang
+     */
+    export type ChucVuDang$chucVuDangArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_ChucVu
+         */
+        select?: DM_ChucVuSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_ChucVu
+         */
+        omit?: DM_ChucVuOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_ChucVuInclude<ExtArgs> | null
+        where?: DM_ChucVuWhereInput
+    };
+    /**
+     * ChucVuDang without action
+     */
+    export type ChucVuDangDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
     };
     /**
      * Model HocVi
@@ -172499,6 +174970,8 @@ export namespace Prisma {
         userProfile?: boolean | DM_ChucVu$userProfileArgs<ExtArgs>
         quaTrinhCongTac?: boolean | DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>
         quaTrinhCuDiCongTac?: boolean | DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>
+        chucVuChinhQuyen?: boolean | DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs>
+        chucVuDang?: boolean | DM_ChucVu$chucVuDangArgs<ExtArgs>
         _count?: boolean | DM_ChucVuCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_ChucVu"]>;
     export type DM_ChucVuSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -172561,6 +175034,8 @@ export namespace Prisma {
         userProfile?: boolean | DM_ChucVu$userProfileArgs<ExtArgs>
         quaTrinhCongTac?: boolean | DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>
         quaTrinhCuDiCongTac?: boolean | DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>
+        chucVuChinhQuyen?: boolean | DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs>
+        chucVuDang?: boolean | DM_ChucVu$chucVuDangArgs<ExtArgs>
         _count?: boolean | DM_ChucVuCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type DM_ChucVuIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -172572,6 +175047,8 @@ export namespace Prisma {
             userProfile: Prisma.$UserProfilePayload<ExtArgs>[]
             quaTrinhCongTac: Prisma.$QuaTrinhCongTacPayload<ExtArgs>[]
             quaTrinhCuDiCongTac: Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>[]
+            chucVuChinhQuyen: Prisma.$ChucVuChinhQuyenPayload<ExtArgs>[]
+            chucVuDang: Prisma.$ChucVuDangPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             Id: string
@@ -173057,6 +175534,52 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: QuaTrinhCuDiCongTacScalarFieldEnum | QuaTrinhCuDiCongTacScalarFieldEnum[]
+    };
+    /**
+     * DM_ChucVu.chucVuChinhQuyen
+     */
+    export type DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuChinhQuyen
+         */
+        select?: ChucVuChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuChinhQuyen
+         */
+        omit?: ChucVuChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuChinhQuyenInclude<ExtArgs> | null
+        where?: ChucVuChinhQuyenWhereInput
+        orderBy?: ChucVuChinhQuyenOrderByWithRelationInput | ChucVuChinhQuyenOrderByWithRelationInput[]
+        cursor?: ChucVuChinhQuyenWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ChucVuChinhQuyenScalarFieldEnum | ChucVuChinhQuyenScalarFieldEnum[]
+    };
+    /**
+     * DM_ChucVu.chucVuDang
+     */
+    export type DM_ChucVu$chucVuDangArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ChucVuDang
+         */
+        select?: ChucVuDangSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ChucVuDang
+         */
+        omit?: ChucVuDangOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ChucVuDangInclude<ExtArgs> | null
+        where?: ChucVuDangWhereInput
+        orderBy?: ChucVuDangOrderByWithRelationInput | ChucVuDangOrderByWithRelationInput[]
+        cursor?: ChucVuDangWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ChucVuDangScalarFieldEnum | ChucVuDangScalarFieldEnum[]
     };
     /**
      * DM_ChucVu without action
@@ -230867,13 +233390,13 @@ export namespace Prisma {
     };
     export type TrainingBlockMinAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
+        code: string | null
         name: string | null
         trainingObjectTypeId: string | null
         priority: number | null
@@ -230881,13 +233404,13 @@ export namespace Prisma {
     };
     export type TrainingBlockMaxAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
+        code: string | null
         name: string | null
         trainingObjectTypeId: string | null
         priority: number | null
@@ -230895,13 +233418,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCountAggregateOutputType = {
         id: number
-        code: number
         active: number
         description: number
         deletedAt: number
         createdAt: number
         updatedAt: number
         createdBy: number
+        code: number
         name: number
         trainingObjectTypeId: number
         priority: number
@@ -230916,13 +233439,13 @@ export namespace Prisma {
     };
     export type TrainingBlockMinAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         trainingObjectTypeId?: true
         priority?: true
@@ -230930,13 +233453,13 @@ export namespace Prisma {
     };
     export type TrainingBlockMaxAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         trainingObjectTypeId?: true
         priority?: true
@@ -230944,13 +233467,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCountAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         createdBy?: true
+        code?: true
         name?: true
         trainingObjectTypeId?: true
         priority?: true
@@ -231039,13 +233562,13 @@ export namespace Prisma {
     };
     export type TrainingBlockGroupByOutputType = {
         id: string
-        code: string | null
         active: boolean
         description: string | null
         deletedAt: Date | null
         createdAt: Date
         updatedAt: Date
         createdBy: string | null
+        code: string | null
         name: string
         trainingObjectTypeId: string
         priority: number
@@ -231070,13 +233593,13 @@ export namespace Prisma {
     >;
     export type TrainingBlockSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         trainingObjectTypeId?: boolean
         priority?: boolean
@@ -231089,13 +233612,13 @@ export namespace Prisma {
     }, ExtArgs["result"]["trainingBlock"]>;
     export type TrainingBlockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         trainingObjectTypeId?: boolean
         priority?: boolean
@@ -231105,13 +233628,13 @@ export namespace Prisma {
     }, ExtArgs["result"]["trainingBlock"]>;
     export type TrainingBlockSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         trainingObjectTypeId?: boolean
         priority?: boolean
@@ -231121,19 +233644,19 @@ export namespace Prisma {
     }, ExtArgs["result"]["trainingBlock"]>;
     export type TrainingBlockSelectScalar = {
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
+        code?: boolean
         name?: boolean
         trainingObjectTypeId?: boolean
         priority?: boolean
         parentId?: boolean
     };
-    export type TrainingBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "trainingObjectTypeId" | "priority" | "parentId", ExtArgs["result"]["trainingBlock"]>;
+    export type TrainingBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "trainingObjectTypeId" | "priority" | "parentId", ExtArgs["result"]["trainingBlock"]>;
     export type TrainingBlockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
@@ -231159,13 +233682,13 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            code: string | null
             active: boolean
             description: string | null
             deletedAt: Date | null
             createdAt: Date
             updatedAt: Date
             createdBy: string | null
+            code: string | null
             name: string
             trainingObjectTypeId: string
             /**
@@ -335681,6 +338204,8 @@ export namespace Prisma {
     export type ChangeLogScalarFieldEnum = (typeof ChangeLogScalarFieldEnum)[keyof typeof ChangeLogScalarFieldEnum];
     export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum];
     export type HocHamScalarFieldEnum = (typeof HocHamScalarFieldEnum)[keyof typeof HocHamScalarFieldEnum];
+    export type ChucVuChinhQuyenScalarFieldEnum = (typeof ChucVuChinhQuyenScalarFieldEnum)[keyof typeof ChucVuChinhQuyenScalarFieldEnum];
+    export type ChucVuDangScalarFieldEnum = (typeof ChucVuDangScalarFieldEnum)[keyof typeof ChucVuDangScalarFieldEnum];
     export type HocViScalarFieldEnum = (typeof HocViScalarFieldEnum)[keyof typeof HocViScalarFieldEnum];
     export type RelativeScalarFieldEnum = (typeof RelativeScalarFieldEnum)[keyof typeof RelativeScalarFieldEnum];
     export type TrinhDoLyLuanChinhTriScalarFieldEnum = (typeof TrinhDoLyLuanChinhTriScalarFieldEnum)[keyof typeof TrinhDoLyLuanChinhTriScalarFieldEnum];
@@ -335940,6 +338465,8 @@ export namespace Prisma {
     export type ChangeLogOrderByRelevanceFieldEnum = (typeof ChangeLogOrderByRelevanceFieldEnum)[keyof typeof ChangeLogOrderByRelevanceFieldEnum];
     export type UserProfileOrderByRelevanceFieldEnum = (typeof UserProfileOrderByRelevanceFieldEnum)[keyof typeof UserProfileOrderByRelevanceFieldEnum];
     export type HocHamOrderByRelevanceFieldEnum = (typeof HocHamOrderByRelevanceFieldEnum)[keyof typeof HocHamOrderByRelevanceFieldEnum];
+    export type ChucVuChinhQuyenOrderByRelevanceFieldEnum = (typeof ChucVuChinhQuyenOrderByRelevanceFieldEnum)[keyof typeof ChucVuChinhQuyenOrderByRelevanceFieldEnum];
+    export type ChucVuDangOrderByRelevanceFieldEnum = (typeof ChucVuDangOrderByRelevanceFieldEnum)[keyof typeof ChucVuDangOrderByRelevanceFieldEnum];
     export type HocViOrderByRelevanceFieldEnum = (typeof HocViOrderByRelevanceFieldEnum)[keyof typeof HocViOrderByRelevanceFieldEnum];
     export type RelativeOrderByRelevanceFieldEnum = (typeof RelativeOrderByRelevanceFieldEnum)[keyof typeof RelativeOrderByRelevanceFieldEnum];
     export type TrinhDoLyLuanChinhTriOrderByRelevanceFieldEnum = (typeof TrinhDoLyLuanChinhTriOrderByRelevanceFieldEnum)[keyof typeof TrinhDoLyLuanChinhTriOrderByRelevanceFieldEnum];
@@ -337125,6 +339652,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapListRelationFilter
         ToChucXaHoi?: ToChucXaHoiListRelationFilter
         QuaTrinhLuong?: QuaTrinhLuongListRelationFilter
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenListRelationFilter
+        quaTrinhChucVuDang?: ChucVuDangListRelationFilter
         trinhDoHocVan?: XOR<DM_TrinhDoHocVanNullableScalarRelationFilter, DM_TrinhDoHocVanWhereInput> | null
         educationAndTraining?: StudentListRelationFilter
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -337342,6 +339871,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapOrderByRelationAggregateInput
         ToChucXaHoi?: ToChucXaHoiOrderByRelationAggregateInput
         QuaTrinhLuong?: QuaTrinhLuongOrderByRelationAggregateInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenOrderByRelationAggregateInput
+        quaTrinhChucVuDang?: ChucVuDangOrderByRelationAggregateInput
         trinhDoHocVan?: DM_TrinhDoHocVanOrderByWithRelationInput
         educationAndTraining?: StudentOrderByRelationAggregateInput
         lecturer?: LecturerOrderByWithRelationInput
@@ -337563,6 +340094,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapListRelationFilter
         ToChucXaHoi?: ToChucXaHoiListRelationFilter
         QuaTrinhLuong?: QuaTrinhLuongListRelationFilter
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenListRelationFilter
+        quaTrinhChucVuDang?: ChucVuDangListRelationFilter
         trinhDoHocVan?: XOR<DM_TrinhDoHocVanNullableScalarRelationFilter, DM_TrinhDoHocVanWhereInput> | null
         educationAndTraining?: StudentListRelationFilter
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -337949,6 +340482,174 @@ export namespace Prisma {
         from?: DateTimeNullableWithAggregatesFilter<"HocHam"> | Date | string | null
         to?: DateTimeNullableWithAggregatesFilter<"HocHam"> | Date | string | null
         userProfileId?: StringWithAggregatesFilter<"HocHam"> | string
+    };
+    export type ChucVuChinhQuyenWhereInput = {
+        AND?: ChucVuChinhQuyenWhereInput | ChucVuChinhQuyenWhereInput[]
+        OR?: ChucVuChinhQuyenWhereInput[]
+        NOT?: ChucVuChinhQuyenWhereInput | ChucVuChinhQuyenWhereInput[]
+        id?: StringFilter<"ChucVuChinhQuyen"> | string
+        code?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
+        active?: BoolFilter<"ChucVuChinhQuyen"> | boolean
+        description?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ChucVuChinhQuyen"> | Date | string | null
+        createdAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
+        updatedAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
+        createdBy?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
+        chucVuChinhQuyenId?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
+        userProfileId?: StringFilter<"ChucVuChinhQuyen"> | string
+        address?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
+        chucVuChinhQuyen?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
+        userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    };
+    export type ChucVuChinhQuyenOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        chucVuChinhQuyenId?: SortOrderInput | SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrderInput | SortOrder
+        chucVuChinhQuyen?: DM_ChucVuOrderByWithRelationInput
+        userProfile?: UserProfileOrderByWithRelationInput
+        _relevance?: ChucVuChinhQuyenOrderByRelevanceInput
+    };
+    export type ChucVuChinhQuyenWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: ChucVuChinhQuyenWhereInput | ChucVuChinhQuyenWhereInput[]
+        OR?: ChucVuChinhQuyenWhereInput[]
+        NOT?: ChucVuChinhQuyenWhereInput | ChucVuChinhQuyenWhereInput[]
+        active?: BoolFilter<"ChucVuChinhQuyen"> | boolean
+        description?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ChucVuChinhQuyen"> | Date | string | null
+        createdAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
+        updatedAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
+        createdBy?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
+        chucVuChinhQuyenId?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
+        userProfileId?: StringFilter<"ChucVuChinhQuyen"> | string
+        address?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
+        chucVuChinhQuyen?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
+        userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    }, "id" | "code">;
+    export type ChucVuChinhQuyenOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        chucVuChinhQuyenId?: SortOrderInput | SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrderInput | SortOrder
+        _count?: ChucVuChinhQuyenCountOrderByAggregateInput
+        _max?: ChucVuChinhQuyenMaxOrderByAggregateInput
+        _min?: ChucVuChinhQuyenMinOrderByAggregateInput
+    };
+    export type ChucVuChinhQuyenScalarWhereWithAggregatesInput = {
+        AND?: ChucVuChinhQuyenScalarWhereWithAggregatesInput | ChucVuChinhQuyenScalarWhereWithAggregatesInput[]
+        OR?: ChucVuChinhQuyenScalarWhereWithAggregatesInput[]
+        NOT?: ChucVuChinhQuyenScalarWhereWithAggregatesInput | ChucVuChinhQuyenScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ChucVuChinhQuyen"> | string
+        code?: StringNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | string | null
+        active?: BoolWithAggregatesFilter<"ChucVuChinhQuyen"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ChucVuChinhQuyen"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ChucVuChinhQuyen"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | string | null
+        chucVuChinhQuyenId?: UuidNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | string | null
+        userProfileId?: StringWithAggregatesFilter<"ChucVuChinhQuyen"> | string
+        address?: StringNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | string | null
+    };
+    export type ChucVuDangWhereInput = {
+        AND?: ChucVuDangWhereInput | ChucVuDangWhereInput[]
+        OR?: ChucVuDangWhereInput[]
+        NOT?: ChucVuDangWhereInput | ChucVuDangWhereInput[]
+        id?: StringFilter<"ChucVuDang"> | string
+        code?: StringNullableFilter<"ChucVuDang"> | string | null
+        active?: BoolFilter<"ChucVuDang"> | boolean
+        description?: StringNullableFilter<"ChucVuDang"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ChucVuDang"> | Date | string | null
+        createdAt?: DateTimeFilter<"ChucVuDang"> | Date | string
+        updatedAt?: DateTimeFilter<"ChucVuDang"> | Date | string
+        createdBy?: UuidNullableFilter<"ChucVuDang"> | string | null
+        chucVuDangId?: UuidNullableFilter<"ChucVuDang"> | string | null
+        userProfileId?: StringFilter<"ChucVuDang"> | string
+        address?: StringNullableFilter<"ChucVuDang"> | string | null
+        chucVuDang?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
+        userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    };
+    export type ChucVuDangOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        chucVuDangId?: SortOrderInput | SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrderInput | SortOrder
+        chucVuDang?: DM_ChucVuOrderByWithRelationInput
+        userProfile?: UserProfileOrderByWithRelationInput
+        _relevance?: ChucVuDangOrderByRelevanceInput
+    };
+    export type ChucVuDangWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: ChucVuDangWhereInput | ChucVuDangWhereInput[]
+        OR?: ChucVuDangWhereInput[]
+        NOT?: ChucVuDangWhereInput | ChucVuDangWhereInput[]
+        active?: BoolFilter<"ChucVuDang"> | boolean
+        description?: StringNullableFilter<"ChucVuDang"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ChucVuDang"> | Date | string | null
+        createdAt?: DateTimeFilter<"ChucVuDang"> | Date | string
+        updatedAt?: DateTimeFilter<"ChucVuDang"> | Date | string
+        createdBy?: UuidNullableFilter<"ChucVuDang"> | string | null
+        chucVuDangId?: UuidNullableFilter<"ChucVuDang"> | string | null
+        userProfileId?: StringFilter<"ChucVuDang"> | string
+        address?: StringNullableFilter<"ChucVuDang"> | string | null
+        chucVuDang?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
+        userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    }, "id" | "code">;
+    export type ChucVuDangOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        chucVuDangId?: SortOrderInput | SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrderInput | SortOrder
+        _count?: ChucVuDangCountOrderByAggregateInput
+        _max?: ChucVuDangMaxOrderByAggregateInput
+        _min?: ChucVuDangMinOrderByAggregateInput
+    };
+    export type ChucVuDangScalarWhereWithAggregatesInput = {
+        AND?: ChucVuDangScalarWhereWithAggregatesInput | ChucVuDangScalarWhereWithAggregatesInput[]
+        OR?: ChucVuDangScalarWhereWithAggregatesInput[]
+        NOT?: ChucVuDangScalarWhereWithAggregatesInput | ChucVuDangScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ChucVuDang"> | string
+        code?: StringNullableWithAggregatesFilter<"ChucVuDang"> | string | null
+        active?: BoolWithAggregatesFilter<"ChucVuDang"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ChucVuDang"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ChucVuDang"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ChucVuDang"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ChucVuDang"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"ChucVuDang"> | string | null
+        chucVuDangId?: UuidNullableWithAggregatesFilter<"ChucVuDang"> | string | null
+        userProfileId?: StringWithAggregatesFilter<"ChucVuDang"> | string
+        address?: StringNullableWithAggregatesFilter<"ChucVuDang"> | string | null
     };
     export type HocViWhereInput = {
         AND?: HocViWhereInput | HocViWhereInput[]
@@ -341753,6 +344454,8 @@ export namespace Prisma {
         userProfile?: UserProfileListRelationFilter
         quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
+        chucVuChinhQuyen?: ChucVuChinhQuyenListRelationFilter
+        chucVuDang?: ChucVuDangListRelationFilter
     };
     export type DM_ChucVuOrderByWithRelationInput = {
         Id?: SortOrder
@@ -341775,6 +344478,8 @@ export namespace Prisma {
         userProfile?: UserProfileOrderByRelationAggregateInput
         quaTrinhCongTac?: QuaTrinhCongTacOrderByRelationAggregateInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacOrderByRelationAggregateInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenOrderByRelationAggregateInput
+        chucVuDang?: ChucVuDangOrderByRelationAggregateInput
         _relevance?: DM_ChucVuOrderByRelevanceInput
     };
     export type DM_ChucVuWhereUniqueInput = Prisma.AtLeast<{
@@ -341801,6 +344506,8 @@ export namespace Prisma {
         userProfile?: UserProfileListRelationFilter
         quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
+        chucVuChinhQuyen?: ChucVuChinhQuyenListRelationFilter
+        chucVuDang?: ChucVuDangListRelationFilter
     }, "Id">;
     export type DM_ChucVuOrderByWithAggregationInput = {
         Id?: SortOrder
@@ -349975,13 +352682,13 @@ export namespace Prisma {
         OR?: TrainingBlockWhereInput[]
         NOT?: TrainingBlockWhereInput | TrainingBlockWhereInput[]
         id?: StringFilter<"TrainingBlock"> | string
-        code?: StringNullableFilter<"TrainingBlock"> | string | null
         active?: BoolFilter<"TrainingBlock"> | boolean
         description?: StringNullableFilter<"TrainingBlock"> | string | null
         deletedAt?: DateTimeNullableFilter<"TrainingBlock"> | Date | string | null
         createdAt?: DateTimeFilter<"TrainingBlock"> | Date | string
         updatedAt?: DateTimeFilter<"TrainingBlock"> | Date | string
         createdBy?: UuidNullableFilter<"TrainingBlock"> | string | null
+        code?: StringNullableFilter<"TrainingBlock"> | string | null
         name?: StringFilter<"TrainingBlock"> | string
         trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
         priority?: IntFilter<"TrainingBlock"> | number
@@ -349993,13 +352700,13 @@ export namespace Prisma {
     };
     export type TrainingBlockOrderByWithRelationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
+        code?: SortOrderInput | SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
         priority?: SortOrder
@@ -350012,7 +352719,6 @@ export namespace Prisma {
     };
     export type TrainingBlockWhereUniqueInput = Prisma.AtLeast<{
         id?: string
-        code?: string
         trainingObjectTypeId_name?: TrainingBlockTrainingObjectTypeIdNameCompoundUniqueInput
         AND?: TrainingBlockWhereInput | TrainingBlockWhereInput[]
         OR?: TrainingBlockWhereInput[]
@@ -350023,6 +352729,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"TrainingBlock"> | Date | string
         updatedAt?: DateTimeFilter<"TrainingBlock"> | Date | string
         createdBy?: UuidNullableFilter<"TrainingBlock"> | string | null
+        code?: StringNullableFilter<"TrainingBlock"> | string | null
         name?: StringFilter<"TrainingBlock"> | string
         trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
         priority?: IntFilter<"TrainingBlock"> | number
@@ -350031,16 +352738,16 @@ export namespace Prisma {
         parent?: XOR<TrainingBlockNullableScalarRelationFilter, TrainingBlockWhereInput> | null
         children?: TrainingBlockListRelationFilter
         curriculumVersions?: TrainingBlockOnCurriculumVersionListRelationFilter
-    }, "id" | "code" | "trainingObjectTypeId_name">;
+    }, "id" | "trainingObjectTypeId_name">;
     export type TrainingBlockOrderByWithAggregationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
+        code?: SortOrderInput | SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
         priority?: SortOrder
@@ -350056,13 +352763,13 @@ export namespace Prisma {
         OR?: TrainingBlockScalarWhereWithAggregatesInput[]
         NOT?: TrainingBlockScalarWhereWithAggregatesInput | TrainingBlockScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"TrainingBlock"> | string
-        code?: StringNullableWithAggregatesFilter<"TrainingBlock"> | string | null
         active?: BoolWithAggregatesFilter<"TrainingBlock"> | boolean
         description?: StringNullableWithAggregatesFilter<"TrainingBlock"> | string | null
         deletedAt?: DateTimeNullableWithAggregatesFilter<"TrainingBlock"> | Date | string | null
         createdAt?: DateTimeWithAggregatesFilter<"TrainingBlock"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"TrainingBlock"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"TrainingBlock"> | string | null
+        code?: StringNullableWithAggregatesFilter<"TrainingBlock"> | string | null
         name?: StringWithAggregatesFilter<"TrainingBlock"> | string
         trainingObjectTypeId?: StringWithAggregatesFilter<"TrainingBlock"> | string
         priority?: IntWithAggregatesFilter<"TrainingBlock"> | number
@@ -363970,6 +366677,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -364143,6 +366852,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -364314,6 +367025,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -364487,6 +367200,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -364960,6 +367675,184 @@ export namespace Prisma {
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ChucVuChinhQuyenCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        address?: string | null
+        chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutChucVuChinhQuyenInput
+        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhChucVuChinhQuyenInput
+    };
+    export type ChucVuChinhQuyenUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        chucVuChinhQuyenId?: string | null
+        userProfileId: string
+        address?: string | null
+    };
+    export type ChucVuChinhQuyenUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutChucVuChinhQuyenNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhChucVuChinhQuyenNestedInput
+    };
+    export type ChucVuChinhQuyenUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuChinhQuyenCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        chucVuChinhQuyenId?: string | null
+        userProfileId: string
+        address?: string | null
+    };
+    export type ChucVuChinhQuyenUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuChinhQuyenUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuDangCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        address?: string | null
+        chucVuDang?: DM_ChucVuCreateNestedOneWithoutChucVuDangInput
+        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhChucVuDangInput
+    };
+    export type ChucVuDangUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        chucVuDangId?: string | null
+        userProfileId: string
+        address?: string | null
+    };
+    export type ChucVuDangUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuDang?: DM_ChucVuUpdateOneWithoutChucVuDangNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhChucVuDangNestedInput
+    };
+    export type ChucVuDangUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuDangId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuDangCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        chucVuDangId?: string | null
+        userProfileId: string
+        address?: string | null
+    };
+    export type ChucVuDangUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuDangUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuDangId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        address?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type HocViCreateInput = {
         id?: string
@@ -369204,6 +372097,8 @@ export namespace Prisma {
         userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
         quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuUncheckedCreateInput = {
         Id?: string
@@ -369226,6 +372121,8 @@ export namespace Prisma {
         userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -369248,6 +372145,8 @@ export namespace Prisma {
         userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_ChucVuUncheckedUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -369270,6 +372169,8 @@ export namespace Prisma {
         userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_ChucVuCreateManyInput = {
         Id?: string
@@ -378748,13 +381649,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         priority?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
@@ -378764,13 +381665,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         trainingObjectTypeId: string
         priority?: number
@@ -378780,13 +381681,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
@@ -378796,13 +381697,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
@@ -378812,13 +381713,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCreateManyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         trainingObjectTypeId: string
         priority?: number
@@ -378826,25 +381727,25 @@ export namespace Prisma {
     };
     export type TrainingBlockUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
     };
     export type TrainingBlockUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
@@ -394579,6 +397480,16 @@ export namespace Prisma {
         some?: QuaTrinhLuongWhereInput
         none?: QuaTrinhLuongWhereInput
     };
+    export type ChucVuChinhQuyenListRelationFilter = {
+        every?: ChucVuChinhQuyenWhereInput
+        some?: ChucVuChinhQuyenWhereInput
+        none?: ChucVuChinhQuyenWhereInput
+    };
+    export type ChucVuDangListRelationFilter = {
+        every?: ChucVuDangWhereInput
+        some?: ChucVuDangWhereInput
+        none?: ChucVuDangWhereInput
+    };
     export type DM_TrinhDoHocVanNullableScalarRelationFilter = {
         is?: DM_TrinhDoHocVanWhereInput | null
         isNot?: DM_TrinhDoHocVanWhereInput | null
@@ -394731,6 +397642,12 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type QuaTrinhLuongOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ChucVuChinhQuyenOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ChucVuDangOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type StudentOrderByRelationAggregateInput = {
@@ -395256,6 +398173,94 @@ export namespace Prisma {
         from?: SortOrder
         to?: SortOrder
         userProfileId?: SortOrder
+    };
+    export type ChucVuChinhQuyenOrderByRelevanceInput = {
+        fields: ChucVuChinhQuyenOrderByRelevanceFieldEnum | ChucVuChinhQuyenOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ChucVuChinhQuyenCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        chucVuChinhQuyenId?: SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrder
+    };
+    export type ChucVuChinhQuyenMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        chucVuChinhQuyenId?: SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrder
+    };
+    export type ChucVuChinhQuyenMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        chucVuChinhQuyenId?: SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrder
+    };
+    export type ChucVuDangOrderByRelevanceInput = {
+        fields: ChucVuDangOrderByRelevanceFieldEnum | ChucVuDangOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ChucVuDangCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        chucVuDangId?: SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrder
+    };
+    export type ChucVuDangMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        chucVuDangId?: SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrder
+    };
+    export type ChucVuDangMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        chucVuDangId?: SortOrder
+        userProfileId?: SortOrder
+        address?: SortOrder
     };
     export type DM_TruongDaoTaoBacDHNullableScalarRelationFilter = {
         is?: DM_TruongDaoTaoBacDHWhereInput | null
@@ -403301,13 +406306,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCountOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
         priority?: SortOrder
@@ -403318,13 +406323,13 @@ export namespace Prisma {
     };
     export type TrainingBlockMaxOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
         priority?: SortOrder
@@ -403332,13 +406337,13 @@ export namespace Prisma {
     };
     export type TrainingBlockMinOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
         priority?: SortOrder
@@ -412550,6 +415555,18 @@ export namespace Prisma {
         createMany?: QuaTrinhLuongCreateManyUserProfileInputEnvelope
         connect?: QuaTrinhLuongWhereUniqueInput | QuaTrinhLuongWhereUniqueInput[]
     };
+    export type ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput = {
+        create?: XOR<ChucVuChinhQuyenCreateWithoutUserProfileInput, ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput> | ChucVuChinhQuyenCreateWithoutUserProfileInput[] | ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput[]
+        connectOrCreate?: ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput | ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput[]
+        createMany?: ChucVuChinhQuyenCreateManyUserProfileInputEnvelope
+        connect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+    };
+    export type ChucVuDangCreateNestedManyWithoutUserProfileInput = {
+        create?: XOR<ChucVuDangCreateWithoutUserProfileInput, ChucVuDangUncheckedCreateWithoutUserProfileInput> | ChucVuDangCreateWithoutUserProfileInput[] | ChucVuDangUncheckedCreateWithoutUserProfileInput[]
+        connectOrCreate?: ChucVuDangCreateOrConnectWithoutUserProfileInput | ChucVuDangCreateOrConnectWithoutUserProfileInput[]
+        createMany?: ChucVuDangCreateManyUserProfileInputEnvelope
+        connect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+    };
     export type DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput = {
         create?: XOR<DM_TrinhDoHocVanCreateWithoutUserProfileInput, DM_TrinhDoHocVanUncheckedCreateWithoutUserProfileInput>
         connectOrCreate?: DM_TrinhDoHocVanCreateOrConnectWithoutUserProfileInput
@@ -412803,6 +415820,18 @@ export namespace Prisma {
         connectOrCreate?: QuaTrinhLuongCreateOrConnectWithoutUserProfileInput | QuaTrinhLuongCreateOrConnectWithoutUserProfileInput[]
         createMany?: QuaTrinhLuongCreateManyUserProfileInputEnvelope
         connect?: QuaTrinhLuongWhereUniqueInput | QuaTrinhLuongWhereUniqueInput[]
+    };
+    export type ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput = {
+        create?: XOR<ChucVuChinhQuyenCreateWithoutUserProfileInput, ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput> | ChucVuChinhQuyenCreateWithoutUserProfileInput[] | ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput[]
+        connectOrCreate?: ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput | ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput[]
+        createMany?: ChucVuChinhQuyenCreateManyUserProfileInputEnvelope
+        connect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+    };
+    export type ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput = {
+        create?: XOR<ChucVuDangCreateWithoutUserProfileInput, ChucVuDangUncheckedCreateWithoutUserProfileInput> | ChucVuDangCreateWithoutUserProfileInput[] | ChucVuDangUncheckedCreateWithoutUserProfileInput[]
+        connectOrCreate?: ChucVuDangCreateOrConnectWithoutUserProfileInput | ChucVuDangCreateOrConnectWithoutUserProfileInput[]
+        createMany?: ChucVuDangCreateManyUserProfileInputEnvelope
+        connect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
     };
     export type StudentUncheckedCreateNestedManyWithoutUserProfileInput = {
         create?: XOR<StudentCreateWithoutUserProfileInput, StudentUncheckedCreateWithoutUserProfileInput> | StudentCreateWithoutUserProfileInput[] | StudentUncheckedCreateWithoutUserProfileInput[]
@@ -413627,6 +416656,32 @@ export namespace Prisma {
         updateMany?: QuaTrinhLuongUpdateManyWithWhereWithoutUserProfileInput | QuaTrinhLuongUpdateManyWithWhereWithoutUserProfileInput[]
         deleteMany?: QuaTrinhLuongScalarWhereInput | QuaTrinhLuongScalarWhereInput[]
     };
+    export type ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput = {
+        create?: XOR<ChucVuChinhQuyenCreateWithoutUserProfileInput, ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput> | ChucVuChinhQuyenCreateWithoutUserProfileInput[] | ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput[]
+        connectOrCreate?: ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput | ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput[]
+        upsert?: ChucVuChinhQuyenUpsertWithWhereUniqueWithoutUserProfileInput | ChucVuChinhQuyenUpsertWithWhereUniqueWithoutUserProfileInput[]
+        createMany?: ChucVuChinhQuyenCreateManyUserProfileInputEnvelope
+        set?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        disconnect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        delete?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        connect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        update?: ChucVuChinhQuyenUpdateWithWhereUniqueWithoutUserProfileInput | ChucVuChinhQuyenUpdateWithWhereUniqueWithoutUserProfileInput[]
+        updateMany?: ChucVuChinhQuyenUpdateManyWithWhereWithoutUserProfileInput | ChucVuChinhQuyenUpdateManyWithWhereWithoutUserProfileInput[]
+        deleteMany?: ChucVuChinhQuyenScalarWhereInput | ChucVuChinhQuyenScalarWhereInput[]
+    };
+    export type ChucVuDangUpdateManyWithoutUserProfileNestedInput = {
+        create?: XOR<ChucVuDangCreateWithoutUserProfileInput, ChucVuDangUncheckedCreateWithoutUserProfileInput> | ChucVuDangCreateWithoutUserProfileInput[] | ChucVuDangUncheckedCreateWithoutUserProfileInput[]
+        connectOrCreate?: ChucVuDangCreateOrConnectWithoutUserProfileInput | ChucVuDangCreateOrConnectWithoutUserProfileInput[]
+        upsert?: ChucVuDangUpsertWithWhereUniqueWithoutUserProfileInput | ChucVuDangUpsertWithWhereUniqueWithoutUserProfileInput[]
+        createMany?: ChucVuDangCreateManyUserProfileInputEnvelope
+        set?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        disconnect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        delete?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        connect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        update?: ChucVuDangUpdateWithWhereUniqueWithoutUserProfileInput | ChucVuDangUpdateWithWhereUniqueWithoutUserProfileInput[]
+        updateMany?: ChucVuDangUpdateManyWithWhereWithoutUserProfileInput | ChucVuDangUpdateManyWithWhereWithoutUserProfileInput[]
+        deleteMany?: ChucVuDangScalarWhereInput | ChucVuDangScalarWhereInput[]
+    };
     export type DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput = {
         create?: XOR<DM_TrinhDoHocVanCreateWithoutUserProfileInput, DM_TrinhDoHocVanUncheckedCreateWithoutUserProfileInput>
         connectOrCreate?: DM_TrinhDoHocVanCreateOrConnectWithoutUserProfileInput
@@ -414173,6 +417228,32 @@ export namespace Prisma {
         updateMany?: QuaTrinhLuongUpdateManyWithWhereWithoutUserProfileInput | QuaTrinhLuongUpdateManyWithWhereWithoutUserProfileInput[]
         deleteMany?: QuaTrinhLuongScalarWhereInput | QuaTrinhLuongScalarWhereInput[]
     };
+    export type ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput = {
+        create?: XOR<ChucVuChinhQuyenCreateWithoutUserProfileInput, ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput> | ChucVuChinhQuyenCreateWithoutUserProfileInput[] | ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput[]
+        connectOrCreate?: ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput | ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput[]
+        upsert?: ChucVuChinhQuyenUpsertWithWhereUniqueWithoutUserProfileInput | ChucVuChinhQuyenUpsertWithWhereUniqueWithoutUserProfileInput[]
+        createMany?: ChucVuChinhQuyenCreateManyUserProfileInputEnvelope
+        set?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        disconnect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        delete?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        connect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        update?: ChucVuChinhQuyenUpdateWithWhereUniqueWithoutUserProfileInput | ChucVuChinhQuyenUpdateWithWhereUniqueWithoutUserProfileInput[]
+        updateMany?: ChucVuChinhQuyenUpdateManyWithWhereWithoutUserProfileInput | ChucVuChinhQuyenUpdateManyWithWhereWithoutUserProfileInput[]
+        deleteMany?: ChucVuChinhQuyenScalarWhereInput | ChucVuChinhQuyenScalarWhereInput[]
+    };
+    export type ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput = {
+        create?: XOR<ChucVuDangCreateWithoutUserProfileInput, ChucVuDangUncheckedCreateWithoutUserProfileInput> | ChucVuDangCreateWithoutUserProfileInput[] | ChucVuDangUncheckedCreateWithoutUserProfileInput[]
+        connectOrCreate?: ChucVuDangCreateOrConnectWithoutUserProfileInput | ChucVuDangCreateOrConnectWithoutUserProfileInput[]
+        upsert?: ChucVuDangUpsertWithWhereUniqueWithoutUserProfileInput | ChucVuDangUpsertWithWhereUniqueWithoutUserProfileInput[]
+        createMany?: ChucVuDangCreateManyUserProfileInputEnvelope
+        set?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        disconnect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        delete?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        connect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        update?: ChucVuDangUpdateWithWhereUniqueWithoutUserProfileInput | ChucVuDangUpdateWithWhereUniqueWithoutUserProfileInput[]
+        updateMany?: ChucVuDangUpdateManyWithWhereWithoutUserProfileInput | ChucVuDangUpdateManyWithWhereWithoutUserProfileInput[]
+        deleteMany?: ChucVuDangScalarWhereInput | ChucVuDangScalarWhereInput[]
+    };
     export type StudentUncheckedUpdateManyWithoutUserProfileNestedInput = {
         create?: XOR<StudentCreateWithoutUserProfileInput, StudentUncheckedCreateWithoutUserProfileInput> | StudentCreateWithoutUserProfileInput[] | StudentUncheckedCreateWithoutUserProfileInput[]
         connectOrCreate?: StudentCreateOrConnectWithoutUserProfileInput | StudentCreateOrConnectWithoutUserProfileInput[]
@@ -414423,6 +417504,58 @@ export namespace Prisma {
         upsert?: UserProfileUpsertWithoutHocHamInput
         connect?: UserProfileWhereUniqueInput
         update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutHocHamInput, UserProfileUpdateWithoutHocHamInput>, UserProfileUncheckedUpdateWithoutHocHamInput>
+    };
+    export type DM_ChucVuCreateNestedOneWithoutChucVuChinhQuyenInput = {
+        create?: XOR<DM_ChucVuCreateWithoutChucVuChinhQuyenInput, DM_ChucVuUncheckedCreateWithoutChucVuChinhQuyenInput>
+        connectOrCreate?: DM_ChucVuCreateOrConnectWithoutChucVuChinhQuyenInput
+        connect?: DM_ChucVuWhereUniqueInput
+    };
+    export type UserProfileCreateNestedOneWithoutQuaTrinhChucVuChinhQuyenInput = {
+        create?: XOR<UserProfileCreateWithoutQuaTrinhChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutQuaTrinhChucVuChinhQuyenInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhChucVuChinhQuyenInput
+        connect?: UserProfileWhereUniqueInput
+    };
+    export type DM_ChucVuUpdateOneWithoutChucVuChinhQuyenNestedInput = {
+        create?: XOR<DM_ChucVuCreateWithoutChucVuChinhQuyenInput, DM_ChucVuUncheckedCreateWithoutChucVuChinhQuyenInput>
+        connectOrCreate?: DM_ChucVuCreateOrConnectWithoutChucVuChinhQuyenInput
+        upsert?: DM_ChucVuUpsertWithoutChucVuChinhQuyenInput
+        disconnect?: DM_ChucVuWhereInput | boolean
+        delete?: DM_ChucVuWhereInput | boolean
+        connect?: DM_ChucVuWhereUniqueInput
+        update?: XOR<XOR<DM_ChucVuUpdateToOneWithWhereWithoutChucVuChinhQuyenInput, DM_ChucVuUpdateWithoutChucVuChinhQuyenInput>, DM_ChucVuUncheckedUpdateWithoutChucVuChinhQuyenInput>
+    };
+    export type UserProfileUpdateOneRequiredWithoutQuaTrinhChucVuChinhQuyenNestedInput = {
+        create?: XOR<UserProfileCreateWithoutQuaTrinhChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutQuaTrinhChucVuChinhQuyenInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhChucVuChinhQuyenInput
+        upsert?: UserProfileUpsertWithoutQuaTrinhChucVuChinhQuyenInput
+        connect?: UserProfileWhereUniqueInput
+        update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutQuaTrinhChucVuChinhQuyenInput, UserProfileUpdateWithoutQuaTrinhChucVuChinhQuyenInput>, UserProfileUncheckedUpdateWithoutQuaTrinhChucVuChinhQuyenInput>
+    };
+    export type DM_ChucVuCreateNestedOneWithoutChucVuDangInput = {
+        create?: XOR<DM_ChucVuCreateWithoutChucVuDangInput, DM_ChucVuUncheckedCreateWithoutChucVuDangInput>
+        connectOrCreate?: DM_ChucVuCreateOrConnectWithoutChucVuDangInput
+        connect?: DM_ChucVuWhereUniqueInput
+    };
+    export type UserProfileCreateNestedOneWithoutQuaTrinhChucVuDangInput = {
+        create?: XOR<UserProfileCreateWithoutQuaTrinhChucVuDangInput, UserProfileUncheckedCreateWithoutQuaTrinhChucVuDangInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhChucVuDangInput
+        connect?: UserProfileWhereUniqueInput
+    };
+    export type DM_ChucVuUpdateOneWithoutChucVuDangNestedInput = {
+        create?: XOR<DM_ChucVuCreateWithoutChucVuDangInput, DM_ChucVuUncheckedCreateWithoutChucVuDangInput>
+        connectOrCreate?: DM_ChucVuCreateOrConnectWithoutChucVuDangInput
+        upsert?: DM_ChucVuUpsertWithoutChucVuDangInput
+        disconnect?: DM_ChucVuWhereInput | boolean
+        delete?: DM_ChucVuWhereInput | boolean
+        connect?: DM_ChucVuWhereUniqueInput
+        update?: XOR<XOR<DM_ChucVuUpdateToOneWithWhereWithoutChucVuDangInput, DM_ChucVuUpdateWithoutChucVuDangInput>, DM_ChucVuUncheckedUpdateWithoutChucVuDangInput>
+    };
+    export type UserProfileUpdateOneRequiredWithoutQuaTrinhChucVuDangNestedInput = {
+        create?: XOR<UserProfileCreateWithoutQuaTrinhChucVuDangInput, UserProfileUncheckedCreateWithoutQuaTrinhChucVuDangInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhChucVuDangInput
+        upsert?: UserProfileUpsertWithoutQuaTrinhChucVuDangInput
+        connect?: UserProfileWhereUniqueInput
+        update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutQuaTrinhChucVuDangInput, UserProfileUpdateWithoutQuaTrinhChucVuDangInput>, UserProfileUncheckedUpdateWithoutQuaTrinhChucVuDangInput>
     };
     export type DM_HocViCreateNestedOneWithoutHocViInput = {
         create?: XOR<DM_HocViCreateWithoutHocViInput, DM_HocViUncheckedCreateWithoutHocViInput>
@@ -415943,6 +419076,18 @@ export namespace Prisma {
         createMany?: QuaTrinhCuDiCongTacCreateManyChucVuInputEnvelope
         connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
     };
+    export type ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput = {
+        create?: XOR<ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput, ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput> | ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput[] | ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput[]
+        connectOrCreate?: ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput[]
+        createMany?: ChucVuChinhQuyenCreateManyChucVuChinhQuyenInputEnvelope
+        connect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+    };
+    export type ChucVuDangCreateNestedManyWithoutChucVuDangInput = {
+        create?: XOR<ChucVuDangCreateWithoutChucVuDangInput, ChucVuDangUncheckedCreateWithoutChucVuDangInput> | ChucVuDangCreateWithoutChucVuDangInput[] | ChucVuDangUncheckedCreateWithoutChucVuDangInput[]
+        connectOrCreate?: ChucVuDangCreateOrConnectWithoutChucVuDangInput | ChucVuDangCreateOrConnectWithoutChucVuDangInput[]
+        createMany?: ChucVuDangCreateManyChucVuDangInputEnvelope
+        connect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+    };
     export type UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput = {
         create?: XOR<UserProfileCreateWithoutPositionCPVInput, UserProfileUncheckedCreateWithoutPositionCPVInput> | UserProfileCreateWithoutPositionCPVInput[] | UserProfileUncheckedCreateWithoutPositionCPVInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutPositionCPVInput | UserProfileCreateOrConnectWithoutPositionCPVInput[]
@@ -415966,6 +419111,18 @@ export namespace Prisma {
         connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutChucVuInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutChucVuInput[]
         createMany?: QuaTrinhCuDiCongTacCreateManyChucVuInputEnvelope
         connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+    };
+    export type ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput = {
+        create?: XOR<ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput, ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput> | ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput[] | ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput[]
+        connectOrCreate?: ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput[]
+        createMany?: ChucVuChinhQuyenCreateManyChucVuChinhQuyenInputEnvelope
+        connect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+    };
+    export type ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput = {
+        create?: XOR<ChucVuDangCreateWithoutChucVuDangInput, ChucVuDangUncheckedCreateWithoutChucVuDangInput> | ChucVuDangCreateWithoutChucVuDangInput[] | ChucVuDangUncheckedCreateWithoutChucVuDangInput[]
+        connectOrCreate?: ChucVuDangCreateOrConnectWithoutChucVuDangInput | ChucVuDangCreateOrConnectWithoutChucVuDangInput[]
+        createMany?: ChucVuDangCreateManyChucVuDangInputEnvelope
+        connect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
     };
     export type UserProfileUpdateManyWithoutPositionCPVNestedInput = {
         create?: XOR<UserProfileCreateWithoutPositionCPVInput, UserProfileUncheckedCreateWithoutPositionCPVInput> | UserProfileCreateWithoutPositionCPVInput[] | UserProfileUncheckedCreateWithoutPositionCPVInput[]
@@ -416019,6 +419176,32 @@ export namespace Prisma {
         updateMany?: QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutChucVuInput | QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutChucVuInput[]
         deleteMany?: QuaTrinhCuDiCongTacScalarWhereInput | QuaTrinhCuDiCongTacScalarWhereInput[]
     };
+    export type ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput = {
+        create?: XOR<ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput, ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput> | ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput[] | ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput[]
+        connectOrCreate?: ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput[]
+        upsert?: ChucVuChinhQuyenUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput[]
+        createMany?: ChucVuChinhQuyenCreateManyChucVuChinhQuyenInputEnvelope
+        set?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        disconnect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        delete?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        connect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        update?: ChucVuChinhQuyenUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput[]
+        updateMany?: ChucVuChinhQuyenUpdateManyWithWhereWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenUpdateManyWithWhereWithoutChucVuChinhQuyenInput[]
+        deleteMany?: ChucVuChinhQuyenScalarWhereInput | ChucVuChinhQuyenScalarWhereInput[]
+    };
+    export type ChucVuDangUpdateManyWithoutChucVuDangNestedInput = {
+        create?: XOR<ChucVuDangCreateWithoutChucVuDangInput, ChucVuDangUncheckedCreateWithoutChucVuDangInput> | ChucVuDangCreateWithoutChucVuDangInput[] | ChucVuDangUncheckedCreateWithoutChucVuDangInput[]
+        connectOrCreate?: ChucVuDangCreateOrConnectWithoutChucVuDangInput | ChucVuDangCreateOrConnectWithoutChucVuDangInput[]
+        upsert?: ChucVuDangUpsertWithWhereUniqueWithoutChucVuDangInput | ChucVuDangUpsertWithWhereUniqueWithoutChucVuDangInput[]
+        createMany?: ChucVuDangCreateManyChucVuDangInputEnvelope
+        set?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        disconnect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        delete?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        connect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        update?: ChucVuDangUpdateWithWhereUniqueWithoutChucVuDangInput | ChucVuDangUpdateWithWhereUniqueWithoutChucVuDangInput[]
+        updateMany?: ChucVuDangUpdateManyWithWhereWithoutChucVuDangInput | ChucVuDangUpdateManyWithWhereWithoutChucVuDangInput[]
+        deleteMany?: ChucVuDangScalarWhereInput | ChucVuDangScalarWhereInput[]
+    };
     export type UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput = {
         create?: XOR<UserProfileCreateWithoutPositionCPVInput, UserProfileUncheckedCreateWithoutPositionCPVInput> | UserProfileCreateWithoutPositionCPVInput[] | UserProfileUncheckedCreateWithoutPositionCPVInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutPositionCPVInput | UserProfileCreateOrConnectWithoutPositionCPVInput[]
@@ -416070,6 +419253,32 @@ export namespace Prisma {
         update?: QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutChucVuInput | QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutChucVuInput[]
         updateMany?: QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutChucVuInput | QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutChucVuInput[]
         deleteMany?: QuaTrinhCuDiCongTacScalarWhereInput | QuaTrinhCuDiCongTacScalarWhereInput[]
+    };
+    export type ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput = {
+        create?: XOR<ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput, ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput> | ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput[] | ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput[]
+        connectOrCreate?: ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput[]
+        upsert?: ChucVuChinhQuyenUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput[]
+        createMany?: ChucVuChinhQuyenCreateManyChucVuChinhQuyenInputEnvelope
+        set?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        disconnect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        delete?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        connect?: ChucVuChinhQuyenWhereUniqueInput | ChucVuChinhQuyenWhereUniqueInput[]
+        update?: ChucVuChinhQuyenUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput[]
+        updateMany?: ChucVuChinhQuyenUpdateManyWithWhereWithoutChucVuChinhQuyenInput | ChucVuChinhQuyenUpdateManyWithWhereWithoutChucVuChinhQuyenInput[]
+        deleteMany?: ChucVuChinhQuyenScalarWhereInput | ChucVuChinhQuyenScalarWhereInput[]
+    };
+    export type ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput = {
+        create?: XOR<ChucVuDangCreateWithoutChucVuDangInput, ChucVuDangUncheckedCreateWithoutChucVuDangInput> | ChucVuDangCreateWithoutChucVuDangInput[] | ChucVuDangUncheckedCreateWithoutChucVuDangInput[]
+        connectOrCreate?: ChucVuDangCreateOrConnectWithoutChucVuDangInput | ChucVuDangCreateOrConnectWithoutChucVuDangInput[]
+        upsert?: ChucVuDangUpsertWithWhereUniqueWithoutChucVuDangInput | ChucVuDangUpsertWithWhereUniqueWithoutChucVuDangInput[]
+        createMany?: ChucVuDangCreateManyChucVuDangInputEnvelope
+        set?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        disconnect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        delete?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        connect?: ChucVuDangWhereUniqueInput | ChucVuDangWhereUniqueInput[]
+        update?: ChucVuDangUpdateWithWhereUniqueWithoutChucVuDangInput | ChucVuDangUpdateWithWhereUniqueWithoutChucVuDangInput[]
+        updateMany?: ChucVuDangUpdateManyWithWhereWithoutChucVuDangInput | ChucVuDangUpdateManyWithWhereWithoutChucVuDangInput[]
+        deleteMany?: ChucVuDangScalarWhereInput | ChucVuDangScalarWhereInput[]
     };
     export type UserProfileCreateNestedManyWithoutAcademicRankTypeInput = {
         create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
@@ -436511,6 +439720,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -436683,6 +439894,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -436866,6 +440079,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -437038,6 +440253,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -438784,6 +442001,8 @@ export namespace Prisma {
         userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
         quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuUncheckedCreateWithoutUserProfileCPVInput = {
         Id?: string
@@ -438805,6 +442024,8 @@ export namespace Prisma {
         userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuCreateOrConnectWithoutUserProfileCPVInput = {
         where: DM_ChucVuWhereUniqueInput
@@ -438830,6 +442051,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
         quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuUncheckedCreateWithoutUserProfileInput = {
         Id?: string
@@ -438851,6 +442074,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuCreateOrConnectWithoutUserProfileInput = {
         where: DM_ChucVuWhereUniqueInput
@@ -439786,6 +443011,70 @@ export namespace Prisma {
     };
     export type QuaTrinhLuongCreateManyUserProfileInputEnvelope = {
         data: QuaTrinhLuongCreateManyUserProfileInput | QuaTrinhLuongCreateManyUserProfileInput[]
+        skipDuplicates?: boolean
+    };
+    export type ChucVuChinhQuyenCreateWithoutUserProfileInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        address?: string | null
+        chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutChucVuChinhQuyenInput
+    };
+    export type ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        chucVuChinhQuyenId?: string | null
+        address?: string | null
+    };
+    export type ChucVuChinhQuyenCreateOrConnectWithoutUserProfileInput = {
+        where: ChucVuChinhQuyenWhereUniqueInput
+        create: XOR<ChucVuChinhQuyenCreateWithoutUserProfileInput, ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput>
+    };
+    export type ChucVuChinhQuyenCreateManyUserProfileInputEnvelope = {
+        data: ChucVuChinhQuyenCreateManyUserProfileInput | ChucVuChinhQuyenCreateManyUserProfileInput[]
+        skipDuplicates?: boolean
+    };
+    export type ChucVuDangCreateWithoutUserProfileInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        address?: string | null
+        chucVuDang?: DM_ChucVuCreateNestedOneWithoutChucVuDangInput
+    };
+    export type ChucVuDangUncheckedCreateWithoutUserProfileInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        chucVuDangId?: string | null
+        address?: string | null
+    };
+    export type ChucVuDangCreateOrConnectWithoutUserProfileInput = {
+        where: ChucVuDangWhereUniqueInput
+        create: XOR<ChucVuDangCreateWithoutUserProfileInput, ChucVuDangUncheckedCreateWithoutUserProfileInput>
+    };
+    export type ChucVuDangCreateManyUserProfileInputEnvelope = {
+        data: ChucVuDangCreateManyUserProfileInput | ChucVuDangCreateManyUserProfileInput[]
         skipDuplicates?: boolean
     };
     export type DM_TrinhDoHocVanCreateWithoutUserProfileInput = {
@@ -442639,6 +445928,8 @@ export namespace Prisma {
         userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_ChucVuUncheckedUpdateWithoutUserProfileCPVInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -442660,6 +445951,8 @@ export namespace Prisma {
         userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_ChucVuUpsertWithoutUserProfileInput = {
         update: XOR<DM_ChucVuUpdateWithoutUserProfileInput, DM_ChucVuUncheckedUpdateWithoutUserProfileInput>
@@ -442690,6 +445983,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_ChucVuUncheckedUpdateWithoutUserProfileInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -442711,6 +446006,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
     };
     export type RelativeUpsertWithWhereUniqueWithoutUserProfileInput = {
         where: RelativeWhereUniqueInput
@@ -443489,6 +446786,64 @@ export namespace Prisma {
         phuCapChucVu?: StringNullableFilter<"QuaTrinhLuong"> | string | null
         phuCapKhac?: StringNullableFilter<"QuaTrinhLuong"> | string | null
         userProfileId?: StringFilter<"QuaTrinhLuong"> | string
+    };
+    export type ChucVuChinhQuyenUpsertWithWhereUniqueWithoutUserProfileInput = {
+        where: ChucVuChinhQuyenWhereUniqueInput
+        update: XOR<ChucVuChinhQuyenUpdateWithoutUserProfileInput, ChucVuChinhQuyenUncheckedUpdateWithoutUserProfileInput>
+        create: XOR<ChucVuChinhQuyenCreateWithoutUserProfileInput, ChucVuChinhQuyenUncheckedCreateWithoutUserProfileInput>
+    };
+    export type ChucVuChinhQuyenUpdateWithWhereUniqueWithoutUserProfileInput = {
+        where: ChucVuChinhQuyenWhereUniqueInput
+        data: XOR<ChucVuChinhQuyenUpdateWithoutUserProfileInput, ChucVuChinhQuyenUncheckedUpdateWithoutUserProfileInput>
+    };
+    export type ChucVuChinhQuyenUpdateManyWithWhereWithoutUserProfileInput = {
+        where: ChucVuChinhQuyenScalarWhereInput
+        data: XOR<ChucVuChinhQuyenUpdateManyMutationInput, ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileInput>
+    };
+    export type ChucVuChinhQuyenScalarWhereInput = {
+        AND?: ChucVuChinhQuyenScalarWhereInput | ChucVuChinhQuyenScalarWhereInput[]
+        OR?: ChucVuChinhQuyenScalarWhereInput[]
+        NOT?: ChucVuChinhQuyenScalarWhereInput | ChucVuChinhQuyenScalarWhereInput[]
+        id?: StringFilter<"ChucVuChinhQuyen"> | string
+        code?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
+        active?: BoolFilter<"ChucVuChinhQuyen"> | boolean
+        description?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ChucVuChinhQuyen"> | Date | string | null
+        createdAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
+        updatedAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
+        createdBy?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
+        chucVuChinhQuyenId?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
+        userProfileId?: StringFilter<"ChucVuChinhQuyen"> | string
+        address?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
+    };
+    export type ChucVuDangUpsertWithWhereUniqueWithoutUserProfileInput = {
+        where: ChucVuDangWhereUniqueInput
+        update: XOR<ChucVuDangUpdateWithoutUserProfileInput, ChucVuDangUncheckedUpdateWithoutUserProfileInput>
+        create: XOR<ChucVuDangCreateWithoutUserProfileInput, ChucVuDangUncheckedCreateWithoutUserProfileInput>
+    };
+    export type ChucVuDangUpdateWithWhereUniqueWithoutUserProfileInput = {
+        where: ChucVuDangWhereUniqueInput
+        data: XOR<ChucVuDangUpdateWithoutUserProfileInput, ChucVuDangUncheckedUpdateWithoutUserProfileInput>
+    };
+    export type ChucVuDangUpdateManyWithWhereWithoutUserProfileInput = {
+        where: ChucVuDangScalarWhereInput
+        data: XOR<ChucVuDangUpdateManyMutationInput, ChucVuDangUncheckedUpdateManyWithoutUserProfileInput>
+    };
+    export type ChucVuDangScalarWhereInput = {
+        AND?: ChucVuDangScalarWhereInput | ChucVuDangScalarWhereInput[]
+        OR?: ChucVuDangScalarWhereInput[]
+        NOT?: ChucVuDangScalarWhereInput | ChucVuDangScalarWhereInput[]
+        id?: StringFilter<"ChucVuDang"> | string
+        code?: StringNullableFilter<"ChucVuDang"> | string | null
+        active?: BoolFilter<"ChucVuDang"> | boolean
+        description?: StringNullableFilter<"ChucVuDang"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ChucVuDang"> | Date | string | null
+        createdAt?: DateTimeFilter<"ChucVuDang"> | Date | string
+        updatedAt?: DateTimeFilter<"ChucVuDang"> | Date | string
+        createdBy?: UuidNullableFilter<"ChucVuDang"> | string | null
+        chucVuDangId?: UuidNullableFilter<"ChucVuDang"> | string | null
+        userProfileId?: StringFilter<"ChucVuDang"> | string
+        address?: StringNullableFilter<"ChucVuDang"> | string | null
     };
     export type DM_TrinhDoHocVanUpsertWithoutUserProfileInput = {
         update: XOR<DM_TrinhDoHocVanUpdateWithoutUserProfileInput, DM_TrinhDoHocVanUncheckedUpdateWithoutUserProfileInput>
@@ -444351,6 +447706,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -444523,6 +447880,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -444751,6 +448110,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -444923,6 +448284,1628 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
+    };
+    export type DM_ChucVuCreateWithoutChucVuChinhQuyenInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        iNhomChucVu?: number | null
+        userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
+        userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
+        chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
+    };
+    export type DM_ChucVuUncheckedCreateWithoutChucVuChinhQuyenInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        iNhomChucVu?: number | null
+        userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+        userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
+    };
+    export type DM_ChucVuCreateOrConnectWithoutChucVuChinhQuyenInput = {
+        where: DM_ChucVuWhereUniqueInput
+        create: XOR<DM_ChucVuCreateWithoutChucVuChinhQuyenInput, DM_ChucVuUncheckedCreateWithoutChucVuChinhQuyenInput>
+    };
+    export type UserProfileCreateWithoutQuaTrinhChucVuChinhQuyenInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaGiangVien?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        permanentAddress?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        officerNumber?: string | null
+        rankDate?: Date | string | null
+        academicDegreeDate?: Date | string | null
+        academicRankDate?: Date | string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        group?: GroupCreateNestedOneWithoutUserProfileInput
+        provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+        districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+        communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+        provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+        districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+        communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+        religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+        ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+        provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+        districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+        communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+        newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+        newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+        rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+        level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+        sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+        nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+        tinhTrangHonNhan?: DM_TinhTrangHonNhanCreateNestedOneWithoutUserProfileInput
+        trangThaiLamViec?: DM_TrangThaiLamViecCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
+        dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
+        dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
+        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
+        dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
+        positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+        chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+        relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
+        trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+        educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
+    };
+    export type UserProfileUncheckedCreateWithoutQuaTrinhChucVuChinhQuyenInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaGiangVien?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        groupId?: string | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        provinceCurrentAddressId?: string | null
+        districtCurrentAddressId?: string | null
+        communeCurrentAddressId?: string | null
+        newProvinceCurrentAddressId?: string | null
+        newCommuneCurrentAddressId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        provinceOfBirthId?: string | null
+        districtOfBirthId?: string | null
+        communeOfBirthId?: string | null
+        newProvinceOfBirthId?: string | null
+        newCommuneOfBirthId?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        genderId?: string | null
+        permanentAddress?: string | null
+        provincePermanentAddressId?: string | null
+        districtPermanentAddressId?: string | null
+        communePermanentAddressId?: string | null
+        newProvincePermanentAddressId?: string | null
+        newCommunePermanentAddressId?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        nationalityId?: string | null
+        religionId?: string | null
+        ethnicityId?: string | null
+        provinceHometownId?: string | null
+        districtHometownId?: string | null
+        communeHometownId?: string | null
+        newProvinceHometownId?: string | null
+        newCommuneHometownId?: string | null
+        officerNumber?: string | null
+        rankId?: string | null
+        rankDate?: Date | string | null
+        academicDegreeTypeId?: string | null
+        academicDegreeDate?: Date | string | null
+        academicRankTypeId?: string | null
+        academicRankDate?: Date | string | null
+        levelId?: string | null
+        chiHuyQuanLyId?: string | null
+        chuyenMonKyThuatId?: string | null
+        sucKhoeId?: string | null
+        nhomMauId?: string | null
+        tinhTrangHonNhanId?: string | null
+        trangThaiLamViecId?: string | null
+        dM_ChucDanhCMNVGiangVienId?: string | null
+        dM_ChucDanhCMNVNghienCuuVienId?: string | null
+        dM_ChucDanhCMNVKySuId?: string | null
+        dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
+        dM_XepLoaiDanhGiaCanBoId?: string | null
+        dM_HinhThucKhenThuongChinhQuyenId?: string | null
+        dM_HinhThucKhenThuongDangId?: string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        positionCPVId?: string | null
+        chucVuChinhQuyenId?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        trinhDoHocVanId?: string | null
+        relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
+        educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
+    };
+    export type UserProfileCreateOrConnectWithoutQuaTrinhChucVuChinhQuyenInput = {
+        where: UserProfileWhereUniqueInput
+        create: XOR<UserProfileCreateWithoutQuaTrinhChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutQuaTrinhChucVuChinhQuyenInput>
+    };
+    export type DM_ChucVuUpsertWithoutChucVuChinhQuyenInput = {
+        update: XOR<DM_ChucVuUpdateWithoutChucVuChinhQuyenInput, DM_ChucVuUncheckedUpdateWithoutChucVuChinhQuyenInput>
+        create: XOR<DM_ChucVuCreateWithoutChucVuChinhQuyenInput, DM_ChucVuUncheckedCreateWithoutChucVuChinhQuyenInput>
+        where?: DM_ChucVuWhereInput
+    };
+    export type DM_ChucVuUpdateToOneWithWhereWithoutChucVuChinhQuyenInput = {
+        where?: DM_ChucVuWhereInput
+        data: XOR<DM_ChucVuUpdateWithoutChucVuChinhQuyenInput, DM_ChucVuUncheckedUpdateWithoutChucVuChinhQuyenInput>
+    };
+    export type DM_ChucVuUpdateWithoutChucVuChinhQuyenInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+        userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+        userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
+        chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
+    };
+    export type DM_ChucVuUncheckedUpdateWithoutChucVuChinhQuyenInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+        userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+        userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
+    };
+    export type UserProfileUpsertWithoutQuaTrinhChucVuChinhQuyenInput = {
+        update: XOR<UserProfileUpdateWithoutQuaTrinhChucVuChinhQuyenInput, UserProfileUncheckedUpdateWithoutQuaTrinhChucVuChinhQuyenInput>
+        create: XOR<UserProfileCreateWithoutQuaTrinhChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutQuaTrinhChucVuChinhQuyenInput>
+        where?: UserProfileWhereInput
+    };
+    export type UserProfileUpdateToOneWithWhereWithoutQuaTrinhChucVuChinhQuyenInput = {
+        where?: UserProfileWhereInput
+        data: XOR<UserProfileUpdateWithoutQuaTrinhChucVuChinhQuyenInput, UserProfileUncheckedUpdateWithoutQuaTrinhChucVuChinhQuyenInput>
+    };
+    export type UserProfileUpdateWithoutQuaTrinhChucVuChinhQuyenInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        group?: GroupUpdateOneWithoutUserProfileNestedInput
+        provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+        provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+        religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+        ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+        provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+        districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+        communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+        newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+        newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+        rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+        level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+        sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+        nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+        tinhTrangHonNhan?: DM_TinhTrangHonNhanUpdateOneWithoutUserProfileNestedInput
+        trangThaiLamViec?: DM_TrangThaiLamViecUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
+        dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
+        dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
+        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
+        dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
+        positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+        chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+        relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
+        trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
+    };
+    export type UserProfileUncheckedUpdateWithoutQuaTrinhChucVuChinhQuyenInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
+        trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+        relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
+    };
+    export type DM_ChucVuCreateWithoutChucVuDangInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        iNhomChucVu?: number | null
+        userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
+        userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
+    };
+    export type DM_ChucVuUncheckedCreateWithoutChucVuDangInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        iNhomChucVu?: number | null
+        userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+        userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    };
+    export type DM_ChucVuCreateOrConnectWithoutChucVuDangInput = {
+        where: DM_ChucVuWhereUniqueInput
+        create: XOR<DM_ChucVuCreateWithoutChucVuDangInput, DM_ChucVuUncheckedCreateWithoutChucVuDangInput>
+    };
+    export type UserProfileCreateWithoutQuaTrinhChucVuDangInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaGiangVien?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        permanentAddress?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        officerNumber?: string | null
+        rankDate?: Date | string | null
+        academicDegreeDate?: Date | string | null
+        academicRankDate?: Date | string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        group?: GroupCreateNestedOneWithoutUserProfileInput
+        provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+        districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+        communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+        provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+        districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+        communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+        religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+        ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+        provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+        districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+        communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+        newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+        newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+        rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+        level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+        sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+        nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+        tinhTrangHonNhan?: DM_TinhTrangHonNhanCreateNestedOneWithoutUserProfileInput
+        trangThaiLamViec?: DM_TrangThaiLamViecCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
+        dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
+        dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
+        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
+        dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
+        positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+        chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+        relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+        educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
+    };
+    export type UserProfileUncheckedCreateWithoutQuaTrinhChucVuDangInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaGiangVien?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        groupId?: string | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        provinceCurrentAddressId?: string | null
+        districtCurrentAddressId?: string | null
+        communeCurrentAddressId?: string | null
+        newProvinceCurrentAddressId?: string | null
+        newCommuneCurrentAddressId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        provinceOfBirthId?: string | null
+        districtOfBirthId?: string | null
+        communeOfBirthId?: string | null
+        newProvinceOfBirthId?: string | null
+        newCommuneOfBirthId?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        genderId?: string | null
+        permanentAddress?: string | null
+        provincePermanentAddressId?: string | null
+        districtPermanentAddressId?: string | null
+        communePermanentAddressId?: string | null
+        newProvincePermanentAddressId?: string | null
+        newCommunePermanentAddressId?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        nationalityId?: string | null
+        religionId?: string | null
+        ethnicityId?: string | null
+        provinceHometownId?: string | null
+        districtHometownId?: string | null
+        communeHometownId?: string | null
+        newProvinceHometownId?: string | null
+        newCommuneHometownId?: string | null
+        officerNumber?: string | null
+        rankId?: string | null
+        rankDate?: Date | string | null
+        academicDegreeTypeId?: string | null
+        academicDegreeDate?: Date | string | null
+        academicRankTypeId?: string | null
+        academicRankDate?: Date | string | null
+        levelId?: string | null
+        chiHuyQuanLyId?: string | null
+        chuyenMonKyThuatId?: string | null
+        sucKhoeId?: string | null
+        nhomMauId?: string | null
+        tinhTrangHonNhanId?: string | null
+        trangThaiLamViecId?: string | null
+        dM_ChucDanhCMNVGiangVienId?: string | null
+        dM_ChucDanhCMNVNghienCuuVienId?: string | null
+        dM_ChucDanhCMNVKySuId?: string | null
+        dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
+        dM_XepLoaiDanhGiaCanBoId?: string | null
+        dM_HinhThucKhenThuongChinhQuyenId?: string | null
+        dM_HinhThucKhenThuongDangId?: string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        positionCPVId?: string | null
+        chucVuChinhQuyenId?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        trinhDoHocVanId?: string | null
+        relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
+    };
+    export type UserProfileCreateOrConnectWithoutQuaTrinhChucVuDangInput = {
+        where: UserProfileWhereUniqueInput
+        create: XOR<UserProfileCreateWithoutQuaTrinhChucVuDangInput, UserProfileUncheckedCreateWithoutQuaTrinhChucVuDangInput>
+    };
+    export type DM_ChucVuUpsertWithoutChucVuDangInput = {
+        update: XOR<DM_ChucVuUpdateWithoutChucVuDangInput, DM_ChucVuUncheckedUpdateWithoutChucVuDangInput>
+        create: XOR<DM_ChucVuCreateWithoutChucVuDangInput, DM_ChucVuUncheckedCreateWithoutChucVuDangInput>
+        where?: DM_ChucVuWhereInput
+    };
+    export type DM_ChucVuUpdateToOneWithWhereWithoutChucVuDangInput = {
+        where?: DM_ChucVuWhereInput
+        data: XOR<DM_ChucVuUpdateWithoutChucVuDangInput, DM_ChucVuUncheckedUpdateWithoutChucVuDangInput>
+    };
+    export type DM_ChucVuUpdateWithoutChucVuDangInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+        userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+        userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
+    };
+    export type DM_ChucVuUncheckedUpdateWithoutChucVuDangInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+        userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+        userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    };
+    export type UserProfileUpsertWithoutQuaTrinhChucVuDangInput = {
+        update: XOR<UserProfileUpdateWithoutQuaTrinhChucVuDangInput, UserProfileUncheckedUpdateWithoutQuaTrinhChucVuDangInput>
+        create: XOR<UserProfileCreateWithoutQuaTrinhChucVuDangInput, UserProfileUncheckedCreateWithoutQuaTrinhChucVuDangInput>
+        where?: UserProfileWhereInput
+    };
+    export type UserProfileUpdateToOneWithWhereWithoutQuaTrinhChucVuDangInput = {
+        where?: UserProfileWhereInput
+        data: XOR<UserProfileUpdateWithoutQuaTrinhChucVuDangInput, UserProfileUncheckedUpdateWithoutQuaTrinhChucVuDangInput>
+    };
+    export type UserProfileUpdateWithoutQuaTrinhChucVuDangInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        group?: GroupUpdateOneWithoutUserProfileNestedInput
+        provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+        provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+        religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+        ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+        provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+        districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+        communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+        newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+        newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+        rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+        level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+        sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+        nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+        tinhTrangHonNhan?: DM_TinhTrangHonNhanUpdateOneWithoutUserProfileNestedInput
+        trangThaiLamViec?: DM_TrangThaiLamViecUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
+        dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
+        dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
+        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
+        dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
+        positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+        chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+        relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
+    };
+    export type UserProfileUncheckedUpdateWithoutQuaTrinhChucVuDangInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
+        trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+        relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -445205,6 +450188,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -445377,6 +450362,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -445687,6 +450674,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -445859,6 +450848,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -446055,6 +451046,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -446227,6 +451220,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -446441,6 +451436,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -446613,6 +451610,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -446783,6 +451782,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -446955,6 +451956,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -447164,6 +452167,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -447336,6 +452341,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -447537,6 +452544,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -447709,6 +452718,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -447918,6 +452929,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -448090,6 +453103,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -448369,6 +453384,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -448541,6 +453558,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -448812,6 +453831,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -448984,6 +454005,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -449192,6 +454215,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -449364,6 +454389,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -449590,6 +454617,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -449762,6 +454791,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -449932,6 +454963,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -450104,6 +455137,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -450287,6 +455322,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -450459,6 +455496,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -450669,6 +455708,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -450841,6 +455882,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -451069,6 +456112,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -451241,6 +456286,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -451280,6 +456327,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
         userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuUncheckedCreateWithoutQuaTrinhCongTacInput = {
         Id?: string
@@ -451301,6 +456350,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
         userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuCreateOrConnectWithoutQuaTrinhCongTacInput = {
         where: DM_ChucVuWhereUniqueInput
@@ -451483,6 +456534,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -451655,6 +456708,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -451707,6 +456762,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
         userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_ChucVuUncheckedUpdateWithoutQuaTrinhCongTacInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -451728,6 +456785,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
         userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
         quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_LoaiHinhCongTacUpsertWithoutQuaTrinhCongTacInput = {
         update: XOR<DM_LoaiHinhCongTacUpdateWithoutQuaTrinhCongTacInput, DM_LoaiHinhCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
@@ -451920,6 +456979,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -452092,6 +457153,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -452131,6 +457194,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
         userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
         quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuUncheckedCreateWithoutQuaTrinhCuDiCongTacInput = {
         Id?: string
@@ -452152,6 +457217,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
         userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+        chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
     };
     export type DM_ChucVuCreateOrConnectWithoutQuaTrinhCuDiCongTacInput = {
         where: DM_ChucVuWhereUniqueInput
@@ -452386,6 +457453,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -452558,6 +457627,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -452610,6 +457681,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
         userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_ChucVuUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -452631,6 +457704,8 @@ export namespace Prisma {
         userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
         userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+        chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+        chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
     };
     export type DM_TinhTrangCongTacUpsertWithoutQuaTrinhCuDiCongTacInput = {
         update: XOR<DM_TinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput, DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
@@ -452885,6 +457960,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -453057,6 +458134,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -453279,6 +458358,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -453451,6 +458532,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -453696,6 +458779,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -453868,6 +458953,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -454038,6 +459125,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -454210,6 +459299,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -454393,6 +459484,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -454565,6 +459658,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -454735,6 +459830,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -454907,6 +460004,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -455090,6 +460189,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -455262,6 +460363,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -455432,6 +460535,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -455604,6 +460709,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -455787,6 +460894,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -455959,6 +461068,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -456129,6 +461240,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -456301,6 +461414,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -456484,6 +461599,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -456656,6 +461773,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -456870,6 +461989,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -457042,6 +462163,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -457274,6 +462397,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -457446,6 +462571,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -457616,6 +462743,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -457788,6 +462917,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -457971,6 +463102,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -458143,6 +463276,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -458357,6 +463492,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -458529,6 +463666,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -458761,6 +463900,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -458933,6 +464074,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -459129,6 +464272,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -459301,6 +464446,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -459515,6 +464662,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -459687,6 +464836,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -459857,6 +465008,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -460029,6 +465182,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -460212,6 +465367,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -460384,6 +465541,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -460634,6 +465793,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -460806,6 +465967,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -461084,6 +466247,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -461256,6 +466421,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -461452,6 +466619,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -461624,6 +466793,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -461838,6 +467009,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -462010,6 +467183,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -462232,6 +467407,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -462404,6 +467581,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -462649,6 +467828,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -462821,6 +468002,8 @@ export namespace Prisma {
         danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -463103,6 +468286,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -463275,6 +468460,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -463913,6 +469100,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -464085,6 +469274,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -464259,6 +469450,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -464431,6 +469624,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -464675,6 +469870,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -464847,6 +470044,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -465026,6 +470225,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -465198,6 +470399,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -465602,6 +470805,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -465774,6 +470979,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -465948,6 +471155,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -466120,6 +471329,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -466344,6 +471555,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -466516,6 +471729,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -466695,6 +471910,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -466867,6 +472084,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -467114,6 +472333,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -467286,6 +472507,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -467569,6 +472792,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -467741,6 +472966,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -468486,6 +473713,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -468658,6 +473887,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -468898,6 +474129,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -469070,6 +474303,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -469261,6 +474496,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -469433,6 +474670,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -469611,6 +474850,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -469783,6 +475024,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -469900,6 +475143,70 @@ export namespace Prisma {
         data: QuaTrinhCuDiCongTacCreateManyChucVuInput | QuaTrinhCuDiCongTacCreateManyChucVuInput[]
         skipDuplicates?: boolean
     };
+    export type ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        address?: string | null
+        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhChucVuChinhQuyenInput
+    };
+    export type ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        userProfileId: string
+        address?: string | null
+    };
+    export type ChucVuChinhQuyenCreateOrConnectWithoutChucVuChinhQuyenInput = {
+        where: ChucVuChinhQuyenWhereUniqueInput
+        create: XOR<ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput, ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput>
+    };
+    export type ChucVuChinhQuyenCreateManyChucVuChinhQuyenInputEnvelope = {
+        data: ChucVuChinhQuyenCreateManyChucVuChinhQuyenInput | ChucVuChinhQuyenCreateManyChucVuChinhQuyenInput[]
+        skipDuplicates?: boolean
+    };
+    export type ChucVuDangCreateWithoutChucVuDangInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        address?: string | null
+        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhChucVuDangInput
+    };
+    export type ChucVuDangUncheckedCreateWithoutChucVuDangInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        userProfileId: string
+        address?: string | null
+    };
+    export type ChucVuDangCreateOrConnectWithoutChucVuDangInput = {
+        where: ChucVuDangWhereUniqueInput
+        create: XOR<ChucVuDangCreateWithoutChucVuDangInput, ChucVuDangUncheckedCreateWithoutChucVuDangInput>
+    };
+    export type ChucVuDangCreateManyChucVuDangInputEnvelope = {
+        data: ChucVuDangCreateManyChucVuDangInput | ChucVuDangCreateManyChucVuDangInput[]
+        skipDuplicates?: boolean
+    };
     export type UserProfileUpsertWithWhereUniqueWithoutPositionCPVInput = {
         where: UserProfileWhereUniqueInput
         update: XOR<UserProfileUpdateWithoutPositionCPVInput, UserProfileUncheckedUpdateWithoutPositionCPVInput>
@@ -469951,6 +475258,32 @@ export namespace Prisma {
     export type QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutChucVuInput = {
         where: QuaTrinhCuDiCongTacScalarWhereInput
         data: XOR<QuaTrinhCuDiCongTacUpdateManyMutationInput, QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuInput>
+    };
+    export type ChucVuChinhQuyenUpsertWithWhereUniqueWithoutChucVuChinhQuyenInput = {
+        where: ChucVuChinhQuyenWhereUniqueInput
+        update: XOR<ChucVuChinhQuyenUpdateWithoutChucVuChinhQuyenInput, ChucVuChinhQuyenUncheckedUpdateWithoutChucVuChinhQuyenInput>
+        create: XOR<ChucVuChinhQuyenCreateWithoutChucVuChinhQuyenInput, ChucVuChinhQuyenUncheckedCreateWithoutChucVuChinhQuyenInput>
+    };
+    export type ChucVuChinhQuyenUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput = {
+        where: ChucVuChinhQuyenWhereUniqueInput
+        data: XOR<ChucVuChinhQuyenUpdateWithoutChucVuChinhQuyenInput, ChucVuChinhQuyenUncheckedUpdateWithoutChucVuChinhQuyenInput>
+    };
+    export type ChucVuChinhQuyenUpdateManyWithWhereWithoutChucVuChinhQuyenInput = {
+        where: ChucVuChinhQuyenScalarWhereInput
+        data: XOR<ChucVuChinhQuyenUpdateManyMutationInput, ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenInput>
+    };
+    export type ChucVuDangUpsertWithWhereUniqueWithoutChucVuDangInput = {
+        where: ChucVuDangWhereUniqueInput
+        update: XOR<ChucVuDangUpdateWithoutChucVuDangInput, ChucVuDangUncheckedUpdateWithoutChucVuDangInput>
+        create: XOR<ChucVuDangCreateWithoutChucVuDangInput, ChucVuDangUncheckedCreateWithoutChucVuDangInput>
+    };
+    export type ChucVuDangUpdateWithWhereUniqueWithoutChucVuDangInput = {
+        where: ChucVuDangWhereUniqueInput
+        data: XOR<ChucVuDangUpdateWithoutChucVuDangInput, ChucVuDangUncheckedUpdateWithoutChucVuDangInput>
+    };
+    export type ChucVuDangUpdateManyWithWhereWithoutChucVuDangInput = {
+        where: ChucVuDangScalarWhereInput
+        data: XOR<ChucVuDangUpdateManyMutationInput, ChucVuDangUncheckedUpdateManyWithoutChucVuDangInput>
     };
     export type UserProfileCreateWithoutAcademicRankTypeInput = {
         id?: string
@@ -470103,6 +475436,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -470275,6 +475610,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -470517,6 +475854,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -470689,6 +476028,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -470931,6 +476272,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -471103,6 +476446,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -472871,6 +478216,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -473043,6 +478390,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -473338,6 +478687,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -473510,6 +478861,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -473868,6 +479221,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -474040,6 +479395,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -474293,6 +479650,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -474465,6 +479824,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -474643,6 +480004,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -474815,6 +480178,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -474993,6 +480358,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -475165,6 +480532,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -475343,6 +480712,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -475515,6 +480886,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -475812,6 +481185,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -475984,6 +481359,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -476162,6 +481539,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -476334,6 +481713,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -476512,6 +481893,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -476684,6 +482067,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -476862,6 +482247,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -477034,6 +482421,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -477315,6 +482704,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -477487,6 +482878,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -477665,6 +483058,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -477837,6 +483232,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -478015,6 +483412,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -478187,6 +483586,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -478365,6 +483766,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -478537,6 +483940,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -478767,6 +484172,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -478939,6 +484346,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -479117,6 +484526,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -479289,6 +484700,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -479467,6 +484880,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -479639,6 +485054,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -479817,6 +485234,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -479989,6 +485408,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -480219,6 +485640,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -480391,6 +485814,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -480569,6 +485994,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -480741,6 +486168,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -480919,6 +486348,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -481091,6 +486522,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -481269,6 +486702,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -481441,6 +486876,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -484455,6 +489892,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -484627,6 +490066,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -484891,6 +490332,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -485063,6 +490506,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -496756,6 +502201,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -496928,6 +502375,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -497222,6 +502671,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -497394,6 +502845,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -501374,6 +506827,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -501546,6 +507001,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -501844,6 +507301,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -502016,6 +507475,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -502713,6 +508174,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -502885,6 +508348,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -504228,13 +509693,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCreateWithoutTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         priority?: number
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
@@ -504243,13 +509708,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         priority?: number
         parentId?: string | null
@@ -504538,13 +510003,13 @@ export namespace Prisma {
         OR?: TrainingBlockScalarWhereInput[]
         NOT?: TrainingBlockScalarWhereInput | TrainingBlockScalarWhereInput[]
         id?: StringFilter<"TrainingBlock"> | string
-        code?: StringNullableFilter<"TrainingBlock"> | string | null
         active?: BoolFilter<"TrainingBlock"> | boolean
         description?: StringNullableFilter<"TrainingBlock"> | string | null
         deletedAt?: DateTimeNullableFilter<"TrainingBlock"> | Date | string | null
         createdAt?: DateTimeFilter<"TrainingBlock"> | Date | string
         updatedAt?: DateTimeFilter<"TrainingBlock"> | Date | string
         createdBy?: UuidNullableFilter<"TrainingBlock"> | string | null
+        code?: StringNullableFilter<"TrainingBlock"> | string | null
         name?: StringFilter<"TrainingBlock"> | string
         trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
         priority?: IntFilter<"TrainingBlock"> | number
@@ -508268,13 +513733,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCreateWithoutChildrenInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         priority?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
@@ -508283,13 +513748,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedCreateWithoutChildrenInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         trainingObjectTypeId: string
         priority?: number
@@ -508302,13 +513767,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCreateWithoutParentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         priority?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
@@ -508317,13 +513782,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedCreateWithoutParentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         trainingObjectTypeId: string
         priority?: number
@@ -508446,13 +513911,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUpdateWithoutChildrenInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
@@ -508461,13 +513926,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedUpdateWithoutChildrenInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
@@ -508502,13 +513967,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCreateWithoutCurriculumVersionsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         priority?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
@@ -508517,13 +513982,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedCreateWithoutCurriculumVersionsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         trainingObjectTypeId: string
         priority?: number
@@ -508677,13 +514142,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUpdateWithoutCurriculumVersionsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
@@ -508692,13 +514157,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedUpdateWithoutCurriculumVersionsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
@@ -510652,6 +516117,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
@@ -510824,6 +516291,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
@@ -512423,6 +517892,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
@@ -512595,6 +518066,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
@@ -519236,6 +524709,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
@@ -519408,6 +524883,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
@@ -520829,6 +526306,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
@@ -521001,6 +526480,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
@@ -521657,6 +527138,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -521829,6 +527312,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
@@ -522124,6 +527609,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -522296,6 +527783,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
@@ -529441,6 +534930,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -529613,6 +535104,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -529914,6 +535407,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -530086,6 +535581,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -532272,6 +537769,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -532444,6 +537943,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -532666,6 +538167,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -532838,6 +538341,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -535841,6 +541346,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -536013,6 +541520,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -536477,6 +541986,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -536649,6 +542160,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -540930,6 +546443,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -541102,6 +546617,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -541481,6 +546998,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -541653,6 +547172,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -541991,6 +547512,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -542163,6 +547686,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -542486,6 +548011,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -542658,6 +548185,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -551091,6 +556620,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
@@ -551262,6 +556793,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -551555,6 +557088,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -551727,6 +557262,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -551973,6 +557510,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -552145,6 +557684,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -552336,6 +557877,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -552508,6 +558051,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -552699,6 +558244,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -552871,6 +558418,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -553062,6 +558611,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -553234,6 +558785,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -553425,6 +558978,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -553597,6 +559152,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -554124,6 +559681,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -554296,6 +559855,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -554487,6 +560048,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -554659,6 +560222,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -554850,6 +560415,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -555022,6 +560589,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -555374,6 +560943,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -555546,6 +561117,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -555737,6 +561310,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -555909,6 +561484,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -556100,6 +561677,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -556272,6 +561851,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -556463,6 +562044,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
@@ -556635,6 +562218,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
         ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
@@ -557315,6 +562900,30 @@ export namespace Prisma {
         maNgach: string
         phuCapChucVu?: string | null
         phuCapKhac?: string | null
+    };
+    export type ChucVuChinhQuyenCreateManyUserProfileInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        chucVuChinhQuyenId?: string | null
+        address?: string | null
+    };
+    export type ChucVuDangCreateManyUserProfileInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        chucVuDangId?: string | null
+        address?: string | null
     };
     export type StudentCreateManyUserProfileInput = {
         id?: string
@@ -558695,6 +564304,78 @@ export namespace Prisma {
         maNgach?: StringFieldUpdateOperationsInput | string
         phuCapChucVu?: NullableStringFieldUpdateOperationsInput | string | null
         phuCapKhac?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuChinhQuyenUpdateWithoutUserProfileInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutChucVuChinhQuyenNestedInput
+    };
+    export type ChucVuChinhQuyenUncheckedUpdateWithoutUserProfileInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuDangUpdateWithoutUserProfileInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuDang?: DM_ChucVuUpdateOneWithoutChucVuDangNestedInput
+    };
+    export type ChucVuDangUncheckedUpdateWithoutUserProfileInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuDangId?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuDangUncheckedUpdateManyWithoutUserProfileInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuDangId?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -560104,6 +565785,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -560276,6 +565959,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -561325,6 +567010,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -561497,6 +567184,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -561967,6 +567656,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -562139,6 +567830,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -562582,6 +568275,30 @@ export namespace Prisma {
         dM_NuocCuDiHocTapId?: string | null
         userProfileId: string
     };
+    export type ChucVuChinhQuyenCreateManyChucVuChinhQuyenInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        userProfileId: string
+        address?: string | null
+    };
+    export type ChucVuDangCreateManyChucVuDangInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        userProfileId: string
+        address?: string | null
+    };
     export type UserProfileUpdateWithoutPositionCPVInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562733,6 +568450,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -562905,6 +568624,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -563204,6 +568925,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -563376,6 +569099,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -563634,6 +569359,78 @@ export namespace Prisma {
         dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_NuocCuDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ChucVuChinhQuyenUpdateWithoutChucVuChinhQuyenInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhChucVuChinhQuyenNestedInput
+    };
+    export type ChucVuChinhQuyenUncheckedUpdateWithoutChucVuChinhQuyenInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuDangUpdateWithoutChucVuDangInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhChucVuDangNestedInput
+    };
+    export type ChucVuDangUncheckedUpdateWithoutChucVuDangInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ChucVuDangUncheckedUpdateManyWithoutChucVuDangInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        address?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type UserProfileCreateManyAcademicRankTypeInput = {
         id?: string
@@ -563930,6 +569727,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -564102,6 +569901,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -564590,6 +570391,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -564762,6 +570565,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -565249,6 +571054,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -565421,6 +571228,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -567495,6 +573304,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -567667,6 +573478,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -568219,6 +574032,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -568391,6 +574206,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -568945,6 +574762,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -569117,6 +574936,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -569986,6 +575807,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -570158,6 +575981,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -570457,6 +576282,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -570629,6 +576456,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -570928,6 +576757,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -571100,6 +576931,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -571399,6 +577232,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -571571,6 +577406,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -572440,6 +578277,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -572612,6 +578451,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -572911,6 +578752,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -573083,6 +578926,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -573382,6 +579227,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -573554,6 +579401,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -573853,6 +579702,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -574025,6 +579876,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -574882,6 +580735,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -575054,6 +580909,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -575353,6 +581210,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -575525,6 +581384,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -575824,6 +581685,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -575996,6 +581859,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -576295,6 +582160,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -576467,6 +582334,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -577282,6 +583151,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -577454,6 +583325,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -577753,6 +583626,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -577925,6 +583800,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -578224,6 +584101,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -578396,6 +584275,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -578695,6 +584576,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -578867,6 +584750,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -579682,6 +585567,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -579854,6 +585741,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -580153,6 +586042,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -580325,6 +586216,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -580624,6 +586517,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -580796,6 +586691,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -581095,6 +586992,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -581267,6 +587166,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -590070,6 +595971,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -590242,6 +596145,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -590645,13 +596550,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCreateManyTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         priority?: number
         parentId?: string | null
@@ -591519,13 +597424,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
@@ -591534,13 +597439,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -591549,13 +597454,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -594169,13 +600074,13 @@ export namespace Prisma {
     };
     export type TrainingBlockCreateManyParentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        code?: string | null
         name: string
         trainingObjectTypeId: string
         priority?: number
@@ -594195,13 +600100,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUpdateWithoutParentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
@@ -594210,13 +600115,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedUpdateWithoutParentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
@@ -594225,13 +600130,13 @@ export namespace Prisma {
     };
     export type TrainingBlockUncheckedUpdateManyWithoutParentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         priority?: IntFieldUpdateOperationsInput | number
@@ -608279,6 +614184,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
@@ -608450,6 +614357,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -608998,6 +614907,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -609170,6 +615081,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -609666,6 +615579,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -609838,6 +615753,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -610266,6 +616183,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -610438,6 +616357,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -610866,6 +616787,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -611038,6 +616961,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -611466,6 +617391,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -611638,6 +617565,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -612066,6 +617995,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -612238,6 +618169,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -613086,6 +619019,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -613258,6 +619193,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -613686,6 +619623,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -613858,6 +619797,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -614286,6 +620227,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -614458,6 +620401,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -615082,6 +621027,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -615254,6 +621201,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -615682,6 +621631,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -615854,6 +621805,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -616282,6 +622235,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -616454,6 +622409,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -616882,6 +622839,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
@@ -617054,6 +623013,8 @@ export namespace Prisma {
         quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
         ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput

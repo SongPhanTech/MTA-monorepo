@@ -9,6 +9,8 @@ export * from './Suggestion.schema';
 export * from './ChangeLog.schema';
 export * from './UserProfile.schema';
 export * from './HocHam.schema';
+export * from './ChucVuChinhQuyen.schema';
+export * from './ChucVuDang.schema';
 export * from './HocVi.schema';
 export * from './Relative.schema';
 export * from './TrinhDoLyLuanChinhTri.schema';

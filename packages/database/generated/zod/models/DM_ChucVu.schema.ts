@@ -48,6 +48,8 @@ const relationSchema = z.object({
     userProfile: z.array(z.unknown()).optional(),
     quaTrinhCongTac: z.array(z.unknown()).optional(),
     quaTrinhCuDiCongTac: z.array(z.unknown()).optional(),
+    chucVuChinhQuyen: z.array(z.unknown()).optional(),
+    chucVuDang: z.array(z.unknown()).optional(),
 }
 );
 

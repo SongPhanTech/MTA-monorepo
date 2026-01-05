@@ -843,6 +843,8 @@ model UserProfile {
   quaTrinhHocTap                       QuaTrinhHocTap[]
   ToChucXaHoi                          ToChucXaHoi[]
   QuaTrinhLuong                        QuaTrinhLuong[]
+  quaTrinhChucVuChinhQuyen             ChucVuChinhQuyen[]
+  quaTrinhChucVuDang                   ChucVuDang[]
   trinhDoHocVan                        DM_TrinhDoHocVan?                   @relation(fields: [trinhDoHocVanId], references: [id])
   trinhDoHocVanId                      String?
   /// hồ sơ đào tạo
@@ -892,6 +894,42 @@ model HocHam {
   @@schema("ql-ho-so")
 }
 
+model ChucVuChinhQuyen {
+  id                 String      @id() @default(cuid())
+  code               String?     @unique()
+  active             Boolean     @default(true)
+  description        String?     @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @default(now()) @updatedAt()
+  createdBy          String?     @db.Uuid()
+  chucVuChinhQuyen   DM_ChucVu?  @relation(fields: [chucVuChinhQuyenId], references: [Id])
+  chucVuChinhQuyenId String?     @db.Uuid()
+  userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId      String
+  address            String?
+
+  @@schema("ql-ho-so")
+}
+
+model ChucVuDang {
+  id            String      @id() @default(cuid())
+  code          String?     @unique()
+  active        Boolean     @default(true)
+  description   String?     @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt()
+  createdBy     String?     @db.Uuid()
+  chucVuDang    DM_ChucVu?  @relation(fields: [chucVuDangId], references: [Id])
+  chucVuDangId  String?     @db.Uuid()
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+  address       String?
+
+  @@schema("ql-ho-so")
+}
+
 model HocVi {
   id                   String                @id() @default(cuid())
   code                 String?               @unique()
@@ -915,6 +953,7 @@ model HocVi {
   @@schema("ql-ho-so")
 }
 
+/// Thân nhân
 model Relative {
   id               String             @id() @default(cuid())
   code             String?            @unique()
@@ -1716,6 +1755,8 @@ model DM_ChucVu {
   userProfile         UserProfile[]         @relation("chucVuChinhQuyen")
   quaTrinhCongTac     QuaTrinhCongTac[]
   quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
+  chucVuChinhQuyen    ChucVuChinhQuyen[]
+  chucVuDang          ChucVuDang[]
 
   @@schema("mta")
 }
@@ -3581,13 +3622,13 @@ model TrainingMajorOnTrainingObjectType {
 /// khối kiến thức
 model TrainingBlock {
   id                   String                             @id() @default(cuid())
-  code                 String?                            @unique()
   active               Boolean                            @default(true)
   description          String?                            @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime                           @default(now())
   updatedAt            DateTime                           @default(now()) @updatedAt()
   createdBy            String?                            @db.Uuid()
+  code                 String?
   name                 String
   trainingObjectType   TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String

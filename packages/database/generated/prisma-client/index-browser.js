@@ -307,6 +307,34 @@ exports.Prisma.HocHamScalarFieldEnum = {
   userProfileId: 'userProfileId'
 };
 
+exports.Prisma.ChucVuChinhQuyenScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  chucVuChinhQuyenId: 'chucVuChinhQuyenId',
+  userProfileId: 'userProfileId',
+  address: 'address'
+};
+
+exports.Prisma.ChucVuDangScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  chucVuDangId: 'chucVuDangId',
+  userProfileId: 'userProfileId',
+  address: 'address'
+};
+
 exports.Prisma.HocViScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -2293,13 +2321,13 @@ exports.Prisma.TrainingMajorOnTrainingObjectTypeScalarFieldEnum = {
 
 exports.Prisma.TrainingBlockScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   trainingObjectTypeId: 'trainingObjectTypeId',
   priority: 'priority',
@@ -4676,6 +4704,26 @@ exports.Prisma.HocHamOrderByRelevanceFieldEnum = {
   userProfileId: 'userProfileId'
 };
 
+exports.Prisma.ChucVuChinhQuyenOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  chucVuChinhQuyenId: 'chucVuChinhQuyenId',
+  userProfileId: 'userProfileId',
+  address: 'address'
+};
+
+exports.Prisma.ChucVuDangOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  chucVuDangId: 'chucVuDangId',
+  userProfileId: 'userProfileId',
+  address: 'address'
+};
+
 exports.Prisma.HocViOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5919,9 +5967,9 @@ exports.Prisma.TrainingMajorOnTrainingObjectTypeOrderByRelevanceFieldEnum = {
 
 exports.Prisma.TrainingBlockOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   trainingObjectTypeId: 'trainingObjectTypeId',
   parentId: 'parentId'
@@ -7730,6 +7778,8 @@ exports.Prisma.ModelName = {
   ChangeLog: 'ChangeLog',
   UserProfile: 'UserProfile',
   HocHam: 'HocHam',
+  ChucVuChinhQuyen: 'ChucVuChinhQuyen',
+  ChucVuDang: 'ChucVuDang',
   HocVi: 'HocVi',
   Relative: 'Relative',
   TrinhDoLyLuanChinhTri: 'TrinhDoLyLuanChinhTri',
