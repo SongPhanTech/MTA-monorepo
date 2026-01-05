@@ -46,6 +46,16 @@ model DM_CapBac extends CoreBase {
   @@schema("mta")
 }
 
+model DM_ChucVuChinhQuyen extends CoreBase {
+  profiles UserProfile[]
+  @@schema("mta")
+}
+
+model DM_ChucVuDang extends CoreBase {
+  profiles UserProfile[]
+  @@schema("mta")
+}
+
 model DM_ChucDanh extends CoreBase {
   iLoaiChucDanh Int?          @default(0)
   userProfile   UserProfile[]

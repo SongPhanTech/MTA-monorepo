@@ -198,6 +198,12 @@ model UserProfile extends Base {
   dM_HinhThucKhenThuongDang            DM_HinhThucKhenThuongDang?          @relation(fields: [dM_HinhThucKhenThuongDangId], references: [id])
   dM_HinhThucKhenThuongDangId          String?
 
+  dM_ChucVuChinhQuyen                  DM_ChucVuChinhQuyen?                @relation(fields: [dM_ChucVuChinhQuyenId], references: [Id])
+  dM_ChucVuChinhQuyenId                String?
+
+  dM_ChucVuDang                        DM_ChucVuDang?                      @relation(fields: [dM_ChucVuDangId], references: [Id])
+  dM_ChucVuDangId                      String?
+
   // thông tin đoàn thể
   unionDate                            DateTime? // ngày vào Đoàn
   unionPlace                           String? // nơi vào Đoàn
