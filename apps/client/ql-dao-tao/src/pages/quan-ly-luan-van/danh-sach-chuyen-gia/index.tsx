@@ -182,7 +182,7 @@ export default function ExpertProfile() {
                         <Col span={6}>
                             <Flex justify="end">
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QUAN_LY_LUAN_VAN_DANH_SACH_CHUYEN_GIA,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_CHUYEN_GIA,
                                     'THEM'
                                 ) && (
                                     <Button onClick={handleModal} type="primary">
