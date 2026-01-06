@@ -752,7 +752,7 @@ export default function ClassSubject() {
                                 },
                             },
                             {
-                                title: 'Môn 1 ĐĐ',
+                                title: <Tooltip title="Môn 1 đầu điểm">Môn 1 ĐĐ</Tooltip>,
                                 width: 80,
                                 align: 'center',
                                 render: (__, record) => {

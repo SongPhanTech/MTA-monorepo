@@ -162,20 +162,29 @@ export const buildOrgFlat = (
     return result
 }
 
-export const validateExamScore = (score?: number | null) => {
+export const validateExamScore = (score?: number | null, isOnePoint = false) => {
     if (score === null || score === undefined) {
         return Promise.resolve()
     }
     if (score < 0 || score > 10) {
         return Promise.reject(new Error('Điểm phải nằm trong khoảng từ 0 đến 10'))
     }
-
-    const scaledValue = score * 10
-    if (scaledValue !== Math.round(scaledValue)) {
-        message.error('Điểm phải là bội số của 0.1')
-        return Promise.reject()
+    if (!isOnePoint) {
+        if (score % 0.5 !== 0) {
+            // message.error('Điểm phải là bội số của 0.5')
+            return Promise.reject(
+                new Error('Điểm phải là bội số của 0.5')
+            )
+        }
+    } else {
+        const scaledValue = score * 10
+        if (scaledValue !== Math.round(scaledValue)) {
+            // message.error('Điểm phải là bội số của 0.1')
+            return Promise.reject(
+                new Error('Điểm phải là bội số của 0.1')
+            )
+        }
     }
-
     return Promise.resolve()
 }
 

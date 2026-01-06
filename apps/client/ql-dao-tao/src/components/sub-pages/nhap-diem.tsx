@@ -647,9 +647,7 @@ export default function NhapDiem({
                         <>
                             <Button
                                 onClick={() => setImportModalVisible(true)}
-                                disabled={
-                                    !selectedSubjectClassId || role !== 'GV' || disabledForm
-                                }
+                                disabled={!selectedSubjectClassId || role !== 'GV' || disabledForm}
                                 className="w-full flex justify-start"
                             >
                                 <FileUp />
@@ -852,7 +850,7 @@ export default function NhapDiem({
                         columns={[
                             {
                                 title: 'STT',
-                                width: 60,
+                                width: 35,
                                 align: 'center',
                                 render: (_, __, index) => index + 1,
                             },
@@ -1017,7 +1015,10 @@ export default function NhapDiem({
                                             rules={[
                                                 {
                                                     validator: (_, value) =>
-                                                        validateExamScore(value),
+                                                        validateExamScore(
+                                                            value,
+                                                            record?.subjectClass?.subject?.onePoint
+                                                        ),
                                                 },
                                             ]}
                                         >
@@ -1266,7 +1267,9 @@ export default function NhapDiem({
                                         >
                                             <Checkbox
                                                 disabled={
-                                                    role !== 'P13' ||
+                                                    (dataDetailSubjectClass?.examType ===
+                                                        'OfflineWritten' &&
+                                                        role !== 'P13') ||
                                                     score === 'CC/TX' ||
                                                     disabledForm
                                                 }

@@ -91,8 +91,7 @@ const ModalPrintStudentSubjectScore = () => {
     })
 
     const { data: session } = useSession()
-    // @ts-expect-error
-    const profileName = session?.preferred_username || ''
+    const profileName = session?.fullName
     const { data } = useFindUniqueSubjectClass(
         {
             where: { id: input?.dataTable?.[0]?.subjectClass?.id || '' },
@@ -346,7 +345,7 @@ const ModalPrintStudentSubjectScore = () => {
                     )}
                     <div className="mt-4 uppercase text-[20px]">Phiếu điểm</div>
                     <div className="text-sm normal-case font-normal italic">
-                        {`(${data?.semester?.name} - ${data?.semester?.schoolYear?.name})`}
+                        {`(${data?.semester?.name})`}
                     </div>
                 </div>
                 <div className="flex justify-between gap-5 mt-6">
@@ -375,8 +374,8 @@ const ModalPrintStudentSubjectScore = () => {
                     {scoreCoefs.map((item) => (
                         <Col span={8} key={item.title}>
                             <div className="flex gap-1 items-center">
-                                <span className="text-[#656565] text-sm">{item.title}</span>
-                                <span className="text-sm font-semibold">
+                                <span className="text-[#656565] text-sm font-time-news-roman">{item.title}</span>
+                                <span className="text-sm font-semibold font-time-news-roman">
                                     {item.value.toString()}
                                 </span>
                             </div>
