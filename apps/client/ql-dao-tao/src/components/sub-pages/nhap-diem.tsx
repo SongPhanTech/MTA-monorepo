@@ -42,6 +42,7 @@ import _ from 'lodash'
 import { FileUp, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { scoreConvert } from '@hooks/scoreConverter'
 
 type FilterTable = FilterProps & {
     fullname?: string
@@ -916,7 +917,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm CC',
                                 dataIndex: 'attendanceScore',
-                                width: 100,
+                                width: 90,
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
@@ -958,7 +959,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm TX',
                                 dataIndex: 'midtermScore',
-                                width: 100,
+                                width: 90,
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
@@ -1002,7 +1003,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm thi',
                                 dataIndex: 'examScore',
-                                width: 100,
+                                width: 90,
                                 type: 'order',
                                 align: 'center',
                                 render: (_, record) => {
@@ -1045,10 +1046,10 @@ export default function NhapDiem({
                                 },
                             },
                             {
-                                title: 'Điểm HP',
-                                width: 80,
+                                title: 'Điểm hệ 10',
+                                width: 90,
                                 align: 'center',
-                                render: (_, record: any) => {
+                                render: (_, record) => {
                                     const recordForm = listForm?.[record.id]
                                     const examBanned = recordForm?.examBanned ?? record?.examBanned
                                     const finalScore = examBanned
@@ -1065,10 +1066,96 @@ export default function NhapDiem({
                                                       record?.midtermScore,
                                                   examScore:
                                                       recordForm?.examScore ?? record?.examScore,
+                                                  awards: [],
+                                                  certificates: [],
                                               },
                                               record.subjectClass?.type || 'NORMAL'
                                           )?.toNumber()
-                                    return <div>{finalScore}</div>
+                                    return <div className="text-red-500">{finalScore}</div>
+                                },
+                            },
+                            {
+                                title: 'Điểm hệ 4',
+                                align: 'center',
+                                width: 90,
+                                render: (_, record) => {
+                                    const recordForm = listForm?.[record.id]
+                                    const examBanned = recordForm?.examBanned ?? record?.examBanned
+                                    const finalScore = examBanned
+                                        ? 0
+                                        : calcFinalScore(
+                                              record?.student?.fixedClass?.trainingCourse,
+                                              {
+                                                  ...record,
+                                                  attendanceScore:
+                                                      recordForm?.attendanceScore ??
+                                                      record?.attendanceScore,
+                                                  midtermScore:
+                                                      recordForm?.midtermScore ??
+                                                      record?.midtermScore,
+                                                  examScore:
+                                                      recordForm?.examScore ?? record?.examScore,
+                                                  awards: [],
+                                                  certificates: [],
+                                              },
+                                              record.subjectClass?.type || 'NORMAL'
+                                          )?.toNumber()
+                                    if (finalScore === undefined || finalScore === null) return null
+                                    return finalScore !== undefined ? (
+                                        <div className="text-blue-500">
+                                            {
+                                                scoreConvert(
+                                                    finalScore,
+                                                    record?.student?.fixedClass?.trainingCourse
+                                                        ?.scoreConverts || []
+                                                ).base4
+                                            }
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Điểm chữ',
+                                align: 'center',
+                                width: 80,
+                                render: (_, record) => {
+                                    const recordForm = listForm?.[record.id]
+                                    const examBanned = recordForm?.examBanned ?? record?.examBanned
+                                    const finalScore = examBanned
+                                        ? 0
+                                        : calcFinalScore(
+                                              record?.student?.fixedClass?.trainingCourse,
+                                              {
+                                                  ...record,
+                                                  attendanceScore:
+                                                      recordForm?.attendanceScore ??
+                                                      record?.attendanceScore,
+                                                  midtermScore:
+                                                      recordForm?.midtermScore ??
+                                                      record?.midtermScore,
+                                                  examScore:
+                                                      recordForm?.examScore ?? record?.examScore,
+                                                  awards: [],
+                                                  certificates: [],
+                                              },
+                                              record.subjectClass?.type || 'NORMAL'
+                                          )?.toNumber()
+                                    if (finalScore === undefined || finalScore === null) return null
+                                    return finalScore !== undefined ? (
+                                        <div className="text-yellow-600">
+                                            {
+                                                scoreConvert(
+                                                    finalScore,
+                                                    record?.student?.fixedClass?.trainingCourse
+                                                        ?.scoreConverts || []
+                                                ).letter
+                                            }
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )
                                 },
                             },
                             {
