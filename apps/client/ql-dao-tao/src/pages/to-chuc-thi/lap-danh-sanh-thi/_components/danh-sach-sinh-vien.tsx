@@ -12,6 +12,7 @@ import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTran
 import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, message, Row } from 'antd'
 import { useEffect } from 'react'
 import { keHoachThiStore } from '..'
+import ExportExamList from './export-exam-list'
 
 interface Props {
     subjectClassId: string | null
@@ -628,7 +629,10 @@ export default function DanhSachSinhVien() {
                             >
                                 4. Khóa DS thi
                             </Checkbox>
-                            <Button type="dashed">Xuất DS thi</Button>
+                            <ExportExamList 
+                                data={data} 
+                                disabled={!selectedExamId || data.length === 0}
+                            />
                         </Flex>
                     </Col>
                 </Row>

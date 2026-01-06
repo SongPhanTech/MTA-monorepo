@@ -18,13 +18,16 @@ import {
     useUpdateArchivedCertificate,
     useFindManySubjectClass,
     useCreateManyStudentSubjectScore,
+    useCountStudent,
 } from '@workspace/db/hooks'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, InputNumber, message, Typography, Divider } from 'antd'
+import { Col, Form, Input, InputNumber, message, Typography, Divider, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+
 export type PutArchivedCertificate = ArchivedCertificate & {
     documentFiles?: DocumentFile[]
     trainingCoursesId?: string
@@ -39,6 +42,9 @@ const PutCertificateArchivedModal = () => {
     const [selectedSubjectClassIds, setSelectedSubjectClassIds] = useState<string[]>([])
     const [allUploadedFiles, setAllUploadedFiles] = useState<DocumentFile[]>([])
     const [uploadingCount, setUploadingCount] = useState<number>(0)
+    const [selectedStudentKeys, setSelectedStudentKeys] = useState<React.Key[]>([])
+    const [studentCurrentPage, setStudentCurrentPage] = useState(1)
+    const [studentPageSize, setStudentPageSize] = useState(DEFAULT_PAGINATE_SIZE)
     const [form] = Form.useForm<PutArchivedCertificate>()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
@@ -47,7 +53,11 @@ const PutCertificateArchivedModal = () => {
         input: id,
     } = useDisclosure<string>({
         tag: 'PutCertificateArchivedModal',
-        onClose: form.resetFields,
+        onClose: () => {
+            form.resetFields()
+            setSelectedStudentKeys([])
+            setStudentCurrentPage(1)
+        },
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -80,7 +90,6 @@ const PutCertificateArchivedModal = () => {
                 in: trainingCourses.map((course) => course.id),
             },
         },
-        // skip: trainingCourses.length ? 0 : 1,
     })
 
     // Lấy danh sách SubjectClass
@@ -99,7 +108,6 @@ const PutCertificateArchivedModal = () => {
     const selectedCertificateId = Form.useWatch('certificateId', form)
     const fixedClassId = Form.useWatch('fixedClassesId', form)
     const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
-    const selectedStudentIds = Form.useWatch('studentIds', form)
     const uploadedFiles = Form.useWatch('allDocumentFiles', form)
 
     // Cập nhật allUploadedFiles khi uploadedFiles thay đổi
@@ -138,6 +146,58 @@ const PutCertificateArchivedModal = () => {
             }
         })
     }, [selectedCertificateId, certificate, subjectClasses])
+
+    // Build where condition for student query
+    const studentWhere = useMemo(() => {
+        if (!trainingCoursesId && !fixedClassId) return null
+        return {
+            fixedClass: {
+                ...(trainingCoursesId ? { trainingCourseId: trainingCoursesId } : {}),
+                ...(fixedClassId ? { id: fixedClassId } : {}),
+            },
+        }
+    }, [trainingCoursesId, fixedClassId])
+
+    // Lấy danh sách sinh viên với phân trang
+    const { data: studentData = [] } = useFindManyStudent(
+        {
+            where: studentWhere || {},
+            include: {
+                userProfile: true,
+                fixedClass: true,
+            },
+            orderBy: {
+                userProfile: {
+                    firstName: 'asc',
+                },
+            },
+            take: studentPageSize,
+            skip: (studentCurrentPage - 1) * studentPageSize,
+        },
+        { enabled: !!trainingObjectTypeId && !!studentWhere }
+    )
+
+    // Đếm tổng số sinh viên
+    const { data: studentCount = 0 } = useCountStudent(
+        {
+            where: studentWhere || {},
+        },
+        { enabled: !!trainingObjectTypeId && !!studentWhere }
+    )
+
+    // Lấy tất cả sinh viên đã chọn (để hiển thị thông tin và xử lý)
+    const { data: allSelectedStudents = [] } = useFindManyStudent(
+        {
+            where: {
+                id: { in: selectedStudentKeys as string[] },
+            },
+            include: {
+                userProfile: true,
+            },
+        },
+        { enabled: selectedStudentKeys.length > 0 }
+    )
+
     async function onOk({ ...rest }: PutArchivedCertificate) {
         try {
             // Kiểm tra nếu đang upload file
@@ -198,7 +258,7 @@ const PutCertificateArchivedModal = () => {
                 message.success('Cập nhật thành công')
             } else {
                 // Xử lý thêm mới cho nhiều sinh viên
-                const studentIds = (rest as any).studentIds || []
+                const studentIds = selectedStudentKeys as string[]
 
                 if (!studentIds || studentIds.length === 0) {
                     message.warning('Vui lòng chọn ít nhất một học viên')
@@ -210,7 +270,7 @@ const PutCertificateArchivedModal = () => {
 
                 // Tạo chứng chỉ cho từng sinh viên với file riêng
                 for (const studentId of studentIds) {
-                    const student = studentData.find((s) => s.id === studentId)
+                    const student = allSelectedStudents.find((s) => s.id === studentId)
                     const studentCode = student?.userProfile?.code || ''
 
                     // Lấy file có tên chứa mã sinh viên
@@ -338,38 +398,17 @@ const PutCertificateArchivedModal = () => {
             hideSpinner()
         }
     }
-    const { data: studentData = [] } = useFindManyStudent(
-        {
-            where: {
-                ...(!!trainingCoursesId || !!fixedClassId
-                    ? {
-                          fixedClass: {
-                              ...(trainingCoursesId ? { trainingCourseId: trainingCoursesId } : {}),
-                              ...(fixedClassId ? { id: fixedClassId } : {}),
-                          },
-                      }
-                    : {}),
-            },
-            include: {
-                userProfile: true,
-            },
-            orderBy: {
-                userProfile: {
-                    firstName: 'asc',
-                },
-            },
-        },
-        { enabled: !!trainingObjectTypeId }
-    )
 
     // Tính toán trạng thái upload cho từng sinh viên dựa trên tên file
     const studentUploadStatus = useMemo(() => {
-        if (!selectedStudentIds || !allUploadedFiles || allUploadedFiles.length === 0) return {}
+        if (!selectedStudentKeys || selectedStudentKeys.length === 0 || allUploadedFiles.length === 0) {
+            return {}
+        }
 
         const status: Record<string, { count: number; files: DocumentFile[] }> = {}
 
-        selectedStudentIds.forEach((studentId: string) => {
-            const student = studentData.find((s) => s.id === studentId)
+        selectedStudentKeys.forEach((studentId) => {
+            const student = allSelectedStudents.find((s) => s.id === studentId)
             const studentCode = student?.userProfile?.code || ''
 
             // Tìm file có tên chứa mã sinh viên (không phân biệt hoa thường)
@@ -377,14 +416,14 @@ const PutCertificateArchivedModal = () => {
                 file.name.toLowerCase().includes(studentCode.toLowerCase())
             )
 
-            status[studentId] = {
+            status[studentId as string] = {
                 count: matchedFiles.length,
                 files: matchedFiles,
             }
         })
 
         return status
-    }, [selectedStudentIds, allUploadedFiles, studentData])
+    }, [selectedStudentKeys, allUploadedFiles, allSelectedStudents])
 
     const { data: initialData } = useFindUniqueArchivedCertificate(
         {
@@ -426,6 +465,7 @@ const PutCertificateArchivedModal = () => {
             setSelectedSubjectClassIds([])
             setAllUploadedFiles([])
             setUploadingCount(0)
+            setSelectedStudentKeys([])
         }
     }, [initialData])
 
@@ -434,6 +474,15 @@ const PutCertificateArchivedModal = () => {
         onChange: (selectedKeys: React.Key[]) => {
             setSelectedSubjectClassIds(selectedKeys as string[])
         },
+    }
+
+    // Row selection cho bảng sinh viên
+    const studentRowSelection = {
+        selectedRowKeys: selectedStudentKeys,
+        onChange: (newSelectedRowKeys: React.Key[]) => {
+            setSelectedStudentKeys(newSelectedRowKeys)
+        },
+        preserveSelectedRowKeys: true, // Giữ lại selection khi chuyển trang
     }
 
     return (
@@ -448,7 +497,7 @@ const PutCertificateArchivedModal = () => {
                     ? 'Chỉnh sửa đơn phiên điểm chứng chỉ cho môn môn học'
                     : 'Thêm mới đơn phiên điểm chứng chỉ cho môn môn học'
             }
-            className="w-[1000px]"
+            className="w-[80vw]"
         >
             <Col span={24} className="mb-3">
                 <FormItem form={form} name="certificateId" label="Chứng chỉ" required>
@@ -461,16 +510,6 @@ const PutCertificateArchivedModal = () => {
                     />
                 </FormItem>
             </Col>
-            {/* <Col span={24} className="mb-3">
-                <FormItem form={form} name="finalScore" label="Điểm phiên cho môn học" required>
-                    <InputNumber
-                        min={1}
-                        max={10}
-                        className="w-full"
-                        placeholder="Nhập điểm phiên cho môn học"
-                    />
-                </FormItem>
-            </Col> */}
             <Col span={12} className="mb-3">
                 <FormItem form={form} name="score" label="Điểm chứng chỉ" required>
                     <InputNumber
@@ -495,7 +534,7 @@ const PutCertificateArchivedModal = () => {
                     <DatePicker format="DD/MM/YYYY" className="w-full" placeholder="Chọn ngày" />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-4">
+            <Col span={12} className="mb-4">
                 <FormItem form={form} name="trainingCoursesId" label="Khoá">
                     <Select
                         showSearch
@@ -508,7 +547,7 @@ const PutCertificateArchivedModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-4">
+            <Col span={12} className="mb-4">
                 <FormItem form={form} name="fixedClassesId" label="Lớp quản lý">
                     <Select
                         showSearch
@@ -521,30 +560,96 @@ const PutCertificateArchivedModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-4">
-                <FormItem
-                    form={form}
-                    name={(id ? 'studentId' : 'studentIds') as any}
-                    label={id ? 'Học viên, sinh viên' : 'Học viên, sinh viên (có thể chọn nhiều)'}
-                    required
-                >
-                    <Select
-                        mode={id ? undefined : 'multiple'}
-                        showSearch
-                        style={{ width: '100%' }}
-                        placeholder={id ? 'Chọn sinh viên' : 'Chọn sinh viên (có thể chọn nhiều)'}
-                        options={studentData.map((item) => ({
-                            label: `${item.userProfile?.code || ''} - ${item.userProfile?.lastName} ${item.userProfile?.firstName}`,
-                            value: item.id,
-                        }))}
-                        filterOption={(input, option) =>
-                            String(option?.label ?? '')
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                        }
-                    />
-                </FormItem>
-            </Col>
+
+            {/* Bảng chọn sinh viên với phân trang - chỉ hiện khi thêm mới */}
+            {!id && (
+                <Col span={24} className="mb-4">
+                    <div className="flex justify-between items-center mb-2">
+                        <Title level={5} className="m-0">
+                            Chọn học viên, sinh viên
+                        </Title>
+                        {selectedStudentKeys.length > 0 && (
+                            <Tag color="blue">Đã chọn: {selectedStudentKeys.length} học viên</Tag>
+                        )}
+                    </div>
+                    {!studentWhere ? (
+                        <div className="text-gray-500 text-center py-4 border rounded">
+                            Vui lòng chọn Khoá hoặc Lớp quản lý để hiển thị danh sách sinh viên
+                        </div>
+                    ) : (
+                        <Table
+                            rowKey="id"
+                            dataSource={studentData}
+                            rowSelection={studentRowSelection}
+                            size="small"
+                            bordered
+                            scroll={{ y: 300 }}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 60,
+                                    align: 'center',
+                                    render: (_, __, index) =>
+                                        index + 1 + (studentCurrentPage - 1) * studentPageSize,
+                                },
+                                {
+                                    title: 'MSSV',
+                                    dataIndex: ['userProfile', 'code'],
+                                    width: 120,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Họ và tên',
+                                    align: 'left',
+                                    render: (_, record) =>
+                                        `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim(),
+                                },
+                                {
+                                    title: 'Lớp',
+                                    dataIndex: ['fixedClass', 'name'],
+                                    width: 150,
+                                    align: 'center',
+                                },
+                            ]}
+                            pagination={{
+                                current: studentCurrentPage,
+                                pageSize: studentPageSize,
+                                total: studentCount,
+                                showSizeChanger: true,
+                                showTotal: (total, range) =>
+                                    `${range[0]}-${range[1]} / ${total} sinh viên`,
+                                onChange: (page, pageSize) => {
+                                    setStudentCurrentPage(page)
+                                    setStudentPageSize(pageSize)
+                                },
+                            }}
+                        />
+                    )}
+                </Col>
+            )}
+
+            {/* Select đơn sinh viên cho trường hợp edit */}
+            {id && (
+                <Col span={24} className="mb-4">
+                    <FormItem form={form} name="studentId" label="Học viên, sinh viên" required>
+                        <Select
+                            showSearch
+                            style={{ width: '100%' }}
+                            placeholder="Chọn sinh viên"
+                            options={studentData.map((item) => ({
+                                label: `${item.userProfile?.code || ''} - ${item.userProfile?.lastName} ${item.userProfile?.firstName}`,
+                                value: item.id,
+                            }))}
+                            filterOption={(input, option) =>
+                                String(option?.label ?? '')
+                                    .toLowerCase()
+                                    .includes(input.toLowerCase())
+                            }
+                        />
+                    </FormItem>
+                </Col>
+            )}
+
             {id && (
                 <Col span={24} className="mb-3">
                     <FormItem form={form} name="documentFiles" label="Minh chứng">
@@ -558,7 +663,7 @@ const PutCertificateArchivedModal = () => {
                 </Col>
             )}
 
-            {!id && selectedStudentIds && selectedStudentIds.length > 0 && (
+            {!id && selectedStudentKeys && selectedStudentKeys.length > 0 && (
                 <Col span={24} className="mb-3">
                     <div>
                         <div className="mb-2">
@@ -591,19 +696,17 @@ const PutCertificateArchivedModal = () => {
                                 )}
                             </div>
                             <Table
-                                dataSource={selectedStudentIds.map((studentId: string) => {
-                                    const student = studentData.find((s) => s.id === studentId)
-                                    return {
-                                        key: studentId,
-                                        studentId,
-                                        studentCode: student?.userProfile?.code || 'N/A',
-                                        studentName:
-                                            `${student?.userProfile?.lastName || ''} ${student?.userProfile?.firstName || ''}`.trim(),
-                                    }
-                                })}
+                                dataSource={allSelectedStudents.map((student) => ({
+                                    key: student.id,
+                                    studentId: student.id,
+                                    studentCode: student?.userProfile?.code || 'N/A',
+                                    studentName:
+                                        `${student?.userProfile?.lastName || ''} ${student?.userProfile?.firstName || ''}`.trim(),
+                                }))}
                                 pagination={false}
                                 size="small"
                                 bordered
+                                scroll={{ y: 200 }}
                                 columns={[
                                     {
                                         title: 'STT',
@@ -662,7 +765,7 @@ const PutCertificateArchivedModal = () => {
                         <Title level={5}>Phiên điểm cho lớp môn học (Tùy chọn)</Title>
                         <p className="text-gray-500 text-sm mb-3">
                             Chọn các lớp môn học để tự động phiên điểm khi thêm chứng chỉ cho{' '}
-                            {selectedStudentIds?.length || 0} học viên đã chọn
+                            {selectedStudentKeys?.length || 0} học viên đã chọn
                         </p>
                         <Table
                             rowKey="id"
