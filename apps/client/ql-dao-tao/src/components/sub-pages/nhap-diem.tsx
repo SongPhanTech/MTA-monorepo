@@ -745,7 +745,7 @@ export default function NhapDiem({
                                 </Button>
                             </>
                         )}
-                    <Button type="primary" onClick={handleSave}>
+                    <Button type="primary" disabled={disabledForm} onClick={handleSave}>
                         <Save stroke="white" />
                         Lưu
                     </Button>
