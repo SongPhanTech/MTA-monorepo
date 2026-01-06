@@ -369,7 +369,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         facility: 'AG', // Cơ sở
         foreignLanguage: 'AH', // Ngoại ngữ
         priorityReason: 'AI', // Lý do ưu tiên
-        description: 'R', // Mô tả
+        description: 'AJ', // Mô tả (Ghi chú)
     }
     // end: Các tham chiếu ô cố định trong sheet
 

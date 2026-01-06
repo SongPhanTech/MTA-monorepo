@@ -20,11 +20,13 @@ import {
     useFindUniqueGraduationSession,
     useUpdateManyStudentGraduationApplication,
     useUpdateStudentGraduationApplication,
+    useFindManyCertificate,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { graduationApplicationInit, useGraduationCheck } from '@workspace/libs/api/training'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip, Divider } from 'antd'
+import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons'
 import type { TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { BookPlus, SearchCheck, X } from 'lucide-react'
@@ -52,6 +54,7 @@ export default function StudentGraduationApplication() {
     const [showDecision, setShowDecision] = useState(false)
     const [trainingCourseSelected, setTrainingCourseSelected] = useState<string>()
     const [fixedClassSelected, setFixedClassSelected] = useState<string>()
+    const [requiredCertificateIds, setRequiredCertificateIds] = useState<string[]>([])
 
     const where = useMemo(
         () => ({
@@ -153,6 +156,15 @@ export default function StudentGraduationApplication() {
                                 },
                             },
                             fixedClass: true,
+                            archivedCertificate: {
+                                where: {
+                                    deletedAt: null,
+                                    status: 'APPROVED',
+                                },
+                                include: {
+                                    certificate: true,
+                                },
+                            },
                         },
                     },
                     trainingMajor: true,
@@ -207,6 +219,11 @@ export default function StudentGraduationApplication() {
         { enabled: !!graduationSessionId && !!trainingCourseSelected }
     )
 
+    // Lấy danh sách chứng chỉ để filter
+    const { data: certificatesData = [] } = useFindManyCertificate({
+        orderBy: { name: 'asc' },
+    })
+
     const handleInitApplication = async () => {
         if (!trainingCourseSelected && !fixedClassSelected) {
             message.error('Vui lòng chọn Khoá hoặc Lớp đào tạo')
@@ -235,18 +252,42 @@ export default function StudentGraduationApplication() {
         }
     }
 
+    // Tạo Set từ requiredCertificateIds để lookup nhanh hơn
+    const requiredCertificateSet = useMemo(
+        () => new Set(requiredCertificateIds),
+        [requiredCertificateIds]
+    )
+
     const data = useMemo(() => {
         if (!studentGraduationApplicationData) return []
 
+        const hasRequiredCerts = requiredCertificateIds.length > 0
+
         return studentGraduationApplicationData.map((item) => {
+            // Chỉ tính toán nếu có chứng chỉ yêu cầu
+            let hasAllRequiredCerts = true
+            let studentCertificateSet: Set<string> | null = null
+
+            if (hasRequiredCerts) {
+                studentCertificateSet = new Set(
+                    item.student?.archivedCertificate?.map((ac: any) => ac.certificateId) || []
+                )
+                hasAllRequiredCerts = requiredCertificateIds.every((certId) =>
+                    studentCertificateSet!.has(certId)
+                )
+            }
+
             return {
                 ...item,
                 gpa: item.gpa?.toNumber(),
                 trainingMajor: item.trainingMajor?.name,
                 diplomaType: item.diplomaType?.name,
+                hasAllRequiredCerts,
+                // Lưu Set thay vì object để tiết kiệm bộ nhớ
+                _studentCertificateSet: studentCertificateSet,
             }
         })
-    }, [studentGraduationApplicationData])
+    }, [studentGraduationApplicationData, requiredCertificateIds])
 
     const { onOpen } = useDisclosure<{
         id: string | null
@@ -467,13 +508,42 @@ export default function StudentGraduationApplication() {
         getCheckboxProps: (record: any) => ({
             disabled:
                 record.status === ApplicationStatus.REJECTED ||
-                record.status === ApplicationStatus.APPROVED,
+                record.status === ApplicationStatus.APPROVED ||
+                (requiredCertificateIds.length > 0 && !record.hasAllRequiredCerts),
             onClick: (e: React.MouseEvent) => {
                 e.stopPropagation()
             },
         }),
         renderCell,
     }
+
+    // Tạo cột động cho mỗi chứng chỉ được chọn - tối ưu không tạo JSX trong title
+    const certificateColumns = useMemo(() => {
+        if (requiredCertificateIds.length === 0) return []
+
+        return requiredCertificateIds.map((certId) => {
+            const cert = certificatesData.find((c) => c.id === certId)
+            const shortName = cert?.name?.substring(0, 10) || 'CC'
+            const hasEllipsis = (cert?.name?.length || 0) > 10
+
+            return {
+                title: shortName + (hasEllipsis ? '...' : ''),
+                key: `cert_${certId}`,
+                width: 80,
+                align: 'center' as const,
+                ellipsis: { showTitle: true },
+                render: (_: any, record: any) => {
+                    // Sử dụng Set đã lưu thay vì tạo lại
+                    const hasCert = record._studentCertificateSet?.has(certId) ?? false
+                    return hasCert ? (
+                        <CheckCircleFilled style={{ color: '#22c55e', fontSize: 18 }} />
+                    ) : (
+                        <CloseCircleFilled style={{ color: '#ef4444', fontSize: 18 }} />
+                    )
+                },
+            }
+        })
+    }, [requiredCertificateIds, certificatesData])
 
     return (
         <Row gutter={[16, 0]} className="mt-4">
@@ -535,7 +605,38 @@ export default function StudentGraduationApplication() {
                                             align="middle"
                                             justify="space-between"
                                         >
-                                            <Col span={24}>
+                                            <Col span={12}>
+                                                <Flex align="center" gap={8}>
+                                                    <span className="whitespace-nowrap font-medium">
+                                                        Điều kiện chứng chỉ:
+                                                    </span>
+                                                    <Select
+                                                        mode="multiple"
+                                                        className="min-w-[300px]"
+                                                        placeholder="Chọn chứng chỉ bắt buộc"
+                                                        value={requiredCertificateIds}
+                                                        onChange={(values) => {
+                                                            setRequiredCertificateIds(values)
+                                                            setSelectedRowKeys([]) // Reset selection khi thay đổi điều kiện
+                                                        }}
+                                                        options={certificatesData.map((c) => ({
+                                                            value: c.id,
+                                                            label: c.name,
+                                                        }))}
+                                                        allowClear
+                                                        maxTagCount={2}
+                                                        maxTagPlaceholder={(omitted) =>
+                                                            `+${omitted.length} khác`
+                                                        }
+                                                    />
+                                                    {requiredCertificateIds.length > 0 && (
+                                                        <Tag color="blue">
+                                                            {requiredCertificateIds.length} chứng chỉ
+                                                        </Tag>
+                                                    )}
+                                                </Flex>
+                                            </Col>
+                                            <Col span={12}>
                                                 <Flex justify="end" gap={4} className="ml-auto">
                                                     {/* <Button type="primary">
                                                         <FileUp />
@@ -710,6 +811,8 @@ export default function StudentGraduationApplication() {
                                                               )
                                                             : '',
                                                 },
+                                                // Cột chứng chỉ động
+                                                ...certificateColumns,
                                                 {
                                                     title: 'Kết quả xét',
                                                     width: 90,
