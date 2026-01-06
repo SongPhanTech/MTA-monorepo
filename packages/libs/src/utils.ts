@@ -127,6 +127,7 @@ declare global {
     interface Array<T> {
         compare(otherArray: T[], cb: (a: T, b: T) => boolean): boolean
         uniqueByKey<K extends keyof T>(key: K): T[]
+        flatten<K extends keyof T>(key: K): T[]
     }
 }
 
@@ -170,6 +171,22 @@ Array.prototype.compare = function <T>(
         }
     }
     return true
+}
+
+Array.prototype.flatten = function <T, K extends keyof T>(this: T[], key: K): T[] {
+    const stack = [...this]
+    const result = []
+    while (stack.length) {
+        const shift = stack.shift()
+        if (!shift) continue
+        const { [key]: children, ...node } = shift as any
+        result.push(node)
+        if (children?.length) {
+            stack.unshift(...children)
+        }
+    }
+
+    return result
 }
 
 Array.prototype.uniqueByKey = function <T, K extends keyof T>(this: T[], key: K): T[] {

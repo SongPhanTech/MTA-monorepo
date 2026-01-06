@@ -10,13 +10,12 @@ import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
-import {
-    type CurriculumVersion,
-    type Prisma,
-    type TrainingCourse,
-    type TrainingMajor,
-    type TrainingTime,
+import type {
+    CurriculumVersion,
+    Prisma,
+    TrainingCourse,
+    TrainingMajor,
+    TrainingTime,
 } from '@workspace/db/client'
 import {
     useCountCurriculum,
@@ -261,7 +260,6 @@ export default function TrainingProgramCatalog() {
     const { data: organization = [] } = useFindManyDM_DonVi({
         orderBy: { sTen: 'asc' },
     })
-    const treeData = buildOrgTree(organization)
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
