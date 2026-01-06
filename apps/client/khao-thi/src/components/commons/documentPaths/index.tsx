@@ -4,7 +4,7 @@ import {
     DownloadOutlined,
     PaperClipOutlined,
 } from '@ant-design/icons'
-import type { DocumentFile, Prisma } from '@workspace/db/client'
+import type { DocumentFile, EvidenceFile, Prisma } from '@workspace/db/client'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { getMinioUrl, getRuntimeEnv } from '@workspace/libs/utils'
 import { message, Tooltip, Typography, Upload } from 'antd'
@@ -18,9 +18,9 @@ const { Link } = Typography
 
 interface DocumentPathsComponentProps {
     form: FormInstance
-    data: DocumentFile[]
+    data: DocumentFile[] | EvidenceFile[]
     relationId: string
-    relationType: Extract<Prisma.DocumentFileScalarFieldEnum, `${string}Id`>
+    relationType: Extract<Prisma.DocumentFileScalarFieldEnum, `${string}Id`> | 'evidenceId'
     titleForm?: string
     multiple?: boolean
     accept?: string
