@@ -127,12 +127,12 @@ export default function QuanLyDiemLopMonHoc({
 
     const reasonDate = useCallback(() => {
         if (score === 'CC/TX' && (data?.scoreDeadLineStart || data?.scoreDeadline)) {
-            if (dayjs()?.isAfter(data?.scoreDeadline) && !data?.enteredScore) {
+            if (dayjs()?.isAfter(data?.scoreDeadline)) {
                 return (
                     <Input
                         size="small"
                         className="bg-red-600 text-white"
-                        placeholder="Hạn nhập điểm pointer-events-none"
+                        placeholder="Hạn nhập điểm"
                         value={`Ngoài hạn nhập điểm quá trình, ${formatDate(data?.scoreDeadLineStart || '')} đến ${formatDate(data?.scoreDeadline || '')}`}
                     />
                 )
@@ -147,8 +147,8 @@ export default function QuanLyDiemLopMonHoc({
             )
         }
 
-        if (score === 'THI' && (data?.scoreDeadLineStart || data?.scoreDeadline)) {
-            if (dayjs()?.isAfter(data?.examScoreDeadline) && !data?.enteredExamScore) {
+        if (score === 'THI' && data?.examScoreDeadline) {
+            if (dayjs()?.isAfter(data?.examScoreDeadline)) {
                 return (
                     <Input
                         size="small"
