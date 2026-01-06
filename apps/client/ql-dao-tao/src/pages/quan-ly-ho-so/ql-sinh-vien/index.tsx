@@ -280,6 +280,31 @@ export default function UserProfilePageDs() {
             trainingCourse: true,
         },
     })
+    const filteredFixedClassData = filters.trainingCourseId
+        ? fixedClassData.filter((c: FixedClass) => c.trainingCourseId === filters.trainingCourseId)
+        : fixedClassData
+
+    const fixedClassMap = useMemo(() => {
+        return new Map(fixedClassData.map((c) => [c.id, c]))
+    }, [fixedClassData])
+
+    const handleFixedClassChange = (val?: string) => {
+        if (!val) {
+            setFilters({
+                ...filters,
+                fixedClassId: undefined,
+            })
+            return
+        }
+
+        const selectedClass = fixedClassMap.get(val)
+
+        setFilters({
+            ...filters,
+            fixedClassId: val,
+            trainingCourseId: filters.trainingCourseId ?? selectedClass?.trainingCourseId,
+        })
+    }
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField()
 
@@ -357,6 +382,7 @@ export default function UserProfilePageDs() {
                                             setFilters({
                                                 ...filters,
                                                 trainingCourseId: val,
+                                                fixedClassId: undefined,
                                             })
                                         }
                                         allowClear
@@ -367,16 +393,12 @@ export default function UserProfilePageDs() {
                                     <Select
                                         className="w-full"
                                         placeholder="Chọn lớp quản lý"
-                                        options={fixedClassData.map((i: FixedClass) => ({
+                                        options={filteredFixedClassData.map((i) => ({
                                             value: i.id,
                                             label: i.name,
                                         }))}
-                                        onChange={(val) =>
-                                            setFilters({
-                                                ...filters,
-                                                fixedClassId: val,
-                                            })
-                                        }
+                                        value={filters.fixedClassId}
+                                        onChange={handleFixedClassChange}
                                         allowClear
                                     />
                                 </Col>
