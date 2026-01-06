@@ -1,5 +1,6 @@
 import { DownloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
+import Select from '@components/commons/select'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -99,13 +100,9 @@ export default function FixedClassPage() {
                       },
                   }
                 : {}),
-            ...(filters.trainingCourses
-                ? {
-                      trainingCourseId: {
-                          in: filters.trainingCourses,
-                      },
-                  }
-                : {}),
+            ...(filters.trainingCourseId && {
+                trainingCourseId: filters.trainingCourseId,
+            }),
             ...(filters.curriculumVersion
                 ? {
                       curriculumVersionId: {
@@ -137,7 +134,8 @@ export default function FixedClassPage() {
                   }
                 : {}),
         }
-    }, [filters, filters.trainingCourses, trainingObjectTypeId, profileId, canReadAll])
+    }, [filters, trainingObjectTypeId, profileId, canReadAll]
+)
 
     const { data = [] } = useFindManyFixedClass({
         where,
@@ -302,7 +300,29 @@ export default function FixedClassPage() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify={'end'}>
-                        <Col span={4}>
+                        <Col span={12}>
+                            <Flex>
+                                <Col span={8}>
+                                    <Select
+                                        className="w-full"
+                                        placeholder="Chọn khoá học"
+                                        value={filters.trainingCourseId}
+                                        options={trainingCourseData.map((i) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                        onChange={(trainingCourseId) =>
+                                            setFilters((prev) => ({
+                                                ...prev,
+                                                trainingCourseId,
+                                            }))
+                                        }
+                                        allowClear
+                                    />
+                                </Col>
+                            </Flex>
+                        </Col>
+                        <Col span={12}>
                             <Flex justify="end">
                                 <Button className="mr-3" type="primary" onClick={downloadStatsFile}>
                                     <DownloadOutlined />
