@@ -649,7 +649,6 @@ export default function NhapDiem({
                                 onClick={() => setImportModalVisible(true)}
                                 disabled={
                                     !selectedSubjectClassId || role !== 'GV' || disabledForm
-                                    // dataDetailSubjectClass?.enteredScore
                                 }
                                 className="w-full flex justify-start"
                             >
