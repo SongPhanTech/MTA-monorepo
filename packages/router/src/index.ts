@@ -528,14 +528,14 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
-                        label: 'Đợt xét luận văn',
+                        label: 'Đợt xét luận văn/đề án',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                         description: 'Đợt xét luận văn',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
                         label: 'Quản lý luận văn/đề án',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_KHOA,
                         description: 'Quản lý luận văn/đề án',
                     },
                     {
