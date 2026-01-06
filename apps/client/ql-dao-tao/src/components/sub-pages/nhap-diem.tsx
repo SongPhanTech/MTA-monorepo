@@ -504,6 +504,19 @@ export default function NhapDiem({
         }
     )
 
+    const onlyNumberPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (
+            !/[0-9]/.test(e.key) &&
+            e.key !== 'Backspace' &&
+            e.key !== 'Delete' &&
+            e.key !== 'Tab' &&
+            e.key !== '.' &&
+            e.key !== ','
+        ) {
+            e.preventDefault()
+        }
+    }
+
     const handleScoreInputKeyDown = (
         e: React.KeyboardEvent<HTMLInputElement>,
         recordId: string,
@@ -542,6 +555,7 @@ export default function NhapDiem({
                 }
             }
         }
+        onlyNumberPress(e)
     }
 
     const disabledForm: boolean = useMemo(() => {
@@ -1057,15 +1071,18 @@ export default function NhapDiem({
                                         : calcFinalScore(
                                               record?.student?.fixedClass?.trainingCourse,
                                               {
-                                                  ...record,
                                                   attendanceScore:
-                                                      recordForm?.attendanceScore ??
-                                                      record?.attendanceScore,
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.attendanceScore
+                                                          : record?.attendanceScore,
                                                   midtermScore:
-                                                      recordForm?.midtermScore ??
-                                                      record?.midtermScore,
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.midtermScore
+                                                          : record?.midtermScore,
                                                   examScore:
-                                                      recordForm?.examScore ?? record?.examScore,
+                                                      score === 'THI'
+                                                          ? recordForm?.examScore
+                                                          : record?.examScore,
                                                   awards: [],
                                                   certificates: [],
                                               },
@@ -1086,15 +1103,18 @@ export default function NhapDiem({
                                         : calcFinalScore(
                                               record?.student?.fixedClass?.trainingCourse,
                                               {
-                                                  ...record,
                                                   attendanceScore:
-                                                      recordForm?.attendanceScore ??
-                                                      record?.attendanceScore,
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.attendanceScore
+                                                          : record?.attendanceScore,
                                                   midtermScore:
-                                                      recordForm?.midtermScore ??
-                                                      record?.midtermScore,
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.midtermScore
+                                                          : record?.midtermScore,
                                                   examScore:
-                                                      recordForm?.examScore ?? record?.examScore,
+                                                      score === 'THI'
+                                                          ? recordForm?.examScore
+                                                          : record?.examScore,
                                                   awards: [],
                                                   certificates: [],
                                               },
@@ -1128,15 +1148,18 @@ export default function NhapDiem({
                                         : calcFinalScore(
                                               record?.student?.fixedClass?.trainingCourse,
                                               {
-                                                  ...record,
                                                   attendanceScore:
-                                                      recordForm?.attendanceScore ??
-                                                      record?.attendanceScore,
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.attendanceScore
+                                                          : record?.attendanceScore,
                                                   midtermScore:
-                                                      recordForm?.midtermScore ??
-                                                      record?.midtermScore,
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.midtermScore
+                                                          : record?.midtermScore,
                                                   examScore:
-                                                      recordForm?.examScore ?? record?.examScore,
+                                                      score === 'THI'
+                                                          ? recordForm?.examScore
+                                                          : record?.examScore,
                                                   awards: [],
                                                   certificates: [],
                                               },
