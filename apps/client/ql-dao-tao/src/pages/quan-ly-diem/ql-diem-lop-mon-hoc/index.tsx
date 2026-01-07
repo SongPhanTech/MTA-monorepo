@@ -3,11 +3,16 @@ import NhapDiem from '@components/sub-pages/nhap-diem'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { Store, useStore } from '@tanstack/react-store'
-import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
+import {
+    useFindFirstSubjectClassHistory,
+    useFindUniqueSubjectClass,
+    useUpdateSubjectClass,
+} from '@workspace/db/hooks'
 import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
+import { useSession } from '@workspace/auth/react'
 
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
@@ -17,9 +22,6 @@ type SubmitFormType = {
     isLockExamScore?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
-    isLockExamScoreOld?: boolean
-    scoreSubmittedOld?: boolean
-    scoreCheckedOld?: boolean
 }
 export type DiemLopMonHocStoreState = {
     selectedSubjectClassId?: string
@@ -35,6 +37,7 @@ export default function QuanLyDiemLopMonHoc({
 }: DiemLopMonHocProps) {
     const [form] = Form.useForm<SubmitFormType>()
     const [activeKey, setActiveKey] = useState('1')
+    const { data: userSession } = useSession()
     const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
     const { data } = useFindUniqueSubjectClass(
         {
@@ -66,6 +69,19 @@ export default function QuanLyDiemLopMonHoc({
                         },
                     },
                 },
+                subjectClassHistory: {
+                    include: {
+                        updatedBy: {
+                            select: {
+                                id: true,
+                                fullname: true,
+                            },
+                        },
+                    },
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+                },
             },
         },
         {
@@ -73,6 +89,64 @@ export default function QuanLyDiemLopMonHoc({
             refetchOnWindowFocus: false,
         }
     )
+
+    const { data: subjectClassHistoryIsLockExamScore } = useFindFirstSubjectClassHistory({
+        where: {
+            subjectClassId: selectedSubjectClassId || '',
+            isLockExamScore: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        select: {
+            createdAt: true,
+            updatedBy: {
+                select: {
+                    fullname: true,
+                },
+            },
+            isLockExamScore: true,
+        },
+    })
+
+    const { data: subjectClassHistoryScoreSubmitted } = useFindFirstSubjectClassHistory({
+        where: {
+            subjectClassId: selectedSubjectClassId || '',
+            scoreSubmitted: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        select: {
+            createdAt: true,
+            updatedBy: {
+                select: {
+                    fullname: true,
+                },
+            },
+            scoreSubmitted: true,
+            isLockExamScore: true,
+        },
+    })
+
+    const { data: subjectClassHistoryScoreChecked } = useFindFirstSubjectClassHistory({
+        where: {
+            subjectClassId: selectedSubjectClassId || '',
+            scoreChecked: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        select: {
+            createdAt: true,
+            updatedBy: {
+                select: {
+                    fullname: true,
+                },
+            },
+            scoreChecked: true,
+        },
+    })
 
     const items = useMemo(() => {
         let baseMenu: TabsProps['items'] = [
@@ -244,6 +318,23 @@ export default function QuanLyDiemLopMonHoc({
                             where: { id: selectedSubjectClassId || '' },
                             data: {
                                 ...changedValue,
+                                subjectClassHistory: {
+                                    create: {
+                                        isLockExamScore:
+                                            typeof changedValue?.isLockExamScore === 'boolean'
+                                                ? changedValue.isLockExamScore
+                                                : undefined,
+                                        scoreChecked:
+                                            typeof changedValue?.scoreChecked === 'boolean'
+                                                ? changedValue.scoreChecked
+                                                : undefined,
+                                        scoreSubmitted:
+                                            typeof changedValue?.scoreSubmitted === 'boolean'
+                                                ? changedValue.scoreSubmitted
+                                                : undefined,
+                                        updatedById: userSession?.sDM_NhanVienId,
+                                    },
+                                },
                             },
                         })
                     }}
@@ -279,7 +370,21 @@ export default function QuanLyDiemLopMonHoc({
                                 </Checkbox>
                             </FormItem>
                             <div className="w-full">
-                                <Input size="small" className="pointer-events-none" />
+                                <Input
+                                    size="small"
+                                    className="pointer-events-none"
+                                    value={[
+                                        subjectClassHistoryIsLockExamScore,
+                                        subjectClassHistoryScoreSubmitted,
+                                    ]
+                                        .filter(Boolean)
+                                        .map((item) =>
+                                            item
+                                                ? `${item.isLockExamScore ? 'Khoá:' : 'Nhận phiếu điểm:'} ${item.createdAt ? dayjs(item.createdAt).format('HH:mm DD/MM/YYYY') : ''} bởi ${item.updatedBy?.fullname ?? '-'}`
+                                                : ''
+                                        )
+                                        .join(' | ')}
+                                />
                             </div>
                         </div>
                     </div>
@@ -296,7 +401,15 @@ export default function QuanLyDiemLopMonHoc({
                                 </Checkbox>
                             </FormItem>
                             <div className="w-full">
-                                <Input size="small" className="pointer-events-none" />
+                                <Input
+                                    size="small"
+                                    className="pointer-events-none"
+                                    value={
+                                        subjectClassHistoryScoreChecked
+                                            ? `P2/P7 đã kiểm tra :  ${subjectClassHistoryScoreChecked?.createdAt ? dayjs(subjectClassHistoryScoreChecked.createdAt).format('HH:mm DD/MM/YYYY') : ''}  ${subjectClassHistoryScoreChecked?.updatedBy?.fullname ?? '-'}`
+                                            : ''
+                                    }
+                                />
                             </div>
                         </div>
                     </div>
