@@ -456,6 +456,7 @@ export default function NhapDiem({
                 enteredScore: true,
                 type: true,
                 enteredExamScore: true,
+                scoreSubmitted: true,
                 subject: {
                     select: {
                         onePoint: true,
@@ -568,6 +569,7 @@ export default function NhapDiem({
                 dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
                 !dataDetailSubjectClass?.isLockScore &&
                 !dataDetailSubjectClass?.isLockExamScore &&
+                !dataDetailSubjectClass?.scoreSubmitted &&
                 !dataDetailSubjectClass?.subject.onePoint &&
                 dataDetailSubjectClass?.type !== $Enums.SubjectClassType.REEXAM
             )
@@ -576,7 +578,8 @@ export default function NhapDiem({
             can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI, 'NHAP_DIEM') &&
             dataDetailSubjectClass?.examScoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
-            !dataDetailSubjectClass?.isLockExamScore
+            !dataDetailSubjectClass?.isLockExamScore &&
+            !dataDetailSubjectClass?.scoreSubmitted
         )
     }, [dataDetailSubjectClass, can, score])
 
@@ -735,7 +738,9 @@ export default function NhapDiem({
                                 <Button
                                     disabled={
                                         !selectedSubjectClassId ||
-                                        !dataDetailSubjectClass?.enteredExamScore
+                                        !dataDetailSubjectClass?.enteredExamScore ||
+                                        dataDetailSubjectClass?.isLockExamScore ||
+                                        dataDetailSubjectClass?.scoreSubmitted
                                     }
                                     onClick={() => handlePrint()}
                                 >
