@@ -64,22 +64,32 @@ const AddStudentToFixedClassModal = () => {
     const { data: dataStudentNotClass = [], refetch } = useFindManyStudent({
         where: {
             fixedClassId: null,
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
+            OR: [
+                {
+                    code: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
                     },
-                    {
-                        code: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
+                },
+                {
+                    userProfile: {
+                        OR: [
+                            {
+                                firstName: {
+                                    contains: filters.searchText,
+                                    mode: 'insensitive',
+                                },
+                            },
+                            {
+                                fullname: {
+                                    contains: filters.searchText,
+                                    mode: 'insensitive',
+                                },
+                            },
+                        ],
                     },
-                ],
-            },
+                },
+            ],
         },
         include: {
             userProfile: true,
@@ -338,7 +348,7 @@ const AddStudentToFixedClassModal = () => {
                     <Input
                         id="search"
                         onChange={(e) => handleFilterChange('searchText', e.target.value)}
-                        placeholder="Tìm kiếm"
+                        placeholder="Tìm kiếm theo tên,mã sinh viên"
                         style={{
                             width: 300,
                             marginRight: 8,
