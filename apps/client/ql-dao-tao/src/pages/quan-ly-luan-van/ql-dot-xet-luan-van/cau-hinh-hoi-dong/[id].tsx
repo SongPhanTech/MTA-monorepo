@@ -68,7 +68,7 @@ export default function SettingCouncil() {
           room: true,
           defenseSession: true,
           registrations: {
-            include: { student: true },
+            include: { student: { include: { userProfile: true } } },
           },
         },
       },
@@ -229,8 +229,6 @@ export default function SettingCouncil() {
       const requiredCouncilsCount = Math.ceil(
         allProjects.length / slotsPerCouncil
       );
-      console.log("requiredCouncilsCount", requiredCouncilsCount);
-      console.log("roomIds?.length", roomIds?.length);
 
       if ((roomIds?.length || 0) < requiredCouncilsCount) {
         message.error(
@@ -386,7 +384,9 @@ export default function SettingCouncil() {
             const reg = record.registrations?.[0];
             return (
               <div>
-                <div className="font-medium">{reg?.student?.name || "N/A"}</div>
+                <div className="font-medium">
+                  {reg?.student?.userProfile?.fullname || "N/A"}
+                </div>
                 <div className="text-xs text-gray-500">
                   {reg?.student?.code || "N/A"}
                 </div>
@@ -462,9 +462,10 @@ export default function SettingCouncil() {
           expandable={{
             expandedRowRender,
             expandRowByClick: true,
-            columnTitle: "Lịch chi tiết",
+            columnTitle: "Chi tiết",
+            columnWidth: 70,
           }}
-          pagination={{ pageSize: 5 }}
+          pagination={false}
         />
       </div>
     );
