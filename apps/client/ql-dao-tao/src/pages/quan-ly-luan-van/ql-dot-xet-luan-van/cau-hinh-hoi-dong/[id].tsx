@@ -1,23 +1,27 @@
-import FormItem from "@components/commons/form-item";
+// biome-ignore assist/source/organizeImports: biomes auto organize imports
 import useSpinner from "@hooks/spinner";
+import type { ExpertProfile, SubjectClass } from "@workspace/db/client";
 import {
-  CouncilProposalStatus,
-  CouncilRole,
-  type ExpertProfile,
-  type SubjectClass,
-} from "@workspace/db/client";
-import {
-  useCreateManyCouncil,
+  useCreateCouncil,
+  useFindManyCouncil,
   useFindManyDefenseSession,
   useFindManyExpertProfile,
   useFindManyRoom,
-  useFindUniqueSubjectClass,
-  useFindUniqueThesisProject,
   useFindUniqueThesisSession,
-  useUpdateThesisProject,
+  useUpdateManyThesisProject,
 } from "@workspace/db/hooks";
-import { Button, Col, Form, message, Row, Select } from "antd";
-import dayjs, { Dayjs } from "dayjs";
+import {
+  Badge,
+  Button,
+  Col,
+  Empty,
+  Form,
+  message,
+  Select,
+  Tag,
+  Typography,
+} from "antd";
+import dayjs, { type Dayjs } from "dayjs";
 import "dayjs/locale/vi";
 import DatePicker from "@components/commons/date-picker";
 import Table from "@components/commons/table";
@@ -27,12 +31,18 @@ import DefaultLayout from "@layouts/default-layout";
 import { ROUTER_PATH } from "@workspace/router";
 import { debounce } from "lodash";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import type React from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  ArrowLeftOutlined,
+  InboxOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
 
 export type PutSettingClass = SubjectClass & {
   roomIds?: string[];
   defenseSessionIds?: string[];
-  defenseDate?: Date;
+  defenseDate?: Date[];
 };
 dayjs.locale("vi");
 
@@ -41,6 +51,29 @@ export default function SettingCouncil() {
   const thesisSessionId = router.query.id as string;
   const { showSpinner, hideSpinner } = useSpinner();
   const [searchRoom, setSearchRoom] = useState("");
+  const { mutateAsync: createCouncil } = useCreateCouncil();
+  const { mutateAsync: updateProjects } = useUpdateManyThesisProject();
+  const { data: councils, isLoading: isLoadingCouncils } = useFindManyCouncil({
+    where: {
+      thesis: {
+        some: { thesisSessionId: thesisSessionId },
+      },
+    },
+    include: {
+      members: {
+        include: { expert: true },
+      },
+      thesis: {
+        include: {
+          room: true,
+          defenseSession: true,
+          registrations: {
+            include: { student: true },
+          },
+        },
+      },
+    },
+  });
   const [form] = Form.useForm<PutSettingClass>();
   const [selectedLeftKeys, setSelectedLeftKeys] = useState<React.Key[]>([]);
   const [selectedRightKeys, setSelectedRightKeys] = useState<React.Key[]>([]);
@@ -183,8 +216,122 @@ export default function SettingCouncil() {
     setSearchRoom(value);
     debouncedRefetch();
   };
-  const handleCreateCouncil = () => {
-    console.log("create council");
+  const handleCreateCouncil = async () => {
+    try {
+      const values = await form.validateFields();
+
+      const { defenseSessionIds, defenseDate, roomIds } = values;
+      const allProjects = [...(thesisSession?.thesisProject || [])];
+      const availableExperts = [...rightData];
+      const slotsPerCouncil =
+        (defenseDate?.length || 0) * (defenseSessionIds?.length || 0);
+
+      const requiredCouncilsCount = Math.ceil(
+        allProjects.length / slotsPerCouncil
+      );
+      console.log("requiredCouncilsCount", requiredCouncilsCount);
+      console.log("roomIds?.length", roomIds?.length);
+
+      if ((roomIds?.length || 0) < requiredCouncilsCount) {
+        message.error(
+          `Bạn cần chọn ít nhất ${requiredCouncilsCount} phòng để đáp ứng ${allProjects.length} đề tài.`
+        );
+        return;
+      }
+
+      if (availableExperts.length < requiredCouncilsCount * 5) {
+        message.error(
+          `Cần ít nhất ${
+            requiredCouncilsCount * 5
+          } chuyên gia để lập ${requiredCouncilsCount} hội đồng.`
+        );
+        return;
+      }
+
+      const usedChairmanIds = new Set<string>();
+      let projectOffset = 0;
+
+      for (let i = 0; i < requiredCouncilsCount; i++) {
+        const roomId = roomIds?.[i];
+        const councilProjects = allProjects.slice(
+          projectOffset,
+          projectOffset + slotsPerCouncil
+        );
+
+        if (councilProjects.length === 0) break;
+
+        const councilSupervisorIds = new Set(
+          councilProjects.map((p) => p.supervisorId)
+        );
+        const validExperts = availableExperts.filter(
+          (exp) => !councilSupervisorIds.has(exp.id)
+        );
+
+        const chairman = validExperts.find(
+          (exp) => exp.eligiblePresident && !usedChairmanIds.has(exp.id)
+        );
+
+        if (!chairman)
+          throw new Error(
+            `Không tìm thấy chủ tịch phù hợp cho hội đồng tại phòng ${roomId}.`
+          );
+        usedChairmanIds.add(chairman.id);
+
+        const others = validExperts.filter((e) => e.id !== chairman.id);
+        const secretary = others.find((e) => e.eligibleSecretary);
+        const remaining = others.filter((e) => e.id !== secretary?.id);
+
+        if (!secretary || remaining.length < 3) {
+          throw new Error(
+            `Không đủ nhân sự để cấu hình hội đồng tại phòng ${roomId}.`
+          );
+        }
+
+        const newCouncil = await createCouncil({
+          data: {
+            status: "PENDING",
+            description: `Hội đồng ${i + 1}`,
+            members: {
+              create: [
+                { expertId: chairman.id, role: "CHAIRMAN" },
+                { expertId: secretary.id, role: "SECRETARY" },
+                { expertId: remaining[0].id, role: "REVIEWER_1" },
+                { expertId: remaining[1].id, role: "REVIEWER_2" },
+                { expertId: remaining[2].id, role: "MEMBER" },
+              ],
+            },
+          },
+        });
+
+        let slotIdx = 0;
+        for (const date of defenseDate || []) {
+          for (const sessionId of defenseSessionIds || []) {
+            if (slotIdx >= councilProjects.length) break;
+
+            const project = councilProjects[slotIdx];
+            await updateProjects({
+              where: { id: project.id },
+              data: {
+                councilId: newCouncil?.id,
+                roomId: roomId,
+                defenseSessionId: sessionId,
+                defenseDate: dayjs(date, "DD/MM/YYYY").toDate(),
+              },
+            });
+            slotIdx++;
+          }
+        }
+
+        projectOffset += slotsPerCouncil;
+      }
+
+      message.success(
+        `Đã tạo ${requiredCouncilsCount} hội đồng và phân bổ thành công ${allProjects.length} đề tài.`
+      );
+    } catch {
+      message.error("Lỗi hệ thống khi tạo hội đồng");
+    } finally {
+    }
   };
   const minRoomsRequired =
     selectedDefenseSessionIds.length * selectedDefenseDate.length > 0
@@ -218,11 +365,125 @@ export default function SettingCouncil() {
     }, 500),
     []
   );
-  if (thesisSession) {
+  const CouncilListTable = () => {
+    const expandedRowRender = (council: any) => {
+      const projectColumns = [
+        {
+          title: "Ngày bảo vệ",
+          dataIndex: "defenseDate",
+          render: (date: Date) =>
+            date ? dayjs(date).format("DD/MM/YYYY") : "Chưa xếp",
+        },
+        {
+          title: "Ca",
+          dataIndex: ["defenseSession", "startTime"],
+          render: (time: Date) =>
+            time ? dayjs(time).format("HH:mm") : "Chưa xếp",
+        },
+        {
+          title: "Sinh viên",
+          render: (_: any, record: any) => {
+            const reg = record.registrations?.[0];
+            return (
+              <div>
+                <div className="font-medium">{reg?.student?.name || "N/A"}</div>
+                <div className="text-xs text-gray-500">
+                  {reg?.student?.code || "N/A"}
+                </div>
+              </div>
+            );
+          },
+        },
+        {
+          title: "Tên đề tài",
+          dataIndex: "title",
+          ellipsis: true,
+        },
+      ];
+
+      return (
+        <Table
+          columns={projectColumns}
+          dataSource={council.thesis}
+          pagination={false}
+          rowKey="id"
+          size="small"
+          bordered
+        />
+      );
+    };
+
+    const mainColumns = [
+      {
+        title: "Phòng bảo vệ",
+        render: (_: any, record: any) =>
+          record.thesis?.[0]?.room?.name || "Chưa gán",
+      },
+      {
+        title: "Thành viên hội đồng",
+        dataIndex: "members",
+        render: (members: any[]) => (
+          <div className="space-y-1">
+            {members.map((m) => (
+              <div key={m.id} className="text-sm">
+                <Badge status="processing" className="mr-2" />
+                <span className="font-semibold">
+                  {getRoleText(m.role)}:
+                </span>{" "}
+                {m.expert?.name}
+              </div>
+            ))}
+          </div>
+        ),
+      },
+      {
+        title: "Số đề tài",
+        render: (_: any, record: any) => (
+          <Tag color="cyan" className="text-base px-3">
+            {record.thesis?.length || 0} đề tài
+          </Tag>
+        ),
+        align: "center" as const,
+      },
+    ];
+
+    return (
+      <div className="mt-10 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+        <Typography.Title level={4} className="mb-4">
+          <span className="border-l-4 border-primary pl-3">
+            Thông tin các hội đồng đã thiết lập
+          </span>
+        </Typography.Title>
+        <Table
+          rowKey="id"
+          columns={mainColumns}
+          dataSource={councils}
+          loading={isLoadingCouncils}
+          expandable={{
+            expandedRowRender,
+            expandRowByClick: true,
+            columnTitle: "Lịch chi tiết",
+          }}
+          pagination={{ pageSize: 5 }}
+        />
+      </div>
+    );
+  };
+  const getRoleText = (role: string) => {
+    const roles: Record<string, string> = {
+      CHAIRMAN: "Chủ tịch",
+      SECRETARY: "Thư ký",
+      REVIEWER_1: "Phản biện 1",
+      REVIEWER_2: "Phản biện 2",
+      MEMBER: "Ủy viên",
+    };
+    return roles[role] || role;
+  };
+  if (thesisSession?.thesisProject?.length) {
     return (
       <Col span={24} className="p-2">
         <Form form={form} layout="horizontal" className="w-full mb-6">
-          <div className="flex items-end gap-x-4">
+          <div className="flex items-start gap-x-4">
             <Form.Item
               name="defenseSessionIds"
               label={<span className="font-semibold">Ca bảo vệ</span>}
@@ -238,6 +499,7 @@ export default function SettingCouncil() {
                   value: item.id,
                 }))}
                 showSearch
+                maxTagCount="responsive"
                 allowClear
                 className="w-full"
                 onChange={(values: string[]) =>
@@ -296,6 +558,7 @@ export default function SettingCouncil() {
                   value: item.id,
                 }))}
                 showSearch
+                maxTagCount="responsive"
                 onSearch={handleSearchRoom}
                 filterOption={false}
                 allowClear
@@ -304,7 +567,7 @@ export default function SettingCouncil() {
               />
             </Form.Item>
 
-            <div className="flex-none">
+            <Form.Item className="mb-0 flex-none">
               <Button
                 onClick={() => handleCreateCouncil()}
                 type="primary"
@@ -312,11 +575,11 @@ export default function SettingCouncil() {
               >
                 Tạo hội đồng bảo vệ
               </Button>
-            </div>
+            </Form.Item>
           </div>
         </Form>
-        <Col span={24} className="flex flex-row h-[200px] gap-2">
-          <Col span={11}>
+        <Col span={24} className="flex flex-row  gap-2">
+          <Col span={12}>
             <div
               style={{
                 fontWeight: "bold",
@@ -400,7 +663,7 @@ export default function SettingCouncil() {
             />
           </Col>
           <Col
-            span={2}
+            span={1}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -426,7 +689,8 @@ export default function SettingCouncil() {
                 ? `(Cần ít nhất ${
                     Math.ceil(
                       (thesisSession?.thesisProject?.length || 0) /
-                        selectedDefenseSessionIds.length
+                        (selectedDefenseSessionIds.length *
+                          selectedDefenseDate.length)
                     ) * 5
                   } chuyên gia)`
                 : ""}
@@ -494,13 +758,57 @@ export default function SettingCouncil() {
             />
           </Col>
         </Col>
+        <Col span={24}>
+          <CouncilListTable />
+        </Col>
       </Col>
     );
   }
 
   return (
-    <div className="text-center text-lg">
-      Hiện chưa có đề tài nào trong lớp đồ án
+    <div className="w-full h-full flex flex-col items-center justify-center bg-white p-4">
+      <div className="max-w-lg w-full text-center animate-fade-in-up">
+        <Empty
+          image={
+            <div className="flex justify-center">
+              <div className="relative">
+                <InboxOutlined className="relative text-8xl text-primary" />
+              </div>
+            </div>
+          }
+          description={
+            <div className="mt-2">
+              <h1 className="text-3xl font-bold text-gray-900 mb-3">
+                Chưa có đề tài nào
+              </h1>
+              <p className="text-base text-gray-500 max-w-sm mx-auto leading-relaxed">
+                Hệ thống hiện chưa ghi nhận đề tài luận văn hoặc đề án nào trong
+                đợt xét này
+              </p>
+            </div>
+          }
+        >
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="large"
+              icon={<ArrowLeftOutlined />}
+              className="flex items-center justify-center px-8  h-12 rounded-full"
+            >
+              Quay lại bảng điều khiển
+            </Button>
+
+            <Button
+              type="primary"
+              size="large"
+              icon={<ReloadOutlined />}
+              onClick={() => window.location.reload()}
+              className="flex items-center justify-center px-8 h-12 rounded-full "
+            >
+              Làm mới dữ liệu
+            </Button>
+          </div>
+        </Empty>
+      </div>
     </div>
   );
 }
