@@ -9,21 +9,28 @@ export const StudentScoreRequest = z
     .openapi('StudentScoreRequest')
 
 export type StudentScoreRequest = z.infer<typeof StudentScoreRequest>
+export const StudentScoreNotFoundResponse = z.object({
+    result_code: z.literal('404'),
+    result_desc: z.string(),
+})
 
 export const StudentScoreItem = z
     .object({
         subject_code: z.string().nullish(),
         subject_name: z.string(),
-        credit: z.number(),
         class_id: z.string(),
-        final_score: z.number(),
-        base4: z.number().nullish(),
-        letter: z.string().nullish(),
-        classification: z.string().nullish(),
+        attendanceScore: z.number().nullish(),
+        midtermScore: z.number().nullish(),
+        examScore: z.number().nullish(),
+        credit: z.number(),
+        final_score10: z.number().nullish(),
+        final_score4: z.number().nullish(),
+        grade_letter: z.string().nullish(),
         pass: z.boolean(),
-        improvement_register: z.boolean(),
+        bonusScore: z.number().default(0),
+        archivedCertificate: z.string(),
+        description: z.string().nullish(),
     })
-    .nullish()
     .openapi('StudentScoreItem')
 
 export type StudentScoreItem = z.infer<typeof StudentScoreItem>
