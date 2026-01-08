@@ -25,7 +25,7 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
-import { deleteDMNhanViensId } from '@workspace/libs/api/system'
+// import { deleteDMNhanViensId } from '@workspace/libs/api/system'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -196,18 +196,17 @@ export default function UserProfilePageDs() {
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            const res = await deleteDMNhanViensId(id)
-            if (res.status === 200) {
-                await updateUserProfile({
-                    where: {
-                        id,
-                    },
-                    data: {
-                        deletedAt: new Date(),
-                    },
-                })
-                message.success('Xoá hồ sơ thành công')
-            }
+            // const res = await deleteDMNhanViensId(id) // todo
+
+            await updateUserProfile({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            message.success('Xoá hồ sơ thành công')
         } catch (error) {
             console.log(error)
 
