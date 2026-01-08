@@ -2,7 +2,7 @@ import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { prisma } from '..'
 import { FailedResponseSchema } from '../dto/base'
 import { StudentScheduleRequest, StudentScheduleResponse } from '../dto/student-schedule'
-
+import _ from 'lodash'
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const postStudentSchedule = createRoute({
@@ -83,20 +83,24 @@ app.openapi(postStudentSchedule, async (c) => {
         },
     })
 
-    const studentScheduleList = student.map((item) => {
-        const class_time = item.subjectClassTimes
-            .map((t) => `T${t.dayOfWeek}(${t.startPeriod}-${t.endPeriod})`)
-            .join(', ')
+  const studentScheduleList = student.map((item) => {
+    const uniqueTimes = _.uniqBy(item.subjectClassTimes, 'dayOfWeek');
+    const class_time = uniqueTimes
+        .map((tkb) => {
+            const dayLabel = tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`;
+            return `${dayLabel} - ${tkb.startPeriod} - ${tkb.endPeriod}`;
+        })
+        .join(', ');
 
-        return {
-            courses_code: item.subject.code ?? '',
-            courses_name: item.subject.name ?? '',
-            class_credit_hour: item.subject.credit ?? 0,
-            class_id: item.code,
-            class_time: class_time,
-            class_classroom: item.room?.name ?? '',
-        }
-    })
+    return {
+        courses_code: item.subject.code ?? '',
+        courses_name: item.subject.name ?? '',
+        class_credit_hour: item.subject.credit ?? 0,
+        class_id: item.code,
+        class_time: class_time,
+        class_classroom: item.room?.name ?? '',
+    };
+});
 
     return c.json(
         {

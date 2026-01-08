@@ -1,8 +1,7 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import type { ScoreConvert } from '@workspace/db'
 import { prisma } from '..'
-import { StudentScoreRequest, StudentScoreResponse } from '../dto/student-score'
-import _ from 'lodash'
+import { StudentScoreRequest, StudentScoreResponse,StudentScoreNotFoundResponse } from '../dto/student-score'
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
@@ -34,6 +33,7 @@ function scoreConverter(scoreRanges: ScoreConvert[] = []) {
     return { convertScore }
 }
 
+
 const getStudentScore = createRoute({
     operationId: 'get-student-score',
     tags: ['Score'],
@@ -58,147 +58,119 @@ const getStudentScore = createRoute({
                 },
             },
         },
+        404: {
+            description: 'Student not found',
+            content: {
+                'application/json': {
+                    schema: StudentScoreNotFoundResponse,
+                },
+            },
+        },
     },
 })
 
 app.openapi(getStudentScore, async (c) => {
     const { student_code } = c.req.valid('json')
-
     const student = await prisma.student.findUnique({
-        where: {
-            code: student_code,
-        },
+        where: { code: student_code },
         include: {
-            userProfile: true,
-            curriculumVersion: {
-                include: {
-                    trainingLevel: true,
-                    curriculum: {
-                        include: {
-                            trainingMajor: {
-                                include: {
-                                    trainingField: true,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
             fixedClass: {
                 include: {
                     trainingCourse: {
-                        include: {
-                            scoreConverts: true,
-                        },
+                        include: { scoreConverts: true },
                     },
                 },
             },
         },
     })
 
-    const studentId = student?.id ?? ''
-
+    if (!student) {
+        return c.json(
+            {
+                result_code: '404',
+                result_desc: 'Không tìm thấy thông tin sinh viên!',
+            },
+            404
+        )
+    }
+    const { convertScore } = scoreConverter(student.fixedClass?.trainingCourse?.scoreConverts ?? [])
     const data = await prisma.semester.findMany({
         where: {
             subjectClasses: {
                 some: {
-                    subjectClassStudent: {
-                        some: {
-                            studentId,
-                        },
-                    },
+                    subjectClassStudent: { some: { studentId: student.id } },
                 },
             },
         },
         include: {
             subjectClasses: {
                 where: {
-                    subjectClassStudent: {
-                        some: {
-                            studentId,
-                        },
-                    },
+                    subjectClassStudent: { some: { studentId: student.id } },
                 },
                 include: {
                     subjectClassStudent: {
-                        where: {
-                            studentId,
-                        },
+                        where: { studentId: student.id },
                         include: {
                             subjectVersion: true,
-                            certificates: {
-                                include: {
-                                    archivedCertificate: {
-                                        include: {
-                                            certificate: true,
-                                        },
-                                    },
-                                },
-                            },
-                            awards: {
-                                include: {
-                                    archivedAward: true,
-                                },
-                            },
+                            awards: { include: { archivedAward: true } },
+                            certificates: { include: { archivedCertificate: true } },
                         },
                     },
                 },
             },
-            trainingCoursesStart: {
-                where: {
-                    id: student?.fixedClass?.trainingCourseId ?? undefined,
-                },
-                include: {
-                    scoreConverts: true,
-                },
-            },
-            schoolYear: true,
         },
-        orderBy: {
-            startDate: 'desc',
-        },
+        orderBy: { startDate: 'desc' },
     })
+    const semestersFormatted = data.map((item) => ({
+        semester_name: item.name,
+        semester_code: item.code,
+        subject_classes: item.subjectClasses
+            .map((sc) => {
+                const subjectStudent = sc.subjectClassStudent[0]
+                if (!subjectStudent) return null
+                const score10 =
+                    subjectStudent.manualFinalScore ?? subjectStudent.finalScore?.toNumber() ?? 0
+                const converted = convertScore(score10)
+                const totalBonus =
+                    subjectStudent.awards?.reduce(
+                        (acc, curr) => acc + (curr.archivedAward?.bonusScore ?? 0),
+                        0
+                    ) ?? 0
 
-    const { convertScore } = scoreConverter(data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts)
+                const certString =
+                    subjectStudent.certificates
+                        ?.map((i) => i.archivedCertificate?.code)
+                        .filter(Boolean)
+                        .join(', ') ?? ''
+
+                return {
+                    subject_code: subjectStudent.subjectVersion.code,
+                    subject_name: subjectStudent.subjectVersion.name,
+                    class_id: sc.id,
+                    attendanceScore: subjectStudent.attendanceScore,
+                    midtermScore: subjectStudent.midtermScore,
+                    examScore: subjectStudent.examScore,
+                    credit: subjectStudent.subjectVersion.credit,
+                    final_score10: score10,
+                    final_score4: converted.base4,
+                    grade_letter: converted.letter,
+                    pass: converted.pass,
+                    bonusScore: totalBonus,
+                    archivedCertificate: certString,
+                    description: subjectStudent.description ?? '',
+                }
+            })
+
+            .filter((i): i is NonNullable<typeof i> => i !== null),
+    }))
 
     return c.json(
         {
             result_code: '000',
-            result_desc: 'success',
-            semesters: data.map((item) => ({
-                semester_name: item.name,
-                semester_code: item.code,
-                subject_classes: item.subjectClasses
-                    .map((subjectClass) => {
-                        const subjectStudent = subjectClass.subjectClassStudent[0]
-                        if (!subjectStudent) {
-                            return null
-                        }
-                        const arrCer: { finalScore: number }[] = subjectStudent?.certificates.map(
-                            (i) => {
-                                return {
-                                    ...i,
-                                    finalScore: Number(i?.archivedCertificate?.finalScore) || 0,
-                                }
-                            }
-                        )
-                        const finalScore = _.maxBy(arrCer, 'finalScore')?.finalScore || 0
-                        const { improvementRegister, ...rest } = convertScore(finalScore)
-                        return {
-                            subject_code: subjectStudent.subjectVersion.code,
-                            subject_name: subjectStudent.subjectVersion.name,
-                            credit: subjectStudent.subjectVersion.credit,
-                            class_id: subjectClass.id,
-                            final_score: subjectStudent.finalScore?.toNumber() ?? 0,
-                            ...rest,
-                            improvement_register: improvementRegister,
-                        }
-                    })
-                    .filter(Boolean),
-            })),
+            result_desc: 'success' as const,
+            semesters: semestersFormatted,
         },
         200
     )
 })
-
 export default app
