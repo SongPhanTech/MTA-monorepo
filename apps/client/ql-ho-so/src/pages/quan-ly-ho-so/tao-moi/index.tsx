@@ -232,7 +232,7 @@ export default function CreateUserPage() {
             ),
         },
         {
-            title: 'Tiếng dân tôc',
+            title: 'Tiếng dân tộc',
             id: 'tiengDanToc',
             render: (
                 <Form.Item name="tiengDanToc" className="mb-0">
@@ -350,7 +350,7 @@ export default function CreateUserPage() {
         },
         {
             title: 'Quá trình được cử đi công tác',
-            id: 'quaTrinhDuocCuDiCongTac',
+            id: 'quaTrinhCuDiCongTac',
             render: (
                 <Form.Item name="quaTrinhCuDiCongTac" className="mb-0">
                     <QuaTrinhCuDiCongTacForm expland={expland} setExpland={setExpland} />

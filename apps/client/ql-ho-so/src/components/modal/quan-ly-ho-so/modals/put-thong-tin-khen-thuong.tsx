@@ -1,8 +1,10 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { KhenThuong } from '@workspace/db'
+import { useFindManyDM_HinhThucKhenThuongChinhQuyen } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
@@ -21,6 +23,9 @@ export default function PutKhenThuongModal() {
         onClose: form.resetFields,
     })
 
+    const { data: hinhThucKhenThuongChinhQuyenData = [] } =
+        useFindManyDM_HinhThucKhenThuongChinhQuyen()
+
     async function onOk(output: KhenThuong) {
         try {
             showSpinner()
@@ -28,7 +33,7 @@ export default function PutKhenThuongModal() {
                 input.onSave(output)
             }
             message.success(
-                isEdit ? 'Cập nhật khen thưởng thành công' : 'Thêm mới khen thưởng thành công'
+                isEdit ? 'Cập nhật  khen thưởng thành công' : 'Thêm mới khen thưởng thành công'
             )
             onClose()
         } catch (error) {
@@ -60,18 +65,28 @@ export default function PutKhenThuongModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={isEdit ? 'Cập nhật hình thức khen thưởng' : 'Thêm mới hình thức khen thưởng'}
+            title={isEdit ? 'Cập nhật thông tin khen thưởng' : 'Thêm mới thông tin khen thưởng'}
             className="w-[40vw]"
             layout="vertical"
         >
             <Col span={24}>
                 <FormItem
-                    label="Hình thức khen thưởng"
-                    name="hinhThucKhenThuong"
+                    label="Hình thức khen thưởng chính quyền"
+                    name="hinhThucKhenThuongId"
                     required
                     form={form}
                 >
-                    <Input placeholder="Nhập hình thức khen thưởng" />
+                    <Select
+                        allowClear
+                        placeholder="Chọn hình thức khen thưởng chính quyền"
+                        className="h-9"
+                        options={hinhThucKhenThuongChinhQuyenData.map((i) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
 
@@ -108,7 +123,7 @@ export default function PutKhenThuongModal() {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem label="Lý do" name="lyDo" required form={form}>
+                <FormItem label="Lý do" name="lyDo" form={form}>
                     <TextArea placeholder="Nhập lý do" rows={3} />
                 </FormItem>
             </Col>

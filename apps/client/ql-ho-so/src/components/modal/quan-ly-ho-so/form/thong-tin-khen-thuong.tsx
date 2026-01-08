@@ -6,6 +6,7 @@ import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { KhenThuong } from '@workspace/db'
+import { useFindManyDM_HinhThucKhenThuongChinhQuyen } from '@workspace/db/hooks'
 import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -18,6 +19,13 @@ export default function ThongTinKhenThuongForm({ expland, setExpland }: DomProps
     const { onOpen } = useDisclosure<Partial<KhenThuong> & { onSave: (val: KhenThuong) => void }>({
         tag: 'PutKhenThuongModal',
     })
+
+    const { data: hinhThucKhenThuongData = [] } = useFindManyDM_HinhThucKhenThuongChinhQuyen(
+        {},
+        {
+            enabled: expland.includes('thongTinKhenThuong'),
+        }
+    )
 
     const handleSave = (data: KhenThuong) => {
         const currentList = form.getFieldValue('khenThuong') || []
@@ -97,11 +105,16 @@ export default function ThongTinKhenThuongForm({ expland, setExpland }: DomProps
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Hình thức khen thưởng',
+                            title: 'Hình thức khen thưởng chính quyền',
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.hinhThucKhenThuong || '',
+                            render: (_, record) => {
+                                const found = hinhThucKhenThuongData.find(
+                                    (item) => item.id === record?.hinhThucKhenThuongId
+                                )
+                                return found ? found.name : ''
+                            },
                         },
                         {
                             title: 'Cấp khen thưởng',

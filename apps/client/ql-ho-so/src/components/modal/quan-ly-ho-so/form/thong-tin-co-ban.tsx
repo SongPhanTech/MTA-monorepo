@@ -12,7 +12,6 @@ import {
     useFindManyDM_DanToc,
     useFindManyDM_DonVi,
     useFindManyDM_GioiTinh,
-    useFindManyDM_HinhThucKhenThuongChinhQuyen,
     useFindManyDM_NhomMau,
     useFindManyDM_QuocGia,
     useFindManyDM_TinhTrangHonNhan,
@@ -45,8 +44,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: chucDanhGiangVienData = [] } = useFindManyDM_ChucDanhCMNVGiangVien()
     const { data: chucDanhNghienCuuVienData = [] } = useFindManyDM_ChucDanhCMNVNghienCuuVien()
     const { data: chucDanhKySuData = [] } = useFindManyDM_ChucDanhCMNVKySu()
-    const { data: hinhThucKhenThuongChinhQuyenData = [] } =
-        useFindManyDM_HinhThucKhenThuongChinhQuyen()
     const { data: xepLoaiDanhGiaCanBoData = [] } = useFindManyDM_XepLoaiDanhGiaCanBo()
 
     const treeData = buildOrgTree(organizations)
@@ -406,27 +403,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                 placeholder="Chọn xếp loại cán bộ"
                                 className="h-9"
                                 options={xepLoaiDanhGiaCanBoData.map((i) => {
-                                    return {
-                                        value: i.id,
-                                        label: i.name,
-                                    }
-                                })}
-                            />
-                        </FormItem>
-                    </Col>
-
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="dM_HinhThucKhenThuongChinhQuyenId"
-                            label="Hình thức khen thưởng chính quyền"
-                            className="mb-2"
-                        >
-                            <Select
-                                allowClear
-                                placeholder="Chọn hình thức khen thưởng chính quyền"
-                                className="h-9"
-                                options={hinhThucKhenThuongChinhQuyenData.map((i) => {
                                     return {
                                         value: i.id,
                                         label: i.name,
