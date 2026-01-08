@@ -177,7 +177,7 @@ export default function UpdateUserPage() {
                 ),
             },
             {
-                title: 'Tiếng dân tôc',
+                title: 'Tiếng dân tộc',
                 id: 'tiengDanToc',
                 render: (
                     <Form.Item name="tiengDanToc" className="mb-0">
@@ -295,7 +295,7 @@ export default function UpdateUserPage() {
             },
             {
                 title: 'Quá trình được cử đi công tác',
-                id: 'quaTrinhDuocCuDiCongTac',
+                id: 'quaTrinhCuDiCongTac',
                 render: (
                     <Form.Item name="quaTrinhCuDiCongTac" className="mb-0">
                         <QuaTrinhCuDiCongTacForm expland={expland} setExpland={setExpland} />
@@ -407,7 +407,6 @@ export default function UpdateUserPage() {
         dM_ChucDanhCMNVNghienCuuVienId,
         dM_XepLoaiDanhGiaChatLuongDangVienId,
         dM_XepLoaiDanhGiaCanBoId,
-        dM_HinhThucKhenThuongChinhQuyenId,
         dM_HinhThucKhenThuongDangId,
         trangThaiLamViecId,
         // staffTypeId,
@@ -546,7 +545,6 @@ export default function UpdateUserPage() {
                             dM_ChucDanhCMNVNghienCuuVienId,
                             dM_XepLoaiDanhGiaChatLuongDangVienId,
                             dM_XepLoaiDanhGiaCanBoId,
-                            dM_HinhThucKhenThuongChinhQuyenId,
                             dM_HinhThucKhenThuongDangId,
                             trangThaiLamViecId,
                         },
@@ -648,8 +646,7 @@ export default function UpdateUserPage() {
                                       }
                                     : undefined,
                             quaTrinhChucVuDang:
-                                values.quaTrinhChucVuDang &&
-                                values.quaTrinhChucVuDang.length > 0
+                                values.quaTrinhChucVuDang && values.quaTrinhChucVuDang.length > 0
                                     ? {
                                           createMany: {
                                               data: values.quaTrinhChucVuDang.map((item) => {
