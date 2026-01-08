@@ -114,8 +114,8 @@ export default function StudentScoreClassPage() {
                                 ).base4 ?? 0,
                             diemchu:
                                 convertScore(
-                                    subjectClassStudent?.manualFinalScore ||
-                                        subjectClassStudent?.finalScore?.toNumber() ||
+                                    subjectClassStudent?.manualFinalScore ??
+                                        subjectClassStudent?.finalScore?.toNumber() ??
                                         0
                                 ).letter ?? '',
                             ghichu: subjectClassStudent.description ?? '',
@@ -818,11 +818,14 @@ export default function StudentScoreClassPage() {
                                 width: 120,
                                 render: (_, record) => {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
+
                                     const score =
-                                        subjectClassStudent?.manualFinalScore ||
+                                        subjectClassStudent?.manualFinalScore ??
                                         subjectClassStudent?.finalScore?.toNumber()
-                                    if (score === undefined || score === null) return null
-                                    return score ?? convertScore(score).letter
+
+                                    if (score === null || score === undefined) return null
+
+                                    return convertScore(score).letter
                                 },
                             },
                             {
