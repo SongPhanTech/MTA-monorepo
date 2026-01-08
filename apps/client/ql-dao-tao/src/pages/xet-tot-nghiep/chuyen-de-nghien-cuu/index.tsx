@@ -1,16 +1,20 @@
 import { FileOutlined } from "@ant-design/icons";
 import Select from "@components/commons/select";
+import Table from "@components/commons/table";
 import TreeSelect from "@components/commons/tree-select";
 import DefaultLayout from "@layouts/default-layout";
 import { buildOrgTree } from "@lib/utils";
 import {
   useFindManyDM_DonVi,
   useFindManySemester,
+  useFindManyStudentSubjectScore,
   useFindManySubjectClass,
   useFindManyTrainingCourse,
   useFindManyTrainingObjectType,
 } from "@workspace/db/hooks";
-import { Button, Col, DatePicker, Form, Row, Table } from "antd";
+import { Button, Col, DatePicker, Form, Row } from "antd";
+import dayjs from "dayjs";
+import { useMemo } from "react";
 
 interface ChuyenDeNghienCuuForm {
   trainingObjectTypeId: string;
@@ -31,6 +35,60 @@ export default function ChuyenDeNghienCuu() {
   const { data: organizationData = [] } = useFindManyDM_DonVi();
   const { data: semesterData = [] } = useFindManySemester();
   const { data: subjectClassData = [] } = useFindManySubjectClass();
+  const where = useMemo(() => {
+    return {
+      studentResearchTopic: {
+        isNot: null,
+      },
+    };
+  }, []);
+  const {
+    data: studentSubjectScoreData = [],
+    refetch: refetchStudentSubjectScore,
+  } = useFindManyStudentSubjectScore({
+    where,
+    include: {
+      studentResearchTopic: {
+        include: {
+          supervisor: {
+            include: {
+              userProfile: true,
+            },
+          },
+          coSupervisor: {
+            include: {
+              userProfile: true,
+            },
+          },
+        },
+      },
+      subjectClass: {
+        include: {
+          trainingObjectType: true,
+          semester: true,
+        },
+      },
+      student: {
+        include: {
+          fixedClass: {
+            include: {
+              trainingCourse: true,
+            },
+          },
+        },
+      },
+      subjectVersion: {
+        include: {
+          subject: {
+            include: {
+              managementOrganization: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
   const treeOrgData = buildOrgTree(organizationData ?? [], "0");
   return (
     <Row gutter={[16, 0]}>
@@ -138,7 +196,7 @@ export default function ChuyenDeNghienCuu() {
                 <Select
                   className="w-46"
                   options={subjectClassData?.map((item) => ({
-                    label: item.code + " - " + item.name,
+                    label: `${item.code} - ${item.name}`,
                     value: item.id,
                   }))}
                   placeholder="Chọn lớp môn học"
@@ -182,73 +240,147 @@ export default function ChuyenDeNghienCuu() {
               title: "Hạn nhập chuyên đề",
               width: 200,
               align: "left",
+              render: (_, record) => {
+                return (
+                  <div>
+                    {record.studentResearchTopic?.deadline
+                      ? dayjs(record.studentResearchTopic?.deadline).format(
+                          "DD/MM/YYYY"
+                        )
+                      : ""}
+                  </div>
+                );
+              },
             },
             {
               title: "ĐTĐT",
               width: 150,
               align: "left",
+              render: (_, record) => {
+                return record?.subjectClass?.trainingObjectType?.name || "";
+              },
             },
             {
               title: "Khóa học",
               width: 150,
               align: "left",
+              render: (_, record) => {
+                return record?.student?.fixedClass?.trainingCourse?.name || "";
+              },
             },
             {
               title: "Học kỳ",
               width: 150,
               align: "left",
+              render: (_, record) => {
+                return record?.subjectClass?.semester?.name || "";
+              },
             },
             {
               title: "Sinh viên",
               width: 150,
               align: "left",
+              render: (_, record) => {
+                return `${record?.student?.userProfile?.lastName || ""} ${
+                  record?.student?.userProfile?.firstName || ""
+                }`.trim();
+              },
             },
             {
               title: "Lớp môn học",
               width: 150,
               align: "left",
+              render: (_, record) => {
+                return record?.subjectClass?.name || "";
+              },
             },
             {
               title: "STC",
               width: 50,
               align: "left",
+              render: (_, record) => {
+                return record?.subjectVersion?.credit || "";
+              },
             },
             {
               title: "Tên chuyên đề",
               width: 250,
               align: "left",
+              render: (_, record) => {
+                return record?.studentResearchTopic?.name || "";
+              },
             },
             {
               title: "Nội dung chính đạt được",
               width: 250,
               align: "left",
+              render: (_, record) => {
+                return record?.studentResearchTopic?.mainContent || "";
+              },
             },
             {
               title: "GVHD1",
               width: 150,
               align: "left",
+              render: (_, record) => {
+                return `${
+                  record?.studentResearchTopic?.supervisor?.userProfile
+                    ?.lastName || ""
+                }
+                 ${
+                   record?.studentResearchTopic?.supervisor?.userProfile
+                     ?.firstName || ""
+                 }`.trim();
+              },
             },
             {
               title: "GVHD2",
               width: 150,
               align: "left",
+              render: (_, record) => {
+                return `${
+                  record?.studentResearchTopic?.coSupervisor?.userProfile
+                    ?.lastName || ""
+                }
+                 ${
+                   record?.studentResearchTopic?.coSupervisor?.userProfile
+                     ?.firstName || ""
+                 }`.trim();
+              },
             },
             {
               title: "Thời gian báo cáo",
               width: 150,
               align: "left",
+              render: (_, record) => {
+                return record?.studentResearchTopic?.reportDate
+                  ? dayjs(record?.studentResearchTopic?.reportDate).format(
+                      "DD/MM/YYYY"
+                    )
+                  : "";
+              },
             },
             {
               title: "Điểm",
+              width: 100,
+              align: "left",
+              render: (_, record) => {
+                return record?.finalScore
+                  ? Number(record?.finalScore).toFixedSmart(2)
+                  : "";
+              },
             },
             {
               title: "Thao tác",
               width: 100,
               fixed: "right",
               align: "center",
+              render: (_, record) => {
+                return <EyeOutlined className="text-sm cursor-pointer" />;
+              },
             },
           ]}
-          dataSource={[]}
+          data={studentSubjectScoreData}
           pagination={false}
         />
       </Col>
