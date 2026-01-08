@@ -30,7 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    userProfile: z.array(z.unknown()).optional(),
+    khenThuong: z.array(z.unknown()).optional(),
 }
 );
 

@@ -795,8 +795,6 @@ model UserProfile {
   dM_XepLoaiDanhGiaChatLuongDangVienId String?
   dM_XepLoaiDanhGiaCanBo               DM_XepLoaiDanhGiaCanBo?             @relation(fields: [dM_XepLoaiDanhGiaCanBoId], references: [id])
   dM_XepLoaiDanhGiaCanBoId             String?
-  dM_HinhThucKhenThuongChinhQuyen      DM_HinhThucKhenThuongChinhQuyen?    @relation(fields: [dM_HinhThucKhenThuongChinhQuyenId], references: [id])
-  dM_HinhThucKhenThuongChinhQuyenId    String?
   dM_HinhThucKhenThuongDang            DM_HinhThucKhenThuongDang?          @relation(fields: [dM_HinhThucKhenThuongDangId], references: [id])
   dM_HinhThucKhenThuongDangId          String?
   unionDate                            DateTime?
@@ -1179,22 +1177,23 @@ model QuaTrinhCuDiDaoTao {
 }
 
 model KhenThuong {
-  id                 String      @id() @default(cuid())
-  code               String?     @unique()
-  active             Boolean     @default(true)
-  description        String?     @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @default(now()) @updatedAt()
-  createdBy          String?     @db.Uuid()
-  hinhThucKhenThuong String?
-  capKhenThuong      String?
-  soQuyetDinh        String?
-  nguoiKy            String?
-  ngayNhanQuyetDinh  DateTime?
-  lyDo               String?
-  userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId      String
+  id                   String                           @id() @default(cuid())
+  code                 String?                          @unique()
+  active               Boolean                          @default(true)
+  description          String?                          @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                         @default(now())
+  updatedAt            DateTime                         @default(now()) @updatedAt()
+  createdBy            String?                          @db.Uuid()
+  hinhThucKhenThuongId String?
+  hinhThucKhenThuong   DM_HinhThucKhenThuongChinhQuyen? @relation(fields: [hinhThucKhenThuongId], references: [id])
+  capKhenThuong        String?
+  soQuyetDinh          String?
+  nguoiKy              String?
+  ngayNhanQuyetDinh    DateTime?
+  lyDo                 String?
+  userProfile          UserProfile                      @relation(fields: [userProfileId], references: [id])
+  userProfileId        String
 
   @@schema("ql-ho-so")
 }
@@ -6305,16 +6304,16 @@ model DM_TrangThaiLamViec {
 }
 
 model DM_HinhThucKhenThuongChinhQuyen {
-  id          String        @id() @default(cuid())
-  code        String?       @unique()
-  active      Boolean       @default(true)
-  description String?       @db.Text()
+  id          String       @id() @default(cuid())
+  code        String?      @unique()
+  active      Boolean      @default(true)
+  description String?      @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt()
-  createdBy   String?       @db.Uuid()
-  name        String        @unique()
-  userProfile UserProfile[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt()
+  createdBy   String?      @db.Uuid()
+  name        String       @unique()
+  khenThuong  KhenThuong[]
 
   @@schema("ql-ho-so")
 }

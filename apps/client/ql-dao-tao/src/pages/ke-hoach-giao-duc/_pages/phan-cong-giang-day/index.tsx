@@ -553,6 +553,9 @@ export default function PhanCongGiangDay({
                                 lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
                                     ? subjectClass.lecturerAssignmentDeadline?.toDate()
                                     : null,
+                                mainLecturerId: subjectClass.lecturerId ?? null,
+                                extraLecturerId: subjectClass.extraLecturerId ?? null,
+                                enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
                                 examType: subjectClass.examType ?? null,
                                 roomId: subjectClass.roomId ?? null,
                                 trainingLocationId: subjectClass.trainingLocationId ?? null,
