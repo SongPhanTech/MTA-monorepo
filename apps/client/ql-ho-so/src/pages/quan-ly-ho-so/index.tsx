@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
@@ -12,7 +12,7 @@ import {
     useFindManyDM_DonVi,
     useFindManyDM_GioiTinh,
     useFindManyUserProfile,
-    useUpdateStudent,
+    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_HO_SO_PERMISSION, ROUTER_PATH } from '@workspace/router'
@@ -25,7 +25,8 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
-import { deleteDMNhanViensId } from '@workspace/libs/api/system'
+
+// import { deleteDMNhanViensId } from '@workspace/libs/api/system'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -192,22 +193,21 @@ export default function UserProfilePageDs() {
         tag: 'ModalSoYeuLyLich',
     })
 
-    const { mutateAsync: updateUserProfile } = useUpdateStudent()
+    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            const res = await deleteDMNhanViensId(id)
-            if (res.status === 200) {
-                await updateUserProfile({
-                    where: {
-                        id,
-                    },
-                    data: {
-                        deletedAt: new Date(),
-                    },
-                })
-                message.success('Xoá hồ sơ thành công')
-            }
+            // const res = await deleteDMNhanViensId(id) // todo
+
+            await updateUserProfile({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            message.success('Xoá hồ sơ thành công')
         } catch (error) {
             console.log(error)
 
@@ -422,15 +422,11 @@ export default function UserProfilePageDs() {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 120,
-                                render: (_, record: { status?: string }) => {
-                                    const statusInfo =
-                                        FIXED_CLASS_STUDENT_STATUS[
-                                            record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
-                                        ]
-                                    return statusInfo ? (
-                                        <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
+                                render: (_, record: { active?: boolean }) => {
+                                    return record.active ? (
+                                        <Tag color="success">Hoạt động</Tag>
                                     ) : (
-                                        <Tag color="default">Không xác định</Tag>
+                                        <Tag color="default">Không hoạt động</Tag>
                                     )
                                 },
                             },

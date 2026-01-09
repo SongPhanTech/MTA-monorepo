@@ -101,7 +101,11 @@ const ModalLyLichCanBo = () => {
                     },
                 },
                 danhHieu: true,
-                khenThuong: true,
+                khenThuong: {
+                    include: {
+                        hinhThucKhenThuong: true,
+                    },
+                },
                 kyLuat: true,
                 quaTrinhCongTac: {
                     include: {
@@ -395,10 +399,10 @@ const ModalLyLichCanBo = () => {
                     <div className="w-[50%]">
                         21) Khen thưởng:{' '}
                         {initialData?.khenThuong?.[0]
-                            ? `${initialData.khenThuong[0].hinhThucKhenThuong || ''} ${
+                            ? `${initialData.khenThuong[0].hinhThucKhenThuong?.name || ''} ${
                                   initialData.khenThuong[0].ngayNhanQuyetDinh
                                       ? `(${dayjs(initialData.khenThuong[0].ngayNhanQuyetDinh).format('DD/MM/YYYY')})`
-                                      : null
+                                      : ''
                               }`
                             : ''}
                     </div>

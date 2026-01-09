@@ -3410,4 +3410,357 @@ app.openapi(
         })
     }
 )
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/science-technology-overview',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Tổng quan KHCN',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+        const data = [
+            { name: 'Tổng số bài báo', count: 450 },
+            { name: 'Tổng số đề tài', count: 45 },
+            { name: 'Sáng kiến cải tiến kỹ thuật', count: 250 },
+            { name: 'Hợp đồng dịch vụ KHCN', count: 20 },
+        ]
+        if(preview){
+            return c.json(
+                {
+                    data,
+                    count:data.length,
+                    summary:{},
+                    preview:true,
+                    labels:['Danh mục','Số lượng']
+                }
+            )
+        }
+
+        return c.json(
+            {
+                data,
+                count: data.length,
+                summary: {},
+                preview,
+                labels: ['Danh mục', 'Số lượng'],
+            },
+            200
+        )
+    }
+)
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/contract-statistics-by-year',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê hợp đồng dịch vụ KHCN theo năm',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    id: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+
+        const startYear = 2020
+        const currentYear = new Date().getFullYear()
+
+        const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => startYear + i)
+
+        const data = years.map((year) => ({
+            id: year.toString(),
+            name: `Năm ${year}`,
+            count: Math.round(Math.random() * 100),
+        }))
+        if (preview) {
+            return c.json(
+                {
+                    data,
+                    count: data.length,
+                    summary: {},
+                    preview: true,
+                    labels: ['ID Năm', 'Năm', 'Số lượng'],
+                },
+                200
+            )
+        }
+        return c.json(
+            {
+                data,
+                count: data.length,
+                summary: {},
+                preview,
+                labels: ['ID Năm', 'Năm', 'Số lượng'],
+            },
+            200
+        )
+    }
+)
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/project-statistics-by-year',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê đề tài theo năm',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    id: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+
+        const startYear = 2020
+        const currentYear = new Date().getFullYear()
+
+        const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => startYear + i)
+
+        const data = years.map((year) => ({
+            id: year.toString(),
+            name: `Năm ${year}`,
+            count: Math.round(Math.random() * 100),
+        }))
+        if (preview) {
+            return c.json(
+                {
+                    data,
+                    count: data.length,
+                    summary: {},
+                    preview: true,
+                    labels: ['ID Năm', 'Năm', 'Số lượng'],
+                },
+                200
+            )
+        }
+        return c.json(
+            {
+                data,
+                count: data.length,
+                summary: {},
+                preview,
+                labels: ['ID Năm', 'Năm', 'Số lượng'],
+            },
+            200
+        )
+    }
+)
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/innovations-statistics-by-year',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê sáng kiến theo năm',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    id: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+
+        const startYear = 2020
+        const currentYear = new Date().getFullYear()
+
+        const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => startYear + i)
+
+        const data = years.map((year) => ({
+            id: year.toString(),
+            name: `Năm ${year}`,
+            count: Math.round(Math.random() * 100),
+        }))
+        if (preview) {
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+                labels: ['ID Năm', 'Năm', 'Số lượng'],
+            })
+        }
+        return c.json(
+            {
+                data,
+                count: data.length,
+                summary: {},
+                preview,
+                labels: ['ID Năm', 'Năm', 'Số lượng'],
+            },
+            200
+        )
+    }
+)
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/articles-statistics-by-year',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê các bài báo theo năm',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    id: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+
+        const startYear = 2020
+        const currentYear = new Date().getFullYear()
+
+        const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => startYear + i)
+
+        const data = years.map((year) => ({
+            id: year.toString(),
+            name: `Năm ${year}`,
+            count: Math.round(Math.random() * 100),
+        }))
+        if (preview) {
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+                labels: ['ID Năm', 'Năm', 'Số lượng'],
+            })
+        }
+        return c.json(
+            {
+                data,
+                count: data.length,
+                summary: {},
+                preview,
+                labels: ['ID Năm', 'Năm', 'Số lượng'],
+            },
+            200
+        )
+    }
+)
 export default app

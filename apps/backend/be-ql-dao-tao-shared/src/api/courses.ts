@@ -223,7 +223,7 @@ app.openapi(getOpenCourses, async (c) => {
                             },
                             _count: {
                                 select: {
-                                     classRegisterLogs: true,
+                                    classRegisterLogs: true,
                                     subjectClassStudent: true,
                                 },
                             },
@@ -259,8 +259,6 @@ app.openapi(getOpenCourses, async (c) => {
                     const mainLecturer =
                         subjectClass.mainLecturer &&
                         [
-                            subjectClass.mainLecturer?.userProfile.academicRankType?.sMa,
-                            subjectClass.mainLecturer?.userProfile.academicDegreeType?.sMa,
                             subjectClass.mainLecturer?.userProfile.fullname,
                         ]
                             .filter(Boolean)
@@ -269,17 +267,18 @@ app.openapi(getOpenCourses, async (c) => {
                     const extraLecturer =
                         subjectClass.extraLecturer &&
                         [
-                            subjectClass.extraLecturer?.userProfile.academicRankType?.sMa,
-                            subjectClass.extraLecturer?.userProfile.academicDegreeType?.sMa,
                             subjectClass.extraLecturer?.userProfile.fullname,
                         ]
                             .filter(Boolean)
                             .join(' ')
 
                     const class_time = subjectClass.subjectClassTimes
-                        .map((t) => `T${t.dayOfWeek}(${t.startPeriod}-${t.endPeriod})`)
+                        .map(
+                            (t) =>
+                                `${t.dayOfWeek === 8 ? 'CN' : `T${t.dayOfWeek}`}(${t.startPeriod}-${t.endPeriod})`
+                        )
+                        .filter((value, index, self) => self.indexOf(value) === index)
                         .join(', ')
-
                     return {
                         session_code: s.code,
                         program_code: program_code ?? curriculumVersion?.code,
@@ -393,12 +392,12 @@ app.openapi(getCoursesDetail, async (c) => {
                     },
                 },
             },
-            classRegisterLogs:{
-                  select:{
-                    studentId:true
-                  }
+            classRegisterLogs: {
+                select: {
+                    studentId: true,
+                },
             },
-            subjectClassTimes:true,
+            subjectClassTimes: true,
             classSchedules: true,
             subjectClassStudent: {
                 include: {
@@ -452,10 +451,7 @@ app.openapi(getCoursesDetail, async (c) => {
         study_period_end: t.endPeriod,
     }))
 
-    const students_list = subjectClass.classRegisterLogs.map(
-  (s) => s.studentId
-)
-
+    const students_list = subjectClass.classRegisterLogs.map((s) => s.studentId)
 
     const response = {
         class_terms: subjectClass.semester.name,
@@ -473,7 +469,7 @@ app.openapi(getCoursesDetail, async (c) => {
     return c.json(
         {
             result_code: '000',
-            result_desc: "success" as const,
+            result_desc: 'success' as const,
             ...response,
         },
         200

@@ -95,7 +95,11 @@ const ModalSoYeuLyLich = () => {
                     },
                 },
                 danhHieu: true,
-                khenThuong: true,
+                khenThuong: {
+                    include: {
+                        hinhThucKhenThuong: true,
+                    },
+                },
                 kyLuat: true,
                 quaTrinhCongTac: {
                     include: {
@@ -394,10 +398,10 @@ const ModalSoYeuLyLich = () => {
                         <p className="flex w-full leading-[12px] mb-4">
                             20. Khen thưởng:{' '}
                             {initialData?.khenThuong?.[0]
-                                ? `${initialData.khenThuong[0].hinhThucKhenThuong || ''} ${
+                                ? `${initialData.khenThuong[0].hinhThucKhenThuong?.name || ''} ${
                                       initialData.khenThuong[0].ngayNhanQuyetDinh
                                           ? `(${dayjs(initialData.khenThuong[0].ngayNhanQuyetDinh).format('DD/MM/YYYY')})`
-                                          : null
+                                          : ''
                                   }`
                                 : ''}
                             <span className="inline-block w-40 flex-1 " />
