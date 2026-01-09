@@ -14156,6 +14156,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'outputStandard',
+                }, graduationSessions: {
+                    name: "graduationSessions",
+                    type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'outputStandard',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22795,6 +22802,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'session',
+                }, outputStandard: {
+                    name: "outputStandard",
+                    type: "OutputStandard",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'graduationSessions',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {

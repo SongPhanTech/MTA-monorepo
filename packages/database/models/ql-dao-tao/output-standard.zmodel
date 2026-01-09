@@ -2,6 +2,7 @@ import '../base'
 import 'plan-training'
 import 'categories'
 import 'student'
+import 'ranking'
 
 
 /// Danh mục các chuẩn đầu ra
@@ -14,6 +15,9 @@ model OutputStandard extends Base {
 
   /// CTĐT áp dụng
   outputStandardOnCurriculum OutputStandardOnCurriculum[]
+
+  /// đợt xét tốt nghiệp
+  graduationSessions         GraduationSession[]
 
   @@schema("ql-dao-tao")
 }

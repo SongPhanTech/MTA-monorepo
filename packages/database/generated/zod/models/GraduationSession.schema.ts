@@ -42,6 +42,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     trainingObjectType: z.record(z.string(), z.unknown()),
     applications: z.array(z.unknown()).optional(),
+    outputStandard: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

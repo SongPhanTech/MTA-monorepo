@@ -7,6 +7,7 @@ import 'categories'
 import 'training-score'
 import 'criteria'
 import '../ql-danh-muc/document'
+import 'output-standard'
 
 enum GraduationSessionStatus {
   PLANNING              // Đang lên kế hoạch
@@ -33,6 +34,9 @@ model GraduationSession extends Base {
 
   // Danh sách các đơn xét tốt nghiệp trong đợt này
   applications         StudentGraduationApplication[]
+
+  /// chuẩn đầu ra áp dụng
+  outputStandard       OutputStandard[]
 
   @@schema("ql-dao-tao")
 }

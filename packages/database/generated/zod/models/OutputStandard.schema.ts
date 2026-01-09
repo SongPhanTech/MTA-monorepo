@@ -32,6 +32,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     certificates: z.array(z.unknown()).optional(),
     outputStandardOnCurriculum: z.array(z.unknown()).optional(),
+    graduationSessions: z.array(z.unknown()).optional(),
 }
 );
 

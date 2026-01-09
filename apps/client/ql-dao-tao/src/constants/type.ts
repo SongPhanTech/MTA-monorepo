@@ -98,6 +98,7 @@ export type FilterProps = {
     trainingObjectId?: string | null
     fixedClassId?: string | null
     schoolYearId?: string | null | undefined
+    schoolYearIds?: string[]
     semesterType?: SemesterType[]
     severityLevel?: 'asc' | 'desc'
     sessionDate?: Date[]

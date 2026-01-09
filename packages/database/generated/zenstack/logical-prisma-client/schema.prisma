@@ -4221,6 +4221,8 @@ model OutputStandard {
   certificates               Certificate[]
   /// CTĐT áp dụng
   outputStandardOnCurriculum OutputStandardOnCurriculum[]
+  /// đợt xét tốt nghiệp
+  graduationSessions         GraduationSession[]
 
   @@schema("ql-dao-tao")
 }
@@ -6419,6 +6421,8 @@ model GraduationSession {
   trainingObjectTypeId String
   status               GraduationSessionStatus        @default(PLANNING)
   applications         StudentGraduationApplication[]
+  /// chuẩn đầu ra áp dụng
+  outputStandard       OutputStandard[]
 
   @@schema("ql-dao-tao")
 }

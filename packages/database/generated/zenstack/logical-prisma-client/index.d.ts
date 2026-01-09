@@ -62377,6 +62377,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         certificates<T extends OutputStandard$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, OutputStandard$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         outputStandardOnCurriculum<T extends OutputStandard$outputStandardOnCurriculumArgs<ExtArgs> = {}>(args?: Subset<T, OutputStandard$outputStandardOnCurriculumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutputStandardOnCurriculumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        graduationSessions<T extends OutputStandard$graduationSessionsArgs<ExtArgs> = {}>(args?: Subset<T, OutputStandard$graduationSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GraduationSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -93122,6 +93123,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         applications<T extends GraduationSession$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, GraduationSession$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        outputStandard<T extends GraduationSession$outputStandardArgs<ExtArgs> = {}>(args?: Subset<T, GraduationSession$outputStandardArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutputStandardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -135027,10 +135029,12 @@ export namespace Prisma {
     export type OutputStandardCountOutputType = {
         certificates: number
         outputStandardOnCurriculum: number
+        graduationSessions: number
     };
     export type OutputStandardCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         certificates?: boolean | OutputStandardCountOutputTypeCountCertificatesArgs
         outputStandardOnCurriculum?: boolean | OutputStandardCountOutputTypeCountOutputStandardOnCurriculumArgs
+        graduationSessions?: boolean | OutputStandardCountOutputTypeCountGraduationSessionsArgs
     };
     /**
      * OutputStandardCountOutputType without action
@@ -135052,6 +135056,12 @@ export namespace Prisma {
      */
     export type OutputStandardCountOutputTypeCountOutputStandardOnCurriculumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: OutputStandardOnCurriculumWhereInput
+    };
+    /**
+     * OutputStandardCountOutputType without action
+     */
+    export type OutputStandardCountOutputTypeCountGraduationSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: GraduationSessionWhereInput
     };
     /**
      * Count Type StudentCountOutputType
@@ -136930,9 +136940,11 @@ export namespace Prisma {
      */
     export type GraduationSessionCountOutputType = {
         applications: number
+        outputStandard: number
     };
     export type GraduationSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         applications?: boolean | GraduationSessionCountOutputTypeCountApplicationsArgs
+        outputStandard?: boolean | GraduationSessionCountOutputTypeCountOutputStandardArgs
     };
     /**
      * GraduationSessionCountOutputType without action
@@ -136948,6 +136960,12 @@ export namespace Prisma {
      */
     export type GraduationSessionCountOutputTypeCountApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StudentGraduationApplicationWhereInput
+    };
+    /**
+     * GraduationSessionCountOutputType without action
+     */
+    export type GraduationSessionCountOutputTypeCountOutputStandardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: OutputStandardWhereInput
     };
     /**
      * Count Type StudentGraduationApplicationCountOutputType
@@ -240096,6 +240114,7 @@ export namespace Prisma {
         name?: boolean
         certificates?: boolean | OutputStandard$certificatesArgs<ExtArgs>
         outputStandardOnCurriculum?: boolean | OutputStandard$outputStandardOnCurriculumArgs<ExtArgs>
+        graduationSessions?: boolean | OutputStandard$graduationSessionsArgs<ExtArgs>
         _count?: boolean | OutputStandardCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["outputStandard"]>;
     export type OutputStandardSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -240135,6 +240154,7 @@ export namespace Prisma {
     export type OutputStandardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         certificates?: boolean | OutputStandard$certificatesArgs<ExtArgs>
         outputStandardOnCurriculum?: boolean | OutputStandard$outputStandardOnCurriculumArgs<ExtArgs>
+        graduationSessions?: boolean | OutputStandard$graduationSessionsArgs<ExtArgs>
         _count?: boolean | OutputStandardCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type OutputStandardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -240150,6 +240170,10 @@ export namespace Prisma {
              * CTĐT áp dụng
              */
             outputStandardOnCurriculum: Prisma.$OutputStandardOnCurriculumPayload<ExtArgs>[]
+            /**
+             * đợt xét tốt nghiệp
+             */
+            graduationSessions: Prisma.$GraduationSessionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -240582,6 +240606,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: OutputStandardOnCurriculumScalarFieldEnum | OutputStandardOnCurriculumScalarFieldEnum[]
+    };
+    /**
+     * OutputStandard.graduationSessions
+     */
+    export type OutputStandard$graduationSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the GraduationSession
+         */
+        select?: GraduationSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the GraduationSession
+         */
+        omit?: GraduationSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: GraduationSessionInclude<ExtArgs> | null
+        where?: GraduationSessionWhereInput
+        orderBy?: GraduationSessionOrderByWithRelationInput | GraduationSessionOrderByWithRelationInput[]
+        cursor?: GraduationSessionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: GraduationSessionScalarFieldEnum | GraduationSessionScalarFieldEnum[]
     };
     /**
      * OutputStandard without action
@@ -302730,6 +302777,7 @@ export namespace Prisma {
         status?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         applications?: boolean | GraduationSession$applicationsArgs<ExtArgs>
+        outputStandard?: boolean | GraduationSession$outputStandardArgs<ExtArgs>
         _count?: boolean | GraduationSessionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["graduationSession"]>;
     export type GraduationSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -302786,6 +302834,7 @@ export namespace Prisma {
     export type GraduationSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         applications?: boolean | GraduationSession$applicationsArgs<ExtArgs>
+        outputStandard?: boolean | GraduationSession$outputStandardArgs<ExtArgs>
         _count?: boolean | GraduationSessionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type GraduationSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -302799,6 +302848,10 @@ export namespace Prisma {
         objects: {
             trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
             applications: Prisma.$StudentGraduationApplicationPayload<ExtArgs>[]
+            /**
+             * chuẩn đầu ra áp dụng
+             */
+            outputStandard: Prisma.$OutputStandardPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -303221,6 +303274,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StudentGraduationApplicationScalarFieldEnum | StudentGraduationApplicationScalarFieldEnum[]
+    };
+    /**
+     * GraduationSession.outputStandard
+     */
+    export type GraduationSession$outputStandardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OutputStandard
+         */
+        select?: OutputStandardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OutputStandard
+         */
+        omit?: OutputStandardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OutputStandardInclude<ExtArgs> | null
+        where?: OutputStandardWhereInput
+        orderBy?: OutputStandardOrderByWithRelationInput | OutputStandardOrderByWithRelationInput[]
+        cursor?: OutputStandardWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: OutputStandardScalarFieldEnum | OutputStandardScalarFieldEnum[]
     };
     /**
      * GraduationSession without action
@@ -353485,6 +353561,7 @@ export namespace Prisma {
         name?: StringFilter<"OutputStandard"> | string
         certificates?: CertificateListRelationFilter
         outputStandardOnCurriculum?: OutputStandardOnCurriculumListRelationFilter
+        graduationSessions?: GraduationSessionListRelationFilter
     };
     export type OutputStandardOrderByWithRelationInput = {
         id?: SortOrder
@@ -353498,6 +353575,7 @@ export namespace Prisma {
         name?: SortOrder
         certificates?: CertificateOrderByRelationAggregateInput
         outputStandardOnCurriculum?: OutputStandardOnCurriculumOrderByRelationAggregateInput
+        graduationSessions?: GraduationSessionOrderByRelationAggregateInput
         _relevance?: OutputStandardOrderByRelevanceInput
     };
     export type OutputStandardWhereUniqueInput = Prisma.AtLeast<{
@@ -353515,6 +353593,7 @@ export namespace Prisma {
         name?: StringFilter<"OutputStandard"> | string
         certificates?: CertificateListRelationFilter
         outputStandardOnCurriculum?: OutputStandardOnCurriculumListRelationFilter
+        graduationSessions?: GraduationSessionListRelationFilter
     }, "id" | "code">;
     export type OutputStandardOrderByWithAggregationInput = {
         id?: SortOrder
@@ -361975,6 +362054,7 @@ export namespace Prisma {
         status?: EnumGraduationSessionStatusFilter<"GraduationSession"> | $Enums.GraduationSessionStatus
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         applications?: StudentGraduationApplicationListRelationFilter
+        outputStandard?: OutputStandardListRelationFilter
     };
     export type GraduationSessionOrderByWithRelationInput = {
         id?: SortOrder
@@ -361993,6 +362073,7 @@ export namespace Prisma {
         status?: SortOrder
         trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
         applications?: StudentGraduationApplicationOrderByRelationAggregateInput
+        outputStandard?: OutputStandardOrderByRelationAggregateInput
         _relevance?: GraduationSessionOrderByRelevanceInput
     };
     export type GraduationSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -362015,6 +362096,7 @@ export namespace Prisma {
         status?: EnumGraduationSessionStatusFilter<"GraduationSession"> | $Enums.GraduationSessionStatus
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         applications?: StudentGraduationApplicationListRelationFilter
+        outputStandard?: OutputStandardListRelationFilter
     }, "id" | "code">;
     export type GraduationSessionOrderByWithAggregationInput = {
         id?: SortOrder
@@ -382543,6 +382625,7 @@ export namespace Prisma {
         name: string
         certificates?: CertificateCreateNestedManyWithoutOutputStandardInput
         outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutOutputStandardInput
+        graduationSessions?: GraduationSessionCreateNestedManyWithoutOutputStandardInput
     };
     export type OutputStandardUncheckedCreateInput = {
         id?: string
@@ -382556,6 +382639,7 @@ export namespace Prisma {
         name: string
         certificates?: CertificateUncheckedCreateNestedManyWithoutOutputStandardInput
         outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutOutputStandardInput
+        graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutOutputStandardInput
     };
     export type OutputStandardUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -382569,6 +382653,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         certificates?: CertificateUpdateManyWithoutOutputStandardNestedInput
         outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutOutputStandardNestedInput
+        graduationSessions?: GraduationSessionUpdateManyWithoutOutputStandardNestedInput
     };
     export type OutputStandardUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -382582,6 +382667,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         certificates?: CertificateUncheckedUpdateManyWithoutOutputStandardNestedInput
         outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutOutputStandardNestedInput
+        graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutOutputStandardNestedInput
     };
     export type OutputStandardCreateManyInput = {
         id?: string
@@ -392010,6 +392096,7 @@ export namespace Prisma {
         status?: $Enums.GraduationSessionStatus
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutGraduationSessionInput
         applications?: StudentGraduationApplicationCreateNestedManyWithoutSessionInput
+        outputStandard?: OutputStandardCreateNestedManyWithoutGraduationSessionsInput
     };
     export type GraduationSessionUncheckedCreateInput = {
         id?: string
@@ -392027,6 +392114,7 @@ export namespace Prisma {
         trainingObjectTypeId: string
         status?: $Enums.GraduationSessionStatus
         applications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSessionInput
+        outputStandard?: OutputStandardUncheckedCreateNestedManyWithoutGraduationSessionsInput
     };
     export type GraduationSessionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -392044,6 +392132,7 @@ export namespace Prisma {
         status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutGraduationSessionNestedInput
         applications?: StudentGraduationApplicationUpdateManyWithoutSessionNestedInput
+        outputStandard?: OutputStandardUpdateManyWithoutGraduationSessionsNestedInput
     };
     export type GraduationSessionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -392061,6 +392150,7 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
         applications?: StudentGraduationApplicationUncheckedUpdateManyWithoutSessionNestedInput
+        outputStandard?: OutputStandardUncheckedUpdateManyWithoutGraduationSessionsNestedInput
     };
     export type GraduationSessionCreateManyInput = {
         id?: string
@@ -412550,6 +412640,14 @@ export namespace Prisma {
         notIn?: $Enums.GraduationSessionStatus[] | ListEnumGraduationSessionStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumGraduationSessionStatusFilter<$PrismaModel> | $Enums.GraduationSessionStatus
     };
+    export type OutputStandardListRelationFilter = {
+        every?: OutputStandardWhereInput
+        some?: OutputStandardWhereInput
+        none?: OutputStandardWhereInput
+    };
+    export type OutputStandardOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
     export type GraduationSessionOrderByRelevanceInput = {
         fields: GraduationSessionOrderByRelevanceFieldEnum | GraduationSessionOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -428002,6 +428100,11 @@ export namespace Prisma {
         createMany?: OutputStandardOnCurriculumCreateManyOutputStandardInputEnvelope
         connect?: OutputStandardOnCurriculumWhereUniqueInput | OutputStandardOnCurriculumWhereUniqueInput[]
     };
+    export type GraduationSessionCreateNestedManyWithoutOutputStandardInput = {
+        create?: XOR<GraduationSessionCreateWithoutOutputStandardInput, GraduationSessionUncheckedCreateWithoutOutputStandardInput> | GraduationSessionCreateWithoutOutputStandardInput[] | GraduationSessionUncheckedCreateWithoutOutputStandardInput[]
+        connectOrCreate?: GraduationSessionCreateOrConnectWithoutOutputStandardInput | GraduationSessionCreateOrConnectWithoutOutputStandardInput[]
+        connect?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+    };
     export type CertificateUncheckedCreateNestedManyWithoutOutputStandardInput = {
         create?: XOR<CertificateCreateWithoutOutputStandardInput, CertificateUncheckedCreateWithoutOutputStandardInput> | CertificateCreateWithoutOutputStandardInput[] | CertificateUncheckedCreateWithoutOutputStandardInput[]
         connectOrCreate?: CertificateCreateOrConnectWithoutOutputStandardInput | CertificateCreateOrConnectWithoutOutputStandardInput[]
@@ -428013,6 +428116,11 @@ export namespace Prisma {
         connectOrCreate?: OutputStandardOnCurriculumCreateOrConnectWithoutOutputStandardInput | OutputStandardOnCurriculumCreateOrConnectWithoutOutputStandardInput[]
         createMany?: OutputStandardOnCurriculumCreateManyOutputStandardInputEnvelope
         connect?: OutputStandardOnCurriculumWhereUniqueInput | OutputStandardOnCurriculumWhereUniqueInput[]
+    };
+    export type GraduationSessionUncheckedCreateNestedManyWithoutOutputStandardInput = {
+        create?: XOR<GraduationSessionCreateWithoutOutputStandardInput, GraduationSessionUncheckedCreateWithoutOutputStandardInput> | GraduationSessionCreateWithoutOutputStandardInput[] | GraduationSessionUncheckedCreateWithoutOutputStandardInput[]
+        connectOrCreate?: GraduationSessionCreateOrConnectWithoutOutputStandardInput | GraduationSessionCreateOrConnectWithoutOutputStandardInput[]
+        connect?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
     };
     export type CertificateUpdateManyWithoutOutputStandardNestedInput = {
         create?: XOR<CertificateCreateWithoutOutputStandardInput, CertificateUncheckedCreateWithoutOutputStandardInput> | CertificateCreateWithoutOutputStandardInput[] | CertificateUncheckedCreateWithoutOutputStandardInput[]
@@ -428040,6 +428148,18 @@ export namespace Prisma {
         updateMany?: OutputStandardOnCurriculumUpdateManyWithWhereWithoutOutputStandardInput | OutputStandardOnCurriculumUpdateManyWithWhereWithoutOutputStandardInput[]
         deleteMany?: OutputStandardOnCurriculumScalarWhereInput | OutputStandardOnCurriculumScalarWhereInput[]
     };
+    export type GraduationSessionUpdateManyWithoutOutputStandardNestedInput = {
+        create?: XOR<GraduationSessionCreateWithoutOutputStandardInput, GraduationSessionUncheckedCreateWithoutOutputStandardInput> | GraduationSessionCreateWithoutOutputStandardInput[] | GraduationSessionUncheckedCreateWithoutOutputStandardInput[]
+        connectOrCreate?: GraduationSessionCreateOrConnectWithoutOutputStandardInput | GraduationSessionCreateOrConnectWithoutOutputStandardInput[]
+        upsert?: GraduationSessionUpsertWithWhereUniqueWithoutOutputStandardInput | GraduationSessionUpsertWithWhereUniqueWithoutOutputStandardInput[]
+        set?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+        disconnect?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+        delete?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+        connect?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+        update?: GraduationSessionUpdateWithWhereUniqueWithoutOutputStandardInput | GraduationSessionUpdateWithWhereUniqueWithoutOutputStandardInput[]
+        updateMany?: GraduationSessionUpdateManyWithWhereWithoutOutputStandardInput | GraduationSessionUpdateManyWithWhereWithoutOutputStandardInput[]
+        deleteMany?: GraduationSessionScalarWhereInput | GraduationSessionScalarWhereInput[]
+    };
     export type CertificateUncheckedUpdateManyWithoutOutputStandardNestedInput = {
         create?: XOR<CertificateCreateWithoutOutputStandardInput, CertificateUncheckedCreateWithoutOutputStandardInput> | CertificateCreateWithoutOutputStandardInput[] | CertificateUncheckedCreateWithoutOutputStandardInput[]
         connectOrCreate?: CertificateCreateOrConnectWithoutOutputStandardInput | CertificateCreateOrConnectWithoutOutputStandardInput[]
@@ -428065,6 +428185,18 @@ export namespace Prisma {
         update?: OutputStandardOnCurriculumUpdateWithWhereUniqueWithoutOutputStandardInput | OutputStandardOnCurriculumUpdateWithWhereUniqueWithoutOutputStandardInput[]
         updateMany?: OutputStandardOnCurriculumUpdateManyWithWhereWithoutOutputStandardInput | OutputStandardOnCurriculumUpdateManyWithWhereWithoutOutputStandardInput[]
         deleteMany?: OutputStandardOnCurriculumScalarWhereInput | OutputStandardOnCurriculumScalarWhereInput[]
+    };
+    export type GraduationSessionUncheckedUpdateManyWithoutOutputStandardNestedInput = {
+        create?: XOR<GraduationSessionCreateWithoutOutputStandardInput, GraduationSessionUncheckedCreateWithoutOutputStandardInput> | GraduationSessionCreateWithoutOutputStandardInput[] | GraduationSessionUncheckedCreateWithoutOutputStandardInput[]
+        connectOrCreate?: GraduationSessionCreateOrConnectWithoutOutputStandardInput | GraduationSessionCreateOrConnectWithoutOutputStandardInput[]
+        upsert?: GraduationSessionUpsertWithWhereUniqueWithoutOutputStandardInput | GraduationSessionUpsertWithWhereUniqueWithoutOutputStandardInput[]
+        set?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+        disconnect?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+        delete?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+        connect?: GraduationSessionWhereUniqueInput | GraduationSessionWhereUniqueInput[]
+        update?: GraduationSessionUpdateWithWhereUniqueWithoutOutputStandardInput | GraduationSessionUpdateWithWhereUniqueWithoutOutputStandardInput[]
+        updateMany?: GraduationSessionUpdateManyWithWhereWithoutOutputStandardInput | GraduationSessionUpdateManyWithWhereWithoutOutputStandardInput[]
+        deleteMany?: GraduationSessionScalarWhereInput | GraduationSessionScalarWhereInput[]
     };
     export type OutputStandardCreateNestedOneWithoutOutputStandardOnCurriculumInput = {
         create?: XOR<OutputStandardCreateWithoutOutputStandardOnCurriculumInput, OutputStandardUncheckedCreateWithoutOutputStandardOnCurriculumInput>
@@ -435604,11 +435736,21 @@ export namespace Prisma {
         createMany?: StudentGraduationApplicationCreateManySessionInputEnvelope
         connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
     };
+    export type OutputStandardCreateNestedManyWithoutGraduationSessionsInput = {
+        create?: XOR<OutputStandardCreateWithoutGraduationSessionsInput, OutputStandardUncheckedCreateWithoutGraduationSessionsInput> | OutputStandardCreateWithoutGraduationSessionsInput[] | OutputStandardUncheckedCreateWithoutGraduationSessionsInput[]
+        connectOrCreate?: OutputStandardCreateOrConnectWithoutGraduationSessionsInput | OutputStandardCreateOrConnectWithoutGraduationSessionsInput[]
+        connect?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+    };
     export type StudentGraduationApplicationUncheckedCreateNestedManyWithoutSessionInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutSessionInput, StudentGraduationApplicationUncheckedCreateWithoutSessionInput> | StudentGraduationApplicationCreateWithoutSessionInput[] | StudentGraduationApplicationUncheckedCreateWithoutSessionInput[]
         connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutSessionInput | StudentGraduationApplicationCreateOrConnectWithoutSessionInput[]
         createMany?: StudentGraduationApplicationCreateManySessionInputEnvelope
         connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+    };
+    export type OutputStandardUncheckedCreateNestedManyWithoutGraduationSessionsInput = {
+        create?: XOR<OutputStandardCreateWithoutGraduationSessionsInput, OutputStandardUncheckedCreateWithoutGraduationSessionsInput> | OutputStandardCreateWithoutGraduationSessionsInput[] | OutputStandardUncheckedCreateWithoutGraduationSessionsInput[]
+        connectOrCreate?: OutputStandardCreateOrConnectWithoutGraduationSessionsInput | OutputStandardCreateOrConnectWithoutGraduationSessionsInput[]
+        connect?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
     };
     export type EnumGraduationSessionStatusFieldUpdateOperationsInput = {
         set?: $Enums.GraduationSessionStatus
@@ -435633,6 +435775,18 @@ export namespace Prisma {
         updateMany?: StudentGraduationApplicationUpdateManyWithWhereWithoutSessionInput | StudentGraduationApplicationUpdateManyWithWhereWithoutSessionInput[]
         deleteMany?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
     };
+    export type OutputStandardUpdateManyWithoutGraduationSessionsNestedInput = {
+        create?: XOR<OutputStandardCreateWithoutGraduationSessionsInput, OutputStandardUncheckedCreateWithoutGraduationSessionsInput> | OutputStandardCreateWithoutGraduationSessionsInput[] | OutputStandardUncheckedCreateWithoutGraduationSessionsInput[]
+        connectOrCreate?: OutputStandardCreateOrConnectWithoutGraduationSessionsInput | OutputStandardCreateOrConnectWithoutGraduationSessionsInput[]
+        upsert?: OutputStandardUpsertWithWhereUniqueWithoutGraduationSessionsInput | OutputStandardUpsertWithWhereUniqueWithoutGraduationSessionsInput[]
+        set?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+        disconnect?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+        delete?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+        connect?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+        update?: OutputStandardUpdateWithWhereUniqueWithoutGraduationSessionsInput | OutputStandardUpdateWithWhereUniqueWithoutGraduationSessionsInput[]
+        updateMany?: OutputStandardUpdateManyWithWhereWithoutGraduationSessionsInput | OutputStandardUpdateManyWithWhereWithoutGraduationSessionsInput[]
+        deleteMany?: OutputStandardScalarWhereInput | OutputStandardScalarWhereInput[]
+    };
     export type StudentGraduationApplicationUncheckedUpdateManyWithoutSessionNestedInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutSessionInput, StudentGraduationApplicationUncheckedCreateWithoutSessionInput> | StudentGraduationApplicationCreateWithoutSessionInput[] | StudentGraduationApplicationUncheckedCreateWithoutSessionInput[]
         connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutSessionInput | StudentGraduationApplicationCreateOrConnectWithoutSessionInput[]
@@ -435645,6 +435799,18 @@ export namespace Prisma {
         update?: StudentGraduationApplicationUpdateWithWhereUniqueWithoutSessionInput | StudentGraduationApplicationUpdateWithWhereUniqueWithoutSessionInput[]
         updateMany?: StudentGraduationApplicationUpdateManyWithWhereWithoutSessionInput | StudentGraduationApplicationUpdateManyWithWhereWithoutSessionInput[]
         deleteMany?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
+    };
+    export type OutputStandardUncheckedUpdateManyWithoutGraduationSessionsNestedInput = {
+        create?: XOR<OutputStandardCreateWithoutGraduationSessionsInput, OutputStandardUncheckedCreateWithoutGraduationSessionsInput> | OutputStandardCreateWithoutGraduationSessionsInput[] | OutputStandardUncheckedCreateWithoutGraduationSessionsInput[]
+        connectOrCreate?: OutputStandardCreateOrConnectWithoutGraduationSessionsInput | OutputStandardCreateOrConnectWithoutGraduationSessionsInput[]
+        upsert?: OutputStandardUpsertWithWhereUniqueWithoutGraduationSessionsInput | OutputStandardUpsertWithWhereUniqueWithoutGraduationSessionsInput[]
+        set?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+        disconnect?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+        delete?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+        connect?: OutputStandardWhereUniqueInput | OutputStandardWhereUniqueInput[]
+        update?: OutputStandardUpdateWithWhereUniqueWithoutGraduationSessionsInput | OutputStandardUpdateWithWhereUniqueWithoutGraduationSessionsInput[]
+        updateMany?: OutputStandardUpdateManyWithWhereWithoutGraduationSessionsInput | OutputStandardUpdateManyWithWhereWithoutGraduationSessionsInput[]
+        deleteMany?: OutputStandardScalarWhereInput | OutputStandardScalarWhereInput[]
     };
     export type StudentCreateNestedOneWithoutGraduationApplicationsInput = {
         create?: XOR<StudentCreateWithoutGraduationApplicationsInput, StudentUncheckedCreateWithoutGraduationApplicationsInput>
@@ -509237,6 +509403,7 @@ export namespace Prisma {
         applicationEnd: Date | string
         status?: $Enums.GraduationSessionStatus
         applications?: StudentGraduationApplicationCreateNestedManyWithoutSessionInput
+        outputStandard?: OutputStandardCreateNestedManyWithoutGraduationSessionsInput
     };
     export type GraduationSessionUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
@@ -509253,6 +509420,7 @@ export namespace Prisma {
         applicationEnd: Date | string
         status?: $Enums.GraduationSessionStatus
         applications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSessionInput
+        outputStandard?: OutputStandardUncheckedCreateNestedManyWithoutGraduationSessionsInput
     };
     export type GraduationSessionCreateOrConnectWithoutTrainingObjectTypeInput = {
         where: GraduationSessionWhereUniqueInput
@@ -514165,6 +514333,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutOutputStandardInput
+        graduationSessions?: GraduationSessionCreateNestedManyWithoutOutputStandardInput
     };
     export type OutputStandardUncheckedCreateWithoutCertificatesInput = {
         id?: string
@@ -514177,6 +514346,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutOutputStandardInput
+        graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutOutputStandardInput
     };
     export type OutputStandardCreateOrConnectWithoutCertificatesInput = {
         where: OutputStandardWhereUniqueInput
@@ -514280,6 +514450,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutOutputStandardNestedInput
+        graduationSessions?: GraduationSessionUpdateManyWithoutOutputStandardNestedInput
     };
     export type OutputStandardUncheckedUpdateWithoutCertificatesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -514292,6 +514463,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutOutputStandardNestedInput
+        graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutOutputStandardNestedInput
     };
     export type ArchivedCertificateUpsertWithWhereUniqueWithoutCertificateInput = {
         where: ArchivedCertificateWhereUniqueInput
@@ -515142,6 +515314,44 @@ export namespace Prisma {
         data: OutputStandardOnCurriculumCreateManyOutputStandardInput | OutputStandardOnCurriculumCreateManyOutputStandardInput[]
         skipDuplicates?: boolean
     };
+    export type GraduationSessionCreateWithoutOutputStandardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        sessionDate: Date | string
+        applicationStart: Date | string
+        applicationEnd: Date | string
+        status?: $Enums.GraduationSessionStatus
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutGraduationSessionInput
+        applications?: StudentGraduationApplicationCreateNestedManyWithoutSessionInput
+    };
+    export type GraduationSessionUncheckedCreateWithoutOutputStandardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        sessionDate: Date | string
+        applicationStart: Date | string
+        applicationEnd: Date | string
+        trainingObjectTypeId: string
+        status?: $Enums.GraduationSessionStatus
+        applications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSessionInput
+    };
+    export type GraduationSessionCreateOrConnectWithoutOutputStandardInput = {
+        where: GraduationSessionWhereUniqueInput
+        create: XOR<GraduationSessionCreateWithoutOutputStandardInput, GraduationSessionUncheckedCreateWithoutOutputStandardInput>
+    };
     export type CertificateUpsertWithWhereUniqueWithoutOutputStandardInput = {
         where: CertificateWhereUniqueInput
         update: XOR<CertificateUpdateWithoutOutputStandardInput, CertificateUncheckedUpdateWithoutOutputStandardInput>
@@ -515184,6 +515394,19 @@ export namespace Prisma {
         where: OutputStandardOnCurriculumScalarWhereInput
         data: XOR<OutputStandardOnCurriculumUpdateManyMutationInput, OutputStandardOnCurriculumUncheckedUpdateManyWithoutOutputStandardInput>
     };
+    export type GraduationSessionUpsertWithWhereUniqueWithoutOutputStandardInput = {
+        where: GraduationSessionWhereUniqueInput
+        update: XOR<GraduationSessionUpdateWithoutOutputStandardInput, GraduationSessionUncheckedUpdateWithoutOutputStandardInput>
+        create: XOR<GraduationSessionCreateWithoutOutputStandardInput, GraduationSessionUncheckedCreateWithoutOutputStandardInput>
+    };
+    export type GraduationSessionUpdateWithWhereUniqueWithoutOutputStandardInput = {
+        where: GraduationSessionWhereUniqueInput
+        data: XOR<GraduationSessionUpdateWithoutOutputStandardInput, GraduationSessionUncheckedUpdateWithoutOutputStandardInput>
+    };
+    export type GraduationSessionUpdateManyWithWhereWithoutOutputStandardInput = {
+        where: GraduationSessionScalarWhereInput
+        data: XOR<GraduationSessionUpdateManyMutationInput, GraduationSessionUncheckedUpdateManyWithoutOutputStandardInput>
+    };
     export type OutputStandardCreateWithoutOutputStandardOnCurriculumInput = {
         id?: string
         code?: string | null
@@ -515195,6 +515418,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         certificates?: CertificateCreateNestedManyWithoutOutputStandardInput
+        graduationSessions?: GraduationSessionCreateNestedManyWithoutOutputStandardInput
     };
     export type OutputStandardUncheckedCreateWithoutOutputStandardOnCurriculumInput = {
         id?: string
@@ -515207,6 +515431,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         certificates?: CertificateUncheckedCreateNestedManyWithoutOutputStandardInput
+        graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutOutputStandardInput
     };
     export type OutputStandardCreateOrConnectWithoutOutputStandardOnCurriculumInput = {
         where: OutputStandardWhereUniqueInput
@@ -515324,6 +515549,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         certificates?: CertificateUpdateManyWithoutOutputStandardNestedInput
+        graduationSessions?: GraduationSessionUpdateManyWithoutOutputStandardNestedInput
     };
     export type OutputStandardUncheckedUpdateWithoutOutputStandardOnCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -515336,6 +515562,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         certificates?: CertificateUncheckedUpdateManyWithoutOutputStandardNestedInput
+        graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutOutputStandardNestedInput
     };
     export type CurriculumVersionUpsertWithoutOutputStandardOnCurriculumInput = {
         update: XOR<CurriculumVersionUpdateWithoutOutputStandardOnCurriculumInput, CurriculumVersionUncheckedUpdateWithoutOutputStandardOnCurriculumInput>
@@ -549134,6 +549361,36 @@ export namespace Prisma {
         data: StudentGraduationApplicationCreateManySessionInput | StudentGraduationApplicationCreateManySessionInput[]
         skipDuplicates?: boolean
     };
+    export type OutputStandardCreateWithoutGraduationSessionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        certificates?: CertificateCreateNestedManyWithoutOutputStandardInput
+        outputStandardOnCurriculum?: OutputStandardOnCurriculumCreateNestedManyWithoutOutputStandardInput
+    };
+    export type OutputStandardUncheckedCreateWithoutGraduationSessionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        certificates?: CertificateUncheckedCreateNestedManyWithoutOutputStandardInput
+        outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutOutputStandardInput
+    };
+    export type OutputStandardCreateOrConnectWithoutGraduationSessionsInput = {
+        where: OutputStandardWhereUniqueInput
+        create: XOR<OutputStandardCreateWithoutGraduationSessionsInput, OutputStandardUncheckedCreateWithoutGraduationSessionsInput>
+    };
     export type TrainingObjectTypeUpsertWithoutGraduationSessionInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutGraduationSessionInput, TrainingObjectTypeUncheckedUpdateWithoutGraduationSessionInput>
         create: XOR<TrainingObjectTypeCreateWithoutGraduationSessionInput, TrainingObjectTypeUncheckedCreateWithoutGraduationSessionInput>
@@ -549207,6 +549464,33 @@ export namespace Prisma {
     export type StudentGraduationApplicationUpdateManyWithWhereWithoutSessionInput = {
         where: StudentGraduationApplicationScalarWhereInput
         data: XOR<StudentGraduationApplicationUpdateManyMutationInput, StudentGraduationApplicationUncheckedUpdateManyWithoutSessionInput>
+    };
+    export type OutputStandardUpsertWithWhereUniqueWithoutGraduationSessionsInput = {
+        where: OutputStandardWhereUniqueInput
+        update: XOR<OutputStandardUpdateWithoutGraduationSessionsInput, OutputStandardUncheckedUpdateWithoutGraduationSessionsInput>
+        create: XOR<OutputStandardCreateWithoutGraduationSessionsInput, OutputStandardUncheckedCreateWithoutGraduationSessionsInput>
+    };
+    export type OutputStandardUpdateWithWhereUniqueWithoutGraduationSessionsInput = {
+        where: OutputStandardWhereUniqueInput
+        data: XOR<OutputStandardUpdateWithoutGraduationSessionsInput, OutputStandardUncheckedUpdateWithoutGraduationSessionsInput>
+    };
+    export type OutputStandardUpdateManyWithWhereWithoutGraduationSessionsInput = {
+        where: OutputStandardScalarWhereInput
+        data: XOR<OutputStandardUpdateManyMutationInput, OutputStandardUncheckedUpdateManyWithoutGraduationSessionsInput>
+    };
+    export type OutputStandardScalarWhereInput = {
+        AND?: OutputStandardScalarWhereInput | OutputStandardScalarWhereInput[]
+        OR?: OutputStandardScalarWhereInput[]
+        NOT?: OutputStandardScalarWhereInput | OutputStandardScalarWhereInput[]
+        id?: StringFilter<"OutputStandard"> | string
+        code?: StringNullableFilter<"OutputStandard"> | string | null
+        active?: BoolFilter<"OutputStandard"> | boolean
+        description?: StringNullableFilter<"OutputStandard"> | string | null
+        deletedAt?: DateTimeNullableFilter<"OutputStandard"> | Date | string | null
+        createdAt?: DateTimeFilter<"OutputStandard"> | Date | string
+        updatedAt?: DateTimeFilter<"OutputStandard"> | Date | string
+        createdBy?: UuidNullableFilter<"OutputStandard"> | string | null
+        name?: StringFilter<"OutputStandard"> | string
     };
     export type StudentCreateWithoutGraduationApplicationsInput = {
         id?: string
@@ -549365,6 +549649,7 @@ export namespace Prisma {
         applicationEnd: Date | string
         status?: $Enums.GraduationSessionStatus
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutGraduationSessionInput
+        outputStandard?: OutputStandardCreateNestedManyWithoutGraduationSessionsInput
     };
     export type GraduationSessionUncheckedCreateWithoutApplicationsInput = {
         id?: string
@@ -549381,6 +549666,7 @@ export namespace Prisma {
         applicationEnd: Date | string
         trainingObjectTypeId: string
         status?: $Enums.GraduationSessionStatus
+        outputStandard?: OutputStandardUncheckedCreateNestedManyWithoutGraduationSessionsInput
     };
     export type GraduationSessionCreateOrConnectWithoutApplicationsInput = {
         where: GraduationSessionWhereUniqueInput
@@ -549967,6 +550253,7 @@ export namespace Prisma {
         applicationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutGraduationSessionNestedInput
+        outputStandard?: OutputStandardUpdateManyWithoutGraduationSessionsNestedInput
     };
     export type GraduationSessionUncheckedUpdateWithoutApplicationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549983,6 +550270,7 @@ export namespace Prisma {
         applicationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
+        outputStandard?: OutputStandardUncheckedUpdateManyWithoutGraduationSessionsNestedInput
     };
     export type ApplicationDowngradedUpsertWithoutStudentGraduationApplicationInput = {
         update: XOR<ApplicationDowngradedUpdateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedUpdateWithoutStudentGraduationApplicationInput>
@@ -596417,6 +596705,7 @@ export namespace Prisma {
         applicationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
         applications?: StudentGraduationApplicationUpdateManyWithoutSessionNestedInput
+        outputStandard?: OutputStandardUpdateManyWithoutGraduationSessionsNestedInput
     };
     export type GraduationSessionUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596433,6 +596722,7 @@ export namespace Prisma {
         applicationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
         applications?: StudentGraduationApplicationUncheckedUpdateManyWithoutSessionNestedInput
+        outputStandard?: OutputStandardUncheckedUpdateManyWithoutGraduationSessionsNestedInput
     };
     export type GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -600341,6 +600631,56 @@ export namespace Prisma {
         curriculumVersionId?: StringFieldUpdateOperationsInput | string
         isRequired?: BoolFieldUpdateOperationsInput | boolean
         semesterIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    };
+    export type GraduationSessionUpdateWithoutOutputStandardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutGraduationSessionNestedInput
+        applications?: StudentGraduationApplicationUpdateManyWithoutSessionNestedInput
+    };
+    export type GraduationSessionUncheckedUpdateWithoutOutputStandardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
+        applications?: StudentGraduationApplicationUncheckedUpdateManyWithoutSessionNestedInput
+    };
+    export type GraduationSessionUncheckedUpdateManyWithoutOutputStandardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationStart?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
     };
     export type StudentSubjectScoreCreateManyStudentInput = {
         id?: string
@@ -611400,6 +611740,43 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type OutputStandardUpdateWithoutGraduationSessionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        certificates?: CertificateUpdateManyWithoutOutputStandardNestedInput
+        outputStandardOnCurriculum?: OutputStandardOnCurriculumUpdateManyWithoutOutputStandardNestedInput
+    };
+    export type OutputStandardUncheckedUpdateWithoutGraduationSessionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        certificates?: CertificateUncheckedUpdateManyWithoutOutputStandardNestedInput
+        outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutOutputStandardNestedInput
+    };
+    export type OutputStandardUncheckedUpdateManyWithoutGraduationSessionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
     };
     export type ApplicationCheckResultCreateManyStudentGraduationApplicationInput = {
         id?: string
