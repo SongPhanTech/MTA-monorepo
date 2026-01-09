@@ -135,7 +135,12 @@ export type OrgTreeItem = {
 }
 
 export function buildOrgTree(
-    list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
+    list: Array<{
+        Id: string
+        sTen: string | null
+        sParentId: string | null
+        sMa: string | null
+    }>,
     parentId = '0'
 ): OrgTreeItem[] {
     return list
@@ -143,9 +148,11 @@ export function buildOrgTree(
         .map((item) => ({
             label: [item.sMa, item.sTen].filter(Boolean).join(' - ') || '',
             value: item.Id,
+            searchText: [item.sTen, item.sMa].filter(Boolean).join(' '),
             children: buildOrgTree(list, item.Id),
         }))
 }
+
 
 export const buildOrgFlat = (
     list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
