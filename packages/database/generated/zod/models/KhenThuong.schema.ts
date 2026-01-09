@@ -14,7 +14,6 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
-    hinhThucKhenThuong: z.string().nullish(),
     capKhenThuong: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),
     nguoiKy: z.string().nullish(),
@@ -31,7 +30,6 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    hinhThucKhenThuong: z.string().nullish(),
     capKhenThuong: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),
     nguoiKy: z.string().nullish(),
@@ -40,10 +38,12 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    hinhThucKhenThuong: z.record(z.string(), z.unknown()).optional(),
     userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
+    hinhThucKhenThuongId: z.string().nullish(),
     userProfileId: z.string(),
 }
 );
@@ -80,7 +80,6 @@ export const KhenThuongPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    hinhThucKhenThuong: z.string().nullish(),
     capKhenThuong: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),
     nguoiKy: z.string().nullish(),

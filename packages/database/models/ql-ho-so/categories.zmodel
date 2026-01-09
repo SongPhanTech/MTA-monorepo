@@ -44,9 +44,9 @@ model DM_TrangThaiLamViec extends Base {
 }
 
 model DM_HinhThucKhenThuongChinhQuyen extends Base {
-  name        String        @unique
+  name       String       @unique
+  khenThuong KhenThuong[]
 
-  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 

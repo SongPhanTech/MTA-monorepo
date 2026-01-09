@@ -30,6 +30,7 @@ import { queryClient } from '@api/index'
 import { buildOrgTree } from '@lib/utils'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import TreeSelect from '@/components/commons/tree-select'
+import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture';
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
@@ -484,16 +485,7 @@ const PutFixedClassModal = () => {
 
             <Col span={12}>
                 <FormItem form={form} name="lecturerManagementId" label="GVCN">
-                    <Select
-                        placeholder="Chọn giảng viên chủ nhiệm"
-                        options={lecturerData.map((i) => {
-                            return {
-                                value: i?.id,
-                                label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
-                            }
-                        })}
-                        // onChange={(val) =>handleMajorChange(val)}
-                    />
+                    <LectureTreeSelect/>
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -506,7 +498,6 @@ const PutFixedClassModal = () => {
                                 label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
                             }
                         })}
-                        // onChange={(val) =>handleMajorChange(val)}
                     />
                 </FormItem>
             </Col>

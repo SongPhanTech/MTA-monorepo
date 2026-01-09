@@ -6231,7 +6231,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId: 'dM_ChucDanhCMNVKySuId',
         dM_XepLoaiDanhGiaChatLuongDangVienId: 'dM_XepLoaiDanhGiaChatLuongDangVienId',
         dM_XepLoaiDanhGiaCanBoId: 'dM_XepLoaiDanhGiaCanBoId',
-        dM_HinhThucKhenThuongChinhQuyenId: 'dM_HinhThucKhenThuongChinhQuyenId',
         dM_HinhThucKhenThuongDangId: 'dM_HinhThucKhenThuongDangId',
         unionDate: 'unionDate',
         unionPlace: 'unionPlace',
@@ -6489,7 +6488,7 @@ export namespace Prisma {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
-        hinhThucKhenThuong: 'hinhThucKhenThuong',
+        hinhThucKhenThuongId: 'hinhThucKhenThuongId',
         capKhenThuong: 'capKhenThuong',
         soQuyetDinh: 'soQuyetDinh',
         nguoiKy: 'nguoiKy',
@@ -10382,7 +10381,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId: 'dM_ChucDanhCMNVKySuId',
         dM_XepLoaiDanhGiaChatLuongDangVienId: 'dM_XepLoaiDanhGiaChatLuongDangVienId',
         dM_XepLoaiDanhGiaCanBoId: 'dM_XepLoaiDanhGiaCanBoId',
-        dM_HinhThucKhenThuongChinhQuyenId: 'dM_HinhThucKhenThuongChinhQuyenId',
         dM_HinhThucKhenThuongDangId: 'dM_HinhThucKhenThuongDangId',
         unionPlace: 'unionPlace',
         CPVJoinPlace: 'CPVJoinPlace',
@@ -10549,7 +10547,7 @@ export namespace Prisma {
         code: 'code',
         description: 'description',
         createdBy: 'createdBy',
-        hinhThucKhenThuong: 'hinhThucKhenThuong',
+        hinhThucKhenThuongId: 'hinhThucKhenThuongId',
         capKhenThuong: 'capKhenThuong',
         soQuyetDinh: 'soQuyetDinh',
         nguoiKy: 'nguoiKy',
@@ -14376,7 +14374,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu<T extends UserProfile$dM_ChucDanhCMNVKySuArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$dM_ChucDanhCMNVKySuArgs<ExtArgs>>): Prisma__DM_ChucDanhCMNVKySuClient<$Result.GetResult<Prisma.$DM_ChucDanhCMNVKySuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         dM_XepLoaiDanhGiaChatLuongDangVien<T extends UserProfile$dM_XepLoaiDanhGiaChatLuongDangVienArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$dM_XepLoaiDanhGiaChatLuongDangVienArgs<ExtArgs>>): Prisma__DM_XepLoaiDanhGiaChatLuongDangVienClient<$Result.GetResult<Prisma.$DM_XepLoaiDanhGiaChatLuongDangVienPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         dM_XepLoaiDanhGiaCanBo<T extends UserProfile$dM_XepLoaiDanhGiaCanBoArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$dM_XepLoaiDanhGiaCanBoArgs<ExtArgs>>): Prisma__DM_XepLoaiDanhGiaCanBoClient<$Result.GetResult<Prisma.$DM_XepLoaiDanhGiaCanBoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        dM_HinhThucKhenThuongChinhQuyen<T extends UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>>): Prisma__DM_HinhThucKhenThuongChinhQuyenClient<$Result.GetResult<Prisma.$DM_HinhThucKhenThuongChinhQuyenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         dM_HinhThucKhenThuongDang<T extends UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>>): Prisma__DM_HinhThucKhenThuongDangClient<$Result.GetResult<Prisma.$DM_HinhThucKhenThuongDangPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         positionCPV<T extends UserProfile$positionCPVArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$positionCPVArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         chucVuChinhQuyen<T extends UserProfile$chucVuChinhQuyenArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$chucVuChinhQuyenArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -14558,7 +14555,6 @@ export namespace Prisma {
         readonly dM_ChucDanhCMNVKySuId: FieldRef<"UserProfile", 'String'>;
         readonly dM_XepLoaiDanhGiaChatLuongDangVienId: FieldRef<"UserProfile", 'String'>;
         readonly dM_XepLoaiDanhGiaCanBoId: FieldRef<"UserProfile", 'String'>;
-        readonly dM_HinhThucKhenThuongChinhQuyenId: FieldRef<"UserProfile", 'String'>;
         readonly dM_HinhThucKhenThuongDangId: FieldRef<"UserProfile", 'String'>;
         readonly unionDate: FieldRef<"UserProfile", 'DateTime'>;
         readonly unionPlace: FieldRef<"UserProfile", 'String'>;
@@ -20352,6 +20348,7 @@ export namespace Prisma {
      */
     export interface Prisma__KhenThuongClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        hinhThucKhenThuong<T extends KhenThuong$hinhThucKhenThuongArgs<ExtArgs> = {}>(args?: Subset<T, KhenThuong$hinhThucKhenThuongArgs<ExtArgs>>): Prisma__DM_HinhThucKhenThuongChinhQuyenClient<$Result.GetResult<Prisma.$DM_HinhThucKhenThuongChinhQuyenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -20387,7 +20384,7 @@ export namespace Prisma {
         readonly createdAt: FieldRef<"KhenThuong", 'DateTime'>;
         readonly updatedAt: FieldRef<"KhenThuong", 'DateTime'>;
         readonly createdBy: FieldRef<"KhenThuong", 'String'>;
-        readonly hinhThucKhenThuong: FieldRef<"KhenThuong", 'String'>;
+        readonly hinhThucKhenThuongId: FieldRef<"KhenThuong", 'String'>;
         readonly capKhenThuong: FieldRef<"KhenThuong", 'String'>;
         readonly soQuyetDinh: FieldRef<"KhenThuong", 'String'>;
         readonly nguoiKy: FieldRef<"KhenThuong", 'String'>;
@@ -102790,7 +102787,7 @@ export namespace Prisma {
      */
     export interface Prisma__DM_HinhThucKhenThuongChinhQuyenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        userProfile<T extends DM_HinhThucKhenThuongChinhQuyen$userProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_HinhThucKhenThuongChinhQuyen$userProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        khenThuong<T extends DM_HinhThucKhenThuongChinhQuyen$khenThuongArgs<ExtArgs> = {}>(args?: Subset<T, DM_HinhThucKhenThuongChinhQuyen$khenThuongArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KhenThuongPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -137524,10 +137521,10 @@ export namespace Prisma {
      * Count Type DM_HinhThucKhenThuongChinhQuyenCountOutputType
      */
     export type DM_HinhThucKhenThuongChinhQuyenCountOutputType = {
-        userProfile: number
+        khenThuong: number
     };
     export type DM_HinhThucKhenThuongChinhQuyenCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        userProfile?: boolean | DM_HinhThucKhenThuongChinhQuyenCountOutputTypeCountUserProfileArgs
+        khenThuong?: boolean | DM_HinhThucKhenThuongChinhQuyenCountOutputTypeCountKhenThuongArgs
     };
     /**
      * DM_HinhThucKhenThuongChinhQuyenCountOutputType without action
@@ -137541,8 +137538,8 @@ export namespace Prisma {
     /**
      * DM_HinhThucKhenThuongChinhQuyenCountOutputType without action
      */
-    export type DM_HinhThucKhenThuongChinhQuyenCountOutputTypeCountUserProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: UserProfileWhereInput
+    export type DM_HinhThucKhenThuongChinhQuyenCountOutputTypeCountKhenThuongArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: KhenThuongWhereInput
     };
     /**
      * Count Type DM_HinhThucKhenThuongDangCountOutputType
@@ -140064,7 +140061,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId: string | null
         dM_XepLoaiDanhGiaCanBoId: string | null
-        dM_HinhThucKhenThuongChinhQuyenId: string | null
         dM_HinhThucKhenThuongDangId: string | null
         unionDate: Date | null
         unionPlace: string | null
@@ -140194,7 +140190,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId: string | null
         dM_XepLoaiDanhGiaCanBoId: string | null
-        dM_HinhThucKhenThuongChinhQuyenId: string | null
         dM_HinhThucKhenThuongDangId: string | null
         unionDate: Date | null
         unionPlace: string | null
@@ -140324,7 +140319,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId: number
         dM_XepLoaiDanhGiaChatLuongDangVienId: number
         dM_XepLoaiDanhGiaCanBoId: number
-        dM_HinhThucKhenThuongChinhQuyenId: number
         dM_HinhThucKhenThuongDangId: number
         unionDate: number
         unionPlace: number
@@ -140467,7 +140461,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: true
         dM_XepLoaiDanhGiaChatLuongDangVienId?: true
         dM_XepLoaiDanhGiaCanBoId?: true
-        dM_HinhThucKhenThuongChinhQuyenId?: true
         dM_HinhThucKhenThuongDangId?: true
         unionDate?: true
         unionPlace?: true
@@ -140597,7 +140590,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: true
         dM_XepLoaiDanhGiaChatLuongDangVienId?: true
         dM_XepLoaiDanhGiaCanBoId?: true
-        dM_HinhThucKhenThuongChinhQuyenId?: true
         dM_HinhThucKhenThuongDangId?: true
         unionDate?: true
         unionPlace?: true
@@ -140727,7 +140719,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: true
         dM_XepLoaiDanhGiaChatLuongDangVienId?: true
         dM_XepLoaiDanhGiaCanBoId?: true
-        dM_HinhThucKhenThuongChinhQuyenId?: true
         dM_HinhThucKhenThuongDangId?: true
         unionDate?: true
         unionPlace?: true
@@ -140938,7 +140929,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId: string | null
         dM_XepLoaiDanhGiaCanBoId: string | null
-        dM_HinhThucKhenThuongChinhQuyenId: string | null
         dM_HinhThucKhenThuongDangId: string | null
         unionDate: Date | null
         unionPlace: string | null
@@ -141085,7 +141075,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: boolean
         dM_XepLoaiDanhGiaChatLuongDangVienId?: boolean
         dM_XepLoaiDanhGiaCanBoId?: boolean
-        dM_HinhThucKhenThuongChinhQuyenId?: boolean
         dM_HinhThucKhenThuongDangId?: boolean
         unionDate?: boolean
         unionPlace?: boolean
@@ -141146,7 +141135,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: boolean | UserProfile$dM_ChucDanhCMNVKySuArgs<ExtArgs>
         dM_XepLoaiDanhGiaChatLuongDangVien?: boolean | UserProfile$dM_XepLoaiDanhGiaChatLuongDangVienArgs<ExtArgs>
         dM_XepLoaiDanhGiaCanBo?: boolean | UserProfile$dM_XepLoaiDanhGiaCanBoArgs<ExtArgs>
-        dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
         dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
         positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
         chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
@@ -141305,7 +141293,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: boolean
         dM_XepLoaiDanhGiaChatLuongDangVienId?: boolean
         dM_XepLoaiDanhGiaCanBoId?: boolean
-        dM_HinhThucKhenThuongChinhQuyenId?: boolean
         dM_HinhThucKhenThuongDangId?: boolean
         unionDate?: boolean
         unionPlace?: boolean
@@ -141366,7 +141353,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: boolean | UserProfile$dM_ChucDanhCMNVKySuArgs<ExtArgs>
         dM_XepLoaiDanhGiaChatLuongDangVien?: boolean | UserProfile$dM_XepLoaiDanhGiaChatLuongDangVienArgs<ExtArgs>
         dM_XepLoaiDanhGiaCanBo?: boolean | UserProfile$dM_XepLoaiDanhGiaCanBoArgs<ExtArgs>
-        dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
         dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
         positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
         chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
@@ -141480,7 +141466,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: boolean
         dM_XepLoaiDanhGiaChatLuongDangVienId?: boolean
         dM_XepLoaiDanhGiaCanBoId?: boolean
-        dM_HinhThucKhenThuongChinhQuyenId?: boolean
         dM_HinhThucKhenThuongDangId?: boolean
         unionDate?: boolean
         unionPlace?: boolean
@@ -141541,7 +141526,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: boolean | UserProfile$dM_ChucDanhCMNVKySuArgs<ExtArgs>
         dM_XepLoaiDanhGiaChatLuongDangVien?: boolean | UserProfile$dM_XepLoaiDanhGiaChatLuongDangVienArgs<ExtArgs>
         dM_XepLoaiDanhGiaCanBo?: boolean | UserProfile$dM_XepLoaiDanhGiaCanBoArgs<ExtArgs>
-        dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
         dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
         positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
         chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
@@ -141655,7 +141639,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: boolean
         dM_XepLoaiDanhGiaChatLuongDangVienId?: boolean
         dM_XepLoaiDanhGiaCanBoId?: boolean
-        dM_HinhThucKhenThuongChinhQuyenId?: boolean
         dM_HinhThucKhenThuongDangId?: boolean
         unionDate?: boolean
         unionPlace?: boolean
@@ -141677,7 +141660,7 @@ export namespace Prisma {
         familyName?: boolean
         trinhDoHocVanId?: boolean
     };
-    export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongChinhQuyenId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>;
+    export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>;
     export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         group?: boolean | UserProfile$groupArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
@@ -141719,7 +141702,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: boolean | UserProfile$dM_ChucDanhCMNVKySuArgs<ExtArgs>
         dM_XepLoaiDanhGiaChatLuongDangVien?: boolean | UserProfile$dM_XepLoaiDanhGiaChatLuongDangVienArgs<ExtArgs>
         dM_XepLoaiDanhGiaCanBo?: boolean | UserProfile$dM_XepLoaiDanhGiaCanBoArgs<ExtArgs>
-        dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
         dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
         positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
         chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
@@ -141811,7 +141793,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: boolean | UserProfile$dM_ChucDanhCMNVKySuArgs<ExtArgs>
         dM_XepLoaiDanhGiaChatLuongDangVien?: boolean | UserProfile$dM_XepLoaiDanhGiaChatLuongDangVienArgs<ExtArgs>
         dM_XepLoaiDanhGiaCanBo?: boolean | UserProfile$dM_XepLoaiDanhGiaCanBoArgs<ExtArgs>
-        dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
         dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
         positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
         chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
@@ -141858,7 +141839,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: boolean | UserProfile$dM_ChucDanhCMNVKySuArgs<ExtArgs>
         dM_XepLoaiDanhGiaChatLuongDangVien?: boolean | UserProfile$dM_XepLoaiDanhGiaChatLuongDangVienArgs<ExtArgs>
         dM_XepLoaiDanhGiaCanBo?: boolean | UserProfile$dM_XepLoaiDanhGiaCanBoArgs<ExtArgs>
-        dM_HinhThucKhenThuongChinhQuyen?: boolean | UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs>
         dM_HinhThucKhenThuongDang?: boolean | UserProfile$dM_HinhThucKhenThuongDangArgs<ExtArgs>
         positionCPV?: boolean | UserProfile$positionCPVArgs<ExtArgs>
         chucVuChinhQuyen?: boolean | UserProfile$chucVuChinhQuyenArgs<ExtArgs>
@@ -141907,7 +141887,6 @@ export namespace Prisma {
             dM_ChucDanhCMNVKySu: Prisma.$DM_ChucDanhCMNVKySuPayload<ExtArgs> | null
             dM_XepLoaiDanhGiaChatLuongDangVien: Prisma.$DM_XepLoaiDanhGiaChatLuongDangVienPayload<ExtArgs> | null
             dM_XepLoaiDanhGiaCanBo: Prisma.$DM_XepLoaiDanhGiaCanBoPayload<ExtArgs> | null
-            dM_HinhThucKhenThuongChinhQuyen: Prisma.$DM_HinhThucKhenThuongChinhQuyenPayload<ExtArgs> | null
             dM_HinhThucKhenThuongDang: Prisma.$DM_HinhThucKhenThuongDangPayload<ExtArgs> | null
             positionCPV: Prisma.$DM_ChucVuPayload<ExtArgs> | null
             chucVuChinhQuyen: Prisma.$DM_ChucVuPayload<ExtArgs> | null
@@ -142077,7 +142056,6 @@ export namespace Prisma {
             dM_ChucDanhCMNVKySuId: string | null
             dM_XepLoaiDanhGiaChatLuongDangVienId: string | null
             dM_XepLoaiDanhGiaCanBoId: string | null
-            dM_HinhThucKhenThuongChinhQuyenId: string | null
             dM_HinhThucKhenThuongDangId: string | null
             unionDate: Date | null
             unionPlace: string | null
@@ -143201,24 +143179,6 @@ export namespace Prisma {
          */
         include?: DM_XepLoaiDanhGiaCanBoInclude<ExtArgs> | null
         where?: DM_XepLoaiDanhGiaCanBoWhereInput
-    };
-    /**
-     * UserProfile.dM_HinhThucKhenThuongChinhQuyen
-     */
-    export type UserProfile$dM_HinhThucKhenThuongChinhQuyenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the DM_HinhThucKhenThuongChinhQuyen
-         */
-        select?: DM_HinhThucKhenThuongChinhQuyenSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the DM_HinhThucKhenThuongChinhQuyen
-         */
-        omit?: DM_HinhThucKhenThuongChinhQuyenOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: DM_HinhThucKhenThuongChinhQuyenInclude<ExtArgs> | null
-        where?: DM_HinhThucKhenThuongChinhQuyenWhereInput
     };
     /**
      * UserProfile.dM_HinhThucKhenThuongDang
@@ -154673,7 +154633,7 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
-        hinhThucKhenThuong: string | null
+        hinhThucKhenThuongId: string | null
         capKhenThuong: string | null
         soQuyetDinh: string | null
         nguoiKy: string | null
@@ -154690,7 +154650,7 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         createdBy: string | null
-        hinhThucKhenThuong: string | null
+        hinhThucKhenThuongId: string | null
         capKhenThuong: string | null
         soQuyetDinh: string | null
         nguoiKy: string | null
@@ -154707,7 +154667,7 @@ export namespace Prisma {
         createdAt: number
         updatedAt: number
         createdBy: number
-        hinhThucKhenThuong: number
+        hinhThucKhenThuongId: number
         capKhenThuong: number
         soQuyetDinh: number
         nguoiKy: number
@@ -154725,7 +154685,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
-        hinhThucKhenThuong?: true
+        hinhThucKhenThuongId?: true
         capKhenThuong?: true
         soQuyetDinh?: true
         nguoiKy?: true
@@ -154742,7 +154702,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
-        hinhThucKhenThuong?: true
+        hinhThucKhenThuongId?: true
         capKhenThuong?: true
         soQuyetDinh?: true
         nguoiKy?: true
@@ -154759,7 +154719,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         createdBy?: true
-        hinhThucKhenThuong?: true
+        hinhThucKhenThuongId?: true
         capKhenThuong?: true
         soQuyetDinh?: true
         nguoiKy?: true
@@ -154843,7 +154803,7 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         createdBy: string | null
-        hinhThucKhenThuong: string | null
+        hinhThucKhenThuongId: string | null
         capKhenThuong: string | null
         soQuyetDinh: string | null
         nguoiKy: string | null
@@ -154875,13 +154835,14 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
-        hinhThucKhenThuong?: boolean
+        hinhThucKhenThuongId?: boolean
         capKhenThuong?: boolean
         soQuyetDinh?: boolean
         nguoiKy?: boolean
         ngayNhanQuyetDinh?: boolean
         lyDo?: boolean
         userProfileId?: boolean
+        hinhThucKhenThuong?: boolean | KhenThuong$hinhThucKhenThuongArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["khenThuong"]>;
     export type KhenThuongSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -154893,13 +154854,14 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
-        hinhThucKhenThuong?: boolean
+        hinhThucKhenThuongId?: boolean
         capKhenThuong?: boolean
         soQuyetDinh?: boolean
         nguoiKy?: boolean
         ngayNhanQuyetDinh?: boolean
         lyDo?: boolean
         userProfileId?: boolean
+        hinhThucKhenThuong?: boolean | KhenThuong$hinhThucKhenThuongArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["khenThuong"]>;
     export type KhenThuongSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -154911,13 +154873,14 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
-        hinhThucKhenThuong?: boolean
+        hinhThucKhenThuongId?: boolean
         capKhenThuong?: boolean
         soQuyetDinh?: boolean
         nguoiKy?: boolean
         ngayNhanQuyetDinh?: boolean
         lyDo?: boolean
         userProfileId?: boolean
+        hinhThucKhenThuong?: boolean | KhenThuong$hinhThucKhenThuongArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["khenThuong"]>;
     export type KhenThuongSelectScalar = {
@@ -154929,7 +154892,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         createdBy?: boolean
-        hinhThucKhenThuong?: boolean
+        hinhThucKhenThuongId?: boolean
         capKhenThuong?: boolean
         soQuyetDinh?: boolean
         nguoiKy?: boolean
@@ -154937,19 +154900,23 @@ export namespace Prisma {
         lyDo?: boolean
         userProfileId?: boolean
     };
-    export type KhenThuongOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "hinhThucKhenThuong" | "capKhenThuong" | "soQuyetDinh" | "nguoiKy" | "ngayNhanQuyetDinh" | "lyDo" | "userProfileId", ExtArgs["result"]["khenThuong"]>;
+    export type KhenThuongOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "hinhThucKhenThuongId" | "capKhenThuong" | "soQuyetDinh" | "nguoiKy" | "ngayNhanQuyetDinh" | "lyDo" | "userProfileId", ExtArgs["result"]["khenThuong"]>;
     export type KhenThuongInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        hinhThucKhenThuong?: boolean | KhenThuong$hinhThucKhenThuongArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type KhenThuongIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        hinhThucKhenThuong?: boolean | KhenThuong$hinhThucKhenThuongArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type KhenThuongIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        hinhThucKhenThuong?: boolean | KhenThuong$hinhThucKhenThuongArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type $KhenThuongPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "KhenThuong"
         objects: {
+            hinhThucKhenThuong: Prisma.$DM_HinhThucKhenThuongChinhQuyenPayload<ExtArgs> | null
             userProfile: Prisma.$UserProfilePayload<ExtArgs>
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -154961,7 +154928,7 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             createdBy: string | null
-            hinhThucKhenThuong: string | null
+            hinhThucKhenThuongId: string | null
             capKhenThuong: string | null
             soQuyetDinh: string | null
             nguoiKy: string | null
@@ -155351,6 +155318,24 @@ export namespace Prisma {
          * Limit how many KhenThuongs to delete.
          */
         limit?: number
+    };
+    /**
+     * KhenThuong.hinhThucKhenThuong
+     */
+    export type KhenThuong$hinhThucKhenThuongArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_HinhThucKhenThuongChinhQuyen
+         */
+        select?: DM_HinhThucKhenThuongChinhQuyenSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_HinhThucKhenThuongChinhQuyen
+         */
+        omit?: DM_HinhThucKhenThuongChinhQuyenOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_HinhThucKhenThuongChinhQuyenInclude<ExtArgs> | null
+        where?: DM_HinhThucKhenThuongChinhQuyenWhereInput
     };
     /**
      * KhenThuong without action
@@ -321439,7 +321424,7 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        userProfile?: boolean | DM_HinhThucKhenThuongChinhQuyen$userProfileArgs<ExtArgs>
+        khenThuong?: boolean | DM_HinhThucKhenThuongChinhQuyen$khenThuongArgs<ExtArgs>
         _count?: boolean | DM_HinhThucKhenThuongChinhQuyenCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_HinhThucKhenThuongChinhQuyen"]>;
     export type DM_HinhThucKhenThuongChinhQuyenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -321477,7 +321462,7 @@ export namespace Prisma {
     };
     export type DM_HinhThucKhenThuongChinhQuyenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["dM_HinhThucKhenThuongChinhQuyen"]>;
     export type DM_HinhThucKhenThuongChinhQuyenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        userProfile?: boolean | DM_HinhThucKhenThuongChinhQuyen$userProfileArgs<ExtArgs>
+        khenThuong?: boolean | DM_HinhThucKhenThuongChinhQuyen$khenThuongArgs<ExtArgs>
         _count?: boolean | DM_HinhThucKhenThuongChinhQuyenCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type DM_HinhThucKhenThuongChinhQuyenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -321485,7 +321470,7 @@ export namespace Prisma {
     export type $DM_HinhThucKhenThuongChinhQuyenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DM_HinhThucKhenThuongChinhQuyen"
         objects: {
-            userProfile: Prisma.$UserProfilePayload<ExtArgs>[]
+            khenThuong: Prisma.$KhenThuongPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -321874,27 +321859,27 @@ export namespace Prisma {
         limit?: number
     };
     /**
-     * DM_HinhThucKhenThuongChinhQuyen.userProfile
+     * DM_HinhThucKhenThuongChinhQuyen.khenThuong
      */
-    export type DM_HinhThucKhenThuongChinhQuyen$userProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    export type DM_HinhThucKhenThuongChinhQuyen$khenThuongArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
-         * Select specific fields to fetch from the UserProfile
+         * Select specific fields to fetch from the KhenThuong
          */
-        select?: UserProfileSelect<ExtArgs> | null
+        select?: KhenThuongSelect<ExtArgs> | null
         /**
-         * Omit specific fields from the UserProfile
+         * Omit specific fields from the KhenThuong
          */
-        omit?: UserProfileOmit<ExtArgs> | null
+        omit?: KhenThuongOmit<ExtArgs> | null
         /**
          * Choose, which related nodes to fetch as well
          */
-        include?: UserProfileInclude<ExtArgs> | null
-        where?: UserProfileWhereInput
-        orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
-        cursor?: UserProfileWhereUniqueInput
+        include?: KhenThuongInclude<ExtArgs> | null
+        where?: KhenThuongWhereInput
+        orderBy?: KhenThuongOrderByWithRelationInput | KhenThuongOrderByWithRelationInput[]
+        cursor?: KhenThuongWhereUniqueInput
         take?: number
         skip?: number
-        distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
+        distinct?: KhenThuongScalarFieldEnum | KhenThuongScalarFieldEnum[]
     };
     /**
      * DM_HinhThucKhenThuongChinhQuyen without action
@@ -339563,7 +339548,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: StringNullableFilter<"UserProfile"> | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: StringNullableFilter<"UserProfile"> | string | null
         dM_XepLoaiDanhGiaCanBoId?: StringNullableFilter<"UserProfile"> | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
         dM_HinhThucKhenThuongDangId?: StringNullableFilter<"UserProfile"> | string | null
         unionDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
         unionPlace?: StringNullableFilter<"UserProfile"> | string | null
@@ -339624,7 +339608,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: XOR<DM_ChucDanhCMNVKySuNullableScalarRelationFilter, DM_ChucDanhCMNVKySuWhereInput> | null
         dM_XepLoaiDanhGiaChatLuongDangVien?: XOR<DM_XepLoaiDanhGiaChatLuongDangVienNullableScalarRelationFilter, DM_XepLoaiDanhGiaChatLuongDangVienWhereInput> | null
         dM_XepLoaiDanhGiaCanBo?: XOR<DM_XepLoaiDanhGiaCanBoNullableScalarRelationFilter, DM_XepLoaiDanhGiaCanBoWhereInput> | null
-        dM_HinhThucKhenThuongChinhQuyen?: XOR<DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter, DM_HinhThucKhenThuongChinhQuyenWhereInput> | null
         dM_HinhThucKhenThuongDang?: XOR<DM_HinhThucKhenThuongDangNullableScalarRelationFilter, DM_HinhThucKhenThuongDangWhereInput> | null
         positionCPV?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
         chucVuChinhQuyen?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
@@ -339782,7 +339765,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: SortOrderInput | SortOrder
         dM_XepLoaiDanhGiaChatLuongDangVienId?: SortOrderInput | SortOrder
         dM_XepLoaiDanhGiaCanBoId?: SortOrderInput | SortOrder
-        dM_HinhThucKhenThuongChinhQuyenId?: SortOrderInput | SortOrder
         dM_HinhThucKhenThuongDangId?: SortOrderInput | SortOrder
         unionDate?: SortOrderInput | SortOrder
         unionPlace?: SortOrderInput | SortOrder
@@ -339843,7 +339825,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuOrderByWithRelationInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienOrderByWithRelationInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoOrderByWithRelationInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenOrderByWithRelationInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangOrderByWithRelationInput
         positionCPV?: DM_ChucVuOrderByWithRelationInput
         chucVuChinhQuyen?: DM_ChucVuOrderByWithRelationInput
@@ -340005,7 +339986,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: StringNullableFilter<"UserProfile"> | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: StringNullableFilter<"UserProfile"> | string | null
         dM_XepLoaiDanhGiaCanBoId?: StringNullableFilter<"UserProfile"> | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
         dM_HinhThucKhenThuongDangId?: StringNullableFilter<"UserProfile"> | string | null
         unionDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
         unionPlace?: StringNullableFilter<"UserProfile"> | string | null
@@ -340066,7 +340046,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: XOR<DM_ChucDanhCMNVKySuNullableScalarRelationFilter, DM_ChucDanhCMNVKySuWhereInput> | null
         dM_XepLoaiDanhGiaChatLuongDangVien?: XOR<DM_XepLoaiDanhGiaChatLuongDangVienNullableScalarRelationFilter, DM_XepLoaiDanhGiaChatLuongDangVienWhereInput> | null
         dM_XepLoaiDanhGiaCanBo?: XOR<DM_XepLoaiDanhGiaCanBoNullableScalarRelationFilter, DM_XepLoaiDanhGiaCanBoWhereInput> | null
-        dM_HinhThucKhenThuongChinhQuyen?: XOR<DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter, DM_HinhThucKhenThuongChinhQuyenWhereInput> | null
         dM_HinhThucKhenThuongDang?: XOR<DM_HinhThucKhenThuongDangNullableScalarRelationFilter, DM_HinhThucKhenThuongDangWhereInput> | null
         positionCPV?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
         chucVuChinhQuyen?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
@@ -340224,7 +340203,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: SortOrderInput | SortOrder
         dM_XepLoaiDanhGiaChatLuongDangVienId?: SortOrderInput | SortOrder
         dM_XepLoaiDanhGiaCanBoId?: SortOrderInput | SortOrder
-        dM_HinhThucKhenThuongChinhQuyenId?: SortOrderInput | SortOrder
         dM_HinhThucKhenThuongDangId?: SortOrderInput | SortOrder
         unionDate?: SortOrderInput | SortOrder
         unionPlace?: SortOrderInput | SortOrder
@@ -340362,7 +340340,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         dM_XepLoaiDanhGiaCanBoId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         dM_HinhThucKhenThuongDangId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         unionDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
         unionPlace?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
@@ -341822,13 +341799,14 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"KhenThuong"> | Date | string
         updatedAt?: DateTimeFilter<"KhenThuong"> | Date | string
         createdBy?: UuidNullableFilter<"KhenThuong"> | string | null
-        hinhThucKhenThuong?: StringNullableFilter<"KhenThuong"> | string | null
+        hinhThucKhenThuongId?: StringNullableFilter<"KhenThuong"> | string | null
         capKhenThuong?: StringNullableFilter<"KhenThuong"> | string | null
         soQuyetDinh?: StringNullableFilter<"KhenThuong"> | string | null
         nguoiKy?: StringNullableFilter<"KhenThuong"> | string | null
         ngayNhanQuyetDinh?: DateTimeNullableFilter<"KhenThuong"> | Date | string | null
         lyDo?: StringNullableFilter<"KhenThuong"> | string | null
         userProfileId?: StringFilter<"KhenThuong"> | string
+        hinhThucKhenThuong?: XOR<DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter, DM_HinhThucKhenThuongChinhQuyenWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     };
     export type KhenThuongOrderByWithRelationInput = {
@@ -341840,13 +341818,14 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
-        hinhThucKhenThuong?: SortOrderInput | SortOrder
+        hinhThucKhenThuongId?: SortOrderInput | SortOrder
         capKhenThuong?: SortOrderInput | SortOrder
         soQuyetDinh?: SortOrderInput | SortOrder
         nguoiKy?: SortOrderInput | SortOrder
         ngayNhanQuyetDinh?: SortOrderInput | SortOrder
         lyDo?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
+        hinhThucKhenThuong?: DM_HinhThucKhenThuongChinhQuyenOrderByWithRelationInput
         userProfile?: UserProfileOrderByWithRelationInput
         _relevance?: KhenThuongOrderByRelevanceInput
     };
@@ -341862,13 +341841,14 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"KhenThuong"> | Date | string
         updatedAt?: DateTimeFilter<"KhenThuong"> | Date | string
         createdBy?: UuidNullableFilter<"KhenThuong"> | string | null
-        hinhThucKhenThuong?: StringNullableFilter<"KhenThuong"> | string | null
+        hinhThucKhenThuongId?: StringNullableFilter<"KhenThuong"> | string | null
         capKhenThuong?: StringNullableFilter<"KhenThuong"> | string | null
         soQuyetDinh?: StringNullableFilter<"KhenThuong"> | string | null
         nguoiKy?: StringNullableFilter<"KhenThuong"> | string | null
         ngayNhanQuyetDinh?: DateTimeNullableFilter<"KhenThuong"> | Date | string | null
         lyDo?: StringNullableFilter<"KhenThuong"> | string | null
         userProfileId?: StringFilter<"KhenThuong"> | string
+        hinhThucKhenThuong?: XOR<DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter, DM_HinhThucKhenThuongChinhQuyenWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     }, "id" | "code">;
     export type KhenThuongOrderByWithAggregationInput = {
@@ -341880,7 +341860,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
-        hinhThucKhenThuong?: SortOrderInput | SortOrder
+        hinhThucKhenThuongId?: SortOrderInput | SortOrder
         capKhenThuong?: SortOrderInput | SortOrder
         soQuyetDinh?: SortOrderInput | SortOrder
         nguoiKy?: SortOrderInput | SortOrder
@@ -341903,7 +341883,7 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"KhenThuong"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"KhenThuong"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"KhenThuong"> | string | null
-        hinhThucKhenThuong?: StringNullableWithAggregatesFilter<"KhenThuong"> | string | null
+        hinhThucKhenThuongId?: StringNullableWithAggregatesFilter<"KhenThuong"> | string | null
         capKhenThuong?: StringNullableWithAggregatesFilter<"KhenThuong"> | string | null
         soQuyetDinh?: StringNullableWithAggregatesFilter<"KhenThuong"> | string | null
         nguoiKy?: StringNullableWithAggregatesFilter<"KhenThuong"> | string | null
@@ -364412,7 +364392,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"DM_HinhThucKhenThuongChinhQuyen"> | Date | string
         createdBy?: UuidNullableFilter<"DM_HinhThucKhenThuongChinhQuyen"> | string | null
         name?: StringFilter<"DM_HinhThucKhenThuongChinhQuyen"> | string
-        userProfile?: UserProfileListRelationFilter
+        khenThuong?: KhenThuongListRelationFilter
     };
     export type DM_HinhThucKhenThuongChinhQuyenOrderByWithRelationInput = {
         id?: SortOrder
@@ -364424,7 +364404,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
-        userProfile?: UserProfileOrderByRelationAggregateInput
+        khenThuong?: KhenThuongOrderByRelationAggregateInput
         _relevance?: DM_HinhThucKhenThuongChinhQuyenOrderByRelevanceInput
     };
     export type DM_HinhThucKhenThuongChinhQuyenWhereUniqueInput = Prisma.AtLeast<{
@@ -364440,7 +364420,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"DM_HinhThucKhenThuongChinhQuyen"> | Date | string
         updatedAt?: DateTimeFilter<"DM_HinhThucKhenThuongChinhQuyen"> | Date | string
         createdBy?: UuidNullableFilter<"DM_HinhThucKhenThuongChinhQuyen"> | string | null
-        userProfile?: UserProfileListRelationFilter
+        khenThuong?: KhenThuongListRelationFilter
     }, "id" | "code" | "name">;
     export type DM_HinhThucKhenThuongChinhQuyenOrderByWithAggregationInput = {
         id?: SortOrder
@@ -366649,7 +366629,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -366807,7 +366786,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -366997,7 +366975,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -367155,7 +367132,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -367329,7 +367305,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -367544,7 +367519,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -369129,12 +369103,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        hinhThucKhenThuong?: string | null
         capKhenThuong?: string | null
         soQuyetDinh?: string | null
         nguoiKy?: string | null
         ngayNhanQuyetDinh?: Date | string | null
         lyDo?: string | null
+        hinhThucKhenThuong?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutKhenThuongInput
         userProfile: UserProfileCreateNestedOneWithoutKhenThuongInput
     };
     export type KhenThuongUncheckedCreateInput = {
@@ -369146,7 +369120,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        hinhThucKhenThuong?: string | null
+        hinhThucKhenThuongId?: string | null
         capKhenThuong?: string | null
         soQuyetDinh?: string | null
         nguoiKy?: string | null
@@ -369163,12 +369137,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        hinhThucKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lyDo?: NullableStringFieldUpdateOperationsInput | string | null
+        hinhThucKhenThuong?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutKhenThuongNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutKhenThuongNestedInput
     };
     export type KhenThuongUncheckedUpdateInput = {
@@ -369180,7 +369154,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        hinhThucKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
+        hinhThucKhenThuongId?: NullableStringFieldUpdateOperationsInput | string | null
         capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -369197,7 +369171,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        hinhThucKhenThuong?: string | null
+        hinhThucKhenThuongId?: string | null
         capKhenThuong?: string | null
         soQuyetDinh?: string | null
         nguoiKy?: string | null
@@ -369214,7 +369188,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        hinhThucKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -369230,7 +369203,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        hinhThucKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
+        hinhThucKhenThuongId?: NullableStringFieldUpdateOperationsInput | string | null
         capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -394763,7 +394736,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        userProfile?: UserProfileCreateNestedManyWithoutDM_HinhThucKhenThuongChinhQuyenInput
+        khenThuong?: KhenThuongCreateNestedManyWithoutHinhThucKhenThuongInput
     };
     export type DM_HinhThucKhenThuongChinhQuyenUncheckedCreateInput = {
         id?: string
@@ -394775,7 +394748,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        userProfile?: UserProfileUncheckedCreateNestedManyWithoutDM_HinhThucKhenThuongChinhQuyenInput
+        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutHinhThucKhenThuongInput
     };
     export type DM_HinhThucKhenThuongChinhQuyenUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -394787,7 +394760,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        userProfile?: UserProfileUpdateManyWithoutDM_HinhThucKhenThuongChinhQuyenNestedInput
+        khenThuong?: KhenThuongUpdateManyWithoutHinhThucKhenThuongNestedInput
     };
     export type DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -394799,7 +394772,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        userProfile?: UserProfileUncheckedUpdateManyWithoutDM_HinhThucKhenThuongChinhQuyenNestedInput
+        khenThuong?: KhenThuongUncheckedUpdateManyWithoutHinhThucKhenThuongNestedInput
     };
     export type DM_HinhThucKhenThuongChinhQuyenCreateManyInput = {
         id?: string
@@ -397348,10 +397321,6 @@ export namespace Prisma {
         is?: DM_XepLoaiDanhGiaCanBoWhereInput | null
         isNot?: DM_XepLoaiDanhGiaCanBoWhereInput | null
     };
-    export type DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter = {
-        is?: DM_HinhThucKhenThuongChinhQuyenWhereInput | null
-        isNot?: DM_HinhThucKhenThuongChinhQuyenWhereInput | null
-    };
     export type DM_HinhThucKhenThuongDangNullableScalarRelationFilter = {
         is?: DM_HinhThucKhenThuongDangWhereInput | null
         isNot?: DM_HinhThucKhenThuongDangWhereInput | null
@@ -397805,7 +397774,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: SortOrder
         dM_XepLoaiDanhGiaChatLuongDangVienId?: SortOrder
         dM_XepLoaiDanhGiaCanBoId?: SortOrder
-        dM_HinhThucKhenThuongChinhQuyenId?: SortOrder
         dM_HinhThucKhenThuongDangId?: SortOrder
         unionDate?: SortOrder
         unionPlace?: SortOrder
@@ -397941,7 +397909,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: SortOrder
         dM_XepLoaiDanhGiaChatLuongDangVienId?: SortOrder
         dM_XepLoaiDanhGiaCanBoId?: SortOrder
-        dM_HinhThucKhenThuongChinhQuyenId?: SortOrder
         dM_HinhThucKhenThuongDangId?: SortOrder
         unionDate?: SortOrder
         unionPlace?: SortOrder
@@ -398071,7 +398038,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: SortOrder
         dM_XepLoaiDanhGiaChatLuongDangVienId?: SortOrder
         dM_XepLoaiDanhGiaCanBoId?: SortOrder
-        dM_HinhThucKhenThuongChinhQuyenId?: SortOrder
         dM_HinhThucKhenThuongDangId?: SortOrder
         unionDate?: SortOrder
         unionPlace?: SortOrder
@@ -398971,6 +398937,10 @@ export namespace Prisma {
         dM_TinhTrangDiHocTapId?: SortOrder
         userProfileId?: SortOrder
     };
+    export type DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter = {
+        is?: DM_HinhThucKhenThuongChinhQuyenWhereInput | null
+        isNot?: DM_HinhThucKhenThuongChinhQuyenWhereInput | null
+    };
     export type KhenThuongOrderByRelevanceInput = {
         fields: KhenThuongOrderByRelevanceFieldEnum | KhenThuongOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -398985,7 +398955,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
-        hinhThucKhenThuong?: SortOrder
+        hinhThucKhenThuongId?: SortOrder
         capKhenThuong?: SortOrder
         soQuyetDinh?: SortOrder
         nguoiKy?: SortOrder
@@ -399002,7 +398972,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
-        hinhThucKhenThuong?: SortOrder
+        hinhThucKhenThuongId?: SortOrder
         capKhenThuong?: SortOrder
         soQuyetDinh?: SortOrder
         nguoiKy?: SortOrder
@@ -399019,7 +398989,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrder
-        hinhThucKhenThuong?: SortOrder
+        hinhThucKhenThuongId?: SortOrder
         capKhenThuong?: SortOrder
         soQuyetDinh?: SortOrder
         nguoiKy?: SortOrder
@@ -415391,11 +415361,6 @@ export namespace Prisma {
         connectOrCreate?: DM_XepLoaiDanhGiaCanBoCreateOrConnectWithoutUserProfileInput
         connect?: DM_XepLoaiDanhGiaCanBoWhereUniqueInput
     };
-    export type DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput = {
-        create?: XOR<DM_HinhThucKhenThuongChinhQuyenCreateWithoutUserProfileInput, DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutUserProfileInput>
-        connectOrCreate?: DM_HinhThucKhenThuongChinhQuyenCreateOrConnectWithoutUserProfileInput
-        connect?: DM_HinhThucKhenThuongChinhQuyenWhereUniqueInput
-    };
     export type DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput = {
         create?: XOR<DM_HinhThucKhenThuongDangCreateWithoutUserProfileInput, DM_HinhThucKhenThuongDangUncheckedCreateWithoutUserProfileInput>
         connectOrCreate?: DM_HinhThucKhenThuongDangCreateOrConnectWithoutUserProfileInput
@@ -416307,15 +416272,6 @@ export namespace Prisma {
         delete?: DM_XepLoaiDanhGiaCanBoWhereInput | boolean
         connect?: DM_XepLoaiDanhGiaCanBoWhereUniqueInput
         update?: XOR<XOR<DM_XepLoaiDanhGiaCanBoUpdateToOneWithWhereWithoutUserProfileInput, DM_XepLoaiDanhGiaCanBoUpdateWithoutUserProfileInput>, DM_XepLoaiDanhGiaCanBoUncheckedUpdateWithoutUserProfileInput>
-    };
-    export type DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput = {
-        create?: XOR<DM_HinhThucKhenThuongChinhQuyenCreateWithoutUserProfileInput, DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutUserProfileInput>
-        connectOrCreate?: DM_HinhThucKhenThuongChinhQuyenCreateOrConnectWithoutUserProfileInput
-        upsert?: DM_HinhThucKhenThuongChinhQuyenUpsertWithoutUserProfileInput
-        disconnect?: DM_HinhThucKhenThuongChinhQuyenWhereInput | boolean
-        delete?: DM_HinhThucKhenThuongChinhQuyenWhereInput | boolean
-        connect?: DM_HinhThucKhenThuongChinhQuyenWhereUniqueInput
-        update?: XOR<XOR<DM_HinhThucKhenThuongChinhQuyenUpdateToOneWithWhereWithoutUserProfileInput, DM_HinhThucKhenThuongChinhQuyenUpdateWithoutUserProfileInput>, DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateWithoutUserProfileInput>
     };
     export type DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput = {
         create?: XOR<DM_HinhThucKhenThuongDangCreateWithoutUserProfileInput, DM_HinhThucKhenThuongDangUncheckedCreateWithoutUserProfileInput>
@@ -417931,10 +417887,24 @@ export namespace Prisma {
         connect?: UserProfileWhereUniqueInput
         update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutQuaTrinhCuDiDaoTaoInput, UserProfileUpdateWithoutQuaTrinhCuDiDaoTaoInput>, UserProfileUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput>
     };
+    export type DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutKhenThuongInput = {
+        create?: XOR<DM_HinhThucKhenThuongChinhQuyenCreateWithoutKhenThuongInput, DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutKhenThuongInput>
+        connectOrCreate?: DM_HinhThucKhenThuongChinhQuyenCreateOrConnectWithoutKhenThuongInput
+        connect?: DM_HinhThucKhenThuongChinhQuyenWhereUniqueInput
+    };
     export type UserProfileCreateNestedOneWithoutKhenThuongInput = {
         create?: XOR<UserProfileCreateWithoutKhenThuongInput, UserProfileUncheckedCreateWithoutKhenThuongInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutKhenThuongInput
         connect?: UserProfileWhereUniqueInput
+    };
+    export type DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutKhenThuongNestedInput = {
+        create?: XOR<DM_HinhThucKhenThuongChinhQuyenCreateWithoutKhenThuongInput, DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutKhenThuongInput>
+        connectOrCreate?: DM_HinhThucKhenThuongChinhQuyenCreateOrConnectWithoutKhenThuongInput
+        upsert?: DM_HinhThucKhenThuongChinhQuyenUpsertWithoutKhenThuongInput
+        disconnect?: DM_HinhThucKhenThuongChinhQuyenWhereInput | boolean
+        delete?: DM_HinhThucKhenThuongChinhQuyenWhereInput | boolean
+        connect?: DM_HinhThucKhenThuongChinhQuyenWhereUniqueInput
+        update?: XOR<XOR<DM_HinhThucKhenThuongChinhQuyenUpdateToOneWithWhereWithoutKhenThuongInput, DM_HinhThucKhenThuongChinhQuyenUpdateWithoutKhenThuongInput>, DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateWithoutKhenThuongInput>
     };
     export type UserProfileUpdateOneRequiredWithoutKhenThuongNestedInput = {
         create?: XOR<UserProfileCreateWithoutKhenThuongInput, UserProfileUncheckedCreateWithoutKhenThuongInput>
@@ -437399,43 +437369,43 @@ export namespace Prisma {
         updateMany?: UserProfileUpdateManyWithWhereWithoutTrangThaiLamViecInput | UserProfileUpdateManyWithWhereWithoutTrangThaiLamViecInput[]
         deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
     };
-    export type UserProfileCreateNestedManyWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
-        create?: XOR<UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput, UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput> | UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput[] | UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        connectOrCreate?: UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        createMany?: UserProfileCreateManyDM_HinhThucKhenThuongChinhQuyenInputEnvelope
-        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    export type KhenThuongCreateNestedManyWithoutHinhThucKhenThuongInput = {
+        create?: XOR<KhenThuongCreateWithoutHinhThucKhenThuongInput, KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput> | KhenThuongCreateWithoutHinhThucKhenThuongInput[] | KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput[]
+        connectOrCreate?: KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput | KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput[]
+        createMany?: KhenThuongCreateManyHinhThucKhenThuongInputEnvelope
+        connect?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
     };
-    export type UserProfileUncheckedCreateNestedManyWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
-        create?: XOR<UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput, UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput> | UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput[] | UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        connectOrCreate?: UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        createMany?: UserProfileCreateManyDM_HinhThucKhenThuongChinhQuyenInputEnvelope
-        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    export type KhenThuongUncheckedCreateNestedManyWithoutHinhThucKhenThuongInput = {
+        create?: XOR<KhenThuongCreateWithoutHinhThucKhenThuongInput, KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput> | KhenThuongCreateWithoutHinhThucKhenThuongInput[] | KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput[]
+        connectOrCreate?: KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput | KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput[]
+        createMany?: KhenThuongCreateManyHinhThucKhenThuongInputEnvelope
+        connect?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
     };
-    export type UserProfileUpdateManyWithoutDM_HinhThucKhenThuongChinhQuyenNestedInput = {
-        create?: XOR<UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput, UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput> | UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput[] | UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        connectOrCreate?: UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        upsert?: UserProfileUpsertWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileUpsertWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        createMany?: UserProfileCreateManyDM_HinhThucKhenThuongChinhQuyenInputEnvelope
-        set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-        disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-        delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-        update?: UserProfileUpdateWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileUpdateWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        updateMany?: UserProfileUpdateManyWithWhereWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileUpdateManyWithWhereWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+    export type KhenThuongUpdateManyWithoutHinhThucKhenThuongNestedInput = {
+        create?: XOR<KhenThuongCreateWithoutHinhThucKhenThuongInput, KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput> | KhenThuongCreateWithoutHinhThucKhenThuongInput[] | KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput[]
+        connectOrCreate?: KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput | KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput[]
+        upsert?: KhenThuongUpsertWithWhereUniqueWithoutHinhThucKhenThuongInput | KhenThuongUpsertWithWhereUniqueWithoutHinhThucKhenThuongInput[]
+        createMany?: KhenThuongCreateManyHinhThucKhenThuongInputEnvelope
+        set?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
+        disconnect?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
+        delete?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
+        connect?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
+        update?: KhenThuongUpdateWithWhereUniqueWithoutHinhThucKhenThuongInput | KhenThuongUpdateWithWhereUniqueWithoutHinhThucKhenThuongInput[]
+        updateMany?: KhenThuongUpdateManyWithWhereWithoutHinhThucKhenThuongInput | KhenThuongUpdateManyWithWhereWithoutHinhThucKhenThuongInput[]
+        deleteMany?: KhenThuongScalarWhereInput | KhenThuongScalarWhereInput[]
     };
-    export type UserProfileUncheckedUpdateManyWithoutDM_HinhThucKhenThuongChinhQuyenNestedInput = {
-        create?: XOR<UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput, UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput> | UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput[] | UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        connectOrCreate?: UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        upsert?: UserProfileUpsertWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileUpsertWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        createMany?: UserProfileCreateManyDM_HinhThucKhenThuongChinhQuyenInputEnvelope
-        set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-        disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-        delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-        update?: UserProfileUpdateWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileUpdateWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        updateMany?: UserProfileUpdateManyWithWhereWithoutDM_HinhThucKhenThuongChinhQuyenInput | UserProfileUpdateManyWithWhereWithoutDM_HinhThucKhenThuongChinhQuyenInput[]
-        deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+    export type KhenThuongUncheckedUpdateManyWithoutHinhThucKhenThuongNestedInput = {
+        create?: XOR<KhenThuongCreateWithoutHinhThucKhenThuongInput, KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput> | KhenThuongCreateWithoutHinhThucKhenThuongInput[] | KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput[]
+        connectOrCreate?: KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput | KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput[]
+        upsert?: KhenThuongUpsertWithWhereUniqueWithoutHinhThucKhenThuongInput | KhenThuongUpsertWithWhereUniqueWithoutHinhThucKhenThuongInput[]
+        createMany?: KhenThuongCreateManyHinhThucKhenThuongInputEnvelope
+        set?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
+        disconnect?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
+        delete?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
+        connect?: KhenThuongWhereUniqueInput | KhenThuongWhereUniqueInput[]
+        update?: KhenThuongUpdateWithWhereUniqueWithoutHinhThucKhenThuongInput | KhenThuongUpdateWithWhereUniqueWithoutHinhThucKhenThuongInput[]
+        updateMany?: KhenThuongUpdateManyWithWhereWithoutHinhThucKhenThuongInput | KhenThuongUpdateManyWithWhereWithoutHinhThucKhenThuongInput[]
+        deleteMany?: KhenThuongScalarWhereInput | KhenThuongScalarWhereInput[]
     };
     export type UserProfileCreateNestedManyWithoutDM_HinhThucKhenThuongDangInput = {
         create?: XOR<UserProfileCreateWithoutDM_HinhThucKhenThuongDangInput, UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongDangInput> | UserProfileCreateWithoutDM_HinhThucKhenThuongDangInput[] | UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongDangInput[]
@@ -439692,7 +439662,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -439849,7 +439818,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -440051,7 +440019,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -440208,7 +440175,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -441929,32 +441895,6 @@ export namespace Prisma {
         where: DM_XepLoaiDanhGiaCanBoWhereUniqueInput
         create: XOR<DM_XepLoaiDanhGiaCanBoCreateWithoutUserProfileInput, DM_XepLoaiDanhGiaCanBoUncheckedCreateWithoutUserProfileInput>
     };
-    export type DM_HinhThucKhenThuongChinhQuyenCreateWithoutUserProfileInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-    };
-    export type DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutUserProfileInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-    };
-    export type DM_HinhThucKhenThuongChinhQuyenCreateOrConnectWithoutUserProfileInput = {
-        where: DM_HinhThucKhenThuongChinhQuyenWhereUniqueInput
-        create: XOR<DM_HinhThucKhenThuongChinhQuyenCreateWithoutUserProfileInput, DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutUserProfileInput>
-    };
     export type DM_HinhThucKhenThuongDangCreateWithoutUserProfileInput = {
         id?: string
         code?: string | null
@@ -442488,12 +442428,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        hinhThucKhenThuong?: string | null
         capKhenThuong?: string | null
         soQuyetDinh?: string | null
         nguoiKy?: string | null
         ngayNhanQuyetDinh?: Date | string | null
         lyDo?: string | null
+        hinhThucKhenThuong?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutKhenThuongInput
     };
     export type KhenThuongUncheckedCreateWithoutUserProfileInput = {
         id?: string
@@ -442504,7 +442444,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        hinhThucKhenThuong?: string | null
+        hinhThucKhenThuongId?: string | null
         capKhenThuong?: string | null
         soQuyetDinh?: string | null
         nguoiKy?: string | null
@@ -445837,37 +445777,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
     };
-    export type DM_HinhThucKhenThuongChinhQuyenUpsertWithoutUserProfileInput = {
-        update: XOR<DM_HinhThucKhenThuongChinhQuyenUpdateWithoutUserProfileInput, DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateWithoutUserProfileInput>
-        create: XOR<DM_HinhThucKhenThuongChinhQuyenCreateWithoutUserProfileInput, DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutUserProfileInput>
-        where?: DM_HinhThucKhenThuongChinhQuyenWhereInput
-    };
-    export type DM_HinhThucKhenThuongChinhQuyenUpdateToOneWithWhereWithoutUserProfileInput = {
-        where?: DM_HinhThucKhenThuongChinhQuyenWhereInput
-        data: XOR<DM_HinhThucKhenThuongChinhQuyenUpdateWithoutUserProfileInput, DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateWithoutUserProfileInput>
-    };
-    export type DM_HinhThucKhenThuongChinhQuyenUpdateWithoutUserProfileInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-    };
-    export type DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateWithoutUserProfileInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-    };
     export type DM_HinhThucKhenThuongDangUpsertWithoutUserProfileInput = {
         update: XOR<DM_HinhThucKhenThuongDangUpdateWithoutUserProfileInput, DM_HinhThucKhenThuongDangUncheckedUpdateWithoutUserProfileInput>
         create: XOR<DM_HinhThucKhenThuongDangCreateWithoutUserProfileInput, DM_HinhThucKhenThuongDangUncheckedCreateWithoutUserProfileInput>
@@ -446363,7 +446272,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"KhenThuong"> | Date | string
         updatedAt?: DateTimeFilter<"KhenThuong"> | Date | string
         createdBy?: UuidNullableFilter<"KhenThuong"> | string | null
-        hinhThucKhenThuong?: StringNullableFilter<"KhenThuong"> | string | null
+        hinhThucKhenThuongId?: StringNullableFilter<"KhenThuong"> | string | null
         capKhenThuong?: StringNullableFilter<"KhenThuong"> | string | null
         soQuyetDinh?: StringNullableFilter<"KhenThuong"> | string | null
         nguoiKy?: StringNullableFilter<"KhenThuong"> | string | null
@@ -447679,7 +447588,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -447836,7 +447744,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -448083,7 +447990,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -448240,7 +448146,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -448479,7 +448384,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -448636,7 +448540,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -448893,7 +448796,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -449050,7 +448952,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -449289,7 +449190,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -449446,7 +449346,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -449703,7 +449602,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -449860,7 +449758,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -450161,7 +450058,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -450318,7 +450214,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -450647,7 +450542,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -450804,7 +450698,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -451019,7 +450912,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -451176,7 +451068,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -451409,7 +451300,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -451566,7 +451456,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -451755,7 +451644,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -451912,7 +451800,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -452140,7 +452027,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -452297,7 +452183,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -452517,7 +452402,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -452674,7 +452558,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -452902,7 +452785,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -453059,7 +452941,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -453357,7 +453238,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -453514,7 +453394,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -453804,7 +453683,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -453961,7 +453839,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -454188,7 +454065,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -454345,7 +454221,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -454590,7 +454465,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -454747,7 +454621,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -454936,7 +454809,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -455093,7 +454965,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -455295,7 +455166,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -455452,7 +455322,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -455681,7 +455550,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -455838,7 +455706,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -456085,7 +455952,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -456242,7 +456108,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -456507,7 +456372,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -456664,7 +456528,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -456952,7 +456815,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -457109,7 +456971,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -457426,7 +457287,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -457583,7 +457443,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -457933,7 +457792,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -458090,7 +457948,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -458331,7 +458188,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -458488,7 +458344,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -458752,7 +458607,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -458909,7 +458763,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -458973,6 +458826,32 @@ export namespace Prisma {
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
+    };
+    export type DM_HinhThucKhenThuongChinhQuyenCreateWithoutKhenThuongInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+    };
+    export type DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutKhenThuongInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+    };
+    export type DM_HinhThucKhenThuongChinhQuyenCreateOrConnectWithoutKhenThuongInput = {
+        where: DM_HinhThucKhenThuongChinhQuyenWhereUniqueInput
+        create: XOR<DM_HinhThucKhenThuongChinhQuyenCreateWithoutKhenThuongInput, DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutKhenThuongInput>
     };
     export type UserProfileCreateWithoutKhenThuongInput = {
         id?: string
@@ -459098,7 +458977,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -459255,7 +459133,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -459323,6 +459200,37 @@ export namespace Prisma {
     export type UserProfileCreateOrConnectWithoutKhenThuongInput = {
         where: UserProfileWhereUniqueInput
         create: XOR<UserProfileCreateWithoutKhenThuongInput, UserProfileUncheckedCreateWithoutKhenThuongInput>
+    };
+    export type DM_HinhThucKhenThuongChinhQuyenUpsertWithoutKhenThuongInput = {
+        update: XOR<DM_HinhThucKhenThuongChinhQuyenUpdateWithoutKhenThuongInput, DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateWithoutKhenThuongInput>
+        create: XOR<DM_HinhThucKhenThuongChinhQuyenCreateWithoutKhenThuongInput, DM_HinhThucKhenThuongChinhQuyenUncheckedCreateWithoutKhenThuongInput>
+        where?: DM_HinhThucKhenThuongChinhQuyenWhereInput
+    };
+    export type DM_HinhThucKhenThuongChinhQuyenUpdateToOneWithWhereWithoutKhenThuongInput = {
+        where?: DM_HinhThucKhenThuongChinhQuyenWhereInput
+        data: XOR<DM_HinhThucKhenThuongChinhQuyenUpdateWithoutKhenThuongInput, DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateWithoutKhenThuongInput>
+    };
+    export type DM_HinhThucKhenThuongChinhQuyenUpdateWithoutKhenThuongInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+    };
+    export type DM_HinhThucKhenThuongChinhQuyenUncheckedUpdateWithoutKhenThuongInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
     };
     export type UserProfileUpsertWithoutKhenThuongInput = {
         update: XOR<UserProfileUpdateWithoutKhenThuongInput, UserProfileUncheckedUpdateWithoutKhenThuongInput>
@@ -459457,7 +459365,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -459614,7 +459521,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -459803,7 +459709,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -459960,7 +459865,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -460162,7 +460066,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -460319,7 +460222,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -460508,7 +460410,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -460665,7 +460566,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -460867,7 +460767,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -461024,7 +460923,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -461213,7 +461111,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -461370,7 +461267,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -461572,7 +461468,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -461729,7 +461624,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -461962,7 +461856,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -462119,7 +462012,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -462370,7 +462262,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -462527,7 +462418,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -462716,7 +462606,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -462873,7 +462762,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -463075,7 +462963,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -463232,7 +463119,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -463465,7 +463351,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -463622,7 +463507,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -463873,7 +463757,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -464030,7 +463913,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -464245,7 +464127,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -464402,7 +464283,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -464635,7 +464515,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -464792,7 +464671,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -464981,7 +464859,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -465138,7 +465015,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -465340,7 +465216,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -465497,7 +465372,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -465766,7 +465640,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -465923,7 +465796,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -466220,7 +466092,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -466377,7 +466248,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -466592,7 +466462,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -466749,7 +466618,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -466982,7 +466850,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -467139,7 +467006,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -467380,7 +467246,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -467537,7 +467402,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -467801,7 +467665,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -467958,7 +467821,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -468258,7 +468120,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -468415,7 +468276,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -468694,7 +468554,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: StringNullableFilter<"UserProfile"> | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: StringNullableFilter<"UserProfile"> | string | null
         dM_XepLoaiDanhGiaCanBoId?: StringNullableFilter<"UserProfile"> | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: StringNullableFilter<"UserProfile"> | string | null
         dM_HinhThucKhenThuongDangId?: StringNullableFilter<"UserProfile"> | string | null
         unionDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
         unionPlace?: StringNullableFilter<"UserProfile"> | string | null
@@ -469072,7 +468931,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -469229,7 +469087,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -469422,7 +469279,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -469579,7 +469435,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -469842,7 +469697,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -469999,7 +469853,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -470197,7 +470050,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -470354,7 +470206,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -470777,7 +470628,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -470934,7 +470784,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -471127,7 +470976,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -471284,7 +471132,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -471527,7 +471374,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -471684,7 +471530,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -471882,7 +471727,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -472039,7 +471883,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -472305,7 +472148,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -472462,7 +472304,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -472764,7 +472605,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -472921,7 +472761,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -473685,7 +473524,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -473842,7 +473680,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -474101,7 +473938,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -474258,7 +474094,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -474469,7 +474304,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
         relatives?: RelativeCreateNestedManyWithoutUserProfileInput
@@ -474626,7 +474460,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -474823,7 +474656,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         relatives?: RelativeCreateNestedManyWithoutUserProfileInput
@@ -474980,7 +474812,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -475408,7 +475239,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -475565,7 +475395,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -475826,7 +475655,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -475983,7 +475811,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -476244,7 +476071,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -476401,7 +476227,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -478188,7 +478013,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -478345,7 +478169,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -478659,7 +478482,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -478816,7 +478638,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -479193,7 +479014,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -479350,7 +479170,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -479622,7 +479441,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -479779,7 +479597,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -479976,7 +479793,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -480133,7 +479949,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -480330,7 +480145,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -480487,7 +480301,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -480684,7 +480497,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -480841,7 +480653,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -481157,7 +480968,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -481314,7 +481124,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -481511,7 +481320,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -481668,7 +481476,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -481865,7 +481672,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -482022,7 +481828,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -482219,7 +482024,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -482376,7 +482180,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -482676,7 +482479,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -482833,7 +482635,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -483030,7 +482831,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -483187,7 +482987,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -483384,7 +483183,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -483541,7 +483339,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -483738,7 +483535,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -483895,7 +483691,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -484144,7 +483939,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -484301,7 +484095,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -484498,7 +484291,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -484655,7 +484447,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -484852,7 +484643,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -485009,7 +484799,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -485206,7 +484995,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -485363,7 +485151,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -485612,7 +485399,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -485769,7 +485555,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -485966,7 +485751,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -486123,7 +485907,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -486320,7 +486103,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -486477,7 +486259,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -486674,7 +486455,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -486831,7 +486611,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -489864,7 +489643,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -490021,7 +489799,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -490304,7 +490081,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -490461,7 +490237,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -502173,7 +501948,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -502330,7 +502104,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -502643,7 +502416,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -502800,7 +502572,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -506799,7 +506570,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -506956,7 +506726,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -507273,7 +507042,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -507430,7 +507198,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508146,7 +507913,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -508303,7 +508069,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -516089,7 +515854,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -516246,7 +516010,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -517864,7 +517627,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -518021,7 +517783,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -524681,7 +524442,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -524838,7 +524598,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -526278,7 +526037,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -526435,7 +526193,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -527110,7 +526867,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -527267,7 +527023,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -527581,7 +527336,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -527738,7 +527492,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534902,7 +534655,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -535059,7 +534811,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -535379,7 +535130,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -535536,7 +535286,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -537741,7 +537490,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -537898,7 +537646,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -538139,7 +537886,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -538296,7 +538042,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -541318,7 +541063,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -541475,7 +541219,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -541958,7 +541701,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -542115,7 +541857,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546415,7 +546156,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -546572,7 +546312,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -546970,7 +546709,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -547127,7 +546865,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -547484,7 +547221,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -547641,7 +547377,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -547983,7 +547718,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -548140,7 +547874,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -556592,7 +556325,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -556749,7 +556481,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -557060,7 +556791,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -557217,7 +556947,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -557482,7 +557211,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -557639,7 +557367,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -557726,7 +557453,7 @@ export namespace Prisma {
         where: UserProfileScalarWhereInput
         data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutTrangThaiLamViecInput>
     };
-    export type UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
+    export type KhenThuongCreateWithoutHinhThucKhenThuongInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -557735,171 +557462,14 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        bLaNguoiDung?: boolean | null
-        bLaGiangVien?: boolean | null
-        bLaCanBoNhanVien?: boolean | null
-        bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
-        sDM_ViTriCongViecId?: string | null
-        sQuanlyTrucTiepId?: string | null
-        iDictionaryKey?: number | null
-        bSystem?: boolean | null
-        sNguoiTao?: string | null
-        sNguoiSua?: string | null
-        sThietBiTao?: string | null
-        sThietBiSua?: string | null
-        avatar?: string | null
-        firstName: string
-        lastName: string
-        idCardNumber: string
-        placeOfIdCardNumber?: string | null
-        fullname?: string | null
-        healthInsuranceNumber?: string | null
-        bankAccountNumber?: string | null
-        bankName?: string | null
-        currentAddress?: string | null
-        newCurrentAddress?: string | null
-        occupationWhenRecruiting?: string | null
-        thuongBinh?: string | null
-        benh?: string | null
-        tinhHinhNhaO?: string | null
-        truocKhiNhapNgu?: string | null
-        thanhPhanGiaDinh?: string | null
-        soTruong?: string | null
-        hoTenThuongDung?: string | null
-        lichSuBanThan?: string | null
-        conThuMay?: number | null
-        chieuCao?: string | null
-        canNang?: string | null
-        soACE?: number | null
-        kinhTeGiaDinh?: string | null
-        chinhTriGiaDinh?: string | null
-        fSoACE?: number | null
-        fKinhTeGiaDinh?: string | null
-        fThanhPhanGiaDinh?: string | null
-        fChinhTriGiaDinh?: string | null
-        fBanThan?: string | null
-        nationalId?: string | null
-        dateOfBirth?: Date | string | null
-        placeOfBirth?: string | null
-        homeTown?: string | null
-        idCardDate?: Date | string | null
-        idCardExpirationDate?: Date | string | null
-        permanentAddress?: string | null
-        temporaryAddress?: string | null
-        contactAddress?: string | null
-        phoneNumber?: string | null
-        email?: string | null
-        officerNumber?: string | null
-        rankDate?: Date | string | null
-        academicDegreeDate?: Date | string | null
-        academicRankDate?: Date | string | null
-        unionDate?: Date | string | null
-        unionPlace?: string | null
-        CPVJoinDate?: Date | string | null
-        officialCPVDate?: Date | string | null
-        CPVJoinPlace?: string | null
-        tenureDate?: Date | string | null
-        enlistmentDate?: Date | string | null
-        reEnlistmentDate?: Date | string | null
-        dischargeDate?: Date | string | null
-        recruitmentDate?: Date | string | null
-        recruitmentAgency?: string | null
-        mainJobAssigned?: string | null
-        revolutionaryDate?: Date | string | null
-        originalPlace?: string | null
-        familyPhone?: string | null
-        familyName?: string | null
-        group?: GroupCreateNestedOneWithoutUserProfileInput
-        provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
-        districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
-        communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
-        newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
-        newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
-        provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
-        districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
-        communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
-        newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
-        newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
-        gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
-        provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
-        districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
-        communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
-        newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
-        newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
-        nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
-        religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
-        ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
-        provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
-        districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
-        communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
-        newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
-        newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
-        rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
-        academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
-        academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
-        level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
-        chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
-        chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
-        sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
-        nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
-        tinhTrangHonNhan?: DM_TinhTrangHonNhanCreateNestedOneWithoutUserProfileInput
-        trangThaiLamViec?: DM_TrangThaiLamViecCreateNestedOneWithoutUserProfileInput
-        dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienCreateNestedOneWithoutUserProfileInput
-        dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
-        dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
-        dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
-        dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
-        positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
-        chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
-        relatives?: RelativeCreateNestedManyWithoutUserProfileInput
-        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
-        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
-        ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
-        tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
-        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
-        capBac?: CapBacCreateNestedManyWithoutUserProfileInput
-        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
-        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
-        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
-        khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
-        kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
-        doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
-        keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
-        hocVi?: HocViCreateNestedManyWithoutUserProfileInput
-        hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
-        tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
-        chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
-        diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
-        thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
-        danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
-        quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
-        ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
-        QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
-        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
-        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
-        trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
-        educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
-        lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
-        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
-        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
-        staffs?: StaffCreateNestedOneWithoutUserProfileInput
-        staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
-        evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
-        documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-        documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-        faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-        faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
-        conversations?: ConversationCreateNestedManyWithoutUserInput
-        subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
-        subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
-        changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
-        surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
-        evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
-        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
+        capKhenThuong?: string | null
+        soQuyetDinh?: string | null
+        nguoiKy?: string | null
+        ngayNhanQuyetDinh?: Date | string | null
+        lyDo?: string | null
+        userProfile: UserProfileCreateNestedOneWithoutKhenThuongInput
     };
-    export type UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
+    export type KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -557908,190 +557478,33 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        bLaNguoiDung?: boolean | null
-        bLaGiangVien?: boolean | null
-        bLaCanBoNhanVien?: boolean | null
-        bLaHocVien?: boolean | null
-        groupId?: string | null
-        sDM_DonViId?: string | null
-        sDM_ViTriCongViecId?: string | null
-        sQuanlyTrucTiepId?: string | null
-        iDictionaryKey?: number | null
-        bSystem?: boolean | null
-        sNguoiTao?: string | null
-        sNguoiSua?: string | null
-        sThietBiTao?: string | null
-        sThietBiSua?: string | null
-        avatar?: string | null
-        firstName: string
-        lastName: string
-        idCardNumber: string
-        placeOfIdCardNumber?: string | null
-        fullname?: string | null
-        healthInsuranceNumber?: string | null
-        bankAccountNumber?: string | null
-        bankName?: string | null
-        currentAddress?: string | null
-        newCurrentAddress?: string | null
-        occupationWhenRecruiting?: string | null
-        thuongBinh?: string | null
-        benh?: string | null
-        tinhHinhNhaO?: string | null
-        truocKhiNhapNgu?: string | null
-        thanhPhanGiaDinh?: string | null
-        soTruong?: string | null
-        hoTenThuongDung?: string | null
-        lichSuBanThan?: string | null
-        conThuMay?: number | null
-        chieuCao?: string | null
-        canNang?: string | null
-        soACE?: number | null
-        kinhTeGiaDinh?: string | null
-        chinhTriGiaDinh?: string | null
-        fSoACE?: number | null
-        fKinhTeGiaDinh?: string | null
-        fThanhPhanGiaDinh?: string | null
-        fChinhTriGiaDinh?: string | null
-        fBanThan?: string | null
-        nationalId?: string | null
-        provinceCurrentAddressId?: string | null
-        districtCurrentAddressId?: string | null
-        communeCurrentAddressId?: string | null
-        newProvinceCurrentAddressId?: string | null
-        newCommuneCurrentAddressId?: string | null
-        dateOfBirth?: Date | string | null
-        placeOfBirth?: string | null
-        provinceOfBirthId?: string | null
-        districtOfBirthId?: string | null
-        communeOfBirthId?: string | null
-        newProvinceOfBirthId?: string | null
-        newCommuneOfBirthId?: string | null
-        homeTown?: string | null
-        idCardDate?: Date | string | null
-        idCardExpirationDate?: Date | string | null
-        genderId?: string | null
-        permanentAddress?: string | null
-        provincePermanentAddressId?: string | null
-        districtPermanentAddressId?: string | null
-        communePermanentAddressId?: string | null
-        newProvincePermanentAddressId?: string | null
-        newCommunePermanentAddressId?: string | null
-        temporaryAddress?: string | null
-        contactAddress?: string | null
-        phoneNumber?: string | null
-        email?: string | null
-        nationalityId?: string | null
-        religionId?: string | null
-        ethnicityId?: string | null
-        provinceHometownId?: string | null
-        districtHometownId?: string | null
-        communeHometownId?: string | null
-        newProvinceHometownId?: string | null
-        newCommuneHometownId?: string | null
-        officerNumber?: string | null
-        rankId?: string | null
-        rankDate?: Date | string | null
-        academicDegreeTypeId?: string | null
-        academicDegreeDate?: Date | string | null
-        academicRankTypeId?: string | null
-        academicRankDate?: Date | string | null
-        levelId?: string | null
-        chiHuyQuanLyId?: string | null
-        chuyenMonKyThuatId?: string | null
-        sucKhoeId?: string | null
-        nhomMauId?: string | null
-        tinhTrangHonNhanId?: string | null
-        trangThaiLamViecId?: string | null
-        dM_ChucDanhCMNVGiangVienId?: string | null
-        dM_ChucDanhCMNVNghienCuuVienId?: string | null
-        dM_ChucDanhCMNVKySuId?: string | null
-        dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
-        dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongDangId?: string | null
-        unionDate?: Date | string | null
-        unionPlace?: string | null
-        CPVJoinDate?: Date | string | null
-        officialCPVDate?: Date | string | null
-        CPVJoinPlace?: string | null
-        positionCPVId?: string | null
-        chucVuChinhQuyenId?: string | null
-        tenureDate?: Date | string | null
-        enlistmentDate?: Date | string | null
-        reEnlistmentDate?: Date | string | null
-        dischargeDate?: Date | string | null
-        recruitmentDate?: Date | string | null
-        recruitmentAgency?: string | null
-        mainJobAssigned?: string | null
-        revolutionaryDate?: Date | string | null
-        originalPlace?: string | null
-        familyPhone?: string | null
-        familyName?: string | null
-        trinhDoHocVanId?: string | null
-        relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
-        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
-        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
-        ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
-        tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
-        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
-        capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
-        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
-        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
-        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
-        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
-        kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
-        doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
-        keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
-        hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
-        hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
-        tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
-        chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
-        diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
-        thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
-        danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
-        quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
-        ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
-        QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
-        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
-        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
-        educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
-        lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
-        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
-        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
-        staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
-        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
-        evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
-        documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-        documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-        faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-        faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
-        conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
-        subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
-        subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
-        changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
-        surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
-        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
-        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
+        capKhenThuong?: string | null
+        soQuyetDinh?: string | null
+        nguoiKy?: string | null
+        ngayNhanQuyetDinh?: Date | string | null
+        lyDo?: string | null
+        userProfileId: string
     };
-    export type UserProfileCreateOrConnectWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
-        where: UserProfileWhereUniqueInput
-        create: XOR<UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput, UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput>
+    export type KhenThuongCreateOrConnectWithoutHinhThucKhenThuongInput = {
+        where: KhenThuongWhereUniqueInput
+        create: XOR<KhenThuongCreateWithoutHinhThucKhenThuongInput, KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput>
     };
-    export type UserProfileCreateManyDM_HinhThucKhenThuongChinhQuyenInputEnvelope = {
-        data: UserProfileCreateManyDM_HinhThucKhenThuongChinhQuyenInput | UserProfileCreateManyDM_HinhThucKhenThuongChinhQuyenInput[]
+    export type KhenThuongCreateManyHinhThucKhenThuongInputEnvelope = {
+        data: KhenThuongCreateManyHinhThucKhenThuongInput | KhenThuongCreateManyHinhThucKhenThuongInput[]
         skipDuplicates?: boolean
     };
-    export type UserProfileUpsertWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
-        where: UserProfileWhereUniqueInput
-        update: XOR<UserProfileUpdateWithoutDM_HinhThucKhenThuongChinhQuyenInput, UserProfileUncheckedUpdateWithoutDM_HinhThucKhenThuongChinhQuyenInput>
-        create: XOR<UserProfileCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput, UserProfileUncheckedCreateWithoutDM_HinhThucKhenThuongChinhQuyenInput>
+    export type KhenThuongUpsertWithWhereUniqueWithoutHinhThucKhenThuongInput = {
+        where: KhenThuongWhereUniqueInput
+        update: XOR<KhenThuongUpdateWithoutHinhThucKhenThuongInput, KhenThuongUncheckedUpdateWithoutHinhThucKhenThuongInput>
+        create: XOR<KhenThuongCreateWithoutHinhThucKhenThuongInput, KhenThuongUncheckedCreateWithoutHinhThucKhenThuongInput>
     };
-    export type UserProfileUpdateWithWhereUniqueWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
-        where: UserProfileWhereUniqueInput
-        data: XOR<UserProfileUpdateWithoutDM_HinhThucKhenThuongChinhQuyenInput, UserProfileUncheckedUpdateWithoutDM_HinhThucKhenThuongChinhQuyenInput>
+    export type KhenThuongUpdateWithWhereUniqueWithoutHinhThucKhenThuongInput = {
+        where: KhenThuongWhereUniqueInput
+        data: XOR<KhenThuongUpdateWithoutHinhThucKhenThuongInput, KhenThuongUncheckedUpdateWithoutHinhThucKhenThuongInput>
     };
-    export type UserProfileUpdateManyWithWhereWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
-        where: UserProfileScalarWhereInput
-        data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutDM_HinhThucKhenThuongChinhQuyenInput>
+    export type KhenThuongUpdateManyWithWhereWithoutHinhThucKhenThuongInput = {
+        where: KhenThuongScalarWhereInput
+        data: XOR<KhenThuongUpdateManyMutationInput, KhenThuongUncheckedUpdateManyWithoutHinhThucKhenThuongInput>
     };
     export type UserProfileCreateWithoutDM_HinhThucKhenThuongDangInput = {
         id?: string
@@ -558217,7 +557630,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
         relatives?: RelativeCreateNestedManyWithoutUserProfileInput
@@ -558374,7 +557786,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
         CPVJoinDate?: Date | string | null
@@ -558583,7 +557994,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -558740,7 +558150,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: string | null
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -558950,7 +558359,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -559107,7 +558515,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: string | null
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -559653,7 +559060,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -559810,7 +559216,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -560020,7 +559425,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -560177,7 +559581,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -560387,7 +559790,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -560544,7 +559946,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -560915,7 +560316,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -561072,7 +560472,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -561282,7 +560681,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -561439,7 +560837,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -561649,7 +561046,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -561806,7 +561202,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -562016,7 +561411,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenCreateNestedOneWithoutUserProfileInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
         positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
         chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
@@ -562173,7 +561567,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -562699,7 +562092,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        hinhThucKhenThuong?: string | null
+        hinhThucKhenThuongId?: string | null
         capKhenThuong?: string | null
         soQuyetDinh?: string | null
         nguoiKy?: string | null
@@ -563681,12 +563074,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        hinhThucKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lyDo?: NullableStringFieldUpdateOperationsInput | string | null
+        hinhThucKhenThuong?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutKhenThuongNestedInput
     };
     export type KhenThuongUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -563697,7 +563090,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        hinhThucKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
+        hinhThucKhenThuongId?: NullableStringFieldUpdateOperationsInput | string | null
         capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563713,7 +563106,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        hinhThucKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
+        hinhThucKhenThuongId?: NullableStringFieldUpdateOperationsInput | string | null
         capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -565464,7 +564857,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -565757,7 +565149,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -565914,7 +565305,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566087,7 +565477,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566823,7 +566212,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -566982,7 +566370,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -567139,7 +566526,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567312,7 +566698,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567483,7 +566868,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -567628,7 +567012,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -567785,7 +567168,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567958,7 +567340,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -568088,7 +567469,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -568217,7 +567597,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -568423,7 +567802,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
         relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
@@ -568580,7 +567958,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -568753,7 +568130,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -568898,7 +568274,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
@@ -569055,7 +568430,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -569228,7 +568602,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -569539,7 +568912,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -569699,7 +569071,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -569856,7 +569227,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570029,7 +569399,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570203,7 +569572,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -570363,7 +569731,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -570520,7 +569887,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570693,7 +570059,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570867,7 +570232,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -571026,7 +570390,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -571183,7 +570546,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -571356,7 +570718,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -573131,7 +572492,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -573276,7 +572636,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -573433,7 +572792,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -573606,7 +572964,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -573859,7 +573216,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -574004,7 +573360,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -574161,7 +573516,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -574334,7 +573688,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -574530,7 +573883,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -574734,7 +574086,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -574891,7 +574242,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -575064,7 +574414,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -575235,7 +574584,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -575364,7 +574712,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -575493,7 +574840,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -575622,7 +574968,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -575779,7 +575124,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -575936,7 +575280,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576109,7 +575452,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576254,7 +575596,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -576411,7 +575752,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576584,7 +575924,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576729,7 +576068,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -576886,7 +576224,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577059,7 +576396,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577204,7 +576540,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -577361,7 +576696,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577534,7 +576868,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577705,7 +577038,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -577834,7 +577166,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -577963,7 +577294,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -578092,7 +577422,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -578249,7 +577578,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -578406,7 +577734,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578579,7 +577906,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578724,7 +578050,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -578881,7 +578206,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579054,7 +578378,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579199,7 +578522,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -579356,7 +578678,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579529,7 +578850,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579674,7 +578994,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -579831,7 +579150,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -580004,7 +579322,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -580175,7 +579492,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -580304,7 +579620,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -580433,7 +579748,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -580562,7 +579876,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -580707,7 +580020,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -580864,7 +580176,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581037,7 +580348,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581182,7 +580492,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -581339,7 +580648,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581512,7 +580820,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581657,7 +580964,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -581814,7 +581120,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581987,7 +581292,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -582132,7 +581436,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -582289,7 +581592,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -582462,7 +581764,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -582591,7 +581892,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -582720,7 +582020,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -582849,7 +582148,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -582978,7 +582276,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -583123,7 +582420,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -583280,7 +582576,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583453,7 +582748,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583598,7 +582892,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -583755,7 +583048,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583928,7 +583220,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -584073,7 +583364,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -584230,7 +583520,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -584403,7 +583692,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -584548,7 +583836,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -584705,7 +583992,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -584878,7 +584164,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -585007,7 +584292,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -585136,7 +584420,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -585265,7 +584548,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -585394,7 +584676,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -585539,7 +584820,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -585696,7 +584976,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -585869,7 +585148,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586014,7 +585292,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -586171,7 +585448,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586344,7 +585620,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586489,7 +585764,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -586646,7 +585920,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586819,7 +586092,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586964,7 +586236,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -587121,7 +586392,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -587294,7 +586564,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -595943,7 +595212,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -596100,7 +595368,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -596273,7 +595540,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614011,7 +613277,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -614156,7 +613421,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -614313,7 +613577,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614486,7 +613749,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614734,7 +613996,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -614879,7 +614140,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -615036,7 +614296,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -615209,7 +614468,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -615406,7 +614664,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -615551,7 +614808,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -615708,7 +614964,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -615881,7 +615136,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -615903,7 +615157,7 @@ export namespace Prisma {
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
     };
-    export type UserProfileCreateManyDM_HinhThucKhenThuongChinhQuyenInput = {
+    export type KhenThuongCreateManyHinhThucKhenThuongInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -615912,127 +615166,14 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        bLaNguoiDung?: boolean | null
-        bLaGiangVien?: boolean | null
-        bLaCanBoNhanVien?: boolean | null
-        bLaHocVien?: boolean | null
-        groupId?: string | null
-        sDM_DonViId?: string | null
-        sDM_ViTriCongViecId?: string | null
-        sQuanlyTrucTiepId?: string | null
-        iDictionaryKey?: number | null
-        bSystem?: boolean | null
-        sNguoiTao?: string | null
-        sNguoiSua?: string | null
-        sThietBiTao?: string | null
-        sThietBiSua?: string | null
-        avatar?: string | null
-        firstName: string
-        lastName: string
-        idCardNumber: string
-        placeOfIdCardNumber?: string | null
-        fullname?: string | null
-        healthInsuranceNumber?: string | null
-        bankAccountNumber?: string | null
-        bankName?: string | null
-        currentAddress?: string | null
-        newCurrentAddress?: string | null
-        occupationWhenRecruiting?: string | null
-        thuongBinh?: string | null
-        benh?: string | null
-        tinhHinhNhaO?: string | null
-        truocKhiNhapNgu?: string | null
-        thanhPhanGiaDinh?: string | null
-        soTruong?: string | null
-        hoTenThuongDung?: string | null
-        lichSuBanThan?: string | null
-        conThuMay?: number | null
-        chieuCao?: string | null
-        canNang?: string | null
-        soACE?: number | null
-        kinhTeGiaDinh?: string | null
-        chinhTriGiaDinh?: string | null
-        fSoACE?: number | null
-        fKinhTeGiaDinh?: string | null
-        fThanhPhanGiaDinh?: string | null
-        fChinhTriGiaDinh?: string | null
-        fBanThan?: string | null
-        nationalId?: string | null
-        provinceCurrentAddressId?: string | null
-        districtCurrentAddressId?: string | null
-        communeCurrentAddressId?: string | null
-        newProvinceCurrentAddressId?: string | null
-        newCommuneCurrentAddressId?: string | null
-        dateOfBirth?: Date | string | null
-        placeOfBirth?: string | null
-        provinceOfBirthId?: string | null
-        districtOfBirthId?: string | null
-        communeOfBirthId?: string | null
-        newProvinceOfBirthId?: string | null
-        newCommuneOfBirthId?: string | null
-        homeTown?: string | null
-        idCardDate?: Date | string | null
-        idCardExpirationDate?: Date | string | null
-        genderId?: string | null
-        permanentAddress?: string | null
-        provincePermanentAddressId?: string | null
-        districtPermanentAddressId?: string | null
-        communePermanentAddressId?: string | null
-        newProvincePermanentAddressId?: string | null
-        newCommunePermanentAddressId?: string | null
-        temporaryAddress?: string | null
-        contactAddress?: string | null
-        phoneNumber?: string | null
-        email?: string | null
-        nationalityId?: string | null
-        religionId?: string | null
-        ethnicityId?: string | null
-        provinceHometownId?: string | null
-        districtHometownId?: string | null
-        communeHometownId?: string | null
-        newProvinceHometownId?: string | null
-        newCommuneHometownId?: string | null
-        officerNumber?: string | null
-        rankId?: string | null
-        rankDate?: Date | string | null
-        academicDegreeTypeId?: string | null
-        academicDegreeDate?: Date | string | null
-        academicRankTypeId?: string | null
-        academicRankDate?: Date | string | null
-        levelId?: string | null
-        chiHuyQuanLyId?: string | null
-        chuyenMonKyThuatId?: string | null
-        sucKhoeId?: string | null
-        nhomMauId?: string | null
-        tinhTrangHonNhanId?: string | null
-        trangThaiLamViecId?: string | null
-        dM_ChucDanhCMNVGiangVienId?: string | null
-        dM_ChucDanhCMNVNghienCuuVienId?: string | null
-        dM_ChucDanhCMNVKySuId?: string | null
-        dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
-        dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongDangId?: string | null
-        unionDate?: Date | string | null
-        unionPlace?: string | null
-        CPVJoinDate?: Date | string | null
-        officialCPVDate?: Date | string | null
-        CPVJoinPlace?: string | null
-        positionCPVId?: string | null
-        chucVuChinhQuyenId?: string | null
-        tenureDate?: Date | string | null
-        enlistmentDate?: Date | string | null
-        reEnlistmentDate?: Date | string | null
-        dischargeDate?: Date | string | null
-        recruitmentDate?: Date | string | null
-        recruitmentAgency?: string | null
-        mainJobAssigned?: string | null
-        revolutionaryDate?: Date | string | null
-        originalPlace?: string | null
-        familyPhone?: string | null
-        familyName?: string | null
-        trinhDoHocVanId?: string | null
+        capKhenThuong?: string | null
+        soQuyetDinh?: string | null
+        nguoiKy?: string | null
+        ngayNhanQuyetDinh?: Date | string | null
+        lyDo?: string | null
+        userProfileId: string
     };
-    export type UserProfileUpdateWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
+    export type KhenThuongUpdateWithoutHinhThucKhenThuongInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -616041,171 +615182,14 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
-        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
-        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        avatar?: NullableStringFieldUpdateOperationsInput | string | null
-        firstName?: StringFieldUpdateOperationsInput | string
-        lastName?: StringFieldUpdateOperationsInput | string
-        idCardNumber?: StringFieldUpdateOperationsInput | string
-        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        fullname?: NullableStringFieldUpdateOperationsInput | string | null
-        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankName?: NullableStringFieldUpdateOperationsInput | string | null
-        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
-        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
-        benh?: NullableStringFieldUpdateOperationsInput | string | null
-        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
-        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
-        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
-        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
-        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
-        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
-        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
-        canNang?: NullableStringFieldUpdateOperationsInput | string | null
-        soACE?: NullableIntFieldUpdateOperationsInput | number | null
-        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
-        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
-        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
-        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
-        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        email?: NullableStringFieldUpdateOperationsInput | string | null
-        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
-        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
-        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
-        familyName?: NullableStringFieldUpdateOperationsInput | string | null
-        group?: GroupUpdateOneWithoutUserProfileNestedInput
-        provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
-        districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
-        communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
-        newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
-        newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
-        provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
-        districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
-        communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
-        newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
-        newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
-        gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
-        provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
-        districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
-        communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
-        newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
-        newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
-        nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
-        religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
-        ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
-        provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
-        districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
-        communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
-        newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
-        newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
-        rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
-        academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
-        academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
-        level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
-        chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
-        chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
-        sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
-        nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
-        tinhTrangHonNhan?: DM_TinhTrangHonNhanUpdateOneWithoutUserProfileNestedInput
-        trangThaiLamViec?: DM_TrangThaiLamViecUpdateOneWithoutUserProfileNestedInput
-        dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienUpdateOneWithoutUserProfileNestedInput
-        dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
-        dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
-        dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
-        dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
-        positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
-        chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
-        relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
-        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
-        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
-        ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
-        tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
-        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
-        capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
-        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
-        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
-        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
-        khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
-        kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
-        doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
-        keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
-        hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
-        hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
-        tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
-        chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
-        diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
-        thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
-        danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
-        quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
-        ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
-        QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
-        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
-        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
-        trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
-        educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
-        lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
-        lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
-        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
-        staffs?: StaffUpdateOneWithoutUserProfileNestedInput
-        staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
-        evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
-        documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-        documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-        faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-        faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
-        conversations?: ConversationUpdateManyWithoutUserNestedInput
-        subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
-        subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
-        changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
-        surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
-        evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
-        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
+        capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
+        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
+        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lyDo?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfile?: UserProfileUpdateOneRequiredWithoutKhenThuongNestedInput
     };
-    export type UserProfileUncheckedUpdateWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
+    export type KhenThuongUncheckedUpdateWithoutHinhThucKhenThuongInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -616214,171 +615198,14 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        groupId?: NullableStringFieldUpdateOperationsInput | string | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
-        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
-        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        avatar?: NullableStringFieldUpdateOperationsInput | string | null
-        firstName?: StringFieldUpdateOperationsInput | string
-        lastName?: StringFieldUpdateOperationsInput | string
-        idCardNumber?: StringFieldUpdateOperationsInput | string
-        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        fullname?: NullableStringFieldUpdateOperationsInput | string | null
-        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankName?: NullableStringFieldUpdateOperationsInput | string | null
-        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
-        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
-        benh?: NullableStringFieldUpdateOperationsInput | string | null
-        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
-        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
-        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
-        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
-        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
-        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
-        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
-        canNang?: NullableStringFieldUpdateOperationsInput | string | null
-        soACE?: NullableIntFieldUpdateOperationsInput | number | null
-        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
-        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
-        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
-        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
-        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        genderId?: NullableStringFieldUpdateOperationsInput | string | null
-        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        email?: NullableStringFieldUpdateOperationsInput | string | null
-        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
-        religionId?: NullableStringFieldUpdateOperationsInput | string | null
-        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
-        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        rankId?: NullableStringFieldUpdateOperationsInput | string | null
-        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        levelId?: NullableStringFieldUpdateOperationsInput | string | null
-        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
-        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
-        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
-        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
-        tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
-        trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
-        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
-        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
-        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
-        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
-        familyName?: NullableStringFieldUpdateOperationsInput | string | null
-        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
-        relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
-        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
-        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
-        ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
-        tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
-        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
-        capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
-        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
-        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
-        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
-        khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
-        kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
-        doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
-        keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
-        hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
-        hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
-        tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
-        chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
-        diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
-        thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
-        danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
-        quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
-        ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
-        QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
-        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
-        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
-        educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
-        lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
-        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
-        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
-        staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
-        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
-        evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
-        documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-        documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-        faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
-        faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
-        conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-        subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
-        subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
-        changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
-        surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
-        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
-        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
+        capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
+        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
+        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lyDo?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
     };
-    export type UserProfileUncheckedUpdateManyWithoutDM_HinhThucKhenThuongChinhQuyenInput = {
+    export type KhenThuongUncheckedUpdateManyWithoutHinhThucKhenThuongInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -616387,125 +615214,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        groupId?: NullableStringFieldUpdateOperationsInput | string | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
-        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
-        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        avatar?: NullableStringFieldUpdateOperationsInput | string | null
-        firstName?: StringFieldUpdateOperationsInput | string
-        lastName?: StringFieldUpdateOperationsInput | string
-        idCardNumber?: StringFieldUpdateOperationsInput | string
-        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        fullname?: NullableStringFieldUpdateOperationsInput | string | null
-        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        bankName?: NullableStringFieldUpdateOperationsInput | string | null
-        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
-        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
-        benh?: NullableStringFieldUpdateOperationsInput | string | null
-        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
-        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
-        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
-        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
-        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
-        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
-        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
-        canNang?: NullableStringFieldUpdateOperationsInput | string | null
-        soACE?: NullableIntFieldUpdateOperationsInput | number | null
-        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
-        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
-        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
-        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
-        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
-        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        genderId?: NullableStringFieldUpdateOperationsInput | string | null
-        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
-        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        email?: NullableStringFieldUpdateOperationsInput | string | null
-        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
-        religionId?: NullableStringFieldUpdateOperationsInput | string | null
-        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
-        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
-        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        rankId?: NullableStringFieldUpdateOperationsInput | string | null
-        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        levelId?: NullableStringFieldUpdateOperationsInput | string | null
-        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
-        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
-        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
-        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
-        tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
-        trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
-        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
-        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
-        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
-        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
-        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
-        familyName?: NullableStringFieldUpdateOperationsInput | string | null
-        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+        capKhenThuong?: NullableStringFieldUpdateOperationsInput | string | null
+        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        nguoiKy?: NullableStringFieldUpdateOperationsInput | string | null
+        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lyDo?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type UserProfileCreateManyDM_HinhThucKhenThuongDangInput = {
         id?: string
@@ -616615,7 +615329,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
         CPVJoinDate?: Date | string | null
@@ -616760,7 +615473,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
         relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
@@ -616917,7 +615629,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
         CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -617090,7 +615801,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
         CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -617218,7 +615928,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: string | null
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -617363,7 +616072,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -617520,7 +616228,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -617693,7 +616400,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -617822,7 +616528,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: string | null
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -617967,7 +616672,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -618124,7 +616828,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618297,7 +617000,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618846,7 +617548,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -618991,7 +617692,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -619148,7 +617848,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619321,7 +618020,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619450,7 +618148,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -619595,7 +618292,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -619752,7 +618448,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619925,7 +618620,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620054,7 +618748,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -620199,7 +618892,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -620356,7 +619048,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620529,7 +619220,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620854,7 +619544,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -620999,7 +619688,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -621156,7 +619844,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621329,7 +620016,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621458,7 +620144,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -621603,7 +620288,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -621760,7 +620444,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621933,7 +620616,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622062,7 +620744,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -622207,7 +620888,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -622364,7 +621044,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622537,7 +621216,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622666,7 +621344,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
         dM_XepLoaiDanhGiaCanBoId?: string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: string | null
         dM_HinhThucKhenThuongDangId?: string | null
         unionDate?: Date | string | null
         unionPlace?: string | null
@@ -622811,7 +621488,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
         dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
-        dM_HinhThucKhenThuongChinhQuyen?: DM_HinhThucKhenThuongChinhQuyenUpdateOneWithoutUserProfileNestedInput
         dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
         positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
         chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
@@ -622968,7 +621644,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
@@ -623141,7 +621816,6 @@ export namespace Prisma {
         dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_HinhThucKhenThuongChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
         unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         unionPlace?: NullableStringFieldUpdateOperationsInput | string | null

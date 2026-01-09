@@ -118,9 +118,9 @@ const PutTrainingObjectTypeModal = () => {
             className="w-[900px]"
         >
             <Col span={12}>
-                <FormItem form={form} name="type" label="Loại đối tượng đào tạo" required>
+                <FormItem form={form} name="type" label="Hệ đào tạo" required>
                     <Select
-                        placeholder="Chọn loại đối tượng đào tạo"
+                        placeholder="Chọn hệ đào tạo"
                         options={Object.keys(TRAINING_OBJECT_TYPE).map((key) => {
                             return {
                                 label: TRAINING_OBJECT_TYPE[

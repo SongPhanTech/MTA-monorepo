@@ -58,7 +58,7 @@ export default function PutKyLuatModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={isEdit ? 'Cập nhật hình thức kỷ luật' : 'Thêm mới hình thức kỷ luật'}
+            title={isEdit ? 'Cập nhật thông tin kỷ luật' : 'Thêm mới thông tin kỷ luật'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -101,7 +101,7 @@ export default function PutKyLuatModal() {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem label="Lý do" name="lyDo" required form={form}>
+                <FormItem label="Lý do" name="lyDo" form={form}>
                     <TextArea placeholder="Nhập lý do" rows={3} />
                 </FormItem>
             </Col>

@@ -1005,20 +1005,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'dM_XepLoaiDanhGiaCanBo',
-                }, dM_HinhThucKhenThuongChinhQuyen: {
-                    name: "dM_HinhThucKhenThuongChinhQuyen",
-                    type: "DM_HinhThucKhenThuongChinhQuyen",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'userProfile',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "dM_HinhThucKhenThuongChinhQuyenId" },
-                }, dM_HinhThucKhenThuongChinhQuyenId: {
-                    name: "dM_HinhThucKhenThuongChinhQuyenId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'dM_HinhThucKhenThuongChinhQuyen',
                 }, dM_HinhThucKhenThuongDang: {
                     name: "dM_HinhThucKhenThuongDang",
                     type: "DM_HinhThucKhenThuongDang",
@@ -2785,10 +2771,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$KhenThuong$createdBy,
-                }, hinhThucKhenThuong: {
-                    name: "hinhThucKhenThuong",
+                }, hinhThucKhenThuongId: {
+                    name: "hinhThucKhenThuongId",
                     type: "String",
                     isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'hinhThucKhenThuong',
+                }, hinhThucKhenThuong: {
+                    name: "hinhThucKhenThuong",
+                    type: "DM_HinhThucKhenThuongChinhQuyen",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'khenThuong',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "hinhThucKhenThuongId" },
                 }, capKhenThuong: {
                     name: "capKhenThuong",
                     type: "String",
@@ -23811,12 +23807,12 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, userProfile: {
-                    name: "userProfile",
-                    type: "UserProfile",
+                }, khenThuong: {
+                    name: "khenThuong",
+                    type: "KhenThuong",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'dM_HinhThucKhenThuongChinhQuyen',
+                    backLink: 'hinhThucKhenThuong',
                 },
             }, uniqueConstraints: {
                 id: {

@@ -103,6 +103,9 @@ const TreeSelectFixClassMulti: React.FC<CustomTreeSelectProps> = ({
             onPopupScroll={handlePopupScroll}
             filterTreeNode={filterTreeNode}
             treeNodeFilterProp="title"
+            treeExpandAction="click"
+            treeIcon
+            showCheckedStrategy="SHOW_CHILD"
             loading={schoolYearLoading || trainingCoursesLoading || fixedClassesLoading}
         />
     )

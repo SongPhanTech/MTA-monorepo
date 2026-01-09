@@ -39,7 +39,7 @@ pg_restore -U admin -h 113.192.17.90 -d mta --disable-triggers -a -j 4 data_dump
 ### backup filter schema
 
 ```bash
-pg_dump -U admin -h 113.192.17.90 -d mta --schema="tro-ly-ao|mta|ql-danh-muc|ql-ho-so"  -Fc -a > categories.custom
+pg_dump -U admin -h 113.192.17.90 -d mta --schema="mta|he-thong|ql-danh-muc|tro-ly-ao"  -Fc -a > categories.custom
 ```
 
 ### restore filter schema

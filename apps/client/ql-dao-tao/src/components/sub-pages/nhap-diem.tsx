@@ -42,6 +42,7 @@ import _ from 'lodash'
 import { FileUp, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { scoreConvert } from '@hooks/scoreConverter'
 
 type FilterTable = FilterProps & {
     fullname?: string
@@ -455,6 +456,7 @@ export default function NhapDiem({
                 enteredScore: true,
                 type: true,
                 enteredExamScore: true,
+                scoreSubmitted: true,
                 subject: {
                     select: {
                         onePoint: true,
@@ -503,6 +505,19 @@ export default function NhapDiem({
         }
     )
 
+    const onlyNumberPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (
+            !/[0-9]/.test(e.key) &&
+            e.key !== 'Backspace' &&
+            e.key !== 'Delete' &&
+            e.key !== 'Tab' &&
+            e.key !== '.' &&
+            e.key !== ','
+        ) {
+            e.preventDefault()
+        }
+    }
+
     const handleScoreInputKeyDown = (
         e: React.KeyboardEvent<HTMLInputElement>,
         recordId: string,
@@ -541,6 +556,7 @@ export default function NhapDiem({
                 }
             }
         }
+        onlyNumberPress(e)
     }
 
     const disabledForm: boolean = useMemo(() => {
@@ -553,6 +569,7 @@ export default function NhapDiem({
                 dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
                 !dataDetailSubjectClass?.isLockScore &&
                 !dataDetailSubjectClass?.isLockExamScore &&
+                !dataDetailSubjectClass?.scoreSubmitted &&
                 !dataDetailSubjectClass?.subject.onePoint &&
                 dataDetailSubjectClass?.type !== $Enums.SubjectClassType.REEXAM
             )
@@ -561,7 +578,8 @@ export default function NhapDiem({
             can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI, 'NHAP_DIEM') &&
             dataDetailSubjectClass?.examScoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
-            !dataDetailSubjectClass?.isLockExamScore
+            !dataDetailSubjectClass?.isLockExamScore &&
+            !dataDetailSubjectClass?.scoreSubmitted
         )
     }, [dataDetailSubjectClass, can, score])
 
@@ -646,10 +664,7 @@ export default function NhapDiem({
                         <>
                             <Button
                                 onClick={() => setImportModalVisible(true)}
-                                disabled={
-                                    !selectedSubjectClassId || role !== 'GV' || disabledForm
-                                    // dataDetailSubjectClass?.enteredScore
-                                }
+                                disabled={!selectedSubjectClassId || role !== 'GV' || disabledForm}
                                 className="w-full flex justify-start"
                             >
                                 <FileUp />
@@ -723,7 +738,9 @@ export default function NhapDiem({
                                 <Button
                                     disabled={
                                         !selectedSubjectClassId ||
-                                        !dataDetailSubjectClass?.enteredExamScore
+                                        !dataDetailSubjectClass?.enteredExamScore ||
+                                        dataDetailSubjectClass?.isLockExamScore ||
+                                        dataDetailSubjectClass?.scoreSubmitted
                                     }
                                     onClick={() => handlePrint()}
                                 >
@@ -744,7 +761,7 @@ export default function NhapDiem({
                                 </Button>
                             </>
                         )}
-                    <Button type="primary" onClick={handleSave}>
+                    <Button type="primary" disabled={disabledForm} onClick={handleSave}>
                         <Save stroke="white" />
                         Lưu
                     </Button>
@@ -852,7 +869,7 @@ export default function NhapDiem({
                         columns={[
                             {
                                 title: 'STT',
-                                width: 60,
+                                width: 35,
                                 align: 'center',
                                 render: (_, __, index) => index + 1,
                             },
@@ -916,7 +933,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm CC',
                                 dataIndex: 'attendanceScore',
-                                width: 100,
+                                width: 90,
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
@@ -958,7 +975,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm TX',
                                 dataIndex: 'midtermScore',
-                                width: 100,
+                                width: 90,
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
@@ -1002,7 +1019,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm thi',
                                 dataIndex: 'examScore',
-                                width: 100,
+                                width: 90,
                                 type: 'order',
                                 align: 'center',
                                 render: (_, record) => {
@@ -1017,7 +1034,10 @@ export default function NhapDiem({
                                             rules={[
                                                 {
                                                     validator: (_, value) =>
-                                                        validateExamScore(value),
+                                                        validateExamScore(
+                                                            value,
+                                                            record?.subjectClass?.subject?.onePoint
+                                                        ),
                                                 },
                                             ]}
                                         >
@@ -1045,10 +1065,10 @@ export default function NhapDiem({
                                 },
                             },
                             {
-                                title: 'Điểm HP',
-                                width: 80,
+                                title: 'Điểm hệ 10',
+                                width: 90,
                                 align: 'center',
-                                render: (_, record: any) => {
+                                render: (_, record) => {
                                     const recordForm = listForm?.[record.id]
                                     const examBanned = recordForm?.examBanned ?? record?.examBanned
                                     const finalScore = examBanned
@@ -1056,19 +1076,114 @@ export default function NhapDiem({
                                         : calcFinalScore(
                                               record?.student?.fixedClass?.trainingCourse,
                                               {
-                                                  ...record,
                                                   attendanceScore:
-                                                      recordForm?.attendanceScore ??
-                                                      record?.attendanceScore,
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.attendanceScore
+                                                          : record?.attendanceScore,
                                                   midtermScore:
-                                                      recordForm?.midtermScore ??
-                                                      record?.midtermScore,
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.midtermScore
+                                                          : record?.midtermScore,
                                                   examScore:
-                                                      recordForm?.examScore ?? record?.examScore,
+                                                      score === 'THI'
+                                                          ? recordForm?.examScore
+                                                          : record?.examScore,
+                                                  awards: [],
+                                                  certificates: [],
                                               },
                                               record.subjectClass?.type || 'NORMAL'
                                           )?.toNumber()
-                                    return <div>{finalScore}</div>
+                                    return <div className="text-red-500">{finalScore}</div>
+                                },
+                            },
+                            {
+                                title: 'Điểm hệ 4',
+                                align: 'center',
+                                width: 90,
+                                render: (_, record) => {
+                                    const recordForm = listForm?.[record.id]
+                                    const examBanned = recordForm?.examBanned ?? record?.examBanned
+                                    const finalScore = examBanned
+                                        ? 0
+                                        : calcFinalScore(
+                                              record?.student?.fixedClass?.trainingCourse,
+                                              {
+                                                  attendanceScore:
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.attendanceScore
+                                                          : record?.attendanceScore,
+                                                  midtermScore:
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.midtermScore
+                                                          : record?.midtermScore,
+                                                  examScore:
+                                                      score === 'THI'
+                                                          ? recordForm?.examScore
+                                                          : record?.examScore,
+                                                  awards: [],
+                                                  certificates: [],
+                                              },
+                                              record.subjectClass?.type || 'NORMAL'
+                                          )?.toNumber()
+                                    if (finalScore === undefined || finalScore === null) return null
+                                    return finalScore !== undefined ? (
+                                        <div className="text-blue-500">
+                                            {
+                                                scoreConvert(
+                                                    finalScore,
+                                                    record?.student?.fixedClass?.trainingCourse
+                                                        ?.scoreConverts || []
+                                                ).base4
+                                            }
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Điểm chữ',
+                                align: 'center',
+                                width: 80,
+                                render: (_, record) => {
+                                    const recordForm = listForm?.[record.id]
+                                    const examBanned = recordForm?.examBanned ?? record?.examBanned
+                                    const finalScore = examBanned
+                                        ? 0
+                                        : calcFinalScore(
+                                              record?.student?.fixedClass?.trainingCourse,
+                                              {
+                                                  attendanceScore:
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.attendanceScore
+                                                          : record?.attendanceScore,
+                                                  midtermScore:
+                                                      score === 'CC/TX'
+                                                          ? recordForm?.midtermScore
+                                                          : record?.midtermScore,
+                                                  examScore:
+                                                      score === 'THI'
+                                                          ? recordForm?.examScore
+                                                          : record?.examScore,
+                                                  awards: [],
+                                                  certificates: [],
+                                              },
+                                              record.subjectClass?.type || 'NORMAL'
+                                          )?.toNumber()
+                                    if (finalScore === undefined || finalScore === null) return null
+                                    return finalScore !== undefined ? (
+                                        <div className="text-yellow-600">
+                                            {
+                                                scoreConvert(
+                                                    finalScore,
+                                                    record?.student?.fixedClass?.trainingCourse
+                                                        ?.scoreConverts || []
+                                                ).letter
+                                            }
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )
                                 },
                             },
                             {
@@ -1180,7 +1295,9 @@ export default function NhapDiem({
                                         >
                                             <Checkbox
                                                 disabled={
-                                                    role !== 'P13' ||
+                                                    (dataDetailSubjectClass?.examType ===
+                                                        'OfflineWritten' &&
+                                                        role !== 'P13') ||
                                                     score === 'CC/TX' ||
                                                     disabledForm
                                                 }

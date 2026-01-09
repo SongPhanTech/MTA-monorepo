@@ -5,15 +5,21 @@ import useSpinner from '@hooks/spinner'
 import type { TrainingScoreSession } from '@workspace/db/client'
 import {
     useCreateTrainingScoreSession,
+    useFindManySemester,
+    useFindManyTrainingObjectType,
     useFindUniqueTrainingScoreSession,
     useUpdateTrainingScoreSession,
 } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, DatePicker, Form, Input, message } from 'antd'
+import { Col, DatePicker, Form, Input, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutTrainingLocation = TrainingScoreSession
+
+export type PutTrainingLocation = TrainingScoreSession & { 
+    semesterId?: string
+    trainingObjectTypeId?: string 
+}
 
 const PutDotRenLuyen = () => {
     const [form] = Form.useForm<PutTrainingLocation>()
@@ -30,19 +36,47 @@ const PutDotRenLuyen = () => {
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
+    // Fetch semester list for select
+    const { data: semesterList = [] } = useFindManySemester({
+        include: {
+            schoolYear: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+    })
+
+    // Fetch training object type list for select
+    const { data: trainingObjectTypeList = [] } = useFindManyTrainingObjectType({
+        orderBy: {
+            name: 'asc',
+        },
+    })
+
     const { mutateAsync: createTrainingScoreSession } = useCreateTrainingScoreSession()
     const { mutateAsync: updateTrainingScoreSession } = useUpdateTrainingScoreSession()
 
     async function onOk(output?: PutTrainingLocation) {
         if (!output) return
+        
+        // Validate required fields
+        if (!output.semesterId) {
+            message.error('Vui lòng chọn học kỳ')
+            return
+        }
+        if (!output.trainingObjectTypeId) {
+            message.error('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
+        
         try {
             showSpinner()
 
             const data = {
                 name: output.name.trim(),
                 time: output.time,
-                semesterId: semesterId || '',
-                trainingObjectTypeId: trainingObjectTypeId || '',
+                semesterId: output.semesterId,
+                trainingObjectTypeId: output.trainingObjectTypeId,
                 description: output.description,
             }
             if (id) {
@@ -87,13 +121,17 @@ const PutDotRenLuyen = () => {
             form.setFieldsValue({
                 ...initialValue,
                 time: initialValue.time ? dayjs(initialValue.time) : undefined,
+                semesterId: initialValue.semesterId || undefined,
+                trainingObjectTypeId: initialValue.trainingObjectTypeId || undefined,
             })
         } else {
             form.setFieldsValue({
                 time: dayjs(),
+                semesterId: semesterId || undefined,
+                trainingObjectTypeId: trainingObjectTypeId || undefined,
             })
         }
-    }, [initialValue])
+    }, [initialValue, semesterId, trainingObjectTypeId])
 
     return (
         <PutFormModal
@@ -107,7 +145,33 @@ const PutDotRenLuyen = () => {
         >
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt" required>
-                    <Input placeholder="Nhập tên đợt" />
+                    <Input placeholder="Nhập tên đợt" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo" required>
+                    <Select
+                        placeholder="Chọn đối tượng đào tạo"
+                        showSearch
+                        optionFilterProp="label"
+                        options={trainingObjectTypeList.map((t) => ({
+                            value: t.id,
+                            label: t.name,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="semesterId" label="Học kỳ" required>
+                    <Select
+                        placeholder="Chọn học kỳ"
+                        showSearch
+                        optionFilterProp="label"
+                        options={semesterList.map((s) => ({
+                            value: s.id,
+                            label: [s.name, s.schoolYear?.name].filter(Boolean).join(' - '),
+                        }))}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

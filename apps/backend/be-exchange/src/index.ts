@@ -50,7 +50,6 @@ app.route('', TrainingCourseApp)
 app.route('', TrainingFieldApp)
 app.route('', TrainingMajorApp)
 app.route('', TrainingObjectTypeApp)
-
 app.onError((err, c) => {
     if (err instanceof HTTPException) {
         return c.json({ message: err.message }, err.status)

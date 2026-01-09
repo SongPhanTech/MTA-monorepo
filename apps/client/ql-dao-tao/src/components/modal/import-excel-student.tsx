@@ -39,18 +39,40 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
 
         const reader = new FileReader()
         reader.onload = (e) => {
-            const { trainingObjectType, trainingCourse, students, errors } = parseSheetStudent(
-                e.target?.result as ArrayBuffer
-            )
-            setPreviewData(students)
-            console.log('students', students)
+            try {
+                const result = parseSheetStudent(e.target?.result as ArrayBuffer)
+                console.log('Parse result:', result)
+                const { trainingObjectType, trainingCourse, students, errors } = result
+                setPreviewData(students)
+                console.log('students', students)
+                console.log('trainingObjectType', trainingObjectType)
+                console.log('trainingCourse', trainingCourse)
 
-            setData({ trainingObjectType, trainingCourse })
-            if (errors.length === 0) {
-                setDisabledButton(false)
+                setData({ trainingObjectType, trainingCourse })
+                if (errors.length === 0 && students.length > 0) {
+                    setDisabledButton(false)
+                } else {
+                    setDisabledButton(true)
+                }
+                setErrorData(errors)
+                if (errors.length > 0) {
+                    console.error('Parse errors:', errors)
+                }
+            } catch (error) {
+                console.error('Error parsing Excel file:', error)
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+                
+                if (errorMessage.includes('password-protected')) {
+                    message.error('File Excel được bảo vệ bằng mật khẩu. Vui lòng bỏ mật khẩu và thử lại.')
+                } else {
+                    message.error(`Lỗi khi đọc file Excel: ${errorMessage}`)
+                }
+                setDisabledButton(true)
             }
-            setErrorData(errors)
-            console.log(errors)
+        }
+        reader.onerror = (error) => {
+            console.error('FileReader error:', error)
+            message.error('Không thể đọc file. Vui lòng thử lại.')
         }
         reader.readAsArrayBuffer(file)
     }

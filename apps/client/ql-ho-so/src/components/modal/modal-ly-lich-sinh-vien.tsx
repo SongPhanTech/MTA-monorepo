@@ -165,7 +165,11 @@ const ModalTomTatLyLich = () => {
                     },
                 },
                 danhHieu: true,
-                khenThuong: true,
+                khenThuong: {
+                    include: {
+                        hinhThucKhenThuong: true,
+                    },
+                },
                 kyLuat: true,
                 quaTrinhCongTac: {
                     include: {
@@ -583,7 +587,7 @@ const ModalTomTatLyLich = () => {
                             {initialData?.khenThuong?.length
                                 ? initialData.khenThuong
                                       .map((item) => [
-                                          item?.hinhThucKhenThuong,
+                                          item?.hinhThucKhenThuong?.name,
                                           dayjs(item?.ngayNhanQuyetDinh).format('DD/MM/YYYY'),
                                       ])
                                       .join('\n')

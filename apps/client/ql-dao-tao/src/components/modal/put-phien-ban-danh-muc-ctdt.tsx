@@ -26,6 +26,7 @@ import {
     useFindManyTrainingTime,
     useFindManyTrainingType,
     useFindUniqueCurriculumVersion,
+    useFindUniqueTrainingObjectType,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
@@ -65,6 +66,15 @@ const PutCurriculumVersion = () => {
     const [importFileName, setImportFileName] = useState<string>('')
     const [filteredSubjects, setFilteredSubjects] = useState<SubjectResult[]>([])
     const [importFile, setImportFile] = useState<File | null>(null)
+
+    const { data: trainingObjectTypeSelected } = useFindUniqueTrainingObjectType(
+        {
+            where: { id: trainingObjectTypeId },
+        },
+        {
+            enabled: !!trainingObjectTypeId,
+        }
+    )
 
     const { isOpen, onClose, input } = useDisclosure<CurriculumVersionInput>({
         tag: 'PutCurriculumVersion',
@@ -372,19 +382,14 @@ const PutCurriculumVersion = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (initialValue) {
+        if (initialValue && trainingObjectTypeSelected) {
             form.setFieldsValue({
                 ...initialValue,
+                trainingLevelId: trainingObjectTypeSelected.trainingLevelId,
             })
             setDocument(initialValue?.documentFiles)
-        } else {
-            form.setFieldsValue({
-                active: true,
-                documentFiles: [],
-            })
-            setDocument([])
         }
-    }, [initialValue])
+    }, [initialValue, trainingObjectTypeSelected])
 
     return (
         <PutFormModal
@@ -528,7 +533,6 @@ const PutCurriculumVersion = () => {
                                             form={form}
                                             label="Bậc đào tạo"
                                             name="trainingLevelId"
-                                            required
                                         >
                                             <Select
                                                 placeholder="Chọn bậc đào tạo"
@@ -538,6 +542,7 @@ const PutCurriculumVersion = () => {
                                                         label: i.name,
                                                     })
                                                 )}
+                                                disabled
                                                 allowClear
                                             />
                                         </FormItem>
@@ -547,7 +552,6 @@ const PutCurriculumVersion = () => {
                                             form={form}
                                             label="Loại hình đào tạo"
                                             name="trainingTypeId"
-                                            required
                                         >
                                             <Select
                                                 placeholder="Chọn loại hình đào tạo"

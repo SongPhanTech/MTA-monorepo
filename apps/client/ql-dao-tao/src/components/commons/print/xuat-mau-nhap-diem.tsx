@@ -240,7 +240,14 @@ const ExportScoreTemplate = ({
                 } else {
                     cell.protection = { locked: true }
                 }
-
+                cell.dataValidation = {
+                    type: 'decimal',
+                    formulae: [0, 10],
+                    showErrorMessage: true,
+                    errorStyle: 'error',
+                    errorTitle: 'Giá trị không hợp lệ',
+                    error: 'Vui lòng nhập điểm từ 0 đến 10',
+                }
                 const baseStyle = {
                     ...dataCellStyle,
                     protection: cell.protection,

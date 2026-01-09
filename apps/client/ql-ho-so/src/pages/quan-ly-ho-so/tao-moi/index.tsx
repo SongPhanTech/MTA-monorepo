@@ -49,7 +49,7 @@ import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
-import { useCreateLecturer, useCreateStaff, useCreateUserProfile } from '@workspace/db/hooks'
+import { useCreateLecturer, useCreateStaff, useUpsertUserProfile } from '@workspace/db/hooks'
 import { postDMNhanViens } from '@workspace/libs/api/system'
 import { getRuntimeEnv } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -232,7 +232,7 @@ export default function CreateUserPage() {
             ),
         },
         {
-            title: 'Tiếng dân tôc',
+            title: 'Tiếng dân tộc',
             id: 'tiengDanToc',
             render: (
                 <Form.Item name="tiengDanToc" className="mb-0">
@@ -350,7 +350,7 @@ export default function CreateUserPage() {
         },
         {
             title: 'Quá trình được cử đi công tác',
-            id: 'quaTrinhDuocCuDiCongTac',
+            id: 'quaTrinhCuDiCongTac',
             render: (
                 <Form.Item name="quaTrinhCuDiCongTac" className="mb-0">
                     <QuaTrinhCuDiCongTacForm expland={expland} setExpland={setExpland} />
@@ -427,7 +427,7 @@ export default function CreateUserPage() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createUserProfile } = useCreateUserProfile()
+    const { mutateAsync: upsertUserProfile } = useUpsertUserProfile()
 
     const handleSubmit = async ({
         bLaGiangVien,
@@ -547,38 +547,43 @@ export default function CreateUserPage() {
                     }
                     hocham = findLatestHocHam(hocHam)
                 }
-                const resProfile = await createUserProfile({
-                    data: {
-                        ...values,
-                        lastName: values.lastName.trim(),
-                        firstName: values.firstName.trim(),
-                        id: res?.data?.Id,
-                        bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
-                        bLaGiangVien: bLaGiangVien || undefined,
-                        bLaNguoiDung: values?.bLaNguoiDung,
-                        dateOfBirth: values.dateOfBirth
-                            ? dayjs(values.dateOfBirth).toISOString()
-                            : null,
-                        idCardDate: values.idCardDate
-                            ? dayjs(values.idCardDate).toISOString()
-                            : null,
-                        unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
-                        CPVJoinDate: values.CPVJoinDate
-                            ? dayjs(values.CPVJoinDate).toISOString()
-                            : null,
-                        officialCPVDate: values.officialCPVDate
-                            ? dayjs(values.officialCPVDate).toISOString()
-                            : null,
-                        tenureDate: values.tenureDate
-                            ? dayjs(values.tenureDate).toISOString()
-                            : null,
-                        avatar: form.getFieldValue('avatar'),
-                        fullname: `${values.lastName.trim() || ''} ${
-                            values.firstName.trim() || ''
-                        }`.trim(),
-                        rankId: rank?.capBacId ?? undefined,
-                        academicDegreeTypeId: hocvi?.academicRankTypeId ?? undefined,
-                        academicRankTypeId: hocham?.academicRankTypeId ?? undefined,
+                const profileData = {
+                    ...values,
+                    lastName: values.lastName.trim(),
+                    firstName: values.firstName.trim(),
+                    id: res?.data?.Id,
+                    bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
+                    bLaGiangVien: bLaGiangVien || undefined,
+                    bLaNguoiDung: values?.bLaNguoiDung,
+                    dateOfBirth: values.dateOfBirth
+                        ? dayjs(values.dateOfBirth).toISOString()
+                        : null,
+                    idCardDate: values.idCardDate
+                        ? dayjs(values.idCardDate).toISOString()
+                        : null,
+                    unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
+                    CPVJoinDate: values.CPVJoinDate
+                        ? dayjs(values.CPVJoinDate).toISOString()
+                        : null,
+                    officialCPVDate: values.officialCPVDate
+                        ? dayjs(values.officialCPVDate).toISOString()
+                        : null,
+                    tenureDate: values.tenureDate
+                        ? dayjs(values.tenureDate).toISOString()
+                        : null,
+                    avatar: form.getFieldValue('avatar'),
+                    fullname: `${values.lastName.trim() || ''} ${
+                        values.firstName.trim() || ''
+                    }`.trim(),
+                    rankId: rank?.capBacId ?? undefined,
+                    academicDegreeTypeId: hocvi?.academicRankTypeId ?? undefined,
+                    academicRankTypeId: hocham?.academicRankTypeId ?? undefined,
+                }
+
+                const resProfile = await upsertUserProfile({
+                    where: { code: values.code ?? undefined },
+                    create: {
+                        ...profileData,
                         ...emptyObjectIf(
                             {
                                 hocVi: {
@@ -912,6 +917,7 @@ export default function CreateUserPage() {
                             !!quaTrinhHocTap
                         ),
                     },
+                    update: profileData,
                 })
                 if (bLaGiangVien && resProfile && lecturerTypeId) {
                     await createLecturer({
