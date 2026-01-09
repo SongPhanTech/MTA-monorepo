@@ -13,11 +13,16 @@ import {
     useFindManyDM_DonVi,
     useFindManyDM_GioiTinh,
     useFindManyDM_NhomMau,
+    useFindManyDM_QuanHuyen,
     useFindManyDM_QuocGia,
+    useFindManyDM_Tinh,
+    useFindManyDM_Tinh_New,
     useFindManyDM_TinhTrangHonNhan,
     useFindManyDM_TonGiao,
     useFindManyDM_TrangThaiLamViec,
     useFindManyDM_TrinhDoHocVan,
+    useFindManyDM_XaPhuong,
+    useFindManyDM_XaPhuong_New,
     useFindManyDM_XepLoaiDanhGiaCanBo,
     useFindManyLecturerType,
 } from '@workspace/db/hooks'
@@ -46,6 +51,98 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: chucDanhKySuData = [] } = useFindManyDM_ChucDanhCMNVKySu()
     const { data: xepLoaiDanhGiaCanBoData = [] } = useFindManyDM_XepLoaiDanhGiaCanBo()
 
+    const { data: provinceData = [] } = useFindManyDM_Tinh_New()
+    const { data: provinceOldData = [] } = useFindManyDM_Tinh()
+
+    // Địa chỉ mới (DM_Tinh_New, DM_XaPhuong_New)
+    const watchedNewProvinceOfBirthId = Form.useWatch('newProvinceOfBirthId', form)
+    const watchedNewProvinceHometownId = Form.useWatch('newProvinceHometownId', form)
+    const watchedNewProvinceCurrentAddressId = Form.useWatch('newProvinceCurrentAddressId', form)
+    const watchedNewProvincePermanentAddressId = Form.useWatch(
+        'newProvincePermanentAddressId',
+        form
+    )
+
+    // Địa chỉ cũ (DM_Tinh, DM_QuanHuyen, DM_XaPhuong)
+    const watchedProvinceOfBirthId = Form.useWatch('provinceOfBirthId', form)
+    const watchedDistrictOfBirthId = Form.useWatch('districtOfBirthId', form)
+    const watchedProvinceHometownId = Form.useWatch('provinceHometownId', form)
+    const watchedDistrictHometownId = Form.useWatch('districtHometownId', form)
+    const watchedProvinceCurrentAddressId = Form.useWatch('provinceCurrentAddressId', form)
+    const watchedDistrictCurrentAddressId = Form.useWatch('districtCurrentAddressId', form)
+    const watchedProvincePermanentAddressId = Form.useWatch('provincePermanentAddressId', form)
+    const watchedDistrictPermanentAddressId = Form.useWatch('districtPermanentAddressId', form)
+
+    // Hooks cho địa chỉ mới (DM_XaPhuong_New)
+    const { data: newCommuneOfBirthData = [] } = useFindManyDM_XaPhuong_New({
+        where: watchedNewProvinceOfBirthId
+            ? { sDM_TinhId_New: watchedNewProvinceOfBirthId }
+            : undefined,
+    })
+
+    const { data: newCommuneCurrentAddressData = [] } = useFindManyDM_XaPhuong_New({
+        where: watchedNewProvinceCurrentAddressId
+            ? { sDM_TinhId_New: watchedNewProvinceCurrentAddressId }
+            : undefined,
+    })
+
+    const { data: newCommunePermanentAddressData = [] } = useFindManyDM_XaPhuong_New({
+        where: watchedNewProvincePermanentAddressId
+            ? { sDM_TinhId_New: watchedNewProvincePermanentAddressId }
+            : undefined,
+    })
+
+    const { data: newCommuneHometownData = [] } = useFindManyDM_XaPhuong_New({
+        where: watchedNewProvinceHometownId
+            ? { sDM_TinhId_New: watchedNewProvinceHometownId }
+            : undefined,
+    })
+
+    // Hooks cho địa chỉ cũ (DM_QuanHuyen, DM_XaPhuong)
+    // Quận/huyện
+    const { data: districtCurrentAddressData = [] } = useFindManyDM_QuanHuyen({
+        where: watchedProvinceCurrentAddressId
+            ? { sDM_TinhId: watchedProvinceCurrentAddressId }
+            : undefined,
+    })
+
+    const { data: districtPermanentAddressData = [] } = useFindManyDM_QuanHuyen({
+        where: watchedProvincePermanentAddressId
+            ? { sDM_TinhId: watchedProvincePermanentAddressId }
+            : undefined,
+    })
+
+    const { data: districtOfBirthData = [] } = useFindManyDM_QuanHuyen({
+        where: watchedProvinceOfBirthId ? { sDM_TinhId: watchedProvinceOfBirthId } : undefined,
+    })
+
+    const { data: districtHometownData = [] } = useFindManyDM_QuanHuyen({
+        where: watchedProvinceHometownId ? { sDM_TinhId: watchedProvinceHometownId } : undefined,
+    })
+
+    // Xã/phường cũ
+    const { data: communeCurrentAddressData = [] } = useFindManyDM_XaPhuong({
+        where: watchedDistrictCurrentAddressId
+            ? { sDM_QuanHuyenId: watchedDistrictCurrentAddressId }
+            : undefined,
+    })
+
+    const { data: communePermanentAddressData = [] } = useFindManyDM_XaPhuong({
+        where: watchedDistrictPermanentAddressId
+            ? { sDM_QuanHuyenId: watchedDistrictPermanentAddressId }
+            : undefined,
+    })
+
+    const { data: communeOfBirthData = [] } = useFindManyDM_XaPhuong({
+        where: watchedDistrictOfBirthId ? { sDM_QuanHuyenId: watchedDistrictOfBirthId } : undefined,
+    })
+
+    const { data: communeHometownData = [] } = useFindManyDM_XaPhuong({
+        where: watchedDistrictHometownId
+            ? { sDM_QuanHuyenId: watchedDistrictHometownId }
+            : undefined,
+    })
+
     const treeData = buildOrgTree(organizations)
     const bLaGiangVien = Form.useWatch('bLaGiangVien', form) || false
     // const bLaCanBoNhanVien = Form.useWatch('bLaCanBoNhanVien', form)
@@ -58,7 +155,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const renderContent = () => {
         return (
             <div className="px-6 form-label-wrap">
-                <div className="mb-6 font-semibold text-base">Thông tin chung</div>
+                <div className="mb-6 font-semibold text-base">1. Thông tin chung</div>
                 <Row className="mb-6" gutter={[16, 16]}>
                     <Col span={12}>
                         <FormItem
@@ -216,16 +313,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="originalPlace"
-                            label="Nguyên quán"
-                            className="mb-0"
-                        >
-                            <Input placeholder="Nhập nguyên quán" className="h-9" />
-                        </FormItem>
-                    </Col>
+
                     <Col span={12}>
                         <FormItem
                             form={form}
@@ -261,11 +349,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                 className="w-full h-9"
                                 disabledDate={(date) => date && date > dayjs().endOf('day')}
                             />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem form={form} name="placeOfBirth" label="Nơi sinh" className="mb-0">
-                            <Input placeholder="Nhập nơi sinh" className="h-9" />
                         </FormItem>
                     </Col>
 
@@ -522,7 +605,553 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </>
                     )} */}
                 </Row>
-                <div className="mb-6 font-semibold text-base">CCCD/CMND</div>
+
+                {/* Nơi sinh */}
+                <div className="mb-6 font-semibold text-base">2. Nơi sinh</div>
+                <Row className="mb-6" gutter={[16, 16]}>
+                    {/* Địa chỉ mới (DM_Tinh_New, DM_XaPhuong_New) */}
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="newProvinceOfBirthId"
+                            label="Tỉnh/Thành phố"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn tỉnh/thành phố"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('newCommuneOfBirthId', null)
+                                }}
+                                options={provinceData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="newCommuneOfBirthId"
+                            label="Xã/Phường/Thị trấn"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn xã/phường/thị trấn"
+                                className="h-9"
+                                options={newCommuneOfBirthData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    {/* Địa chỉ cũ (DM_Tinh, DM_QuanHuyen, DM_XaPhuong) */}
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="provinceOfBirthId"
+                            label={
+                                <span>
+                                    Tỉnh/Thành phố <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn tỉnh/thành phố"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('districtOfBirthId', null)
+                                    form.setFieldValue('communeOfBirthId', null)
+                                }}
+                                options={provinceOldData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="districtOfBirthId"
+                            label={
+                                <span>
+                                    Quận/Huyện <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn quận/huyện"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('communeOfBirthId', null)
+                                }}
+                                options={districtOfBirthData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="communeOfBirthId"
+                            label={
+                                <span>
+                                    Xã/Phường/Thị trấn <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn xã/phường/thị trấn"
+                                className="h-9"
+                                options={communeOfBirthData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem form={form} name="placeOfBirth" label="Nơi sinh" className="mb-0">
+                            <Input placeholder="Nhập nơi sinh" className="h-9" />
+                        </FormItem>
+                    </Col>
+                </Row>
+
+                {/* 3. Quê quán */}
+                <div className="mb-6 font-semibold text-base">3. Quê quán</div>
+                <Row className="mb-6" gutter={[16, 16]}>
+                    {/* Địa chỉ mới (DM_Tinh_New, DM_XaPhuong_New) */}
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="newProvinceHometownId"
+                            label="Tỉnh/Thành phố"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn tỉnh/thành phố"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('newCommuneHometownId', null)
+                                }}
+                                options={provinceData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="newCommuneHometownId"
+                            label="Xã/Phường/Thị trấn"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn xã/phường/thị trấn"
+                                className="h-9"
+                                options={newCommuneHometownData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    {/* Địa chỉ cũ (DM_Tinh, DM_QuanHuyen, DM_XaPhuong) */}
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="provinceHometownId"
+                            label={
+                                <span>
+                                    Tỉnh/Thành phố <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn tỉnh/thành phố"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('districtHometownId', null)
+                                    form.setFieldValue('communeHometownId', null)
+                                }}
+                                options={provinceOldData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="districtHometownId"
+                            label={
+                                <span>
+                                    Quận/Huyện <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn quận/huyện"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('communeHometownId', null)
+                                }}
+                                options={districtHometownData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="communeHometownId"
+                            label={
+                                <span>
+                                    Xã/Phường/Thị trấn <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn xã/phường/thị trấn"
+                                className="h-9"
+                                options={communeHometownData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="homeTown" label="Quê quán" className="mb-0">
+                            <Input placeholder="Nhập quê quán" className="h-9" />
+                        </FormItem>
+                    </Col>
+                </Row>
+
+                {/* 4. Nơi cư trú hiện tại */}
+                <div className="mb-6 font-semibold text-base">4. Nơi cư trú hiện tại</div>
+                <Row className="mb-6" gutter={[16, 16]}>
+                    {/* Địa chỉ mới (DM_Tinh_New, DM_XaPhuong_New) */}
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="newProvinceCurrentAddressId"
+                            label="Tỉnh/Thành phố"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn tỉnh/thành phố"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('newCommuneCurrentAddressId', null)
+                                }}
+                                options={provinceData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="newCommuneCurrentAddressId"
+                            label="Xã/Phường/Thị trấn"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn xã/phường/thị trấn"
+                                className="h-9"
+                                options={newCommuneCurrentAddressData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    {/* Địa chỉ cũ (DM_Tinh, DM_QuanHuyen, DM_XaPhuong) */}
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="provinceCurrentAddressId"
+                            label={
+                                <span>
+                                    Tỉnh/Thành phố <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn tỉnh/thành phố"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('districtCurrentAddressId', null)
+                                    form.setFieldValue('communeCurrentAddressId', null)
+                                }}
+                                options={provinceOldData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="districtCurrentAddressId"
+                            label={
+                                <span>
+                                    Quận/Huyện <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn quận/huyện"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('communeCurrentAddressId', null)
+                                }}
+                                options={districtCurrentAddressData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="communeCurrentAddressId"
+                            label={
+                                <span>
+                                    Xã/Phường/Thị trấn <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn xã/phường/thị trấn"
+                                className="h-9"
+                                options={communeCurrentAddressData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="permanentAddress"
+                            label="Nơi cư trú hiện tại"
+                            className="mb-0"
+                        >
+                            <Input placeholder="Nhập nơi cư trú hiện tại" className="h-9" />
+                        </FormItem>
+                    </Col>
+                </Row>
+
+                {/* 5. Nơi đăng ký thường trú */}
+                <div className="mb-6 font-semibold text-base">5. Nơi đăng ký thường trú</div>
+                <Row className="mb-6" gutter={[16, 16]}>
+                    {/* Địa chỉ mới (DM_Tinh_New, DM_XaPhuong_New) */}
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="newProvincePermanentAddressId"
+                            label="Tỉnh/Thành phố"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn tỉnh/thành phố"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('newCommunePermanentAddressId', null)
+                                }}
+                                options={provinceData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="newCommunePermanentAddressId"
+                            label="Xã/Phường/Thị trấn"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn xã/phường/thị trấn"
+                                className="h-9"
+                                options={newCommunePermanentAddressData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    {/* Địa chỉ cũ (DM_Tinh, DM_QuanHuyen, DM_XaPhuong) */}
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="provincePermanentAddressId"
+                            label={
+                                <span>
+                                    Tỉnh/Thành phố <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn tỉnh/thành phố"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('districtPermanentAddressId', null)
+                                    form.setFieldValue('communePermanentAddressId', null)
+                                }}
+                                options={provinceOldData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="districtPermanentAddressId"
+                            label={
+                                <span>
+                                    Quận/Huyện <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn quận/huyện"
+                                className="h-9"
+                                onChange={() => {
+                                    form.setFieldValue('communePermanentAddressId', null)
+                                }}
+                                options={districtPermanentAddressData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="communePermanentAddressId"
+                            label={
+                                <span>
+                                    Xã/Phường/Thị trấn <span className="text-red-600">(cũ)</span>
+                                </span>
+                            }
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                showSearch
+                                placeholder="Chọn xã/phường/thị trấn"
+                                className="h-9"
+                                options={communePermanentAddressData.map((i) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="permanentAddress"
+                            label="Nơi đăng ký thường trú"
+                            className="mb-0"
+                        >
+                            <Input placeholder="Nhập nơi đăng ký thường trú" className="h-9" />
+                        </FormItem>
+                    </Col>
+                </Row>
+
+                <div className="mb-6 font-semibold text-base">6. CCCD/CMND</div>
                 <Row className="mb-6" gutter={[16, 16]}>
                     <Col span={12}>
                         <FormItem
@@ -585,7 +1214,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     </Col>
                 </Row>
                 {/* Thông tin bản thân */}
-                <div className="mb-6 font-semibold text-base">Thông tin bản thân</div>
+                <div className="mb-6 font-semibold text-base">7. Thông tin bản thân</div>
                 <Row className="mb-8" gutter={[16, 16]}>
                     <Col span={12}>
                         <FormItem form={form} name="conThuMay" label="Con thứ mấy" className="mb-0">
@@ -652,7 +1281,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 </Row>
 
                 {/* Thông tin gia đình */}
-                <div className="mb-6 font-semibold text-base">Thông tin gia đình</div>
+                <div className="mb-6 font-semibold text-base">8. Thông tin gia đình</div>
                 <Row className="mb-8" gutter={[16, 16]}>
                     <Col span={24}>
                         <FormItem
@@ -689,7 +1318,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 </Row>
 
                 {/* Thông tin gia đình vợ/chồng */}
-                <div className="mb-6 font-semibold text-base">Thông tin gia đình vợ/chồng</div>
+                <div className="mb-6 font-semibold text-base">9. Thông tin gia đình vợ/chồng</div>
                 <Row className="mb-8" gutter={[16, 16]}>
                     <Col span={24}>
                         <FormItem
