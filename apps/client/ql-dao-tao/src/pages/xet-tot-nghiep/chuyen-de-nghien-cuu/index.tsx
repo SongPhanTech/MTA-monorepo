@@ -9,6 +9,7 @@ import { SubjectVersionType } from '@workspace/db'
 import {
     useCountStudentSubjectScore,
     useFindManyDM_DonVi,
+    useFindManyLecturer,
     useFindManySemester,
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
@@ -19,6 +20,7 @@ import { Button, Col, DatePicker, Form, message, Row } from 'antd'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import dayjs from 'dayjs'
 import { SquarePen } from 'lucide-react'
+import * as XLSX from 'xlsx';
 import { useMemo, useState } from 'react'
 
 interface ChuyenDeNghienCuuForm {
@@ -37,6 +39,7 @@ export default function ChuyenDeNghienCuu() {
     const [timeReportForm] = Form.useForm<TimeReportForm>()
     const [searchParams, setSearchParams] = useState<Partial<ChuyenDeNghienCuuForm>>({})
     const [timeReportParams, setTimeReportParams] = useState<Partial<TimeReportForm>>({})
+
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [isSearched, setIsSearched] = useState(false)
@@ -50,6 +53,11 @@ export default function ChuyenDeNghienCuu() {
     }, [watchTrainingObjectTypeId])
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: courseWhere,
+    })
+    const {data:lecturerData = []} = useFindManyLecturer({
+        include: {
+            userProfile: true,
+        },
     })
     const { data: organizationData = [] } = useFindManyDM_DonVi()
     const { data: semesterData = [] } = useFindManySemester()
@@ -283,7 +291,7 @@ export default function ChuyenDeNghienCuu() {
                     model: 'StudentResearchTopic',
                     operation: 'createMany',
                     data: {
-                        //@ts-ignore:
+                        //@ts-expect-error: Prisma type error
                         data: recordsToCreate[0].map((record: any) => ({
                             studentSubjectScoreId: record.id,
                             deadline: null,
@@ -296,9 +304,8 @@ export default function ChuyenDeNghienCuu() {
                     },
                 },
             ])
-            console.log('res', res)
             if (res.status !== 200) {
-                return message.error('Có lỗi xảy ra khi lấy dữ liệu.')
+                return message.error('Vui lòng kiểm tra lại dữ liệu học sinh.')
             }
 
             message.success('Lấy dữ liệu thành công!')
@@ -310,6 +317,50 @@ export default function ChuyenDeNghienCuu() {
             message.error('Có lỗi xảy ra khi xử lý dữ liệu.')
         }
     }
+    const exportToExcel = () => {
+        if (studentSubjectScoreAllData.length === 0) {
+            return message.warning('Không có dữ liệu để xuất Excel!');
+        }
+    
+        const excelData = studentSubjectScoreAllData.map((record) => {
+            const studentProfile = record?.student?.userProfile;
+            const researchTopic = record?.studentResearchTopic;
+            
+            return {
+                'Hạn nhập chuyên đề': researchTopic?.deadline 
+                    ? dayjs(researchTopic.deadline).format('DD/MM/YYYY') : '',
+                'Đối tượng đào tạo': record?.subjectClass?.trainingObjectType?.name || '',
+                'Khóa học': record?.student?.fixedClass?.trainingCourse?.name || '',
+                'Học kỳ': record?.subjectClass?.semester?.name || '',
+                'Mã sinh viên': studentProfile?.code || '',
+                'Họ và tên': `${studentProfile?.lastName || ''} ${studentProfile?.firstName || ''}`.trim(),
+                'Lớp môn học': record?.subjectClass?.name || '',
+                'Số tín chỉ': record?.subjectVersion?.credit || '',
+                'Tên chuyên đề': researchTopic?.name || '',
+                'Nội dung chính': researchTopic?.mainContent || '',
+                'GVHD 1': `${researchTopic?.supervisor?.userProfile?.lastName || ''} ${researchTopic?.supervisor?.userProfile?.firstName || ''}`.trim(),
+                'GVHD 2': `${researchTopic?.coSupervisor?.userProfile?.lastName || ''} ${researchTopic?.coSupervisor?.userProfile?.firstName || ''}`.trim(),
+                'Thời gian báo cáo': researchTopic?.reportDate 
+                    ? dayjs(researchTopic.reportDate).format('DD/MM/YYYY') : '',
+                'Điểm': record?.finalScore ? Number(record.finalScore).toFixedSmart(2) : '',
+            };
+        });
+    
+        const worksheet = XLSX.utils.json_to_sheet(excelData);
+    
+        const wscols = [
+            { wch: 20 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 },
+            { wch: 25 }, { wch: 20 }, { wch: 10 }, { wch: 40 }, { wch: 40 },
+            { wch: 25 }, { wch: 25 }, { wch: 20 }, { wch: 10 }
+        ];
+        worksheet['!cols'] = wscols;
+        
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sach chuyen de');
+        
+        const fileName = `Danh_sach_Chuyen_de_Nghien_cuu_${dayjs().format('YYYYMMDD_HHmm')}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
+    };
     return (
         <Row gutter={[16, 0]}>
             <Col span={24}>
@@ -419,8 +470,8 @@ export default function ChuyenDeNghienCuu() {
                                     <Button type="primary" onClick={async () => await getData()}>
                                         Lấy dữ liệu
                                     </Button>
-                                    <Button disabled type="primary" onClick={() => {}}>
-                                        Lấy điểm từ lớp môn học sang
+                                    <Button  type="primary" onClick={exportToExcel}>
+                                        Xuất mẫu excel
                                     </Button>
                                 </div>
                             </Form.Item>
