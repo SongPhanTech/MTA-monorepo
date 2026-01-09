@@ -5,6 +5,7 @@ import TreeSelect from '@components/commons/tree-select'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
+import { SubjectVersionType } from '@workspace/db'
 import {
     useCountStudentSubjectScore,
     useFindManyDM_DonVi,
@@ -13,9 +14,9 @@ import {
     useFindManySubjectClass,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
-    useUpdateManyStudentResearchTopic,
 } from '@workspace/db/hooks'
 import { Button, Col, DatePicker, Form, message, Row } from 'antd'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import dayjs from 'dayjs'
 import { SquarePen } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -35,8 +36,10 @@ export default function ChuyenDeNghienCuu() {
     const [form] = Form.useForm<ChuyenDeNghienCuuForm>()
     const [timeReportForm] = Form.useForm<TimeReportForm>()
     const [searchParams, setSearchParams] = useState<Partial<ChuyenDeNghienCuuForm>>({})
+    const [timeReportParams, setTimeReportParams] = useState<Partial<TimeReportForm>>({})
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [isSearched, setIsSearched] = useState(false)
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
     const watchTrainingObjectTypeId = Form.useWatch('trainingObjectTypeId', form)
     const courseWhere = useMemo(() => {
@@ -50,18 +53,32 @@ export default function ChuyenDeNghienCuu() {
     })
     const { data: organizationData = [] } = useFindManyDM_DonVi()
     const { data: semesterData = [] } = useFindManySemester()
-    const { data: subjectClassData = [] } = useFindManySubjectClass()
-    const { mutateAsync: updateManyResearchTopic } = useUpdateManyStudentResearchTopic()
+    const { data: subjectClassData = [] } = useFindManySubjectClass({
+        where: {
+            subject: {
+                type: SubjectVersionType.Research,
+            },
+        },
+    })
     const where = useMemo(() => {
+        if (!isSearched) {
+            return { id: { in: [] } }
+        }
         const filter: any = {
             studentResearchTopic: {
                 isNot: null,
+            },
+            subjectClass: {
+                subject: {
+                    type: SubjectVersionType.Research,
+                },
             },
         }
 
         if (searchParams.trainingObjectTypeId) {
             filter.subjectClass = {
                 ...filter.subjectClass,
+
                 trainingObjectTypeId: searchParams.trainingObjectTypeId,
             }
         }
@@ -90,7 +107,7 @@ export default function ChuyenDeNghienCuu() {
         }
 
         return filter
-    }, [searchParams])
+    }, [searchParams, isSearched])
     const { data: studentSubjectScoreData = [], refetch: refetchStudentSubjectScore } =
         useFindManyStudentSubjectScore({
             where,
@@ -117,6 +134,7 @@ export default function ChuyenDeNghienCuu() {
                 },
                 student: {
                     include: {
+                        userProfile: true,
                         fixedClass: {
                             include: {
                                 trainingCourse: true,
@@ -137,53 +155,161 @@ export default function ChuyenDeNghienCuu() {
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         })
-    const { data: count } = useCountStudentSubjectScore({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
+    const { data: studentSubjectScoreAllData = [], refetch: refetchStudentSubjectScoreAll } =
+        useFindManyStudentSubjectScore({
+            where,
+            include: {
+                studentResearchTopic: {
+                    include: {
+                        supervisor: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        coSupervisor: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                    },
+                },
+                subjectClass: {
+                    include: {
+                        trainingObjectType: true,
+                        semester: true,
+                    },
+                },
+                student: {
+                    include: {
+                        userProfile: true,
+                        fixedClass: {
+                            include: {
+                                trainingCourse: true,
+                            },
+                        },
+                    },
+                },
+                subjectVersion: {
+                    include: {
+                        subject: {
+                            include: {
+                                managementOrganization: true,
+                            },
+                        },
+                    },
+                },
+            },
+        })
+
+    const { data: count, refetch: refetchCount } = useCountStudentSubjectScore({
+        where: isSearched ? { ...where, deletedAt: null } : { id: { in: [] } },
     })
     const handleAssignDate = async () => {
-        try {
-            const values = timeReportForm.getFieldValue('reportDate')
-
-            if (!values) {
-                return message.warning('Vui lòng chọn hạn nhập chuyên đề trước khi gán!')
-            }
-
-            const topicIds = studentSubjectScoreData
-                .map((item) => item.studentResearchTopic?.id)
-                .filter((id): id is string => !!id)
-
-            if (topicIds.length === 0) {
-                return message.info('Không có dữ liệu đề tài để cập nhật.')
-            }
-
-            await updateManyResearchTopic({
-                where: {
-                    id: { in: topicIds },
-                },
-                data: {
-                    deadline: values,
-                },
-            })
-
-            message.success(`Đã gán ngày cho ${topicIds.length} chuyên đề thành công!`)
-
-            refetchStudentSubjectScore()
-        } catch (error) {
-            console.error('Assign Date Error:', error)
-            message.error('Có lỗi xảy ra khi gán ngày.')
+        const reportDate = timeReportForm.getFieldValue('reportDate')
+        if (!reportDate) {
+            return message.warning('Vui lòng chọn hạn nhập chuyên đề trước khi gán!')
         }
+
+        const res = await sqlTransaction([
+            {
+                model: 'StudentResearchTopic',
+                operation: 'updateMany',
+                data: {
+                    where: {
+                        id: {
+                            in: studentSubjectScoreAllData.map(
+                                (item: any) => item.studentResearchTopic?.id
+                            ),
+                        },
+                    },
+                    data: {
+                        deadline: reportDate,
+                    },
+                },
+            },
+        ])
+        if (res.status !== 200) {
+            return message.error('Có lỗi xảy ra khi gán ngày.')
+        }
+        message.success('Gán ngày thành công!')
+        refetchStudentSubjectScore()
+        refetchCount()
+        refetchStudentSubjectScoreAll()
     }
     const handleSearch = () => {
         const values = form.getFieldsValue()
         setSearchParams(values)
+        setIsSearched(true)
+        setCurrentPage(1)
         refetchStudentSubjectScore()
+        refetchStudentSubjectScoreAll()
+        refetchCount()
     }
 
     const treeOrgData = buildOrgTree(organizationData ?? [], '0')
-    const getData =() => {}
+    const getData = async () => {
+        const subjectClassId = timeReportForm.getFieldValue('subjectClassId')
+        if (!subjectClassId) {
+            return message.warning('Vui lòng chọn lớp môn học trước khi lấy dữ liệu')
+        }
+
+        setTimeReportParams({ subjectClassId })
+
+        try {
+            const subjectStudent = await sqlTransaction([
+                {
+                    model: 'StudentSubjectScore',
+                    operation: 'findMany',
+                    data: {
+                        where: { subjectClassId: subjectClassId },
+                        include: { studentResearchTopic: true },
+                    },
+                },
+            ])
+
+            const studentSubjectScoreData = subjectStudent.data || []
+            if (studentSubjectScoreData.length === 0) {
+                return message.error('Lớp môn học này không có sinh viên nào.')
+            }
+            const recordsToCreate = studentSubjectScoreData.filter(
+                (item: any) => !item.studentResearchTopic
+            )
+            if (recordsToCreate.length === 0) {
+                return message.info('Tất cả sinh viên trong lớp này đã được khởi tạo chuyên đề.')
+            }
+            console.log('recordsToCreate', recordsToCreate)
+            const res = await sqlTransaction([
+                {
+                    model: 'StudentResearchTopic',
+                    operation: 'createMany',
+                    data: {
+                        //@ts-ignore:
+                        data: recordsToCreate[0].map((record: any) => ({
+                            studentSubjectScoreId: record.id,
+                            deadline: null,
+                            name: null,
+                            mainContent: null,
+                            supervisorId: null,
+                            coSupervisorId: null,
+                            reportDate: null,
+                        })),
+                    },
+                },
+            ])
+            console.log('res', res)
+            if (res.status !== 200) {
+                return message.error('Có lỗi xảy ra khi lấy dữ liệu.')
+            }
+
+            message.success('Lấy dữ liệu thành công!')
+            refetchStudentSubjectScore()
+            refetchStudentSubjectScoreAll()
+            refetchCount()
+        } catch (error) {
+            console.error('getData Error:', error)
+            message.error('Có lỗi xảy ra khi xử lý dữ liệu.')
+        }
+    }
     return (
         <Row gutter={[16, 0]}>
             <Col span={24}>
@@ -290,7 +416,7 @@ export default function ChuyenDeNghienCuu() {
 
                             <Form.Item className="mb-0">
                                 <div className="flex gap-2">
-                                    <Button type="primary" onClick={getData}>
+                                    <Button type="primary" onClick={async () => await getData()}>
                                         Lấy dữ liệu
                                     </Button>
                                     <Button disabled type="primary" onClick={() => {}}>
@@ -455,7 +581,11 @@ export default function ChuyenDeNghienCuu() {
                             fixed: 'right',
                             align: 'center',
                             render: (_, record) => {
-                                return <SquarePen className="text-sm cursor-pointer" />
+                                return (
+                                    <div className="flex justify-center items-center">
+                                        <SquarePen className="text-sm cursor-pointer" />
+                                    </div>
+                                )
                             },
                         },
                     ]}
