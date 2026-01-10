@@ -20,7 +20,8 @@ import { Button, Col, DatePicker, Form, message, Row } from 'antd'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import dayjs from 'dayjs'
 import { SquarePen } from 'lucide-react'
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 import { useMemo, useState } from 'react'
 
 interface ChuyenDeNghienCuuForm {
@@ -317,50 +318,71 @@ export default function ChuyenDeNghienCuu() {
             message.error('Có lỗi xảy ra khi xử lý dữ liệu.')
         }
     }
-    const exportToExcel = () => {
-        if (studentSubjectScoreAllData.length === 0) {
+    const exportToExcel = async () => {
+        if (studentSubjectScoreData.length === 0) {
             return message.warning('Không có dữ liệu để xuất Excel!');
         }
     
-        const excelData = studentSubjectScoreAllData.map((record) => {
-            const studentProfile = record?.student?.userProfile;
-            const researchTopic = record?.studentResearchTopic;
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Danh sách chuyên đề');
+        const refSheet = workbook.addWorksheet('LecturerData');
+        refSheet.state = 'veryHidden'; 
+
+        lecturerData.forEach((l, index) => {
+            const fullName = `${l.userProfile?.lastName || ''} ${l.userProfile?.firstName || ''}`.trim();
+            refSheet.getCell(`A${index + 1}`).value = fullName;
+            refSheet.getCell(`B${index + 1}`).value = l.id;
+        });
+        const lecturerNameRange = `LecturerData!$A$1:$A$${lecturerData.length}`;
+        const fullTableRange = `LecturerData!$A$1:$B$${lecturerData.length}`;
+    
+        worksheet.columns = [
+            { header: 'Mã SV', key: 'studentCode', width: 15 },
+            { header: 'Họ và tên', key: 'studentName', width: 25 },
+            { header: 'Tên chuyên đề', key: 'topicName', width: 35 },
+            { header: 'GVHD 1', key: 'gvhd1', width: 25 }, 
+            { header: 'GVHD 2', key: 'gvhd2', width: 25 }, 
+            { header: 'ID_GV1', key: 'idGv1', width: 0, hidden: true }, 
+            { header: 'ID_GV2', key: 'idGv2', width: 0, hidden: true }, 
+            { header: 'Điểm', key: 'score', width: 10 },
+        ];
+    
+        studentSubjectScoreData.forEach((record, index) => {
+            const rowNumber = index + 2; // Dòng dữ liệu bắt đầu từ 2 (sau header)
+            const topic = record.studentResearchTopic;
             
-            return {
-                'Hạn nhập chuyên đề': researchTopic?.deadline 
-                    ? dayjs(researchTopic.deadline).format('DD/MM/YYYY') : '',
-                'Đối tượng đào tạo': record?.subjectClass?.trainingObjectType?.name || '',
-                'Khóa học': record?.student?.fixedClass?.trainingCourse?.name || '',
-                'Học kỳ': record?.subjectClass?.semester?.name || '',
-                'Mã sinh viên': studentProfile?.code || '',
-                'Họ và tên': `${studentProfile?.lastName || ''} ${studentProfile?.firstName || ''}`.trim(),
-                'Lớp môn học': record?.subjectClass?.name || '',
-                'Số tín chỉ': record?.subjectVersion?.credit || '',
-                'Tên chuyên đề': researchTopic?.name || '',
-                'Nội dung chính': researchTopic?.mainContent || '',
-                'GVHD 1': `${researchTopic?.supervisor?.userProfile?.lastName || ''} ${researchTopic?.supervisor?.userProfile?.firstName || ''}`.trim(),
-                'GVHD 2': `${researchTopic?.coSupervisor?.userProfile?.lastName || ''} ${researchTopic?.coSupervisor?.userProfile?.firstName || ''}`.trim(),
-                'Thời gian báo cáo': researchTopic?.reportDate 
-                    ? dayjs(researchTopic.reportDate).format('DD/MM/YYYY') : '',
-                'Điểm': record?.finalScore ? Number(record.finalScore).toFixedSmart(2) : '',
+            const row = worksheet.addRow({
+                studentCode: record.student?.userProfile?.code || '',
+                studentName: `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`.trim(),
+                topicName: topic?.name || '',
+                gvhd1: topic?.supervisor ? `${topic.supervisor.userProfile?.lastName} ${topic.supervisor.userProfile?.firstName}`.trim() : '',
+                gvhd2: topic?.coSupervisor ? `${topic.coSupervisor.userProfile?.lastName} ${topic.coSupervisor.userProfile?.firstName}`.trim() : '',
+                score: record.finalScore || '',
+            });
+    
+            const validation: ExcelJS.DataValidation = {
+                type: 'list',
+                allowBlank: true,
+                formulae: [lecturerNameRange]
+            };
+            row.getCell('gvhd1').dataValidation = validation;
+            row.getCell('gvhd2').dataValidation = validation;
+    
+            row.getCell('idGv1').value = {
+                formula: `=IF(D${rowNumber}<>"", VLOOKUP(D${rowNumber}, ${fullTableRange}, 2, FALSE), "")`
+            };
+            row.getCell('idGv2').value = {
+                formula: `=IF(E${rowNumber}<>"", VLOOKUP(E${rowNumber}, ${fullTableRange}, 2, FALSE), "")`
             };
         });
     
-        const worksheet = XLSX.utils.json_to_sheet(excelData);
-    
-        const wscols = [
-            { wch: 20 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 },
-            { wch: 25 }, { wch: 20 }, { wch: 10 }, { wch: 40 }, { wch: 40 },
-            { wch: 25 }, { wch: 25 }, { wch: 20 }, { wch: 10 }
-        ];
-        worksheet['!cols'] = wscols;
-        
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sach chuyen de');
-        
-        const fileName = `Danh_sach_Chuyen_de_Nghien_cuu_${dayjs().format('YYYYMMDD_HHmm')}.xlsx`;
-        XLSX.writeFile(workbook, fileName);
+        const buffer = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buffer]), `Chuyen_de_Nghien_cuu_${dayjs().format('DDMMYYYY')}.xlsx`);
     };
+    const importExcel = async () => {
+        
+    }
+
     return (
         <Row gutter={[16, 0]}>
             <Col span={24}>
