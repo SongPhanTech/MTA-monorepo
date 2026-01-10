@@ -6,8 +6,9 @@ import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
+import { signIn, useSession } from '@workspace/auth/react'
 import { WidgetChatbot } from '@workspace/ui'
-import { Breadcrumb, Layout, theme } from 'antd'
+import { Breadcrumb, Layout, Spin, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -39,6 +40,28 @@ const DefaultLayout = ({
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
+
+    // SSO Authentication check
+    const { status } = useSession()
+
+    // Redirect to SSO if not authenticated
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            signIn()
+        }
+    }, [status])
+
+    // Show loading while checking authentication
+    if (status === 'loading' || status === 'unauthenticated') {
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <Spin size="large" />
+                    <p className="mt-4 text-gray-600">Đang kiểm tra đăng nhập...</p>
+                </div>
+            </div>
+        )
+    }
 
     const listBreadcrumb = useMemo(() => {
         return breadcrumb?.length > 0
