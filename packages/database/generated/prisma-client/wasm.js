@@ -3834,7 +3834,25 @@ exports.Prisma.GraduationSessionScalarFieldEnum = {
   applicationStart: 'applicationStart',
   applicationEnd: 'applicationEnd',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  status: 'status'
+  status: 'status',
+  trainingCourseId: 'trainingCourseId',
+  eligibleCount: 'eligibleCount',
+  excellentCount: 'excellentCount',
+  topicDecisionNumber: 'topicDecisionNumber',
+  topicDecisionDate: 'topicDecisionDate',
+  topicDecisionSigner: 'topicDecisionSigner',
+  defenseDecisionNumber: 'defenseDecisionNumber',
+  defenseDecisionDate: 'defenseDecisionDate',
+  defenseDecisionSigner: 'defenseDecisionSigner',
+  graduationDecisionNumber: 'graduationDecisionNumber',
+  graduationDecisionDate: 'graduationDecisionDate',
+  graduationDecisionSigner: 'graduationDecisionSigner',
+  councilMeetingDate: 'councilMeetingDate',
+  councilMeetingBasis: 'councilMeetingBasis',
+  proposalTopic: 'proposalTopic',
+  proposalCouncil: 'proposalCouncil',
+  proposalGraduation: 'proposalGraduation',
+  skipCertificateCheck: 'skipCertificateCheck'
 };
 
 exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
@@ -6887,7 +6905,18 @@ exports.Prisma.GraduationSessionOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name',
-  trainingObjectTypeId: 'trainingObjectTypeId'
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  trainingCourseId: 'trainingCourseId',
+  topicDecisionNumber: 'topicDecisionNumber',
+  topicDecisionSigner: 'topicDecisionSigner',
+  defenseDecisionNumber: 'defenseDecisionNumber',
+  defenseDecisionSigner: 'defenseDecisionSigner',
+  graduationDecisionNumber: 'graduationDecisionNumber',
+  graduationDecisionSigner: 'graduationDecisionSigner',
+  councilMeetingBasis: 'councilMeetingBasis',
+  proposalTopic: 'proposalTopic',
+  proposalCouncil: 'proposalCouncil',
+  proposalGraduation: 'proposalGraduation'
 };
 
 exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {

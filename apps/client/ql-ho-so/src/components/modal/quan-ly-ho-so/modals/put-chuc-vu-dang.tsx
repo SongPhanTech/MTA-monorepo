@@ -36,9 +36,7 @@ const PutChucVuDangModal = () => {
                 input.onSave(dataToSave)
             }
             message.success(
-                isEdit
-                    ? 'Cập nhật chức vụ Đảng thành công'
-                    : 'Thêm mới chức vụ Đảng thành công'
+                isEdit ? 'Cập nhật chức vụ Đảng thành công' : 'Thêm mới chức vụ Đảng thành công'
             )
             onClose()
         } catch (error) {
@@ -72,12 +70,7 @@ const PutChucVuDangModal = () => {
             layout="vertical"
         >
             <Col span={24}>
-                <FormItem
-                    label="Tên Chức vụ Đảng"
-                    name="chucVuDangId"
-                    required
-                    form={form}
-                >
+                <FormItem label="Tên Chức vụ Đảng" name="chucVuDangId" required form={form}>
                     <Select
                         placeholder="Chọn chức vụ Đảng"
                         options={chucVuDangData.map((i) => {

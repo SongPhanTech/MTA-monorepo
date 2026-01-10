@@ -21,22 +21,51 @@ enum GraduationSessionStatus {
 
 /// Đợt xét tốt nghiệp 
 model GraduationSession extends Base {
-  name                 String
-  sessionDate          DateTime             // Ngày diễn ra phiên họp của hội đồng
-  applicationStart     DateTime             // Ngày bắt đầu nhận đơn
-  applicationEnd       DateTime             // Ngày kết thúc nhận đơn
+  name                     String
+  sessionDate              DateTime             // Ngày diễn ra phiên họp của hội đồng
+  applicationStart         DateTime             // Ngày bắt đầu nhận đơn
+  applicationEnd           DateTime             // Ngày kết thúc nhận đơn
 
   // Đối tượng đào tạo
-  trainingObjectType   TrainingObjectType             @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String
+  trainingObjectType       TrainingObjectType             @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
 
-  status               GraduationSessionStatus        @default(PLANNING)
+  status                   GraduationSessionStatus        @default(PLANNING)
 
-  // Danh sách các đơn xét tốt nghiệp trong đợt này
-  applications         StudentGraduationApplication[]
+  /// Danh sách các đơn xét tốt nghiệp trong đợt này
+  applications             StudentGraduationApplication[]
 
   /// chuẩn đầu ra áp dụng
-  outputStandard       OutputStandard[]
+  outputStandard           OutputStandard[]
+
+  trainingCourse           TrainingCourse?                @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId         String?
+
+  eligibleCount            Int? // SoDuDieuKien
+  excellentCount           Int? // SoXS
+
+  // Topic Decision (QD_DETAI)
+  topicDecisionNumber      String?
+  topicDecisionDate        DateTime?
+  topicDecisionSigner      String?
+
+  // Defense Decision (QD_BVLV)
+  defenseDecisionNumber    String?
+  defenseDecisionDate      DateTime?
+  defenseDecisionSigner    String?
+
+  // Graduation Decision (QDtotNghiep)
+  graduationDecisionNumber String?
+  graduationDecisionDate   DateTime?
+  graduationDecisionSigner String?
+
+  councilMeetingDate       DateTime? // NgayHopHDXTN
+
+  councilMeetingBasis      String? // CanCuHopHDXTN
+  proposalTopic            String? // ToTrinhDeTai
+  proposalCouncil          String? // ToTrinhHoiDong
+  proposalGraduation       String? // ToTrinhTotNghiep
+  skipCertificateCheck     Boolean? // BoQuaChungChi
 
   @@schema("ql-dao-tao")
 }

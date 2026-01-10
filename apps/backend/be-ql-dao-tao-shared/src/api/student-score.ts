@@ -1,7 +1,11 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import type { ScoreConvert } from '@workspace/db'
 import { prisma } from '..'
-import { StudentScoreRequest, StudentScoreResponse,StudentScoreNotFoundResponse } from '../dto/student-score'
+import {
+    StudentScoreRequest,
+    StudentScoreResponse,
+    StudentScoreNotFoundResponse,
+} from '../dto/student-score'
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
@@ -32,7 +36,6 @@ function scoreConverter(scoreRanges: ScoreConvert[] = []) {
 
     return { convertScore }
 }
-
 
 const getStudentScore = createRoute({
     operationId: 'get-student-score',

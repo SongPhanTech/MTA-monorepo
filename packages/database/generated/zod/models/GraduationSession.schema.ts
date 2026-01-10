@@ -21,6 +21,23 @@ const baseSchema = z.object({
     applicationStart: z.coerce.date(),
     applicationEnd: z.coerce.date(),
     status: GraduationSessionStatusSchema,
+    eligibleCount: z.number().nullish(),
+    excellentCount: z.number().nullish(),
+    topicDecisionNumber: z.string().nullish(),
+    topicDecisionDate: z.coerce.date().nullish(),
+    topicDecisionSigner: z.string().nullish(),
+    defenseDecisionNumber: z.string().nullish(),
+    defenseDecisionDate: z.coerce.date().nullish(),
+    defenseDecisionSigner: z.string().nullish(),
+    graduationDecisionNumber: z.string().nullish(),
+    graduationDecisionDate: z.coerce.date().nullish(),
+    graduationDecisionSigner: z.string().nullish(),
+    councilMeetingDate: z.coerce.date().nullish(),
+    councilMeetingBasis: z.string().nullish(),
+    proposalTopic: z.string().nullish(),
+    proposalCouncil: z.string().nullish(),
+    proposalGraduation: z.string().nullish(),
+    skipCertificateCheck: z.boolean().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -37,16 +54,35 @@ const baseSchemaWithoutDefaults = z.object({
     applicationStart: z.coerce.date(),
     applicationEnd: z.coerce.date(),
     status: GraduationSessionStatusSchema,
+    eligibleCount: z.number().nullish(),
+    excellentCount: z.number().nullish(),
+    topicDecisionNumber: z.string().nullish(),
+    topicDecisionDate: z.coerce.date().nullish(),
+    topicDecisionSigner: z.string().nullish(),
+    defenseDecisionNumber: z.string().nullish(),
+    defenseDecisionDate: z.coerce.date().nullish(),
+    defenseDecisionSigner: z.string().nullish(),
+    graduationDecisionNumber: z.string().nullish(),
+    graduationDecisionDate: z.coerce.date().nullish(),
+    graduationDecisionSigner: z.string().nullish(),
+    councilMeetingDate: z.coerce.date().nullish(),
+    councilMeetingBasis: z.string().nullish(),
+    proposalTopic: z.string().nullish(),
+    proposalCouncil: z.string().nullish(),
+    proposalGraduation: z.string().nullish(),
+    skipCertificateCheck: z.boolean().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
     trainingObjectType: z.record(z.string(), z.unknown()),
     applications: z.array(z.unknown()).optional(),
     outputStandard: z.array(z.unknown()).optional(),
+    trainingCourse: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     trainingObjectTypeId: z.string(),
+    trainingCourseId: z.string().nullish(),
 }
 );
 
@@ -86,7 +122,24 @@ export const GraduationSessionPrismaUpdateSchema = z.object({
     sessionDate: z.coerce.date(),
     applicationStart: z.coerce.date(),
     applicationEnd: z.coerce.date(),
-    status: GraduationSessionStatusSchema
+    status: GraduationSessionStatusSchema,
+    eligibleCount: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    excellentCount: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    topicDecisionNumber: z.string().nullish(),
+    topicDecisionDate: z.coerce.date().nullish(),
+    topicDecisionSigner: z.string().nullish(),
+    defenseDecisionNumber: z.string().nullish(),
+    defenseDecisionDate: z.coerce.date().nullish(),
+    defenseDecisionSigner: z.string().nullish(),
+    graduationDecisionNumber: z.string().nullish(),
+    graduationDecisionDate: z.coerce.date().nullish(),
+    graduationDecisionSigner: z.string().nullish(),
+    councilMeetingDate: z.coerce.date().nullish(),
+    councilMeetingBasis: z.string().nullish(),
+    proposalTopic: z.string().nullish(),
+    proposalCouncil: z.string().nullish(),
+    proposalGraduation: z.string().nullish(),
+    skipCertificateCheck: z.boolean().nullish()
 }).partial().passthrough();
 
 

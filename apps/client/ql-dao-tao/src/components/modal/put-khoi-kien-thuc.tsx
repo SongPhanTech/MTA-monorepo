@@ -72,7 +72,10 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             form.setFieldsValue({
                 trainingBlockIds: initialItems.map((item) => item.value),
                 trainingBlockElectiveCreditsRequired: initialValue?.trainingBlocks.reduce(
-                    (acc: Record<string, number>, curr: TrainingBlockOnCurriculumVersion & { trainingBlock: TrainingBlock }) => {
+                    (
+                        acc: Record<string, number>,
+                        curr: TrainingBlockOnCurriculumVersion & { trainingBlock: TrainingBlock }
+                    ) => {
                         acc[curr.trainingBlockId] = curr.electiveCreditsRequired || 0
                         return acc
                     },
@@ -157,7 +160,8 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                             },
                             data: {
                                 priority: index + 1,
-                                electiveCreditsRequired: output.trainingBlockElectiveCreditsRequired[i.value] || 0,
+                                electiveCreditsRequired:
+                                    output.trainingBlockElectiveCreditsRequired[i.value] || 0,
                             },
                         },
                     }
@@ -233,7 +237,11 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             >
                 <GripVertical className="text-blue-400" />
                 <div className="ml-2 font-[500]">{item?.label}</div>
-                <FormItem className="ml-auto w-[200px]" form={form} name={['trainingBlockElectiveCreditsRequired', item.value]}>
+                <FormItem
+                    className="ml-auto w-[200px]"
+                    form={form}
+                    name={['trainingBlockElectiveCreditsRequired', item.value]}
+                >
                     <InputNumber
                         prefix="Số tín chỉ tự chọn: "
                         controls={false}

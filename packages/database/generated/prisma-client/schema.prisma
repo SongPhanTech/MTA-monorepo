@@ -2812,6 +2812,7 @@ model TrainingCourse {
   documentFiles              DocumentFile[]
   thesisSession              ThesisSession[]
   planTrainings              PlanTraining[]
+  graduationSessions         GraduationSession[]
 
   @@schema("ql-dao-tao")
 }
@@ -5766,24 +5767,44 @@ model ScholarshipAward {
 
 /// Đợt xét tốt nghiệp 
 model GraduationSession {
-  id                   String                         @id() @default(cuid())
-  code                 String?                        @unique()
-  active               Boolean                        @default(true)
-  description          String?                        @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime                       @default(now())
-  updatedAt            DateTime                       @default(now()) @updatedAt()
-  createdBy            String?                        @db.Uuid()
-  name                 String
-  sessionDate          DateTime
-  applicationStart     DateTime
-  applicationEnd       DateTime
-  trainingObjectType   TrainingObjectType             @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String
-  status               GraduationSessionStatus        @default(PLANNING)
-  applications         StudentGraduationApplication[]
+  id                       String                         @id() @default(cuid())
+  code                     String?                        @unique()
+  active                   Boolean                        @default(true)
+  description              String?                        @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                       @default(now())
+  updatedAt                DateTime                       @default(now()) @updatedAt()
+  createdBy                String?                        @db.Uuid()
+  name                     String
+  sessionDate              DateTime
+  applicationStart         DateTime
+  applicationEnd           DateTime
+  trainingObjectType       TrainingObjectType             @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
+  status                   GraduationSessionStatus        @default(PLANNING)
+  /// Danh sách các đơn xét tốt nghiệp trong đợt này
+  applications             StudentGraduationApplication[]
   /// chuẩn đầu ra áp dụng
-  outputStandard       OutputStandard[]
+  outputStandard           OutputStandard[]
+  trainingCourse           TrainingCourse?                @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId         String?
+  eligibleCount            Int?
+  excellentCount           Int?
+  topicDecisionNumber      String?
+  topicDecisionDate        DateTime?
+  topicDecisionSigner      String?
+  defenseDecisionNumber    String?
+  defenseDecisionDate      DateTime?
+  defenseDecisionSigner    String?
+  graduationDecisionNumber String?
+  graduationDecisionDate   DateTime?
+  graduationDecisionSigner String?
+  councilMeetingDate       DateTime?
+  councilMeetingBasis      String?
+  proposalTopic            String?
+  proposalCouncil          String?
+  proposalGraduation       String?
+  skipCertificateCheck     Boolean?
 
   @@schema("ql-dao-tao")
 }

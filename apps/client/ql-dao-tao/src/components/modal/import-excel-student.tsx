@@ -61,9 +61,11 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             } catch (error) {
                 console.error('Error parsing Excel file:', error)
                 const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-                
+
                 if (errorMessage.includes('password-protected')) {
-                    message.error('File Excel được bảo vệ bằng mật khẩu. Vui lòng bỏ mật khẩu và thử lại.')
+                    message.error(
+                        'File Excel được bảo vệ bằng mật khẩu. Vui lòng bỏ mật khẩu và thử lại.'
+                    )
                 } else {
                     message.error(`Lỗi khi đọc file Excel: ${errorMessage}`)
                 }

@@ -16,9 +16,9 @@ import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export type PutTrainingLocation = TrainingScoreSession & { 
+export type PutTrainingLocation = TrainingScoreSession & {
     semesterId?: string
-    trainingObjectTypeId?: string 
+    trainingObjectTypeId?: string
 }
 
 const PutDotRenLuyen = () => {
@@ -58,7 +58,7 @@ const PutDotRenLuyen = () => {
 
     async function onOk(output?: PutTrainingLocation) {
         if (!output) return
-        
+
         // Validate required fields
         if (!output.semesterId) {
             message.error('Vui lòng chọn học kỳ')
@@ -68,7 +68,7 @@ const PutDotRenLuyen = () => {
             message.error('Vui lòng chọn đối tượng đào tạo')
             return
         }
-        
+
         try {
             showSpinner()
 
@@ -149,7 +149,12 @@ const PutDotRenLuyen = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo" required>
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeId"
+                    label="Đối tượng đào tạo"
+                    required
+                >
                     <Select
                         placeholder="Chọn đối tượng đào tạo"
                         showSearch

@@ -134,8 +134,7 @@ export default function FixedClassPage() {
                   }
                 : {}),
         }
-    }, [filters, trainingObjectTypeId, profileId, canReadAll]
-)
+    }, [filters, trainingObjectTypeId, profileId, canReadAll])
 
     const { data = [] } = useFindManyFixedClass({
         where,

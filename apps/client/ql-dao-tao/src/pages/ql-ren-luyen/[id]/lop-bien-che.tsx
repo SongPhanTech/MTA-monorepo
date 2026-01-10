@@ -82,11 +82,11 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
 
         // Nếu không có quyền xem tất cả -> filter theo lecturer hoặc staff
         const orConditions: any[] = []
-        
+
         if (currentLecturer?.id) {
             orConditions.push({ lecturerManagementId: currentLecturer.id })
         }
-        
+
         if (currentStaff?.id) {
             orConditions.push({ staffManagementId: currentStaff.id })
         }

@@ -1,4 +1,3 @@
-
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { prisma } from '..'
 import { ErrorCode, FailedResponseSchema } from '../dto/base'
@@ -137,7 +136,6 @@ app.openapi(registration, async (c) => {
                     throw new Error(`Lớp học ${cls} không hợp lệ`)
                 }
 
- 
                 const existed = await tx.classRegisterLogs.findFirst({
                     where: {
                         studentId: student.id,
@@ -169,7 +167,7 @@ app.openapi(registration, async (c) => {
                         },
                     })
                 }
-                
+
                 if (type_res === TYPE_RES.CANCEL) {
                     if (!existed) {
                         throw new Error(`Bạn chưa đăng ký lớp ${subjectClass.subject.name}`)

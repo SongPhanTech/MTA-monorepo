@@ -9749,6 +9749,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingCourse',
+                }, graduationSessions: {
+                    name: "graduationSessions",
+                    type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22812,6 +22818,89 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'graduationSessions',
                     isRelationOwner: true,
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'graduationSessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, eligibleCount: {
+                    name: "eligibleCount",
+                    type: "Int",
+                    isOptional: true,
+                }, excellentCount: {
+                    name: "excellentCount",
+                    type: "Int",
+                    isOptional: true,
+                }, topicDecisionNumber: {
+                    name: "topicDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, topicDecisionDate: {
+                    name: "topicDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, topicDecisionSigner: {
+                    name: "topicDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, defenseDecisionNumber: {
+                    name: "defenseDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, defenseDecisionDate: {
+                    name: "defenseDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, defenseDecisionSigner: {
+                    name: "defenseDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, graduationDecisionNumber: {
+                    name: "graduationDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, graduationDecisionDate: {
+                    name: "graduationDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, graduationDecisionSigner: {
+                    name: "graduationDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, councilMeetingDate: {
+                    name: "councilMeetingDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, councilMeetingBasis: {
+                    name: "councilMeetingBasis",
+                    type: "String",
+                    isOptional: true,
+                }, proposalTopic: {
+                    name: "proposalTopic",
+                    type: "String",
+                    isOptional: true,
+                }, proposalCouncil: {
+                    name: "proposalCouncil",
+                    type: "String",
+                    isOptional: true,
+                }, proposalGraduation: {
+                    name: "proposalGraduation",
+                    type: "String",
+                    isOptional: true,
+                }, skipCertificateCheck: {
+                    name: "skipCertificateCheck",
+                    type: "Boolean",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {

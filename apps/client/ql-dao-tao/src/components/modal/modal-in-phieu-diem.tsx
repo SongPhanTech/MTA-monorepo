@@ -374,7 +374,9 @@ const ModalPrintStudentSubjectScore = () => {
                     {scoreCoefs.map((item) => (
                         <Col span={8} key={item.title}>
                             <div className="flex gap-1 items-center">
-                                <span className="text-[#656565] text-sm font-time-news-roman">{item.title}</span>
+                                <span className="text-[#656565] text-sm font-time-news-roman">
+                                    {item.title}
+                                </span>
                                 <span className="text-sm font-semibold font-time-news-roman">
                                     {item.value.toString()}
                                 </span>

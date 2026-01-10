@@ -258,19 +258,11 @@ app.openapi(getOpenCourses, async (c) => {
 
                     const mainLecturer =
                         subjectClass.mainLecturer &&
-                        [
-                            subjectClass.mainLecturer?.userProfile.fullname,
-                        ]
-                            .filter(Boolean)
-                            .join(' ')
+                        [subjectClass.mainLecturer?.userProfile.fullname].filter(Boolean).join(' ')
 
                     const extraLecturer =
                         subjectClass.extraLecturer &&
-                        [
-                            subjectClass.extraLecturer?.userProfile.fullname,
-                        ]
-                            .filter(Boolean)
-                            .join(' ')
+                        [subjectClass.extraLecturer?.userProfile.fullname].filter(Boolean).join(' ')
 
                     const class_time = subjectClass.subjectClassTimes
                         .map(

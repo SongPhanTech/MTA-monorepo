@@ -629,8 +629,8 @@ export default function DanhSachSinhVien() {
                             >
                                 4. Khóa DS thi
                             </Checkbox>
-                            <ExportExamList 
-                                data={data} 
+                            <ExportExamList
+                                data={data}
                                 disabled={!selectedExamId || data.length === 0}
                             />
                         </Flex>

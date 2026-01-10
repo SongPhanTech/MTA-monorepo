@@ -443,6 +443,7 @@ model TrainingCourse extends Base {
   documentFiles              DocumentFile[]
   thesisSession              ThesisSession[]
   planTrainings              PlanTraining[]
+  graduationSessions         GraduationSession[]
 
   @@schema("ql-dao-tao")
 }

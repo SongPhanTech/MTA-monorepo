@@ -153,7 +153,6 @@ export function buildOrgTree(
         }))
 }
 
-
 export const buildOrgFlat = (
     list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
     parentId = '0'
@@ -179,17 +178,13 @@ export const validateExamScore = (score?: number | null, isOnePoint = false) => 
     if (!isOnePoint) {
         if (score % 0.5 !== 0) {
             // message.error('Điểm phải là bội số của 0.5')
-            return Promise.reject(
-                new Error('Điểm phải là bội số của 0.5')
-            )
+            return Promise.reject(new Error('Điểm phải là bội số của 0.5'))
         }
     } else {
         const scaledValue = score * 10
         if (scaledValue !== Math.round(scaledValue)) {
             // message.error('Điểm phải là bội số của 0.1')
-            return Promise.reject(
-                new Error('Điểm phải là bội số của 0.1')
-            )
+            return Promise.reject(new Error('Điểm phải là bội số của 0.1'))
         }
     }
     return Promise.resolve()

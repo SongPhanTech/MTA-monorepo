@@ -3153,7 +3153,6 @@ app.openapi(
     }
 )
 
-
 app.openapi(
     createRoute({
         method: 'post',
@@ -3453,16 +3452,14 @@ app.openapi(
             { name: 'Sáng kiến cải tiến kỹ thuật', count: 250 },
             { name: 'Hợp đồng dịch vụ KHCN', count: 20 },
         ]
-        if(preview){
-            return c.json(
-                {
-                    data,
-                    count:data.length,
-                    summary:{},
-                    preview:true,
-                    labels:['Danh mục','Số lượng']
-                }
-            )
+        if (preview) {
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+                labels: ['Danh mục', 'Số lượng'],
+            })
         }
 
         return c.json(
