@@ -9,8 +9,6 @@ import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurr
 export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum =
     {
         id: string
-        /** @nullable */
-        code?: string | null
         active?: boolean
         /** @nullable */
         description?: string | null
@@ -22,6 +20,8 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurric
         updatedAt?: string | null
         /** @nullable */
         createdBy?: string | null
+        /** @nullable */
+        code?: string | null
         name: string
         /** @nullable */
         englishName?: string | null

@@ -12,8 +12,6 @@ import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurr
  */
 export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion = {
     id: string
-    /** @nullable */
-    code?: string | null
     active?: boolean
     /** @nullable */
     description?: string | null
@@ -25,6 +23,8 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurric
     updatedAt?: string | null
     /** @nullable */
     createdBy?: string | null
+    /** @nullable */
+    code?: string | null
     name: string
     /** @nullable */
     shortName?: string | null
