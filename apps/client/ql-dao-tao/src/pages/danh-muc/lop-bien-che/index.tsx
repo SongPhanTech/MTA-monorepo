@@ -1,6 +1,6 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import Table from '@components/commons/table'
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -169,14 +169,7 @@ export default function FixedClassPage() {
             },
         },
         orderBy: [
-            ...emptyObjectIf(
-                [
-                    {
-                        startYear: filters.startYear,
-                    },
-                ],
-                !!filters.startYear
-            ),
+            ...emptyObjectIf([{ startYear: filters.startYear }], !!filters.startYear),
             { name: 'asc' },
         ],
         take: numberOfPages,
@@ -184,14 +177,20 @@ export default function FixedClassPage() {
     })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
+        orderBy: { name: 'asc' },
     })
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
         orderBy: { name: 'asc' },
     })
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        where: {
+            trainingObjectTypes: { some: { id: trainingObjectTypeId } },
+            deletedAt: null,
+            active: true,
+        },
         orderBy: { name: 'asc' },
     })
 

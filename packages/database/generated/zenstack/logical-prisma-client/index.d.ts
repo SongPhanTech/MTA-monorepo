@@ -9634,7 +9634,26 @@ export namespace Prisma {
         reason: 'reason',
         rankId: 'rankId',
         trainingMajorId: 'trainingMajorId',
-        diplomaTypeId: 'diplomaTypeId'
+        diplomaTypeId: 'diplomaTypeId',
+        thesisScore: 'thesisScore',
+        thesisReExam: 'thesisReExam',
+        politicalScore: 'politicalScore',
+        politicalReExam: 'politicalReExam',
+        foreignLanguageScore: 'foreignLanguageScore',
+        foreignLanguageReExam: 'foreignLanguageReExam',
+        defenseEduCert: 'defenseEduCert',
+        physicalEduCert: 'physicalEduCert',
+        foreignLangCert: 'foreignLangCert',
+        itCert: 'itCert',
+        accumulatedCredits: 'accumulatedCredits',
+        gpa10: 'gpa10',
+        reExamCredits: 'reExamCredits',
+        totalSubjects: 'totalSubjects',
+        failedSubjects: 'failedSubjects',
+        failedCredits: 'failedCredits',
+        mandatoryFailedSubjects: 'mandatoryFailedSubjects',
+        mandatoryFailedCredits: 'mandatoryFailedCredits',
+        rankDowngraded: 'rankDowngraded'
     };
     export const ApplicationDowngradedScalarFieldEnum: {
         id: 'id',
@@ -93612,6 +93631,25 @@ export namespace Prisma {
         readonly rankId: FieldRef<"StudentGraduationApplication", 'String'>;
         readonly trainingMajorId: FieldRef<"StudentGraduationApplication", 'String'>;
         readonly diplomaTypeId: FieldRef<"StudentGraduationApplication", 'String'>;
+        readonly thesisScore: FieldRef<"StudentGraduationApplication", 'Float'>;
+        readonly thesisReExam: FieldRef<"StudentGraduationApplication", 'Boolean'>;
+        readonly politicalScore: FieldRef<"StudentGraduationApplication", 'Float'>;
+        readonly politicalReExam: FieldRef<"StudentGraduationApplication", 'Boolean'>;
+        readonly foreignLanguageScore: FieldRef<"StudentGraduationApplication", 'Float'>;
+        readonly foreignLanguageReExam: FieldRef<"StudentGraduationApplication", 'Boolean'>;
+        readonly defenseEduCert: FieldRef<"StudentGraduationApplication", 'Boolean'>;
+        readonly physicalEduCert: FieldRef<"StudentGraduationApplication", 'Boolean'>;
+        readonly foreignLangCert: FieldRef<"StudentGraduationApplication", 'Boolean'>;
+        readonly itCert: FieldRef<"StudentGraduationApplication", 'Boolean'>;
+        readonly accumulatedCredits: FieldRef<"StudentGraduationApplication", 'Int'>;
+        readonly gpa10: FieldRef<"StudentGraduationApplication", 'Float'>;
+        readonly reExamCredits: FieldRef<"StudentGraduationApplication", 'Int'>;
+        readonly totalSubjects: FieldRef<"StudentGraduationApplication", 'Int'>;
+        readonly failedSubjects: FieldRef<"StudentGraduationApplication", 'Int'>;
+        readonly failedCredits: FieldRef<"StudentGraduationApplication", 'Int'>;
+        readonly mandatoryFailedSubjects: FieldRef<"StudentGraduationApplication", 'Int'>;
+        readonly mandatoryFailedCredits: FieldRef<"StudentGraduationApplication", 'Int'>;
+        readonly rankDowngraded: FieldRef<"StudentGraduationApplication", 'Boolean'>;
     }
 
     export interface ApplicationDowngradedDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -303688,9 +303726,31 @@ export namespace Prisma {
     };
     export type StudentGraduationApplicationAvgAggregateOutputType = {
         gpa: Decimal | null
+        thesisScore: number | null
+        politicalScore: number | null
+        foreignLanguageScore: number | null
+        accumulatedCredits: number | null
+        gpa10: number | null
+        reExamCredits: number | null
+        totalSubjects: number | null
+        failedSubjects: number | null
+        failedCredits: number | null
+        mandatoryFailedSubjects: number | null
+        mandatoryFailedCredits: number | null
     };
     export type StudentGraduationApplicationSumAggregateOutputType = {
         gpa: Decimal | null
+        thesisScore: number | null
+        politicalScore: number | null
+        foreignLanguageScore: number | null
+        accumulatedCredits: number | null
+        gpa10: number | null
+        reExamCredits: number | null
+        totalSubjects: number | null
+        failedSubjects: number | null
+        failedCredits: number | null
+        mandatoryFailedSubjects: number | null
+        mandatoryFailedCredits: number | null
     };
     export type StudentGraduationApplicationMinAggregateOutputType = {
         id: string | null
@@ -303711,6 +303771,25 @@ export namespace Prisma {
         rankId: string | null
         trainingMajorId: string | null
         diplomaTypeId: string | null
+        thesisScore: number | null
+        thesisReExam: boolean | null
+        politicalScore: number | null
+        politicalReExam: boolean | null
+        foreignLanguageScore: number | null
+        foreignLanguageReExam: boolean | null
+        defenseEduCert: boolean | null
+        physicalEduCert: boolean | null
+        foreignLangCert: boolean | null
+        itCert: boolean | null
+        accumulatedCredits: number | null
+        gpa10: number | null
+        reExamCredits: number | null
+        totalSubjects: number | null
+        failedSubjects: number | null
+        failedCredits: number | null
+        mandatoryFailedSubjects: number | null
+        mandatoryFailedCredits: number | null
+        rankDowngraded: boolean | null
     };
     export type StudentGraduationApplicationMaxAggregateOutputType = {
         id: string | null
@@ -303731,6 +303810,25 @@ export namespace Prisma {
         rankId: string | null
         trainingMajorId: string | null
         diplomaTypeId: string | null
+        thesisScore: number | null
+        thesisReExam: boolean | null
+        politicalScore: number | null
+        politicalReExam: boolean | null
+        foreignLanguageScore: number | null
+        foreignLanguageReExam: boolean | null
+        defenseEduCert: boolean | null
+        physicalEduCert: boolean | null
+        foreignLangCert: boolean | null
+        itCert: boolean | null
+        accumulatedCredits: number | null
+        gpa10: number | null
+        reExamCredits: number | null
+        totalSubjects: number | null
+        failedSubjects: number | null
+        failedCredits: number | null
+        mandatoryFailedSubjects: number | null
+        mandatoryFailedCredits: number | null
+        rankDowngraded: boolean | null
     };
     export type StudentGraduationApplicationCountAggregateOutputType = {
         id: number
@@ -303751,13 +303849,54 @@ export namespace Prisma {
         rankId: number
         trainingMajorId: number
         diplomaTypeId: number
+        thesisScore: number
+        thesisReExam: number
+        politicalScore: number
+        politicalReExam: number
+        foreignLanguageScore: number
+        foreignLanguageReExam: number
+        defenseEduCert: number
+        physicalEduCert: number
+        foreignLangCert: number
+        itCert: number
+        accumulatedCredits: number
+        gpa10: number
+        reExamCredits: number
+        totalSubjects: number
+        failedSubjects: number
+        failedCredits: number
+        mandatoryFailedSubjects: number
+        mandatoryFailedCredits: number
+        rankDowngraded: number
         _all: number
     };
     export type StudentGraduationApplicationAvgAggregateInputType = {
         gpa?: true
+        thesisScore?: true
+        politicalScore?: true
+        foreignLanguageScore?: true
+        accumulatedCredits?: true
+        gpa10?: true
+        reExamCredits?: true
+        totalSubjects?: true
+        failedSubjects?: true
+        failedCredits?: true
+        mandatoryFailedSubjects?: true
+        mandatoryFailedCredits?: true
     };
     export type StudentGraduationApplicationSumAggregateInputType = {
         gpa?: true
+        thesisScore?: true
+        politicalScore?: true
+        foreignLanguageScore?: true
+        accumulatedCredits?: true
+        gpa10?: true
+        reExamCredits?: true
+        totalSubjects?: true
+        failedSubjects?: true
+        failedCredits?: true
+        mandatoryFailedSubjects?: true
+        mandatoryFailedCredits?: true
     };
     export type StudentGraduationApplicationMinAggregateInputType = {
         id?: true
@@ -303778,6 +303917,25 @@ export namespace Prisma {
         rankId?: true
         trainingMajorId?: true
         diplomaTypeId?: true
+        thesisScore?: true
+        thesisReExam?: true
+        politicalScore?: true
+        politicalReExam?: true
+        foreignLanguageScore?: true
+        foreignLanguageReExam?: true
+        defenseEduCert?: true
+        physicalEduCert?: true
+        foreignLangCert?: true
+        itCert?: true
+        accumulatedCredits?: true
+        gpa10?: true
+        reExamCredits?: true
+        totalSubjects?: true
+        failedSubjects?: true
+        failedCredits?: true
+        mandatoryFailedSubjects?: true
+        mandatoryFailedCredits?: true
+        rankDowngraded?: true
     };
     export type StudentGraduationApplicationMaxAggregateInputType = {
         id?: true
@@ -303798,6 +303956,25 @@ export namespace Prisma {
         rankId?: true
         trainingMajorId?: true
         diplomaTypeId?: true
+        thesisScore?: true
+        thesisReExam?: true
+        politicalScore?: true
+        politicalReExam?: true
+        foreignLanguageScore?: true
+        foreignLanguageReExam?: true
+        defenseEduCert?: true
+        physicalEduCert?: true
+        foreignLangCert?: true
+        itCert?: true
+        accumulatedCredits?: true
+        gpa10?: true
+        reExamCredits?: true
+        totalSubjects?: true
+        failedSubjects?: true
+        failedCredits?: true
+        mandatoryFailedSubjects?: true
+        mandatoryFailedCredits?: true
+        rankDowngraded?: true
     };
     export type StudentGraduationApplicationCountAggregateInputType = {
         id?: true
@@ -303818,6 +303995,25 @@ export namespace Prisma {
         rankId?: true
         trainingMajorId?: true
         diplomaTypeId?: true
+        thesisScore?: true
+        thesisReExam?: true
+        politicalScore?: true
+        politicalReExam?: true
+        foreignLanguageScore?: true
+        foreignLanguageReExam?: true
+        defenseEduCert?: true
+        physicalEduCert?: true
+        foreignLangCert?: true
+        itCert?: true
+        accumulatedCredits?: true
+        gpa10?: true
+        reExamCredits?: true
+        totalSubjects?: true
+        failedSubjects?: true
+        failedCredits?: true
+        mandatoryFailedSubjects?: true
+        mandatoryFailedCredits?: true
+        rankDowngraded?: true
         _all?: true
     };
     export type StudentGraduationApplicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -303919,6 +304115,25 @@ export namespace Prisma {
         rankId: string | null
         trainingMajorId: string | null
         diplomaTypeId: string | null
+        thesisScore: number | null
+        thesisReExam: boolean | null
+        politicalScore: number | null
+        politicalReExam: boolean | null
+        foreignLanguageScore: number | null
+        foreignLanguageReExam: boolean | null
+        defenseEduCert: boolean | null
+        physicalEduCert: boolean | null
+        foreignLangCert: boolean | null
+        itCert: boolean | null
+        accumulatedCredits: number | null
+        gpa10: number | null
+        reExamCredits: number | null
+        totalSubjects: number | null
+        failedSubjects: number | null
+        failedCredits: number | null
+        mandatoryFailedSubjects: number | null
+        mandatoryFailedCredits: number | null
+        rankDowngraded: boolean | null
         _count: StudentGraduationApplicationCountAggregateOutputType | null
         _avg: StudentGraduationApplicationAvgAggregateOutputType | null
         _sum: StudentGraduationApplicationSumAggregateOutputType | null
@@ -303956,6 +304171,25 @@ export namespace Prisma {
         rankId?: boolean
         trainingMajorId?: boolean
         diplomaTypeId?: boolean
+        thesisScore?: boolean
+        thesisReExam?: boolean
+        politicalScore?: boolean
+        politicalReExam?: boolean
+        foreignLanguageScore?: boolean
+        foreignLanguageReExam?: boolean
+        defenseEduCert?: boolean
+        physicalEduCert?: boolean
+        foreignLangCert?: boolean
+        itCert?: boolean
+        accumulatedCredits?: boolean
+        gpa10?: boolean
+        reExamCredits?: boolean
+        totalSubjects?: boolean
+        failedSubjects?: boolean
+        failedCredits?: boolean
+        mandatoryFailedSubjects?: boolean
+        mandatoryFailedCredits?: boolean
+        rankDowngraded?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         session?: boolean | GraduationSessionDefaultArgs<ExtArgs>
         downgraded?: boolean | StudentGraduationApplication$downgradedArgs<ExtArgs>
@@ -303987,6 +304221,25 @@ export namespace Prisma {
         rankId?: boolean
         trainingMajorId?: boolean
         diplomaTypeId?: boolean
+        thesisScore?: boolean
+        thesisReExam?: boolean
+        politicalScore?: boolean
+        politicalReExam?: boolean
+        foreignLanguageScore?: boolean
+        foreignLanguageReExam?: boolean
+        defenseEduCert?: boolean
+        physicalEduCert?: boolean
+        foreignLangCert?: boolean
+        itCert?: boolean
+        accumulatedCredits?: boolean
+        gpa10?: boolean
+        reExamCredits?: boolean
+        totalSubjects?: boolean
+        failedSubjects?: boolean
+        failedCredits?: boolean
+        mandatoryFailedSubjects?: boolean
+        mandatoryFailedCredits?: boolean
+        rankDowngraded?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         session?: boolean | GraduationSessionDefaultArgs<ExtArgs>
         rank?: boolean | StudentGraduationApplication$rankArgs<ExtArgs>
@@ -304012,6 +304265,25 @@ export namespace Prisma {
         rankId?: boolean
         trainingMajorId?: boolean
         diplomaTypeId?: boolean
+        thesisScore?: boolean
+        thesisReExam?: boolean
+        politicalScore?: boolean
+        politicalReExam?: boolean
+        foreignLanguageScore?: boolean
+        foreignLanguageReExam?: boolean
+        defenseEduCert?: boolean
+        physicalEduCert?: boolean
+        foreignLangCert?: boolean
+        itCert?: boolean
+        accumulatedCredits?: boolean
+        gpa10?: boolean
+        reExamCredits?: boolean
+        totalSubjects?: boolean
+        failedSubjects?: boolean
+        failedCredits?: boolean
+        mandatoryFailedSubjects?: boolean
+        mandatoryFailedCredits?: boolean
+        rankDowngraded?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         session?: boolean | GraduationSessionDefaultArgs<ExtArgs>
         rank?: boolean | StudentGraduationApplication$rankArgs<ExtArgs>
@@ -304037,8 +304309,27 @@ export namespace Prisma {
         rankId?: boolean
         trainingMajorId?: boolean
         diplomaTypeId?: boolean
+        thesisScore?: boolean
+        thesisReExam?: boolean
+        politicalScore?: boolean
+        politicalReExam?: boolean
+        foreignLanguageScore?: boolean
+        foreignLanguageReExam?: boolean
+        defenseEduCert?: boolean
+        physicalEduCert?: boolean
+        foreignLangCert?: boolean
+        itCert?: boolean
+        accumulatedCredits?: boolean
+        gpa10?: boolean
+        reExamCredits?: boolean
+        totalSubjects?: boolean
+        failedSubjects?: boolean
+        failedCredits?: boolean
+        mandatoryFailedSubjects?: boolean
+        mandatoryFailedCredits?: boolean
+        rankDowngraded?: boolean
     };
-    export type StudentGraduationApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "sessionId" | "applicationDate" | "status" | "graduation" | "gpa" | "reason" | "rankId" | "trainingMajorId" | "diplomaTypeId", ExtArgs["result"]["studentGraduationApplication"]>;
+    export type StudentGraduationApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "sessionId" | "applicationDate" | "status" | "graduation" | "gpa" | "reason" | "rankId" | "trainingMajorId" | "diplomaTypeId" | "thesisScore" | "thesisReExam" | "politicalScore" | "politicalReExam" | "foreignLanguageScore" | "foreignLanguageReExam" | "defenseEduCert" | "physicalEduCert" | "foreignLangCert" | "itCert" | "accumulatedCredits" | "gpa10" | "reExamCredits" | "totalSubjects" | "failedSubjects" | "failedCredits" | "mandatoryFailedSubjects" | "mandatoryFailedCredits" | "rankDowngraded", ExtArgs["result"]["studentGraduationApplication"]>;
     export type StudentGraduationApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         student?: boolean | StudentDefaultArgs<ExtArgs>
         session?: boolean | GraduationSessionDefaultArgs<ExtArgs>
@@ -304099,6 +304390,25 @@ export namespace Prisma {
             rankId: string | null
             trainingMajorId: string | null
             diplomaTypeId: string | null
+            thesisScore: number | null
+            thesisReExam: boolean | null
+            politicalScore: number | null
+            politicalReExam: boolean | null
+            foreignLanguageScore: number | null
+            foreignLanguageReExam: boolean | null
+            defenseEduCert: boolean | null
+            physicalEduCert: boolean | null
+            foreignLangCert: boolean | null
+            itCert: boolean | null
+            accumulatedCredits: number | null
+            gpa10: number | null
+            reExamCredits: number | null
+            totalSubjects: number | null
+            failedSubjects: number | null
+            failedCredits: number | null
+            mandatoryFailedSubjects: number | null
+            mandatoryFailedCredits: number | null
+            rankDowngraded: boolean | null
         }, ExtArgs["result"]["studentGraduationApplication"]>
         composites: {}
     };
@@ -362617,6 +362927,25 @@ export namespace Prisma {
         rankId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
         trainingMajorId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
         diplomaTypeId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
+        thesisScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        thesisReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        politicalScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        politicalReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        foreignLanguageScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        foreignLanguageReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        defenseEduCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        physicalEduCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        foreignLangCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        itCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        accumulatedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        gpa10?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        reExamCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        totalSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        failedSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        failedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        mandatoryFailedSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        mandatoryFailedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        rankDowngraded?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         session?: XOR<GraduationSessionScalarRelationFilter, GraduationSessionWhereInput>
         downgraded?: XOR<ApplicationDowngradedNullableScalarRelationFilter, ApplicationDowngradedWhereInput> | null
@@ -362647,6 +362976,25 @@ export namespace Prisma {
         rankId?: SortOrderInput | SortOrder
         trainingMajorId?: SortOrderInput | SortOrder
         diplomaTypeId?: SortOrderInput | SortOrder
+        thesisScore?: SortOrderInput | SortOrder
+        thesisReExam?: SortOrderInput | SortOrder
+        politicalScore?: SortOrderInput | SortOrder
+        politicalReExam?: SortOrderInput | SortOrder
+        foreignLanguageScore?: SortOrderInput | SortOrder
+        foreignLanguageReExam?: SortOrderInput | SortOrder
+        defenseEduCert?: SortOrderInput | SortOrder
+        physicalEduCert?: SortOrderInput | SortOrder
+        foreignLangCert?: SortOrderInput | SortOrder
+        itCert?: SortOrderInput | SortOrder
+        accumulatedCredits?: SortOrderInput | SortOrder
+        gpa10?: SortOrderInput | SortOrder
+        reExamCredits?: SortOrderInput | SortOrder
+        totalSubjects?: SortOrderInput | SortOrder
+        failedSubjects?: SortOrderInput | SortOrder
+        failedCredits?: SortOrderInput | SortOrder
+        mandatoryFailedSubjects?: SortOrderInput | SortOrder
+        mandatoryFailedCredits?: SortOrderInput | SortOrder
+        rankDowngraded?: SortOrderInput | SortOrder
         student?: StudentOrderByWithRelationInput
         session?: GraduationSessionOrderByWithRelationInput
         downgraded?: ApplicationDowngradedOrderByWithRelationInput
@@ -362682,6 +363030,25 @@ export namespace Prisma {
         rankId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
         trainingMajorId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
         diplomaTypeId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
+        thesisScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        thesisReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        politicalScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        politicalReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        foreignLanguageScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        foreignLanguageReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        defenseEduCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        physicalEduCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        foreignLangCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        itCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        accumulatedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        gpa10?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        reExamCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        totalSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        failedSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        failedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        mandatoryFailedSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        mandatoryFailedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        rankDowngraded?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         session?: XOR<GraduationSessionScalarRelationFilter, GraduationSessionWhereInput>
         downgraded?: XOR<ApplicationDowngradedNullableScalarRelationFilter, ApplicationDowngradedWhereInput> | null
@@ -362712,6 +363079,25 @@ export namespace Prisma {
         rankId?: SortOrderInput | SortOrder
         trainingMajorId?: SortOrderInput | SortOrder
         diplomaTypeId?: SortOrderInput | SortOrder
+        thesisScore?: SortOrderInput | SortOrder
+        thesisReExam?: SortOrderInput | SortOrder
+        politicalScore?: SortOrderInput | SortOrder
+        politicalReExam?: SortOrderInput | SortOrder
+        foreignLanguageScore?: SortOrderInput | SortOrder
+        foreignLanguageReExam?: SortOrderInput | SortOrder
+        defenseEduCert?: SortOrderInput | SortOrder
+        physicalEduCert?: SortOrderInput | SortOrder
+        foreignLangCert?: SortOrderInput | SortOrder
+        itCert?: SortOrderInput | SortOrder
+        accumulatedCredits?: SortOrderInput | SortOrder
+        gpa10?: SortOrderInput | SortOrder
+        reExamCredits?: SortOrderInput | SortOrder
+        totalSubjects?: SortOrderInput | SortOrder
+        failedSubjects?: SortOrderInput | SortOrder
+        failedCredits?: SortOrderInput | SortOrder
+        mandatoryFailedSubjects?: SortOrderInput | SortOrder
+        mandatoryFailedCredits?: SortOrderInput | SortOrder
+        rankDowngraded?: SortOrderInput | SortOrder
         _count?: StudentGraduationApplicationCountOrderByAggregateInput
         _avg?: StudentGraduationApplicationAvgOrderByAggregateInput
         _max?: StudentGraduationApplicationMaxOrderByAggregateInput
@@ -362740,6 +363126,25 @@ export namespace Prisma {
         rankId?: StringNullableWithAggregatesFilter<"StudentGraduationApplication"> | string | null
         trainingMajorId?: StringNullableWithAggregatesFilter<"StudentGraduationApplication"> | string | null
         diplomaTypeId?: StringNullableWithAggregatesFilter<"StudentGraduationApplication"> | string | null
+        thesisScore?: FloatNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        thesisReExam?: BoolNullableWithAggregatesFilter<"StudentGraduationApplication"> | boolean | null
+        politicalScore?: FloatNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        politicalReExam?: BoolNullableWithAggregatesFilter<"StudentGraduationApplication"> | boolean | null
+        foreignLanguageScore?: FloatNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        foreignLanguageReExam?: BoolNullableWithAggregatesFilter<"StudentGraduationApplication"> | boolean | null
+        defenseEduCert?: BoolNullableWithAggregatesFilter<"StudentGraduationApplication"> | boolean | null
+        physicalEduCert?: BoolNullableWithAggregatesFilter<"StudentGraduationApplication"> | boolean | null
+        foreignLangCert?: BoolNullableWithAggregatesFilter<"StudentGraduationApplication"> | boolean | null
+        itCert?: BoolNullableWithAggregatesFilter<"StudentGraduationApplication"> | boolean | null
+        accumulatedCredits?: IntNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        gpa10?: FloatNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        reExamCredits?: IntNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        totalSubjects?: IntNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        failedSubjects?: IntNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        failedCredits?: IntNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        mandatoryFailedSubjects?: IntNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        mandatoryFailedCredits?: IntNullableWithAggregatesFilter<"StudentGraduationApplication"> | number | null
+        rankDowngraded?: BoolNullableWithAggregatesFilter<"StudentGraduationApplication"> | boolean | null
     };
     export type ApplicationDowngradedWhereInput = {
         AND?: ApplicationDowngradedWhereInput | ApplicationDowngradedWhereInput[]
@@ -392801,6 +393206,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -392831,6 +393255,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
@@ -392851,6 +393294,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -392881,6 +393343,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
@@ -392906,6 +393387,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
     };
     export type StudentGraduationApplicationUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -392921,6 +393421,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type StudentGraduationApplicationUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -392941,6 +393460,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type ApplicationDowngradedCreateInput = {
         id?: string
@@ -413414,9 +413952,39 @@ export namespace Prisma {
         rankId?: SortOrder
         trainingMajorId?: SortOrder
         diplomaTypeId?: SortOrder
+        thesisScore?: SortOrder
+        thesisReExam?: SortOrder
+        politicalScore?: SortOrder
+        politicalReExam?: SortOrder
+        foreignLanguageScore?: SortOrder
+        foreignLanguageReExam?: SortOrder
+        defenseEduCert?: SortOrder
+        physicalEduCert?: SortOrder
+        foreignLangCert?: SortOrder
+        itCert?: SortOrder
+        accumulatedCredits?: SortOrder
+        gpa10?: SortOrder
+        reExamCredits?: SortOrder
+        totalSubjects?: SortOrder
+        failedSubjects?: SortOrder
+        failedCredits?: SortOrder
+        mandatoryFailedSubjects?: SortOrder
+        mandatoryFailedCredits?: SortOrder
+        rankDowngraded?: SortOrder
     };
     export type StudentGraduationApplicationAvgOrderByAggregateInput = {
         gpa?: SortOrder
+        thesisScore?: SortOrder
+        politicalScore?: SortOrder
+        foreignLanguageScore?: SortOrder
+        accumulatedCredits?: SortOrder
+        gpa10?: SortOrder
+        reExamCredits?: SortOrder
+        totalSubjects?: SortOrder
+        failedSubjects?: SortOrder
+        failedCredits?: SortOrder
+        mandatoryFailedSubjects?: SortOrder
+        mandatoryFailedCredits?: SortOrder
     };
     export type StudentGraduationApplicationMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -413437,6 +414005,25 @@ export namespace Prisma {
         rankId?: SortOrder
         trainingMajorId?: SortOrder
         diplomaTypeId?: SortOrder
+        thesisScore?: SortOrder
+        thesisReExam?: SortOrder
+        politicalScore?: SortOrder
+        politicalReExam?: SortOrder
+        foreignLanguageScore?: SortOrder
+        foreignLanguageReExam?: SortOrder
+        defenseEduCert?: SortOrder
+        physicalEduCert?: SortOrder
+        foreignLangCert?: SortOrder
+        itCert?: SortOrder
+        accumulatedCredits?: SortOrder
+        gpa10?: SortOrder
+        reExamCredits?: SortOrder
+        totalSubjects?: SortOrder
+        failedSubjects?: SortOrder
+        failedCredits?: SortOrder
+        mandatoryFailedSubjects?: SortOrder
+        mandatoryFailedCredits?: SortOrder
+        rankDowngraded?: SortOrder
     };
     export type StudentGraduationApplicationMinOrderByAggregateInput = {
         id?: SortOrder
@@ -413457,9 +414044,39 @@ export namespace Prisma {
         rankId?: SortOrder
         trainingMajorId?: SortOrder
         diplomaTypeId?: SortOrder
+        thesisScore?: SortOrder
+        thesisReExam?: SortOrder
+        politicalScore?: SortOrder
+        politicalReExam?: SortOrder
+        foreignLanguageScore?: SortOrder
+        foreignLanguageReExam?: SortOrder
+        defenseEduCert?: SortOrder
+        physicalEduCert?: SortOrder
+        foreignLangCert?: SortOrder
+        itCert?: SortOrder
+        accumulatedCredits?: SortOrder
+        gpa10?: SortOrder
+        reExamCredits?: SortOrder
+        totalSubjects?: SortOrder
+        failedSubjects?: SortOrder
+        failedCredits?: SortOrder
+        mandatoryFailedSubjects?: SortOrder
+        mandatoryFailedCredits?: SortOrder
+        rankDowngraded?: SortOrder
     };
     export type StudentGraduationApplicationSumOrderByAggregateInput = {
         gpa?: SortOrder
+        thesisScore?: SortOrder
+        politicalScore?: SortOrder
+        foreignLanguageScore?: SortOrder
+        accumulatedCredits?: SortOrder
+        gpa10?: SortOrder
+        reExamCredits?: SortOrder
+        totalSubjects?: SortOrder
+        failedSubjects?: SortOrder
+        failedCredits?: SortOrder
+        mandatoryFailedSubjects?: SortOrder
+        mandatoryFailedCredits?: SortOrder
     };
     export type EnumApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
@@ -489461,6 +490078,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -489490,6 +490126,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -489513,6 +490168,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -489542,6 +490216,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
@@ -490195,6 +490888,25 @@ export namespace Prisma {
         rankId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
         trainingMajorId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
         diplomaTypeId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
+        thesisScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        thesisReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        politicalScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        politicalReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        foreignLanguageScore?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        foreignLanguageReExam?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        defenseEduCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        physicalEduCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        foreignLangCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        itCert?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
+        accumulatedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        gpa10?: FloatNullableFilter<"StudentGraduationApplication"> | number | null
+        reExamCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        totalSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        failedSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        failedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        mandatoryFailedSubjects?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        mandatoryFailedCredits?: IntNullableFilter<"StudentGraduationApplication"> | number | null
+        rankDowngraded?: BoolNullableFilter<"StudentGraduationApplication"> | boolean | null
     };
     export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutSupplementaryScoreInput = {
         where: StudentGraduationApplicationWhereUniqueInput
@@ -513748,6 +514460,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -513776,6 +514507,25 @@ export namespace Prisma {
         reason?: string | null
         rankId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
@@ -515813,6 +516563,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -515841,6 +516610,25 @@ export namespace Prisma {
         reason?: string | null
         rankId?: string | null
         trainingMajorId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
@@ -517894,6 +518682,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -517922,6 +518729,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
@@ -550250,6 +551076,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -550278,6 +551123,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
@@ -551819,6 +552683,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -551848,6 +552731,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -551974,6 +552876,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -552003,6 +552924,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -552117,6 +553057,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -552146,6 +553105,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -552214,6 +553192,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -552243,6 +553240,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -552303,6 +553319,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -552332,6 +553367,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
@@ -552792,6 +553846,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -552821,6 +553894,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
@@ -553532,6 +554624,25 @@ export namespace Prisma {
         graduation?: boolean | null
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -553560,6 +554671,25 @@ export namespace Prisma {
         reason?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
         downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
@@ -588419,6 +589549,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -588448,6 +589597,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -588472,6 +589640,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type StudentGraduationApplicationUpdateWithoutSupplementaryScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -588487,6 +589674,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -588516,6 +589722,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
@@ -588540,6 +589765,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type ArchivedCertificateOnStudentSubjectScoreUpdateWithoutStudentSubjectScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -600722,6 +601966,25 @@ export namespace Prisma {
         reason?: string | null
         rankId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
     };
     export type TrainingMajorOnTrainingObjectTypeUpdateWithoutTrainingMajorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -600975,6 +602238,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -601003,6 +602285,25 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
@@ -601027,6 +602328,25 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type SurveyObjectTypeUpdateWithoutTrainingMajorsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -601719,6 +603039,25 @@ export namespace Prisma {
         reason?: string | null
         rankId?: string | null
         trainingMajorId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
     };
     export type CurriculumVersionUpdateWithoutDiplomaTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -601927,6 +603266,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -601955,6 +603313,25 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
@@ -601979,6 +603356,25 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type CertificateCreateManyOutputStandardInput = {
         id?: string
@@ -602411,6 +603807,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
     };
     export type SurveySessionCreateManyStudentInput = {
         id?: string
@@ -603236,6 +604651,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -603264,6 +604698,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
@@ -603288,6 +604741,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type SurveySessionUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -613183,6 +614655,25 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
     };
     export type StudentGraduationApplicationUpdateWithoutSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -613198,6 +614689,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -613226,6 +614736,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
@@ -613250,6 +614779,25 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type OutputStandardUpdateWithoutGraduationSessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -613654,6 +615202,25 @@ export namespace Prisma {
         reason?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        thesisScore?: number | null
+        thesisReExam?: boolean | null
+        politicalScore?: number | null
+        politicalReExam?: boolean | null
+        foreignLanguageScore?: number | null
+        foreignLanguageReExam?: boolean | null
+        defenseEduCert?: boolean | null
+        physicalEduCert?: boolean | null
+        foreignLangCert?: boolean | null
+        itCert?: boolean | null
+        accumulatedCredits?: number | null
+        gpa10?: number | null
+        reExamCredits?: number | null
+        totalSubjects?: number | null
+        failedSubjects?: number | null
+        failedCredits?: number | null
+        mandatoryFailedSubjects?: number | null
+        mandatoryFailedCredits?: number | null
+        rankDowngraded?: boolean | null
     };
     export type ApplicationDowngradedCreateManyFromInput = {
         id?: string
@@ -613897,6 +615464,25 @@ export namespace Prisma {
         graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -613925,6 +615511,25 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
         downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
@@ -613949,6 +615554,25 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        thesisReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        politicalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        politicalReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLanguageScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguageReExam?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        defenseEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        physicalEduCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        foreignLangCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        itCert?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        accumulatedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        gpa10?: NullableFloatFieldUpdateOperationsInput | number | null
+        reExamCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        totalSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        failedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedSubjects?: NullableIntFieldUpdateOperationsInput | number | null
+        mandatoryFailedCredits?: NullableIntFieldUpdateOperationsInput | number | null
+        rankDowngraded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type ApplicationDowngradedUpdateWithoutFromInput = {
         id?: StringFieldUpdateOperationsInput | string
