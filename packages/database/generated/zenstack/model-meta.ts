@@ -23050,6 +23050,82 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaType',
+                }, thesisScore: {
+                    name: "thesisScore",
+                    type: "Float",
+                    isOptional: true,
+                }, thesisReExam: {
+                    name: "thesisReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, politicalScore: {
+                    name: "politicalScore",
+                    type: "Float",
+                    isOptional: true,
+                }, politicalReExam: {
+                    name: "politicalReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, foreignLanguageScore: {
+                    name: "foreignLanguageScore",
+                    type: "Float",
+                    isOptional: true,
+                }, foreignLanguageReExam: {
+                    name: "foreignLanguageReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, defenseEduCert: {
+                    name: "defenseEduCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, physicalEduCert: {
+                    name: "physicalEduCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, foreignLangCert: {
+                    name: "foreignLangCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, itCert: {
+                    name: "itCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, accumulatedCredits: {
+                    name: "accumulatedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, gpa10: {
+                    name: "gpa10",
+                    type: "Float",
+                    isOptional: true,
+                }, reExamCredits: {
+                    name: "reExamCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, totalSubjects: {
+                    name: "totalSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, failedSubjects: {
+                    name: "failedSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, failedCredits: {
+                    name: "failedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, mandatoryFailedSubjects: {
+                    name: "mandatoryFailedSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, mandatoryFailedCredits: {
+                    name: "mandatoryFailedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, rankDowngraded: {
+                    name: "rankDowngraded",
+                    type: "Boolean",
+                    isOptional: true,
                 }, applicationCheckResult: {
                     name: "applicationCheckResult",
                     type: "ApplicationCheckResult",

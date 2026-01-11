@@ -20,7 +20,6 @@ import type {
 import {
     useCountCurriculum,
     useFindManyCurriculum,
-    useFindManyDM_DonVi,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
     useFindManyTrainingTime,
@@ -241,9 +240,7 @@ export default function TrainingProgramCatalog() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountCurriculum({
-        where,
-    })
+    const { data: count } = useCountCurriculum({ where })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
         where: {
@@ -257,17 +254,11 @@ export default function TrainingProgramCatalog() {
         orderBy: { name: 'asc' },
     })
 
-    const { data: organization = [] } = useFindManyDM_DonVi({
-        orderBy: { sTen: 'asc' },
-    })
-
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
-        where: {
-            ...(trainingObjectTypeId
-                ? { trainingObjectTypes: { some: { trainingObjectTypeId } } }
-                : {}),
-        },
+        where: trainingObjectTypeId
+            ? { trainingObjectTypes: { some: { trainingObjectTypeId } } }
+            : {},
     })
 
     const { onOpen: onOpenCurriculum } = useDisclosure<string>({
@@ -291,12 +282,8 @@ export default function TrainingProgramCatalog() {
         try {
             showSpinner()
             await updateCurriculum({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
+                where: { id },
+                data: { deletedAt: new Date() },
             })
         } catch (error: any) {
             if (error?.info?.message) {
@@ -314,12 +301,8 @@ export default function TrainingProgramCatalog() {
         try {
             showSpinner()
             await updateCurriculumVersion({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
+                where: { id },
+                data: { deletedAt: new Date() },
             })
         } catch (error: any) {
             if (error?.info?.message) {
@@ -425,6 +408,12 @@ export default function TrainingProgramCatalog() {
                                             value: i.id,
                                             label: i.name,
                                         }))}
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            String(option?.label ?? '')
+                                                ?.toLowerCase()
+                                                ?.includes(input?.toLowerCase())
+                                        }
                                         onChange={(val) =>
                                             setFilters({
                                                 ...filters,

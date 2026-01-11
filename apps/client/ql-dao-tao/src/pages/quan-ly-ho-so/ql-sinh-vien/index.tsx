@@ -68,137 +68,119 @@ export default function UserProfilePageDs() {
 
     const where: Prisma.StudentWhereInput = useMemo(
         () => ({
-            OR: [
-                { fixedClass: null },
-                {
-                    ...(filters.code
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.name || filters.rank || filters.phone
-                        ? {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.name,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.name,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                      {
-                                          fullname: {
-                                              contains: filters.name,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                  ],
-                                  ...(filters.rank
-                                      ? {
-                                            rank: {
-                                                sTen: {
-                                                    contains: filters.rank,
-                                                    mode: 'insensitive',
-                                                },
-                                            },
-                                        }
-                                      : {}),
-                                  ...(filters.phone
-                                      ? {
-                                            phoneNumber: {
-                                                contains: filters.phone,
-                                                mode: 'insensitive',
-                                            },
-                                        }
-                                      : {}),
-                              },
-                          }
-                        : {}),
-                    ...(filters.curriculumVersion
-                        ? {
-                              curriculumVersionId: {
-                                  in: filters.curriculumVersion,
-                              },
-                          }
-                        : {}),
-                    ...(filters.curriculumVersionParallel
-                        ? {
-                              curriculumVersionParallelId: {
-                                  in: filters.curriculumVersionParallel,
-                              },
-                          }
-                        : {}),
-                    ...(filters.fixedClass
-                        ? {
-                              fixedClassId: {
-                                  in: filters.fixedClass,
-                              },
-                          }
-                        : {}),
-                    ...(filters.fixedClassId
-                        ? {
-                              fixedClassId: filters.fixedClassId,
-                          }
-                        : {}),
-                    ...(filters.trainingCourse
-                        ? {
-                              fixedClass: {
-                                  trainingCourseId: {
-                                      in: filters.trainingCourse,
-                                  },
-                              },
-                          }
-                        : {}),
-                    ...(filters.trainingCourseId
-                        ? {
-                              fixedClass: {
-                                  trainingCourseId: filters.trainingCourseId,
-                              },
-                          }
-                        : {
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name || filters.rank || filters.phone
+                ? {
+                      userProfile: {
+                          fullname: {
+                              contains: filters.name,
+                              mode: 'insensitive' as const,
+                          },
+                          ...(filters.rank
+                              ? {
+                                    rank: {
+                                        sTen: {
+                                            contains: filters.rank,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                }
+                              : {}),
+                          ...(filters.phone
+                              ? {
+                                    phoneNumber: {
+                                        contains: filters.phone,
+                                        mode: 'insensitive',
+                                    },
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.curriculumVersion
+                ? {
+                      curriculumVersionId: {
+                          in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
+            ...(filters.curriculumVersionParallel
+                ? {
+                      curriculumVersionParallelId: {
+                          in: filters.curriculumVersionParallel,
+                      },
+                  }
+                : {}),
+
+            ...(filters.trainingCourse
+                ? {
+                      fixedClass: {
+                          trainingCourseId: {
+                              in: filters.trainingCourse,
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourseId
+                ? {
+                      fixedClass: {
+                          trainingCourseId: filters.trainingCourseId,
+                      },
+                  }
+                : {
+                      OR: [
+                          {
                               fixedClass: {
                                   trainingCourse: {
                                       trainingObjectTypeId,
                                   },
                               },
-                          }),
-                    ...(filters.trainingMajors || filters.trainingField
-                        ? {
-                              fixedClass: {
-                                  curriculumVersion: {
-                                      curriculum: {
-                                          trainingMajor: {
-                                              ...(filters.trainingMajors
-                                                  ? {
-                                                        id: {
-                                                            in: filters.trainingMajors,
-                                                        },
-                                                    }
-                                                  : {}),
-                                              ...(filters.trainingField
-                                                  ? {
-                                                        trainingFieldId: {
-                                                            in: filters.trainingField,
-                                                        },
-                                                    }
-                                                  : {}),
-                                          },
-                                      },
+                          },
+                          {
+                              fixedClassId: null,
+                          },
+                      ],
+                  }),
+            ...(filters.fixedClassId
+                ? {
+                      fixedClass: {
+                          id: filters.fixedClassId,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingMajors || filters.trainingField
+                ? {
+                      fixedClass: {
+                          curriculumVersion: {
+                              curriculum: {
+                                  trainingMajor: {
+                                      ...(filters.trainingMajors
+                                          ? {
+                                                id: {
+                                                    in: filters.trainingMajors,
+                                                },
+                                            }
+                                          : {}),
+                                      ...(filters.trainingField
+                                          ? {
+                                                trainingFieldId: {
+                                                    in: filters.trainingField,
+                                                },
+                                            }
+                                          : {}),
                                   },
                               },
-                          }
-                        : {}),
-                },
-            ],
+                          },
+                      },
+                  }
+                : {}),
         }),
         [filters, trainingObjectTypeId]
     )
@@ -474,9 +456,9 @@ export default function UserProfilePageDs() {
                                 dataIndex: 'name',
                                 type: 'input',
                                 render: (__, record: { userProfile?: UserProfile }) =>
-                                    record.userProfile
-                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
-                                        : '',
+                                    record.userProfile?.fullname
+                                        ? record.userProfile.fullname
+                                        : `${record.userProfile?.lastName} ${record.userProfile?.firstName}`,
                             },
                             {
                                 title: 'SĐT',

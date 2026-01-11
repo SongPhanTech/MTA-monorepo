@@ -3873,7 +3873,26 @@ exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
   reason: 'reason',
   rankId: 'rankId',
   trainingMajorId: 'trainingMajorId',
-  diplomaTypeId: 'diplomaTypeId'
+  diplomaTypeId: 'diplomaTypeId',
+  thesisScore: 'thesisScore',
+  thesisReExam: 'thesisReExam',
+  politicalScore: 'politicalScore',
+  politicalReExam: 'politicalReExam',
+  foreignLanguageScore: 'foreignLanguageScore',
+  foreignLanguageReExam: 'foreignLanguageReExam',
+  defenseEduCert: 'defenseEduCert',
+  physicalEduCert: 'physicalEduCert',
+  foreignLangCert: 'foreignLangCert',
+  itCert: 'itCert',
+  accumulatedCredits: 'accumulatedCredits',
+  gpa10: 'gpa10',
+  reExamCredits: 'reExamCredits',
+  totalSubjects: 'totalSubjects',
+  failedSubjects: 'failedSubjects',
+  failedCredits: 'failedCredits',
+  mandatoryFailedSubjects: 'mandatoryFailedSubjects',
+  mandatoryFailedCredits: 'mandatoryFailedCredits',
+  rankDowngraded: 'rankDowngraded'
 };
 
 exports.Prisma.ApplicationDowngradedScalarFieldEnum = {
