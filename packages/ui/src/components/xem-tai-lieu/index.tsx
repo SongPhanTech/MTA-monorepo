@@ -414,16 +414,6 @@ const XemTaiLieu = () => {
                             onClick={(e) => {
                                 e.stopPropagation()
                                 e.preventDefault()
-                                document?.getElementById?.('idt-print')?.click?.()
-                            }}
-                        >
-                            In tài liệu
-                        </Button>
-                        <Button
-                            type="primary"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                e.preventDefault()
                                 window?.docEditor?.downloadAs?.(input?.mimeType)
                             }}
                         >
