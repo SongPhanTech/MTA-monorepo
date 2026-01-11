@@ -305,7 +305,8 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
             const config = {
                 width: '100%',
                 height: '750px',
-                type: mode === 'edit' ? 'desktop' : 'embedded',
+                type: 'desktop',
+                // type: mode === 'edit' ? 'desktop' : 'embedded',
                 documentType: getDocumentType(fileType),
                 token: '',
                 document: {
