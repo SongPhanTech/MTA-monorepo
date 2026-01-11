@@ -290,6 +290,7 @@ type Props = {
 const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode = 'view' }: Props) => {
     useEffect(() => {
         const id = createId()
+
         const placeholderContainer = document.getElementById('placeholder-container')
         // @ts-expect-error
         if (window.DocsAPI) {
@@ -314,6 +315,7 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                     url: uri,
                     permissions: {
                         download: true,
+                        print: true,
                     },
                 },
                 events: {
@@ -321,10 +323,9 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                         // console.log('OnlyOfficeViewer - onRequestSaveAs:', event)
                     },
                     onDocumentStateChange: (state) => {
-                        // console.log('OnlyOfficeViewer - onDocumentStateChange:', state)
+                        console.log('OnlyOfficeViewer - onDocumentStateChange:', state)
                     },
                     onDownloadAs(data) {
-                        // console.log('OnlyOfficeViewer - onDownloadAs:', data)
                         const link = document.createElement('a')
                         link.href = data?.data?.url
                         link.setAttribute('download', title || 'download')
@@ -345,6 +346,8 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                             visible: false, // Ẩn logo
                         },
                     },
+                    region: 'vn', //
+                    location: 'vi',
                 },
             } satisfies OnlyOfficeFullConfig
             // @ts-expect-error
@@ -384,7 +387,7 @@ const XemTaiLieu = () => {
     })
 
     const documentUrl = getMinioUrl(input?.uri || '')
-    
+
     const fileType = input?.mimeType?.toLowerCase() ?? ''
 
     return (
@@ -405,7 +408,17 @@ const XemTaiLieu = () => {
         >
             <Row gutter={[8, 8]}>
                 <Col span={24}>
-                    <Flex justify="end" className="mb-2">
+                    <Flex justify="end" className="mb-2" gap={1}>
+                        <Button
+                            type="primary"
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                e.preventDefault()
+                                document?.getElementById?.('idt-print')?.click?.()
+                            }}
+                        >
+                            In tài liệu
+                        </Button>
                         <Button
                             type="primary"
                             onClick={(e) => {

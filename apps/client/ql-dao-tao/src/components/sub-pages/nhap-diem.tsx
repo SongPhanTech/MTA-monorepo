@@ -773,6 +773,7 @@ export default function NhapDiem({
                                                     id: selectedSubjectClassId ?? '',
                                                 })}`
                                             ),
+                                            name: 'PhieuDiemNhap',
                                             mimeType: 'xlsx',
                                         })
                                     }

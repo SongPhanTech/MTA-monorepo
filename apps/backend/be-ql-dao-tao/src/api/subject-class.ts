@@ -1737,9 +1737,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     }
 
     template.substitute(1, data)
-
     const result = await template.generate({ type: 'arraybuffer' })
-
     const fileName = `Phieu_diem_${subjectClass.name}.xlsx`
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 

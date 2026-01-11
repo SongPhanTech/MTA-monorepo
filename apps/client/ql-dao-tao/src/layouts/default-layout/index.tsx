@@ -68,7 +68,6 @@ const DefaultLayout = ({
     const menus = useMenuList()
 
     const menusFlat = menus.flatten('children')
-    console.log('menusFlat', menusFlat)
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
