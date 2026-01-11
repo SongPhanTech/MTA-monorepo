@@ -29,7 +29,7 @@ const getBody = <T>(c: Response | Request): Promise<T> => {
     return c.blob() as Promise<T>
 }
 
-const getUrl = (baseUrl: string, contextUrl: string): string => {
+export const getUrl = (baseUrl: string, contextUrl: string): string => {
     const requestUrl = new URL(`${baseUrl}${contextUrl}`)
 
     return requestUrl.toString()

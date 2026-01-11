@@ -3,7 +3,6 @@ import XlsxTemplate from 'xlsx-template'
 
 // Load the template
 fs.readFile('PHIEU-DIEM.xlsx', (err, data) => {
-
     const template = new XlsxTemplate(data)
 
     // Define replacement values
@@ -16,9 +15,9 @@ fs.readFile('PHIEU-DIEM.xlsx', (err, data) => {
 
     // Generate the output file
     const output = template.generate({
-        type:'nodebuffer'
+        type: 'nodebuffer',
     })
-    
+
     // Save to disk
     fs.writeFileSync('output.xlsx', output)
 })

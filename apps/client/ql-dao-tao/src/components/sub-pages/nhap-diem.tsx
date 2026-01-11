@@ -18,7 +18,7 @@ import { $Enums, type StudentSubjectScore } from '@workspace/db/client'
 import { useFindManyStudentSubjectScore, useFindUniqueSubjectClass } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
-import { calcFinalScore, fastIsEqual } from '@workspace/libs/utils'
+import { calcFinalScore, fastIsEqual, getRuntimeEnv } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { cn } from '@workspace/ui/lib/utils'
@@ -43,6 +43,8 @@ import { FileUp, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { scoreConvert } from '@hooks/scoreConverter'
+import { getUrl } from '@workspace/libs/api/custom-instance'
+import { getExportSubjectClassScoreUrl } from '@workspace/libs/api/training'
 
 type FilterTable = FilterProps & {
     fullname?: string
@@ -583,6 +585,15 @@ export default function NhapDiem({
         )
     }, [dataDetailSubjectClass, can, score])
 
+    const { onOpen: openXemTaiLieu } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+        mode?: 'view' | 'edit'
+    }>({
+        tag: 'XemTaiLieu',
+    })
+
     const { onOpen: openStudentSubjectScore } = useDisclosure<{
         dataTable: DataTable[]
         type: number // 1: In phiếu điểm và khoá, 0: In phiếu điểm nháp
@@ -750,9 +761,19 @@ export default function NhapDiem({
                                 <Button
                                     disabled={!selectedSubjectClassId}
                                     onClick={() =>
-                                        openStudentSubjectScore({
-                                            dataTable,
-                                            type: EnumInPhieuDiem.PHIEU_DIEM_NHAP,
+                                        // openStudentSubjectScore({
+                                        //     dataTable,
+                                        //     type: EnumInPhieuDiem.PHIEU_DIEM_NHAP,
+                                        // })
+                                        openXemTaiLieu({
+                                            uri: getUrl(
+                                                getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                                    'https://api.daotao.mta.swantech.vn',
+                                                `${getExportSubjectClassScoreUrl({
+                                                    id: selectedSubjectClassId ?? '',
+                                                })}`
+                                            ),
+                                            mimeType: 'xlsx',
                                         })
                                     }
                                 >
