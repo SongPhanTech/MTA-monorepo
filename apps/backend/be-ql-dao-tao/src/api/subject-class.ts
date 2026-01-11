@@ -1,10 +1,13 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { $Enums, Prisma } from '@workspace/db'
+import { $Enums, ExamType, Prisma, ScoreConvert } from '@workspace/db'
+import { getMinioUrl, getScoreStatistics, numberToWords } from '@workspace/libs/utils'
 import { read, utils } from 'xlsx'
+import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from '../dto/subject-class.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { ListOf, PaginationQuerySchema } from '../zod/base'
+import dayjs from 'dayjs'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -454,6 +457,37 @@ const uploadExcelImportScore = createRoute({
                 },
             },
             description: 'Invalid file upload',
+        },
+    },
+})
+
+const exportSubjectClassScore = createRoute({
+    operationId: 'export-subject-class-score',
+    path: '/export-subject-class-score',
+    method: 'get',
+    tags: ['SubjectClass'],
+    summary: 'Excel xuất điểm lớp môn học',
+    request: {
+        query: z.object({
+            id: z.string().openapi('id', { description: 'ID của lớp môn học' }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export thành công',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy lớp môn học.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
         },
     },
 })
@@ -1539,6 +1573,180 @@ app.openapi(uploadExcelImportScore, async (c) => {
     console.log(`Total records updated: ${totalUpdated}`)
 
     return c.json({ data: updateResults, count: totalUpdated }, 200)
+})
+
+app.openapi(exportSubjectClassScore, async (c) => {
+    const { id } = c.req.valid('query')
+
+    const subjectClass = await prisma.subjectClass.findUnique({
+        where: { id },
+        include: {
+            subject: {
+                include: {
+                    managementOrganization: true,
+                },
+            },
+            semester: {
+                include: {
+                    schoolYear: true,
+                },
+            },
+            mainLecturer: {
+                include: {
+                    userProfile: true,
+                },
+            },
+            extraLecturer: {
+                include: {
+                    userProfile: true,
+                },
+            },
+            trainingObjectType: true,
+            subjectClassStudent: {
+                include: {
+                    student: {
+                        include: {
+                            fixedClass: {
+                                include: {
+                                    trainingCourse: {
+                                        include: {
+                                            scoreConverts: true,
+                                        },
+                                    },
+                                },
+                            },
+                            userProfile: true,
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    if (!subjectClass) {
+        return c.json({ message: 'Không tìm thấy lớp học' }, 404)
+    }
+    const res = await fetch(getMinioUrl('/mta/template/PHIEU-DIEM.xlsx'))
+    const buffer = await res.arrayBuffer()
+    const nodeBuffer = Buffer.from(buffer)
+    const template = new XlsxTemplate(nodeBuffer)
+    const examOptions = [
+        { value: ExamType.OfflineWritten, label: 'Thi viết' },
+        { value: ExamType.Oral, label: 'Thi vấn đáp' },
+        { value: ExamType.Practice, label: 'Thi thực hành' },
+        { value: ExamType.Project, label: 'Thi đồ án' },
+        { value: ExamType.Other, label: 'Loại khác' },
+    ]
+
+    const scoreConvert = (finalScore: number, scoreRanges: ScoreConvert[] = []) => {
+        const sortedRanges = [...scoreRanges].sort((a, b) => b.base10Min - a.base10Min)
+
+        const matched = sortedRanges.find(
+            (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
+        )
+
+        if (!matched) {
+            return {
+                base4: null,
+                letter: '-',
+                classification: 'Không xác định',
+                pass: false,
+                improvementRegister: false,
+            }
+        }
+
+        return {
+            base4: matched.base4,
+            letter: matched.letter,
+            classification: matched.classification,
+            pass: matched.pass,
+            improvementRegister: matched.improvementRegister,
+        }
+    }
+    const statistics = getScoreStatistics(subjectClass.subjectClassStudent || [])
+    const data = {
+        HOC_KY: subjectClass.semester?.name || '',
+        MA_LMH: subjectClass.code,
+        DOI_TUONG_DAO_TAO: subjectClass.trainingObjectType?.name || '',
+        KHOA_HOC: [
+            ...new Set(
+                subjectClass.subjectClassStudent
+                    ?.map((scs) => scs.student?.fixedClass?.trainingCourse?.name)
+                    .filter(Boolean)
+            ),
+        ].join(', '),
+        NGAY_THI: subjectClass.examDate ? dayjs(subjectClass.examDate).format('DD/MM/YYYY') : '',
+        QUAN_SO: subjectClass.subjectClassStudent.length,
+        VANG: subjectClass.subjectClassStudent.filter(
+            (scs) => scs.attendanceScore === null || scs.attendanceScore === undefined
+        ).length,
+        TEN_MON_HOC: subjectClass.subject?.name || '',
+        STC: subjectClass.subject?.credit || '',
+        GIANG_VIEN: subjectClass.mainLecturer
+            ? subjectClass.mainLecturer.userProfile?.fullname
+            : `${
+                  subjectClass.extraLecturer
+                      ? `, ${subjectClass.extraLecturer.userProfile?.fullname || ''}`
+                      : ''
+              }`,
+        KHOA: subjectClass.subject?.managementOrganization?.sCode || '',
+        HINH_THUC_THI: examOptions.find((et) => et.value === subjectClass.examType)?.label || '',
+        d: dayjs().date(),
+        m: dayjs().month() + 1,
+        y: dayjs().year(),
+        NGUOI_IN: c.get('user')?.fullName || '',
+        THOI_GIAN_IN: dayjs().format('HH:mm:ss DD/MM/YYYY'),
+        data: subjectClass.subjectClassStudent.map((scs, index) => {
+            const statusTexts = []
+            if (scs.examPostponed) statusTexts.push('Hoãn thi')
+            if (scs.exempted) statusTexts.push('Miễn học')
+            if (scs.withdrew) statusTexts.push('Rút khỏi')
+            if (scs.examBanned) statusTexts.push('Cấm thi')
+            if (scs.suspended) statusTexts.push('Đình chỉ')
+            return {
+                TT: index + 1,
+                MA_SV: scs.student.code,
+                HO_TEN: scs.student.userProfile?.fullname || '',
+                LOP: scs.student.fixedClass?.code || '',
+                CC:
+                    scs.attendanceScore !== null && scs.attendanceScore !== undefined
+                        ? scs.attendanceScore
+                        : '',
+                TX:
+                    scs.midtermScore !== null && scs.midtermScore !== undefined
+                        ? scs.midtermScore
+                        : '',
+                DT: scs.examScore !== null && scs.examScore !== undefined ? scs.examScore : '',
+                SO:
+                    scs.finalScore !== null && scs.finalScore !== undefined
+                        ? scs.finalScore?.toNumber()?.toString?.().replace(',', '.')
+                        : '',
+                TC: scs?.finalScore
+                    ? scoreConvert(
+                          scs?.finalScore?.toNumber(),
+                          scs.student.fixedClass?.trainingCourse?.scoreConverts || []
+                      ).base4
+                    : '',
+                BANG_CHU: scs?.finalScore ? numberToWords(scs?.finalScore?.toNumber()) : '',
+                GHI_CHU: statusTexts.length > 0 ? statusTexts.join(', ') : '',
+            }
+        }),
+        TONG_HOP: Object.entries(statistics)
+            .map(([type, { count, percentage }]) => `${type}: ${count}= ${percentage.toFixed(0)}%`)
+            .join(' '),
+    }
+
+    template.substitute(1, data)
+
+    const result = await template.generate({ type: 'arraybuffer' })
+
+    const fileName = `Phieu_diem_${subjectClass.name}.xlsx`
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
 })
 
 export default app
