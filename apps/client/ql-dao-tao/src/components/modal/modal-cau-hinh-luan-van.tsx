@@ -44,7 +44,7 @@ import {
 } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 // import  {useEffect} from 'react'
 const { Title } = Typography
 
@@ -117,10 +117,11 @@ const ModalCauHinhLuanVan = () => {
         return validExpertIds.length !== uniqueIds.size
     }
     const { TextArea } = Input
-    const [document] = useState<DocumentFile[]>([])
+    const [document, setDocument] = useState<DocumentFile[]>([])
 
-    const [attachments] = useState<DocumentFile[]>([])
+    const [attachments, setAttachments] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<ModalCauHinhLuanVanType>()
+
     const [activeTabKey, setActiveTabKey] = useState<string>('defenseConfig')
     const { isOpen, onClose, input } = useDisclosure<{
         thesisProjectId: string
@@ -286,69 +287,69 @@ const ModalCauHinhLuanVan = () => {
     }
 
     const handleSubmitThesis = async (data: ModalCauHinhLuanVanType) => {
-        // const filesInForm = (data as any).documentFile || []
-        // const initialFiles = document
-        // const thesisLibraryId = thesisProjectData?.librarySubmission?.id
-        // if (!thesisLibraryId) {
-        //     message.error('Không tìm thấy ID nộp luận văn thư viện.')
-        //     return
-        // }
-        // try {
-        //     showSpinner()
-        //     const dataSubmit = {
-        //         submissionDate: data.submissionDate,
-        //         isHardcopy: data.isHardcopy,
-        //         isSoftcopy: data.isSoftcopy,
-        //         librarianNote: data.librarianNote,
-        //         documentFile: {
-        //             upsert: filesInForm
-        //                 .filter((file: DocumentFile) => !!file.id)
-        //                 .map((file: DocumentFile) => ({
-        //                     where: { id: file.id },
-        //                     create: {
-        //                         name: file.name,
-        //                         path: file.path,
-        //                         mimeType: file.mimeType,
-        //                         size: file.size,
-        //                     },
-        //                     update: {
-        //                         name: file.name,
-        //                         path: file.path,
-        //                         mimeType: file.mimeType,
-        //                         size: file.size,
-        //                     },
-        //                 })),
-        //             create: filesInForm
-        //                 .filter((file: DocumentFile) => !file.id)
-        //                 .map((file: DocumentFile) => ({
-        //                     name: file.name,
-        //                     path: file.path,
-        //                     mimeType: file.mimeType,
-        //                     size: file.size,
-        //                 })),
-        //             disconnect: initialFiles
-        //                 .filter(
-        //                     (initialFile) =>
-        //                         !filesInForm.some(
-        //                             (finalFile: DocumentFile) => finalFile.id === initialFile.id
-        //                         )
-        //                 )
-        //                 .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
-        //         },
-        //     }
-        //     await updateLibrarySubmission({
-        //         where: { id: thesisLibraryId },
-        //         data: dataSubmit,
-        //     })
-        //     message.success('Cập nhật thông tin nộp luận văn thành công')
-        //     onClose()
-        // } catch (error: any) {
-        //     const errorMessage =
-        //         error?.info?.message || 'Đã xảy ra lỗi khi cập nhật thông tin nộp luận văn.'
-        //     message.error(errorMessage)
-        // } finally {
-        //     hideSpinner()
-        // }
+        const filesInForm = (data as any).documentFile || []
+        const initialFiles = document
+        const thesisLibraryId = thesisProjectData?.librarySubmission?.id
+        if (!thesisLibraryId) {
+            message.error('Không tìm thấy ID nộp luận văn thư viện.')
+            return
+        }
+        try {
+            showSpinner()
+            const dataSubmit = {
+                submissionDate: data.submissionDate,
+                isHardcopy: data.isHardcopy,
+                isSoftcopy: data.isSoftcopy,
+                librarianNote: data.librarianNote,
+                documentFile: {
+                    upsert: filesInForm
+                        .filter((file: DocumentFile) => !!file.id)
+                        .map((file: DocumentFile) => ({
+                            where: { id: file.id },
+                            create: {
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            },
+                            update: {
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            },
+                        })),
+                    create: filesInForm
+                        .filter((file: DocumentFile) => !file.id)
+                        .map((file: DocumentFile) => ({
+                            name: file.name,
+                            path: file.path,
+                            mimeType: file.mimeType,
+                            size: file.size,
+                        })),
+                    disconnect: initialFiles
+                        .filter(
+                            (initialFile) =>
+                                !filesInForm.some(
+                                    (finalFile: DocumentFile) => finalFile.id === initialFile.id
+                                )
+                        )
+                        .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+                },
+            }
+            await updateLibrarySubmission({
+                where: { id: thesisLibraryId },
+                data: dataSubmit,
+            })
+            message.success('Cập nhật thông tin nộp luận văn thành công')
+            onClose()
+        } catch (error: any) {
+            const errorMessage =
+                error?.info?.message || 'Đã xảy ra lỗi khi cập nhật thông tin nộp luận văn.'
+            message.error(errorMessage)
+        } finally {
+            hideSpinner()
+        }
     }
     const handlePaymentThesis = async (data: ModalCauHinhLuanVanType) => {
         // try {
@@ -424,64 +425,64 @@ const ModalCauHinhLuanVan = () => {
         // }
     }
     const handleInforSubmit = async (data: ModalCauHinhLuanVanType) => {
-        // try {
-        //     showSpinner()
-        //     const filesInForm = (data as any).attachments || []
-        //     const initialFiles = attachments
-        //     const payload = {
-        //         finalScore: new Decimal(data.finalResult ?? 0),
-        //         comments: data.commentsCouncil,
-        //         isProfileComplete: data.isCompleteCouncil,
-        //         documents: {
-        //             upsert: filesInForm
-        //                 .filter((file: DocumentFile) => !!file.id)
-        //                 .map((file: DocumentFile) => ({
-        //                     where: { id: file.id },
-        //                     create: {
-        //                         name: file.name,
-        //                         path: file.path,
-        //                         mimeType: file.mimeType,
-        //                         size: file.size,
-        //                     },
-        //                     update: {
-        //                         name: file.name,
-        //                         path: file.path,
-        //                         mimeType: file.mimeType,
-        //                         size: file.size,
-        //                     },
-        //                 })),
-        //             create: filesInForm
-        //                 .filter((file: DocumentFile) => !file.id)
-        //                 .map((file: DocumentFile) => ({
-        //                     name: file.name,
-        //                     path: file.path,
-        //                     mimeType: file.mimeType,
-        //                     size: file.size,
-        //                 })),
-        //             disconnect: initialFiles
-        //                 .filter(
-        //                     (initialFile) =>
-        //                         !filesInForm.some(
-        //                             (finalFile: DocumentFile) => finalFile.id === initialFile.id
-        //                         )
-        //                 )
-        //                 .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
-        //         },
-        //     }
-        //     await updateDefenseRecord({
-        //         data: payload,
-        //         where: { id: thesisProjectData?.defenseRecord?.id ?? '' },
-        //     })
-        //     message.success('Cập nhật thông tin hồ sơ và kết quả bảo vệ thành công')
-        //     onClose()
-        // } catch (error: any) {
-        //     const errorMessage =
-        //         error?.info?.message ||
-        //         'Đã xảy ra lỗi khi cập nhật thông tin hồ sơ và kết quả bảo vệ.'
-        //     message.error(errorMessage)
-        // } finally {
-        //     hideSpinner()
-        // }
+        try {
+            showSpinner()
+            const filesInForm = (data as any).attachments || []
+            const initialFiles = attachments
+            const payload = {
+                finalScore: new Decimal(data.finalResult ?? 0),
+                comments: data.commentsCouncil,
+                isProfileComplete: data.isCompleteCouncil,
+                documents: {
+                    upsert: filesInForm
+                        .filter((file: DocumentFile) => !!file.id)
+                        .map((file: DocumentFile) => ({
+                            where: { id: file.id },
+                            create: {
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            },
+                            update: {
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            },
+                        })),
+                    create: filesInForm
+                        .filter((file: DocumentFile) => !file.id)
+                        .map((file: DocumentFile) => ({
+                            name: file.name,
+                            path: file.path,
+                            mimeType: file.mimeType,
+                            size: file.size,
+                        })),
+                    disconnect: initialFiles
+                        .filter(
+                            (initialFile) =>
+                                !filesInForm.some(
+                                    (finalFile: DocumentFile) => finalFile.id === initialFile.id
+                                )
+                        )
+                        .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+                },
+            }
+            await updateDefenseRecord({
+                data: payload,
+                where: { id: thesisProjectData?.defenseRecord?.id ?? '' },
+            })
+            message.success('Cập nhật thông tin hồ sơ và kết quả bảo vệ thành công')
+            onClose()
+        } catch (error: any) {
+            const errorMessage =
+                error?.info?.message ||
+                'Đã xảy ra lỗi khi cập nhật thông tin hồ sơ và kết quả bảo vệ.'
+            message.error(errorMessage)
+        } finally {
+            hideSpinner()
+        }
     }
     const onOk = async () => {
         const defenseConfigFields: (keyof ModalCauHinhLuanVanType)[] = [
@@ -575,71 +576,64 @@ const ModalCauHinhLuanVan = () => {
             },
             supervisor: true,
             coSupervisor: true,
-            // supervisorPayments: {
-            //     include: {
-            //         expert: true,
-            //     },
-
-            //     orderBy: {
-            //         description: 'asc',
-            //     },
-            // },
+            supervisorPayment: true,
+            coSupervisorPayment: true,
         },
     })
 
-    // useEffect(() => {
-    //     if (thesisProjectData) {
-    //         // form.setFieldsValue({
-    //         //     chairman: thesisProjectData?.council?.members.find(
-    //         //         (member) => member.role === CouncilRole.CHAIRMAN
-    //         //     )?.expert?.id,
-    //         //     secretary: thesisProjectData?.council?.members.find(
-    //         //         (member) => member.role === CouncilRole.SECRETARY
-    //         //     )?.expert?.id,
-    //         //     reviewer1: thesisProjectData?.council?.members.find(
-    //         //         (member) => member.role === CouncilRole.REVIEWER_1
-    //         //     )?.expert?.id,
-    //         //     reviewer2: thesisProjectData?.council?.members.find(
-    //         //         (member) => member.role === CouncilRole.REVIEWER_2
-    //         //     )?.expert?.id,
-    //         //     member: thesisProjectData?.council?.members.find(
-    //         //         (member) => member.role === CouncilRole.MEMBER
-    //         //     )?.expert?.id,
-    //         //     roomId: thesisProjectData?.room?.id,
-    //         //     defenseDate: thesisProjectData?.defenseDate
-    //         //         ? dayjs(thesisProjectData?.defenseDate)
-    //         //         : undefined,
-    //         //     sessionId: thesisProjectData?.defenseSession?.id,
-    //         //     submissionDate: thesisProjectData?.librarySubmission?.submissionDate
-    //         //         ? dayjs(thesisProjectData?.librarySubmission?.submissionDate)
-    //         //         : undefined,
-    //         //     isHardcopy: thesisProjectData?.librarySubmission?.isHardcopy,
-    //         //     isSoftcopy: thesisProjectData?.librarySubmission?.isSoftcopy,
-    //         //     librarianNote: thesisProjectData?.librarySubmission?.librarianNote ?? '',
-    //         //     supervisorId: thesisProjectData?.supervisorId ?? '',
-    //         //     supervisorName: thesisProjectData?.supervisor?.name ?? '',
-    //         //     coSupervisorId: thesisProjectData?.coSupervisorId ?? '',
-    //         //     coSupervisorName: thesisProjectData?.coSupervisor?.name ?? '',
-    //         //     supervisorPaymentAmount:
-    //         //         thesisProjectData?.supervisorPayments[0]?.amount?.toNumber() ?? 0,
-    //         //     coSupervisorPaymentAmount:
-    //         //         thesisProjectData?.supervisorPayments[1]?.amount?.toNumber() ?? 0,
-    //         //     supervisorPaymentTransactionCode:
-    //         //         thesisProjectData?.supervisorPayments[0]?.transactionCode ?? '',
-    //         //     coSupervisorPaymentTransactionCode:
-    //         //         thesisProjectData?.supervisorPayments[1]?.transactionCode ?? '',
-    //         //     finalResult: thesisProjectData?.defenseRecord?.finalScore?.toNumber() ?? 0,
-    //         //     commentsCouncil: thesisProjectData?.defenseRecord?.comments ?? '',
-    //         //     isCompleteCouncil: thesisProjectData?.defenseRecord?.isProfileComplete ?? false,
-    //         //     attachments: thesisProjectData?.defenseRecord?.documents ?? [],
-    //         // })
-    //         // setDocument(thesisProjectData?.librarySubmission?.documentFile ?? [])
-    //         // setAttachments(thesisProjectData?.defenseRecord?.documents ?? [])
-    //     } else {
-    //         setDocument([])
-    //         setAttachments([])
-    //     }
-    // }, [form, thesisProjectData])
+    useEffect(() => {
+        if (thesisProjectData) {
+            form.setFieldsValue({
+                chairman: thesisProjectData?.council?.members.find(
+                    (member) => member.role === CouncilRole.CHAIRMAN
+                )?.expert?.id,
+                secretary: thesisProjectData?.council?.members.find(
+                    (member) => member.role === CouncilRole.SECRETARY
+                )?.expert?.id,
+                reviewer1: thesisProjectData?.council?.members.find(
+                    (member) => member.role === CouncilRole.REVIEWER_1
+                )?.expert?.id,
+                reviewer2: thesisProjectData?.council?.members.find(
+                    (member) => member.role === CouncilRole.REVIEWER_2
+                )?.expert?.id,
+                member: thesisProjectData?.council?.members.find(
+                    (member) => member.role === CouncilRole.MEMBER
+                )?.expert?.id,
+                roomId: thesisProjectData?.room?.id,
+                defenseDate: thesisProjectData?.defenseDate
+                    ? dayjs(thesisProjectData?.defenseDate)
+                    : undefined,
+                sessionId: thesisProjectData?.defenseSession?.id,
+                submissionDate: thesisProjectData?.librarySubmission?.submissionDate
+                    ? dayjs(thesisProjectData?.librarySubmission?.submissionDate)
+                    : undefined,
+                isHardcopy: thesisProjectData?.librarySubmission?.isHardcopy,
+                isSoftcopy: thesisProjectData?.librarySubmission?.isSoftcopy,
+                librarianNote: thesisProjectData?.librarySubmission?.librarianNote ?? '',
+                supervisorId: thesisProjectData?.supervisorId ?? '',
+                supervisorName: thesisProjectData?.supervisor?.name ?? '',
+                coSupervisorId: thesisProjectData?.coSupervisorId ?? '',
+                coSupervisorName: thesisProjectData?.coSupervisor?.name ?? '',
+                supervisorPaymentAmount:
+                    thesisProjectData?.supervisorPayment?.amount?.toNumber() ?? 0,
+                coSupervisorPaymentAmount:
+                    thesisProjectData?.coSupervisorPayment?.amount?.toNumber() ?? 0,
+                supervisorPaymentTransactionCode:
+                    thesisProjectData?.supervisorPayment?.transactionCode ?? '',
+                coSupervisorPaymentTransactionCode:
+                    thesisProjectData?.coSupervisorPayment?.transactionCode ?? '',
+                finalResult: thesisProjectData?.defenseRecord?.finalScore?.toNumber() ?? 0,
+                commentsCouncil: thesisProjectData?.defenseRecord?.comments ?? '',
+                isCompleteCouncil: thesisProjectData?.defenseRecord?.isProfileComplete ?? false,
+                attachments: thesisProjectData?.defenseRecord?.documents ?? [],
+            })
+            setDocument(thesisProjectData?.librarySubmission?.documentFile ?? [])
+            setAttachments(thesisProjectData?.defenseRecord?.documents ?? [])
+        } else {
+            setDocument([])
+            setAttachments([])
+        }
+    }, [form, thesisProjectData])
     const itemTab: TabsProps['items'] = [
         {
             key: 'defenseConfig',
@@ -1010,15 +1004,13 @@ const ModalCauHinhLuanVan = () => {
             icon: <DollarOutlined />,
             children: (
                 <Row gutter={32} className="w-full mt-4">
-                    {/* Cột chính chứa thông tin thanh toán */}
+
                     <Col span={24}>
                         <Title level={5} className="mb-4" style={{ marginTop: 0 }}>
                             Thanh toán giảng viên hướng dẫn
                         </Title>
 
-                        {/* --- GVHD 1 --- */}
                         <Row gutter={16} align="middle">
-                            {/* Phần hiển thị Tên GVHD 1 (chiếm 12/24 cột) */}
                             <Col span={12}>
                                 <FormItem
                                     form={form}
@@ -1045,7 +1037,7 @@ const ModalCauHinhLuanVan = () => {
                             <Col span={12}>
                                 <FormItem
                                     form={form}
-                                    name="supervisorPaymentAmount" // Tên trường mới
+                                    name="supervisorPaymentAmount" 
                                     label="Số tiền "
                                     className="mb-5"
                                     labelAlign="left"
@@ -1096,7 +1088,7 @@ const ModalCauHinhLuanVan = () => {
                             <Col span={12}>
                                 <FormItem
                                     form={form}
-                                    name="coSupervisorPaymentAmount" // Tên trường mới
+                                    name="coSupervisorPaymentAmount" 
                                     label="Số tiền"
                                     className="mb-5"
                                     labelAlign="left"
@@ -1153,7 +1145,7 @@ const ModalCauHinhLuanVan = () => {
                             <Col span={12}>
                                 <FormItem
                                     form={form}
-                                    name="councilChairmanPaymentAmount" // Tên trường mới
+                                    name="councilChairmanPaymentAmount" 
                                     label="Số tiền "
                                     className="mb-5"
                                     labelAlign="left"
@@ -1209,7 +1201,7 @@ const ModalCauHinhLuanVan = () => {
                             <Col span={12}>
                                 <FormItem
                                     form={form}
-                                    name="councilSecretaryPaymentAmount" // Tên trường mới
+                                    name="councilSecretaryPaymentAmount" 
                                     label="Số tiền"
                                     className="mb-5"
                                     labelAlign="left"
@@ -1265,7 +1257,7 @@ const ModalCauHinhLuanVan = () => {
                             <Col span={12}>
                                 <FormItem
                                     form={form}
-                                    name="councilReviewer1PaymentAmount" // Tên trường mới
+                                    name="councilReviewer1PaymentAmount" 
                                     label="Số tiền "
                                     className="mb-5"
                                     labelAlign="left"
