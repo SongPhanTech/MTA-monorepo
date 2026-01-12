@@ -75,7 +75,7 @@ model Student extends Base {
   fixedClassId                   String?
   subjectClassStudent            StudentSubjectScore[]
 
-  userProfileId                  String
+  userProfileId                  String                           @db.Uuid
   userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
 
   registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký

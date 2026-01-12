@@ -170,6 +170,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -187,7 +188,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1578,6 +1579,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -1658,6 +1660,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, address: {
@@ -1742,6 +1745,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, address: {
@@ -1865,6 +1869,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -1967,6 +1972,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2047,6 +2053,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, trinhDo: {
@@ -2142,6 +2149,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, trinhDo: {
@@ -2267,6 +2275,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2361,6 +2370,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2437,6 +2447,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2527,6 +2538,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2654,6 +2666,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2788,6 +2801,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2900,6 +2914,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2999,6 +3014,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3087,6 +3103,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3167,6 +3184,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3243,6 +3261,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3335,6 +3354,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3427,6 +3447,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3517,6 +3538,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3614,6 +3636,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3686,6 +3709,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3807,6 +3831,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3896,6 +3921,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -4009,6 +4035,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -4460,7 +4487,7 @@ const metadata = {
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Document$uploadedById,
                     isForeignKey: true,
                     relationField: 'uploadedBy',
@@ -4477,6 +4504,7 @@ const metadata = {
                     name: "approvedById",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'approvedBy',
                 }, topics: {
@@ -4658,7 +4686,7 @@ const metadata = {
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$FAQ$uploadedById,
                     isForeignKey: true,
                     relationField: 'uploadedBy',
@@ -4675,6 +4703,7 @@ const metadata = {
                     name: "approvedById",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'approvedBy',
                 },
@@ -4823,6 +4852,7 @@ const metadata = {
                     name: "userId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'user',
                 }, session: {
@@ -8589,6 +8619,7 @@ const metadata = {
                     name: "updatedById",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'updatedBy',
                 },
@@ -10960,6 +10991,7 @@ const metadata = {
                 }, updatedById: {
                     name: "updatedById",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'updatedBy',
                 },
@@ -11931,6 +11963,7 @@ const metadata = {
                     name: "updatedById",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'updatedBy',
                 },
@@ -14458,6 +14491,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, userProfile: {
@@ -16353,7 +16387,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, organization: {
@@ -16596,7 +16630,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, organization: {
@@ -18949,6 +18983,7 @@ const metadata = {
                 }, reviewerId: {
                     name: "reviewerId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'reviewer',
                 }, requirementCriterion: {
@@ -19922,6 +19957,7 @@ const metadata = {
                     name: "userProfileId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -20736,6 +20772,7 @@ const metadata = {
                     name: "profileId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'profile',
                 }, student: {
@@ -22265,7 +22302,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, organization: {
@@ -22388,7 +22425,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, organization: {

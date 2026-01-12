@@ -46,7 +46,7 @@ const fkSchema = z.object({
     dM_TinhTrangCongTacId: z.string().nullish(),
     dM_LoaiTinhTrangCongTacId: z.string().nullish(),
     dM_NuocCuDiHocTapId: z.string().nullish(),
-    userProfileId: z.string(),
+    userProfileId: z.string().uuid(),
 }
 );
 

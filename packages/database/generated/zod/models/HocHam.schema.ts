@@ -42,7 +42,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     academicRankTypeId: z.string().uuid().nullish(),
-    userProfileId: z.string(),
+    userProfileId: z.string().uuid(),
 }
 );
 

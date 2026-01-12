@@ -12,7 +12,7 @@ model ChangeLog {
   source        String?     // optional: e.g., "api", "admin_ui", "cron_job"
 
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String      @db.Uuid
 
   @@index([tableName, recordId])
   @@index([userProfileId])

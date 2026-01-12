@@ -191,7 +191,7 @@ model StudentSubjectScoreHistory extends Base {
   suspendedReason       String?
 
   updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
-  updatedById           String?
+  updatedById           String?             @db.Uuid
 
   @@schema("ql-dao-tao")
 }
@@ -712,7 +712,7 @@ model SubjectVersionHistory extends Base {
   action           String
 
   updatedBy        UserProfile    @relation(fields: [updatedById], references: [id])
-  updatedById      String
+  updatedById      String         @db.Uuid
 
   @@schema("ql-dao-tao")
 }
@@ -969,7 +969,7 @@ model SubjectClassHistory extends Base {
   scoreChecked       Boolean?
 
   updatedBy          UserProfile? @relation(fields: [updatedById], references: [id])
-  updatedById        String?
+  updatedById        String?      @db.Uuid
 
   @@schema("ql-dao-tao")
 }

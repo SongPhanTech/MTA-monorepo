@@ -6,7 +6,7 @@
 
 import { z } from 'zod/v3';
 const baseSchema = z.object({
-    id: z.string(),
+    id: z.string().uuid(),
     code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
@@ -92,7 +92,7 @@ const baseSchema = z.object({
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
+    id: z.string().uuid(),
     code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
@@ -340,7 +340,7 @@ export const UserProfilePrismaCreateSchema = baseSchemaWithoutDefaults.partial()
  * @private
  */
 export const UserProfilePrismaUpdateSchema = z.object({
-    id: z.string(),
+    id: z.string().uuid(),
     code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),

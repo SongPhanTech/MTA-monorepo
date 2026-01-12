@@ -100,14 +100,14 @@ model Survey extends Base {
 
   surveyObjectType     SurveyObjectType[]
 
-  lecture             Lecturer? @relation(fields: [lectureId], references: [id])
-	lectureId           String?
+  lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
+  lectureId            String?
 
-  subjectClass         SubjectClass?  @relation(fields: [subjectClassId], references: [id])
+  subjectClass         SubjectClass?      @relation(fields: [subjectClassId], references: [id])
   subjectClassId       String?
 
-  semester                    Semester?              @relation(fields: [semesterId], references: [id])
-  semesterId                  String?
+  semester             Semester?          @relation(fields: [semesterId], references: [id])
+  semesterId           String?
   // TODO: SurveyTopic[]
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
@@ -129,8 +129,6 @@ model Survey extends Base {
   clusterSurveyId      String?
 
   @@schema("khao-thi")
-
-
 }
 
 // câu hỏi khảo sát
@@ -172,7 +170,7 @@ model SurveySession extends Base {
   additionalSuggestion String?
 
   profile              UserProfile?      @relation(fields: [profileId], references: [id])
-  profileId            String?
+  profileId            String?           @db.Uuid
 
   student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?

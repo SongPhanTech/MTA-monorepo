@@ -17,20 +17,20 @@ model UserSession extends Base {
   conversation Conversation[]
 }
 model Document extends Base {
-  title              String?
-  body               String?                  @db.Text
-  status             DocumentStatus           @default(PENDING)
-  classification     DocumentClassification?  @relation(fields: [classificationId], references: [id]) // Phân loại: mới ban hành, hết hạn, còn hiệu lực...
-  classificationId   String?
-  uri                String?
-  fileType           String?
-  fileSize           Int?
-  reason             String?
-  uploadedBy         UserProfile              @relation("DocumentUploaded", fields: [uploadedById], references: [id])
-  uploadedById       String                   @default(auth().id)
-  approvedBy         UserProfile?             @relation("DocumentApproved", fields: [approvedById], references: [id])
-  approvedById       String?
-  topics             DocumentTopic[]         
+  title            String?
+  body             String?                 @db.Text
+  status           DocumentStatus          @default(PENDING)
+  classification   DocumentClassification? @relation(fields: [classificationId], references: [id]) // Phân loại: mới ban hành, hết hạn, còn hiệu lực...
+  classificationId String?
+  uri              String?
+  fileType         String?
+  fileSize         Int?
+  reason           String?
+  uploadedBy       UserProfile             @relation("DocumentUploaded", fields: [uploadedById], references: [id])
+  uploadedById     String                  @db.Uuid @default(auth().id)
+  approvedBy       UserProfile?            @relation("DocumentApproved", fields: [approvedById], references: [id])
+  approvedById     String?                 @db.Uuid
+  topics           DocumentTopic[]
   @@schema("tro-ly-ao")
 }
 
@@ -52,9 +52,9 @@ model FAQ  extends Base {
   topicId      String?
   reason       String?
   uploadedBy   UserProfile    @relation("FAQUploaded", fields: [uploadedById], references: [id])
-  uploadedById String         @default(auth().id)
+  uploadedById String         @db.Uuid @default(auth().id)
   approvedBy   UserProfile?   @relation("FAQApproved", fields: [approvedById], references: [id])
-  approvedById String?
+  approvedById String?        @db.Uuid
   @@schema("tro-ly-ao")
 }
 
@@ -70,7 +70,7 @@ model Prompt extends Base {
 model Conversation extends Base {
   name      String?
   user      UserProfile? @relation(fields: [userId], references: [id])
-  userId    String?
+  userId    String?      @db.Uuid
   session   UserSession? @relation(fields: [sessionId], references: [id])
   sessionId String?
   topic     Topic?       @relation(fields: [topicId], references: [id])
@@ -95,7 +95,7 @@ model CitationMessage extends Base {
   documentId   String?
   documentType String?
   messageId    String?
-  message      Message?  @relation(fields: [messageId], references: [id])
+  message      Message? @relation(fields: [messageId], references: [id])
 
   @@schema("tro-ly-ao")
 }
@@ -103,8 +103,8 @@ model CitationMessage extends Base {
 model Topic extends Base {
   name          String
   type          String
-  isPinned      Boolean        @default(false)
-  documents     DocumentTopic[] 
+  isPinned      Boolean         @default(false)
+  documents     DocumentTopic[]
   faqs          FAQ[]
   prompts       Prompt[]
   conversations Conversation[]
