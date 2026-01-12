@@ -34,7 +34,11 @@ const PutSubjectListModal = () => {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
-
+    const normalize = (str = '') =>
+        str
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
     const { mutateAsync: createSubject } = useCreateSubject()
     const { mutateAsync: updateSubject } = useUpdateSubject()
     async function onOk(output?: PutSubject) {
@@ -120,15 +124,18 @@ const PutSubjectListModal = () => {
                         treeData={treeData}
                         placeholder="Chọn đơn vị quản lý"
                         style={{ width: '100%' }}
+                        treeDefaultExpandAll
+                        showSearch={!input?.isLocked}
+                        filterTreeNode={(input, node) =>
+                            normalize(node.searchText).includes(normalize(input))
+                        }
                         {...(input?.isLocked
                             ? {
-                                  showSearch: false,
                                   allowClear: false,
                                   showArrow: false,
                                   open: false,
                               }
                             : {})}
-                        treeDefaultExpandAll
                     />
                 </Form.Item>
             </Col>
