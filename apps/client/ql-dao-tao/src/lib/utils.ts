@@ -3,7 +3,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
 import { message } from 'antd'
 
-function normalizeVietnamese(str: string): string {
+export function normalizeVietnamese(str: string): string {
     return str
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
