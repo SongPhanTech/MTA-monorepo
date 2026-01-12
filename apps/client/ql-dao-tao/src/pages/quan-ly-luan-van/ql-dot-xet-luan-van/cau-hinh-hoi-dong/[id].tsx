@@ -219,76 +219,66 @@ export default function SettingCouncil() {
   const handleCreateCouncil = async () => {
     try {
       const values = await form.validateFields();
-
       const { defenseSessionIds, defenseDate, roomIds } = values;
+  
       const allProjects = [...(thesisSession?.thesisProject || [])];
       const availableExperts = [...rightData];
-      const slotsPerCouncil =
-        (defenseDate?.length || 0) * (defenseSessionIds?.length || 0);
-
-      const requiredCouncilsCount = Math.ceil(
-        allProjects.length / slotsPerCouncil
-      );
-
-      if ((roomIds?.length || 0) < requiredCouncilsCount) {
-        message.error(
-          `Bạn cần chọn ít nhất ${requiredCouncilsCount} phòng để đáp ứng ${allProjects.length} đề tài.`
-        );
-        return;
-      }
-
-      if (availableExperts.length < requiredCouncilsCount * 5) {
-        message.error(
-          `Cần ít nhất ${
-            requiredCouncilsCount * 5
-          } chuyên gia để lập ${requiredCouncilsCount} hội đồng.`
-        );
-        return;
-      }
-
-      const usedChairmanIds = new Set<string>();
-      let projectOffset = 0;
-
-      for (let i = 0; i < requiredCouncilsCount; i++) {
-        const roomId = roomIds?.[i];
-        const councilProjects = allProjects.slice(
-          projectOffset,
-          projectOffset + slotsPerCouncil
-        );
-
-        if (councilProjects.length === 0) break;
-
-        const councilSupervisorIds = new Set(
-          councilProjects.map((p) => p.supervisorId)
-        );
-        const validExperts = availableExperts.filter(
-          (exp) => !councilSupervisorIds.has(exp.id)
-        );
-
-        const chairman = validExperts.find(
-          (exp) => exp.eligiblePresident && !usedChairmanIds.has(exp.id)
-        );
-
-        if (!chairman)
-          throw new Error(
-            `Không tìm thấy chủ tịch phù hợp cho hội đồng tại phòng ${roomId}.`
-          );
-        usedChairmanIds.add(chairman.id);
-
-        const others = validExperts.filter((e) => e.id !== chairman.id);
-        const secretary = others.find((e) => e.eligibleSecretary);
-        const remaining = others.filter((e) => e.id !== secretary?.id);
-
-        if (!secretary || remaining.length < 3) {
-          throw new Error(
-            `Không đủ nhân sự để cấu hình hội đồng tại phòng ${roomId}.`
-          );
+  
+      const availableSlots: { roomId: string; date: string; sessionId: string }[] = [];
+      for (const roomId of roomIds || []) {
+        for (const date of defenseDate || []) {
+          for (const sessionId of defenseSessionIds || []) {
+            availableSlots.push({ roomId, date: date.toISOString(), sessionId });
+          }
         }
-
+      }
+  
+      if (allProjects.length > availableSlots.length) {
+        message.error(`Chỉ có ${availableSlots.length} slot trống, không đủ cho ${allProjects.length} đề tài.`);
+        return;
+      }
+  
+      const usedExpertSets = new Set<string>();
+  
+      for (let i = 0; i < allProjects.length; i++) {
+        const project = allProjects[i];
+        const slot = availableSlots[i];
+  
+        let chairman: ExpertProfile | undefined;
+        let secretary: ExpertProfile | undefined;
+        let remaining: ExpertProfile[] = [];
+        let expertSetKey = "";
+        let attempts = 0;
+        const maxAttempts = 20;
+  
+        const validExperts = availableExperts.filter((exp) => exp.id !== project.supervisorId);
+  
+        do {
+          const shuffled = [...validExperts].sort(() => Math.random() - 0.5);
+  
+          chairman = shuffled.find((exp) => exp.eligiblePresident);
+          const others = shuffled.filter((e) => e.id !== chairman?.id);
+          
+          secretary = others.find((e) => e.eligibleSecretary);
+          remaining = others.filter((e) => e.id !== secretary?.id).slice(0, 3);
+  
+          if (chairman && secretary && remaining.length === 3) {
+            const ids = [chairman.id, secretary.id, ...remaining.map(r => r.id)].sort();
+            expertSetKey = ids.join(",");
+          }
+          attempts++;
+        } while (usedExpertSets.has(expertSetKey) && attempts < maxAttempts);
+  
+        if (!chairman || !secretary || remaining.length < 3) {
+          throw new Error(`Không thể tìm tổ hợp 5 người duy nhất cho đề tài: ${project.title}`);
+        }
+  
+        usedExpertSets.add(expertSetKey);
+  
         const newCouncil = await createCouncil({
           data: {
             status: "PENDING",
-            description: `Hội đồng ${i + 1}`,
+            description: `Hội đồng riêng cho đề tài: ${project.code || project.title}`,
             members: {
               create: [
                 { expertId: chairman.id, role: "CHAIRMAN" },
@@ -300,35 +290,21 @@ export default function SettingCouncil() {
             },
           },
         });
-
-        let slotIdx = 0;
-        for (const date of defenseDate || []) {
-          for (const sessionId of defenseSessionIds || []) {
-            if (slotIdx >= councilProjects.length) break;
-
-            const project = councilProjects[slotIdx];
-            await updateProjects({
-              where: { id: project.id },
-              data: {
-                councilId: newCouncil?.id,
-                roomId: roomId,
-                defenseSessionId: sessionId,
-                defenseDate: dayjs(date, "DD/MM/YYYY").toDate(),
-              },
-            });
-            slotIdx++;
-          }
-        }
-
-        projectOffset += slotsPerCouncil;
+  
+        await updateProjects({
+          where: { id: project.id },
+          data: {
+            councilId: newCouncil?.id,
+            roomId: slot.roomId,
+            defenseSessionId: slot.sessionId,
+            defenseDate: dayjs(slot.date, "DD/MM/YYYY").toDate(),
+          },
+        });
       }
-
-      message.success(
-        `Đã tạo ${requiredCouncilsCount} hội đồng và phân bổ thành công ${allProjects.length} đề tài.`
-      );
-    } catch {
-      message.error("Lỗi hệ thống khi tạo hội đồng");
-    } finally {
+  
+      message.success(`Đã tạo thành công ${allProjects.length} hội đồng cho các đề tài.`);
+    } catch (error: any) {
+      message.error(error.message || "Lỗi khi tạo hội đồng");
     }
   };
   const minRoomsRequired =

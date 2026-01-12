@@ -16,12 +16,12 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Button, Col, DatePicker, Form, message, Row } from 'antd'
+import { Button, Col, DatePicker, Form, message, Modal, Row } from 'antd'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import dayjs from 'dayjs'
 import { SquarePen } from 'lucide-react'
-import ExcelJS from 'exceljs';
-import { saveAs } from 'file-saver';
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
 import { useMemo, useState } from 'react'
 
 interface ChuyenDeNghienCuuForm {
@@ -55,7 +55,7 @@ export default function ChuyenDeNghienCuu() {
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: courseWhere,
     })
-    const {data:lecturerData = []} = useFindManyLecturer({
+    const { data: lecturerData = [] } = useFindManyLecturer({
         include: {
             userProfile: true,
         },
@@ -114,9 +114,15 @@ export default function ChuyenDeNghienCuu() {
                 },
             }
         }
+        if (timeReportParams.subjectClassId) {
+            filter.subjectClass = {
+                ...filter.subjectClass,
+                id: timeReportParams.subjectClassId,
+            }
+        }
 
         return filter
-    }, [searchParams, isSearched])
+    }, [searchParams, isSearched, timeReportParams])
     const { data: studentSubjectScoreData = [], refetch: refetchStudentSubjectScore } =
         useFindManyStudentSubjectScore({
             where,
@@ -306,16 +312,20 @@ export default function ChuyenDeNghienCuu() {
                 },
             ])
             if (res.status !== 200) {
-                return message.error('Vui lòng kiểm tra lại dữ liệu học sinh.')
+                if (res.status === 409) {
+                    return message.error('Chuyên đề  đã có trong lớp môn học này.')
+                }
             }
 
             message.success('Lấy dữ liệu thành công!')
-            refetchStudentSubjectScore()
-            refetchStudentSubjectScoreAll()
-            refetchCount()
         } catch (error) {
             console.error('getData Error:', error)
             message.error('Có lỗi xảy ra khi xử lý dữ liệu.')
+        } finally {
+            setIsSearched(true)
+            refetchStudentSubjectScore()
+            refetchStudentSubjectScoreAll()
+            refetchCount()
         }
     }
     const exportToExcel = async () => {
@@ -325,63 +335,261 @@ export default function ChuyenDeNghienCuu() {
     
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Danh sách chuyên đề');
-        const refSheet = workbook.addWorksheet('LecturerData');
-        refSheet.state = 'veryHidden'; 
-
+        
+        const refSheetName = 'LecturerData';
+        const refSheet = workbook.addWorksheet(refSheetName);
+        refSheet.state = 'veryHidden';
+    
+        // Đổ dữ liệu Giảng viên vào Sheet tham chiếu
         lecturerData.forEach((l, index) => {
             const fullName = `${l.userProfile?.lastName || ''} ${l.userProfile?.firstName || ''}`.trim();
-            refSheet.getCell(`A${index + 1}`).value = fullName;
-            refSheet.getCell(`B${index + 1}`).value = l.id;
+            refSheet.getCell(index + 1, 1).value = fullName; // Cột A: Tên
+            refSheet.getCell(index + 1, 2).value = l.id;     // Cột B: ID
         });
-        const lecturerNameRange = `LecturerData!$A$1:$A$${lecturerData.length}`;
-        const fullTableRange = `LecturerData!$A$1:$B$${lecturerData.length}`;
     
-        worksheet.columns = [
+        // Xác định dải ô tham chiếu (Quan trọng: Phải có dấu nháy đơn bao quanh tên Sheet)
+        const lecturerCount = lecturerData.length || 1;
+        const nameRange = `'${refSheetName}'!$A$1:$A$${lecturerCount}`;
+        const tableRange = `'${refSheetName}'!$A$1:$B$${lecturerCount}`;
+    
+        // 2. PHẦN ĐẦU SHEET CHÍNH: TIÊU ĐỀ VÀ THÔNG TIN TÌM KIẾM
+        worksheet.mergeCells('A1:Q1');
+        const titleCell = worksheet.getCell('A1');
+        titleCell.value = 'DANH SÁCH CHUYÊN ĐỀ NGHIÊN CỨU';
+        titleCell.font = { size: 16, bold: true };
+        titleCell.alignment = { horizontal: 'center' };
+    
+        const getNameById = (id: string | undefined, data: any[]) => 
+            data.find(item => item.id === id)?.name || 'Tất cả';
+    
+        const searchRows = [
+            ['trainingObjectTypeId',`Đối tượng đào tạo: ${getNameById(searchParams.trainingObjectTypeId, trainingObjectTypeData)}`],
+            ['trainingCourseId',`Khóa học: ${getNameById(searchParams.trainingCourseId, trainingCourseData)}`],
+            ['semesterId',`Học kỳ: ${getNameById(searchParams.semesterId, semesterData)}`],
+            ['organizationId',`Khoa quản lý: ${organizationData.find(o => o.Id === searchParams.organizationId)?.sTen || 'Tất cả'}`],
+            ['reportDate', 
+                 `Ngày xuất file: ${dayjs().format('DD/MM/YYYY HH:mm')}`],
+            []
+        ];
+        searchRows.forEach(val => {
+            const row = worksheet.addRow(val)
+            row.getCell(1).font = { bold: true }
+        })
+    
+        const columns = [
+            { header: 'ID_RECORD', key: 'recordId', width: 0, hidden: true },
+            { header: 'Hạn nhập', key: 'deadline', width: 15 },
+            { header: 'ĐTĐT', key: 'trainingType', width: 15 },
+            { header: 'Khóa học', key: 'course', width: 15 },
+            { header: 'Học kỳ', key: 'semester', width: 15 },
             { header: 'Mã SV', key: 'studentCode', width: 15 },
-            { header: 'Họ và tên', key: 'studentName', width: 25 },
+            { header: 'Họ và tên SV', key: 'studentName', width: 25 },
+            { header: 'Lớp môn học', key: 'subjectClass', width: 20 },
+            { header: 'STC', key: 'credits', width: 10 },
             { header: 'Tên chuyên đề', key: 'topicName', width: 35 },
-            { header: 'GVHD 1', key: 'gvhd1', width: 25 }, 
-            { header: 'GVHD 2', key: 'gvhd2', width: 25 }, 
-            { header: 'ID_GV1', key: 'idGv1', width: 0, hidden: true }, 
-            { header: 'ID_GV2', key: 'idGv2', width: 0, hidden: true }, 
+            { header: 'Nội dung chính', key: 'mainContent', width: 35 },
+            { header: 'GVHD 1', key: 'gvhd1', width: 30 },
+            { header: 'GVHD 2', key: 'gvhd2', width: 30 },
+            { header: 'ID_GV1', key: 'idGv1', width: 0, hidden: true },
+            { header: 'ID_GV2', key: 'idGv2', width: 0, hidden: true },
+            { header: 'Thời gian báo cáo', key: 'reportDate', width: 15 },
             { header: 'Điểm', key: 'score', width: 10 },
         ];
     
+        const headerRowNumber = worksheet.lastRow ? worksheet.lastRow.number + 1 : 1;
+        const headerRow = worksheet.getRow(headerRowNumber);
+        columns.forEach((col, idx) => {
+            headerRow.getCell(idx + 1).value = col.header;
+            worksheet.getColumn(idx + 1).key = col.key;
+            worksheet.getColumn(idx + 1).width = col.width;
+            if (col.hidden) worksheet.getColumn(idx + 1).hidden = true;
+        });
+        headerRow.font = { bold: true };
+        headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    
         studentSubjectScoreData.forEach((record, index) => {
-            const rowNumber = index + 2; // Dòng dữ liệu bắt đầu từ 2 (sau header)
+            const currentRowNum = headerRowNumber + index + 1;
             const topic = record.studentResearchTopic;
-            
-            const row = worksheet.addRow({
-                studentCode: record.student?.userProfile?.code || '',
-                studentName: `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`.trim(),
+    
+            const dataRow = worksheet.addRow({
+                recordId: record.id,
+                deadline: topic?.deadline ? dayjs(topic.deadline).format('DD/MM/YYYY') : '',
+                trainingType: record?.subjectClass?.trainingObjectType?.name || '',
+                course: record?.student?.fixedClass?.trainingCourse?.name || '',
+                semester: record?.subjectClass?.semester?.name || '',
+                studentCode: record?.student?.userProfile?.code || '',
+                studentName: `${record?.student?.userProfile?.lastName || ''} ${record?.student?.userProfile?.firstName || ''}`.trim(),
+                subjectClass: record?.subjectClass?.name || '',
+                credits: record?.subjectVersion?.credit || 0,
                 topicName: topic?.name || '',
+                mainContent: topic?.mainContent || '',
                 gvhd1: topic?.supervisor ? `${topic.supervisor.userProfile?.lastName} ${topic.supervisor.userProfile?.firstName}`.trim() : '',
                 gvhd2: topic?.coSupervisor ? `${topic.coSupervisor.userProfile?.lastName} ${topic.coSupervisor.userProfile?.firstName}`.trim() : '',
+                reportDate: topic?.reportDate ? dayjs(topic.reportDate).format('DD/MM/YYYY') : '',
                 score: record.finalScore || '',
             });
     
             const validation: ExcelJS.DataValidation = {
                 type: 'list',
                 allowBlank: true,
-                formulae: [lecturerNameRange]
+                formulae: [nameRange],
+                showErrorMessage: true,
+                errorTitle: 'Dữ liệu không hợp lệ',
+                error: 'Vui lòng chọn giảng viên từ danh sách.'
             };
-            row.getCell('gvhd1').dataValidation = validation;
-            row.getCell('gvhd2').dataValidation = validation;
     
-            row.getCell('idGv1').value = {
-                formula: `=IF(D${rowNumber}<>"", VLOOKUP(D${rowNumber}, ${fullTableRange}, 2, FALSE), "")`
+            dataRow.getCell('gvhd1').dataValidation = validation;
+            dataRow.getCell('gvhd2').dataValidation = validation;
+    
+            dataRow.getCell('idGv1').value = { 
+                formula: `=IF(L${currentRowNum}<>"", VLOOKUP(L${currentRowNum}, ${tableRange}, 2, FALSE), "")` 
             };
-            row.getCell('idGv2').value = {
-                formula: `=IF(E${rowNumber}<>"", VLOOKUP(E${rowNumber}, ${fullTableRange}, 2, FALSE), "")`
+            dataRow.getCell('idGv2').value = { 
+                formula: `=IF(M${currentRowNum}<>"", VLOOKUP(M${currentRowNum}, ${tableRange}, 2, FALSE), "")` 
             };
         });
     
         const buffer = await workbook.xlsx.writeBuffer();
-        saveAs(new Blob([buffer]), `Chuyen_de_Nghien_cuu_${dayjs().format('DDMMYYYY')}.xlsx`);
+        saveAs(new Blob([buffer]), `Danh_sach_Chuyen_de_${dayjs().format('DDMMYYYY_HHmm')}.xlsx`);
+        message.success('Xuất file thành công!');
     };
-    const importExcel = async () => {
+    const getCellValue = (cell: ExcelJS.Cell) => {
+        const val = cell.value;
+    
+        if (val === null || val === undefined) return null;
+    
+        if (typeof val === 'object' && 'result' in val) {
+            const result = val.result;
+            if (result === null || result === undefined || result === "") return null;
+            return result.toString().trim();
+        }
+    
+        const strVal = val.toString().trim();
+        return strVal !== "" ? strVal : null;
+    };
+    const importExcel = async (file: File) => {
+        const loading = message.loading('Đang xử lý file Excel...', 0);
+    try {
+        const workbook = new ExcelJS.Workbook();
+        const buffer = await file.arrayBuffer();
+        await workbook.xlsx.load(buffer);
         
+        const worksheet = workbook.getWorksheet('Danh sách chuyên đề');
+        if (!worksheet) {
+            return message.error('Không tìm thấy Sheet "Danh sách chuyên đề" trong file!');
+        }
+
+        const dataToUpdate: any[] = [];
+        
+        let startRow = 1;
+        worksheet.eachRow((row, rowNumber) => {
+            if (row.getCell(1).value === 'ID_RECORD') {
+                startRow = rowNumber + 1;
+            }
+        });
+
+        worksheet.eachRow((row, rowNumber) => {
+            if (rowNumber < startRow) return
+
+            const studentSubjectScoreId = getCellValue(row.getCell(1))
+            if (!studentSubjectScoreId) return
+
+            const supervisorId = getCellValue(row.getCell(14))
+            const coSupervisorId = getCellValue(row.getCell(15))
+
+            const name = getCellValue(row.getCell(10))
+            const mainContent = getCellValue(row.getCell(11))
+
+            const deadlineVal = row.getCell(2).value
+            const reportDateVal = row.getCell(16).value
+
+            const deadline = deadlineVal instanceof Date ? deadlineVal.toISOString() : null
+            const reportDate = reportDateVal instanceof Date ? reportDateVal.toISOString() : null
+
+            dataToUpdate.push({
+                model: 'StudentResearchTopic',
+                operation: 'upsert',
+                data: {
+                    where: { studentSubjectScoreId: studentSubjectScoreId },
+                    update: {
+                        name,
+                        mainContent,
+                        supervisorId,
+                        coSupervisorId,
+                        deadline,
+                        reportDate,
+                    },
+                    create: {
+                        studentSubjectScoreId,
+                        name,
+                        mainContent,
+                        supervisorId,
+                        coSupervisorId,
+                        deadline,
+                        reportDate,
+                    },
+                },
+            })
+        });
+
+        if (dataToUpdate.length === 0) {
+            return message.warning('Không tìm thấy dữ liệu hợp lệ trong file.');
+        }
+        const finalData = dataToUpdate.map(item => {
+            const fixValue = (val: any) => val === "[object Object]" ? null : val;
+        
+            return {
+                ...item,
+                data: {
+                    ...item.data,
+                    update: {
+                        ...item.data.update,
+                        supervisorId: fixValue(item.data.update.supervisorId),
+                        coSupervisorId: fixValue(item.data.update.coSupervisorId),
+                    },
+                    create: {
+                        ...item.data.create,
+                        supervisorId: fixValue(item.data.create.supervisorId),
+                        coSupervisorId: fixValue(item.data.create.coSupervisorId),
+                    }
+                }
+            };
+        });
+
+        const res = await sqlTransaction(finalData);
+        console.log('res', res)
+        
+        message.success(`Cập nhật thành công ${finalData.length} bản ghi!`);
+        refetchStudentSubjectScore(); 
+
+    } catch (error) {
+        console.error('Import Excel Error:', error);
+        message.error('Lỗi khi đọc file hoặc cập nhật dữ liệu. Vui lòng kiểm tra lại định dạng file!');
+    } finally {
+        loading();
     }
+    }
+    const confirmImport = (file: File) => {
+        Modal.confirm({
+            title: 'Xác nhận Import dữ liệu',
+            icon: <FileOutlined />,
+            content: (
+                <div>
+                    <p>Bạn có chắc chắn muốn import thông tin từ file sau không?</p>
+                    <p><strong>Tên file:</strong> <span className="text-blue-600">{file.name}</span></p>
+                    <p className="text-red-500 text-xs">
+                        * Lưu ý: Dữ liệu trong hệ thống sẽ được cập nhật hoặc tạo mới dựa trên nội dung file Excel.
+                    </p>
+                </div>
+            ),
+            okText: 'Xác nhận Import',
+            cancelText: 'Hủy bỏ',
+            okButtonProps: { type: 'primary', className: 'bg-[#02884f] hover:bg-[#19945d] border-none' },
+            onOk: () => {
+                importExcel(file);
+            },
+        });
+    };
 
     return (
         <Row gutter={[16, 0]}>
@@ -492,15 +700,39 @@ export default function ChuyenDeNghienCuu() {
                                     <Button type="primary" onClick={async () => await getData()}>
                                         Lấy dữ liệu
                                     </Button>
-                                    <Button  type="primary" onClick={exportToExcel}>
+                                    <Button
+                                        type="primary"
+                                        onClick={async () => await exportToExcel()}
+                                    >
                                         Xuất mẫu excel
                                     </Button>
+                                    <Button
+                                        type="primary"
+                                        onClick={() =>
+                                            document.getElementById('import-excel')?.click()
+                                        }
+                                    >
+                                        Import Excel
+                                    </Button>
+                                    <input
+                                        id="import-excel"
+                                        type="file"
+                                        accept=".xlsx"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0]
+                                            if (file) {
+                                                confirmImport(file)
+                                            }
+                                            e.target.value = ''
+                                        }}
+                                    />
                                 </div>
                             </Form.Item>
                             <Form.Item
                                 name="reportDate"
                                 label="Hạn nhập chuyên đề"
-                                className="mb-0"
+                                className="mb-0 ml-10"
                             >
                                 <DatePicker
                                     className="w-36"
