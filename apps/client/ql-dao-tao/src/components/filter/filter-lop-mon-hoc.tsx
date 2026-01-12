@@ -166,7 +166,6 @@ const FilterSubjectClass = (props: Props) => {
                                     labelAlign="left"
                                 >
                                     <TreeSelectDepartment
-                                        placeholder="Chọn bộ môn"
                                         style={{ width: '100%' }}
                                         dropdownStyle={{
                                             maxHeight: 400,

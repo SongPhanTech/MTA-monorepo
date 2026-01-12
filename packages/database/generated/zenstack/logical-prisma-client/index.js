@@ -8113,7 +8113,7 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/luanbt/swantech/MTA-monorepo/packages/database/logical-1768106695405.prisma",
+    "sourceFilePath": "/Users/luanbt/swantech/MTA-monorepo/packages/database/logical-1768208391813.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
