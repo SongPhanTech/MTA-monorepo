@@ -163,7 +163,15 @@ const PutClassRegisterSession = () => {
         },
         orderBy: { createdAt: 'desc' },
     })
-
+    const tableData = Object.keys(
+        Object.groupBy(
+            trainingCourses.flatMap((e) => e.academicRankingConvert),
+            (item) => item.classification
+        )
+    ).map((key, index) => ({
+        id: index,
+        classification: key,
+    }))
     return (
         <PutFormModal
             open={isOpen}
@@ -269,12 +277,7 @@ const PutClassRegisterSession = () => {
                 <FormItem hidden form={form} name="creditLimit" />
                 <span>Giới hạn đăng ký tín chỉ</span>
                 <Table
-                    data={Object.keys(
-                        Object.groupBy(
-                            trainingCourses.flatMap((e) => e.academicRankingConvert),
-                            (item) => item.classification
-                        )
-                    ).map((key) => ({ classification: key }))}
+                    data={tableData}
                     columns={[
                         {
                             title: 'Xếp loại',
@@ -284,15 +287,13 @@ const PutClassRegisterSession = () => {
                         {
                             title: 'TC Tối thiểu',
                             align: 'center',
-                            render: (_, record: any) => (
-                                <FormItem form={form} required name="minCredit">
+                            render: (_, __, index) => (
+                                <FormItem form={form} required name={[index, 'minCredit']}>
                                     <InputNumber
-                                        type="number"
                                         className="w-full"
                                         min={0}
                                         defaultValue={0}
                                         placeholder="Nhập tín chỉ tối thiểu"
-                                        step={1}
                                     />
                                 </FormItem>
                             ),
@@ -300,15 +301,13 @@ const PutClassRegisterSession = () => {
                         {
                             title: 'TC Tối đa',
                             align: 'center',
-                            render: (_, record: any) => (
-                                <FormItem form={form} required name="maxCredit">
+                            render: (_, __, index) => (
+                                <FormItem form={form} required name={[index, 'maxCredit']}>
                                     <InputNumber
-                                        type="number"
                                         className="w-full"
                                         min={0}
                                         defaultValue={25}
                                         placeholder="Nhập tín chỉ tối đa"
-                                        step={1}
                                     />
                                 </FormItem>
                             ),
