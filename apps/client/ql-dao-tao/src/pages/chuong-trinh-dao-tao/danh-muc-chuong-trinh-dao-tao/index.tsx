@@ -10,13 +10,7 @@ import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type {
-    CurriculumVersion,
-    Prisma,
-    TrainingCourse,
-    TrainingMajor,
-    TrainingTime,
-} from '@workspace/db/client'
+import type { CurriculumVersion, Prisma, TrainingMajor, TrainingTime } from '@workspace/db/client'
 import {
     useCountCurriculum,
     useFindManyCurriculum,
@@ -530,11 +524,6 @@ export default function TrainingProgramCatalog() {
                                 title: 'Khoá',
                                 align: 'center',
                                 width: 120,
-                                type: 'select',
-                                options: trainingCourseData.map((i: TrainingCourse) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                })),
                                 render: (__, record) => {
                                     return record?.fixedClass?.trainingCourse?.name
                                 },

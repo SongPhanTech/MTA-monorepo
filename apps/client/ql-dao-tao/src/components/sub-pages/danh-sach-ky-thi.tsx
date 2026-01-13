@@ -38,11 +38,7 @@ export default function KyThi() {
                     trainingObjectTypeId,
                     semesterId,
                     ...(filters.examType && filters.examType.length > 0
-                        ? {
-                              examType: {
-                                  in: filters.examType,
-                              },
-                          }
+                        ? { examType: { in: filters.examType } }
                         : {}),
                 },
             },
@@ -57,7 +53,7 @@ export default function KyThi() {
             subjectClass: true,
             _count: {
                 select: {
-                    examRooms: true,
+                    examRooms: { where: { roomId: { not: null } } },
                 },
             },
             examRooms: {
@@ -71,18 +67,10 @@ export default function KyThi() {
                         },
                     },
                 },
-                where: {
-                    roomId: {
-                        not: null,
-                    },
-                },
+                where: { roomId: { not: null } },
             },
         },
-        orderBy: {
-            subjectVersion: {
-                name: 'asc',
-            },
-        },
+        orderBy: { subjectVersion: { name: 'asc' } },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
