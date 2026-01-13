@@ -93,6 +93,7 @@ export type FilterProps = {
     active?: boolean[]
     numberOfOther?: 'asc' | 'desc'
     managementOrganizationId?: string
+    managementOrganizationIds?: string[]
     floor?: 'asc' | 'desc'
     roomNumber?: 'asc' | 'desc'
     trainingObjectId?: string | null

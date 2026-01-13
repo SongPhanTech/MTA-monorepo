@@ -2,11 +2,12 @@ import { buildOrgTree } from '@lib/utils'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import type { TreeSelectProps } from 'antd'
 import { TreeSelect as TreeSelectAnt } from 'antd'
-import type React from 'react'
 
 // Define props for our custom component
 type TreeSelectDepartmentProps = {
     rootId?: string
+    treeCheckable?: boolean
+    multiple?: boolean
 } & TreeSelectProps
 
 const TreeSelectDepartment: React.FC<TreeSelectDepartmentProps> = ({
@@ -14,6 +15,8 @@ const TreeSelectDepartment: React.FC<TreeSelectDepartmentProps> = ({
     style = { width: '100%' },
     dropdownStyle = { maxHeight: 400, overflow: 'auto', width: 600 },
     rootId,
+    treeCheckable = true,
+    multiple,
     ...rest
 }) => {
     const { data: organizationData = [] } = useFindManyDM_DonVi({
@@ -31,7 +34,8 @@ const TreeSelectDepartment: React.FC<TreeSelectDepartmentProps> = ({
 
     return (
         <TreeSelectAnt
-            treeCheckable
+            treeCheckable={treeCheckable}
+            multiple={multiple}
             showSearch
             style={style}
             dropdownStyle={dropdownStyle}

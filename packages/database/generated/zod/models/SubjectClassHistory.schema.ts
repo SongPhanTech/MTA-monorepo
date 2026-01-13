@@ -48,7 +48,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     subjectClassId: z.string(),
-    updatedById: z.string().nullish(),
+    updatedById: z.string().uuid().nullish(),
 }
 );
 

@@ -645,7 +645,7 @@ model ChangeLog {
   transactionId String?
   source        String?
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String      @db.Uuid()
 
   @@index([tableName, recordId])
   @@index([userProfileId])
@@ -658,7 +658,7 @@ model ChangeLog {
 /// @@allow('read', auth() != null)
 /// @@auth
 model UserProfile {
-  id                                   String                              @id() @default(cuid())
+  id                                   String                              @id() @default(uuid()) @db.Uuid()
   code                                 String?                             @unique()
   active                               Boolean                             @default(true)
   description                          String?                             @db.Text()
@@ -900,7 +900,7 @@ model HocHam {
   from               DateTime?
   to                 DateTime?
   userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId      String
+  userProfileId      String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -920,7 +920,7 @@ model ChucVuChinhQuyen {
   chucVuChinhQuyen   DM_ChucVu?  @relation(fields: [chucVuChinhQuyenId], references: [Id])
   chucVuChinhQuyenId String?     @db.Uuid()
   userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId      String
+  userProfileId      String      @db.Uuid()
   address            String?
 
   @@schema("ql-ho-so")
@@ -941,7 +941,7 @@ model ChucVuDang {
   chucVuDang    DM_ChucVu?  @relation(fields: [chucVuDangId], references: [Id])
   chucVuDangId  String?     @db.Uuid()
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String      @db.Uuid()
   address       String?
 
   @@schema("ql-ho-so")
@@ -968,7 +968,7 @@ model HocVi {
   truongId             String?
   year                 Int?
   userProfile          UserProfile           @relation(fields: [userProfileId], references: [id])
-  userProfileId        String
+  userProfileId        String                @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -995,7 +995,7 @@ model Relative {
   quanHeThanNhan   DM_QuanHeThanNhan? @relation(fields: [quanHeThanNhanId], references: [id])
   quanHeThanNhanId String?
   userProfile      UserProfile        @relation(fields: [userProfileId], references: [id])
-  userProfileId    String
+  userProfileId    String             @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1017,7 +1017,7 @@ model TrinhDoLyLuanChinhTri {
   thoiGianBatDau  DateTime?
   thoiGianKetThuc DateTime?
   userProfile     UserProfile               @relation(fields: [userProfileId], references: [id])
-  userProfileId   String
+  userProfileId   String                    @db.Uuid()
   trinhDo         DM_TrinhDoLyLuanChinhTri? @relation(fields: [trinhDoId], references: [id])
   trinhDoId       String?
 
@@ -1041,7 +1041,7 @@ model TrinhDoQuanLyNhaNuoc {
   thoiGianBatDau  DateTime?
   thoiGianKetThuc DateTime?
   userProfile     UserProfile              @relation(fields: [userProfileId], references: [id])
-  userProfileId   String
+  userProfileId   String                   @db.Uuid()
   trinhDo         DM_TrinhDoQuanLyNhaNuoc? @relation(fields: [trinhDoId], references: [id])
   trinhDoId       String?
 
@@ -1069,7 +1069,7 @@ model NgoaiNgu {
   trinhDo         DM_TrinhDoNgoaiNgu @relation(fields: [trinhDoId], references: [Id])
   trinhDoId       String             @db.Uuid()
   userProfile     UserProfile        @relation(fields: [userProfileId], references: [id])
-  userProfileId   String
+  userProfileId   String             @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1093,7 +1093,7 @@ model TinHoc {
   dM_TrinhDoTinHoc   DM_TrinhDoTinHoc @relation(fields: [dM_TrinhDoTinHocId], references: [Id])
   dM_TrinhDoTinHocId String           @db.Uuid()
   userProfile        UserProfile      @relation(fields: [userProfileId], references: [id])
-  userProfileId      String
+  userProfileId      String           @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1114,7 +1114,7 @@ model BoiDuongQuocPhongAnNinh {
   thoiGianBatDau  DateTime?
   thoiGianKetThuc DateTime?
   userProfile     UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId   String
+  userProfileId   String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1137,7 +1137,7 @@ model CapBac {
   capBac            DM_CapBac   @relation(fields: [capBacId], references: [Id])
   capBacId          String      @db.Uuid()
   userProfile       UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId     String
+  userProfileId     String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1167,7 +1167,7 @@ model QuaTrinhCongTac {
   loaiHinhCongTac   DM_LoaiHinhCongTac? @relation(fields: [loaiHinhCongTacId], references: [id])
   loaiHinhCongTacId String?
   userProfile       UserProfile         @relation(fields: [userProfileId], references: [id])
-  userProfileId     String
+  userProfileId     String              @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1196,7 +1196,7 @@ model QuaTrinhCuDiCongTac {
   dM_NuocCuDiHocTap         DM_NuocCuDiHocTap?       @relation(fields: [dM_NuocCuDiHocTapId], references: [id])
   dM_NuocCuDiHocTapId       String?
   userProfile               UserProfile              @relation(fields: [userProfileId], references: [id])
-  userProfileId             String
+  userProfileId             String                   @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1223,7 +1223,7 @@ model QuaTrinhCuDiDaoTao {
   dM_TinhTrangDiHocTap   DM_TinhTrangDiHocTap? @relation(fields: [dM_TinhTrangDiHocTapId], references: [id])
   dM_TinhTrangDiHocTapId String?
   userProfile            UserProfile           @relation(fields: [userProfileId], references: [id])
-  userProfileId          String
+  userProfileId          String                @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1248,7 +1248,7 @@ model KhenThuong {
   ngayNhanQuyetDinh    DateTime?
   lyDo                 String?
   userProfile          UserProfile                      @relation(fields: [userProfileId], references: [id])
-  userProfileId        String
+  userProfileId        String                           @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1272,7 +1272,7 @@ model KyLuat {
   ngayNhanQuyetDinh DateTime?
   lyDo              String?
   userProfile       UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId     String
+  userProfileId     String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1294,7 +1294,7 @@ model DoiTuongChinhSach {
   ngayKetThuc   DateTime?
   ghiChu        String?
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1315,7 +1315,7 @@ model KeKhaiTaiSan {
   tenDot         String?
   thoiGianKeKhai DateTime?
   userProfile    UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId  String
+  userProfileId  String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1338,7 +1338,7 @@ model TiengDanToc {
   noi           String?
   viet          String?
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1363,7 +1363,7 @@ model ChienDau {
   thoiGianBatDau  DateTime?
   thoiGianKetThuc DateTime?
   userProfile     UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId   String
+  userProfileId   String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1386,7 +1386,7 @@ model NuocNgoai {
   denNgay       DateTime?
   lyDo          String?
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1411,7 +1411,7 @@ model ThuongTat {
   noiBiThuong      String?
   thoiGianGiamDinh DateTime?
   userProfile      UserProfile      @relation(fields: [userProfileId], references: [id])
-  userProfileId    String
+  userProfileId    String           @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1431,7 +1431,7 @@ model DanhHieu {
   ten           String?
   thoiGian      DateTime?
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1459,7 +1459,7 @@ model QuaTrinhHocTap {
   ketQua         String?
   loaiHinhDaoTao String?
   userProfile    UserProfile                @relation(fields: [userProfileId], references: [id])
-  userProfileId  String
+  userProfileId  String                     @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1482,7 +1482,7 @@ model ToChucXaHoi {
   denNgay       DateTime?
   congViec      String?
   userProfile   UserProfile    @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String         @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1510,7 +1510,7 @@ model QuaTrinhLuong {
   phuCapChucVu  String?
   phuCapKhac    String?
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfileId String      @db.Uuid()
 
   @@schema("ql-ho-so")
 }
@@ -1635,9 +1635,9 @@ model Document {
   fileSize         Int?
   reason           String?
   uploadedBy       UserProfile             @relation("DocumentUploaded", fields: [uploadedById], references: [id])
-  uploadedById     String                  @default("")
+  uploadedById     String                  @default("") @db.Uuid()
   approvedBy       UserProfile?            @relation("DocumentApproved", fields: [approvedById], references: [id])
-  approvedById     String?
+  approvedById     String?                 @db.Uuid()
   topics           DocumentTopic[]
 
   @@schema("tro-ly-ao")
@@ -1683,9 +1683,9 @@ model FAQ {
   topicId      String?
   reason       String?
   uploadedBy   UserProfile    @relation("FAQUploaded", fields: [uploadedById], references: [id])
-  uploadedById String         @default("")
+  uploadedById String         @default("") @db.Uuid()
   approvedBy   UserProfile?   @relation("FAQApproved", fields: [approvedById], references: [id])
-  approvedById String?
+  approvedById String?        @db.Uuid()
 
   @@schema("tro-ly-ao")
 }
@@ -1725,7 +1725,7 @@ model Conversation {
   createdBy   String?      @default("") @db.Uuid()
   name        String?
   user        UserProfile? @relation(fields: [userId], references: [id])
-  userId      String?
+  userId      String?      @db.Uuid()
   session     UserSession? @relation(fields: [sessionId], references: [id])
   sessionId   String?
   topic       Topic?       @relation(fields: [topicId], references: [id])
@@ -2775,7 +2775,7 @@ model StudentSubjectScoreHistory {
   suspended             Boolean?
   suspendedReason       String?
   updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
-  updatedById           String?
+  updatedById           String?             @db.Uuid()
 
   @@schema("ql-dao-tao")
 }
@@ -3376,7 +3376,7 @@ model SubjectVersionHistory {
   content          String
   action           String
   updatedBy        UserProfile    @relation(fields: [updatedById], references: [id])
-  updatedById      String
+  updatedById      String         @db.Uuid()
 
   @@schema("ql-dao-tao")
 }
@@ -3625,7 +3625,7 @@ model SubjectClassHistory {
   scoreSubmitted     Boolean?
   scoreChecked       Boolean?
   updatedBy          UserProfile? @relation(fields: [updatedById], references: [id])
-  updatedById        String?
+  updatedById        String?      @db.Uuid()
 
   @@schema("ql-dao-tao")
 }
@@ -4313,7 +4313,7 @@ model Student {
   fixedClass                     FixedClass?                      @relation(fields: [fixedClassId], references: [id])
   fixedClassId                   String?
   subjectClassStudent            StudentSubjectScore[]
-  userProfileId                  String
+  userProfileId                  String                           @db.Uuid()
   userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
   registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id])
   registrationAreaId             String?                          @db.Uuid()
@@ -4761,7 +4761,7 @@ model Lecturer {
   lectureID                   String?                       @unique()
   serviceDate                 DateTime?
   userProfile                 UserProfile                   @relation(fields: [userProfileId], references: [id])
-  userProfileId               String                        @unique()
+  userProfileId               String                        @unique() @db.Uuid()
   organization                DM_DonVi                      @relation(fields: [organizationId], references: [Id])
   organizationId              String                        @db.Uuid()
   lecturerType                LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
@@ -4807,7 +4807,7 @@ model LecturerHistory {
   lectureCode    String?
   serviceDate    DateTime?
   userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
-  userProfileId  String       @unique()
+  userProfileId  String       @unique() @db.Uuid()
   organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
   organizationId String?      @db.Uuid()
   lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
@@ -5423,7 +5423,7 @@ model EvaluationCriterionComment {
   updatedAt              DateTime              @default(now()) @updatedAt()
   createdBy              String?               @default("") @db.Uuid()
   reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
-  reviewerId             String
+  reviewerId             String                @db.Uuid()
   requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
   requirementCriterionId String?
   content                String?               @db.Text()
@@ -5682,7 +5682,7 @@ model EvidenceFile {
   evidence      Evidence     @relation(fields: [evidenceId], references: [id])
   evidenceId    String
   userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
-  userProfileId String?
+  userProfileId String?      @db.Uuid()
 
   @@schema("khao-thi")
 }
@@ -5883,7 +5883,7 @@ model SurveySession {
   surveyId             String
   additionalSuggestion String?
   profile              UserProfile?      @relation(fields: [profileId], references: [id])
-  profileId            String?
+  profileId            String?           @db.Uuid()
   student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?
   startedAt            DateTime          @default(now())
@@ -6286,7 +6286,7 @@ model Staff {
   createdBy       String?       @default("") @db.Uuid()
   from            DateTime?
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId   String        @unique()
+  userProfileId   String        @unique() @db.Uuid()
   organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
   organizationId  String        @db.Uuid()
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
@@ -6313,7 +6313,7 @@ model StaffHistory {
   from            DateTime?
   to              DateTime?
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId   String        @unique()
+  userProfileId   String        @unique() @db.Uuid()
   organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
   organizationId  String        @db.Uuid()
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])

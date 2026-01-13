@@ -42,7 +42,7 @@ const fkSchema = z.object({
     academicDegreeTypeId: z.string().uuid().nullish(),
     nationalityId: z.string().uuid().nullish(),
     truongId: z.string().nullish(),
-    userProfileId: z.string(),
+    userProfileId: z.string().uuid(),
 }
 );
 

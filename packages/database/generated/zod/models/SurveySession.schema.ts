@@ -45,7 +45,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     surveyId: z.string(),
-    profileId: z.string().nullish(),
+    profileId: z.string().uuid().nullish(),
     studentId: z.string().nullish(),
     surveyObjectTypeId: z.string().nullish(),
 }

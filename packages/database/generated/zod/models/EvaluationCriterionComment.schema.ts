@@ -37,7 +37,7 @@ const relationSchema = z.object({
 }
 );
 const fkSchema = z.object({
-    reviewerId: z.string(),
+    reviewerId: z.string().uuid(),
     requirementCriterionId: z.string().nullish(),
     analysisCriterionId: z.string().nullish(),
     evaluationCriterionId: z.string().nullish(),

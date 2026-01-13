@@ -19,7 +19,7 @@ model Lecturer extends Base {
   serviceDate                 DateTime? // ngày vào ngành
 
   userProfile                 UserProfile                   @relation(fields: [userProfileId], references: [id])
-  userProfileId               String                        @unique
+  userProfileId               String                        @db.Uuid @unique
 
   organization                DM_DonVi                      @relation(fields: [organizationId], references: [Id])
   organizationId              String                        @db.Uuid
@@ -60,7 +60,7 @@ model LecturerHistory extends Base {
   serviceDate    DateTime? // ngày vào ngành
 
   userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
-  userProfileId  String       @unique
+  userProfileId  String       @db.Uuid @unique
 
   organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
   organizationId String?      @db.Uuid

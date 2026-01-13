@@ -1,3 +1,4 @@
+import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -30,7 +31,6 @@ import { BookPlus, History, LockKeyhole, LockKeyholeOpen, Search } from 'lucide-
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import TreeSelect from '@/components/commons/tree-select'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
@@ -39,7 +39,7 @@ export default function SubjectList() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        managementOrganizationId: undefined,
+        managementOrganizationIds: undefined,
         examType: undefined,
         active: undefined,
         code: '',
@@ -124,8 +124,8 @@ export default function SubjectList() {
                       },
                   }
                 : {}),
-            ...(filters.managementOrganizationId
-                ? { managementOrganizationId: filters.managementOrganizationId }
+            ...(filters.managementOrganizationIds?.length
+                ? { managementOrganizationId: { in: filters.managementOrganizationIds } }
                 : {}),
             ...(filters.examType
                 ? {
@@ -386,12 +386,19 @@ export default function SubjectList() {
                                 <Col span={12}>
                                     <Form.Item
                                         className="mb-0"
-                                        name="managementOrganizationId"
+                                        name="managementOrganizationIds"
                                         labelCol={{ span: 24 }}
                                         wrapperCol={{ span: 24 }}
                                         labelAlign="left"
                                     >
-                                        <TreeSelect
+                                        <TreeSelectDepartment
+                                            treeCheckable={false}
+                                            multiple={true}
+                                            onChange={(val) =>
+                                                handleFilterChange('managementOrganizationIds', val)
+                                            }
+                                        />
+                                        {/* <TreeSelect
                                             placeholder="Chọn đơn vị quản lý"
                                             allowClear
                                             showSearch
@@ -401,7 +408,7 @@ export default function SubjectList() {
                                             onChange={(val) =>
                                                 handleFilterChange('managementOrganizationId', val)
                                             }
-                                        />
+                                        /> */}
                                     </Form.Item>
                                 </Col>
                             </Flex>
@@ -453,9 +460,13 @@ export default function SubjectList() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        headerTitleKey={({ name, managementOrganization }) =>
-                            `Nhóm môn: ${[name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
-                        }
+                        headerTitleKey={({ name, managementOrganization }) => {
+                            const org = [managementOrganization?.sMa, managementOrganization?.sTen]
+                                .filter(Boolean)
+                                .join(' - ')
+
+                            return `Nhóm môn: ${[name, org].filter(Boolean).join(' | ')}`
+                        }}
                         className="mt-0"
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}

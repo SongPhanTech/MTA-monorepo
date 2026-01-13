@@ -42,7 +42,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     dM_TrinhDoTinHocId: z.string().uuid(),
-    userProfileId: z.string(),
+    userProfileId: z.string().uuid(),
 }
 );
 

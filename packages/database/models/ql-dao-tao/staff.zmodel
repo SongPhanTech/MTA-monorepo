@@ -10,7 +10,7 @@ model Staff extends Base {
   from            DateTime? // từ ngày
 
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId   String        @unique
+  userProfileId   String        @db.Uuid @unique
 
   organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
   organizationId  String        @db.Uuid
@@ -31,7 +31,7 @@ model StaffHistory extends Base {
   to              DateTime? // đến ngày
 
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId   String        @unique
+  userProfileId   String        @db.Uuid @unique
 
   organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
   organizationId  String        @db.Uuid

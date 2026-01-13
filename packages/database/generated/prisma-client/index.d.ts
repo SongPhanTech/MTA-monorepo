@@ -366371,7 +366371,7 @@ export namespace Prisma {
     newData?: JsonNullableFilter<"ChangeLog">
     transactionId?: StringNullableFilter<"ChangeLog"> | string | null
     source?: StringNullableFilter<"ChangeLog"> | string | null
-    userProfileId?: StringFilter<"ChangeLog"> | string
+    userProfileId?: UuidFilter<"ChangeLog"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -366403,7 +366403,7 @@ export namespace Prisma {
     newData?: JsonNullableFilter<"ChangeLog">
     transactionId?: StringNullableFilter<"ChangeLog"> | string | null
     source?: StringNullableFilter<"ChangeLog"> | string | null
-    userProfileId?: StringFilter<"ChangeLog"> | string
+    userProfileId?: UuidFilter<"ChangeLog"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id">
 
@@ -366436,14 +366436,14 @@ export namespace Prisma {
     newData?: JsonNullableWithAggregatesFilter<"ChangeLog">
     transactionId?: StringNullableWithAggregatesFilter<"ChangeLog"> | string | null
     source?: StringNullableWithAggregatesFilter<"ChangeLog"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"ChangeLog"> | string
+    userProfileId?: UuidWithAggregatesFilter<"ChangeLog"> | string
   }
 
   export type UserProfileWhereInput = {
     AND?: UserProfileWhereInput | UserProfileWhereInput[]
     OR?: UserProfileWhereInput[]
     NOT?: UserProfileWhereInput | UserProfileWhereInput[]
-    id?: StringFilter<"UserProfile"> | string
+    id?: UuidFilter<"UserProfile"> | string
     code?: StringNullableFilter<"UserProfile"> | string | null
     active?: BoolFilter<"UserProfile"> | boolean
     description?: StringNullableFilter<"UserProfile"> | string | null
@@ -367239,7 +367239,7 @@ export namespace Prisma {
     AND?: UserProfileScalarWhereWithAggregatesInput | UserProfileScalarWhereWithAggregatesInput[]
     OR?: UserProfileScalarWhereWithAggregatesInput[]
     NOT?: UserProfileScalarWhereWithAggregatesInput | UserProfileScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"UserProfile"> | string
+    id?: UuidWithAggregatesFilter<"UserProfile"> | string
     code?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     active?: BoolWithAggregatesFilter<"UserProfile"> | boolean
     description?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
@@ -367385,7 +367385,7 @@ export namespace Prisma {
     soQuyetDinh?: StringNullableFilter<"HocHam"> | string | null
     from?: DateTimeNullableFilter<"HocHam"> | Date | string | null
     to?: DateTimeNullableFilter<"HocHam"> | Date | string | null
-    userProfileId?: StringFilter<"HocHam"> | string
+    userProfileId?: UuidFilter<"HocHam"> | string
     academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -367427,7 +367427,7 @@ export namespace Prisma {
     soQuyetDinh?: StringNullableFilter<"HocHam"> | string | null
     from?: DateTimeNullableFilter<"HocHam"> | Date | string | null
     to?: DateTimeNullableFilter<"HocHam"> | Date | string | null
-    userProfileId?: StringFilter<"HocHam"> | string
+    userProfileId?: UuidFilter<"HocHam"> | string
     academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -367469,7 +367469,7 @@ export namespace Prisma {
     soQuyetDinh?: StringNullableWithAggregatesFilter<"HocHam"> | string | null
     from?: DateTimeNullableWithAggregatesFilter<"HocHam"> | Date | string | null
     to?: DateTimeNullableWithAggregatesFilter<"HocHam"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"HocHam"> | string
+    userProfileId?: UuidWithAggregatesFilter<"HocHam"> | string
   }
 
   export type ChucVuChinhQuyenWhereInput = {
@@ -367485,7 +367485,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
     createdBy?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
     chucVuChinhQuyenId?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
-    userProfileId?: StringFilter<"ChucVuChinhQuyen"> | string
+    userProfileId?: UuidFilter<"ChucVuChinhQuyen"> | string
     address?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
     chucVuChinhQuyen?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -367521,7 +367521,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
     createdBy?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
     chucVuChinhQuyenId?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
-    userProfileId?: StringFilter<"ChucVuChinhQuyen"> | string
+    userProfileId?: UuidFilter<"ChucVuChinhQuyen"> | string
     address?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
     chucVuChinhQuyen?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -367557,7 +367557,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ChucVuChinhQuyen"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | string | null
     chucVuChinhQuyenId?: UuidNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"ChucVuChinhQuyen"> | string
+    userProfileId?: UuidWithAggregatesFilter<"ChucVuChinhQuyen"> | string
     address?: StringNullableWithAggregatesFilter<"ChucVuChinhQuyen"> | string | null
   }
 
@@ -367574,7 +367574,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ChucVuDang"> | Date | string
     createdBy?: UuidNullableFilter<"ChucVuDang"> | string | null
     chucVuDangId?: UuidNullableFilter<"ChucVuDang"> | string | null
-    userProfileId?: StringFilter<"ChucVuDang"> | string
+    userProfileId?: UuidFilter<"ChucVuDang"> | string
     address?: StringNullableFilter<"ChucVuDang"> | string | null
     chucVuDang?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -367610,7 +367610,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ChucVuDang"> | Date | string
     createdBy?: UuidNullableFilter<"ChucVuDang"> | string | null
     chucVuDangId?: UuidNullableFilter<"ChucVuDang"> | string | null
-    userProfileId?: StringFilter<"ChucVuDang"> | string
+    userProfileId?: UuidFilter<"ChucVuDang"> | string
     address?: StringNullableFilter<"ChucVuDang"> | string | null
     chucVuDang?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -367646,7 +367646,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ChucVuDang"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"ChucVuDang"> | string | null
     chucVuDangId?: UuidNullableWithAggregatesFilter<"ChucVuDang"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"ChucVuDang"> | string
+    userProfileId?: UuidWithAggregatesFilter<"ChucVuDang"> | string
     address?: StringNullableWithAggregatesFilter<"ChucVuDang"> | string | null
   }
 
@@ -367667,7 +367667,7 @@ export namespace Prisma {
     linhVuc?: StringNullableFilter<"HocVi"> | string | null
     truongId?: StringNullableFilter<"HocVi"> | string | null
     year?: IntNullableFilter<"HocVi"> | number | null
-    userProfileId?: StringFilter<"HocVi"> | string
+    userProfileId?: UuidFilter<"HocVi"> | string
     academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
     nationality?: XOR<DM_QuocGiaNullableScalarRelationFilter, DM_QuocGiaWhereInput> | null
     truong?: XOR<DM_TruongDaoTaoBacDHNullableScalarRelationFilter, DM_TruongDaoTaoBacDHWhereInput> | null
@@ -367713,7 +367713,7 @@ export namespace Prisma {
     linhVuc?: StringNullableFilter<"HocVi"> | string | null
     truongId?: StringNullableFilter<"HocVi"> | string | null
     year?: IntNullableFilter<"HocVi"> | number | null
-    userProfileId?: StringFilter<"HocVi"> | string
+    userProfileId?: UuidFilter<"HocVi"> | string
     academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
     nationality?: XOR<DM_QuocGiaNullableScalarRelationFilter, DM_QuocGiaWhereInput> | null
     truong?: XOR<DM_TruongDaoTaoBacDHNullableScalarRelationFilter, DM_TruongDaoTaoBacDHWhereInput> | null
@@ -367759,7 +367759,7 @@ export namespace Prisma {
     linhVuc?: StringNullableWithAggregatesFilter<"HocVi"> | string | null
     truongId?: StringNullableWithAggregatesFilter<"HocVi"> | string | null
     year?: IntNullableWithAggregatesFilter<"HocVi"> | number | null
-    userProfileId?: StringWithAggregatesFilter<"HocVi"> | string
+    userProfileId?: UuidWithAggregatesFilter<"HocVi"> | string
   }
 
   export type RelativeWhereInput = {
@@ -367781,7 +367781,7 @@ export namespace Prisma {
     job?: StringNullableFilter<"Relative"> | string | null
     information?: StringNullableFilter<"Relative"> | string | null
     quanHeThanNhanId?: StringNullableFilter<"Relative"> | string | null
-    userProfileId?: StringFilter<"Relative"> | string
+    userProfileId?: UuidFilter<"Relative"> | string
     quanHeThanNhan?: XOR<DM_QuanHeThanNhanNullableScalarRelationFilter, DM_QuanHeThanNhanWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -367827,7 +367827,7 @@ export namespace Prisma {
     job?: StringNullableFilter<"Relative"> | string | null
     information?: StringNullableFilter<"Relative"> | string | null
     quanHeThanNhanId?: StringNullableFilter<"Relative"> | string | null
-    userProfileId?: StringFilter<"Relative"> | string
+    userProfileId?: UuidFilter<"Relative"> | string
     quanHeThanNhan?: XOR<DM_QuanHeThanNhanNullableScalarRelationFilter, DM_QuanHeThanNhanWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -367875,7 +367875,7 @@ export namespace Prisma {
     job?: StringNullableWithAggregatesFilter<"Relative"> | string | null
     information?: StringNullableWithAggregatesFilter<"Relative"> | string | null
     quanHeThanNhanId?: StringNullableWithAggregatesFilter<"Relative"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"Relative"> | string
+    userProfileId?: UuidWithAggregatesFilter<"Relative"> | string
   }
 
   export type TrinhDoLyLuanChinhTriWhereInput = {
@@ -367894,7 +367894,7 @@ export namespace Prisma {
     noiDaoTao?: StringNullableFilter<"TrinhDoLyLuanChinhTri"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"TrinhDoLyLuanChinhTri"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TrinhDoLyLuanChinhTri"> | Date | string | null
-    userProfileId?: StringFilter<"TrinhDoLyLuanChinhTri"> | string
+    userProfileId?: UuidFilter<"TrinhDoLyLuanChinhTri"> | string
     trinhDoId?: StringNullableFilter<"TrinhDoLyLuanChinhTri"> | string | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     trinhDo?: XOR<DM_TrinhDoLyLuanChinhTriNullableScalarRelationFilter, DM_TrinhDoLyLuanChinhTriWhereInput> | null
@@ -367936,7 +367936,7 @@ export namespace Prisma {
     noiDaoTao?: StringNullableFilter<"TrinhDoLyLuanChinhTri"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"TrinhDoLyLuanChinhTri"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TrinhDoLyLuanChinhTri"> | Date | string | null
-    userProfileId?: StringFilter<"TrinhDoLyLuanChinhTri"> | string
+    userProfileId?: UuidFilter<"TrinhDoLyLuanChinhTri"> | string
     trinhDoId?: StringNullableFilter<"TrinhDoLyLuanChinhTri"> | string | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     trinhDo?: XOR<DM_TrinhDoLyLuanChinhTriNullableScalarRelationFilter, DM_TrinhDoLyLuanChinhTriWhereInput> | null
@@ -367978,7 +367978,7 @@ export namespace Prisma {
     noiDaoTao?: StringNullableWithAggregatesFilter<"TrinhDoLyLuanChinhTri"> | string | null
     thoiGianBatDau?: DateTimeNullableWithAggregatesFilter<"TrinhDoLyLuanChinhTri"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableWithAggregatesFilter<"TrinhDoLyLuanChinhTri"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"TrinhDoLyLuanChinhTri"> | string
+    userProfileId?: UuidWithAggregatesFilter<"TrinhDoLyLuanChinhTri"> | string
     trinhDoId?: StringNullableWithAggregatesFilter<"TrinhDoLyLuanChinhTri"> | string | null
   }
 
@@ -367998,7 +367998,7 @@ export namespace Prisma {
     noiDaoTao?: StringNullableFilter<"TrinhDoQuanLyNhaNuoc"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"TrinhDoQuanLyNhaNuoc"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TrinhDoQuanLyNhaNuoc"> | Date | string | null
-    userProfileId?: StringFilter<"TrinhDoQuanLyNhaNuoc"> | string
+    userProfileId?: UuidFilter<"TrinhDoQuanLyNhaNuoc"> | string
     trinhDoId?: StringNullableFilter<"TrinhDoQuanLyNhaNuoc"> | string | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     trinhDo?: XOR<DM_TrinhDoQuanLyNhaNuocNullableScalarRelationFilter, DM_TrinhDoQuanLyNhaNuocWhereInput> | null
@@ -368040,7 +368040,7 @@ export namespace Prisma {
     noiDaoTao?: StringNullableFilter<"TrinhDoQuanLyNhaNuoc"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"TrinhDoQuanLyNhaNuoc"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TrinhDoQuanLyNhaNuoc"> | Date | string | null
-    userProfileId?: StringFilter<"TrinhDoQuanLyNhaNuoc"> | string
+    userProfileId?: UuidFilter<"TrinhDoQuanLyNhaNuoc"> | string
     trinhDoId?: StringNullableFilter<"TrinhDoQuanLyNhaNuoc"> | string | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     trinhDo?: XOR<DM_TrinhDoQuanLyNhaNuocNullableScalarRelationFilter, DM_TrinhDoQuanLyNhaNuocWhereInput> | null
@@ -368082,7 +368082,7 @@ export namespace Prisma {
     noiDaoTao?: StringNullableWithAggregatesFilter<"TrinhDoQuanLyNhaNuoc"> | string | null
     thoiGianBatDau?: DateTimeNullableWithAggregatesFilter<"TrinhDoQuanLyNhaNuoc"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableWithAggregatesFilter<"TrinhDoQuanLyNhaNuoc"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"TrinhDoQuanLyNhaNuoc"> | string
+    userProfileId?: UuidWithAggregatesFilter<"TrinhDoQuanLyNhaNuoc"> | string
     trinhDoId?: StringNullableWithAggregatesFilter<"TrinhDoQuanLyNhaNuoc"> | string | null
   }
 
@@ -368104,7 +368104,7 @@ export namespace Prisma {
     thoiGianBatDau?: DateTimeNullableFilter<"NgoaiNgu"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"NgoaiNgu"> | Date | string | null
     trinhDoId?: UuidFilter<"NgoaiNgu"> | string
-    userProfileId?: StringFilter<"NgoaiNgu"> | string
+    userProfileId?: UuidFilter<"NgoaiNgu"> | string
     ngonNgu?: XOR<DM_NgoaiNguNullableScalarRelationFilter, DM_NgoaiNguWhereInput> | null
     trinhDo?: XOR<DM_TrinhDoNgoaiNguScalarRelationFilter, DM_TrinhDoNgoaiNguWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -368150,7 +368150,7 @@ export namespace Prisma {
     thoiGianBatDau?: DateTimeNullableFilter<"NgoaiNgu"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"NgoaiNgu"> | Date | string | null
     trinhDoId?: UuidFilter<"NgoaiNgu"> | string
-    userProfileId?: StringFilter<"NgoaiNgu"> | string
+    userProfileId?: UuidFilter<"NgoaiNgu"> | string
     ngonNgu?: XOR<DM_NgoaiNguNullableScalarRelationFilter, DM_NgoaiNguWhereInput> | null
     trinhDo?: XOR<DM_TrinhDoNgoaiNguScalarRelationFilter, DM_TrinhDoNgoaiNguWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -368195,7 +368195,7 @@ export namespace Prisma {
     thoiGianBatDau?: DateTimeNullableWithAggregatesFilter<"NgoaiNgu"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableWithAggregatesFilter<"NgoaiNgu"> | Date | string | null
     trinhDoId?: UuidWithAggregatesFilter<"NgoaiNgu"> | string
-    userProfileId?: StringWithAggregatesFilter<"NgoaiNgu"> | string
+    userProfileId?: UuidWithAggregatesFilter<"NgoaiNgu"> | string
   }
 
   export type TinHocWhereInput = {
@@ -368215,7 +368215,7 @@ export namespace Prisma {
     thoiGianBatDau?: DateTimeNullableFilter<"TinHoc"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TinHoc"> | Date | string | null
     dM_TrinhDoTinHocId?: UuidFilter<"TinHoc"> | string
-    userProfileId?: StringFilter<"TinHoc"> | string
+    userProfileId?: UuidFilter<"TinHoc"> | string
     dM_TrinhDoTinHoc?: XOR<DM_TrinhDoTinHocScalarRelationFilter, DM_TrinhDoTinHocWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -368257,7 +368257,7 @@ export namespace Prisma {
     thoiGianBatDau?: DateTimeNullableFilter<"TinHoc"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TinHoc"> | Date | string | null
     dM_TrinhDoTinHocId?: UuidFilter<"TinHoc"> | string
-    userProfileId?: StringFilter<"TinHoc"> | string
+    userProfileId?: UuidFilter<"TinHoc"> | string
     dM_TrinhDoTinHoc?: XOR<DM_TrinhDoTinHocScalarRelationFilter, DM_TrinhDoTinHocWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -368299,7 +368299,7 @@ export namespace Prisma {
     thoiGianBatDau?: DateTimeNullableWithAggregatesFilter<"TinHoc"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableWithAggregatesFilter<"TinHoc"> | Date | string | null
     dM_TrinhDoTinHocId?: UuidWithAggregatesFilter<"TinHoc"> | string
-    userProfileId?: StringWithAggregatesFilter<"TinHoc"> | string
+    userProfileId?: UuidWithAggregatesFilter<"TinHoc"> | string
   }
 
   export type BoiDuongQuocPhongAnNinhWhereInput = {
@@ -368317,7 +368317,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"BoiDuongQuocPhongAnNinh"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"BoiDuongQuocPhongAnNinh"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"BoiDuongQuocPhongAnNinh"> | Date | string | null
-    userProfileId?: StringFilter<"BoiDuongQuocPhongAnNinh"> | string
+    userProfileId?: UuidFilter<"BoiDuongQuocPhongAnNinh"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -368353,7 +368353,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"BoiDuongQuocPhongAnNinh"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"BoiDuongQuocPhongAnNinh"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"BoiDuongQuocPhongAnNinh"> | Date | string | null
-    userProfileId?: StringFilter<"BoiDuongQuocPhongAnNinh"> | string
+    userProfileId?: UuidFilter<"BoiDuongQuocPhongAnNinh"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -368390,7 +368390,7 @@ export namespace Prisma {
     name?: StringNullableWithAggregatesFilter<"BoiDuongQuocPhongAnNinh"> | string | null
     thoiGianBatDau?: DateTimeNullableWithAggregatesFilter<"BoiDuongQuocPhongAnNinh"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableWithAggregatesFilter<"BoiDuongQuocPhongAnNinh"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"BoiDuongQuocPhongAnNinh"> | string
+    userProfileId?: UuidWithAggregatesFilter<"BoiDuongQuocPhongAnNinh"> | string
   }
 
   export type CapBacWhereInput = {
@@ -368409,7 +368409,7 @@ export namespace Prisma {
     capRaQuyetDinh?: StringNullableFilter<"CapBac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"CapBac"> | Date | string | null
     capBacId?: UuidFilter<"CapBac"> | string
-    userProfileId?: StringFilter<"CapBac"> | string
+    userProfileId?: UuidFilter<"CapBac"> | string
     capBac?: XOR<DM_CapBacScalarRelationFilter, DM_CapBacWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -368449,7 +368449,7 @@ export namespace Prisma {
     capRaQuyetDinh?: StringNullableFilter<"CapBac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"CapBac"> | Date | string | null
     capBacId?: UuidFilter<"CapBac"> | string
-    userProfileId?: StringFilter<"CapBac"> | string
+    userProfileId?: UuidFilter<"CapBac"> | string
     capBac?: XOR<DM_CapBacScalarRelationFilter, DM_CapBacWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -368489,7 +368489,7 @@ export namespace Prisma {
     capRaQuyetDinh?: StringNullableWithAggregatesFilter<"CapBac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableWithAggregatesFilter<"CapBac"> | Date | string | null
     capBacId?: UuidWithAggregatesFilter<"CapBac"> | string
-    userProfileId?: StringWithAggregatesFilter<"CapBac"> | string
+    userProfileId?: UuidWithAggregatesFilter<"CapBac"> | string
   }
 
   export type QuaTrinhCongTacWhereInput = {
@@ -368514,7 +368514,7 @@ export namespace Prisma {
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
     loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCongTac"> | string
     chucVu?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacNullableScalarRelationFilter, DM_LoaiHinhCongTacWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -368568,7 +368568,7 @@ export namespace Prisma {
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
     loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCongTac"> | string
     chucVu?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacNullableScalarRelationFilter, DM_LoaiHinhCongTacWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -368621,7 +368621,7 @@ export namespace Prisma {
     ngayNhanQuyetDinh?: DateTimeNullableWithAggregatesFilter<"QuaTrinhCongTac"> | Date | string | null
     chucVuId?: UuidNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     loaiHinhCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"QuaTrinhCongTac"> | string
+    userProfileId?: UuidWithAggregatesFilter<"QuaTrinhCongTac"> | string
   }
 
   export type QuaTrinhCuDiCongTacWhereInput = {
@@ -368643,7 +368643,7 @@ export namespace Prisma {
     dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_NuocCuDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
     chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
     dM_TinhTrangCongTac?: XOR<DM_TinhTrangCongTacNullableScalarRelationFilter, DM_TinhTrangCongTacWhereInput> | null
     dM_LoaiTinhTrangCongTac?: XOR<DM_LoaiTinhTrangCongTacNullableScalarRelationFilter, DM_LoaiTinhTrangCongTacWhereInput> | null
@@ -368695,7 +368695,7 @@ export namespace Prisma {
     dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_NuocCuDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
     chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
     dM_TinhTrangCongTac?: XOR<DM_TinhTrangCongTacNullableScalarRelationFilter, DM_TinhTrangCongTacWhereInput> | null
     dM_LoaiTinhTrangCongTac?: XOR<DM_LoaiTinhTrangCongTacNullableScalarRelationFilter, DM_LoaiTinhTrangCongTacWhereInput> | null
@@ -368744,7 +368744,7 @@ export namespace Prisma {
     dM_TinhTrangCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_LoaiTinhTrangCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_NuocCuDiHocTapId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string
+    userProfileId?: UuidWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string
   }
 
   export type QuaTrinhCuDiDaoTaoWhereInput = {
@@ -368766,7 +368766,7 @@ export namespace Prisma {
     vanBang?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
     loaiId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
     dM_TinhTrangDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCuDiDaoTao"> | string
     loai?: XOR<DM_LoaiHinhDiHocTapScalarRelationFilter, DM_LoaiHinhDiHocTapWhereInput>
     dM_TinhTrangDiHocTap?: XOR<DM_TinhTrangDiHocTapNullableScalarRelationFilter, DM_TinhTrangDiHocTapWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -368814,7 +368814,7 @@ export namespace Prisma {
     vanBang?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
     loaiId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
     dM_TinhTrangDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCuDiDaoTao"> | string
     loai?: XOR<DM_LoaiHinhDiHocTapScalarRelationFilter, DM_LoaiHinhDiHocTapWhereInput>
     dM_TinhTrangDiHocTap?: XOR<DM_TinhTrangDiHocTapNullableScalarRelationFilter, DM_TinhTrangDiHocTapWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -368861,7 +368861,7 @@ export namespace Prisma {
     vanBang?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string | null
     loaiId?: StringWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string
     dM_TinhTrangDiHocTapId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string
+    userProfileId?: UuidWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string
   }
 
   export type KhenThuongWhereInput = {
@@ -368882,7 +368882,7 @@ export namespace Prisma {
     nguoiKy?: StringNullableFilter<"KhenThuong"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"KhenThuong"> | Date | string | null
     lyDo?: StringNullableFilter<"KhenThuong"> | string | null
-    userProfileId?: StringFilter<"KhenThuong"> | string
+    userProfileId?: UuidFilter<"KhenThuong"> | string
     hinhThucKhenThuong?: XOR<DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter, DM_HinhThucKhenThuongChinhQuyenWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -368926,7 +368926,7 @@ export namespace Prisma {
     nguoiKy?: StringNullableFilter<"KhenThuong"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"KhenThuong"> | Date | string | null
     lyDo?: StringNullableFilter<"KhenThuong"> | string | null
-    userProfileId?: StringFilter<"KhenThuong"> | string
+    userProfileId?: UuidFilter<"KhenThuong"> | string
     hinhThucKhenThuong?: XOR<DM_HinhThucKhenThuongChinhQuyenNullableScalarRelationFilter, DM_HinhThucKhenThuongChinhQuyenWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -368970,7 +368970,7 @@ export namespace Prisma {
     nguoiKy?: StringNullableWithAggregatesFilter<"KhenThuong"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableWithAggregatesFilter<"KhenThuong"> | Date | string | null
     lyDo?: StringNullableWithAggregatesFilter<"KhenThuong"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"KhenThuong"> | string
+    userProfileId?: UuidWithAggregatesFilter<"KhenThuong"> | string
   }
 
   export type KyLuatWhereInput = {
@@ -368991,7 +368991,7 @@ export namespace Prisma {
     nguoiKy?: StringNullableFilter<"KyLuat"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"KyLuat"> | Date | string | null
     lyDo?: StringNullableFilter<"KyLuat"> | string | null
-    userProfileId?: StringFilter<"KyLuat"> | string
+    userProfileId?: UuidFilter<"KyLuat"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -369033,7 +369033,7 @@ export namespace Prisma {
     nguoiKy?: StringNullableFilter<"KyLuat"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"KyLuat"> | Date | string | null
     lyDo?: StringNullableFilter<"KyLuat"> | string | null
-    userProfileId?: StringFilter<"KyLuat"> | string
+    userProfileId?: UuidFilter<"KyLuat"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -369076,7 +369076,7 @@ export namespace Prisma {
     nguoiKy?: StringNullableWithAggregatesFilter<"KyLuat"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableWithAggregatesFilter<"KyLuat"> | Date | string | null
     lyDo?: StringNullableWithAggregatesFilter<"KyLuat"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"KyLuat"> | string
+    userProfileId?: UuidWithAggregatesFilter<"KyLuat"> | string
   }
 
   export type DoiTuongChinhSachWhereInput = {
@@ -369095,7 +369095,7 @@ export namespace Prisma {
     ngayBatDau?: DateTimeNullableFilter<"DoiTuongChinhSach"> | Date | string | null
     ngayKetThuc?: DateTimeNullableFilter<"DoiTuongChinhSach"> | Date | string | null
     ghiChu?: StringNullableFilter<"DoiTuongChinhSach"> | string | null
-    userProfileId?: StringFilter<"DoiTuongChinhSach"> | string
+    userProfileId?: UuidFilter<"DoiTuongChinhSach"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -369133,7 +369133,7 @@ export namespace Prisma {
     ngayBatDau?: DateTimeNullableFilter<"DoiTuongChinhSach"> | Date | string | null
     ngayKetThuc?: DateTimeNullableFilter<"DoiTuongChinhSach"> | Date | string | null
     ghiChu?: StringNullableFilter<"DoiTuongChinhSach"> | string | null
-    userProfileId?: StringFilter<"DoiTuongChinhSach"> | string
+    userProfileId?: UuidFilter<"DoiTuongChinhSach"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -369172,7 +369172,7 @@ export namespace Prisma {
     ngayBatDau?: DateTimeNullableWithAggregatesFilter<"DoiTuongChinhSach"> | Date | string | null
     ngayKetThuc?: DateTimeNullableWithAggregatesFilter<"DoiTuongChinhSach"> | Date | string | null
     ghiChu?: StringNullableWithAggregatesFilter<"DoiTuongChinhSach"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"DoiTuongChinhSach"> | string
+    userProfileId?: UuidWithAggregatesFilter<"DoiTuongChinhSach"> | string
   }
 
   export type KeKhaiTaiSanWhereInput = {
@@ -369190,7 +369190,7 @@ export namespace Prisma {
     loai?: StringNullableFilter<"KeKhaiTaiSan"> | string | null
     tenDot?: StringNullableFilter<"KeKhaiTaiSan"> | string | null
     thoiGianKeKhai?: DateTimeNullableFilter<"KeKhaiTaiSan"> | Date | string | null
-    userProfileId?: StringFilter<"KeKhaiTaiSan"> | string
+    userProfileId?: UuidFilter<"KeKhaiTaiSan"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -369226,7 +369226,7 @@ export namespace Prisma {
     loai?: StringNullableFilter<"KeKhaiTaiSan"> | string | null
     tenDot?: StringNullableFilter<"KeKhaiTaiSan"> | string | null
     thoiGianKeKhai?: DateTimeNullableFilter<"KeKhaiTaiSan"> | Date | string | null
-    userProfileId?: StringFilter<"KeKhaiTaiSan"> | string
+    userProfileId?: UuidFilter<"KeKhaiTaiSan"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -369263,7 +369263,7 @@ export namespace Prisma {
     loai?: StringNullableWithAggregatesFilter<"KeKhaiTaiSan"> | string | null
     tenDot?: StringNullableWithAggregatesFilter<"KeKhaiTaiSan"> | string | null
     thoiGianKeKhai?: DateTimeNullableWithAggregatesFilter<"KeKhaiTaiSan"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"KeKhaiTaiSan"> | string
+    userProfileId?: UuidWithAggregatesFilter<"KeKhaiTaiSan"> | string
   }
 
   export type TiengDanTocWhereInput = {
@@ -369282,7 +369282,7 @@ export namespace Prisma {
     nghe?: StringNullableFilter<"TiengDanToc"> | string | null
     noi?: StringNullableFilter<"TiengDanToc"> | string | null
     viet?: StringNullableFilter<"TiengDanToc"> | string | null
-    userProfileId?: StringFilter<"TiengDanToc"> | string
+    userProfileId?: UuidFilter<"TiengDanToc"> | string
     danToc?: XOR<DM_DanTocNullableScalarRelationFilter, DM_DanTocWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -369322,7 +369322,7 @@ export namespace Prisma {
     nghe?: StringNullableFilter<"TiengDanToc"> | string | null
     noi?: StringNullableFilter<"TiengDanToc"> | string | null
     viet?: StringNullableFilter<"TiengDanToc"> | string | null
-    userProfileId?: StringFilter<"TiengDanToc"> | string
+    userProfileId?: UuidFilter<"TiengDanToc"> | string
     danToc?: XOR<DM_DanTocNullableScalarRelationFilter, DM_DanTocWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -369362,7 +369362,7 @@ export namespace Prisma {
     nghe?: StringNullableWithAggregatesFilter<"TiengDanToc"> | string | null
     noi?: StringNullableWithAggregatesFilter<"TiengDanToc"> | string | null
     viet?: StringNullableWithAggregatesFilter<"TiengDanToc"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"TiengDanToc"> | string
+    userProfileId?: UuidWithAggregatesFilter<"TiengDanToc"> | string
   }
 
   export type ChienDauWhereInput = {
@@ -369384,7 +369384,7 @@ export namespace Prisma {
     doiTuong?: StringNullableFilter<"ChienDau"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"ChienDau"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"ChienDau"> | Date | string | null
-    userProfileId?: StringFilter<"ChienDau"> | string
+    userProfileId?: UuidFilter<"ChienDau"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -369428,7 +369428,7 @@ export namespace Prisma {
     doiTuong?: StringNullableFilter<"ChienDau"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"ChienDau"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"ChienDau"> | Date | string | null
-    userProfileId?: StringFilter<"ChienDau"> | string
+    userProfileId?: UuidFilter<"ChienDau"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -369473,7 +369473,7 @@ export namespace Prisma {
     doiTuong?: StringNullableWithAggregatesFilter<"ChienDau"> | string | null
     thoiGianBatDau?: DateTimeNullableWithAggregatesFilter<"ChienDau"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableWithAggregatesFilter<"ChienDau"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"ChienDau"> | string
+    userProfileId?: UuidWithAggregatesFilter<"ChienDau"> | string
   }
 
   export type NuocNgoaiWhereInput = {
@@ -369492,7 +369492,7 @@ export namespace Prisma {
     tuNgay?: DateTimeNullableFilter<"NuocNgoai"> | Date | string | null
     denNgay?: DateTimeNullableFilter<"NuocNgoai"> | Date | string | null
     lyDo?: StringNullableFilter<"NuocNgoai"> | string | null
-    userProfileId?: StringFilter<"NuocNgoai"> | string
+    userProfileId?: UuidFilter<"NuocNgoai"> | string
     tenNuoc?: XOR<DM_QuocGiaScalarRelationFilter, DM_QuocGiaWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -369532,7 +369532,7 @@ export namespace Prisma {
     tuNgay?: DateTimeNullableFilter<"NuocNgoai"> | Date | string | null
     denNgay?: DateTimeNullableFilter<"NuocNgoai"> | Date | string | null
     lyDo?: StringNullableFilter<"NuocNgoai"> | string | null
-    userProfileId?: StringFilter<"NuocNgoai"> | string
+    userProfileId?: UuidFilter<"NuocNgoai"> | string
     tenNuoc?: XOR<DM_QuocGiaScalarRelationFilter, DM_QuocGiaWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -369572,7 +369572,7 @@ export namespace Prisma {
     tuNgay?: DateTimeNullableWithAggregatesFilter<"NuocNgoai"> | Date | string | null
     denNgay?: DateTimeNullableWithAggregatesFilter<"NuocNgoai"> | Date | string | null
     lyDo?: StringNullableWithAggregatesFilter<"NuocNgoai"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"NuocNgoai"> | string
+    userProfileId?: UuidWithAggregatesFilter<"NuocNgoai"> | string
   }
 
   export type ThuongTatWhereInput = {
@@ -369593,7 +369593,7 @@ export namespace Prisma {
     thoiGian?: DateTimeNullableFilter<"ThuongTat"> | Date | string | null
     noiBiThuong?: StringNullableFilter<"ThuongTat"> | string | null
     thoiGianGiamDinh?: DateTimeNullableFilter<"ThuongTat"> | Date | string | null
-    userProfileId?: StringFilter<"ThuongTat"> | string
+    userProfileId?: UuidFilter<"ThuongTat"> | string
     loai?: XOR<DM_LoaiThuongTatScalarRelationFilter, DM_LoaiThuongTatWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -369637,7 +369637,7 @@ export namespace Prisma {
     thoiGian?: DateTimeNullableFilter<"ThuongTat"> | Date | string | null
     noiBiThuong?: StringNullableFilter<"ThuongTat"> | string | null
     thoiGianGiamDinh?: DateTimeNullableFilter<"ThuongTat"> | Date | string | null
-    userProfileId?: StringFilter<"ThuongTat"> | string
+    userProfileId?: UuidFilter<"ThuongTat"> | string
     loai?: XOR<DM_LoaiThuongTatScalarRelationFilter, DM_LoaiThuongTatWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -369683,7 +369683,7 @@ export namespace Prisma {
     thoiGian?: DateTimeNullableWithAggregatesFilter<"ThuongTat"> | Date | string | null
     noiBiThuong?: StringNullableWithAggregatesFilter<"ThuongTat"> | string | null
     thoiGianGiamDinh?: DateTimeNullableWithAggregatesFilter<"ThuongTat"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"ThuongTat"> | string
+    userProfileId?: UuidWithAggregatesFilter<"ThuongTat"> | string
   }
 
   export type DanhHieuWhereInput = {
@@ -369700,7 +369700,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"DanhHieu"> | string | null
     ten?: StringNullableFilter<"DanhHieu"> | string | null
     thoiGian?: DateTimeNullableFilter<"DanhHieu"> | Date | string | null
-    userProfileId?: StringFilter<"DanhHieu"> | string
+    userProfileId?: UuidFilter<"DanhHieu"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -369734,7 +369734,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"DanhHieu"> | string | null
     ten?: StringNullableFilter<"DanhHieu"> | string | null
     thoiGian?: DateTimeNullableFilter<"DanhHieu"> | Date | string | null
-    userProfileId?: StringFilter<"DanhHieu"> | string
+    userProfileId?: UuidFilter<"DanhHieu"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -369769,7 +369769,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"DanhHieu"> | string | null
     ten?: StringNullableWithAggregatesFilter<"DanhHieu"> | string | null
     thoiGian?: DateTimeNullableWithAggregatesFilter<"DanhHieu"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"DanhHieu"> | string
+    userProfileId?: UuidWithAggregatesFilter<"DanhHieu"> | string
   }
 
   export type QuaTrinhHocTapWhereInput = {
@@ -369791,7 +369791,7 @@ export namespace Prisma {
     denNgay?: DateTimeNullableFilter<"QuaTrinhHocTap"> | Date | string | null
     ketQua?: StringNullableFilter<"QuaTrinhHocTap"> | string | null
     loaiHinhDaoTao?: StringNullableFilter<"QuaTrinhHocTap"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhHocTap"> | string
+    userProfileId?: UuidFilter<"QuaTrinhHocTap"> | string
     tenTruong?: XOR<DM_TruongDaoTaoBacDHScalarRelationFilter, DM_TruongDaoTaoBacDHWhereInput>
     nganhHoc?: XOR<DM_NganhHocScalarRelationFilter, DM_NganhHocWhereInput>
     chuyenNganh?: XOR<DM_ChuyenNganhDaoTaoBacDHNullableScalarRelationFilter, DM_ChuyenNganhDaoTaoBacDHWhereInput> | null
@@ -369841,7 +369841,7 @@ export namespace Prisma {
     denNgay?: DateTimeNullableFilter<"QuaTrinhHocTap"> | Date | string | null
     ketQua?: StringNullableFilter<"QuaTrinhHocTap"> | string | null
     loaiHinhDaoTao?: StringNullableFilter<"QuaTrinhHocTap"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhHocTap"> | string
+    userProfileId?: UuidFilter<"QuaTrinhHocTap"> | string
     tenTruong?: XOR<DM_TruongDaoTaoBacDHScalarRelationFilter, DM_TruongDaoTaoBacDHWhereInput>
     nganhHoc?: XOR<DM_NganhHocScalarRelationFilter, DM_NganhHocWhereInput>
     chuyenNganh?: XOR<DM_ChuyenNganhDaoTaoBacDHNullableScalarRelationFilter, DM_ChuyenNganhDaoTaoBacDHWhereInput> | null
@@ -369889,7 +369889,7 @@ export namespace Prisma {
     denNgay?: DateTimeNullableWithAggregatesFilter<"QuaTrinhHocTap"> | Date | string | null
     ketQua?: StringNullableWithAggregatesFilter<"QuaTrinhHocTap"> | string | null
     loaiHinhDaoTao?: StringNullableWithAggregatesFilter<"QuaTrinhHocTap"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"QuaTrinhHocTap"> | string
+    userProfileId?: UuidWithAggregatesFilter<"QuaTrinhHocTap"> | string
   }
 
   export type ToChucXaHoiWhereInput = {
@@ -369908,7 +369908,7 @@ export namespace Prisma {
     tuNgay?: DateTimeNullableFilter<"ToChucXaHoi"> | Date | string | null
     denNgay?: DateTimeNullableFilter<"ToChucXaHoi"> | Date | string | null
     congViec?: StringNullableFilter<"ToChucXaHoi"> | string | null
-    userProfileId?: StringFilter<"ToChucXaHoi"> | string
+    userProfileId?: UuidFilter<"ToChucXaHoi"> | string
     ten?: XOR<DM_ToChucXaHoiScalarRelationFilter, DM_ToChucXaHoiWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -369948,7 +369948,7 @@ export namespace Prisma {
     tuNgay?: DateTimeNullableFilter<"ToChucXaHoi"> | Date | string | null
     denNgay?: DateTimeNullableFilter<"ToChucXaHoi"> | Date | string | null
     congViec?: StringNullableFilter<"ToChucXaHoi"> | string | null
-    userProfileId?: StringFilter<"ToChucXaHoi"> | string
+    userProfileId?: UuidFilter<"ToChucXaHoi"> | string
     ten?: XOR<DM_ToChucXaHoiScalarRelationFilter, DM_ToChucXaHoiWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -369988,7 +369988,7 @@ export namespace Prisma {
     tuNgay?: DateTimeNullableWithAggregatesFilter<"ToChucXaHoi"> | Date | string | null
     denNgay?: DateTimeNullableWithAggregatesFilter<"ToChucXaHoi"> | Date | string | null
     congViec?: StringNullableWithAggregatesFilter<"ToChucXaHoi"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"ToChucXaHoi"> | string
+    userProfileId?: UuidWithAggregatesFilter<"ToChucXaHoi"> | string
   }
 
   export type QuaTrinhLuongWhereInput = {
@@ -370011,7 +370011,7 @@ export namespace Prisma {
     maNgach?: StringFilter<"QuaTrinhLuong"> | string
     phuCapChucVu?: StringNullableFilter<"QuaTrinhLuong"> | string | null
     phuCapKhac?: StringNullableFilter<"QuaTrinhLuong"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhLuong"> | string
+    userProfileId?: UuidFilter<"QuaTrinhLuong"> | string
     ngach?: XOR<DM_NgachScalarRelationFilter, DM_NgachWhereInput>
     bacLuong?: XOR<DM_BacLuongScalarRelationFilter, DM_BacLuongWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -370061,7 +370061,7 @@ export namespace Prisma {
     maNgach?: StringFilter<"QuaTrinhLuong"> | string
     phuCapChucVu?: StringNullableFilter<"QuaTrinhLuong"> | string | null
     phuCapKhac?: StringNullableFilter<"QuaTrinhLuong"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhLuong"> | string
+    userProfileId?: UuidFilter<"QuaTrinhLuong"> | string
     ngach?: XOR<DM_NgachScalarRelationFilter, DM_NgachWhereInput>
     bacLuong?: XOR<DM_BacLuongScalarRelationFilter, DM_BacLuongWhereInput>
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -370110,7 +370110,7 @@ export namespace Prisma {
     maNgach?: StringWithAggregatesFilter<"QuaTrinhLuong"> | string
     phuCapChucVu?: StringNullableWithAggregatesFilter<"QuaTrinhLuong"> | string | null
     phuCapKhac?: StringNullableWithAggregatesFilter<"QuaTrinhLuong"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"QuaTrinhLuong"> | string
+    userProfileId?: UuidWithAggregatesFilter<"QuaTrinhLuong"> | string
   }
 
   export type GroupWhereInput = {
@@ -370545,8 +370545,8 @@ export namespace Prisma {
     fileType?: StringNullableFilter<"Document"> | string | null
     fileSize?: IntNullableFilter<"Document"> | number | null
     reason?: StringNullableFilter<"Document"> | string | null
-    uploadedById?: StringFilter<"Document"> | string
-    approvedById?: StringNullableFilter<"Document"> | string | null
+    uploadedById?: UuidFilter<"Document"> | string
+    approvedById?: UuidNullableFilter<"Document"> | string | null
     classification?: XOR<DocumentClassificationNullableScalarRelationFilter, DocumentClassificationWhereInput> | null
     uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
@@ -370599,8 +370599,8 @@ export namespace Prisma {
     fileType?: StringNullableFilter<"Document"> | string | null
     fileSize?: IntNullableFilter<"Document"> | number | null
     reason?: StringNullableFilter<"Document"> | string | null
-    uploadedById?: StringFilter<"Document"> | string
-    approvedById?: StringNullableFilter<"Document"> | string | null
+    uploadedById?: UuidFilter<"Document"> | string
+    approvedById?: UuidNullableFilter<"Document"> | string | null
     classification?: XOR<DocumentClassificationNullableScalarRelationFilter, DocumentClassificationWhereInput> | null
     uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
@@ -370653,8 +370653,8 @@ export namespace Prisma {
     fileType?: StringNullableWithAggregatesFilter<"Document"> | string | null
     fileSize?: IntNullableWithAggregatesFilter<"Document"> | number | null
     reason?: StringNullableWithAggregatesFilter<"Document"> | string | null
-    uploadedById?: StringWithAggregatesFilter<"Document"> | string
-    approvedById?: StringNullableWithAggregatesFilter<"Document"> | string | null
+    uploadedById?: UuidWithAggregatesFilter<"Document"> | string
+    approvedById?: UuidNullableWithAggregatesFilter<"Document"> | string | null
   }
 
   export type DocumentTopicWhereInput = {
@@ -370759,8 +370759,8 @@ export namespace Prisma {
     status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
     topicId?: StringNullableFilter<"FAQ"> | string | null
     reason?: StringNullableFilter<"FAQ"> | string | null
-    uploadedById?: StringFilter<"FAQ"> | string
-    approvedById?: StringNullableFilter<"FAQ"> | string | null
+    uploadedById?: UuidFilter<"FAQ"> | string
+    approvedById?: UuidNullableFilter<"FAQ"> | string | null
     topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
     uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
@@ -370805,8 +370805,8 @@ export namespace Prisma {
     status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
     topicId?: StringNullableFilter<"FAQ"> | string | null
     reason?: StringNullableFilter<"FAQ"> | string | null
-    uploadedById?: StringFilter<"FAQ"> | string
-    approvedById?: StringNullableFilter<"FAQ"> | string | null
+    uploadedById?: UuidFilter<"FAQ"> | string
+    approvedById?: UuidNullableFilter<"FAQ"> | string | null
     topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
     uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
@@ -370850,8 +370850,8 @@ export namespace Prisma {
     status?: EnumDocumentStatusWithAggregatesFilter<"FAQ"> | $Enums.DocumentStatus
     topicId?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
     reason?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
-    uploadedById?: StringWithAggregatesFilter<"FAQ"> | string
-    approvedById?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
+    uploadedById?: UuidWithAggregatesFilter<"FAQ"> | string
+    approvedById?: UuidNullableWithAggregatesFilter<"FAQ"> | string | null
   }
 
   export type PromptWhereInput = {
@@ -370958,7 +370958,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     createdBy?: UuidNullableFilter<"Conversation"> | string | null
     name?: StringNullableFilter<"Conversation"> | string | null
-    userId?: StringNullableFilter<"Conversation"> | string | null
+    userId?: UuidNullableFilter<"Conversation"> | string | null
     sessionId?: StringNullableFilter<"Conversation"> | string | null
     topicId?: StringNullableFilter<"Conversation"> | string | null
     user?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
@@ -371000,7 +371000,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     createdBy?: UuidNullableFilter<"Conversation"> | string | null
     name?: StringNullableFilter<"Conversation"> | string | null
-    userId?: StringNullableFilter<"Conversation"> | string | null
+    userId?: UuidNullableFilter<"Conversation"> | string | null
     sessionId?: StringNullableFilter<"Conversation"> | string | null
     topicId?: StringNullableFilter<"Conversation"> | string | null
     user?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
@@ -371040,7 +371040,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"Conversation"> | string | null
     name?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
-    userId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
+    userId?: UuidNullableWithAggregatesFilter<"Conversation"> | string | null
     sessionId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
     topicId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
   }
@@ -375310,7 +375310,7 @@ export namespace Prisma {
     examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
     suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
     suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
-    updatedById?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+    updatedById?: UuidNullableFilter<"StudentSubjectScoreHistory"> | string | null
     studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
     updatedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }
@@ -375366,7 +375366,7 @@ export namespace Prisma {
     examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
     suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
     suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
-    updatedById?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+    updatedById?: UuidNullableFilter<"StudentSubjectScoreHistory"> | string | null
     studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
     updatedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }, "id" | "code">
@@ -375424,7 +375424,7 @@ export namespace Prisma {
     examBannedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
     suspended?: BoolNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean | null
     suspendedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
-    updatedById?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
+    updatedById?: UuidNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
   }
 
   export type StudentResearchTopicWhereInput = {
@@ -377701,7 +377701,7 @@ export namespace Prisma {
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
     content?: StringFilter<"SubjectVersionHistory"> | string
     action?: StringFilter<"SubjectVersionHistory"> | string
-    updatedById?: StringFilter<"SubjectVersionHistory"> | string
+    updatedById?: UuidFilter<"SubjectVersionHistory"> | string
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     updatedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -377739,7 +377739,7 @@ export namespace Prisma {
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
     content?: StringFilter<"SubjectVersionHistory"> | string
     action?: StringFilter<"SubjectVersionHistory"> | string
-    updatedById?: StringFilter<"SubjectVersionHistory"> | string
+    updatedById?: UuidFilter<"SubjectVersionHistory"> | string
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     updatedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -377777,7 +377777,7 @@ export namespace Prisma {
     subjectVersionId?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
     content?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
     action?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
-    updatedById?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
+    updatedById?: UuidWithAggregatesFilter<"SubjectVersionHistory"> | string
   }
 
   export type EquivalencyGroupWhereInput = {
@@ -378687,7 +378687,7 @@ export namespace Prisma {
     isLockExamScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreSubmitted?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreChecked?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
-    updatedById?: StringNullableFilter<"SubjectClassHistory"> | string | null
+    updatedById?: UuidNullableFilter<"SubjectClassHistory"> | string | null
     subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
     updatedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }
@@ -378735,7 +378735,7 @@ export namespace Prisma {
     isLockExamScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreSubmitted?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreChecked?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
-    updatedById?: StringNullableFilter<"SubjectClassHistory"> | string | null
+    updatedById?: UuidNullableFilter<"SubjectClassHistory"> | string | null
     subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
     updatedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }, "id" | "code">
@@ -378783,7 +378783,7 @@ export namespace Prisma {
     isLockExamScore?: BoolNullableWithAggregatesFilter<"SubjectClassHistory"> | boolean | null
     scoreSubmitted?: BoolNullableWithAggregatesFilter<"SubjectClassHistory"> | boolean | null
     scoreChecked?: BoolNullableWithAggregatesFilter<"SubjectClassHistory"> | boolean | null
-    updatedById?: StringNullableWithAggregatesFilter<"SubjectClassHistory"> | string | null
+    updatedById?: UuidNullableWithAggregatesFilter<"SubjectClassHistory"> | string | null
   }
 
   export type SubjectClassTimeWhereInput = {
@@ -381305,7 +381305,7 @@ export namespace Prisma {
     unionLeader?: StringNullableFilter<"Student"> | string | null
     status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
     fixedClassId?: StringNullableFilter<"Student"> | string | null
-    userProfileId?: StringFilter<"Student"> | string
+    userProfileId?: UuidFilter<"Student"> | string
     registrationAreaId?: UuidNullableFilter<"Student"> | string | null
     curriculumVersionId?: StringNullableFilter<"Student"> | string | null
     curriculumVersionParallelId?: StringNullableFilter<"Student"> | string | null
@@ -381463,7 +381463,7 @@ export namespace Prisma {
     unionLeader?: StringNullableFilter<"Student"> | string | null
     status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
     fixedClassId?: StringNullableFilter<"Student"> | string | null
-    userProfileId?: StringFilter<"Student"> | string
+    userProfileId?: UuidFilter<"Student"> | string
     registrationAreaId?: UuidNullableFilter<"Student"> | string | null
     curriculumVersionId?: StringNullableFilter<"Student"> | string | null
     curriculumVersionParallelId?: StringNullableFilter<"Student"> | string | null
@@ -381595,7 +381595,7 @@ export namespace Prisma {
     unionLeader?: StringNullableWithAggregatesFilter<"Student"> | string | null
     status?: EnumStudentStatusWithAggregatesFilter<"Student"> | $Enums.StudentStatus
     fixedClassId?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    userProfileId?: StringWithAggregatesFilter<"Student"> | string
+    userProfileId?: UuidWithAggregatesFilter<"Student"> | string
     registrationAreaId?: UuidNullableWithAggregatesFilter<"Student"> | string | null
     curriculumVersionId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     curriculumVersionParallelId?: StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -383269,7 +383269,7 @@ export namespace Prisma {
     from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     lectureID?: StringNullableFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
-    userProfileId?: StringFilter<"Lecturer"> | string
+    userProfileId?: UuidFilter<"Lecturer"> | string
     organizationId?: UuidFilter<"Lecturer"> | string
     lecturerTypeId?: StringFilter<"Lecturer"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -383413,7 +383413,7 @@ export namespace Prisma {
     from?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
     lectureID?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"Lecturer"> | string
+    userProfileId?: UuidWithAggregatesFilter<"Lecturer"> | string
     organizationId?: UuidWithAggregatesFilter<"Lecturer"> | string
     lecturerTypeId?: StringWithAggregatesFilter<"Lecturer"> | string
   }
@@ -383435,7 +383435,7 @@ export namespace Prisma {
     lectureID?: StringNullableFilter<"LecturerHistory"> | string | null
     lectureCode?: StringNullableFilter<"LecturerHistory"> | string | null
     serviceDate?: DateTimeNullableFilter<"LecturerHistory"> | Date | string | null
-    userProfileId?: StringFilter<"LecturerHistory"> | string
+    userProfileId?: UuidFilter<"LecturerHistory"> | string
     organizationId?: UuidNullableFilter<"LecturerHistory"> | string | null
     lecturerTypeId?: StringFilter<"LecturerHistory"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -383530,7 +383530,7 @@ export namespace Prisma {
     lectureID?: StringNullableWithAggregatesFilter<"LecturerHistory"> | string | null
     lectureCode?: StringNullableWithAggregatesFilter<"LecturerHistory"> | string | null
     serviceDate?: DateTimeNullableWithAggregatesFilter<"LecturerHistory"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"LecturerHistory"> | string
+    userProfileId?: UuidWithAggregatesFilter<"LecturerHistory"> | string
     organizationId?: UuidNullableWithAggregatesFilter<"LecturerHistory"> | string | null
     lecturerTypeId?: StringWithAggregatesFilter<"LecturerHistory"> | string
   }
@@ -385984,7 +385984,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"EvaluationCriterionComment"> | Date | string
     updatedAt?: DateTimeFilter<"EvaluationCriterionComment"> | Date | string
     createdBy?: UuidNullableFilter<"EvaluationCriterionComment"> | string | null
-    reviewerId?: StringFilter<"EvaluationCriterionComment"> | string
+    reviewerId?: UuidFilter<"EvaluationCriterionComment"> | string
     requirementCriterionId?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
     content?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
     analysisCriterionId?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
@@ -386028,7 +386028,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"EvaluationCriterionComment"> | Date | string
     updatedAt?: DateTimeFilter<"EvaluationCriterionComment"> | Date | string
     createdBy?: UuidNullableFilter<"EvaluationCriterionComment"> | string | null
-    reviewerId?: StringFilter<"EvaluationCriterionComment"> | string
+    reviewerId?: UuidFilter<"EvaluationCriterionComment"> | string
     requirementCriterionId?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
     content?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
     analysisCriterionId?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
@@ -386070,7 +386070,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"EvaluationCriterionComment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"EvaluationCriterionComment"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"EvaluationCriterionComment"> | string | null
-    reviewerId?: StringWithAggregatesFilter<"EvaluationCriterionComment"> | string
+    reviewerId?: UuidWithAggregatesFilter<"EvaluationCriterionComment"> | string
     requirementCriterionId?: StringNullableWithAggregatesFilter<"EvaluationCriterionComment"> | string | null
     content?: StringNullableWithAggregatesFilter<"EvaluationCriterionComment"> | string | null
     analysisCriterionId?: StringNullableWithAggregatesFilter<"EvaluationCriterionComment"> | string | null
@@ -386996,7 +386996,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"EvidenceFile"> | string
     size?: BigIntFilter<"EvidenceFile"> | bigint | number
     evidenceId?: StringFilter<"EvidenceFile"> | string
-    userProfileId?: StringNullableFilter<"EvidenceFile"> | string | null
+    userProfileId?: UuidNullableFilter<"EvidenceFile"> | string | null
     evidence?: XOR<EvidenceScalarRelationFilter, EvidenceWhereInput>
     userProfile?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }
@@ -387038,7 +387038,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"EvidenceFile"> | string
     size?: BigIntFilter<"EvidenceFile"> | bigint | number
     evidenceId?: StringFilter<"EvidenceFile"> | string
-    userProfileId?: StringNullableFilter<"EvidenceFile"> | string | null
+    userProfileId?: UuidNullableFilter<"EvidenceFile"> | string | null
     evidence?: XOR<EvidenceScalarRelationFilter, EvidenceWhereInput>
     userProfile?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }, "id" | "code">
@@ -387082,7 +387082,7 @@ export namespace Prisma {
     mimeType?: StringWithAggregatesFilter<"EvidenceFile"> | string
     size?: BigIntWithAggregatesFilter<"EvidenceFile"> | bigint | number
     evidenceId?: StringWithAggregatesFilter<"EvidenceFile"> | string
-    userProfileId?: StringNullableWithAggregatesFilter<"EvidenceFile"> | string | null
+    userProfileId?: UuidNullableWithAggregatesFilter<"EvidenceFile"> | string | null
   }
 
   export type SurveyObjectTypeWhereInput = {
@@ -387828,7 +387828,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"SurveySession"> | string | null
     surveyId?: StringFilter<"SurveySession"> | string
     additionalSuggestion?: StringNullableFilter<"SurveySession"> | string | null
-    profileId?: StringNullableFilter<"SurveySession"> | string | null
+    profileId?: UuidNullableFilter<"SurveySession"> | string | null
     studentId?: StringNullableFilter<"SurveySession"> | string | null
     startedAt?: DateTimeFilter<"SurveySession"> | Date | string
     completedAt?: DateTimeNullableFilter<"SurveySession"> | Date | string | null
@@ -387881,7 +387881,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"SurveySession"> | string | null
     surveyId?: StringFilter<"SurveySession"> | string
     additionalSuggestion?: StringNullableFilter<"SurveySession"> | string | null
-    profileId?: StringNullableFilter<"SurveySession"> | string | null
+    profileId?: UuidNullableFilter<"SurveySession"> | string | null
     studentId?: StringNullableFilter<"SurveySession"> | string | null
     startedAt?: DateTimeFilter<"SurveySession"> | Date | string
     completedAt?: DateTimeNullableFilter<"SurveySession"> | Date | string | null
@@ -387930,7 +387930,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"SurveySession"> | string | null
     surveyId?: StringWithAggregatesFilter<"SurveySession"> | string
     additionalSuggestion?: StringNullableWithAggregatesFilter<"SurveySession"> | string | null
-    profileId?: StringNullableWithAggregatesFilter<"SurveySession"> | string | null
+    profileId?: UuidNullableWithAggregatesFilter<"SurveySession"> | string | null
     studentId?: StringNullableWithAggregatesFilter<"SurveySession"> | string | null
     startedAt?: DateTimeWithAggregatesFilter<"SurveySession"> | Date | string
     completedAt?: DateTimeNullableWithAggregatesFilter<"SurveySession"> | Date | string | null
@@ -389435,7 +389435,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
     createdBy?: UuidNullableFilter<"Staff"> | string | null
     from?: DateTimeNullableFilter<"Staff"> | Date | string | null
-    userProfileId?: StringFilter<"Staff"> | string
+    userProfileId?: UuidFilter<"Staff"> | string
     organizationId?: UuidFilter<"Staff"> | string
     staffTypeId?: StringFilter<"Staff"> | string
     staffPositionId?: StringFilter<"Staff"> | string
@@ -389524,7 +389524,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Staff"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"Staff"> | string | null
     from?: DateTimeNullableWithAggregatesFilter<"Staff"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"Staff"> | string
+    userProfileId?: UuidWithAggregatesFilter<"Staff"> | string
     organizationId?: UuidWithAggregatesFilter<"Staff"> | string
     staffTypeId?: StringWithAggregatesFilter<"Staff"> | string
     staffPositionId?: StringWithAggregatesFilter<"Staff"> | string
@@ -389544,7 +389544,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"StaffHistory"> | string | null
     from?: DateTimeNullableFilter<"StaffHistory"> | Date | string | null
     to?: DateTimeNullableFilter<"StaffHistory"> | Date | string | null
-    userProfileId?: StringFilter<"StaffHistory"> | string
+    userProfileId?: UuidFilter<"StaffHistory"> | string
     organizationId?: UuidFilter<"StaffHistory"> | string
     staffTypeId?: StringFilter<"StaffHistory"> | string
     staffPositionId?: StringFilter<"StaffHistory"> | string
@@ -389634,7 +389634,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"StaffHistory"> | string | null
     from?: DateTimeNullableWithAggregatesFilter<"StaffHistory"> | Date | string | null
     to?: DateTimeNullableWithAggregatesFilter<"StaffHistory"> | Date | string | null
-    userProfileId?: StringWithAggregatesFilter<"StaffHistory"> | string
+    userProfileId?: UuidWithAggregatesFilter<"StaffHistory"> | string
     organizationId?: UuidWithAggregatesFilter<"StaffHistory"> | string
     staffTypeId?: StringWithAggregatesFilter<"StaffHistory"> | string
     staffPositionId?: StringWithAggregatesFilter<"StaffHistory"> | string
@@ -427695,6 +427695,19 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type UuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    mode?: QueryMode
+    not?: NestedUuidFilter<$PrismaModel> | string
+  }
+
   export type UserProfileScalarRelationFilter = {
     is?: UserProfileWhereInput
     isNot?: UserProfileWhereInput
@@ -427765,6 +427778,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    mode?: QueryMode
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type BoolNullableFilter<$PrismaModel = never> = {
@@ -429190,19 +429219,6 @@ export namespace Prisma {
     trinhDoId?: SortOrder
   }
 
-  export type UuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    mode?: QueryMode
-    not?: NestedUuidFilter<$PrismaModel> | string
-  }
-
   export type DM_NgoaiNguNullableScalarRelationFilter = {
     is?: DM_NgoaiNguWhereInput | null
     isNot?: DM_NgoaiNguWhereInput | null
@@ -429271,22 +429287,6 @@ export namespace Prisma {
     thoiGianKetThuc?: SortOrder
     trinhDoId?: SortOrder
     userProfileId?: SortOrder
-  }
-
-  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    mode?: QueryMode
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type DM_TrinhDoTinHocScalarRelationFilter = {
@@ -474103,6 +474103,18 @@ export namespace Prisma {
     _min?: NestedEnumConfigKeyFilter<$PrismaModel>
     _max?: NestedEnumConfigKeyFilter<$PrismaModel>
   }
+
+  export type NestedUuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedUuidFilter<$PrismaModel> | string
+  }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -474125,6 +474137,21 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
@@ -474165,33 +474192,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedUuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedUuidFilter<$PrismaModel> | string
-  }
-
-  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type NestedEnumPermissionTypeFilter<$PrismaModel = never> = {
@@ -482168,7 +482168,7 @@ export namespace Prisma {
     job?: StringNullableFilter<"Relative"> | string | null
     information?: StringNullableFilter<"Relative"> | string | null
     quanHeThanNhanId?: StringNullableFilter<"Relative"> | string | null
-    userProfileId?: StringFilter<"Relative"> | string
+    userProfileId?: UuidFilter<"Relative"> | string
   }
 
   export type TrinhDoLyLuanChinhTriUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482203,7 +482203,7 @@ export namespace Prisma {
     noiDaoTao?: StringNullableFilter<"TrinhDoLyLuanChinhTri"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"TrinhDoLyLuanChinhTri"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TrinhDoLyLuanChinhTri"> | Date | string | null
-    userProfileId?: StringFilter<"TrinhDoLyLuanChinhTri"> | string
+    userProfileId?: UuidFilter<"TrinhDoLyLuanChinhTri"> | string
     trinhDoId?: StringNullableFilter<"TrinhDoLyLuanChinhTri"> | string | null
   }
 
@@ -482239,7 +482239,7 @@ export namespace Prisma {
     noiDaoTao?: StringNullableFilter<"TrinhDoQuanLyNhaNuoc"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"TrinhDoQuanLyNhaNuoc"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TrinhDoQuanLyNhaNuoc"> | Date | string | null
-    userProfileId?: StringFilter<"TrinhDoQuanLyNhaNuoc"> | string
+    userProfileId?: UuidFilter<"TrinhDoQuanLyNhaNuoc"> | string
     trinhDoId?: StringNullableFilter<"TrinhDoQuanLyNhaNuoc"> | string | null
   }
 
@@ -482277,7 +482277,7 @@ export namespace Prisma {
     thoiGianBatDau?: DateTimeNullableFilter<"NgoaiNgu"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"NgoaiNgu"> | Date | string | null
     trinhDoId?: UuidFilter<"NgoaiNgu"> | string
-    userProfileId?: StringFilter<"NgoaiNgu"> | string
+    userProfileId?: UuidFilter<"NgoaiNgu"> | string
   }
 
   export type TinHocUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482313,7 +482313,7 @@ export namespace Prisma {
     thoiGianBatDau?: DateTimeNullableFilter<"TinHoc"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"TinHoc"> | Date | string | null
     dM_TrinhDoTinHocId?: UuidFilter<"TinHoc"> | string
-    userProfileId?: StringFilter<"TinHoc"> | string
+    userProfileId?: UuidFilter<"TinHoc"> | string
   }
 
   export type BoiDuongQuocPhongAnNinhUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482347,7 +482347,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"BoiDuongQuocPhongAnNinh"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"BoiDuongQuocPhongAnNinh"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"BoiDuongQuocPhongAnNinh"> | Date | string | null
-    userProfileId?: StringFilter<"BoiDuongQuocPhongAnNinh"> | string
+    userProfileId?: UuidFilter<"BoiDuongQuocPhongAnNinh"> | string
   }
 
   export type CapBacUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482382,7 +482382,7 @@ export namespace Prisma {
     capRaQuyetDinh?: StringNullableFilter<"CapBac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"CapBac"> | Date | string | null
     capBacId?: UuidFilter<"CapBac"> | string
-    userProfileId?: StringFilter<"CapBac"> | string
+    userProfileId?: UuidFilter<"CapBac"> | string
   }
 
   export type QuaTrinhCongTacUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482423,7 +482423,7 @@ export namespace Prisma {
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
     loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCongTac"> | string
   }
 
   export type QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482461,7 +482461,7 @@ export namespace Prisma {
     dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
     dM_NuocCuDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
   }
 
   export type QuaTrinhCuDiDaoTaoUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482499,7 +482499,7 @@ export namespace Prisma {
     vanBang?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
     loaiId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
     dM_TinhTrangDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
+    userProfileId?: UuidFilter<"QuaTrinhCuDiDaoTao"> | string
   }
 
   export type KhenThuongUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482536,7 +482536,7 @@ export namespace Prisma {
     nguoiKy?: StringNullableFilter<"KhenThuong"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"KhenThuong"> | Date | string | null
     lyDo?: StringNullableFilter<"KhenThuong"> | string | null
-    userProfileId?: StringFilter<"KhenThuong"> | string
+    userProfileId?: UuidFilter<"KhenThuong"> | string
   }
 
   export type KyLuatUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482573,7 +482573,7 @@ export namespace Prisma {
     nguoiKy?: StringNullableFilter<"KyLuat"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"KyLuat"> | Date | string | null
     lyDo?: StringNullableFilter<"KyLuat"> | string | null
-    userProfileId?: StringFilter<"KyLuat"> | string
+    userProfileId?: UuidFilter<"KyLuat"> | string
   }
 
   export type DoiTuongChinhSachUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482608,7 +482608,7 @@ export namespace Prisma {
     ngayBatDau?: DateTimeNullableFilter<"DoiTuongChinhSach"> | Date | string | null
     ngayKetThuc?: DateTimeNullableFilter<"DoiTuongChinhSach"> | Date | string | null
     ghiChu?: StringNullableFilter<"DoiTuongChinhSach"> | string | null
-    userProfileId?: StringFilter<"DoiTuongChinhSach"> | string
+    userProfileId?: UuidFilter<"DoiTuongChinhSach"> | string
   }
 
   export type KeKhaiTaiSanUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482642,7 +482642,7 @@ export namespace Prisma {
     loai?: StringNullableFilter<"KeKhaiTaiSan"> | string | null
     tenDot?: StringNullableFilter<"KeKhaiTaiSan"> | string | null
     thoiGianKeKhai?: DateTimeNullableFilter<"KeKhaiTaiSan"> | Date | string | null
-    userProfileId?: StringFilter<"KeKhaiTaiSan"> | string
+    userProfileId?: UuidFilter<"KeKhaiTaiSan"> | string
   }
 
   export type HocViUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482678,7 +482678,7 @@ export namespace Prisma {
     linhVuc?: StringNullableFilter<"HocVi"> | string | null
     truongId?: StringNullableFilter<"HocVi"> | string | null
     year?: IntNullableFilter<"HocVi"> | number | null
-    userProfileId?: StringFilter<"HocVi"> | string
+    userProfileId?: UuidFilter<"HocVi"> | string
   }
 
   export type HocHamUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482714,7 +482714,7 @@ export namespace Prisma {
     soQuyetDinh?: StringNullableFilter<"HocHam"> | string | null
     from?: DateTimeNullableFilter<"HocHam"> | Date | string | null
     to?: DateTimeNullableFilter<"HocHam"> | Date | string | null
-    userProfileId?: StringFilter<"HocHam"> | string
+    userProfileId?: UuidFilter<"HocHam"> | string
   }
 
   export type TiengDanTocUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482749,7 +482749,7 @@ export namespace Prisma {
     nghe?: StringNullableFilter<"TiengDanToc"> | string | null
     noi?: StringNullableFilter<"TiengDanToc"> | string | null
     viet?: StringNullableFilter<"TiengDanToc"> | string | null
-    userProfileId?: StringFilter<"TiengDanToc"> | string
+    userProfileId?: UuidFilter<"TiengDanToc"> | string
   }
 
   export type ChienDauUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482787,7 +482787,7 @@ export namespace Prisma {
     doiTuong?: StringNullableFilter<"ChienDau"> | string | null
     thoiGianBatDau?: DateTimeNullableFilter<"ChienDau"> | Date | string | null
     thoiGianKetThuc?: DateTimeNullableFilter<"ChienDau"> | Date | string | null
-    userProfileId?: StringFilter<"ChienDau"> | string
+    userProfileId?: UuidFilter<"ChienDau"> | string
   }
 
   export type NuocNgoaiUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482822,7 +482822,7 @@ export namespace Prisma {
     tuNgay?: DateTimeNullableFilter<"NuocNgoai"> | Date | string | null
     denNgay?: DateTimeNullableFilter<"NuocNgoai"> | Date | string | null
     lyDo?: StringNullableFilter<"NuocNgoai"> | string | null
-    userProfileId?: StringFilter<"NuocNgoai"> | string
+    userProfileId?: UuidFilter<"NuocNgoai"> | string
   }
 
   export type ThuongTatUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482859,7 +482859,7 @@ export namespace Prisma {
     thoiGian?: DateTimeNullableFilter<"ThuongTat"> | Date | string | null
     noiBiThuong?: StringNullableFilter<"ThuongTat"> | string | null
     thoiGianGiamDinh?: DateTimeNullableFilter<"ThuongTat"> | Date | string | null
-    userProfileId?: StringFilter<"ThuongTat"> | string
+    userProfileId?: UuidFilter<"ThuongTat"> | string
   }
 
   export type DanhHieuUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482892,7 +482892,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"DanhHieu"> | string | null
     ten?: StringNullableFilter<"DanhHieu"> | string | null
     thoiGian?: DateTimeNullableFilter<"DanhHieu"> | Date | string | null
-    userProfileId?: StringFilter<"DanhHieu"> | string
+    userProfileId?: UuidFilter<"DanhHieu"> | string
   }
 
   export type QuaTrinhHocTapUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482930,7 +482930,7 @@ export namespace Prisma {
     denNgay?: DateTimeNullableFilter<"QuaTrinhHocTap"> | Date | string | null
     ketQua?: StringNullableFilter<"QuaTrinhHocTap"> | string | null
     loaiHinhDaoTao?: StringNullableFilter<"QuaTrinhHocTap"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhHocTap"> | string
+    userProfileId?: UuidFilter<"QuaTrinhHocTap"> | string
   }
 
   export type ToChucXaHoiUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -482965,7 +482965,7 @@ export namespace Prisma {
     tuNgay?: DateTimeNullableFilter<"ToChucXaHoi"> | Date | string | null
     denNgay?: DateTimeNullableFilter<"ToChucXaHoi"> | Date | string | null
     congViec?: StringNullableFilter<"ToChucXaHoi"> | string | null
-    userProfileId?: StringFilter<"ToChucXaHoi"> | string
+    userProfileId?: UuidFilter<"ToChucXaHoi"> | string
   }
 
   export type QuaTrinhLuongUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -483004,7 +483004,7 @@ export namespace Prisma {
     maNgach?: StringFilter<"QuaTrinhLuong"> | string
     phuCapChucVu?: StringNullableFilter<"QuaTrinhLuong"> | string | null
     phuCapKhac?: StringNullableFilter<"QuaTrinhLuong"> | string | null
-    userProfileId?: StringFilter<"QuaTrinhLuong"> | string
+    userProfileId?: UuidFilter<"QuaTrinhLuong"> | string
   }
 
   export type ChucVuChinhQuyenUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -483036,7 +483036,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ChucVuChinhQuyen"> | Date | string
     createdBy?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
     chucVuChinhQuyenId?: UuidNullableFilter<"ChucVuChinhQuyen"> | string | null
-    userProfileId?: StringFilter<"ChucVuChinhQuyen"> | string
+    userProfileId?: UuidFilter<"ChucVuChinhQuyen"> | string
     address?: StringNullableFilter<"ChucVuChinhQuyen"> | string | null
   }
 
@@ -483069,7 +483069,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ChucVuDang"> | Date | string
     createdBy?: UuidNullableFilter<"ChucVuDang"> | string | null
     chucVuDangId?: UuidNullableFilter<"ChucVuDang"> | string | null
-    userProfileId?: StringFilter<"ChucVuDang"> | string
+    userProfileId?: UuidFilter<"ChucVuDang"> | string
     address?: StringNullableFilter<"ChucVuDang"> | string | null
   }
 
@@ -483160,7 +483160,7 @@ export namespace Prisma {
     unionLeader?: StringNullableFilter<"Student"> | string | null
     status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
     fixedClassId?: StringNullableFilter<"Student"> | string | null
-    userProfileId?: StringFilter<"Student"> | string
+    userProfileId?: UuidFilter<"Student"> | string
     registrationAreaId?: UuidNullableFilter<"Student"> | string | null
     curriculumVersionId?: StringNullableFilter<"Student"> | string | null
     curriculumVersionParallelId?: StringNullableFilter<"Student"> | string | null
@@ -483288,7 +483288,7 @@ export namespace Prisma {
     lectureID?: StringNullableFilter<"LecturerHistory"> | string | null
     lectureCode?: StringNullableFilter<"LecturerHistory"> | string | null
     serviceDate?: DateTimeNullableFilter<"LecturerHistory"> | Date | string | null
-    userProfileId?: StringFilter<"LecturerHistory"> | string
+    userProfileId?: UuidFilter<"LecturerHistory"> | string
     organizationId?: UuidNullableFilter<"LecturerHistory"> | string | null
     lecturerTypeId?: StringFilter<"LecturerHistory"> | string
   }
@@ -483333,7 +483333,7 @@ export namespace Prisma {
     examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
     suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
     suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
-    updatedById?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+    updatedById?: UuidNullableFilter<"StudentSubjectScoreHistory"> | string | null
   }
 
   export type StaffUpsertWithoutUserProfileInput = {
@@ -483409,7 +483409,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"StaffHistory"> | string | null
     from?: DateTimeNullableFilter<"StaffHistory"> | Date | string | null
     to?: DateTimeNullableFilter<"StaffHistory"> | Date | string | null
-    userProfileId?: StringFilter<"StaffHistory"> | string
+    userProfileId?: UuidFilter<"StaffHistory"> | string
     organizationId?: UuidFilter<"StaffHistory"> | string
     staffTypeId?: StringFilter<"StaffHistory"> | string
     staffPositionId?: StringFilter<"StaffHistory"> | string
@@ -483448,7 +483448,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"EvidenceFile"> | string
     size?: BigIntFilter<"EvidenceFile"> | bigint | number
     evidenceId?: StringFilter<"EvidenceFile"> | string
-    userProfileId?: StringNullableFilter<"EvidenceFile"> | string | null
+    userProfileId?: UuidNullableFilter<"EvidenceFile"> | string | null
   }
 
   export type DocumentUpsertWithWhereUniqueWithoutUploadedByInput = {
@@ -483487,8 +483487,8 @@ export namespace Prisma {
     fileType?: StringNullableFilter<"Document"> | string | null
     fileSize?: IntNullableFilter<"Document"> | number | null
     reason?: StringNullableFilter<"Document"> | string | null
-    uploadedById?: StringFilter<"Document"> | string
-    approvedById?: StringNullableFilter<"Document"> | string | null
+    uploadedById?: UuidFilter<"Document"> | string
+    approvedById?: UuidNullableFilter<"Document"> | string | null
   }
 
   export type DocumentUpsertWithWhereUniqueWithoutApprovedByInput = {
@@ -483540,8 +483540,8 @@ export namespace Prisma {
     status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
     topicId?: StringNullableFilter<"FAQ"> | string | null
     reason?: StringNullableFilter<"FAQ"> | string | null
-    uploadedById?: StringFilter<"FAQ"> | string
-    approvedById?: StringNullableFilter<"FAQ"> | string | null
+    uploadedById?: UuidFilter<"FAQ"> | string
+    approvedById?: UuidNullableFilter<"FAQ"> | string | null
   }
 
   export type FAQUpsertWithWhereUniqueWithoutApprovedByInput = {
@@ -483589,7 +483589,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     createdBy?: UuidNullableFilter<"Conversation"> | string | null
     name?: StringNullableFilter<"Conversation"> | string | null
-    userId?: StringNullableFilter<"Conversation"> | string | null
+    userId?: UuidNullableFilter<"Conversation"> | string | null
     sessionId?: StringNullableFilter<"Conversation"> | string | null
     topicId?: StringNullableFilter<"Conversation"> | string | null
   }
@@ -483625,7 +483625,7 @@ export namespace Prisma {
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
     content?: StringFilter<"SubjectVersionHistory"> | string
     action?: StringFilter<"SubjectVersionHistory"> | string
-    updatedById?: StringFilter<"SubjectVersionHistory"> | string
+    updatedById?: UuidFilter<"SubjectVersionHistory"> | string
   }
 
   export type SubjectClassHistoryUpsertWithWhereUniqueWithoutUpdatedByInput = {
@@ -483664,7 +483664,7 @@ export namespace Prisma {
     isLockExamScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreSubmitted?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreChecked?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
-    updatedById?: StringNullableFilter<"SubjectClassHistory"> | string | null
+    updatedById?: UuidNullableFilter<"SubjectClassHistory"> | string | null
   }
 
   export type ChangeLogUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -483696,7 +483696,7 @@ export namespace Prisma {
     newData?: JsonNullableFilter<"ChangeLog">
     transactionId?: StringNullableFilter<"ChangeLog"> | string | null
     source?: StringNullableFilter<"ChangeLog"> | string | null
-    userProfileId?: StringFilter<"ChangeLog"> | string
+    userProfileId?: UuidFilter<"ChangeLog"> | string
   }
 
   export type SurveySessionUpsertWithWhereUniqueWithoutProfileInput = {
@@ -483729,7 +483729,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"SurveySession"> | string | null
     surveyId?: StringFilter<"SurveySession"> | string
     additionalSuggestion?: StringNullableFilter<"SurveySession"> | string | null
-    profileId?: StringNullableFilter<"SurveySession"> | string | null
+    profileId?: UuidNullableFilter<"SurveySession"> | string | null
     studentId?: StringNullableFilter<"SurveySession"> | string | null
     startedAt?: DateTimeFilter<"SurveySession"> | Date | string
     completedAt?: DateTimeNullableFilter<"SurveySession"> | Date | string | null
@@ -483765,7 +483765,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"EvaluationCriterionComment"> | Date | string
     updatedAt?: DateTimeFilter<"EvaluationCriterionComment"> | Date | string
     createdBy?: UuidNullableFilter<"EvaluationCriterionComment"> | string | null
-    reviewerId?: StringFilter<"EvaluationCriterionComment"> | string
+    reviewerId?: UuidFilter<"EvaluationCriterionComment"> | string
     requirementCriterionId?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
     content?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
     analysisCriterionId?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
@@ -505261,7 +505261,7 @@ export namespace Prisma {
     AND?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
     OR?: UserProfileScalarWhereInput[]
     NOT?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
-    id?: StringFilter<"UserProfile"> | string
+    id?: UuidFilter<"UserProfile"> | string
     code?: StringNullableFilter<"UserProfile"> | string | null
     active?: BoolFilter<"UserProfile"> | boolean
     description?: StringNullableFilter<"UserProfile"> | string | null
@@ -514413,7 +514413,7 @@ export namespace Prisma {
     from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     lectureID?: StringNullableFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
-    userProfileId?: StringFilter<"Lecturer"> | string
+    userProfileId?: UuidFilter<"Lecturer"> | string
     organizationId?: UuidFilter<"Lecturer"> | string
     lecturerTypeId?: StringFilter<"Lecturer"> | string
   }
@@ -514463,7 +514463,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
     createdBy?: UuidNullableFilter<"Staff"> | string | null
     from?: DateTimeNullableFilter<"Staff"> | Date | string | null
-    userProfileId?: StringFilter<"Staff"> | string
+    userProfileId?: UuidFilter<"Staff"> | string
     organizationId?: UuidFilter<"Staff"> | string
     staffTypeId?: StringFilter<"Staff"> | string
     staffPositionId?: StringFilter<"Staff"> | string

@@ -38,7 +38,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     subjectVersionId: z.string(),
-    updatedById: z.string(),
+    updatedById: z.string().uuid(),
 }
 );
 

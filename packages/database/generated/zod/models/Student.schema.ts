@@ -125,7 +125,7 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     trainingLocationId: z.string().nullish(),
     fixedClassId: z.string().nullish(),
-    userProfileId: z.string(),
+    userProfileId: z.string().uuid(),
     registrationAreaId: z.string().uuid().nullish(),
     curriculumVersionId: z.string().nullish(),
     curriculumVersionParallelId: z.string().nullish(),
