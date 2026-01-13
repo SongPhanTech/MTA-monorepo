@@ -58,78 +58,39 @@ export default function FixedClassPage() {
     const where = useMemo(() => {
         const curriculumVersionFilter = {
             ...(filters.trainingMajors
-                ? {
-                      curriculum: {
-                          trainingMajorId: {
-                              in: filters.trainingMajors,
-                          },
-                      },
-                  }
+                ? { curriculum: { trainingMajorId: { in: filters.trainingMajors } } }
                 : {}),
-            ...(filters.trainingLevel
-                ? {
-                      trainingLevelId: {
-                          in: filters.trainingLevel,
-                      },
-                  }
-                : {}),
+            ...(filters.trainingLevel ? { trainingLevelId: { in: filters.trainingLevel } } : {}),
         }
-
         return {
             deletedAt: null,
             ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
+                ? { code: { contains: filters.code, mode: 'insensitive' as const } }
                 : {}),
             ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive' as const,
-                      },
-                  }
+                ? { name: { contains: filters.name, mode: 'insensitive' as const } }
                 : {}),
             ...(filters.managementOrganization
-                ? {
-                      managementOrganizationId: {
-                          in: filters.managementOrganization,
-                      },
-                  }
+                ? { managementOrganizationId: { in: filters.managementOrganization } }
                 : {}),
-            ...(filters.trainingCourseId && {
-                trainingCourseId: filters.trainingCourseId,
-            }),
             ...(filters.curriculumVersion
-                ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
-                      },
-                  }
+                ? { curriculumVersionId: { in: filters.curriculumVersion } }
                 : {}),
             ...(Object.keys(curriculumVersionFilter).length > 0 && {
                 curriculumVersion: curriculumVersionFilter,
             }),
             trainingCourse: {
                 trainingObjectTypeId,
+                ...(filters.trainingCourseId && {
+                    id: filters.trainingCourseId,
+                }),
             },
             active: true,
             ...(!canReadAll
                 ? {
                       OR: [
-                          {
-                              lecturerManagement: {
-                                  userProfileId: profileId,
-                              },
-                          },
-                          {
-                              staffManagement: {
-                                  userProfileId: profileId,
-                              },
-                          },
+                          { lecturerManagement: { userProfileId: profileId } },
+                          { staffManagement: { userProfileId: profileId } },
                       ],
                   }
                 : {}),
