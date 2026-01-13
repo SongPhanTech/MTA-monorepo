@@ -1,13 +1,13 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { $Enums, ExamType, Prisma, ScoreConvert } from '@workspace/db'
+import { $Enums, ExamType, Prisma, type ScoreConvert } from '@workspace/db'
 import { getMinioUrl, getScoreStatistics, numberToWords } from '@workspace/libs/utils'
+import dayjs from 'dayjs'
 import { read, utils } from 'xlsx'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from '../dto/subject-class.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { ListOf, PaginationQuerySchema } from '../zod/base'
-import dayjs from 'dayjs'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -1632,9 +1632,12 @@ app.openapi(exportSubjectClassScore, async (c) => {
     const template = new XlsxTemplate(nodeBuffer)
     const examOptions = [
         { value: ExamType.OfflineWritten, label: 'Thi viết' },
-        { value: ExamType.Oral, label: 'Thi vấn đáp' },
-        { value: ExamType.Practice, label: 'Thi thực hành' },
-        { value: ExamType.Project, label: 'Thi đồ án' },
+        { value: ExamType.OnlineWritten, label: 'Trực tuyến' },
+        // { value: ExamType.OfflineChoices, label: 'Thi trắc nghiệm' },
+        // { value: ExamType.OnlineChoices, label: 'Thi trắc nghiệm trực tuyến' },
+        { value: ExamType.Oral, label: 'Vấn đáp' },
+        { value: ExamType.Practice, label: 'Thực hành - Thí nghiệm' },
+        { value: ExamType.Project, label: 'Đồ án' },
         { value: ExamType.Other, label: 'Loại khác' },
     ]
 

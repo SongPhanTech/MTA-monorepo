@@ -682,7 +682,7 @@ const ThongTinDiemHocKy = async (
 // Main function
 export const calculateStudentSemesterResult = async (
     semesterId: string,
-    trainingCourseId: string,
+    trainingCourseId: string
 ): Promise<string> => {
     const results: StudentSemesterResult[] = []
 
@@ -720,7 +720,6 @@ export const calculateStudentSemesterResult = async (
                 fixedClass: {
                     trainingCourseId,
                 },
-                
             },
             include: {
                 fixedClass: {

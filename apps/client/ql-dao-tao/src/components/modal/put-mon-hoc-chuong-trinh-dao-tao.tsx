@@ -24,7 +24,7 @@ import TreeSelect from '@/components/commons/tree-select'
 export type PutTrainingBlockSubject = TrainingBlockSubject & {
     conditional?: boolean
 }
-import {normalizeVietnamese}from '@lib/utils'
+import { normalizeVietnamese } from '@lib/utils'
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
@@ -236,7 +236,9 @@ const PutTrainingBlockSubject = () => {
                             treeDefaultExpandAll
                             treeData={treeData}
                             filterTreeNode={(input, node) =>
-                                normalizeVietnamese(node.searchText).includes(normalizeVietnamese(input))
+                                normalizeVietnamese(node.searchText).includes(
+                                    normalizeVietnamese(input)
+                                )
                             }
                             onChange={(val) => handleFilterChange('managementOrganizationId', val)}
                         />
@@ -259,7 +261,9 @@ const PutTrainingBlockSubject = () => {
                         placeholder="Chọn phiên bản môn học"
                         options={subjectVersionOptions}
                         filterOption={(input, option) =>
-                            normalizeVietnamese(option?.searchText ?? "").includes(normalizeVietnamese(input))
+                            normalizeVietnamese(option?.searchText ?? '').includes(
+                                normalizeVietnamese(input)
+                            )
                         }
                     />
                 </FormItem>
