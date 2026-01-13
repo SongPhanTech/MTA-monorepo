@@ -145,7 +145,9 @@ const DiemTrungBinhKyHoc = () => {
 
         try {
             showSpinner()
-            const res = await calculateSemesterResults({ params: { semesterId } })
+            const res = await calculateSemesterResults({
+                params: { semesterId, trainingCourseId: trainingCourseId ?? '' },
+            })
 
             if (res?.status === 400 || res?.status === 500) {
                 message.error(res?.data?.message || 'Đã xảy ra lỗi khi tổng kết học kỳ')
@@ -191,7 +193,11 @@ const DiemTrungBinhKyHoc = () => {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button type="primary" onClick={handleSummaryClick}>
+                                <Button
+                                    type="primary"
+                                    disabled={!trainingCourseId}
+                                    onClick={handleSummaryClick}
+                                >
                                     Tổng kết kết quả học kỳ
                                 </Button>
                             </Flex>
