@@ -3,6 +3,13 @@ import type { Session, SessionStatus } from '..'
 import { useSession } from './hook'
 import SessionProvider from './provider'
 
+declare global {
+    interface Window {
+        tenantCode?: string
+        NEXT_PUBLIC_AUTH_ISSUER?: string
+    }
+}
+
 const signIn = () => {
     const tenantCode = window.tenantCode || 'dev'
     window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE')}&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
@@ -30,8 +37,8 @@ const fetchSession = async (): Promise<{
             error: null,
         }
     } catch (error) {
-        if (process?.env?.NODE_ENV !== 'development') {
-            // signIn()
+        if (window.NEXT_PUBLIC_AUTH_ISSUER) {
+            signIn()
         }
         return {
             status: 'unauthenticated',

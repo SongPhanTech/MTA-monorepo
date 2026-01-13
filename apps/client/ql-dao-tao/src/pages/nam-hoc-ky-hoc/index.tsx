@@ -90,11 +90,10 @@ function YearAndSemester() {
     }, [filters, isFiltering])
     const { data = [], refetch } = useFindManySchoolYear({
         where,
-        orderBy: {
-            createdAt: 'desc',
-        },
+        orderBy: { startDate: 'desc' },
         include: {
             semesters: {
+                orderBy: { startDate: 'desc' },
                 where: {
                     ...(filters.code && filters.code !== ''
                         ? {
@@ -135,6 +134,7 @@ function YearAndSemester() {
     const { data: dataFilterSchoolYear = [] } = useFindManySchoolYear({
         take: 1000,
         skip: 0,
+        orderBy: { startDate: 'desc' },
     })
 
     const { data: count } = useCountSchoolYear({
@@ -276,7 +276,20 @@ function YearAndSemester() {
             <Col span={24}>
                 <TableCollapse
                     rowKey={'key'}
-                    headerTitleKey={'name'}
+                    headerTitleKey={({ code, name, startDate, endDate }) => {
+                        const format = (date: Date) => dayjs(date).format('DD/MM/YYYY')
+                        const startDateStr = startDate ? format(startDate) : null
+                        const endDateStr = endDate ? format(endDate) : null
+
+                        const range = [startDateStr, endDateStr].filter(Boolean).join(' -> ')
+                        const title = [code, name].filter(Boolean).join(' | ')
+
+                        return (
+                            <span className="truncate inline-block align-middle">
+                                {title} {range ? `(${range})` : ''}
+                            </span>
+                        )
+                    }}
                     childrenFieldName="semesters"
                     currentPage={currentPage}
                     filters={filters}

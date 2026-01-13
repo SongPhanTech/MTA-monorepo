@@ -81,9 +81,11 @@ export default function FixedClassPage() {
             }),
             trainingCourse: {
                 trainingObjectTypeId,
-                ...(filters.trainingCourseId && {
-                    id: filters.trainingCourseId,
-                }),
+                ...(filters.trainingCourseId
+                    ? { id: filters.trainingCourseId }
+                    : filters.trainingCourses?.length
+                      ? { id: { in: filters.trainingCourses } }
+                      : {}),
             },
             active: true,
             ...(!canReadAll
@@ -148,7 +150,7 @@ export default function FixedClassPage() {
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         where: {
-            trainingObjectTypes: { some: { id: trainingObjectTypeId } },
+            trainingObjectTypes: { some: { trainingObjectType: { id: trainingObjectTypeId } } },
             deletedAt: null,
             active: true,
         },
@@ -159,14 +161,9 @@ export default function FixedClassPage() {
         orderBy: { name: 'asc' },
     })
 
-    const { data: count } = useCountFixedClass({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
-    })
+    const { data: count } = useCountFixedClass({ where: { ...where, deletedAt: null } })
 
-    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
     const { onOpen } = useDisclosure<string>({
@@ -198,16 +195,17 @@ export default function FixedClassPage() {
             message.error('Vui lòng chọn ĐTĐT')
             return
         }
-        if (filters.trainingCourses?.length !== 1) {
-            message.error('Vui lòng chọn 1 khoá đào tạo')
+        const trainingCourseId = filters.trainingCourseId || filters.trainingCourses?.[0]
+        if (!trainingCourseId || filters.trainingCourses?.length !== 1) {
+            message.error('Vui lòng chọn một khoá đào tạo')
             return
         }
         try {
             setLoading(true)
             // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
             const { status, headers, data } = await fixedClassStudentCount({
-                trainingObjectTypeId: trainingObjectTypeId,
-                trainingCourseId: filters.trainingCourses[0],
+                trainingObjectTypeId,
+                trainingCourseId,
             })
             if (status === 200) {
                 const filename = getFilenameFromContentDisposition(
@@ -283,7 +281,12 @@ export default function FixedClassPage() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end">
-                                <Button className="mr-3" type="primary" onClick={downloadStatsFile}>
+                                <Button
+                                    className="mr-3"
+                                    type="primary"
+                                    onClick={downloadStatsFile}
+                                    loading={loading}
+                                >
                                     <DownloadOutlined />
                                     QS theo khoá
                                 </Button>
