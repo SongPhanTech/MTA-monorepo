@@ -418,11 +418,13 @@ const XemTaiLieu = () => {
             return null
         },
         enabled: !!input?.convertTo && !!input?.uri && !!input?.name && !!input?.mimeType,
+        refetchOnWindowFocus: false,
     })
 
     const documentUrl = input?.convertTo
         ? convertedDocumentUrl?.data?.fileUrl
         : getMinioUrl(input?.uri || '')
+
     const fileType = input?.mimeType?.toLowerCase() ?? ''
 
     return (
