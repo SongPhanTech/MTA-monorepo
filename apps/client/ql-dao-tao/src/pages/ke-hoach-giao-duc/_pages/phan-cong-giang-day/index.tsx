@@ -301,7 +301,7 @@ export default function PhanCongGiangDay({
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
         {
-            select: { Id: true },
+            select: { Id: true, sParentId: true },
             where: { bActive: true },
         },
         { refetchOnWindowFocus: false }
@@ -312,7 +312,7 @@ export default function PhanCongGiangDay({
             dmDonViIds.map((e) => ({
                 Id: e.Id,
                 sTen: null,
-                sParentId: null,
+                sParentId: e.sParentId,
                 sMa: null,
             })),
             orgId || '0'
