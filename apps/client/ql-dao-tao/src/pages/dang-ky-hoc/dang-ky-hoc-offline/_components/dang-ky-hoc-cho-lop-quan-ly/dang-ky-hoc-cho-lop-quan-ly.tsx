@@ -184,7 +184,7 @@ export default function DangKyHocChoLopQuanLy() {
                         width: 150,
                         render: (text: string, record) => (
                             <p className="text-left">
-                                {text}({record.subject?.credit})
+                                {record?.subject?.name}({record.subject?.credit})
                             </p>
                         ),
                     },
