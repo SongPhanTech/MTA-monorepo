@@ -1,8 +1,10 @@
 import { createId } from '@workspace/db'
 import { getMinioUrl } from '@workspace/libs/utils'
+import { convertDocument } from '@workspace/libs/api/model'
 import { Col, Image, Modal, Row } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useQuery } from '@tanstack/react-query'
 export type DocumentType =
     | 'word'
     | 'cell'
@@ -341,12 +343,18 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                     lang: 'vi',
                     customization: {
                         forcesave: false,
-                        toolbar: true, // Ẩn toàn bộ toolbar
-                        statusBar: true, // Ẩn thanh trạng thái dưới cùng
+                        toolbar: false,
+                        statusBar: false,
                         autosave: false,
                         logo: {
                             visible: false, // Ẩn logo
                         },
+                        chat: false,
+                        comments: false,
+                        anonymous: {
+                            request: false,
+                        },
+                        plugins: false,
                     },
                     region: 'vn',
                 },
@@ -383,12 +391,38 @@ const XemTaiLieu = () => {
         name?: string
         mimeType?: string
         mode?: 'view' | 'edit'
+        convertTo?: string
     }>({
         tag: 'XemTaiLieu',
     })
 
-    const documentUrl = getMinioUrl(input?.uri || '')
+    const { data: convertedDocumentUrl, isFetching: convertedDocumentUrlLoading } = useQuery({
+        queryKey: [
+            'convertedDocumentUrl',
+            input?.convertTo,
+            input?.uri,
+            input?.name,
+            input?.mimeType,
+        ],
+        queryFn: async () => {
+            if (input?.convertTo && input?.uri && input?.name && input?.mimeType) {
+                const fileType = input.mimeType.toLowerCase()
+                const convertedUrl = await convertDocument({
+                    fileType,
+                    outputtype: input.convertTo,
+                    url: input.uri,
+                    title: input.name,
+                })
+                return convertedUrl
+            }
+            return null
+        },
+        enabled: !!input?.convertTo && !!input?.uri && !!input?.name && !!input?.mimeType,
+    })
 
+    const documentUrl = input?.convertTo
+        ? convertedDocumentUrl?.data?.fileUrl
+        : getMinioUrl(input?.uri || '')
     const fileType = input?.mimeType?.toLowerCase() ?? ''
 
     return (
@@ -423,15 +457,20 @@ const XemTaiLieu = () => {
                             Tải xuống
                         </Button>
                     </Flex> */}
-                    {input?.uri && supportedDocFileTypes.includes(fileType) && (
-                        <OnlyOfficeViewer
-                            uri={documentUrl}
-                            fileType={fileType}
-                            title={input?.name}
-                            mode={input?.mode || 'view'}
-                        />
+                    {input?.convertTo && convertedDocumentUrlLoading ? (
+                        <div>Đang chuyển đổi tài liệu...</div>
+                    ) : (
+                        documentUrl &&
+                        supportedDocFileTypes.includes(fileType) && (
+                            <OnlyOfficeViewer
+                                uri={documentUrl}
+                                fileType={input?.convertTo ?? fileType}
+                                title={input?.name}
+                                mode={input?.mode || 'view'}
+                            />
+                        )
                     )}
-                    {input?.uri && supportedImageFileTypes.includes(fileType) && (
+                    {documentUrl && supportedImageFileTypes.includes(fileType) && (
                         <Image
                             preview={{
                                 visible: isOpen,

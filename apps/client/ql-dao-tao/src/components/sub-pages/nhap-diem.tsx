@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import ImportScoreModal, { type ImportScoreData } from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Table from '@components/commons/table'
-import { type DataTable, EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
+import type { DataTable } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import { examBanReason, examPostponeReason, examSuspendedReason } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -590,6 +590,7 @@ export default function NhapDiem({
         name?: string
         mimeType?: string
         mode?: 'view' | 'edit'
+        convertTo?: string
     }>({
         tag: 'XemTaiLieu',
     })
@@ -608,9 +609,21 @@ export default function NhapDiem({
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                openStudentSubjectScore({
-                    dataTable,
-                    type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
+                // openStudentSubjectScore({
+                //     dataTable,
+                //     type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
+                // })
+                openXemTaiLieu({
+                    uri: getUrl(
+                        getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                            'https://api.daotao.mta.swantech.vn',
+                        `${getExportSubjectClassScoreUrl({
+                            id: selectedSubjectClassId ?? '',
+                        })}`
+                    ),
+                    name: 'PhieuDiemNhap',
+                    mimeType: 'xlsx',
+                    convertTo: 'pdf',
                 })
             },
         })
@@ -775,6 +788,7 @@ export default function NhapDiem({
                                             ),
                                             name: 'PhieuDiemNhap',
                                             mimeType: 'xlsx',
+                                            convertTo: 'pdf',
                                         })
                                     }
                                 >
