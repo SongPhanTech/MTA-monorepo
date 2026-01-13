@@ -146,7 +146,7 @@ export default function CreateUserPage() {
             ),
         },
         {
-            title: 'Thông tin liên hệ',
+            title: 'Thông tin khác',
             id: 'thongTinLienHe',
             render: (
                 <Form.Item className="mb-0">
