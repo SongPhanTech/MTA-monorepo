@@ -1,6 +1,6 @@
 import { createId } from '@workspace/db'
 import { getMinioUrl } from '@workspace/libs/utils'
-import { Button, Col, Flex, Image, Modal, Row } from 'antd'
+import { Col, Image, Modal, Row } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type DocumentType =
@@ -298,6 +298,7 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                 if (placeholderContainer.lastChild)
                     placeholderContainer.removeChild(placeholderContainer.lastChild)
             }
+            // @ts-expect-error
             window.docEditor?.destroyEditor?.()
             const placeholder = document.createElement('div')
             placeholder.id = id
@@ -347,8 +348,7 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                             visible: false, // Ẩn logo
                         },
                     },
-                    region: 'vn', //
-                    location: 'vi',
+                    region: 'vn',
                 },
             } satisfies OnlyOfficeFullConfig
             // @ts-expect-error
@@ -409,18 +409,20 @@ const XemTaiLieu = () => {
         >
             <Row gutter={[8, 8]}>
                 <Col span={24}>
-                    <Flex justify="end" className="mb-2" gap={1}>
+                    {/* <Flex justify="end" className="mb-2" gap={1}>
                         <Button
                             type="primary"
                             onClick={(e) => {
                                 e.stopPropagation()
                                 e.preventDefault()
+
+                                // @ts-expect-error
                                 window?.docEditor?.downloadAs?.(input?.mimeType)
                             }}
                         >
                             Tải xuống
                         </Button>
-                    </Flex>
+                    </Flex> */}
                     {input?.uri && supportedDocFileTypes.includes(fileType) && (
                         <OnlyOfficeViewer
                             uri={documentUrl}

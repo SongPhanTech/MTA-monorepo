@@ -31,7 +31,7 @@ const fetchSession = async (): Promise<{
         }
     } catch (error) {
         if (process?.env?.NODE_ENV !== 'development') {
-            signIn()
+            // signIn()
         }
         return {
             status: 'unauthenticated',
