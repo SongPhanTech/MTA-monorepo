@@ -611,7 +611,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                   return (
                                                       fixedClasses?.reduce(
                                                           (sum: number, fc: any) =>
-                                                              sum + (fc._count?.students ?? 0),
+                                                              sum + (fc?._count?.students ?? 0),
                                                           0
                                                       ) || 0
                                                   )

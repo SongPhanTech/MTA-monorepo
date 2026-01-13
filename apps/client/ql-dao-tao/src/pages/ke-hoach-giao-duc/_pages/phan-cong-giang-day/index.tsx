@@ -1812,7 +1812,7 @@ export default function PhanCongGiangDay({
                                     }),
                                     render: (_, record) => (
                                         <p className="text-left">
-                                            {record?.name} ({record.subject?.credit})
+                                            {record?.subject?.name} ({record.subject?.credit})
                                         </p>
                                     ),
                                 },

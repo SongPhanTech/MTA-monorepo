@@ -178,7 +178,7 @@ const FixedClassDragItem: React.FC<{
                                     {
                                         id: item.id,
                                         code: item.code,
-                                        count: item._count?.students || 0,
+                                        count: item?._count?.students || 0,
                                     },
                                 ],
                             },
@@ -210,7 +210,7 @@ const FixedClassDragItem: React.FC<{
             className="border border-dashed border-gray-400 rounded px-2 py-1 m-1 bg-green-100 select-none cursor-move"
             style={{ opacity }}
         >
-            {item.code} ({item._count?.students})
+            {item.code} ({item?._count?.students})
         </div>
     )
 }
@@ -378,14 +378,14 @@ export default function KeHoachGhepLopMonHoc() {
                                     id: subCur.id,
                                     code: subCur.code,
                                     count: subCur.fixedClasses.reduce(
-                                        (sum, fc) => sum + (fc._count?.students ?? 0),
+                                        (sum, fc) => sum + (fc?._count?.students ?? 0),
                                         0
                                     ),
                                     createdAt: subCur.createdAt,
                                     fixedClasses: subCur.fixedClasses.map((fc) => ({
                                         id: fc.id,
                                         code: fc.code,
-                                        count: fc._count?.students || 0,
+                                        count: fc?._count?.students || 0,
                                     })),
                                 }
                                 return subAcc
@@ -755,7 +755,7 @@ export default function KeHoachGhepLopMonHoc() {
                                             return (
                                                 fixedClasses?.reduce(
                                                     (sum: number, fc: any) =>
-                                                        sum + (fc._count?.students ?? 0),
+                                                        sum + (fc?._count?.students ?? 0),
                                                     0
                                                 ) || 0
                                             )
