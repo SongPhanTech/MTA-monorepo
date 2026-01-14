@@ -12,8 +12,8 @@ import {
     useGetUserPermissionsAccessLevelAppCodeUserId,
     useGetUserPermissionsPermissionAppCodeUserId,
 } from '../../libs/src/api/system'
-import ability from './ability'
 import { getRuntimeEnv } from '../../libs/src/utils'
+import ability from './ability'
 
 declare global {
     interface Window {
@@ -23,7 +23,7 @@ declare global {
             organizationId: string
         }
         MTAMenuComponents: any
-        tenantCode: string
+        tenantCode?: string
         docEditor: any
     }
 }

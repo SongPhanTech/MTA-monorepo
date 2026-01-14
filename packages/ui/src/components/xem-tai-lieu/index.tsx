@@ -1,10 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
 import { createId } from '@workspace/db'
-import { getMinioUrl } from '@workspace/libs/utils'
 import { convertDocument } from '@workspace/libs/api/model'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { Col, Image, Modal, Row } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useQuery } from '@tanstack/react-query'
 export type DocumentType =
     | 'word'
     | 'cell'
@@ -289,18 +289,23 @@ type Props = {
     documentServerUrl?: string // Mặc định là http://localhost
 }
 
+declare global {
+    interface Window {
+        DocsAPI: any
+        docEditor: any
+    }
+}
+
 const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode = 'view' }: Props) => {
     useEffect(() => {
         const id = createId()
 
         const placeholderContainer = document.getElementById('placeholder-container')
-        // @ts-expect-error
         if (window.DocsAPI) {
             while (placeholderContainer?.firstChild) {
                 if (placeholderContainer.lastChild)
                     placeholderContainer.removeChild(placeholderContainer.lastChild)
             }
-            // @ts-expect-error
             window.docEditor?.destroyEditor?.()
             const placeholder = document.createElement('div')
             placeholder.id = id
@@ -359,7 +364,6 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                     region: 'vn',
                 },
             } satisfies OnlyOfficeFullConfig
-            // @ts-expect-error
             window.docEditor = new window.DocsAPI.DocEditor(id, config)
         }
     }, [uri, title, fileType, mode])
@@ -452,7 +456,6 @@ const XemTaiLieu = () => {
                                 e.stopPropagation()
                                 e.preventDefault()
 
-                                // @ts-expect-error
                                 window?.docEditor?.downloadAs?.(input?.mimeType)
                             }}
                         >
