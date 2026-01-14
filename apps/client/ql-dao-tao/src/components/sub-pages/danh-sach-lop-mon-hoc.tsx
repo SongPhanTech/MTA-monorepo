@@ -48,11 +48,6 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
-    const { onOpen: onOpenDetailSubject } = useDisclosure<{
-        subjectVersionId?: string
-    }>({
-        tag: 'ModalChiTietMonHoc',
-    })
     const { onOpen: onOpenDetailSubjectClass } = useDisclosure<{
         id: string
         mode: 'edit' | 'view'
@@ -297,7 +292,7 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
 
     return (
         <div>
-            <Row>
+            <Row gutter={[0, 0]}>
                 <Col span={24}>
                     <Row align="top" justify="space-between">
                         <Col span={12}>

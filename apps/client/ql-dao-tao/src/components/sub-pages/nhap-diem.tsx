@@ -35,6 +35,7 @@ import {
     message,
     Row,
     Tag,
+    Tooltip,
 } from 'antd'
 import dayjs from 'dayjs'
 import type Decimal from 'decimal.js'
@@ -902,18 +903,20 @@ export default function NhapDiem({
                         onRow={(record) => ({
                             className: cn(!!listForm?.[record.id]?.isChanged && 'bg-yellow-100'),
                         })}
+                        scrollable
+                        maxHeight={'calc(100vh - 460px)'}
                         columns={[
                             {
-                                title: 'STT',
+                                title: 'TT',
                                 width: 35,
                                 align: 'center',
                                 render: (_, __, index) => index + 1,
                             },
                             {
-                                title: 'Mã sinh viên',
+                                title: <Tooltip title="Mã sinh viên">MSV</Tooltip>,
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 150,
+                                width: 80,
                                 type: 'input',
                                 render: (_, record) => (
                                     <span
@@ -947,7 +950,7 @@ export default function NhapDiem({
                             {
                                 title: 'Ngày sinh',
                                 dataIndex: 'dateOfBirth',
-                                width: 125,
+                                width: 90,
                                 type: 'date',
                                 align: 'center',
                                 render: (_, record) =>
@@ -960,7 +963,7 @@ export default function NhapDiem({
                             {
                                 title: 'Lớp',
                                 dataIndex: 'fixedClassName',
-                                width: 120,
+                                width: 100,
                                 align: 'center',
                                 type: 'input',
                                 render: (_, record) => record.student?.fixedClass?.code || '',
@@ -969,9 +972,9 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm CC',
                                 dataIndex: 'attendanceScore',
-                                width: 90,
+                                width: 65,
                                 align: 'center',
-                                type: 'order',
+                                // type: 'order',
                                 render: (_, record) => {
                                     if (role !== 'GV' || score === 'THI') {
                                         return record.attendanceScore ?? ''
@@ -1011,9 +1014,9 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm TX',
                                 dataIndex: 'midtermScore',
-                                width: 90,
+                                width: 65,
                                 align: 'center',
-                                type: 'order',
+                                // type: 'order',
                                 render: (_, record) => {
                                     if (role !== 'GV' || score === 'THI') {
                                         return record.midtermScore ?? ''
@@ -1055,8 +1058,8 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm thi',
                                 dataIndex: 'examScore',
-                                width: 90,
-                                type: 'order',
+                                width: 65,
+                                // type: 'order',
                                 align: 'center',
                                 render: (_, record) => {
                                     if (role !== 'GV' || score === 'CC/TX' || !!record.examBanned) {
@@ -1101,8 +1104,8 @@ export default function NhapDiem({
                                 },
                             },
                             {
-                                title: 'Điểm hệ 10',
-                                width: 90,
+                                title: 'Điểm HP',
+                                width: 65,
                                 align: 'center',
                                 render: (_, record) => {
                                     const recordForm = listForm?.[record.id]
@@ -1135,7 +1138,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm hệ 4',
                                 align: 'center',
-                                width: 90,
+                                width: 70,
                                 render: (_, record) => {
                                     const recordForm = listForm?.[record.id]
                                     const examBanned = recordForm?.examBanned ?? record?.examBanned
@@ -1180,7 +1183,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm chữ',
                                 align: 'center',
-                                width: 80,
+                                width: 70,
                                 render: (_, record) => {
                                     const recordForm = listForm?.[record.id]
                                     const examBanned = recordForm?.examBanned ?? record?.examBanned
@@ -1225,7 +1228,7 @@ export default function NhapDiem({
                             {
                                 title: 'Cấm thi',
                                 dataIndex: 'examBanned',
-                                width: 80,
+                                width: 65,
                                 align: 'center',
                                 render: (_, record) => {
                                     return (
@@ -1253,7 +1256,11 @@ export default function NhapDiem({
                                             required={!!examBanned}
                                         >
                                             {disabledForm ? (
-                                                <Input readOnly variant="underlined" />
+                                                <Input.TextArea
+                                                    readOnly
+                                                    autoSize
+                                                    variant="underlined"
+                                                />
                                             ) : (
                                                 <AutoComplete
                                                     placeholder="Nhập lý do cấm thi"
@@ -1263,7 +1270,13 @@ export default function NhapDiem({
                                                     }))}
                                                     styles={{ popup: { root: { width: 'fit' } } }}
                                                     disabled={!examBanned}
-                                                />
+                                                >
+                                                    <Input.TextArea
+                                                        readOnly
+                                                        autoSize
+                                                        variant="underlined"
+                                                    />
+                                                </AutoComplete>
                                             )}
                                         </Form.Item>
                                     )
@@ -1272,7 +1285,7 @@ export default function NhapDiem({
                             {
                                 title: 'Hoãn thi',
                                 dataIndex: 'examPostponed',
-                                width: 80,
+                                width: 65,
                                 align: 'center',
                                 render: (_, record) => {
                                     return (
@@ -1300,7 +1313,11 @@ export default function NhapDiem({
                                             required={!!examPostponed}
                                         >
                                             {disabledForm ? (
-                                                <Input readOnly variant="underlined" />
+                                                <Input.TextArea
+                                                    readOnly
+                                                    autoSize
+                                                    variant="underlined"
+                                                />
                                             ) : (
                                                 <AutoComplete
                                                     placeholder="Nhập lý do hoãn thi"
@@ -1310,7 +1327,13 @@ export default function NhapDiem({
                                                     }))}
                                                     styles={{ popup: { root: { width: 'fit' } } }}
                                                     disabled={!examPostponed}
-                                                />
+                                                >
+                                                    <Input.TextArea
+                                                        readOnly
+                                                        autoSize
+                                                        variant="underlined"
+                                                    />
+                                                </AutoComplete>
                                             )}
                                         </Form.Item>
                                     )
@@ -1319,7 +1342,7 @@ export default function NhapDiem({
                             {
                                 title: 'Đình chỉ',
                                 dataIndex: 'suspended',
-                                width: 80,
+                                width: 65,
                                 align: 'center',
                                 render: (_, record) => {
                                     return (
@@ -1355,7 +1378,11 @@ export default function NhapDiem({
                                             required={!!suspended}
                                         >
                                             {disabledForm ? (
-                                                <Input readOnly variant="underlined" />
+                                                <Input.TextArea
+                                                    readOnly
+                                                    autoSize
+                                                    variant="underlined"
+                                                />
                                             ) : (
                                                 <AutoComplete
                                                     placeholder="Nhập lý do hoãn thi"
@@ -1367,7 +1394,13 @@ export default function NhapDiem({
                                                         popup: { root: { width: 'fit' } },
                                                     }}
                                                     disabled={!suspended}
-                                                />
+                                                >
+                                                    <Input.TextArea
+                                                        readOnly
+                                                        autoSize
+                                                        variant="underlined"
+                                                    />
+                                                </AutoComplete>
                                             )}
                                         </Form.Item>
                                     )
@@ -1387,7 +1420,7 @@ export default function NhapDiem({
                                         >
                                             <Input
                                                 readOnly={disabledForm}
-                                                variant={disabledForm ? 'underlined' : 'outlined'}
+                                                variant={disabledForm ? 'borderless' : 'underlined'}
                                                 placeholder="Nhập ghi chú"
                                                 style={{
                                                     width: '100%',

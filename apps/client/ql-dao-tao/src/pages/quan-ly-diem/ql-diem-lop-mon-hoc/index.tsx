@@ -258,7 +258,7 @@ export default function QuanLyDiemLopMonHoc({
         }
     }, [data, form])
     return (
-        <Row gutter={[16, 4]}>
+        <Row gutter={[8, 4]}>
             <Col span={12}>
                 <div className="flex items-center mb-2 w-full">
                     <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>
@@ -417,7 +417,12 @@ export default function QuanLyDiemLopMonHoc({
                 </Form>
             </Col>
             <Col span={24}>
-                <Tabs activeKey={activeKey} onChange={(key) => setActiveKey(key)} items={items} />
+                <Tabs
+                    className="-mt-3"
+                    activeKey={activeKey}
+                    onChange={(key) => setActiveKey(key)}
+                    items={items}
+                />
             </Col>
         </Row>
     )
