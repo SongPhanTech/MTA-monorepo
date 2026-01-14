@@ -1,5 +1,5 @@
 import { getRuntimeEnv } from '@workspace/libs/utils'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export type SSOSessionStatus = 'loading' | 'authenticated' | 'unauthenticated'
 
@@ -17,21 +17,82 @@ export interface SSOSession {
 }
 
 /**
+ * Global cache - shared across all hook instances
+ * Persist qua reload với localStorage
+ */
+interface CacheEntry {
+    status: SSOSessionStatus
+    session: SSOSession | null
+    timestamp: number
+}
+
+const CACHE_KEY = 'sso-session-cache'
+const CACHE_TIME = 5 * 60 * 1000 // 5 phút
+
+// Load from localStorage on init
+let globalCache: CacheEntry | null = null
+if (typeof window !== 'undefined') {
+    try {
+        const stored = localStorage.getItem(CACHE_KEY)
+        if (stored) {
+            const parsed = JSON.parse(stored) as CacheEntry
+            // Check if cache is still valid
+            if (Date.now() - parsed.timestamp < CACHE_TIME) {
+                globalCache = parsed
+            } else {
+                localStorage.removeItem(CACHE_KEY)
+            }
+        }
+    } catch (error) {
+        console.warn('[useSSOSession] Failed to load cache from localStorage:', error)
+    }
+}
+
+let isFetching = false
+const listeners = new Set<() => void>()
+
+/**
+ * Save cache to localStorage
+ */
+const saveCache = (cache: CacheEntry) => {
+    if (typeof window !== 'undefined') {
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cache))
+        } catch (error) {
+            console.warn('[useSSOSession] Failed to save cache to localStorage:', error)
+        }
+    }
+}
+
+/**
  * Hook để kiểm tra SSO session cho tro-ly-ao
  * KHÔNG tự động redirect về trang đăng nhập khi chưa authenticated
- * Khác với useSession từ @workspace/auth/react sẽ auto redirect
  * 
- * Simple version - chỉ fetch 1 lần khi mount, không retry/cache phức tạp
+ * Features:
+ * - Global cache 5 phút với localStorage persistence
+ * - Share state giữa các instances
+ * - Prevent duplicate fetches
+ * - Reload không mất cache
  */
 export const useSSOSession = () => {
-    const [status, setStatus] = useState<SSOSessionStatus>('loading')
-    const [session, setSession] = useState<SSOSession | null>(null)
-    const hasFetched = useRef(false)
+    const [status, setStatus] = useState<SSOSessionStatus>(
+        globalCache?.status || 'loading'
+    )
+    const [session, setSession] = useState<SSOSession | null>(
+        globalCache?.session || null
+    )
 
     const fetchSSOSession = useCallback(async () => {
-        // Prevent multiple fetches
-        if (hasFetched.current) return
-        hasFetched.current = true
+        // Check cache first
+        if (globalCache && Date.now() - globalCache.timestamp < CACHE_TIME) {
+            setStatus(globalCache.status)
+            setSession(globalCache.session)
+            return
+        }
+
+        // Prevent concurrent fetches
+        if (isFetching) return
+        isFetching = true
 
         try {
             const response = await fetch(
@@ -42,23 +103,60 @@ export const useSSOSession = () => {
                 }
             )
 
-            if (!response.ok) {
-                setStatus('unauthenticated')
-                setSession(null)
-                return
+            const newStatus: SSOSessionStatus = response.ok ? 'authenticated' : 'unauthenticated'
+            const newSession = response.ok ? await response.json() : null
+
+            // Update global cache
+            globalCache = {
+                status: newStatus,
+                session: newSession,
+                timestamp: Date.now(),
             }
 
-            const sessionData = await response.json()
-            setSession(sessionData)
-            setStatus('authenticated')
+            // Save to localStorage
+            saveCache(globalCache)
+
+            setStatus(newStatus)
+            setSession(newSession)
+
+            // Notify all listeners
+            listeners.forEach((listener) => listener())
         } catch (error) {
             console.warn('[useSSOSession] SSO session fetch failed:', error)
+            
+            globalCache = {
+                status: 'unauthenticated',
+                session: null,
+                timestamp: Date.now(),
+            }
+
+            saveCache(globalCache)
+
             setStatus('unauthenticated')
             setSession(null)
+
+            listeners.forEach((listener) => listener())
+        } finally {
+            isFetching = false
         }
     }, [])
 
-    // Fetch once on mount
+    // Subscribe to cache updates
+    useEffect(() => {
+        const handleUpdate = () => {
+            if (globalCache) {
+                setStatus(globalCache.status)
+                setSession(globalCache.session)
+            }
+        }
+
+        listeners.add(handleUpdate)
+        return () => {
+            listeners.delete(handleUpdate)
+        }
+    }, [])
+
+    // Fetch on mount
     useEffect(() => {
         fetchSSOSession()
     }, [fetchSSOSession])
@@ -74,10 +172,13 @@ export const useSSOSession = () => {
     }, [])
 
     /**
-     * Refresh lại session - reset hasFetched và fetch lại
+     * Refresh lại session - invalidate cache và fetch lại
      */
     const refetch = useCallback(() => {
-        hasFetched.current = false
+        globalCache = null
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem(CACHE_KEY)
+        }
         setStatus('loading')
         fetchSSOSession()
     }, [fetchSSOSession])
