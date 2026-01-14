@@ -4,16 +4,15 @@ import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
-import { getRuntimeEnv } from '@workspace/libs/utils'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
-import { signIn, useSession } from '@workspace/auth/react'
+import { useSSOSession } from '@/hooks/useSSOSession'
 import { WidgetChatbot } from '@workspace/ui'
 import { Breadcrumb, Layout, Spin, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
 
@@ -23,6 +22,11 @@ interface breadcrumListProps {
     href?: string
 }
 
+/**
+ * DefaultLayout - Layout cho trang quản trị (/quan-tri/*)
+ * YÊU CẦU ĐĂNG NHẬP SSO
+ * Nếu chưa đăng nhập sẽ redirect về trang SSO
+ */
 const DefaultLayout = ({
     children,
     className,
@@ -42,8 +46,11 @@ const DefaultLayout = ({
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
 
-    // SSO Authentication check
-    const { status } = useSession()
+    // SSO Authentication check - sử dụng hook riêng
+    const { status, signIn } = useSSOSession()
+    
+    // Ref để đảm bảo chỉ redirect 1 lần
+    const hasRedirected = useRef(false)
 
     // All hooks must be called before any early return
     const listBreadcrumb = useMemo(() => {
@@ -124,23 +131,34 @@ const DefaultLayout = ({
         handleCollapsed()
     }, [])
 
-    // Check if running in local environment
-    const isLocal = getRuntimeEnv('NEXT_PUBLIC_ENVIRONMENT') === 'local'
-
-    // Redirect to SSO if not authenticated (skip in local environment)
+    // Redirect to SSO if not authenticated
+    // Chỉ redirect 1 lần duy nhất
     useEffect(() => {
-        if (!isLocal && status === 'unauthenticated') {
+        if (status === 'unauthenticated' && !hasRedirected.current) {
+            hasRedirected.current = true
             signIn()
         }
-    }, [status, isLocal])
+    }, [status, signIn])
 
-    // Show loading while checking authentication (AFTER all hooks, skip in local)
-    if (!isLocal && (status === 'loading' || status === 'unauthenticated')) {
+    // Show loading while checking authentication
+    if (status === 'loading') {
         return (
             <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                     <Spin size="large" />
                     <p className="mt-4 text-gray-600">Đang kiểm tra đăng nhập...</p>
+                </div>
+            </div>
+        )
+    }
+
+    // Nếu unauthenticated, hiển thị loading (đang redirect)
+    if (status === 'unauthenticated') {
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <Spin size="large" />
+                    <p className="mt-4 text-gray-600">Đang chuyển hướng đến trang đăng nhập...</p>
                 </div>
             </div>
         )
