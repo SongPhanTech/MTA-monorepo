@@ -3760,4 +3760,181 @@ app.openapi(
         )
     }
 )
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/final-exam-info',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thông tin tổ chức thi kết thúc học phần',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+        const data = [
+            { name: 'Đề thi đã duyệt', count: 120 },
+            { name: 'Học viên tham dự', count: 750 },
+            { name: 'Nhập điểm', count: 350 },
+        ]
+        if (preview) {
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+                labels: ['Danh mục', 'Số lượng'],
+            })
+        }
+        return c.json(
+            { data, count: data.length, summary: {}, preview, labels: ['Danh mục', 'Số lượng'] },
+            200
+        )
+    }
+)
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/exam-info-by-day',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thông tin thi theo ngày',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+        const data = [
+            { name: 'Ca thi', count: 120 },
+            { name: 'Học phần', count: 450 },
+            { name: 'Học viên', count: 600 },
+            { name: 'Phòng thi', count: 300 },
+            { name: 'Giám thị', count: 300 },
+        ]
+        if (preview) {
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+                labels: ['Danh mục', 'Số lượng'],
+            })
+        }
+        return c.json(
+            { data, count: data.length, summary: {}, preview, labels: ['Danh mục', 'Số lượng'] },
+            200
+        )
+    }
+)
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/final-exam-result',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Tổng quan kết quả thi kết thúc học phần của học viện',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+        const data = [
+            { name: 'Lượt thi', count: 21234 },
+            { name: 'Học phần', count: 150 },
+            { name: 'Tiến độ nhập điểm', count: 100 },
+            { name: 'Tỷ lệ vắng thi', count: 10 },
+            { name: 'Vi phạm quy chế', count: 6300 },
+            { name: 'Phúc khảo', count: 52 },
+        ]
+        if (preview) {
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+                labels: ['Danh mục', 'Số lượng'],
+            })
+        }
+        return c.json(
+            { data, count: data.length, summary: {}, preview, labels: ['Danh mục', 'Số lượng'] },
+            200
+        )
+    }
+)
+
 export default app
