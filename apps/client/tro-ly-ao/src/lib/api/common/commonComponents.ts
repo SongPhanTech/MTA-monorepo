@@ -108,6 +108,146 @@ export const useGetSession = <TData = Schemas.Session,>(
   });
 };
 
+export type GetConfigLogsQueryParams = {
+  apiId: string;
+};
+
+export type GetConfigLogsError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetConfigLogsVariables = {
+  queryParams: GetConfigLogsQueryParams;
+} & CommonContext["fetcherOptions"];
+
+export const fetchGetConfigLogs = (
+  variables: GetConfigLogsVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    boolean,
+    GetConfigLogsError,
+    undefined,
+    {},
+    GetConfigLogsQueryParams,
+    {}
+  >({ url: "/api/apim-logs/config-logs", method: "get", ...variables, signal });
+
+export function getConfigLogsQuery(variables: GetConfigLogsVariables): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<boolean>;
+};
+
+export function getConfigLogsQuery(
+  variables: GetConfigLogsVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((options: QueryFnOptions) => Promise<boolean>)
+    | reactQuery.SkipToken;
+};
+
+export function getConfigLogsQuery(
+  variables: GetConfigLogsVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/api/apim-logs/config-logs",
+      operationId: "getConfigLogs",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) => fetchGetConfigLogs(variables, signal),
+  };
+}
+
+export const useSuspenseGetConfigLogs = <TData = boolean,>(
+  variables: GetConfigLogsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<boolean, GetConfigLogsError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  return reactQuery.useSuspenseQuery<boolean, GetConfigLogsError, TData>({
+    ...getConfigLogsQuery(deepMerge(fetcherOptions, variables)),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export const useGetConfigLogs = <TData = boolean,>(
+  variables: GetConfigLogsVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<boolean, GetConfigLogsError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  return reactQuery.useQuery<boolean, GetConfigLogsError, TData>({
+    ...getConfigLogsQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type UpdateConfigLogsError = Fetcher.ErrorWrapper<undefined>;
+
+export type UpdateConfigLogsResponse = void | null;
+
+export type UpdateConfigLogsRequestBody = {
+  apiId: string;
+  enabled: boolean;
+};
+
+export type UpdateConfigLogsVariables = {
+  body: UpdateConfigLogsRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchUpdateConfigLogs = (
+  variables: UpdateConfigLogsVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    UpdateConfigLogsResponse,
+    UpdateConfigLogsError,
+    UpdateConfigLogsRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/apim-logs/config-logs",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useUpdateConfigLogs = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      UpdateConfigLogsResponse,
+      UpdateConfigLogsError,
+      UpdateConfigLogsVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    UpdateConfigLogsResponse,
+    UpdateConfigLogsError,
+    UpdateConfigLogsVariables
+  >({
+    mutationFn: (variables: UpdateConfigLogsVariables) =>
+      fetchUpdateConfigLogs(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
 export type AccessRequestsQueryParams = {
   service: string;
   from?: string | null;
@@ -1799,6 +1939,8 @@ export type SqlTransactionRequestBody = {
     | "ChangeLog"
     | "UserProfile"
     | "HocHam"
+    | "ChucVuChinhQuyen"
+    | "ChucVuDang"
     | "HocVi"
     | "Relative"
     | "TrinhDoLyLuanChinhTri"
@@ -1869,6 +2011,7 @@ export type SqlTransactionRequestBody = {
     | "SubjectScoreConvert"
     | "StudentSubjectScore"
     | "StudentSubjectScoreHistory"
+    | "StudentResearchTopic"
     | "ArchivedCertificateOnStudentSubjectScore"
     | "ArchivedCertificate"
     | "ArchivedAwardOnStudentSubjectScore"
@@ -1917,6 +2060,8 @@ export type SqlTransactionRequestBody = {
     | "DiplomaType"
     | "ScoreConvert"
     | "LoadCategory"
+    | "OutputStandard"
+    | "OutputStandardOnCurriculum"
     | "Student"
     | "StudentSemesterResult"
     | "StudentYearResult"
@@ -1947,6 +2092,7 @@ export type SqlTransactionRequestBody = {
     | "DefenseRecord"
     | "LibrarySubmission"
     | "DefaultCouncilRolePayAmount"
+    | "DefaultSupervisorPayAmount"
     | "PaymentRecord"
     | "SupervisorPaymentRecord"
     | "EvaluationPeriod"
@@ -2016,6 +2162,7 @@ export type SqlTransactionRequestBody = {
     | "DM_TrinhDoLyLuanChinhTri"
     | "DM_TrinhDoQuanLyNhaNuoc"
     | "DM_TinhTrangHonNhan"
+    | "DM_QuanHeThanNhan"
     | "DM_TrangThaiLamViec"
     | "DM_HinhThucKhenThuongChinhQuyen"
     | "DM_HinhThucKhenThuongDang"
@@ -2023,6 +2170,7 @@ export type SqlTransactionRequestBody = {
     | "DM_XepLoaiDanhGiaChatLuongDangVien"
     | "DM_LoaiHinhCongTac"
     | "DM_TinhTrangCongTac"
+    | "DM_LoaiTinhTrangCongTac"
     | "DM_LoaiHinhDiHocTap"
     | "DM_TinhTrangDiHocTap"
     | "DM_NuocCuDiHocTap"
@@ -2090,6 +2238,11 @@ export type QueryOperation =
       path: "/api/auth/get-session";
       operationId: "getSession";
       variables: GetSessionVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/api/apim-logs/config-logs";
+      operationId: "getConfigLogs";
+      variables: GetConfigLogsVariables | reactQuery.SkipToken;
     }
   | {
       path: "/api/apim-logs/access-requests";

@@ -28,19 +28,25 @@ const PutChuanDauRaModal = () => {
 
     async function onOk(data?: StudentOutputStandards) {
         if (!data) return
+
         try {
             showSpinner()
+            const submitData = {
+                ...data,
+                foreignLangPass: !data.foreignLangPass,
+                ITCertificationPass: !data.ITCertificationPass,
+            }
 
             await updateStudent({
-                data,
+                data: submitData,
                 where: { id },
             })
-            message.success('Cập nhật thành công')
 
+            message.success('Cập nhật thành công')
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
-                message.error(error?.info?.message)
+                message.error(error.info.message)
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -57,15 +63,15 @@ const PutChuanDauRaModal = () => {
             enabled: !!id,
         }
     )
-
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (initialValue) {
+        if (isOpen && initialValue) {
             form.setFieldsValue({
-                ...initialValue,
+                foreignLangPass: !initialValue.foreignLangPass,
+                ITCertificationPass: !initialValue.ITCertificationPass,
             })
         }
-    }, [initialValue])
+    }, [isOpen, initialValue])
 
     return (
         <PutFormModal
