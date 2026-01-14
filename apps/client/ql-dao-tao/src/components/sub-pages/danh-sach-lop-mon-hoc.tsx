@@ -458,10 +458,8 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
                             },
                             {
                                 title: 'Trạng thái NĐ',
-                                dataIndex: 'scoreDeadLineStart',
                                 width: 120,
                                 align: 'center',
-                                type: 'date',
                                 render: (__, record) => {
                                     return record?.enteredExamScore ? (
                                         'Đã nhập điểm thi'

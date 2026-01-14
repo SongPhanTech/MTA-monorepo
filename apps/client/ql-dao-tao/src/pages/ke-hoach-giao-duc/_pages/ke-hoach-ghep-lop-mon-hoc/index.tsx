@@ -405,6 +405,9 @@ export default function KeHoachGhepLopMonHoc() {
         _.debounce(() => {
             refetch()
             queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'DM_DonVi'],
+            })
+            queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'Subject'],
             })
             queryClient.invalidateQueries({

@@ -737,10 +737,8 @@ export default function ClassSubject() {
                             },
                             {
                                 title: 'Trạng thái NĐ',
-                                dataIndex: 'scoreDeadLineStart',
                                 width: 120,
                                 align: 'center',
-                                type: 'date',
                                 render: (__, record) => {
                                     return record?.enteredExamScore ? (
                                         'Đã nhập điểm thi'
