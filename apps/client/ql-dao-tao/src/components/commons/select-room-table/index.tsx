@@ -76,6 +76,7 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                     className="w-80"
                     placeholder="Tìm kiếm phòng..."
                     value={searchText}
+                    variant='underlined'
                     onChange={(e) => {
                         setSearchText(e.target.value)
                         setCurrentPage(1)
@@ -89,6 +90,17 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                 onRow={(record) => ({
                     onClick: (e) => {
                         e.stopPropagation()
+                        onChange?.(
+                            tableData.some((room) => room.id === record.id && room.isSelected)
+                                ? value.filter((v) => v.roomId !== record.id)
+                                : [
+                                      ...value,
+                                      {
+                                          roomId: record.id,
+                                          quantity: record.capacity,
+                                      },
+                                  ]
+                        )
                     },
                 })}
                 columns={[
@@ -120,6 +132,9 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                                 value={record.quantity}
                                 disabled={!record.isSelected}
                                 min={0}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                }}
                                 onChange={(e) => {
                                     handleQuantityChange(
                                         record.id,
@@ -132,7 +147,7 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                         ),
                     },
                 ]}
-                dataSource={filteredData}
+                data={filteredData}
                 rowSelection={rowSelection}
                 pagination={{
                     current: currentPage,
@@ -166,6 +181,7 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                     <Select
                         disabled={disabled}
                         mode="multiple"
+                        variant='underlined'
                         value={value.map((v) => v.roomId)}
                         options={rooms.map((room) => ({
                             label: `${room.name}-${room.capacity}`,

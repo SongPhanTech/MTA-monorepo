@@ -644,7 +644,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     return (
                                         <div className="text-left">
                                             <HighlightText
-                                                text={name}
+                                                text={`${name} (${record.subjectClass?.[0]?.subject?.credit || ''})`}
                                                 searchText={filters.searchText}
                                             />
                                         </div>
@@ -654,7 +654,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Mã LMH',
                                 align: 'center',
-                                width: 30,
+                                width: 70,
                                 render: (_, record) => {
                                     return record.subjectClass.length ? (
                                         <TextTruncate
@@ -669,13 +669,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                         ''
                                     )
                                 },
-                            },
-                            {
-                                title: 'STC',
-                                align: 'center',
-                                width: 30,
-                                render: (_, record) =>
-                                    record.subjectClass?.[0]?.subject?.credit || '',
                             },
                             {
                                 title: 'Số SV',
@@ -703,7 +696,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             },
                             {
                                 title: 'Trạng thái NĐ',
-                                width: 100,
+                                width: 90,
                                 align: 'center',
                                 render: (__, record) => {
                                     return record.subjectClass?.[0]?.enteredExamScore ? (
@@ -718,7 +711,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Khóa nhập ĐQT',
                                 align: 'center',
-                                width: 80,
+                                width: 90,
                                 render: (_, record) => {
                                     return (
                                         <Checkbox
@@ -740,7 +733,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Khóa DTS',
                                 align: 'center',
-                                width: 50,
+                                width: 60,
                                 render: (_, record) => {
                                     const lockExamSessions = record.lockExamSessions
                                     return <Checkbox checked={lockExamSessions} />
@@ -749,7 +742,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Đánh phách',
                                 align: 'center',
-                                width: 60,
+                                width: 70,
                                 render: (_, record) => {
                                     return (
                                         <Checkbox
@@ -778,7 +771,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Khóa phách',
                                 align: 'center',
-                                width: 60,
+                                width: 70,
                                 render: (_, record) => {
                                     return (
                                         <Checkbox
@@ -837,7 +830,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Số ca thi',
                                 align: 'center',
-                                width: 50,
+                                width: 70,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
