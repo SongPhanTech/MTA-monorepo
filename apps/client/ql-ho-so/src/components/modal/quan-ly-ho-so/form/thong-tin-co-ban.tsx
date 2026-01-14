@@ -2,10 +2,13 @@ import { CaretRightOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
+import TreeSelect from '@components/commons/tree-select'
 import type { DomProps } from '@constants/type'
+import { buildOrgTree } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import {
     useFindManyDM_DanToc,
+    useFindManyDM_DonVi,
     useFindManyDM_GioiTinh,
     useFindManyDM_QuanHuyen,
     useFindManyDM_QuocGia,
@@ -132,6 +135,8 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     //     {},
     //     { enabled: !!bLaCanBoNhanVien }
     // )
+    const { data: organizations = [] } = useFindManyDM_DonVi()
+    const treeData = buildOrgTree(organizations)
     const renderContent = () => {
         return (
             <div className="px-6 form-label-wrap">
@@ -379,23 +384,53 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </Flex>
                     </Col>
                     {bLaGiangVien && (
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="lecturerTypeId"
-                                label="Loại giảng viên"
-                                className="mb-0"
-                                required={bLaGiangVien}
-                            >
-                                <Select
-                                    placeholder="Chọn loại giảng viên"
-                                    options={lecturerTypeData.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                />
-                            </FormItem>
-                        </Col>
+                        <>
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="lecturerTypeId"
+                                    label="Loại giảng viên"
+                                    className="mb-0"
+                                    required={bLaGiangVien}
+                                >
+                                    <Select
+                                        placeholder="Chọn loại giảng viên"
+                                        options={lecturerTypeData.map((i) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                    />
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    required
+                                    form={form}
+                                    name="lectureID"
+                                    label="Mã giảng viên"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập mã giảng viên" className="h-9" />
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    required
+                                    name="organizationId"
+                                    label="Chọn đơn vị"
+                                    className="mb-2"
+                                >
+                                    <TreeSelect
+                                        allowClear
+                                        showSearch
+                                        placeholder="Chọn đơn vị quản lý"
+                                        treeDefaultExpandAll
+                                        treeData={treeData}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </>
                     )}
                     {/* {bLaCanBoNhanVien && (
                         <>
