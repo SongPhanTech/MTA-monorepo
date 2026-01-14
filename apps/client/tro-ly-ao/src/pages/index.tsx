@@ -7,8 +7,9 @@ import { useEffect } from 'react'
 
 const checkSessionQuietly = async (): Promise<boolean> => {
     try {
+        const appCode = getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'Chatbot'
         const response = await fetch(
-            `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/auth/get-session`,
+            `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/auth/get-session?appCode=${appCode}`,
             {
                 method: 'GET',
                 credentials: 'include',

@@ -4,6 +4,7 @@ import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 import { signIn, useSession } from '@workspace/auth/react'
@@ -44,25 +45,7 @@ const DefaultLayout = ({
     // SSO Authentication check
     const { status } = useSession()
 
-    // Redirect to SSO if not authenticated
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            signIn()
-        }
-    }, [status])
-
-    // Show loading while checking authentication
-    if (status === 'loading' || status === 'unauthenticated') {
-        return (
-            <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <Spin size="large" />
-                    <p className="mt-4 text-gray-600">Đang kiểm tra đăng nhập...</p>
-                </div>
-            </div>
-        )
-    }
-
+    // All hooks must be called before any early return
     const listBreadcrumb = useMemo(() => {
         return breadcrumb?.length > 0
             ? [
@@ -135,10 +118,33 @@ const DefaultLayout = ({
             localStorage.setItem('collapsed', newValue.toString())
         }
     }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         handleCollapsed()
     }, [])
+
+    // Check if running in local environment
+    const isLocal = getRuntimeEnv('NEXT_PUBLIC_ENVIRONMENT') === 'local'
+
+    // Redirect to SSO if not authenticated (skip in local environment)
+    useEffect(() => {
+        if (!isLocal && status === 'unauthenticated') {
+            signIn()
+        }
+    }, [status, isLocal])
+
+    // Show loading while checking authentication (AFTER all hooks, skip in local)
+    if (!isLocal && (status === 'loading' || status === 'unauthenticated')) {
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <Spin size="large" />
+                    <p className="mt-4 text-gray-600">Đang kiểm tra đăng nhập...</p>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <IdleTimerProvider

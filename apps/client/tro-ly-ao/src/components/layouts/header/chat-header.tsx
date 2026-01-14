@@ -8,7 +8,6 @@ import { Button, Layout, Typography } from 'antd'
 import { usePathname } from 'next/navigation'
 import APPS_TYPES from '@/navigations/header-content/app_types'
 import HeaderApp from '@/components/header'
-import LoginButton from '@/components/commons/login-button'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Header } = Layout
@@ -77,7 +76,6 @@ const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHe
                         title="Mở trong tab mới"
                     />
                 )}
-                <LoginButton />
                 <HeaderApp />
             </div>
         </Header>
