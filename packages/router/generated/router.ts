@@ -134,7 +134,8 @@ export default {
     "TO_CHUC_THI_LAP_DANH_SANH_THI": "/to-chuc-thi/lap-danh-sanh-thi",
     "XET_TOT_NGHIEP_PHU_LUC_VAN_BANG": "/xet-tot-nghiep/phu-luc-van-bang",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP_ID": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep/[id]",
-    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep"
+    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep",
+    "XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU": "/xet-tot-nghiep/chuyen-de-nghien-cuu"
   },
   "QL_HO_SO": {
     "DANH_MUC_HO_SO_BAC_LUONG": "/danh-muc-ho-so/bac-luong",

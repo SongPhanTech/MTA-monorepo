@@ -8074,7 +8074,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/luanbt/swantech/MTA-monorepo/packages/database/generated/prisma-client",
+      "value": "/Users/swan/swantech/MTA-monorepo/packages/database/generated/prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -8112,12 +8112,11 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/luanbt/swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/Users/swan/swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.10.1",
