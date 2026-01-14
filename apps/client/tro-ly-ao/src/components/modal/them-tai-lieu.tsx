@@ -391,6 +391,10 @@ const ThemTaiLieu = () => {
                         path: 'tai-lieu',
                         extension: file.file.name.split('.').pop() || '',
                     })
+                    
+                    // Lưu lại MinIO path để sử dụng sau
+                    const minioPath = resPresignedUrl.fileName
+                    
                     await axios.put(resPresignedUrl.url, file.file, {
                         onUploadProgress: (progressEvent) => {
                             const { loaded, total = 1, estimated = 0 } = progressEvent
@@ -408,7 +412,7 @@ const ThemTaiLieu = () => {
                                     ...currentFiles,
                                     [file.id]: {
                                         ...currentFile,
-                                        url: resPresignedUrl.fileName,
+                                        url: minioPath,
                                         progress: Math.min(percent, 90),
                                         timeLeft: estimated,
                                     },
@@ -416,6 +420,24 @@ const ThemTaiLieu = () => {
                             })
                         },
                     })
+                    
+                    // Đảm bảo cập nhật URL ngay sau khi upload xong (đề phòng onUploadProgress không được gọi)
+                    {
+                        const currentFiles = form.getFieldValue('files')
+                        const currentFile = currentFiles?.[file.id]
+                        if (currentFile && (!currentFile.url || currentFile.url.startsWith('blob:'))) {
+                            form.setFieldsValue({
+                                files: {
+                                    ...currentFiles,
+                                    [file.id]: {
+                                        ...currentFile,
+                                        url: minioPath,
+                                    },
+                                },
+                            })
+                        }
+                    }
+                    
                     const currentTopicIds = form.getFieldValue('topicIds')
 
                     if (needOCR && documentBody && documentBody.trim().length > 0) {
