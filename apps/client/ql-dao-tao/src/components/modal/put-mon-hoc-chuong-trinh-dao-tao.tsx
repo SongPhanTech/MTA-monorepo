@@ -24,6 +24,7 @@ import TreeSelect from '@/components/commons/tree-select'
 export type PutTrainingBlockSubject = TrainingBlockSubject & {
     conditional?: boolean
 }
+import { normalizeVietnamese } from '@lib/utils'
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
@@ -33,6 +34,19 @@ type TrainingBlockOnCurriculumVersionInput = {
 
 interface FilterProps {
     managementOrganizationId: string | undefined
+}
+
+function getAllChildOrgIds(
+    orgId: string,
+    list: { Id: string; sParentId: string | null }[]
+): string[] {
+    const result = [orgId]
+
+    list.filter((i) => i.sParentId === orgId).forEach((child) => {
+        result.push(...getAllChildOrgIds(child.Id, list))
+    })
+
+    return result
 }
 const PutTrainingBlockSubject = () => {
     const [form] = Form.useForm<PutTrainingBlockSubject>()
@@ -75,12 +89,20 @@ const PutTrainingBlockSubject = () => {
             enabled: !!input?.trainingBlockOnCurriculumVersionId,
         }
     )
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+
+    const treeData = buildOrgTree(manageOrgData)
+    const orgIds = filters.managementOrganizationId
+        ? getAllChildOrgIds(filters.managementOrganizationId, manageOrgData)
+        : undefined
 
     const { data: subjectVersionData = [], refetch } = useFindManySubjectVersion({
         where: {
-            ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
+            ...(orgIds && orgIds.length > 0
                 ? {
-                      managementOrganizationId: filters.managementOrganizationId,
+                      managementOrganizationId: {
+                          in: orgIds,
+                      },
                   }
                 : {}),
             trainingObjectTypeId,
@@ -177,10 +199,11 @@ const PutTrainingBlockSubject = () => {
         })
     }
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
-
-    const treeData = buildOrgTree(manageOrgData)
-
+    const subjectVersionOptions = subjectVersionData.map((item: SubjectVersion) => ({
+        label: [item?.code, item?.name, item?.period].filter(Boolean).join(' - '),
+        value: item.id,
+        searchText: `${item.code} ${item.name}`,
+    }))
     return (
         <PutFormModal
             open={isOpen}
@@ -211,8 +234,13 @@ const PutTrainingBlockSubject = () => {
                             allowClear
                             showSearch
                             treeDefaultExpandAll
-                            onChange={(val) => handleFilterChange('managementOrganizationId', val)}
                             treeData={treeData}
+                            filterTreeNode={(input, node) =>
+                                normalizeVietnamese(node.searchText).includes(
+                                    normalizeVietnamese(input)
+                                )
+                            }
+                            onChange={(val) => handleFilterChange('managementOrganizationId', val)}
                         />
                     </Form.Item>
                 </Col>
@@ -229,16 +257,14 @@ const PutTrainingBlockSubject = () => {
                                   open: false,
                               }
                             : {})}
+                        showSearch
                         placeholder="Chọn phiên bản môn học"
-                        options={subjectVersionData.map((item: SubjectVersion) => {
-                            return {
-                                ...item,
-                                label: [item?.code, item?.name, item?.period]
-                                    .filter(Boolean)
-                                    .join(' - '),
-                                value: item.id,
-                            }
-                        })}
+                        options={subjectVersionOptions}
+                        filterOption={(input, option) =>
+                            normalizeVietnamese(option?.searchText ?? '').includes(
+                                normalizeVietnamese(input)
+                            )
+                        }
                     />
                 </FormItem>
             </Col>

@@ -3,7 +3,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
 import { message } from 'antd'
 
-function normalizeVietnamese(str: string): string {
+export function normalizeVietnamese(str: string): string {
     return str
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
@@ -135,7 +135,12 @@ export type OrgTreeItem = {
 }
 
 export function buildOrgTree(
-    list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
+    list: Array<{
+        Id: string
+        sTen: string | null
+        sParentId: string | null
+        sMa: string | null
+    }>,
     parentId = '0'
 ): OrgTreeItem[] {
     return list
@@ -143,6 +148,7 @@ export function buildOrgTree(
         .map((item) => ({
             label: [item.sMa, item.sTen].filter(Boolean).join(' - ') || '',
             value: item.Id,
+            searchText: [item.sTen, item.sMa].filter(Boolean).join(' '),
             children: buildOrgTree(list, item.Id),
         }))
 }
@@ -172,17 +178,13 @@ export const validateExamScore = (score?: number | null, isOnePoint = false) => 
     if (!isOnePoint) {
         if (score % 0.5 !== 0) {
             // message.error('Điểm phải là bội số của 0.5')
-            return Promise.reject(
-                new Error('Điểm phải là bội số của 0.5')
-            )
+            return Promise.reject(new Error('Điểm phải là bội số của 0.5'))
         }
     } else {
         const scaledValue = score * 10
         if (scaledValue !== Math.round(scaledValue)) {
             // message.error('Điểm phải là bội số của 0.1')
-            return Promise.reject(
-                new Error('Điểm phải là bội số của 0.1')
-            )
+            return Promise.reject(new Error('Điểm phải là bội số của 0.1'))
         }
     }
     return Promise.resolve()

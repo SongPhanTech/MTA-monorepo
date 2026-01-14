@@ -25,10 +25,10 @@ import { Button, Col, Form, Input, InputNumber, message, Radio, Row, Switch, Too
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import type { DocumentFile } from '@workspace/db/client'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 import { BadgeHelpIcon, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
     trainingCourseClone: string | null
@@ -808,9 +808,30 @@ const PutTrainingCourseModal = () => {
                         name="scoreToTakeExam"
                         label="Điểm tối thiểu được thi"
                         required
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập điểm tối thiểu được thi',
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value === undefined || value === null) {
+                                        return Promise.resolve()
+                                    }
+                                    const numValue = Number.parseFloat(value)
+                                    if (Number.isNaN(numValue) || numValue < 0) {
+                                        return Promise.reject(
+                                            new Error('Điểm tối thiểu được thi phải lớn hơn 0')
+                                        )
+                                    }
+
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}
                     >
                         <InputNumber
-                            min={0}
+                            // min={0}
                             type="number"
                             placeholder="Nhập điểm tối thiểu được thi"
                             className="w-full"
@@ -819,9 +840,35 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="scoreToPass" label="Điểm tối thiểu để qua" required>
+                    <FormItem
+                        form={form}
+                        name="scoreToPass"
+                        label="Điểm tối thiểu để qua"
+                        required
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập điểm tối thiểu để qua',
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value === undefined || value === null) {
+                                        return Promise.resolve()
+                                    }
+                                    const numValue = Number.parseFloat(value)
+                                    if (Number.isNaN(numValue) || numValue < 0) {
+                                        return Promise.reject(
+                                            new Error('Điểm tối thiểu để qua phải lớn hơn 0')
+                                        )
+                                    }
+
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}
+                    >
                         <InputNumber
-                            min={0}
+                            // min={0}
                             type="number"
                             placeholder="Nhập điểm tối thiểu để qua"
                             className="w-full"
@@ -834,6 +881,29 @@ const PutTrainingCourseModal = () => {
                         form={form}
                         name="scoreToPassConditional"
                         label="Điểm tối thiểu để qua môn điều kiện"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập điểm tối thiểu để qua môn điều kiện',
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value === undefined || value === null) {
+                                        return Promise.resolve()
+                                    }
+                                    const numValue = Number.parseFloat(value)
+                                    if (Number.isNaN(numValue) || numValue < 0) {
+                                        return Promise.reject(
+                                            new Error(
+                                                'Điểm tối thiểu để qua môn điều kiện phải lớn hơn 0'
+                                            )
+                                        )
+                                    }
+
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}
                     >
                         <InputNumber
                             min={0}
@@ -849,6 +919,27 @@ const PutTrainingCourseModal = () => {
                         form={form}
                         name="scoreToTakeGraduation"
                         label="Điểm liệt môn tốt nghiệp"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập điểm liệt môn tốt nghiệp',
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value === undefined || value === null) {
+                                        return Promise.resolve()
+                                    }
+                                    const numValue = Number.parseFloat(value)
+                                    if (Number.isNaN(numValue) || numValue < 0) {
+                                        return Promise.reject(
+                                            new Error('Điểm liệt môn tốt nghiệp phải lớn hơn 0')
+                                        )
+                                    }
+
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}
                     >
                         <InputNumber
                             min={0}
@@ -864,6 +955,27 @@ const PutTrainingCourseModal = () => {
                         form={form}
                         name="scoreToPassGraduation"
                         label="Điểm để qua môn tốt nghiệp"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập điểm để qua môn tốt nghiệp',
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value === undefined || value === null) {
+                                        return Promise.resolve()
+                                    }
+                                    const numValue = Number.parseFloat(value)
+                                    if (Number.isNaN(numValue) || numValue < 0) {
+                                        return Promise.reject(
+                                            new Error('Điểm để qua môn tốt nghiệp phải lớn hơn 0')
+                                        )
+                                    }
+
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}
                     >
                         <InputNumber
                             min={0}
@@ -975,7 +1087,32 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="scoreToRetain" label="Điểm giữ lại khi lưu ban">
+                    <FormItem
+                        form={form}
+                        name="scoreToRetain"
+                        label="Điểm giữ lại khi lưu ban"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập điểm giữ lại khi lưu ban',
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value === undefined || value === null) {
+                                        return Promise.resolve()
+                                    }
+                                    const numValue = Number.parseFloat(value)
+                                    if (Number.isNaN(numValue) || numValue < 0) {
+                                        return Promise.reject(
+                                            new Error('Điểm giữ lại khi lưu ban phải lớn hơn 0')
+                                        )
+                                    }
+
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}
+                    >
                         <InputNumber
                             min={0}
                             type="number"

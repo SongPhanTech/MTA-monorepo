@@ -15,6 +15,7 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
@@ -23,7 +24,6 @@ import { FileDown } from 'lucide-react'
 import type React from 'react'
 import { useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { getMinioUrl } from '@workspace/libs/utils'
 
 export default function TrainingCoursePage() {
     const { can, canSome } = useAbility()
@@ -53,6 +53,8 @@ export default function TrainingCoursePage() {
         { enabled: !!idTrainingCourse.current }
     )
 
+    console.log('filters.schoolYearId', filters.schoolYearId)
+
     const where = useMemo(
         () => ({
             ...(filters.code && filters.code !== ''
@@ -71,15 +73,17 @@ export default function TrainingCoursePage() {
                       },
                   }
                 : {}),
-            ...(filters.semesterStart
+            ...(filters.schoolYearIds?.length
                 ? {
-                      semesterStartId: filters.semesterStart,
+                      semesterStart: {
+                          OR: filters?.schoolYearIds?.map((id) => ({ schoolYearId: id })),
+                      },
                   }
                 : {}),
             trainingObjectTypeId,
             deletedAt: null,
         }),
-        [filters.code, filters.name, filters.semesterStart, trainingObjectTypeId]
+        [filters.code, filters.name, trainingObjectTypeId, filters.schoolYearIds]
     )
 
     const { data = [], refetch } = useFindManyTrainingCourse({
@@ -336,7 +340,7 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Năm bắt đầu',
                                 align: 'center',
-                                dataIndex: 'semesterStart',
+                                dataIndex: 'schoolYearIds',
                                 width: 150,
                                 type: 'select',
                                 options: schoolYearData.map((i) => {
@@ -345,8 +349,10 @@ export default function TrainingCoursePage() {
                                         label: i.name,
                                     }
                                 }),
-                                render: (value) =>
-                                    value?.schoolYear?.name ? value?.schoolYear?.name : '',
+                                render: (_, record) =>
+                                    record.semesterStart?.schoolYear?.name
+                                        ? record?.semesterStart?.schoolYear?.name
+                                        : '',
                             },
                             {
                                 title: 'Ngôn ngữ ĐT',

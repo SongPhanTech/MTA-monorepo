@@ -680,7 +680,10 @@ const ThongTinDiemHocKy = async (
 
 //#region ThongTinDiemHocKy
 // Main function
-export const calculateStudentSemesterResult = async (semesterId: string): Promise<string> => {
+export const calculateStudentSemesterResult = async (
+    semesterId: string,
+    trainingCourseId: string
+): Promise<string> => {
     const results: StudentSemesterResult[] = []
 
     try {
@@ -714,6 +717,9 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 // id: {endsWith: '4'}
                 deletedAt: null,
                 active: true,
+                fixedClass: {
+                    trainingCourseId,
+                },
             },
             include: {
                 fixedClass: {
@@ -858,6 +864,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                         active: true,
                         description: null,
                         deletedAt: null,
+                        createdBy: '',
                     }
                     // Lưu kết quả học kỳ mới
                     results.push(newResult)
@@ -926,6 +933,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                         active: existingResult?.active || true, // Trạng thái hoạt động
                         description: existingResult?.description || null,
                         deletedAt: existingResult?.deletedAt || null,
+                        createdBy: existingResult?.createdBy,
                     }
                     // Cập nhật kết quả học kỳ
                     results.push(updatedResult)

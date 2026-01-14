@@ -6,6 +6,7 @@ import {
     UrlDtoSchema,
 } from '../dto/minio'
 import { MinIOService } from '../services/minio'
+import { createId } from '@workspace/db'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -83,6 +84,71 @@ app.openapi(
         const { objectName } = c.req.valid('query')
         const url = await minioService.presignedGetObject(objectName)
         return c.json(url, 200)
+    }
+)
+
+app.openapi(
+    createRoute({
+        operationId: 'convertDocument',
+        path: '/convert-document',
+        method: 'get',
+        request: {
+            query: z
+                .object({
+                    url: z.string().url(),
+                    fileType: z.string(),
+                    outputtype: z.string(),
+                    title: z.string().optional(),
+                })
+                .openapi('ConvertDocumentDto'),
+        },
+        responses: {
+            200: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            fileUrl: z.string().url(),
+                        }),
+                    },
+                },
+                description: 'Generate presigned URL',
+            },
+        },
+    }),
+    async (c) => {
+        const { fileType, outputtype, title, url } = c.req.valid('query')
+        const raw = JSON.stringify({
+            async: false,
+            filetype: fileType,
+            outputtype: outputtype,
+            title,
+            key: createId(),
+            url,
+        })
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: raw,
+        }
+
+        const res = await fetch(`${process?.env?.ONLY_OFFICE_ENDPOINT}/converter`, requestOptions)
+
+        const resJson = (await res.json()) as {
+            fileUrl: string
+            fileType: string
+            percent: number
+            endConvert: boolean
+        }
+
+        return c.json(
+            {
+                fileUrl: resJson.fileUrl,
+            },
+            200
+        )
     }
 )
 

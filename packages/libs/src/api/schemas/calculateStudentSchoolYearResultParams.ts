@@ -7,5 +7,5 @@
 
 export type CalculateStudentSchoolYearResultParams = {
     semesterId: string
-    trainingObjectTypeId: string
+    trainingCourseId: string
 }

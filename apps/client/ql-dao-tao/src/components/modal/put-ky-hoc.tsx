@@ -13,7 +13,7 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { useSemesterTypeOptions } from '@hooks/semesterType'
@@ -35,7 +35,7 @@ const PutSemesterModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const { options } = useSemesterTypeOptions()
 
-    const { data = [], refetch } = useFindManySchoolYear({
+    const { data = [] } = useFindManySchoolYear({
         take: 1000,
         skip: 0,
     })
@@ -86,6 +86,12 @@ const PutSemesterModal = () => {
         }
     }
     const schoolYearIdForm = useWatch('schoolYearId', form)
+    const startDate = useWatch('startDate', form)
+    const endDate = useWatch('endDate', form)
+
+    const schoolYear = useMemo(() => {
+        return data.find((i) => i.id === schoolYearIdForm)
+    }, [schoolYearIdForm, data])
 
     const { data: initialData } = useFindUniqueSemester(
         {
@@ -179,6 +185,15 @@ const PutSemesterModal = () => {
                         }}
                         className="w-full"
                         placeholder="Chọn ngày bắt đầu"
+                        disabled={!schoolYear}
+                        disabledDate={(date) => {
+                            return (
+                                date &&
+                                date > dayjs(endDate).startOf('day') &&
+                                (date < dayjs(schoolYear?.startDate).startOf('day') ||
+                                    date > dayjs(schoolYear?.endDate).endOf('day'))
+                            )
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -190,10 +205,14 @@ const PutSemesterModal = () => {
                             type: 'mask',
                         }}
                         className="w-full"
-                        disabledDate={(current) => {
-                            const startTime = form.getFieldValue('startDate')
-                            if (!startTime) return false
-                            return current && current < dayjs(startTime).startOf('day')
+                        disabled={!schoolYear || !startDate}
+                        disabledDate={(date) => {
+                            return (
+                                date &&
+                                date < dayjs(startDate).startOf('day') &&
+                                (date < dayjs(startDate).startOf('day') ||
+                                    date > dayjs(schoolYear?.endDate).endOf('day'))
+                            )
                         }}
                         placeholder="Chọn ngày kết thúc"
                     />

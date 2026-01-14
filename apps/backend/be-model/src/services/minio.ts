@@ -9,7 +9,9 @@ export class MinIOService {
 
     constructor() {
         this.minioClient = new Client({
-            endPoint: process.env.MINIO_ENDPOINT || '',
+            endPoint: process?.env?.MINIO_ENDPOINT
+                ? new URL(process?.env?.MINIO_ENDPOINT).hostname
+                : '',
             ...(process.env.MINIO_PORT
                 ? {
                       port: Number.parseInt(process.env.MINIO_PORT, 10),

@@ -175,7 +175,7 @@ const DiemTrungBinhKyHoc = () => {
         try {
             showSpinner()
             const res = await calculateSchoolYearResult({
-                params: { semesterId, trainingObjectTypeId },
+                params: { semesterId, trainingCourseId: trainingCourseId ?? '' },
             })
 
             if (res?.status === 400 || res?.status === 500) {
@@ -222,7 +222,11 @@ const DiemTrungBinhKyHoc = () => {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button type="primary" onClick={handleSummaryClick}>
+                                <Button
+                                    type="primary"
+                                    disabled={!trainingCourseId}
+                                    onClick={handleSummaryClick}
+                                >
                                     Tổng kết kết quả năm học
                                 </Button>
                             </Flex>

@@ -170,6 +170,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -187,7 +188,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1578,6 +1579,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -1658,6 +1660,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, address: {
@@ -1742,6 +1745,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, address: {
@@ -1865,6 +1869,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -1967,6 +1972,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2047,6 +2053,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, trinhDo: {
@@ -2142,6 +2149,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, trinhDo: {
@@ -2267,6 +2275,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2361,6 +2370,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2437,6 +2447,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2527,6 +2538,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2654,6 +2666,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2788,6 +2801,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2900,6 +2914,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -2999,6 +3014,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3087,6 +3103,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3167,6 +3184,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3243,6 +3261,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3335,6 +3354,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3427,6 +3447,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3517,6 +3538,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3614,6 +3636,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3686,6 +3709,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3807,6 +3831,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -3896,6 +3921,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -4009,6 +4035,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -4460,7 +4487,7 @@ const metadata = {
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Document$uploadedById,
                     isForeignKey: true,
                     relationField: 'uploadedBy',
@@ -4477,6 +4504,7 @@ const metadata = {
                     name: "approvedById",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'approvedBy',
                 }, topics: {
@@ -4658,7 +4686,7 @@ const metadata = {
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$FAQ$uploadedById,
                     isForeignKey: true,
                     relationField: 'uploadedBy',
@@ -4675,6 +4703,7 @@ const metadata = {
                     name: "approvedById",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'approvedBy',
                 },
@@ -4823,6 +4852,7 @@ const metadata = {
                     name: "userId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'user',
                 }, session: {
@@ -8589,6 +8619,7 @@ const metadata = {
                     name: "updatedById",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'updatedBy',
                 },
@@ -9746,6 +9777,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingCourse',
+                }, graduationSessions: {
+                    name: "graduationSessions",
+                    type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -9876,7 +9913,6 @@ const metadata = {
                 }, graduated: {
                     name: "graduated",
                     type: "Boolean",
-                    isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, classMonitor: {
                     name: "classMonitor",
@@ -10954,6 +10990,7 @@ const metadata = {
                 }, updatedById: {
                     name: "updatedById",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'updatedBy',
                 },
@@ -11925,6 +11962,7 @@ const metadata = {
                     name: "updatedById",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'updatedBy',
                 },
@@ -14156,6 +14194,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'outputStandard',
+                }, graduationSessions: {
+                    name: "graduationSessions",
+                    type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'outputStandard',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -14445,6 +14490,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, userProfile: {
@@ -16340,7 +16386,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, organization: {
@@ -16583,7 +16629,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, organization: {
@@ -18936,6 +18982,7 @@ const metadata = {
                 }, reviewerId: {
                     name: "reviewerId",
                     type: "String",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'reviewer',
                 }, requirementCriterion: {
@@ -19909,6 +19956,7 @@ const metadata = {
                     name: "userProfileId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 },
@@ -20723,6 +20771,7 @@ const metadata = {
                     name: "profileId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'profile',
                 }, student: {
@@ -22252,7 +22301,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, organization: {
@@ -22375,7 +22424,7 @@ const metadata = {
                 }, userProfileId: {
                     name: "userProfileId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
                 }, organization: {
@@ -22795,6 +22844,96 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'session',
+                }, outputStandard: {
+                    name: "outputStandard",
+                    type: "OutputStandard",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'graduationSessions',
+                    isRelationOwner: true,
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'graduationSessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, eligibleCount: {
+                    name: "eligibleCount",
+                    type: "Int",
+                    isOptional: true,
+                }, excellentCount: {
+                    name: "excellentCount",
+                    type: "Int",
+                    isOptional: true,
+                }, topicDecisionNumber: {
+                    name: "topicDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, topicDecisionDate: {
+                    name: "topicDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, topicDecisionSigner: {
+                    name: "topicDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, defenseDecisionNumber: {
+                    name: "defenseDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, defenseDecisionDate: {
+                    name: "defenseDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, defenseDecisionSigner: {
+                    name: "defenseDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, graduationDecisionNumber: {
+                    name: "graduationDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, graduationDecisionDate: {
+                    name: "graduationDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, graduationDecisionSigner: {
+                    name: "graduationDecisionSigner",
+                    type: "String",
+                    isOptional: true,
+                }, councilMeetingDate: {
+                    name: "councilMeetingDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, councilMeetingBasis: {
+                    name: "councilMeetingBasis",
+                    type: "String",
+                    isOptional: true,
+                }, proposalTopic: {
+                    name: "proposalTopic",
+                    type: "String",
+                    isOptional: true,
+                }, proposalCouncil: {
+                    name: "proposalCouncil",
+                    type: "String",
+                    isOptional: true,
+                }, proposalGraduation: {
+                    name: "proposalGraduation",
+                    type: "String",
+                    isOptional: true,
+                }, skipCertificateCheck: {
+                    name: "skipCertificateCheck",
+                    type: "Boolean",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22944,6 +23083,82 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaType',
+                }, thesisScore: {
+                    name: "thesisScore",
+                    type: "Float",
+                    isOptional: true,
+                }, thesisReExam: {
+                    name: "thesisReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, politicalScore: {
+                    name: "politicalScore",
+                    type: "Float",
+                    isOptional: true,
+                }, politicalReExam: {
+                    name: "politicalReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, foreignLanguageScore: {
+                    name: "foreignLanguageScore",
+                    type: "Float",
+                    isOptional: true,
+                }, foreignLanguageReExam: {
+                    name: "foreignLanguageReExam",
+                    type: "Boolean",
+                    isOptional: true,
+                }, defenseEduCert: {
+                    name: "defenseEduCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, physicalEduCert: {
+                    name: "physicalEduCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, foreignLangCert: {
+                    name: "foreignLangCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, itCert: {
+                    name: "itCert",
+                    type: "Boolean",
+                    isOptional: true,
+                }, accumulatedCredits: {
+                    name: "accumulatedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, gpa10: {
+                    name: "gpa10",
+                    type: "Float",
+                    isOptional: true,
+                }, reExamCredits: {
+                    name: "reExamCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, totalSubjects: {
+                    name: "totalSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, failedSubjects: {
+                    name: "failedSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, failedCredits: {
+                    name: "failedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, mandatoryFailedSubjects: {
+                    name: "mandatoryFailedSubjects",
+                    type: "Int",
+                    isOptional: true,
+                }, mandatoryFailedCredits: {
+                    name: "mandatoryFailedCredits",
+                    type: "Int",
+                    isOptional: true,
+                }, rankDowngraded: {
+                    name: "rankDowngraded",
+                    type: "Boolean",
+                    isOptional: true,
                 }, applicationCheckResult: {
                     name: "applicationCheckResult",
                     type: "ApplicationCheckResult",

@@ -301,7 +301,7 @@ export default function PhanCongGiangDay({
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
         {
-            select: { Id: true },
+            select: { Id: true, sParentId: true },
             where: { bActive: true },
         },
         { refetchOnWindowFocus: false }
@@ -312,7 +312,7 @@ export default function PhanCongGiangDay({
             dmDonViIds.map((e) => ({
                 Id: e.Id,
                 sTen: null,
-                sParentId: null,
+                sParentId: e.sParentId,
                 sMa: null,
             })),
             orgId || '0'
@@ -553,7 +553,7 @@ export default function PhanCongGiangDay({
                                 lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
                                     ? subjectClass.lecturerAssignmentDeadline?.toDate()
                                     : null,
-                                mainLecturerId: subjectClass.lecturerId ?? null,
+                                lecturerId: subjectClass.lecturerId ?? null,
                                 extraLecturerId: subjectClass.extraLecturerId ?? null,
                                 enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
                                 examType: subjectClass.examType ?? null,
@@ -1812,7 +1812,7 @@ export default function PhanCongGiangDay({
                                     }),
                                     render: (_, record) => (
                                         <p className="text-left">
-                                            {record?.name} ({record.subject?.credit})
+                                            {record?.subject?.name} ({record.subject?.credit})
                                         </p>
                                     ),
                                 },

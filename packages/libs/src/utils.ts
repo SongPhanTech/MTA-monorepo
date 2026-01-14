@@ -65,6 +65,42 @@ export const isDevEnvironment = () => {
     return window?.location.host?.includes('localhost')
 }
 
+export const capitalizeFirstLetter = (str = ''): string =>
+    str.charAt(0).toUpperCase() + str.slice(1)
+
+export const numberToWords = (num: number): string => {
+    const numberWords = [
+        'không',
+        'một',
+        'hai',
+        'ba',
+        'bốn',
+        'năm',
+        'sáu',
+        'bảy',
+        'tám',
+        'chín',
+        'mười',
+    ]
+
+    if (Number.isInteger(num) && num >= 0 && num <= 10) {
+        return capitalizeFirstLetter(numberWords[num])
+    }
+
+    if (num > 0 && num < 10.99) {
+        const integerPart = Math.floor(num)
+        const decimalPart = Math.round((num - integerPart) * 10)
+
+        if (decimalPart === 0) {
+            return capitalizeFirstLetter(numberWords[integerPart])
+        }
+
+        return `${capitalizeFirstLetter(numberWords[integerPart])} phẩy ${numberWords[decimalPart]}`
+    }
+
+    return num ? num.toString() : ''
+}
+
 export const getMinioUrl = (uri: string | undefined | null) => {
     if (!uri) return ''
     const isAbsolutePath = uri.startsWith('http') || uri.startsWith('blob')
@@ -72,7 +108,9 @@ export const getMinioUrl = (uri: string | undefined | null) => {
     // TODO: check env minio domain
     const url = new URL(
         uri,
-        getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT') || 'https://minio.swantech.vn'
+        getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT') ||
+            process?.env?.MINIO_ENDPOINT ||
+            'https://minio.swantech.vn'
     )
     return url.href
 }

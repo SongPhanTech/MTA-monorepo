@@ -401,7 +401,11 @@ const PutCertificateArchivedModal = () => {
 
     // Tính toán trạng thái upload cho từng sinh viên dựa trên tên file
     const studentUploadStatus = useMemo(() => {
-        if (!selectedStudentKeys || selectedStudentKeys.length === 0 || allUploadedFiles.length === 0) {
+        if (
+            !selectedStudentKeys ||
+            selectedStudentKeys.length === 0 ||
+            allUploadedFiles.length === 0
+        ) {
             return {}
         }
 

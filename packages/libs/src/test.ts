@@ -1,14 +1,23 @@
-import { PrismaClient } from '@workspace/db'
-import { postDMNhanViens } from './api/system'
+import fs from 'fs'
+import XlsxTemplate from 'xlsx-template'
 
-const prisma = new PrismaClient()
+// Load the template
+fs.readFile('PHIEU-DIEM.xlsx', (err, data) => {
+    const template = new XlsxTemplate(data)
 
-const block = await prisma.trainingBlockOnCurriculumVersion.deleteMany({
-    where: {
-        subjects: {
-            none: {},
-        },
-    },
+    // Define replacement values
+    const values = {
+        MA_LMH: 'CS101',
+    }
+
+    // Perform substitution on sheet 1 (can also use sheet name as string: 'Sheet1')
+    template.substitute(1, values)
+
+    // Generate the output file
+    const output = template.generate({
+        type: 'nodebuffer',
+    })
+
+    // Save to disk
+    fs.writeFileSync('output.xlsx', output)
 })
-
-console.log(block)

@@ -30,7 +30,7 @@ import { queryClient } from '@api/index'
 import { buildOrgTree } from '@lib/utils'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import TreeSelect from '@/components/commons/tree-select'
-import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture';
+import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
@@ -485,7 +485,7 @@ const PutFixedClassModal = () => {
 
             <Col span={12}>
                 <FormItem form={form} name="lecturerManagementId" label="GVCN">
-                    <LectureTreeSelect/>
+                    <LectureTreeSelect />
                 </FormItem>
             </Col>
             <Col span={12}>

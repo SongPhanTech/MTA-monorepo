@@ -25,6 +25,12 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
                     label: e.name,
                     value: e.id,
                 }))}
+                showSearch
+                filterOption={(input, option) =>
+                    String(option?.label ?? '')
+                        ?.toLowerCase()
+                        ?.includes(input?.toLowerCase())
+                }
                 value={id}
                 onChange={onSelect}
                 allowClear={false}

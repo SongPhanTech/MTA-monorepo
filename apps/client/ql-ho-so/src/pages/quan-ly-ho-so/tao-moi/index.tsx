@@ -146,7 +146,7 @@ export default function CreateUserPage() {
             ),
         },
         {
-            title: 'Thông tin liên hệ',
+            title: 'Thông tin khác',
             id: 'thongTinLienHe',
             render: (
                 <Form.Item className="mb-0">
@@ -558,9 +558,7 @@ export default function CreateUserPage() {
                     dateOfBirth: values.dateOfBirth
                         ? dayjs(values.dateOfBirth).toISOString()
                         : null,
-                    idCardDate: values.idCardDate
-                        ? dayjs(values.idCardDate).toISOString()
-                        : null,
+                    idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
                     unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
                     CPVJoinDate: values.CPVJoinDate
                         ? dayjs(values.CPVJoinDate).toISOString()
@@ -568,9 +566,7 @@ export default function CreateUserPage() {
                     officialCPVDate: values.officialCPVDate
                         ? dayjs(values.officialCPVDate).toISOString()
                         : null,
-                    tenureDate: values.tenureDate
-                        ? dayjs(values.tenureDate).toISOString()
-                        : null,
+                    tenureDate: values.tenureDate ? dayjs(values.tenureDate).toISOString() : null,
                     avatar: form.getFieldValue('avatar'),
                     fullname: `${values.lastName.trim() || ''} ${
                         values.firstName.trim() || ''

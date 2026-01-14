@@ -631,7 +631,8 @@ export default function StudentGraduationApplication() {
                                                     />
                                                     {requiredCertificateIds.length > 0 && (
                                                         <Tag color="blue">
-                                                            {requiredCertificateIds.length} chứng chỉ
+                                                            {requiredCertificateIds.length} chứng
+                                                            chỉ
                                                         </Tag>
                                                     )}
                                                 </Flex>

@@ -46,7 +46,7 @@ const fkSchema = z.object({
     tenTruongId: z.string(),
     nganhHocId: z.string(),
     chuyenNganhId: z.string().nullish(),
-    userProfileId: z.string(),
+    userProfileId: z.string().uuid(),
 }
 );
 

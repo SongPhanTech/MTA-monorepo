@@ -79,10 +79,13 @@ export default function QuanLyDiemRenLuyen() {
 
     // Group training sessions by semester
     const groupedBySemester = useMemo(() => {
-        const groups = new Map<string, {
-            semester: typeof semesterList[0] | null
-            sessions: typeof trainingScoreSessions
-        }>()
+        const groups = new Map<
+            string,
+            {
+                semester: (typeof semesterList)[0] | null
+                sessions: typeof trainingScoreSessions
+            }
+        >()
 
         // First, add all semesters to ensure we show semesters even without sessions
         semesterList.forEach((semester) => {
@@ -159,7 +162,10 @@ export default function QuanLyDiemRenLuyen() {
                       align: 'center' as const,
                       render: (_: any, record: any) => (
                           <Row className="justify-center gap-2">
-                              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN, 'XEM_CHI_TIET') && (
+                              {can(
+                                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                  'XEM_CHI_TIET'
+                              ) && (
                                   <Tooltip title="Xem chi tiết" placement="top">
                                       <EyeOutlined
                                           className="text-sm cursor-pointer"
@@ -241,7 +247,9 @@ export default function QuanLyDiemRenLuyen() {
                         <Empty description="Không có dữ liệu" />
                     ) : (
                         <Collapse
-                            defaultActiveKey={groupedBySemester.slice(0, 3).map((g) => g.semester?.id || '')}
+                            defaultActiveKey={groupedBySemester
+                                .slice(0, 3)
+                                .map((g) => g.semester?.id || '')}
                             expandIcon={({ isActive }) =>
                                 isActive ? (
                                     <ChevronDown className="w-4 h-4" />

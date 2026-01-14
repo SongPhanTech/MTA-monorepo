@@ -15,6 +15,7 @@ export type GetSurveyResultSubjectClassExamType =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveyResultSubjectClassExamType = {
     OfflineWritten: 'OfflineWritten',
+    OnlineWritten: 'OnlineWritten',
     Oral: 'Oral',
     Practice: 'Practice',
     Project: 'Project',

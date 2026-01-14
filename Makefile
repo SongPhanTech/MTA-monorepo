@@ -108,7 +108,7 @@ package-cdn:
 	@for pkg in $(FE_PKGS); do \
 		$(MAKE) _package-fe-cdn-copy PACKAGE=$$pkg; \
 	done
-	@zip -r cdn.zip cdn
+	@zip -r -q cdn.zip cdn
 
 # Pattern rule: all-<name> = build + push + deploy
 all-%: build-%
@@ -135,7 +135,7 @@ _build-fe:
 	pnpm build && \
 	rm -rf $(CDN_NAME) && \
 	mv out $(CDN_NAME) && \
-	zip -r $(CDN_NAME).zip $(CDN_NAME)
+	zip -r -q $(CDN_NAME).zip $(CDN_NAME)
 
 # Internal frontend deploy
 _deploy-fe:

@@ -29,6 +29,8 @@ import type {
     CheckExportTableBySql200,
     CheckExportTableBySql500,
     CheckExportTableBySqlParams,
+    ConvertDocument200,
+    ConvertDocumentParams,
     CountRequests200Item,
     CountRequestsParams,
     ErrorRate200Item,
@@ -2658,6 +2660,150 @@ export function usePresignedGetObject<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getPresignedGetObjectQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type convertDocumentResponse200 = {
+    data: ConvertDocument200
+    status: 200
+}
+
+export type convertDocumentResponseSuccess = convertDocumentResponse200 & {
+    headers: Headers
+}
+
+export type convertDocumentResponse = convertDocumentResponseSuccess
+
+export const getConvertDocumentUrl = (params: ConvertDocumentParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/minio/convert-document?${stringifiedParams}`
+        : `/api/minio/convert-document`
+}
+
+export const convertDocument = async (
+    params: ConvertDocumentParams,
+    options?: RequestInit
+): Promise<convertDocumentResponse> => {
+    return customModelFetch<convertDocumentResponse>(getConvertDocumentUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getConvertDocumentQueryKey = (params?: ConvertDocumentParams) => {
+    return [`/api/minio/convert-document`, ...(params ? [params] : [])] as const
+}
+
+export const getConvertDocumentQueryOptions = <
+    TData = Awaited<ReturnType<typeof convertDocument>>,
+    TError = unknown,
+>(
+    params: ConvertDocumentParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getConvertDocumentQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof convertDocument>>> = ({ signal }) =>
+        convertDocument(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof convertDocument>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ConvertDocumentQueryResult = NonNullable<Awaited<ReturnType<typeof convertDocument>>>
+export type ConvertDocumentQueryError = unknown
+
+export function useConvertDocument<
+    TData = Awaited<ReturnType<typeof convertDocument>>,
+    TError = unknown,
+>(
+    params: ConvertDocumentParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof convertDocument>>,
+                    TError,
+                    Awaited<ReturnType<typeof convertDocument>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useConvertDocument<
+    TData = Awaited<ReturnType<typeof convertDocument>>,
+    TError = unknown,
+>(
+    params: ConvertDocumentParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof convertDocument>>,
+                    TError,
+                    Awaited<ReturnType<typeof convertDocument>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useConvertDocument<
+    TData = Awaited<ReturnType<typeof convertDocument>>,
+    TError = unknown,
+>(
+    params: ConvertDocumentParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useConvertDocument<
+    TData = Awaited<ReturnType<typeof convertDocument>>,
+    TError = unknown,
+>(
+    params: ConvertDocumentParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getConvertDocumentQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

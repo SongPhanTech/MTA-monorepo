@@ -343,17 +343,24 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                     ) as Prisma.SubjectClassGetPayload<{}>[]
 
                                                     const res = await sqlTransaction([
-                                                        ...listSubjectVersionIds.planTrainingSubjects
-                                                            .filter(
-                                                                (pts) =>
-                                                                    !alreadySubjectIds.some(
-                                                                        (asc) =>
-                                                                            asc.subjectId ===
-                                                                            pts
-                                                                                ?.trainingBlockSubject
-                                                                                ?.subject?.id
-                                                                    )
+                                                        ...Object.values(
+                                                            Object.groupBy(
+                                                                listSubjectVersionIds.planTrainingSubjects.filter(
+                                                                    (pts) =>
+                                                                        !alreadySubjectIds.some(
+                                                                            (asc) =>
+                                                                                asc.subjectId ===
+                                                                                pts
+                                                                                    ?.trainingBlockSubject
+                                                                                    ?.subject?.id
+                                                                        )
+                                                                ),
+                                                                (item) =>
+                                                                    item?.trainingBlockSubject
+                                                                        ?.subject?.code ?? ''
                                                             )
+                                                        )
+                                                            ?.map((e) => e?.[0])
                                                             .flatMap((e) =>
                                                                 new Array(values.count)
                                                                     .fill(1)
@@ -367,18 +374,20 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                                                 type: type,
                                                                                 subjectId:
                                                                                     e
-                                                                                        .trainingBlockSubject
-                                                                                        .subject.id,
-                                                                                code: `${e.trainingBlockSubject.subject.code} ${String(idx + 1)}`,
+                                                                                        ?.trainingBlockSubject
+                                                                                        ?.subject
+                                                                                        ?.id,
+                                                                                code: `${e?.trainingBlockSubject?.subject?.code} ${String(idx + 1)}`,
                                                                                 name: e
-                                                                                    .trainingBlockSubject
-                                                                                    .subject.name,
+                                                                                    ?.trainingBlockSubject
+                                                                                    ?.subject?.name,
                                                                                 maxStudent:
-                                                                                    subjectVersions[
+                                                                                    subjectVersions?.[
                                                                                         e
-                                                                                            .trainingBlockSubject
-                                                                                            .subject
-                                                                                            .id
+                                                                                            ?.trainingBlockSubject
+                                                                                            ?.subject
+                                                                                            ?.id ??
+                                                                                            ''
                                                                                     ]?.maxStudent ||
                                                                                     0,
                                                                             },
@@ -611,7 +620,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                   return (
                                                       fixedClasses?.reduce(
                                                           (sum: number, fc: any) =>
-                                                              sum + (fc._count?.students ?? 0),
+                                                              sum + (fc?._count?.students ?? 0),
                                                           0
                                                       ) || 0
                                                   )

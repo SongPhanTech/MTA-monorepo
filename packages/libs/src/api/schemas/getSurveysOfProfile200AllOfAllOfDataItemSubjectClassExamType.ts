@@ -15,6 +15,7 @@ export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType = {
     OfflineWritten: 'OfflineWritten',
+    OnlineWritten: 'OnlineWritten',
     Oral: 'Oral',
     Practice: 'Practice',
     Project: 'Project',

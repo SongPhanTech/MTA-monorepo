@@ -2168,6 +2168,9 @@ importers:
       xlsx:
         specifier: 'catalog:'
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
+      xlsx-template:
+        specifier: 'catalog:'
+        version: 1.4.4
     devDependencies:
       '@types/file-saver':
         specifier: 'catalog:'

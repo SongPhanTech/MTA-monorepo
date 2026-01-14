@@ -93,8 +93,8 @@ const ExportExamList = ({ data, examName, disabled }: ExportExamListProps) => {
         }
 
         // Collect all exam papers from all exam lists
-        const allExamPapers = data.flatMap(el => el.examPapers)
-        
+        const allExamPapers = data.flatMap((el) => el.examPapers)
+
         if (allExamPapers.length === 0) {
             message.warning('Không có sinh viên nào trong danh sách thi')
             return
@@ -152,19 +152,19 @@ const ExportExamList = ({ data, examName, disabled }: ExportExamListProps) => {
             }
 
             // Check if rooms are assigned
-            const hasRoomAssignment = data.some(el => el.examRoom?.room?.name)
+            const hasRoomAssignment = data.some((el) => el.examRoom?.room?.name)
 
             if (hasRoomAssignment) {
                 // Export by room - each room gets a separate sheet
                 for (const examList of data) {
                     if (examList.examPapers.length === 0) continue
-                    
+
                     const roomName = examList.examRoom?.room?.name || 'Chua phan phong'
                     const caNumber = examList.start || 'N/A'
                     const sheetName = sanitizeSheetName(`Ca ${caNumber} - ${roomName}`)
 
                     const worksheet = workbook.addWorksheet(sheetName)
-                    
+
                     createExamSheet(worksheet, {
                         examPapers: examList.examPapers,
                         roomName,
@@ -180,7 +180,7 @@ const ExportExamList = ({ data, examName, disabled }: ExportExamListProps) => {
             } else {
                 // Export all students in one sheet (not assigned to rooms yet)
                 const worksheet = workbook.addWorksheet('Danh sach thi')
-                
+
                 createExamSheet(worksheet, {
                     examPapers: allExamPapers,
                     roomName: 'Chua phan phong',
@@ -232,10 +232,7 @@ interface CreateExamSheetParams {
     cellStyleLeft: Partial<ExcelJS.Style>
 }
 
-function createExamSheet(
-    worksheet: ExcelJS.Worksheet,
-    params: CreateExamSheetParams
-) {
+function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetParams) {
     const {
         examPapers,
         roomName,
@@ -297,19 +294,19 @@ function createExamSheet(
 
     // Set column widths
     worksheet.columns = [
-        { width: 6 },   // TT
-        { width: 15 },  // Mã sinh viên
-        { width: 30 },  // Họ và tên
-        { width: 12 },  // Ngày sinh
-        { width: 15 },  // Lớp
-        { width: 10 },  // Điểm CC
-        { width: 10 },  // Điểm TX
-        { width: 10 },  // Điểm thi
-        { width: 10 },  // Cấm thi
-        { width: 25 },  // Lý do cấm thi
-        { width: 10 },  // Hoãn thi
-        { width: 25 },  // Lý do hoãn thi
-        { width: 20 },  // Ghi chú
+        { width: 6 }, // TT
+        { width: 15 }, // Mã sinh viên
+        { width: 30 }, // Họ và tên
+        { width: 12 }, // Ngày sinh
+        { width: 15 }, // Lớp
+        { width: 10 }, // Điểm CC
+        { width: 10 }, // Điểm TX
+        { width: 10 }, // Điểm thi
+        { width: 10 }, // Cấm thi
+        { width: 25 }, // Lý do cấm thi
+        { width: 10 }, // Hoãn thi
+        { width: 25 }, // Lý do hoãn thi
+        { width: 20 }, // Ghi chú
     ]
 
     // Data rows
@@ -323,9 +320,7 @@ function createExamSheet(
             index + 1,
             student?.code || '',
             student?.userProfile?.fullname || '',
-            student?.userProfile?.dateOfBirth
-                ? formatDate(student.userProfile.dateOfBirth)
-                : '',
+            student?.userProfile?.dateOfBirth ? formatDate(student.userProfile.dateOfBirth) : '',
             student?.fixedClass?.code || '',
             sss?.attendanceScore ?? '',
             sss?.midtermScore ?? '',

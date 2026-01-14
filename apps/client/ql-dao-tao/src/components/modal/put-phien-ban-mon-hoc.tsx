@@ -118,7 +118,7 @@ const PutVersionSubjectModal = () => {
                 selectable: false,
                 children:
                     subject.subjectVersion.map((version: SubjectVersion) => ({
-                        title: [version.code,version.name].join(' - '),
+                        title: [version.code, version.name].join(' - '),
                         value: version.id,
                     })) || [],
             })) || []

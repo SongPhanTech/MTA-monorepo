@@ -15,6 +15,8 @@ export const SqlTransactionBodyItemModel = {
     ChangeLog: 'ChangeLog',
     UserProfile: 'UserProfile',
     HocHam: 'HocHam',
+    ChucVuChinhQuyen: 'ChucVuChinhQuyen',
+    ChucVuDang: 'ChucVuDang',
     HocVi: 'HocVi',
     Relative: 'Relative',
     TrinhDoLyLuanChinhTri: 'TrinhDoLyLuanChinhTri',

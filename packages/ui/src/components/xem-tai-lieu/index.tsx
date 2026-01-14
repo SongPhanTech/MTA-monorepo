@@ -1,6 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { createId } from '@workspace/db'
+import { convertDocument } from '@workspace/libs/api/model'
 import { getMinioUrl } from '@workspace/libs/utils'
-import { Button, Col, Flex, Image, Modal, Row } from 'antd'
+import { Col, Image, Modal, Row } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type DocumentType =
@@ -287,11 +289,18 @@ type Props = {
     documentServerUrl?: string // Mặc định là http://localhost
 }
 
+declare global {
+    interface Window {
+        DocsAPI: any
+        docEditor: any
+    }
+}
+
 const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode = 'view' }: Props) => {
     useEffect(() => {
         const id = createId()
+
         const placeholderContainer = document.getElementById('placeholder-container')
-        // @ts-expect-error
         if (window.DocsAPI) {
             while (placeholderContainer?.firstChild) {
                 if (placeholderContainer.lastChild)
@@ -304,7 +313,8 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
             const config = {
                 width: '100%',
                 height: '750px',
-                type: mode === 'edit' ? 'desktop' : 'embedded',
+                type: 'desktop',
+                // type: mode === 'edit' ? 'desktop' : 'embedded',
                 documentType: getDocumentType(fileType),
                 token: '',
                 document: {
@@ -314,6 +324,7 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                     url: uri,
                     permissions: {
                         download: true,
+                        print: true,
                     },
                 },
                 events: {
@@ -321,10 +332,9 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                         // console.log('OnlyOfficeViewer - onRequestSaveAs:', event)
                     },
                     onDocumentStateChange: (state) => {
-                        // console.log('OnlyOfficeViewer - onDocumentStateChange:', state)
+                        console.log('OnlyOfficeViewer - onDocumentStateChange:', state)
                     },
                     onDownloadAs(data) {
-                        // console.log('OnlyOfficeViewer - onDownloadAs:', data)
                         const link = document.createElement('a')
                         link.href = data?.data?.url
                         link.setAttribute('download', title || 'download')
@@ -338,16 +348,22 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                     lang: 'vi',
                     customization: {
                         forcesave: false,
-                        toolbar: true, // Ẩn toàn bộ toolbar
-                        statusBar: true, // Ẩn thanh trạng thái dưới cùng
+                        toolbar: false,
+                        statusBar: false,
                         autosave: false,
                         logo: {
                             visible: false, // Ẩn logo
                         },
+                        chat: false,
+                        comments: false,
+                        anonymous: {
+                            request: false,
+                        },
+                        plugins: false,
                     },
+                    region: 'vn',
                 },
             } satisfies OnlyOfficeFullConfig
-            // @ts-expect-error
             window.docEditor = new window.DocsAPI.DocEditor(id, config)
         }
     }, [uri, title, fileType, mode])
@@ -379,12 +395,39 @@ const XemTaiLieu = () => {
         name?: string
         mimeType?: string
         mode?: 'view' | 'edit'
+        convertTo?: string
     }>({
         tag: 'XemTaiLieu',
     })
 
-    const documentUrl = getMinioUrl(input?.uri || '')
-    console.log(input, documentUrl)
+    const { data: convertedDocumentUrl, isFetching: convertedDocumentUrlLoading } = useQuery({
+        queryKey: [
+            'convertedDocumentUrl',
+            input?.convertTo,
+            input?.uri,
+            input?.name,
+            input?.mimeType,
+        ],
+        queryFn: async () => {
+            if (input?.convertTo && input?.uri && input?.name && input?.mimeType) {
+                const fileType = input.mimeType.toLowerCase()
+                const convertedUrl = await convertDocument({
+                    fileType,
+                    outputtype: input.convertTo,
+                    url: input.uri,
+                    title: input.name,
+                })
+                return convertedUrl
+            }
+            return null
+        },
+        enabled: !!input?.convertTo && !!input?.uri && !!input?.name && !!input?.mimeType,
+        refetchOnWindowFocus: false,
+    })
+
+    const documentUrl = input?.convertTo
+        ? convertedDocumentUrl?.data?.fileUrl
+        : getMinioUrl(input?.uri || '')
 
     const fileType = input?.mimeType?.toLowerCase() ?? ''
 
@@ -406,27 +449,33 @@ const XemTaiLieu = () => {
         >
             <Row gutter={[8, 8]}>
                 <Col span={24}>
-                    <Flex justify="end" className="mb-2">
+                    {/* <Flex justify="end" className="mb-2" gap={1}>
                         <Button
                             type="primary"
                             onClick={(e) => {
                                 e.stopPropagation()
                                 e.preventDefault()
+
                                 window?.docEditor?.downloadAs?.(input?.mimeType)
                             }}
                         >
                             Tải xuống
                         </Button>
-                    </Flex>
-                    {input?.uri && supportedDocFileTypes.includes(fileType) && (
-                        <OnlyOfficeViewer
-                            uri={documentUrl}
-                            fileType={fileType}
-                            title={input?.name}
-                            mode={input?.mode || 'view'}
-                        />
+                    </Flex> */}
+                    {input?.convertTo && convertedDocumentUrlLoading ? (
+                        <div>Đang chuyển đổi tài liệu...</div>
+                    ) : (
+                        documentUrl &&
+                        supportedDocFileTypes.includes(fileType) && (
+                            <OnlyOfficeViewer
+                                uri={documentUrl}
+                                fileType={input?.convertTo ?? fileType}
+                                title={input?.name}
+                                mode={input?.mode || 'view'}
+                            />
+                        )
                     )}
-                    {input?.uri && supportedImageFileTypes.includes(fileType) && (
+                    {documentUrl && supportedImageFileTypes.includes(fileType) && (
                         <Image
                             preview={{
                                 visible: isOpen,

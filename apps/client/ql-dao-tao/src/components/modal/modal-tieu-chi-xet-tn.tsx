@@ -179,102 +179,106 @@ const ModalGraduationCriteria = () => {
                             </Button>
                         </Flex>
                     </Col>
-                </Row>
-                <Table
-                    rowKey="key"
-                    id="ranking-condition"
-                    scroll={{ y: 500 }}
-                    dataSource={rankingCondition}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) => index + 1,
-                        },
-                        {
-                            title: 'Trường được đánh giá',
-                            dataIndex: 'field',
-                            width: 200,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (record) => getCriteriaFieldLabel(record),
-                        },
-                        {
-                            title: 'Đảo ngược so sánh',
-                            dataIndex: 'invert',
-                            align: 'center',
-                            width: 80,
-                            render: (record) => {
-                                return (
-                                    <div className="flex items-center justify-center">
-                                        <Checkbox checked={record} disabled />
-                                    </div>
-                                )
+
+                    <Table
+                        rowKey="key"
+                        id="ranking-condition"
+                        // scroll={{ y: 500 }}
+                        className="w-full"
+                        dataSource={rankingCondition}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) => index + 1,
                             },
-                        },
-                        {
-                            title: 'So sánh',
-                            dataIndex: 'operator',
-                            align: 'center',
-                            width: 150,
-                            render: (record) => getCriteriaOperatorLabel(record),
-                        },
-                        {
-                            title: 'Mốc điểm',
-                            dataIndex: 'value',
-                            align: 'center',
-                            width: 150,
-                        },
-                        {
-                            title: 'Mô tả',
-                            width: 150,
-                            align: 'center',
-                            dataIndex: 'description',
-                            render: (record: string) => {
-                                return (
-                                    <Tooltip title={record}>
-                                        <div className="line-clamp-2">{record}</div>
-                                    </Tooltip>
-                                )
+                            {
+                                title: 'Trường được đánh giá',
+                                dataIndex: 'field',
+                                width: 200,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (record) => getCriteriaFieldLabel(record),
                             },
-                        },
-                        {
-                            title: 'Thao tác',
-                            width: 100,
-                            align: 'center',
-                            fixed: 'right',
-                            render: (_, record) => {
-                                if (record?.id) {
+                            {
+                                title: 'Đảo ngược so sánh',
+                                dataIndex: 'invert',
+                                align: 'center',
+                                width: 200,
+                                render: (record) => {
                                     return (
-                                        <Row className="justify-center gap-2">
-                                            <EditIcon
-                                                onClick={() =>
-                                                    openRankingCondition({
-                                                        rankingId: id,
-                                                        rankingConditionId: record?.id,
-                                                    })
-                                                }
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: () =>
-                                                        handleDeleteRankingCondition(record?.id),
-                                                }}
-                                            />
-                                        </Row>
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={record} disabled />
+                                        </div>
                                     )
-                                }
-                                return ''
+                                },
                             },
-                        },
-                    ]}
-                    pagination={{
-                        hideOnSinglePage: true,
-                    }}
-                />
+                            {
+                                title: 'So sánh',
+                                dataIndex: 'operator',
+                                align: 'center',
+                                width: 150,
+                                render: (record) => getCriteriaOperatorLabel(record),
+                            },
+                            {
+                                title: 'Mốc điểm',
+                                dataIndex: 'value',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Mô tả',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'description',
+                                render: (record: string) => {
+                                    return (
+                                        <Tooltip title={record}>
+                                            <div className="line-clamp-2">{record}</div>
+                                        </Tooltip>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (_, record) => {
+                                    if (record?.id) {
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                <EditIcon
+                                                    onClick={() =>
+                                                        openRankingCondition({
+                                                            rankingId: id,
+                                                            rankingConditionId: record?.id,
+                                                        })
+                                                    }
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDeleteRankingCondition(
+                                                                record?.id
+                                                            ),
+                                                    }}
+                                                />
+                                            </Row>
+                                        )
+                                    }
+                                    return ''
+                                },
+                            },
+                        ]}
+                        pagination={{
+                            hideOnSinglePage: true,
+                        }}
+                    />
+                </Row>
             </Col>
             <Col span={24}>
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>

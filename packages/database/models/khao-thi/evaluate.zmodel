@@ -113,7 +113,7 @@ enum EvaluationStatus {
 //Comment 
 model EvaluationCriterionComment extends Base {
   reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
-  reviewerId             String
+  reviewerId             String                @db.Uuid
 
   requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
   requirementCriterionId String?
@@ -302,7 +302,7 @@ model EvidenceFile extends Base {
   evidenceId    String
 
   userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
-  userProfileId String?
+  userProfileId String?      @db.Uuid
 
   @@schema("khao-thi")
 }

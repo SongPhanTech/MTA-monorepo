@@ -3834,7 +3834,25 @@ exports.Prisma.GraduationSessionScalarFieldEnum = {
   applicationStart: 'applicationStart',
   applicationEnd: 'applicationEnd',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  status: 'status'
+  status: 'status',
+  trainingCourseId: 'trainingCourseId',
+  eligibleCount: 'eligibleCount',
+  excellentCount: 'excellentCount',
+  topicDecisionNumber: 'topicDecisionNumber',
+  topicDecisionDate: 'topicDecisionDate',
+  topicDecisionSigner: 'topicDecisionSigner',
+  defenseDecisionNumber: 'defenseDecisionNumber',
+  defenseDecisionDate: 'defenseDecisionDate',
+  defenseDecisionSigner: 'defenseDecisionSigner',
+  graduationDecisionNumber: 'graduationDecisionNumber',
+  graduationDecisionDate: 'graduationDecisionDate',
+  graduationDecisionSigner: 'graduationDecisionSigner',
+  councilMeetingDate: 'councilMeetingDate',
+  councilMeetingBasis: 'councilMeetingBasis',
+  proposalTopic: 'proposalTopic',
+  proposalCouncil: 'proposalCouncil',
+  proposalGraduation: 'proposalGraduation',
+  skipCertificateCheck: 'skipCertificateCheck'
 };
 
 exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
@@ -3855,7 +3873,26 @@ exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
   reason: 'reason',
   rankId: 'rankId',
   trainingMajorId: 'trainingMajorId',
-  diplomaTypeId: 'diplomaTypeId'
+  diplomaTypeId: 'diplomaTypeId',
+  thesisScore: 'thesisScore',
+  thesisReExam: 'thesisReExam',
+  politicalScore: 'politicalScore',
+  politicalReExam: 'politicalReExam',
+  foreignLanguageScore: 'foreignLanguageScore',
+  foreignLanguageReExam: 'foreignLanguageReExam',
+  defenseEduCert: 'defenseEduCert',
+  physicalEduCert: 'physicalEduCert',
+  foreignLangCert: 'foreignLangCert',
+  itCert: 'itCert',
+  accumulatedCredits: 'accumulatedCredits',
+  gpa10: 'gpa10',
+  reExamCredits: 'reExamCredits',
+  totalSubjects: 'totalSubjects',
+  failedSubjects: 'failedSubjects',
+  failedCredits: 'failedCredits',
+  mandatoryFailedSubjects: 'mandatoryFailedSubjects',
+  mandatoryFailedCredits: 'mandatoryFailedCredits',
+  rankDowngraded: 'rankDowngraded'
 };
 
 exports.Prisma.ApplicationDowngradedScalarFieldEnum = {
@@ -6887,7 +6924,18 @@ exports.Prisma.GraduationSessionOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name',
-  trainingObjectTypeId: 'trainingObjectTypeId'
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  trainingCourseId: 'trainingCourseId',
+  topicDecisionNumber: 'topicDecisionNumber',
+  topicDecisionSigner: 'topicDecisionSigner',
+  defenseDecisionNumber: 'defenseDecisionNumber',
+  defenseDecisionSigner: 'defenseDecisionSigner',
+  graduationDecisionNumber: 'graduationDecisionNumber',
+  graduationDecisionSigner: 'graduationDecisionSigner',
+  councilMeetingBasis: 'councilMeetingBasis',
+  proposalTopic: 'proposalTopic',
+  proposalCouncil: 'proposalCouncil',
+  proposalGraduation: 'proposalGraduation'
 };
 
 exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {

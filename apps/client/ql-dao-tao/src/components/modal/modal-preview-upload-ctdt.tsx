@@ -181,7 +181,7 @@ const ModalPreviewUpload = () => {
                             title: 'Môn mới',
                             width: 70,
                             align: 'center',
-                            render: (_,record) => {
+                            render: (_, record) => {
                                 // if (record.status === 'new') {
                                 //     return <Tag color="green">Nhóm học mới</Tag>
                                 // }
@@ -196,7 +196,7 @@ const ModalPreviewUpload = () => {
                             title: 'Bắt buộc',
                             align: 'center',
                             width: 100,
-                            render: (_,record) => mapSubjectRequirementType(record.type),
+                            render: (_, record) => mapSubjectRequirementType(record.type),
                         },
                         {
                             title: 'Khối kiến thức',
@@ -222,7 +222,7 @@ const ModalPreviewUpload = () => {
                             title: 'HP điều kiện',
                             align: 'center',
                             width: 100,
-                            render: (_,record) => {
+                            render: (_, record) => {
                                 return <Checkbox checked={record.useForFinalScore} />
                             },
                         },
@@ -231,7 +231,7 @@ const ModalPreviewUpload = () => {
                             // dataIndex: 'subjectVersionType',
                             key: 'type',
                             width: 110,
-                            render: (_,record) => mapSubjectVersionType(record.subjectVersionType),
+                            render: (_, record) => mapSubjectVersionType(record.subjectVersionType),
                         },
 
                         {

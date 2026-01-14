@@ -93,11 +93,13 @@ export type FilterProps = {
     active?: boolean[]
     numberOfOther?: 'asc' | 'desc'
     managementOrganizationId?: string
+    managementOrganizationIds?: string[]
     floor?: 'asc' | 'desc'
     roomNumber?: 'asc' | 'desc'
     trainingObjectId?: string | null
     fixedClassId?: string | null
     schoolYearId?: string | null | undefined
+    schoolYearIds?: string[]
     semesterType?: SemesterType[]
     severityLevel?: 'asc' | 'desc'
     sessionDate?: Date[]

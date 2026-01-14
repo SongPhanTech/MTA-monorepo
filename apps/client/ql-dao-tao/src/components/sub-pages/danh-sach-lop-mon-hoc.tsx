@@ -25,7 +25,7 @@ import { Search } from 'lucide-react'
 import { type Key, useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
+export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLopMonHocProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -48,11 +48,6 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
-    const { onOpen: onOpenDetailSubject } = useDisclosure<{
-        subjectVersionId?: string
-    }>({
-        tag: 'ModalChiTietMonHoc',
-    })
     const { onOpen: onOpenDetailSubjectClass } = useDisclosure<{
         id: string
         mode: 'edit' | 'view'
@@ -297,7 +292,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
 
     return (
         <div>
-            <Row>
+            <Row gutter={[0, 0]}>
                 <Col span={24}>
                     <Row align="top" justify="space-between">
                         <Col span={12}>
@@ -369,6 +364,9 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                                         selectedSubjectClassId: record.id,
                                     })
                                 },
+                                onDoubleClick: () => {
+                                    setActiveKey?.('2')
+                                },
                                 className: cn(
                                     record?.subject?.examType === 'OfflineWritten'
                                         ? 'text-red-500'
@@ -424,15 +422,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                                 align: 'left',
                                 type: 'input',
                                 render: (_, record) => (
-                                    <p
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenDetailSubject({
-                                                subjectVersionId: record.subjectId,
-                                            })
-                                        }}
-                                        className="cursor-pointer hover:text-primary"
-                                    >
+                                    <p>
                                         {record.type === $Enums.SubjectClassType.RETAKE ? (
                                             <Tag color={'blue'} className="p-0 px-1">
                                                 Học lại
@@ -463,10 +453,8 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                             },
                             {
                                 title: 'Trạng thái NĐ',
-                                dataIndex: 'scoreDeadLineStart',
                                 width: 120,
                                 align: 'center',
-                                type: 'date',
                                 render: (__, record) => {
                                     return record?.enteredExamScore ? (
                                         'Đã nhập điểm thi'

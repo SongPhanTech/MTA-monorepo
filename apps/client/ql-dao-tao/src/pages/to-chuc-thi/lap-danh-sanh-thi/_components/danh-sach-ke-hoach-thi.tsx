@@ -152,9 +152,14 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
             },
         },
-        orderBy: {
-            subjectVersionId: 'asc',
-        },
+        orderBy: [
+            {
+                subjectVersionId: 'asc',
+            },
+            {
+                code: 'asc',
+            },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })

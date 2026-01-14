@@ -8,4 +8,5 @@ import type { SemesterId } from './semesterId'
 
 export type CalculateStudentSemesterResultJsonParams = {
     semesterId: SemesterId & unknown
+    trainingCourseId: string
 }

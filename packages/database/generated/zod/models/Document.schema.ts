@@ -52,8 +52,8 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     classificationId: z.string().nullish(),
-    uploadedById: z.string().optional(),
-    approvedById: z.string().nullish(),
+    uploadedById: z.string().uuid().optional(),
+    approvedById: z.string().uuid().nullish(),
 }
 );
 

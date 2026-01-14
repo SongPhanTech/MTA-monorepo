@@ -35,10 +35,11 @@
     "docxtemplater": "catalog:",
     "esm-env": "catalog:",
     "exceljs": "catalog:",
-    "hono": "catalog:",
     "file-saver": "catalog:",
+    "hono": "catalog:",
     "pizzip": "catalog:",
     "react": "catalog:",
-    "xlsx": "catalog:"
+    "xlsx": "catalog:",
+    "xlsx-template": "catalog:"
   }
 }

@@ -25,6 +25,7 @@ const tongKetHocKyHVSV = createRoute({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của kỳ học',
             }),
+            trainingCourseId: z.string(),
         }),
     },
     responses: {
@@ -69,7 +70,7 @@ const tongKetNamHocHVSV = createRoute({
     request: {
         query: z.object({
             semesterId: z.string(),
-            trainingObjectTypeId: z.string(),
+            trainingCourseId: z.string(),
         }),
     },
     responses: {
@@ -321,7 +322,7 @@ app.openapi(dsKetQuaHocKySinhVienJson, async (c) => {
 })
 
 app.openapi(tongKetHocKyHVSV, async (c) => {
-    const { semesterId } = c.req.valid('query')
+    const { semesterId, trainingCourseId } = c.req.valid('query')
     // Validate semester existence
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -330,7 +331,7 @@ app.openapi(tongKetHocKyHVSV, async (c) => {
         return c.json({ message: `Kỳ học với ID ${semesterId} không tồn tại` }, 400)
     }
     try {
-        const studentResults = await calculateStudentSemesterResult(semesterId)
+        const studentResults = await calculateStudentSemesterResult(semesterId, trainingCourseId)
         return c.json(studentResults, 200)
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Lỗi không xác định'
@@ -342,7 +343,7 @@ app.openapi(tongKetHocKyHVSV, async (c) => {
 })
 
 app.openapi(tongKetNamHocHVSV, async (c) => {
-    const { semesterId, trainingObjectTypeId } = c.req.valid('query')
+    const { semesterId, trainingCourseId } = c.req.valid('query')
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
     })
@@ -350,25 +351,11 @@ app.openapi(tongKetNamHocHVSV, async (c) => {
         return c.json({ message: `Kỳ học với ID ${semesterId} không tồn tại` }, 400)
     }
 
-    const trainingObjectType = await prisma.trainingObjectType.findUnique({
-        where: { id: trainingObjectTypeId },
-    })
-    if (!trainingObjectType) {
-        return c.json(
-            { message: `Loại đối tượng đào tạo với ID ${trainingObjectTypeId} không tồn tại` },
-            400
-        )
-    }
-
     const students = await prisma.student.findMany({
         select: { id: true },
         where: {
             fixedClass: {
-                trainingCourse: {
-                    trainingObjectType: {
-                        id: trainingObjectTypeId,
-                    },
-                },
+                trainingCourseId,
             },
             status: {
                 notIn: [

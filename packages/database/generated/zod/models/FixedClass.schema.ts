@@ -17,7 +17,7 @@ const baseSchema = z.object({
     name: z.string(),
     summary: z.string().nullish(),
     startYear: z.number().nullish(),
-    graduated: z.boolean().default(false).nullish(),
+    graduated: z.boolean().default(false),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -32,7 +32,7 @@ const baseSchemaWithoutDefaults = z.object({
     name: z.string(),
     summary: z.string().nullish(),
     startYear: z.number().nullish(),
-    graduated: z.boolean().nullish(),
+    graduated: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -95,7 +95,7 @@ export const FixedClassPrismaUpdateSchema = z.object({
     name: z.string(),
     summary: z.string().nullish(),
     startYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    graduated: z.boolean().nullish()
+    graduated: z.boolean()
 }).partial().passthrough();
 
 

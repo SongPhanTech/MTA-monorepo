@@ -1,6 +1,6 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import Table from '@components/commons/table'
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -58,84 +58,46 @@ export default function FixedClassPage() {
     const where = useMemo(() => {
         const curriculumVersionFilter = {
             ...(filters.trainingMajors
-                ? {
-                      curriculum: {
-                          trainingMajorId: {
-                              in: filters.trainingMajors,
-                          },
-                      },
-                  }
+                ? { curriculum: { trainingMajorId: { in: filters.trainingMajors } } }
                 : {}),
-            ...(filters.trainingLevel
-                ? {
-                      trainingLevelId: {
-                          in: filters.trainingLevel,
-                      },
-                  }
-                : {}),
+            ...(filters.trainingLevel ? { trainingLevelId: { in: filters.trainingLevel } } : {}),
         }
-
         return {
             deletedAt: null,
             ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
+                ? { code: { contains: filters.code, mode: 'insensitive' as const } }
                 : {}),
             ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive' as const,
-                      },
-                  }
+                ? { name: { contains: filters.name, mode: 'insensitive' as const } }
                 : {}),
             ...(filters.managementOrganization
-                ? {
-                      managementOrganizationId: {
-                          in: filters.managementOrganization,
-                      },
-                  }
+                ? { managementOrganizationId: { in: filters.managementOrganization } }
                 : {}),
-            ...(filters.trainingCourseId && {
-                trainingCourseId: filters.trainingCourseId,
-            }),
             ...(filters.curriculumVersion
-                ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
-                      },
-                  }
+                ? { curriculumVersionId: { in: filters.curriculumVersion } }
                 : {}),
             ...(Object.keys(curriculumVersionFilter).length > 0 && {
                 curriculumVersion: curriculumVersionFilter,
             }),
             trainingCourse: {
                 trainingObjectTypeId,
+                ...(filters.trainingCourseId
+                    ? { id: filters.trainingCourseId }
+                    : filters.trainingCourses?.length
+                      ? { id: { in: filters.trainingCourses } }
+                      : {}),
             },
             active: true,
             ...(!canReadAll
                 ? {
                       OR: [
-                          {
-                              lecturerManagement: {
-                                  userProfileId: profileId,
-                              },
-                          },
-                          {
-                              staffManagement: {
-                                  userProfileId: profileId,
-                              },
-                          },
+                          { lecturerManagement: { userProfileId: profileId } },
+                          { staffManagement: { userProfileId: profileId } },
                       ],
                   }
                 : {}),
         }
-    }, [filters, trainingObjectTypeId, profileId, canReadAll]
-)
+    }, [filters, trainingObjectTypeId, profileId, canReadAll])
 
     const { data = [] } = useFindManyFixedClass({
         where,
@@ -170,14 +132,7 @@ export default function FixedClassPage() {
             },
         },
         orderBy: [
-            ...emptyObjectIf(
-                [
-                    {
-                        startYear: filters.startYear,
-                    },
-                ],
-                !!filters.startYear
-            ),
+            ...emptyObjectIf([{ startYear: filters.startYear }], !!filters.startYear),
             { name: 'asc' },
         ],
         take: numberOfPages,
@@ -185,14 +140,20 @@ export default function FixedClassPage() {
     })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
+        orderBy: { name: 'asc' },
     })
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
         orderBy: { name: 'asc' },
     })
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        where: {
+            trainingObjectTypes: { some: { trainingObjectType: { id: trainingObjectTypeId } } },
+            deletedAt: null,
+            active: true,
+        },
         orderBy: { name: 'asc' },
     })
 
@@ -200,14 +161,9 @@ export default function FixedClassPage() {
         orderBy: { name: 'asc' },
     })
 
-    const { data: count } = useCountFixedClass({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
-    })
+    const { data: count } = useCountFixedClass({ where: { ...where, deletedAt: null } })
 
-    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
     const { onOpen } = useDisclosure<string>({
@@ -239,16 +195,17 @@ export default function FixedClassPage() {
             message.error('Vui lòng chọn ĐTĐT')
             return
         }
-        if (filters.trainingCourses?.length !== 1) {
-            message.error('Vui lòng chọn 1 khoá đào tạo')
+        const trainingCourseId = filters.trainingCourseId || filters.trainingCourses?.[0]
+        if (!trainingCourseId || filters.trainingCourses?.length !== 1) {
+            message.error('Vui lòng chọn một khoá đào tạo')
             return
         }
         try {
             setLoading(true)
             // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
             const { status, headers, data } = await fixedClassStudentCount({
-                trainingObjectTypeId: trainingObjectTypeId,
-                trainingCourseId: filters.trainingCourses[0],
+                trainingObjectTypeId,
+                trainingCourseId,
             })
             if (status === 200) {
                 const filename = getFilenameFromContentDisposition(
@@ -324,7 +281,12 @@ export default function FixedClassPage() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end">
-                                <Button className="mr-3" type="primary" onClick={downloadStatsFile}>
+                                <Button
+                                    className="mr-3"
+                                    type="primary"
+                                    onClick={downloadStatsFile}
+                                    loading={loading}
+                                >
                                     <DownloadOutlined />
                                     QS theo khoá
                                 </Button>
@@ -473,19 +435,19 @@ export default function FixedClassPage() {
                                 render: (value) => (value?.name ? value?.name : ''),
                             },
 
-                            // {
-                            //     title: 'Đã tốt nghiệp',
-                            //     align: 'center',
-                            //     width: 150,
-                            //     dataIndex: 'graduated',
-                            //     type: 'select',
-                            //     options: [
-                            //         { value: true, label: 'Đã tốt nghiệp' },
-                            //         { value: false, label: 'Chưa tốt nghiệp' },
-                            //     ],
-                            //     render: (value) =>
-                            //         value ? <CheckOutlined className="text-[#028850]" /> : '',
-                            // },
+                            {
+                                title: 'Đã tốt nghiệp',
+                                align: 'center',
+                                width: 150,
+                                dataIndex: 'graduated',
+                                type: 'select',
+                                options: [
+                                    { value: true, label: 'Đã tốt nghiệp' },
+                                    { value: false, label: 'Chưa tốt nghiệp' },
+                                ],
+                                render: (value) =>
+                                    value ? <CheckOutlined className="text-[#028850]" /> : '',
+                            },
                             {
                                 title: 'Giảng viên chủ nhiệm',
                                 dataIndex: 'lecturerManagement',
