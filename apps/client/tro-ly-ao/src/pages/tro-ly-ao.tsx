@@ -1,5 +1,6 @@
 import { fetchRecommendByTopicId } from '@/api/hoi-dap'
 import { useUserSession } from '@/hooks/useUserSession'
+import { useSSOSession } from '@/hooks/useSSOSession'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
@@ -11,7 +12,8 @@ import { useRef, useState } from 'react'
 
 export default function TroLyAo() {
     const router = useRouter()
-    const { ensureSession, isLoading: sessionLoading, ssoUserId, isSSOAuthenticated } = useUserSession()
+    const { ensureSession, isLoading: sessionLoading } = useUserSession()
+    const { isAuthenticated: isSSOAuthenticated, session: ssoSession } = useSSOSession()
 
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
@@ -49,7 +51,7 @@ export default function TroLyAo() {
                 data: {
                     sessionId: currentSessionId,
                     // Nếu đăng nhập SSO thì lưu userId
-                    userId: isSSOAuthenticated && ssoUserId ? ssoUserId : null,
+                    userId: isSSOAuthenticated && ssoSession?.userId ? ssoSession.userId : null,
                     message: {
                         create: [
                             {
@@ -136,7 +138,7 @@ export default function TroLyAo() {
             const res = await createConversation({
                 data: {
                     sessionId: currentSessionId,
-                    userId: isSSOAuthenticated && ssoUserId ? ssoUserId : null,
+                    userId: isSSOAuthenticated && ssoSession?.userId ? ssoSession.userId : null,
                     message: {
                         create: [
                             {
@@ -181,7 +183,7 @@ export default function TroLyAo() {
             const res = await createConversation({
                 data: {
                     sessionId: currentSessionId,
-                    userId: isSSOAuthenticated && ssoUserId ? ssoUserId : null,
+                    userId: isSSOAuthenticated && ssoSession?.userId ? ssoSession.userId : null,
                     message: {
                         create: [
                             {

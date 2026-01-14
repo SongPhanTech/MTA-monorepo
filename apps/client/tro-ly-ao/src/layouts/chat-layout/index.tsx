@@ -28,8 +28,8 @@ const ChatLayout = ({
     showSiderChat?: boolean
 }) => {
     const router = useRouter()
-    const { sessionId, ssoUserId, isSSOAuthenticated } = useUserSession()
-    const { signIn } = useSSOSession()
+    const { sessionId } = useUserSession()
+    const { isAuthenticated: isSSOAuthenticated, signIn, session: ssoSession } = useSSOSession()
     const [isDeleting, setIsDeleting] = useState(false)
     const [isInIframe, setIsInIframe] = useState(false)
     const [isResizing, setIsResizing] = useState(false)
@@ -134,8 +134,8 @@ const ChatLayout = ({
     }, [])
 
     // Build where clause based on authentication status
-    const conversationWhereClause = isSSOAuthenticated && ssoUserId
-        ? { userId: ssoUserId } // Logged in SSO user - filter by userId
+    const conversationWhereClause = isSSOAuthenticated && ssoSession?.userId
+        ? { userId: ssoSession.userId } // Logged in SSO user - filter by userId
         : { sessionId: sessionId || '' } // Guest user - filter by sessionId
 
     const { data: conversation } = useFindManyConversation({

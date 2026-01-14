@@ -1,6 +1,5 @@
 import { useCreateUserSession, useFindUniqueUserSession } from '@workspace/db/hooks'
 import { useEffect, useState } from 'react'
-import { useSSOSession } from './useSSOSession'
 
 const SESSION_KEY = 'chatbot-session-id'
 
@@ -21,17 +20,15 @@ const generateSessionName = (): string => {
     return `${getBrowserName()} - ${dateStr} ${timeStr}`
 }
 
+/**
+ * Hook quản lý local user session (chatbot session)
+ * KHÔNG liên quan đến SSO authentication
+ * Chỉ quản lý sessionId để lưu conversation history
+ */
 export const useUserSession = () => {
     const [sessionId, setSessionId] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const { mutateAsync: createUserSession } = useCreateUserSession()
-    
-    // Get SSO session info
-    const { session: ssoSession, isAuthenticated: isSSOAuthenticated, status: ssoStatus } = useSSOSession()
-    
-    // Extract userId from SSO session if authenticated
-    // API trả về session.userId (không phải session.user.id)
-    const ssoUserId = isSSOAuthenticated && ssoSession?.userId ? ssoSession.userId : null
 
     const { data: existingSession, refetch: validateSession } = useFindUniqueUserSession(
         {
@@ -115,11 +112,6 @@ export const useUserSession = () => {
         isLoading,
         ensureSession,
         clearSession,
-        // SSO related
-        ssoUserId,
-        isSSOAuthenticated,
-        ssoStatus,
-        ssoSession,
     }
 }
 
