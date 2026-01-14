@@ -359,7 +359,7 @@ app.openapi(mergeExam, async (c) => {
     }
 
     const subjectVersionId = subjectVersionIds[0] as string
-    const semesterId = classes[0]?.examId as string
+    const semesterId = classes[0]?.semesterId as string
 
     const newExamId = createId()
 
