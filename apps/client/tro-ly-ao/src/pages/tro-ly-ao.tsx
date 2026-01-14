@@ -11,7 +11,7 @@ import { useRef, useState } from 'react'
 
 export default function TroLyAo() {
     const router = useRouter()
-    const { ensureSession, isLoading: sessionLoading } = useUserSession()
+    const { ensureSession, isLoading: sessionLoading, ssoUserId, isSSOAuthenticated } = useUserSession()
 
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
@@ -48,6 +48,8 @@ export default function TroLyAo() {
             const res = await createConversation({
                 data: {
                     sessionId: currentSessionId,
+                    // Nếu đăng nhập SSO thì lưu userId
+                    userId: isSSOAuthenticated && ssoUserId ? ssoUserId : null,
                     message: {
                         create: [
                             {
@@ -134,6 +136,7 @@ export default function TroLyAo() {
             const res = await createConversation({
                 data: {
                     sessionId: currentSessionId,
+                    userId: isSSOAuthenticated && ssoUserId ? ssoUserId : null,
                     message: {
                         create: [
                             {
@@ -178,6 +181,7 @@ export default function TroLyAo() {
             const res = await createConversation({
                 data: {
                     sessionId: currentSessionId,
+                    userId: isSSOAuthenticated && ssoUserId ? ssoUserId : null,
                     message: {
                         create: [
                             {

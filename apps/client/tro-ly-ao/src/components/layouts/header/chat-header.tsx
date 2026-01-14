@@ -1,6 +1,7 @@
 import {
     AppstoreOutlined,
     ExportOutlined,
+    LoginOutlined,
     MenuOutlined,
     UnorderedListOutlined,
 } from '@ant-design/icons'
@@ -17,9 +18,11 @@ interface ChatHeaderProps {
     collapsed: boolean
     onCollapse: (collapsed: boolean) => void
     showCollapseButton?: boolean
+    isSSOAuthenticated?: boolean
+    onSignIn?: () => void
 }
 
-const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHeaderProps) => {
+const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true, isSSOAuthenticated = false, onSignIn }: ChatHeaderProps) => {
     const pathname = usePathname()
     const { onOpen: openAppSwitcher } = useDisclosure({
         tag: 'AppSwitcherModal',
@@ -76,7 +79,17 @@ const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHe
                         title="Mở trong tab mới"
                     />
                 )}
-                <HeaderApp />
+                {!isSSOAuthenticated && onSignIn && (
+                    <Button
+                        type="primary"
+                        icon={<LoginOutlined />}
+                        onClick={onSignIn}
+                        className="flex items-center justify-center"
+                    >
+                        Đăng nhập
+                    </Button>
+                )}
+                {isSSOAuthenticated && <HeaderApp />}
             </div>
         </Header>
     )

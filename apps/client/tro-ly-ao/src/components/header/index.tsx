@@ -5,50 +5,61 @@ import type React from 'react'
 import { useEffect, useRef } from 'react'
 
 const HeaderApp: React.FC = () => {
-    const initialized = useRef(false)
+    const hasInitialized = useRef(false)
+    const retryTimerRef = useRef<NodeJS.Timeout | null>(null)
 
     useEffect(() => {
-        // Prevent double initialization
-        if (initialized.current) return
+        // Đã khởi tạo rồi thì không làm gì
+        if (hasInitialized.current) return
 
-        // Skip SSO menu in local environment - it requires connection to SSO server
-        const env = getRuntimeEnv('NEXT_PUBLIC_ENVIRONMENT')
-        if (env === 'local') return
-
-        const initPlugin = () => {
-            // Check if MTAMenuComponents is loaded and available
-            if (
-                typeof window !== 'undefined' &&
-                window.MTAMenuComponents?.default?.createPlugin
-            ) {
-                initialized.current = true
-                // Use .catch() to handle any fetch errors from within the plugin
-                Promise.resolve(
+        const initializePlugin = () => {
+            try {
+                if (typeof window !== 'undefined' && window.MTAMenuComponents?.default?.createPlugin) {
                     window.MTAMenuComponents.default.createPlugin('pluginContainer', {
                         menuAppId: 'menuContainer',
                         notificationAppId: 'notificationContainer',
                         userAppId: 'userContainer',
                         tenantCode: window.tenantCode || 'dev',
-                        appCode: getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'Chatbot',
+                        appCode: getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'chatbot',
                     })
-                ).catch((error) => {
-                    // Silently ignore - expected when running locally or SSO unavailable
-                    console.warn('[HeaderApp] MTAMenuComponents error:', error?.message || error)
-                })
+                    hasInitialized.current = true
+                    return true
+                }
+                return false
+            } catch (error) {
+                console.error('Error initializing MTA Menu Plugin:', error)
+                return false
             }
         }
 
-        // Try immediately
-        initPlugin()
+        // Thử khởi tạo ngay
+        if (initializePlugin()) return
 
-        // If script not loaded yet, retry after delay
-        const retryTimeout = setTimeout(() => {
-            if (!initialized.current) {
-                initPlugin()
+        // Nếu chưa load, thử lại với interval (không dùng state để tránh re-render)
+        let retryCount = 0
+        const maxRetries = 10
+        
+        const retry = () => {
+            if (retryCount >= maxRetries) {
+                console.warn('MTAMenuComponents script not loaded after retries')
+                return
             }
-        }, 500)
+            
+            retryTimerRef.current = setTimeout(() => {
+                if (!initializePlugin()) {
+                    retryCount++
+                    retry()
+                }
+            }, 200)
+        }
+        
+        retry()
 
-        return () => clearTimeout(retryTimeout)
+        return () => {
+            if (retryTimerRef.current) {
+                clearTimeout(retryTimerRef.current)
+            }
+        }
     }, [])
 
     return <div id="pluginContainer" />

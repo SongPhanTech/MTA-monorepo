@@ -1,27 +1,12 @@
 import Loading from '@components/commons/loading'
-import { getRuntimeEnv } from '@workspace/libs/utils'
+import { useSSOSession } from '@/hooks/useSSOSession'
 import { ROUTER_PATH } from '@workspace/router'
-import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { NextPage } from 'next'
 
-const checkSessionQuietly = async (): Promise<boolean> => {
-    try {
-        const appCode = getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'Chatbot'
-        const response = await fetch(
-            `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/auth/get-session?appCode=${appCode}`,
-            {
-                method: 'GET',
-                credentials: 'include',
-            }
-        )
-        return response.ok
-    } catch (error) {
-        return false
-    }
-}
-
-const Page: NextPage = () => {
+const IndexPage: NextPage = () => {
+    const { status } = useSSOSession()
     const router = useRouter()
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
@@ -40,9 +25,7 @@ const Page: NextPage = () => {
         }
 
         const handleRedirect = async () => {
-            const isAuthenticated = await checkSessionQuietly()
-
-            if (isAuthenticated) {
+            if (status === 'authenticated') {
                 const lastPage = localStorage.getItem('lastPage')
                 const lastSubsystem = localStorage.getItem('lastSubsystem')
 
@@ -57,30 +40,9 @@ const Page: NextPage = () => {
         }
 
         handleRedirect()
-    }, [router.isReady, router.query.mode])
+    }, [router.isReady, router.query.mode, status])
 
     return <Loading />
 }
-export default Page
 
-// todo: tạm bỏ
-// import Loading from '@components/commons/loading'
-// import { ROUTER_PATH } from '@workspace/router'
-// import { useRouter } from 'next/router'
-// import { useEffect } from 'react'
-
-// export default function Page() {
-//     const router = useRouter()
-//     const query = router.query
-
-//     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-//     useEffect(() => {
-//         if (query?.mode === 'quan-tri') {
-//             router.replace(ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_TAI_LIEU)
-//         }
-//         if (query?.mode === 'tro-ly-ao') {
-//             router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
-//         }
-//     }, [query?.mode])
-//     return <Loading />
-// }
+export default IndexPage
