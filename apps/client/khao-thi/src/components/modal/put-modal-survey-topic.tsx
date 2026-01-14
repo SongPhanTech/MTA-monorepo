@@ -98,7 +98,7 @@ const PutSurveyTopicModal = () => {
         >
             <Col span={24}>
                 <FormItem form={form} name="code" label="Mã chủ đề khảo sát" required>
-                    <Input placeholder="Nhập mã chủ đề khảo sát" disabled={!!id}/>
+                    <Input placeholder="Nhập mã chủ đề khảo sát" disabled={!!id} />
                 </FormItem>
             </Col>
             <Col span={24}>
