@@ -1238,7 +1238,17 @@ export default function NhapDiem({
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox disabled={score === 'THI' || disabledForm} />
+                                            <Checkbox
+                                                disabled={score === 'THI' || disabledForm}
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'examBannedReason'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
+                                            />
                                         </Form.Item>
                                     )
                                 },
@@ -1295,7 +1305,17 @@ export default function NhapDiem({
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox disabled={score === 'THI' || disabledForm} />
+                                            <Checkbox
+                                                disabled={score === 'THI' || disabledForm}
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'examPostponed'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
+                                            />
                                         </Form.Item>
                                     )
                                 },
@@ -1360,6 +1380,14 @@ export default function NhapDiem({
                                                     score === 'CC/TX' ||
                                                     disabledForm
                                                 }
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'suspendedReason'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
                                             />
                                         </Form.Item>
                                     )

@@ -15,7 +15,7 @@ import { Checkbox, Col, Flex, Input, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 
-export default function KyThi() {
+export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) => void }) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -132,6 +132,9 @@ export default function KyThi() {
                                     kythiStore.setState({ examId: record.id })
                                     diemPhongThiStore.setState({ selectedExamListId: undefined })
                                     debouncedRefetch()
+                                },
+                                onDoubleClick:()=>{
+                                    setActiveKey('11')
                                 },
                                 className: cn(examId === record.id ? 'bg-orange-200' : ''),
                             }

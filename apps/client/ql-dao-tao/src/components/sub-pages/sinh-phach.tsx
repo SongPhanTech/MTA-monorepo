@@ -272,7 +272,21 @@ export default function SinhPhach() {
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox disabled={examList?.lockExamCode} />
+                                            <Checkbox
+                                                disabled={examList?.lockExamCode}
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            [
+                                                                'list',
+                                                                record.studentSubjectScoreId,
+                                                                'suspendedReason',
+                                                            ],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
+                                            />
                                         </Form.Item>
                                     )
                                 },
@@ -292,7 +306,11 @@ export default function SinhPhach() {
                                             className="m-0"
                                         >
                                             {!suspended ? (
-                                                <Input readOnly variant="underlined" />
+                                                <Input.TextArea
+                                                    autoSize
+                                                    readOnly
+                                                    variant="underlined"
+                                                />
                                             ) : (
                                                 <AutoComplete
                                                     placeholder="Nhập lý do đình chỉ thi"
@@ -302,7 +320,13 @@ export default function SinhPhach() {
                                                     }))}
                                                     styles={{ popup: { root: { width: 'fit' } } }}
                                                     disabled={!suspended}
-                                                />
+                                                >
+                                                    <Input.TextArea
+                                                        autoSize
+                                                        readOnly
+                                                        variant="underlined"
+                                                    />
+                                                </AutoComplete>
                                             )}
                                         </Form.Item>
                                     )
@@ -317,7 +341,11 @@ export default function SinhPhach() {
                                             name={['list', record.id, 'description']}
                                             label=""
                                         >
-                                            <Input placeholder="Nhập ghi chú" />
+                                            <Input.TextArea
+                                                autoSize
+                                                variant="underlined"
+                                                placeholder="Nhập ghi chú"
+                                            />
                                         </Form.Item>
                                     )
                                 },

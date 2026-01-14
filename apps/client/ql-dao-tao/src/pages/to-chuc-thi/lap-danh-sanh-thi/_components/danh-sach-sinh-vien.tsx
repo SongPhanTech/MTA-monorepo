@@ -827,7 +827,9 @@ export default function DanhSachSinhVien() {
                                             autoSize
                                             readOnly
                                             variant="underlined"
-                                            value={record?.studentSubjectScore?.examBannedReason ?? ''}
+                                            value={
+                                                record?.studentSubjectScore?.examBannedReason ?? ''
+                                            }
                                         />
                                     )
                                 },
@@ -854,6 +856,18 @@ export default function DanhSachSinhVien() {
                                                     examData?.lockExamSessions ||
                                                     isCreatedExamCode
                                                 }
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            [
+                                                                'list',
+                                                                record.studentSubjectScoreId,
+                                                                'examPostponedReason',
+                                                            ],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
                                             />
                                         </Form.Item>
                                     )
