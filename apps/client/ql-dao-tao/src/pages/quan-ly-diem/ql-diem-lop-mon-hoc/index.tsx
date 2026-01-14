@@ -17,6 +17,7 @@ import { useSession } from '@workspace/auth/react'
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
     score?: 'CC/TX' | 'THI'
+    setActiveKey?: (key: string) => void
 }
 type SubmitFormType = {
     isLockExamScore?: boolean
@@ -153,7 +154,7 @@ export default function QuanLyDiemLopMonHoc({
             {
                 label: 'Danh sách lớp môn học',
                 key: '1',
-                children: <DanhSachLopMonHoc role={role} />,
+                children: <DanhSachLopMonHoc role={role} setActiveKey={setActiveKey} />,
             },
         ]
 
