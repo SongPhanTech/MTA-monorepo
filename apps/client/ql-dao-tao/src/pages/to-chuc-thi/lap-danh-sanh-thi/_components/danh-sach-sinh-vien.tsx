@@ -822,7 +822,14 @@ export default function DanhSachSinhVien() {
                             {
                                 title: 'Lý do cấm thi',
                                 render: (_, record) => {
-                                    return record?.studentSubjectScore?.examBannedReason
+                                    return (
+                                        <Input.TextArea
+                                            autoSize
+                                            readOnly
+                                            variant="underlined"
+                                            value={record?.studentSubjectScore?.examBannedReason ?? ''}
+                                        />
+                                    )
                                 },
                             },
                             {
@@ -867,7 +874,11 @@ export default function DanhSachSinhVien() {
                                             className="m-0"
                                         >
                                             {!examPostponed ? (
-                                                <Input.TextArea readOnly variant="underlined" />
+                                                <Input.TextArea
+                                                    autoSize
+                                                    readOnly
+                                                    variant="underlined"
+                                                />
                                             ) : (
                                                 <AutoComplete
                                                     placeholder="Nhập lý do hoãn thi"
@@ -883,7 +894,11 @@ export default function DanhSachSinhVien() {
                                                         isCreatedExamCode
                                                     }
                                                 >
-                                                    <Input.TextArea readOnly variant="underlined" />
+                                                    <Input.TextArea
+                                                        autoSize
+                                                        readOnly
+                                                        variant="underlined"
+                                                    />
                                                 </AutoComplete>
                                             )}
                                         </Form.Item>

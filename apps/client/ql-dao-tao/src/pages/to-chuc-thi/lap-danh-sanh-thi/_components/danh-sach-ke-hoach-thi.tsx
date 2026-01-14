@@ -230,7 +230,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
             }
         },
         hideSelectAll: true,
-        columnWidth: 35,
+        columnWidth: 70,
         columnTitle: 'Ghép/Tách',
     }
 
@@ -565,6 +565,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             type: 'checkbox',
                             ...rowSelection,
                         }}
+                        scrollable
+                        maxHeight={'calc(100vh - 350px)'}
                         onRow={(record) => ({
                             // onClick: () => {
                             //     const selectedKeys = [...selectedRowKeys]
@@ -869,7 +871,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Ngày thi',
                                 align: 'center',
-                                width: 20,
+                                width: 60,
                                 render: (_, record) => {
                                     const examDate = record.subjectClass?.[0]?.examDate
                                     return examDate ? formatDate(examDate) : undefined
