@@ -435,19 +435,19 @@ export default function FixedClassPage() {
                                 render: (value) => (value?.name ? value?.name : ''),
                             },
 
-                            // {
-                            //     title: 'Đã tốt nghiệp',
-                            //     align: 'center',
-                            //     width: 150,
-                            //     dataIndex: 'graduated',
-                            //     type: 'select',
-                            //     options: [
-                            //         { value: true, label: 'Đã tốt nghiệp' },
-                            //         { value: false, label: 'Chưa tốt nghiệp' },
-                            //     ],
-                            //     render: (value) =>
-                            //         value ? <CheckOutlined className="text-[#028850]" /> : '',
-                            // },
+                            {
+                                title: 'Đã tốt nghiệp',
+                                align: 'center',
+                                width: 150,
+                                dataIndex: 'graduated',
+                                type: 'select',
+                                options: [
+                                    { value: true, label: 'Đã tốt nghiệp' },
+                                    { value: false, label: 'Chưa tốt nghiệp' },
+                                ],
+                                render: (value) =>
+                                    value ? <CheckOutlined className="text-[#028850]" /> : '',
+                            },
                             {
                                 title: 'Giảng viên chủ nhiệm',
                                 dataIndex: 'lecturerManagement',

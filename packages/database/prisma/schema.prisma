@@ -2848,7 +2848,7 @@ model FixedClass {
   name                     String
   summary                  String?
   startYear                Int?
-  graduated                Boolean?           @default(false)
+  graduated                Boolean            @default(false)
   classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
   classMonitorId           String?            @unique()
   unionLeader              Student?           @relation("UnionLeader", fields: [unionLeaderId], references: [id])

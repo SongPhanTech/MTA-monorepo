@@ -9418,7 +9418,6 @@ const metadata: ModelMeta = {
                 }, graduated: {
                     name: "graduated",
                     type: "Boolean",
-                    isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, classMonitor: {
                     name: "classMonitor",

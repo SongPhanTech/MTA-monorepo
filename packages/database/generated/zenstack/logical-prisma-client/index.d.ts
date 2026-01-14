@@ -209369,7 +209369,7 @@ export namespace Prisma {
         name: string
         summary: string | null
         startYear: number | null
-        graduated: boolean | null
+        graduated: boolean
         classMonitorId: string | null
         unionLeaderId: string | null
         trainingCourseId: string
@@ -209565,7 +209565,7 @@ export namespace Prisma {
             name: string
             summary: string | null
             startYear: number | null
-            graduated: boolean | null
+            graduated: boolean
             classMonitorId: string | null
             unionLeaderId: string | null
             trainingCourseId: string
@@ -350047,7 +350047,7 @@ export namespace Prisma {
         name?: StringFilter<"FixedClass"> | string
         summary?: StringNullableFilter<"FixedClass"> | string | null
         startYear?: IntNullableFilter<"FixedClass"> | number | null
-        graduated?: BoolNullableFilter<"FixedClass"> | boolean | null
+        graduated?: BoolFilter<"FixedClass"> | boolean
         classMonitorId?: StringNullableFilter<"FixedClass"> | string | null
         unionLeaderId?: StringNullableFilter<"FixedClass"> | string | null
         trainingCourseId?: StringFilter<"FixedClass"> | string
@@ -350079,7 +350079,7 @@ export namespace Prisma {
         name?: SortOrder
         summary?: SortOrderInput | SortOrder
         startYear?: SortOrderInput | SortOrder
-        graduated?: SortOrderInput | SortOrder
+        graduated?: SortOrder
         classMonitorId?: SortOrderInput | SortOrder
         unionLeaderId?: SortOrderInput | SortOrder
         trainingCourseId?: SortOrder
@@ -350119,7 +350119,7 @@ export namespace Prisma {
         name?: StringFilter<"FixedClass"> | string
         summary?: StringNullableFilter<"FixedClass"> | string | null
         startYear?: IntNullableFilter<"FixedClass"> | number | null
-        graduated?: BoolNullableFilter<"FixedClass"> | boolean | null
+        graduated?: BoolFilter<"FixedClass"> | boolean
         trainingCourseId?: StringFilter<"FixedClass"> | string
         managementOrganizationId?: UuidNullableFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableFilter<"FixedClass"> | string | null
@@ -350148,7 +350148,7 @@ export namespace Prisma {
         name?: SortOrder
         summary?: SortOrderInput | SortOrder
         startYear?: SortOrderInput | SortOrder
-        graduated?: SortOrderInput | SortOrder
+        graduated?: SortOrder
         classMonitorId?: SortOrderInput | SortOrder
         unionLeaderId?: SortOrderInput | SortOrder
         trainingCourseId?: SortOrder
@@ -350177,7 +350177,7 @@ export namespace Prisma {
         name?: StringWithAggregatesFilter<"FixedClass"> | string
         summary?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
         startYear?: IntNullableWithAggregatesFilter<"FixedClass"> | number | null
-        graduated?: BoolNullableWithAggregatesFilter<"FixedClass"> | boolean | null
+        graduated?: BoolWithAggregatesFilter<"FixedClass"> | boolean
         classMonitorId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
         unionLeaderId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
         trainingCourseId?: StringWithAggregatesFilter<"FixedClass"> | string
@@ -378784,7 +378784,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -378809,7 +378809,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -378834,7 +378834,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -378859,7 +378859,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -378884,7 +378884,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -378905,7 +378905,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
     };
     export type FixedClassUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -378919,7 +378919,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -478097,7 +478097,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -478121,7 +478121,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -478853,7 +478853,7 @@ export namespace Prisma {
         name?: StringFilter<"FixedClass"> | string
         summary?: StringNullableFilter<"FixedClass"> | string | null
         startYear?: IntNullableFilter<"FixedClass"> | number | null
-        graduated?: BoolNullableFilter<"FixedClass"> | boolean | null
+        graduated?: BoolFilter<"FixedClass"> | boolean
         classMonitorId?: StringNullableFilter<"FixedClass"> | string | null
         unionLeaderId?: StringNullableFilter<"FixedClass"> | string | null
         trainingCourseId?: StringFilter<"FixedClass"> | string
@@ -496076,7 +496076,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
@@ -496100,7 +496100,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         managementOrganizationId?: string | null
@@ -500378,7 +500378,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -500402,7 +500402,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -501192,7 +501192,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -501216,7 +501216,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -506731,7 +506731,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -506755,7 +506755,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -517432,7 +517432,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
@@ -517456,7 +517456,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         unionLeaderId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
@@ -517484,7 +517484,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
@@ -517508,7 +517508,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
@@ -517536,7 +517536,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -517560,7 +517560,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -519295,7 +519295,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
@@ -519319,7 +519319,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -519352,7 +519352,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
@@ -519376,7 +519376,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -519409,7 +519409,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -519433,7 +519433,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -521615,7 +521615,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -521639,7 +521639,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -527106,7 +527106,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -527130,7 +527130,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -540436,7 +540436,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -540460,7 +540460,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -548512,7 +548512,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -548536,7 +548536,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -573524,7 +573524,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -574002,7 +574002,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -574026,7 +574026,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -574050,7 +574050,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -592249,7 +592249,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         managementOrganizationId?: string | null
@@ -592612,7 +592612,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
@@ -592636,7 +592636,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -592660,7 +592660,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -597340,7 +597340,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -597364,7 +597364,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -597388,7 +597388,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -605428,7 +605428,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -605452,7 +605452,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -605476,7 +605476,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -606684,7 +606684,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -607412,7 +607412,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -607436,7 +607436,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -607460,7 +607460,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -611794,7 +611794,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -611818,7 +611818,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -611842,7 +611842,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -614437,7 +614437,7 @@ export namespace Prisma {
         name: string
         summary?: string | null
         startYear?: number | null
-        graduated?: boolean | null
+        graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
         trainingCourseId: string
@@ -614457,7 +614457,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -614481,7 +614481,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
@@ -614505,7 +614505,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
