@@ -101,7 +101,7 @@ const importFileGiaoVienCoGioGiay = async (
     for (const row of rowData) {
         // Xử lý từng dòng dữ liệu ở đây
         const [
-            ,
+            idx,
             maGV,
             tenGV,
             maMon,
@@ -237,7 +237,7 @@ const importFileGiaoVienCoGioGiay = async (
             for (const row of rowData) {
                 // Xử lý từng dòng dữ liệu ở đây
                 const [
-                    ,
+                    idx,
                     maGV,
                     tenGV,
                     maMon,
@@ -253,6 +253,21 @@ const importFileGiaoVienCoGioGiay = async (
                     tietHoc,
                     hocChung,
                 ] = row
+                console.log('Xử lý dòng', {
+                    idx,
+                    maGV,
+                    tenGV,
+                    maMon,
+                    tenMon,
+                    maLopNienChe,
+                    quanSo,
+                    maPhongHoc,
+                    hinhThucHoc,
+                    ngayHoc,
+                    caHoc,
+                    tietHoc,
+                    hocChung,
+                })
                 const subjectClass = {
                     gvChinh: null as string | null,
                     gvPhu: null as string | null,
@@ -1158,7 +1173,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                 }
                 console.log(
                     'danhSachLopMonHoc',
-                    danhSachLopMonHoc.map((e) => e.code)
+                    danhSachLopMonHoc.uniqueByKey('code').map((e) => e.code)
                 )
             } else {
                 await importFileGiaoVienCoGioGiay(
@@ -1192,7 +1207,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
         {
             message: 'Tải danh sách thành công',
             time: endTime - startTime,
-            data: danhSachLopMonHoc,
+            data: danhSachLopMonHoc.uniqueByKey('code'),
             error: errorImport,
         },
         200
