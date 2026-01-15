@@ -1,6 +1,7 @@
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import {
+    useFindManyStudentSubjectScore,
     useFindManyCertificate,
     useCreateManyStudentSubjectScore,
     useFindManySubjectClass,
@@ -67,6 +68,18 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
         },
     })
 
+    // **Lấy danh sách điểm đã có của sinh viên**
+    const { data: existingScores = [] } = useFindManyStudentSubjectScore(
+        {
+            where: {
+                studentId: {
+                    in: input?.studentIds || [],
+                },
+            },
+        },
+        { enabled: !!input?.studentIds && input.studentIds.length > 0 }
+    )
+
     // Lấy danh sách lớp môn học có thể phiên điểm từ chứng chỉ đã chọn
     const availableSubjectClasses = useMemo(() => {
         if (!selectedCertificateId) return []
@@ -88,12 +101,22 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
                 (cs: any) => cs.subjectId === sc.subject?.subjectId
             )
 
+            // ** Kiểm tra môn đã được chuyển đổi chưa**
+            const convertedCount = existingScores.filter(
+                (score: any) => score.subjectClassId === sc.id
+            ).length
+            
+            const totalStudents = input?.studentIds?.length || 0
+            const isConverted = convertedCount === totalStudents && totalStudents > 0
+
             return {
                 ...sc,
                 finalScore: certSubject?.finalScore || 0,
+                isConverted, // Đánh dấu nếu tất cả sinh viên đã có điểm
+                convertedCount, // Số sinh viên đã chuyển đổi
             }
         })
-    }, [selectedCertificateId, certificates, subjectClasses])
+    }, [selectedCertificateId, certificates, subjectClasses, existingScores, input?.studentIds])
 
     const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
 
@@ -181,12 +204,17 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
         },
     }
 
+    // **Thêm getCheckboxProps để disable checkbox**
     const subjectClassRowSelection = {
         selectedRowKeys: selectedSubjectClassIds,
         onChange: (selectedKeys: React.Key[]) => {
             setSelectedSubjectClassIds(selectedKeys as string[])
         },
+        getCheckboxProps: (record: any) => ({
+            disabled: record.isConverted,
+        }),
     }
+
 
     return (
         <Modal
