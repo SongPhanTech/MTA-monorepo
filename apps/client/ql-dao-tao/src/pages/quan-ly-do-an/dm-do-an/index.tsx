@@ -1053,7 +1053,6 @@ export default function DanhMucDoAn() {
     </Row>
   );
 }
-// Tách riêng để khi nhập điểm, chỉ có Modal này re-render, trang chính không bị ảnh hưởng
 const StudentManagementModal = ({
   isOpen,
   onClose,
@@ -1110,34 +1109,6 @@ const StudentManagementModal = ({
         ),
       },
       {
-        title: "Chuyên cần",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.attendanceScore}
-            onChange={(val) =>
-              handleScoreChange(reg.studentId, "attendanceScore", val)
-            }
-          />
-        ),
-      },
-      {
-        title: "Giữa kỳ",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.midtermScore}
-            onChange={(val) =>
-              handleScoreChange(reg.studentId, "midtermScore", val)
-            }
-          />
-        ),
-      },
-      {
         title: "Điểm thi",
         render: (_: any, reg: any) => (
           <InputNumber
@@ -1168,7 +1139,7 @@ const StudentManagementModal = ({
       },
     ],
     [gradeValues]
-  ); // Chỉ tính toán lại cột khi dữ liệu điểm thay đổi
+  );
   const handleSaveMembers = async () => {
     try {
       const transactions: any[] = [];
@@ -1279,8 +1250,8 @@ const StudentManagementModal = ({
             data: {
               where: { id: grades.scoreId },
               data: {
-                attendanceScore: grades.attendanceScore ?? null,
-                midtermScore: grades.midtermScore ?? null,
+                attendanceScore: grades.examScore ?? null,
+                midtermScore: grades.examScore ?? null,
                 examScore: grades.examScore ?? null,
                 finalScore: grades.finalScore ?? null,
               },
