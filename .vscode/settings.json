@@ -18,7 +18,7 @@
     "SCIM",
     "swantech"
   ],
-   "files.associations": {
+  "files.associations": {
     "*.zmodel": "zmodel"
   },
   "[json]": {
@@ -34,7 +34,7 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[sql]": {
     "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"

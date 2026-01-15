@@ -3,6 +3,7 @@ import NhapDiem from '@components/sub-pages/nhap-diem'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { Store, useStore } from '@tanstack/react-store'
+import { useSession } from '@workspace/auth/react'
 import {
     useFindFirstSubjectClassHistory,
     useFindUniqueSubjectClass,
@@ -12,7 +13,6 @@ import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
-import { useSession } from '@workspace/auth/react'
 
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
@@ -96,9 +96,7 @@ export default function QuanLyDiemLopMonHoc({
             subjectClassId: selectedSubjectClassId || '',
             isLockExamScore: true,
         },
-        orderBy: {
-            createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
         select: {
             createdAt: true,
             updatedBy: {
