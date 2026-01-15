@@ -50,7 +50,7 @@ import {
     Row,
     Switch,
     Tooltip,
-    TreeSelect,
+    TreeSelect
 } from 'antd'
 import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
@@ -85,6 +85,8 @@ type XepKhuVucForm = {
     isOverride: boolean
 }
 
+type FilterStatus = 'YEU_CAU_PCGD' | 'LMH_DA_HUY' | 'CHO_DUYET_PCGD' | 'DA_DUYET_PCGD'
+
 export default function PhanCongGiangDay({
     type,
     khoaBoMon = false,
@@ -107,9 +109,9 @@ export default function PhanCongGiangDay({
         enterGradeLecturer: undefined,
         examType: undefined,
         room: undefined,
-        pcgd: undefined,
-        approved: undefined,
     })
+
+    const [filterStatus, setFilterStatus] = useState<FilterStatus>()
 
     const [form] = Form.useForm<TeachingAssignmentForm>()
 
@@ -138,7 +140,6 @@ export default function PhanCongGiangDay({
                           code: { contains: filters.code, mode: 'insensitive' as const },
                       }
                     : {}),
-
                 ...(filters?.examType
                     ? {
                           examType: {
@@ -225,38 +226,6 @@ export default function PhanCongGiangDay({
                           },
                       }
                     : {}),
-                ...(filters.pcgd && filters.pcgd.length === 1 && filters.pcgd[0]
-                    ? {
-                          lecturerId: { not: null },
-                          extraLecturerId: { not: null },
-                          submitLecturerAssignmentAt: { not: null },
-                      }
-                    : {}),
-                ...(filters.pcgd && filters.pcgd.length === 1 && !filters.pcgd[0]
-                    ? {
-                          OR: [
-                              {
-                                  lecturerId: null,
-                              },
-                              {
-                                  extraLecturerId: null,
-                              },
-                              {
-                                  submitLecturerAssignmentAt: null,
-                              },
-                          ],
-                      }
-                    : {}),
-                ...(filters.approved && filters.approved.length === 1 && filters.approved[0]
-                    ? {
-                          approveLecturerAssignmentAt: { not: null },
-                      }
-                    : {}),
-                ...(filters.approved && filters.approved.length === 1 && !filters.approved[0]
-                    ? {
-                          approveLecturerAssignmentAt: null,
-                      }
-                    : {}),
                 subject: {
                     ...(filters.organization && filters.organization.length > 0
                         ? {
@@ -295,8 +264,48 @@ export default function PhanCongGiangDay({
                       }
                     : {}),
                 type: type,
+                ...(filterStatus === 'CHO_DUYET_PCGD'
+                    ? {
+                          submitLecturerAssignmentAt: {
+                              not: null,
+                          },
+                      }
+                    : filterStatus === 'YEU_CAU_PCGD'
+                      ? {
+                            OR: [
+                                {
+                                    lecturerId: null,
+                                },
+                                {
+                                    extraLecturerId: null,
+                                },
+                                {
+                                    enterGradeLecturerId: null,
+                                },
+                            ],
+                        }
+                      : filterStatus === 'DA_DUYET_PCGD'
+                        ? {
+                              approveLecturerAssignmentAt: {
+                                  not: null,
+                              },
+                          }
+                        : filterStatus === 'LMH_DA_HUY'
+                          ? {
+                                cancelled: true,
+                            }
+                          : {}),
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, trainingCourseId, fixedClassId, khoaBoMon, type]
+        [
+            filters,
+            semesterId,
+            trainingObjectTypeId,
+            trainingCourseId,
+            fixedClassId,
+            khoaBoMon,
+            type,
+            filterStatus,
+        ]
     )
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
@@ -773,23 +782,61 @@ export default function PhanCongGiangDay({
                                         phân công giảng dạy.
                                     </p>
                                 )}
-                                <Flex gap={16} className="px-2">
-                                    <p className="flex gap-1 items-center">
+                                <Flex gap={2} className="px-1">
+                                    <Button
+                                        type={
+                                            filterStatus === 'YEU_CAU_PCGD' ? 'primary' : 'link'
+                                        }
+                                        className="flex gap-1 items-center cursor-pointer px-1"
+                                        onClick={() => {
+                                            filterStatus === 'YEU_CAU_PCGD'
+                                                ? setFilterStatus(undefined)
+                                                : setFilterStatus('YEU_CAU_PCGD')
+                                        }}
+                                    >
                                         <p className="bg-slate-200 h-4 w-4 rounded" />
                                         <span>Yêu cầu PCGD</span>
-                                    </p>
-                                    <p className="flex gap-1 items-center">
+                                    </Button>
+                                    <Button
+                                        type={filterStatus === 'LMH_DA_HUY' ? 'primary' : 'link'}
+                                        className="flex gap-1 items-center cursor-pointer"
+                                        onClick={() => {
+                                            filterStatus === 'LMH_DA_HUY'
+                                                ? setFilterStatus(undefined)
+                                                : setFilterStatus('LMH_DA_HUY')
+                                        }}
+                                    >
                                         <p className="bg-red-200 h-4 w-4 rounded" />
                                         <span>LMH đã huỷ</span>
-                                    </p>
-                                    <p className="flex gap-1 items-center">
+                                    </Button>
+                                    <Button
+                                        type={
+                                            filterStatus === 'CHO_DUYET_PCGD' ? 'primary' : 'link'
+                                        }
+                                        className="flex gap-1 items-center cursor-pointer"
+                                        onClick={() => {
+                                            filterStatus === 'CHO_DUYET_PCGD'
+                                                ? setFilterStatus(undefined)
+                                                : setFilterStatus('CHO_DUYET_PCGD')
+                                        }}
+                                    >
                                         <p className="bg-yellow-200 h-4 w-4 rounded" />
                                         <span>Chờ duyệt PCGD</span>
-                                    </p>
-                                    <p className="flex gap-1 items-center">
-                                        <p className="bg-green-200 h-4 w-4 rounded" />
+                                    </Button>
+                                    <Button
+                                        type={
+                                            filterStatus === 'DA_DUYET_PCGD' ? 'primary' : 'link'
+                                        }
+                                        className="flex gap-1 items-center"
+                                        onClick={() => {
+                                            filterStatus === 'DA_DUYET_PCGD'
+                                                ? setFilterStatus(undefined)
+                                                : setFilterStatus('DA_DUYET_PCGD')
+                                        }}
+                                    >
+                                        <p className="bg-green-200 h-4 w-4 rounded " />
                                         <span>Đã duyệt PCGD</span>
-                                    </p>
+                                    </Button>
                                     {!khoaBoMon && (
                                         <p className="flex gap-1 items-center">
                                             <Checkbox
@@ -1759,11 +1806,12 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Lớp QL',
                                     align: 'center',
-                                    width: 120,
+                                    width: 100,
                                     render: (_, record) => (
                                         <p className="text-left">
-                                            {record?.fixedClasses?.map((e) => e?.code).join('\n') ||
-                                                '-'}
+                                            {record?.fixedClasses?.map((e) => (
+                                                <p>{e?.code}</p>
+                                            ))}
                                         </p>
                                     ),
                                 },
