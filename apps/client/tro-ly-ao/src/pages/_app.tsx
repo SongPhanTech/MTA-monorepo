@@ -21,6 +21,10 @@ import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
 
 dayjs.locale('vi')
+
+// Pages that require SSO authentication (using SessionProvider)
+const ADMIN_PATHS = ['/quan-tri']
+
 function App({ Component, pageProps }: AppProps) {
     const getLayout: (page: ReactNode) => ReactNode =
         (
@@ -31,6 +35,9 @@ function App({ Component, pageProps }: AppProps) {
     const [progress, setProgress] = useState(0)
     const [isClient, setIsClient] = useState(false)
     const router = useRouter()
+
+    // Check if current page requires auth
+    const requiresAuth = ADMIN_PATHS.some((path) => router.pathname.startsWith(path))
 
     useEffect(() => {
         setIsClient(true)
@@ -63,36 +70,42 @@ function App({ Component, pageProps }: AppProps) {
 
     if (!isClient) return null
 
-    return (
-        <SessionProvider session={pageProps.session}>
-            <StoreProvider store={store}>
-                <LoadingBar
-                    color={colors.common.green}
-                    waitingTime={400}
-                    progress={progress}
-                    onLoaderFinished={onRouteDone}
-                />
-                <Head>
-                    <title>Học viện kỹ thuật quân sự</title>
-                </Head>
-                <ConfigProvider theme={lightThemeCustom}>
-                    <QueryClientProvider client={queryClient}>
-                        <ZenStackHooksProvider
-                            value={{
-                                endpoint: `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/model`,
-                                fetch: fetchInstance,
-                            }}
-                        >
-                            <ReactHookModalProvider modals={modals}>
-                                {getLayout(<Component {...pageProps} />)}
-                                <Spinner />
-                            </ReactHookModalProvider>
-                        </ZenStackHooksProvider>
-                    </QueryClientProvider>
-                </ConfigProvider>
-            </StoreProvider>
-        </SessionProvider>
+    const appContent = (
+        <StoreProvider store={store}>
+            <LoadingBar
+                color={colors.common.green}
+                waitingTime={400}
+                progress={progress}
+                onLoaderFinished={onRouteDone}
+            />
+            <Head>
+                <title>Học viện kỹ thuật quân sự</title>
+            </Head>
+            <ConfigProvider theme={lightThemeCustom}>
+                <QueryClientProvider client={queryClient}>
+                    <ZenStackHooksProvider
+                        value={{
+                            endpoint: `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/model`,
+                            fetch: fetchInstance,
+                        }}
+                    >
+                        <ReactHookModalProvider modals={modals}>
+                            {getLayout(<Component {...pageProps} />)}
+                            <Spinner />
+                        </ReactHookModalProvider>
+                    </ZenStackHooksProvider>
+                </QueryClientProvider>
+            </ConfigProvider>
+        </StoreProvider>
     )
+
+    // Only wrap with SessionProvider for admin pages that need SSO
+    if (requiresAuth) {
+        return <SessionProvider session={pageProps.session}>{appContent}</SessionProvider>
+    }
+
+    // Public pages (chatbot) - no SessionProvider, no SSO check
+    return appContent
 }
 
 export default App
