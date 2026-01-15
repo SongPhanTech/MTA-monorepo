@@ -1,6 +1,7 @@
 import { FilterFilled } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { ColumnTypeProps, FilterProps } from '@constants/type'
+import { normalizeVietnamese } from '@workspace/libs/utils'
 import { cn } from '@workspace/ui/lib/utils'
 import {
     AutoComplete,
@@ -147,15 +148,6 @@ const Table = <T extends AnyObject>({
         }
 
         return result
-    }
-
-    function normalizeVietnamese(str: string): string {
-        return str
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd')
-            .replace(/Đ/g, 'D')
-            .toLowerCase()
     }
 
     function searchVietnamese(

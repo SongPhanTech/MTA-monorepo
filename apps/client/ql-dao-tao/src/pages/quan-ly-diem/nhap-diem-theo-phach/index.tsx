@@ -90,7 +90,7 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
             {
                 label: 'Phòng thi',
                 key: '11',
-                children: <PhongThi  setActiveKey={setActiveKey} />,
+                children: <PhongThi setActiveKey={setActiveKey} />,
                 disabled: !examId,
             },
         ]

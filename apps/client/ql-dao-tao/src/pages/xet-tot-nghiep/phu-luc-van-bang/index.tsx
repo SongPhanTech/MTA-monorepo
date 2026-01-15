@@ -1,19 +1,20 @@
+import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, DatePicker, Form, Input, TreeSelect, Upload } from 'antd'
-import type React from 'react'
-import { useState } from 'react'
+import { buildOrgTree } from '@lib/utils'
 import {
     useFindManyDM_DonVi,
+    useFindManyFixedClass,
     useFindManyThesisSession,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import FormItem from '@components/commons/form-item'
-import { useFindManyFixedClass } from '@workspace/db/hooks'
-import { buildOrgTree } from '@lib/utils'
-import dayjs from 'dayjs'
+import { fuzzyMatch } from '@workspace/libs/utils'
 import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
+import { Button, DatePicker, Form, Input, TreeSelect, Upload } from 'antd'
+import dayjs from 'dayjs'
+import type React from 'react'
+import { useState } from 'react'
 
 export type StudentGradeSystemForm = {
     trainingObjectTypeId: string[]
@@ -203,6 +204,9 @@ export default function StudentGradeSystem() {
                                     allowClear
                                     showSearch
                                     treeDefaultExpandAll
+                                    filterTreeNode={(input, treeNode) =>
+                                        fuzzyMatch(input, treeNode.label?.toString() || '')
+                                    }
                                 />
                             </FormItem>
                         </div>

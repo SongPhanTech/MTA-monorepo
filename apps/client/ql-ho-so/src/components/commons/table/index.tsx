@@ -2,6 +2,7 @@ import { FilterFilled } from '@ant-design/icons'
 import type { ColumnTypeProps, FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { cn } from '@lib/utils'
+import { normalizeVietnamese } from '@workspace/libs/utils'
 import {
     AutoComplete,
     Button,
@@ -130,15 +131,6 @@ const Table = <T extends Record<string, unknown>>({
         }
 
         return result
-    }
-
-    function normalizeVietnamese(str: string): string {
-        return str
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd')
-            .replace(/Đ/g, 'D')
-            .toLowerCase()
     }
 
     function searchVietnamese(

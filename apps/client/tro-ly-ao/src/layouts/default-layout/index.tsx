@@ -48,7 +48,7 @@ const DefaultLayout = ({
 
     // SSO Authentication check - sử dụng hook riêng
     const { status, signIn } = useSSOSession()
-    
+
     // Ref để đảm bảo chỉ redirect 1 lần
     const hasRedirected = useRef(false)
 

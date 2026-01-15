@@ -133,7 +133,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                                     diemPhongThiStore.setState({ selectedExamListId: undefined })
                                     debouncedRefetch()
                                 },
-                                onDoubleClick:()=>{
+                                onDoubleClick: () => {
                                     setActiveKey('11')
                                 },
                                 className: cn(examId === record.id ? 'bg-orange-200' : ''),
