@@ -1674,92 +1674,11 @@ export default function PhanCongGiangDay({
                                 }
                             }}
                             columns={[
-                                // {
-                                //     title: 'Duyệt',
-                                //     align: 'center',
-                                //     width: 80,
-                                //     type: 'select',
-                                //     options: [
-                                //         { value: true, label: 'Đã duyệt' },
-                                //         { value: false, label: 'Chưa duyệt' },
-                                //     ],
-                                //     render: (_, record) =>
-                                //         record?.approveLecturerAssignmentAt ? (
-                                //             <Checkbox checked />
-                                //         ) : (
-                                //             <FormItem
-                                //                 form={form}
-                                //                 name={[
-                                //                     'subjectClass',
-                                //                     record.id,
-                                //                     'approveLecturerAssignmentAt',
-                                //                 ]}
-                                //                 valuePropName="checked"
-                                //             >
-                                //                 <Checkbox
-                                //                     disabled={
-                                //                         subjectClassForm?.[record.id]?.cancelled ||
-                                //                         khoaBoMon ||
-                                //                         !record?.submitLecturerAssignmentAt
-                                //                     }
-                                //                 />
-                                //             </FormItem>
-                                //         ),
-                                // },
-                                // {
-                                //     title: <Tooltip title="Phân công giảng dạy">PCGD</Tooltip>,
-                                //     align: 'center',
-                                //     width: 80,
-                                //     type: 'select',
-                                //     options: [
-                                //         { value: true, label: 'Đã phân công giảng dạy' },
-                                //         { value: false, label: 'Chưa phân công giảng dạy' },
-                                //     ],
-                                //     render: (_, record) =>
-                                //         !!record?.approveLecturerAssignmentAt ||
-                                //         !!record?.submitLecturerAssignmentAt ? (
-                                //             <Checkbox checked />
-                                //         ) : (
-                                //             <>
-                                //                 <FormItem
-                                //                     form={form}
-                                //                     name={['subjectClass', record.id, 'isEdit']}
-                                //                     hidden
-                                //                 />
-                                //                 <FormItem
-                                //                     form={form}
-                                //                     name={[
-                                //                         'subjectClass',
-                                //                         record.id,
-                                //                         'submitLecturerAssignmentAt',
-                                //                     ]}
-                                //                     valuePropName="checked"
-                                //                 >
-                                //                     <Checkbox
-                                //                         disabled={
-                                //                             subjectClassForm?.[record.id]
-                                //                                 ?.cancelled ||
-                                //                             !khoaBoMon ||
-                                //                             !subjectClassForm?.[record.id]
-                                //                                 ?.lecturerId ||
-                                //                             !subjectClassForm?.[record.id]
-                                //                                 ?.extraLecturerId ||
-                                //                             !subjectClassForm?.[record.id]
-                                //                                 ?.enterGradeLecturerId ||
-                                //                             (!!record.lecturerAssignmentDeadline &&
-                                //                                 dayjs(
-                                //                                     record.lecturerAssignmentDeadline
-                                //                                 ).isBefore(dayjs().startOf('day')))
-                                //                         }
-                                //                     />
-                                //                 </FormItem>
-                                //             </>
-                                //         ),
-                                // },
                                 {
                                     title: 'Hạn PCGD',
                                     width: 100,
                                     align: 'center',
+                                    distinctFilters: [],
                                     render: (_, record) =>
                                         canXemTatCa && !khoaBoMon ? (
                                             <FormItem
@@ -1800,6 +1719,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Mã LMH',
                                     width: 90,
+                                    dataIndex: 'code',
                                     align: 'center',
                                     type: 'input',
                                     render: (_, record) => record?.code || '',
@@ -1807,6 +1727,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Tên môn',
                                     align: 'center',
+                                    dataIndex: ['subject', 'name'],
                                     type: 'input',
                                     onCell: (record) => ({
                                         rowSpan: record.rowSpan,
@@ -1820,7 +1741,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Kíp',
                                     align: 'center',
-                                    type: 'select',
+                                    // type: 'select',
                                     width: 60,
                                     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
                                         ([key, value_]) => {
@@ -1868,6 +1789,7 @@ export default function PhanCongGiangDay({
                                     title: 'Giảng viên 1',
                                     align: 'center',
                                     type: 'input',
+                                    dataIndex: 'mainLecturer',
                                     render: (__, record) =>
                                         // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
@@ -1904,6 +1826,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Giảng viên 2',
                                     align: 'center',
+                                    dataIndex: 'extraLecturer',
                                     type: 'input',
                                     render: (__, record) =>
                                         // khoaBoMon &&
@@ -1944,7 +1867,9 @@ export default function PhanCongGiangDay({
                                 },
                                 {
                                     title: 'GV nhập điểm',
+                                    dataIndex: 'enterGradeLecturer',
                                     align: 'center',
+                                    type: 'input',
                                     render: (__, record) =>
                                         // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
