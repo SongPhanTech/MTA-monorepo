@@ -624,7 +624,8 @@ enum SubjectVersionType {
   Normal // Học phần lý thuyết
   Internship // Thực tập
   Research // Chuyên đề nghiên cứu
-  Project // Luận văn/Đồ án
+  Project // Đồ án
+  Thesis // Luận văn/đề án
   Practice // Thí nghiệm/Thực hành
   Graduation // Thi tốt nghiệp
 
