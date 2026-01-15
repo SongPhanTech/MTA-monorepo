@@ -20,6 +20,11 @@ const generateSessionName = (): string => {
     return `${getBrowserName()} - ${dateStr} ${timeStr}`
 }
 
+/**
+ * Hook quản lý local user session (chatbot session)
+ * KHÔNG liên quan đến SSO authentication
+ * Chỉ quản lý sessionId để lưu conversation history
+ */
 export const useUserSession = () => {
     const [sessionId, setSessionId] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
