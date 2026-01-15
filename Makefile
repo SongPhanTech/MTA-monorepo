@@ -110,6 +110,15 @@ package-cdn:
 	done
 	@zip -r -q cdn.zip cdn
 
+deploy-cdn:
+	sshpass -p "Bancntt@2025" scp -O cdn.zip app@192.168.3.9:~/Documents/app/
+	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/app/ && \
+	docker compose -f dao-tao.yml down; \
+	rm -rf dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/; \
+	unzip -q cdn.zip && \
+	mv cdn/* . && \
+	docker compose -f dao-tao.yml up -d"
+
 # Pattern rule: all-<name> = build + push + deploy
 all-%: build-%
 	@if echo "$(BE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
