@@ -4,7 +4,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import type { $Enums, ClassRegisterSession, TrainingCourse } from '@workspace/db/client'
+import { $Enums, ClassRegisterSession, TrainingCourse } from '@workspace/db/client'
 import {
     useCreateClassRegisterSession,
     useDeleteManyClassRegisterSessionCredit,
@@ -21,19 +21,24 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutClassRegisterSession = ClassRegisterSession & {
     trainingCourses: string[]
-    minCredit: number | null
-    maxCredit: number | null
-    creditLimit: Array<{
-        baseScore: $Enums.AcademicRankingBaseType
-        base10Min: number | null
-        base10Max: number | null
-        base4Min: number | null
-        base4Max: number | null
-        minCredit: number | null
-        maxCredit: number | null
-    }>
+    creditLimit: Record<
+        string,
+        {
+            baseScore: $Enums.AcademicRankingBaseType
+            base10Min: number | null
+            base10Max: number | null
+            base4Min: number | null
+            base4Max: number | null
+            minCredit: number | null
+            maxCredit: number | null
+        }
+    >
 }
 dayjs.locale('vi')
+
+const getClassificationKey = (baseMin: number | null, baseMax: number | null) => {
+    return `${baseMin ?? 0}-${baseMax ?? 0}`
+}
 
 const PutClassRegisterSession = () => {
     const [form] = Form.useForm<PutClassRegisterSession>()
@@ -49,9 +54,41 @@ const PutClassRegisterSession = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const { id: semesterId } = useSemesterStore()
     const { data: initialValue } = useFindUniqueClassRegisterSession(
-        { where: { id }, include: { trainingCourses: true } },
+        { where: { id }, include: { trainingCourses: true, creditLimit: true } },
         { enabled: !!id }
     )
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
+        where: {
+            active: true,
+            trainingObjectTypeId,
+        },
+        include: {
+            academicRankingConvert: {
+                select: {
+                    classification: true,
+                    base10Max: true,
+                    base10Min: true,
+                    base4Max: true,
+                    base4Min: true,
+                    baseScore: true,
+                },
+                where: {
+                    context: 'STUDYING',
+                },
+                orderBy: {
+                    rankOrder: 'asc',
+                },
+            },
+        },
+        orderBy: { createdAt: 'desc' },
+    })
+
+    const tableData = trainingCourses
+        .flatMap((e) => e.academicRankingConvert)
+        .uniqueByKey('classification')
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
@@ -60,10 +97,51 @@ const PutClassRegisterSession = () => {
                 trainingCourses: initialValue?.trainingCourses?.map((item) => item.id),
                 startDate: dayjs(initialValue?.startDate),
                 endDate: dayjs(initialValue?.endDate),
+                creditLimit: {
+                    ...initialValue.creditLimit.reduce(
+                        (pre, cur) => ({
+                            ...pre,
+                            [getClassificationKey(
+                                cur.baseScore === 'Base10' ? cur.base10Min : cur.base4Min,
+                                cur.baseScore === 'Base4' ? cur.base10Max : cur.base4Max
+                            )]: {
+                                minCredit: cur.minCredit,
+                                maxCredit: cur.maxCredit,
+                                baseScore: cur.baseScore,
+                                base10Min: cur.base10Min,
+                                base10Max: cur.base10Max,
+                                base4Min: cur.base4Min,
+                                base4Max: cur.base4Max,
+                            },
+                        }),
+                        {}
+                    ),
+                },
             })
         } else {
             form.setFieldsValue({
                 active: true,
+                tuitionPerCredit: 350000,
+                creditLimit: {
+                    ...tableData.reduce(
+                        (pre, cur) => ({
+                            ...pre,
+                            [getClassificationKey(
+                                cur.baseScore === 'Base10' ? cur.base10Min : cur.base4Min,
+                                cur.baseScore === 'Base4' ? cur.base10Max : cur.base4Max
+                            )]: {
+                                minCredit: 0,
+                                maxCredit: 25,
+                                baseScore: cur.baseScore,
+                                base10Min: cur.base10Min,
+                                base10Max: cur.base10Max,
+                                base4Min: cur.base4Min,
+                                base4Max: cur.base4Max,
+                            },
+                        }),
+                        {}
+                    ),
+                },
             })
         }
     }, [initialValue])
@@ -74,7 +152,6 @@ const PutClassRegisterSession = () => {
         useDeleteManyClassRegisterSessionCredit()
     async function onOk(output?: PutClassRegisterSession) {
         if (!output) return
-
         try {
             showSpinner()
             const data = {
@@ -101,10 +178,9 @@ const PutClassRegisterSession = () => {
                                     : [],
                         },
                         creditLimit: {
-                            // create: {
-                            //     minCredit: output.minCredit || 0,
-                            //     maxCredit: output.maxCredit || 0,
-                            // },
+                            create: Object.values(output.creditLimit).map((item) => ({
+                                ...item,
+                            })),
                         },
                     },
                     where: { id },
@@ -121,10 +197,9 @@ const PutClassRegisterSession = () => {
                                     : [],
                         },
                         creditLimit: {
-                            // create: {
-                            //     minCredit: output.minCredit || 0,
-                            //     maxCredit: output.maxCredit || 0,
-                            // },
+                            create: Object.values(output.creditLimit).map((item) => ({
+                                ...item,
+                            })),
                         },
                     },
                 })
@@ -145,33 +220,6 @@ const PutClassRegisterSession = () => {
         }
     }
 
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
-        where: {
-            active: true,
-            trainingObjectTypeId,
-        },
-        include: {
-            academicRankingConvert: {
-                select: {
-                    classification: true,
-                },
-                orderBy: {
-                    rankOrder: 'asc',
-                },
-            },
-        },
-        orderBy: { createdAt: 'desc' },
-    })
-    const tableData = Object.keys(
-        Object.groupBy(
-            trainingCourses.flatMap((e) => e.academicRankingConvert),
-            (item) => item.classification
-        )
-    ).map((key, index) => ({
-        id: index,
-        classification: key,
-    }))
     return (
         <PutFormModal
             open={isOpen}
@@ -181,14 +229,6 @@ const PutClassRegisterSession = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa đợt đăng ký học' : 'Thêm mới đợt đăng ký học'}
             className="w-[50vw]"
-            formProps={{
-                initialValues: {
-                    minCredit: 0,
-                    maxCredit: 25,
-                    tuitionPerCredit: 350000,
-                    active: true,
-                },
-            }}
         >
             <Col span={12}>
                 <FormItem form={form} name="code" label="Mã đợt đăng ký" required>
@@ -266,13 +306,11 @@ const PutClassRegisterSession = () => {
                     />
                 </FormItem>
             </Col>
-
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
-
             <Col span={24}>
                 <FormItem hidden form={form} name="creditLimit" />
                 <span>Giới hạn đăng ký tín chỉ</span>
@@ -285,14 +323,45 @@ const PutClassRegisterSession = () => {
                             dataIndex: 'classification',
                         },
                         {
+                            title: 'Từ điểm',
+                            align: 'center',
+                            render: (_, record) =>
+                                record?.baseScore === $Enums.AcademicRankingBaseType.Base10
+                                    ? record?.base10Min
+                                    : record?.base4Min,
+                        },
+                        {
+                            title: 'Đến điểm',
+                            align: 'center',
+                            render: (_, record) =>
+                                record?.baseScore === $Enums.AcademicRankingBaseType.Base10
+                                    ? record?.base10Max
+                                    : record?.base4Max,
+                        },
+                        {
                             title: 'TC Tối thiểu',
                             align: 'center',
-                            render: (_, __, index) => (
-                                <FormItem form={form} required name={[index, 'minCredit']}>
+                            render: (_, record) => (
+                                <FormItem
+                                    form={form}
+                                    required
+                                    name={[
+                                        'creditLimit',
+                                        getClassificationKey(
+                                            record.baseScore === 'Base10'
+                                                ? record.base10Min
+                                                : record.base4Min,
+                                            record.baseScore === 'Base4'
+                                                ? record.base10Max
+                                                : record.base4Max
+                                        ),
+                                        'minCredit',
+                                    ]}
+                                >
                                     <InputNumber
                                         className="w-full"
                                         min={0}
-                                        defaultValue={0}
+                                        // defaultValue={0}
                                         placeholder="Nhập tín chỉ tối thiểu"
                                     />
                                 </FormItem>
@@ -301,12 +370,27 @@ const PutClassRegisterSession = () => {
                         {
                             title: 'TC Tối đa',
                             align: 'center',
-                            render: (_, __, index) => (
-                                <FormItem form={form} required name={[index, 'maxCredit']}>
+                            render: (_, record) => (
+                                <FormItem
+                                    form={form}
+                                    required
+                                    name={[
+                                        'creditLimit',
+                                        getClassificationKey(
+                                            record.baseScore === 'Base10'
+                                                ? record.base10Min
+                                                : record.base4Min,
+                                            record.baseScore === 'Base4'
+                                                ? record.base10Max
+                                                : record.base4Max
+                                        ),
+                                        'maxCredit',
+                                    ]}
+                                >
                                     <InputNumber
                                         className="w-full"
                                         min={0}
-                                        defaultValue={25}
+                                        // defaultValue={25}
                                         placeholder="Nhập tín chỉ tối đa"
                                     />
                                 </FormItem>
