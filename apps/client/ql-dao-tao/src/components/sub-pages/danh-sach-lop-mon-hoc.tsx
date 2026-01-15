@@ -391,6 +391,7 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
                             },
                             {
                                 title: 'Mã lớp',
+                                dataIndex: 'code',
                                 align: 'center',
                                 width: 120,
                                 type: 'input',

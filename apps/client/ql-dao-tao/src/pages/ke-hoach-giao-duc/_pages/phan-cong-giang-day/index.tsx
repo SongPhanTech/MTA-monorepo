@@ -162,11 +162,9 @@ export default function PhanCongGiangDay({
                       }
                     : {}),
                 ...(filters.lecturerId?.length === 1
-                    ? {
-                          ...(filters.lecturerId[0]
-                              ? { lecturerId: { not: null } }
-                              : { lecturerId: null }),
-                      }
+                    ? filters.lecturerId[0]
+                        ? { lecturerId: { not: null } }
+                        : { lecturerId: null }
                     : {}),
                 ...(filters.mainLecturer
                     ? {
