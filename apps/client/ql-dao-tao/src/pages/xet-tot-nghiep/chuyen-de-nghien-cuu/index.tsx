@@ -330,52 +330,61 @@ export default function ChuyenDeNghienCuu() {
     }
     const exportToExcel = async () => {
         if (studentSubjectScoreData.length === 0) {
-            return message.warning('Không có dữ liệu để xuất Excel!');
+            return message.warning('Không có dữ liệu để xuất Excel!')
         }
-    
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Danh sách chuyên đề');
-        
-        const refSheetName = 'LecturerData';
-        const refSheet = workbook.addWorksheet(refSheetName);
-        refSheet.state = 'veryHidden';
-    
+
+        const workbook = new ExcelJS.Workbook()
+        const worksheet = workbook.addWorksheet('Danh sách chuyên đề')
+
+        const refSheetName = 'LecturerData'
+        const refSheet = workbook.addWorksheet(refSheetName)
+        refSheet.state = 'veryHidden'
+
         // Đổ dữ liệu Giảng viên vào Sheet tham chiếu
         lecturerData.forEach((l, index) => {
-            const fullName = `${l.userProfile?.lastName || ''} ${l.userProfile?.firstName || ''}`.trim();
-            refSheet.getCell(index + 1, 1).value = fullName; // Cột A: Tên
-            refSheet.getCell(index + 1, 2).value = l.id;     // Cột B: ID
-        });
-    
+            const fullName =
+                `${l.userProfile?.lastName || ''} ${l.userProfile?.firstName || ''}`.trim()
+            refSheet.getCell(index + 1, 1).value = fullName // Cột A: Tên
+            refSheet.getCell(index + 1, 2).value = l.id // Cột B: ID
+        })
+
         // Xác định dải ô tham chiếu (Quan trọng: Phải có dấu nháy đơn bao quanh tên Sheet)
-        const lecturerCount = lecturerData.length || 1;
-        const nameRange = `'${refSheetName}'!$A$1:$A$${lecturerCount}`;
-        const tableRange = `'${refSheetName}'!$A$1:$B$${lecturerCount}`;
-    
+        const lecturerCount = lecturerData.length || 1
+        const nameRange = `'${refSheetName}'!$A$1:$A$${lecturerCount}`
+        const tableRange = `'${refSheetName}'!$A$1:$B$${lecturerCount}`
+
         // 2. PHẦN ĐẦU SHEET CHÍNH: TIÊU ĐỀ VÀ THÔNG TIN TÌM KIẾM
-        worksheet.mergeCells('A1:Q1');
-        const titleCell = worksheet.getCell('A1');
-        titleCell.value = 'DANH SÁCH CHUYÊN ĐỀ NGHIÊN CỨU';
-        titleCell.font = { size: 16, bold: true };
-        titleCell.alignment = { horizontal: 'center' };
-    
-        const getNameById = (id: string | undefined, data: any[]) => 
-            data.find(item => item.id === id)?.name || 'Tất cả';
-    
+        worksheet.mergeCells('A1:Q1')
+        const titleCell = worksheet.getCell('A1')
+        titleCell.value = 'DANH SÁCH CHUYÊN ĐỀ NGHIÊN CỨU'
+        titleCell.font = { size: 16, bold: true }
+        titleCell.alignment = { horizontal: 'center' }
+
+        const getNameById = (id: string | undefined, data: any[]) =>
+            data.find((item) => item.id === id)?.name || 'Tất cả'
+
         const searchRows = [
-            ['trainingObjectTypeId',`Đối tượng đào tạo: ${getNameById(searchParams.trainingObjectTypeId, trainingObjectTypeData)}`],
-            ['trainingCourseId',`Khóa học: ${getNameById(searchParams.trainingCourseId, trainingCourseData)}`],
-            ['semesterId',`Học kỳ: ${getNameById(searchParams.semesterId, semesterData)}`],
-            ['organizationId',`Khoa quản lý: ${organizationData.find(o => o.Id === searchParams.organizationId)?.sTen || 'Tất cả'}`],
-            ['reportDate', 
-                 `Ngày xuất file: ${dayjs().format('DD/MM/YYYY HH:mm')}`],
-            []
-        ];
-        searchRows.forEach(val => {
+            [
+                'trainingObjectTypeId',
+                `Đối tượng đào tạo: ${getNameById(searchParams.trainingObjectTypeId, trainingObjectTypeData)}`,
+            ],
+            [
+                'trainingCourseId',
+                `Khóa học: ${getNameById(searchParams.trainingCourseId, trainingCourseData)}`,
+            ],
+            ['semesterId', `Học kỳ: ${getNameById(searchParams.semesterId, semesterData)}`],
+            [
+                'organizationId',
+                `Khoa quản lý: ${organizationData.find((o) => o.Id === searchParams.organizationId)?.sTen || 'Tất cả'}`,
+            ],
+            ['reportDate', `Ngày xuất file: ${dayjs().format('DD/MM/YYYY HH:mm')}`],
+            [],
+        ]
+        searchRows.forEach((val) => {
             const row = worksheet.addRow(val)
             row.getCell(1).font = { bold: true }
         })
-    
+
         const columns = [
             { header: 'ID_RECORD', key: 'recordId', width: 0, hidden: true },
             { header: 'Hạn nhập', key: 'deadline', width: 15 },
@@ -394,23 +403,23 @@ export default function ChuyenDeNghienCuu() {
             { header: 'ID_GV2', key: 'idGv2', width: 0, hidden: true },
             { header: 'Thời gian báo cáo', key: 'reportDate', width: 15 },
             { header: 'Điểm', key: 'score', width: 10 },
-        ];
-    
-        const headerRowNumber = worksheet.lastRow ? worksheet.lastRow.number + 1 : 1;
-        const headerRow = worksheet.getRow(headerRowNumber);
+        ]
+
+        const headerRowNumber = worksheet.lastRow ? worksheet.lastRow.number + 1 : 1
+        const headerRow = worksheet.getRow(headerRowNumber)
         columns.forEach((col, idx) => {
-            headerRow.getCell(idx + 1).value = col.header;
-            worksheet.getColumn(idx + 1).key = col.key;
-            worksheet.getColumn(idx + 1).width = col.width;
-            if (col.hidden) worksheet.getColumn(idx + 1).hidden = true;
-        });
-        headerRow.font = { bold: true };
-        headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
-    
+            headerRow.getCell(idx + 1).value = col.header
+            worksheet.getColumn(idx + 1).key = col.key
+            worksheet.getColumn(idx + 1).width = col.width
+            if (col.hidden) worksheet.getColumn(idx + 1).hidden = true
+        })
+        headerRow.font = { bold: true }
+        headerRow.alignment = { horizontal: 'center', vertical: 'middle' }
+
         studentSubjectScoreData.forEach((record, index) => {
-            const currentRowNum = headerRowNumber + index + 1;
-            const topic = record.studentResearchTopic;
-    
+            const currentRowNum = headerRowNumber + index + 1
+            const topic = record.studentResearchTopic
+
             const dataRow = worksheet.addRow({
                 recordId: record.id,
                 deadline: topic?.deadline ? dayjs(topic.deadline).format('DD/MM/YYYY') : '',
@@ -418,156 +427,163 @@ export default function ChuyenDeNghienCuu() {
                 course: record?.student?.fixedClass?.trainingCourse?.name || '',
                 semester: record?.subjectClass?.semester?.name || '',
                 studentCode: record?.student?.userProfile?.code || '',
-                studentName: `${record?.student?.userProfile?.lastName || ''} ${record?.student?.userProfile?.firstName || ''}`.trim(),
+                studentName:
+                    `${record?.student?.userProfile?.lastName || ''} ${record?.student?.userProfile?.firstName || ''}`.trim(),
                 subjectClass: record?.subjectClass?.name || '',
                 credits: record?.subjectVersion?.credit || 0,
                 topicName: topic?.name || '',
                 mainContent: topic?.mainContent || '',
-                gvhd1: topic?.supervisor ? `${topic.supervisor.userProfile?.lastName} ${topic.supervisor.userProfile?.firstName}`.trim() : '',
-                gvhd2: topic?.coSupervisor ? `${topic.coSupervisor.userProfile?.lastName} ${topic.coSupervisor.userProfile?.firstName}`.trim() : '',
+                gvhd1: topic?.supervisor
+                    ? `${topic.supervisor.userProfile?.lastName} ${topic.supervisor.userProfile?.firstName}`.trim()
+                    : '',
+                gvhd2: topic?.coSupervisor
+                    ? `${topic.coSupervisor.userProfile?.lastName} ${topic.coSupervisor.userProfile?.firstName}`.trim()
+                    : '',
                 reportDate: topic?.reportDate ? dayjs(topic.reportDate).format('DD/MM/YYYY') : '',
                 score: record.finalScore || '',
-            });
-    
+            })
+
             const validation: ExcelJS.DataValidation = {
                 type: 'list',
                 allowBlank: true,
                 formulae: [nameRange],
                 showErrorMessage: true,
                 errorTitle: 'Dữ liệu không hợp lệ',
-                error: 'Vui lòng chọn giảng viên từ danh sách.'
-            };
-    
-            dataRow.getCell('gvhd1').dataValidation = validation;
-            dataRow.getCell('gvhd2').dataValidation = validation;
-    
-            dataRow.getCell('idGv1').value = { 
-                formula: `=IF(L${currentRowNum}<>"", VLOOKUP(L${currentRowNum}, ${tableRange}, 2, FALSE), "")` 
-            };
-            dataRow.getCell('idGv2').value = { 
-                formula: `=IF(M${currentRowNum}<>"", VLOOKUP(M${currentRowNum}, ${tableRange}, 2, FALSE), "")` 
-            };
-        });
-    
-        const buffer = await workbook.xlsx.writeBuffer();
-        saveAs(new Blob([buffer]), `Danh_sach_Chuyen_de_${dayjs().format('DDMMYYYY_HHmm')}.xlsx`);
-        message.success('Xuất file thành công!');
-    };
-    const getCellValue = (cell: ExcelJS.Cell) => {
-        const val = cell.value;
-    
-        if (val === null || val === undefined) return null;
-    
-        if (typeof val === 'object' && 'result' in val) {
-            const result = val.result;
-            if (result === null || result === undefined || result === "") return null;
-            return result.toString().trim();
-        }
-    
-        const strVal = val.toString().trim();
-        return strVal !== "" ? strVal : null;
-    };
-    const importExcel = async (file: File) => {
-        const loading = message.loading('Đang xử lý file Excel...', 0);
-    try {
-        const workbook = new ExcelJS.Workbook();
-        const buffer = await file.arrayBuffer();
-        await workbook.xlsx.load(buffer);
-        
-        const worksheet = workbook.getWorksheet('Danh sách chuyên đề');
-        if (!worksheet) {
-            return message.error('Không tìm thấy Sheet "Danh sách chuyên đề" trong file!');
-        }
-
-        const dataToUpdate: any[] = [];
-        
-        let startRow = 1;
-        worksheet.eachRow((row, rowNumber) => {
-            if (row.getCell(1).value === 'ID_RECORD') {
-                startRow = rowNumber + 1;
+                error: 'Vui lòng chọn giảng viên từ danh sách.',
             }
-        });
 
-        worksheet.eachRow((row, rowNumber) => {
-            if (rowNumber < startRow) return
+            dataRow.getCell('gvhd1').dataValidation = validation
+            dataRow.getCell('gvhd2').dataValidation = validation
 
-            const studentSubjectScoreId = getCellValue(row.getCell(1))
-            if (!studentSubjectScoreId) return
+            dataRow.getCell('idGv1').value = {
+                formula: `=IF(L${currentRowNum}<>"", VLOOKUP(L${currentRowNum}, ${tableRange}, 2, FALSE), "")`,
+            }
+            dataRow.getCell('idGv2').value = {
+                formula: `=IF(M${currentRowNum}<>"", VLOOKUP(M${currentRowNum}, ${tableRange}, 2, FALSE), "")`,
+            }
+        })
 
-            const supervisorId = getCellValue(row.getCell(14))
-            const coSupervisorId = getCellValue(row.getCell(15))
-
-            const name = getCellValue(row.getCell(10))
-            const mainContent = getCellValue(row.getCell(11))
-
-            const deadlineVal = row.getCell(2).value
-            const reportDateVal = row.getCell(16).value
-
-            const deadline = deadlineVal instanceof Date ? deadlineVal.toISOString() : null
-            const reportDate = reportDateVal instanceof Date ? reportDateVal.toISOString() : null
-
-            dataToUpdate.push({
-                model: 'StudentResearchTopic',
-                operation: 'upsert',
-                data: {
-                    where: { studentSubjectScoreId: studentSubjectScoreId },
-                    update: {
-                        name,
-                        mainContent,
-                        supervisorId,
-                        coSupervisorId,
-                        deadline,
-                        reportDate,
-                    },
-                    create: {
-                        studentSubjectScoreId,
-                        name,
-                        mainContent,
-                        supervisorId,
-                        coSupervisorId,
-                        deadline,
-                        reportDate,
-                    },
-                },
-            })
-        });
-
-        if (dataToUpdate.length === 0) {
-            return message.warning('Không tìm thấy dữ liệu hợp lệ trong file.');
-        }
-        const finalData = dataToUpdate.map(item => {
-            const fixValue = (val: any) => val === "[object Object]" ? null : val;
-        
-            return {
-                ...item,
-                data: {
-                    ...item.data,
-                    update: {
-                        ...item.data.update,
-                        supervisorId: fixValue(item.data.update.supervisorId),
-                        coSupervisorId: fixValue(item.data.update.coSupervisorId),
-                    },
-                    create: {
-                        ...item.data.create,
-                        supervisorId: fixValue(item.data.create.supervisorId),
-                        coSupervisorId: fixValue(item.data.create.coSupervisorId),
-                    }
-                }
-            };
-        });
-
-        const res = await sqlTransaction(finalData);
-        console.log('res', res)
-        
-        message.success(`Cập nhật thành công ${finalData.length} bản ghi!`);
-        refetchStudentSubjectScore(); 
-
-    } catch (error) {
-        console.error('Import Excel Error:', error);
-        message.error('Lỗi khi đọc file hoặc cập nhật dữ liệu. Vui lòng kiểm tra lại định dạng file!');
-    } finally {
-        loading();
+        const buffer = await workbook.xlsx.writeBuffer()
+        saveAs(new Blob([buffer]), `Danh_sach_Chuyen_de_${dayjs().format('DDMMYYYY_HHmm')}.xlsx`)
+        message.success('Xuất file thành công!')
     }
+    const getCellValue = (cell: ExcelJS.Cell) => {
+        const val = cell.value
+
+        if (val === null || val === undefined) return null
+
+        if (typeof val === 'object' && 'result' in val) {
+            const result = val.result
+            if (result === null || result === undefined || result === '') return null
+            return result.toString().trim()
+        }
+
+        const strVal = val.toString().trim()
+        return strVal !== '' ? strVal : null
+    }
+    const importExcel = async (file: File) => {
+        const loading = message.loading('Đang xử lý file Excel...', 0)
+        try {
+            const workbook = new ExcelJS.Workbook()
+            const buffer = await file.arrayBuffer()
+            await workbook.xlsx.load(buffer)
+
+            const worksheet = workbook.getWorksheet('Danh sách chuyên đề')
+            if (!worksheet) {
+                return message.error('Không tìm thấy Sheet "Danh sách chuyên đề" trong file!')
+            }
+
+            const dataToUpdate: any[] = []
+
+            let startRow = 1
+            worksheet.eachRow((row, rowNumber) => {
+                if (row.getCell(1).value === 'ID_RECORD') {
+                    startRow = rowNumber + 1
+                }
+            })
+
+            worksheet.eachRow((row, rowNumber) => {
+                if (rowNumber < startRow) return
+
+                const studentSubjectScoreId = getCellValue(row.getCell(1))
+                if (!studentSubjectScoreId) return
+
+                const supervisorId = getCellValue(row.getCell(14))
+                const coSupervisorId = getCellValue(row.getCell(15))
+
+                const name = getCellValue(row.getCell(10))
+                const mainContent = getCellValue(row.getCell(11))
+
+                const deadlineVal = row.getCell(2).value
+                const reportDateVal = row.getCell(16).value
+
+                const deadline = deadlineVal instanceof Date ? deadlineVal.toISOString() : null
+                const reportDate =
+                    reportDateVal instanceof Date ? reportDateVal.toISOString() : null
+
+                dataToUpdate.push({
+                    model: 'StudentResearchTopic',
+                    operation: 'upsert',
+                    data: {
+                        where: { studentSubjectScoreId: studentSubjectScoreId },
+                        update: {
+                            name,
+                            mainContent,
+                            supervisorId,
+                            coSupervisorId,
+                            deadline,
+                            reportDate,
+                        },
+                        create: {
+                            studentSubjectScoreId,
+                            name,
+                            mainContent,
+                            supervisorId,
+                            coSupervisorId,
+                            deadline,
+                            reportDate,
+                        },
+                    },
+                })
+            })
+
+            if (dataToUpdate.length === 0) {
+                return message.warning('Không tìm thấy dữ liệu hợp lệ trong file.')
+            }
+            const finalData = dataToUpdate.map((item) => {
+                const fixValue = (val: any) => (val === '[object Object]' ? null : val)
+
+                return {
+                    ...item,
+                    data: {
+                        ...item.data,
+                        update: {
+                            ...item.data.update,
+                            supervisorId: fixValue(item.data.update.supervisorId),
+                            coSupervisorId: fixValue(item.data.update.coSupervisorId),
+                        },
+                        create: {
+                            ...item.data.create,
+                            supervisorId: fixValue(item.data.create.supervisorId),
+                            coSupervisorId: fixValue(item.data.create.coSupervisorId),
+                        },
+                    },
+                }
+            })
+
+            const res = await sqlTransaction(finalData)
+            console.log('res', res)
+
+            message.success(`Cập nhật thành công ${finalData.length} bản ghi!`)
+            refetchStudentSubjectScore()
+        } catch (error) {
+            console.error('Import Excel Error:', error)
+            message.error(
+                'Lỗi khi đọc file hoặc cập nhật dữ liệu. Vui lòng kiểm tra lại định dạng file!'
+            )
+        } finally {
+            loading()
+        }
     }
     const confirmImport = (file: File) => {
         Modal.confirm({
@@ -576,20 +592,27 @@ export default function ChuyenDeNghienCuu() {
             content: (
                 <div>
                     <p>Bạn có chắc chắn muốn import thông tin từ file sau không?</p>
-                    <p><strong>Tên file:</strong> <span className="text-blue-600">{file.name}</span></p>
+                    <p>
+                        <strong>Tên file:</strong>{' '}
+                        <span className="text-blue-600">{file.name}</span>
+                    </p>
                     <p className="text-red-500 text-xs">
-                        * Lưu ý: Dữ liệu trong hệ thống sẽ được cập nhật hoặc tạo mới dựa trên nội dung file Excel.
+                        * Lưu ý: Dữ liệu trong hệ thống sẽ được cập nhật hoặc tạo mới dựa trên nội
+                        dung file Excel.
                     </p>
                 </div>
             ),
             okText: 'Xác nhận Import',
             cancelText: 'Hủy bỏ',
-            okButtonProps: { type: 'primary', className: 'bg-[#02884f] hover:bg-[#19945d] border-none' },
-            onOk: () => {
-                importExcel(file);
+            okButtonProps: {
+                type: 'primary',
+                className: 'bg-[#02884f] hover:bg-[#19945d] border-none',
             },
-        });
-    };
+            onOk: () => {
+                importExcel(file)
+            },
+        })
+    }
 
     return (
         <Row gutter={[16, 0]}>

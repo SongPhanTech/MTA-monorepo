@@ -15,7 +15,7 @@ import {
     useFindUniqueStudent,
     useFindUniqueStudentScoreConvert,
 } from '@workspace/db/hooks'
-import { Button, Col, Form, Input, InputNumber, message, Row, Select, Table } from 'antd'
+import { Button, Col, Form, Input, InputNumber, message, Row, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -26,6 +26,7 @@ import { $Enums } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { TableColumnsType } from 'antd'
 import { Trash2 } from 'lucide-react'
+import { Select } from '@workspace/ui'
 
 const ScoreConvertStatus = $Enums.ScoreConvertStatus
 type ScoreConvertStatus = $Enums.ScoreConvertStatus

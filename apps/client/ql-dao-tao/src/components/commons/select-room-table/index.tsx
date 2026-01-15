@@ -76,7 +76,7 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                     className="w-80"
                     placeholder="Tìm kiếm phòng..."
                     value={searchText}
-                    variant='underlined'
+                    variant="underlined"
                     onChange={(e) => {
                         setSearchText(e.target.value)
                         setCurrentPage(1)
@@ -181,7 +181,7 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                     <Select
                         disabled={disabled}
                         mode="multiple"
-                        variant='underlined'
+                        variant="underlined"
                         value={value.map((v) => v.roomId)}
                         options={rooms.map((room) => ({
                             label: `${room.name}-${room.capacity}`,

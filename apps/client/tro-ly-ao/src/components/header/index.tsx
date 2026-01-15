@@ -14,7 +14,10 @@ const HeaderApp: React.FC = () => {
 
         const initializePlugin = () => {
             try {
-                if (typeof window !== 'undefined' && window.MTAMenuComponents?.default?.createPlugin) {
+                if (
+                    typeof window !== 'undefined' &&
+                    window.MTAMenuComponents?.default?.createPlugin
+                ) {
                     window.MTAMenuComponents.default.createPlugin('pluginContainer', {
                         menuAppId: 'menuContainer',
                         notificationAppId: 'notificationContainer',
@@ -38,13 +41,13 @@ const HeaderApp: React.FC = () => {
         // Nếu chưa load, thử lại với interval (không dùng state để tránh re-render)
         let retryCount = 0
         const maxRetries = 10
-        
+
         const retry = () => {
             if (retryCount >= maxRetries) {
                 console.warn('MTAMenuComponents script not loaded after retries')
                 return
             }
-            
+
             retryTimerRef.current = setTimeout(() => {
                 if (!initializePlugin()) {
                     retryCount++
@@ -52,7 +55,7 @@ const HeaderApp: React.FC = () => {
                 }
             }, 200)
         }
-        
+
         retry()
 
         return () => {

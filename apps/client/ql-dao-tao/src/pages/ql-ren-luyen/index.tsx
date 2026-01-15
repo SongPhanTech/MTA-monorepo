@@ -10,8 +10,8 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Collapse, Empty, Flex, message, Row, Select, Table, Tag, Tooltip } from 'antd'
+import { Select, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Collapse, Empty, Flex, message, Row, Table, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, ChevronDown, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -221,7 +221,6 @@ export default function QuanLyDiemRenLuyen() {
                                 onChange={(value) => setSemesterFilter(value)}
                                 allowClear
                                 showSearch
-                                optionFilterProp="label"
                                 options={semesterList.map((s) => ({
                                     value: s.id,
                                     label: [s.name, s.schoolYear?.name].filter(Boolean).join(' - '),

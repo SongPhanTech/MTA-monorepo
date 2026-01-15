@@ -1,16 +1,9 @@
+import { normalizeVietnamese } from '@workspace/libs/utils'
+import { message } from 'antd'
 import clsx, { type ClassValue } from 'clsx'
 import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
-import { message } from 'antd'
 
-export function normalizeVietnamese(str: string): string {
-    return str
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd')
-        .replace(/Đ/g, 'D')
-        .toLowerCase()
-}
 export function searchVietnamese(
     data: { value: string; label: string }[],
     keyword: string

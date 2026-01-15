@@ -1,3 +1,4 @@
+import { normalizeVietnamese } from '@workspace/libs/utils'
 import clsx, { type ClassValue } from 'clsx'
 import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
@@ -9,14 +10,6 @@ const getPageCount = (totalItems: number, itemsPerPage: number) => {
     return Math.ceil(totalItems / itemsPerPage)
 }
 
-function normalizeVietnamese(str: string): string {
-    return str
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd')
-        .replace(/Đ/g, 'D')
-        .toLowerCase()
-}
 const formatDate = (date: string | Date | Dayjs, unit?: 'Day' | 'Month' | 'Year') => {
     if (unit === 'Year') return dayjs(date).format('YYYY')
     if (unit === 'Month') return dayjs(date).format('MM/YYYY')

@@ -67,7 +67,7 @@ const saveCache = (cache: CacheEntry) => {
 /**
  * Hook để kiểm tra SSO session cho tro-ly-ao
  * KHÔNG tự động redirect về trang đăng nhập khi chưa authenticated
- * 
+ *
  * Features:
  * - Global cache 5 phút với localStorage persistence
  * - Share state giữa các instances
@@ -75,12 +75,8 @@ const saveCache = (cache: CacheEntry) => {
  * - Reload không mất cache
  */
 export const useSSOSession = () => {
-    const [status, setStatus] = useState<SSOSessionStatus>(
-        globalCache?.status || 'loading'
-    )
-    const [session, setSession] = useState<SSOSession | null>(
-        globalCache?.session || null
-    )
+    const [status, setStatus] = useState<SSOSessionStatus>(globalCache?.status || 'loading')
+    const [session, setSession] = useState<SSOSession | null>(globalCache?.session || null)
 
     const fetchSSOSession = useCallback(async () => {
         // Check cache first
@@ -123,7 +119,7 @@ export const useSSOSession = () => {
             listeners.forEach((listener) => listener())
         } catch (error) {
             console.warn('[useSSOSession] SSO session fetch failed:', error)
-            
+
             globalCache = {
                 status: 'unauthenticated',
                 session: null,
@@ -166,8 +162,7 @@ export const useSSOSession = () => {
      * Chỉ gọi khi người dùng chủ động click nút đăng nhập
      */
     const signIn = useCallback(() => {
-        const tenantCode =
-            (typeof window !== 'undefined' && (window as any).tenantCode) || 'dev'
+        const tenantCode = (typeof window !== 'undefined' && (window as any).tenantCode) || 'dev'
         window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE')}&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
     }, [])
 

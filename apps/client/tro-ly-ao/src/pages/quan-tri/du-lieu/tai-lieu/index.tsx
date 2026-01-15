@@ -1,7 +1,12 @@
 // Trong code này có code sv: do cả khi upload và download lúc lư
 
-
-import { AuditOutlined, DownloadOutlined, EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons'
+import {
+    AuditOutlined,
+    DownloadOutlined,
+    EditOutlined,
+    EyeOutlined,
+    ReloadOutlined,
+} from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DocumentSidebar from '@components/commons/document-sidebar'
@@ -143,7 +148,7 @@ function Page() {
             const result = await fetchPresignedGetObject({
                 queryParams: { objectName: cleanObjectName },
             })
-            
+
             const presignedUrl = result.url
             if (!presignedUrl) {
                 message.error('Không thể lấy đường dẫn tải file')

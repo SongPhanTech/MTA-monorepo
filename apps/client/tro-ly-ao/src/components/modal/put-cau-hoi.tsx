@@ -2,7 +2,13 @@ import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
-import { useCreateFAQ, useDeleteFAQ, useFindFirstFAQ, useFindManyFAQ, useUpdateFAQ } from '@workspace/db/hooks'
+import {
+    useCreateFAQ,
+    useDeleteFAQ,
+    useFindFirstFAQ,
+    useFindManyFAQ,
+    useUpdateFAQ,
+} from '@workspace/db/hooks'
 import { Button, Col, Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -74,7 +80,9 @@ const PutCauHoi = () => {
                 })
 
                 if (isDuplicate) {
-                    message.error('Câu hỏi này đã tồn tại trong hệ thống. Vui lòng nhập câu hỏi khác.')
+                    message.error(
+                        'Câu hỏi này đã tồn tại trong hệ thống. Vui lòng nhập câu hỏi khác.'
+                    )
                     return
                 }
             }

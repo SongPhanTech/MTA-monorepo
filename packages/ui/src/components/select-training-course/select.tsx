@@ -1,5 +1,6 @@
 import { useFindManyTrainingCourse, useFindUniqueSemester } from '@workspace/db/hooks'
-import { Select, type SelectProps } from 'antd'
+import type { SelectProps } from 'antd'
+import { Select } from '../commons/select'
 import { useSemesterStore } from '../select-semester'
 import { useTrainingObjectTypeStore } from '../select-training-object-type'
 import { useTrainingCourseStore } from './hook'
@@ -70,16 +71,7 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
                 }
 
                 return {
-                    label: (
-                        <span>
-                            {e.name}
-                            {semesterIdx ? (
-                                <span className="text-gray-600 italic"> (HK{semesterIdx})</span>
-                            ) : (
-                                ''
-                            )}
-                        </span>
-                    ),
+                    label: `${e.name} ${semesterIdx ? `(HK${semesterIdx})` : ''}`,
                     value: e.id,
                 }
             })}

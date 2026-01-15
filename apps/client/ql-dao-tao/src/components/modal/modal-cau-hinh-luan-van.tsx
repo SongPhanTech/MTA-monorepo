@@ -706,11 +706,11 @@ const ModalCauHinhLuanVan = () => {
             setAttachments([])
         }
     }, [
-        thesisProjectData, 
-        form, 
-        formatDecimal, 
-        getDefaultCouncilAmount, 
-        getDefaultSupervisorAmount
+        thesisProjectData,
+        form,
+        formatDecimal,
+        getDefaultCouncilAmount,
+        getDefaultSupervisorAmount,
     ])
     const itemTab: TabsProps['items'] = [
         {

@@ -134,9 +134,10 @@ const ChatLayout = ({
     }, [])
 
     // Build where clause based on authentication status
-    const conversationWhereClause = isSSOAuthenticated && ssoSession?.userId
-        ? { userId: ssoSession.userId } // Logged in SSO user - filter by userId
-        : { sessionId: sessionId || '' } // Guest user - filter by sessionId
+    const conversationWhereClause =
+        isSSOAuthenticated && ssoSession?.userId
+            ? { userId: ssoSession.userId } // Logged in SSO user - filter by userId
+            : { sessionId: sessionId || '' } // Guest user - filter by sessionId
 
     const { data: conversation } = useFindManyConversation({
         where: conversationWhereClause,

@@ -1,1458 +1,1434 @@
-import Select from "@components/commons/select";
-import Table from "@components/commons/table";
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants";
-import DefaultLayout from "@layouts/default-layout";
+import Select from '@components/commons/select'
+import Table from '@components/commons/table'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import DefaultLayout from '@layouts/default-layout'
 import {
-  CouncilRole,
-  StudentThesisRegistrationStatus,
-  SubjectClassType,
-  SubjectVersionType,
-  ThesisProjectStatus,
-  ThesisType,
-} from "@workspace/db";
+    CouncilRole,
+    StudentThesisRegistrationStatus,
+    SubjectClassType,
+    SubjectVersionType,
+    ThesisProjectStatus,
+    ThesisType,
+} from '@workspace/db'
 import {
-  useCountThesisProject,
-  useFindManyDefenseSession,
-  useFindManySubjectClass,
-  useFindManyThesisProject,
-  useFindManyRoom,
-  useFindManyExpertProfile,
-} from "@workspace/db/hooks";
+    useCountThesisProject,
+    useFindManyDefenseSession,
+    useFindManySubjectClass,
+    useFindManyThesisProject,
+    useFindManyRoom,
+    useFindManyExpertProfile,
+} from '@workspace/db/hooks'
 import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  message,
-  Modal,
-  Row,
-  Tag,
-  Input,
-  InputNumber,
-  Tabs,
-} from "antd";
-import { sqlTransaction } from "@workspace/libs/api/model";
-import dayjs from "dayjs";
-import { SquarePen } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { useThesisProjectStatusOptions } from "@hooks/thesisProjectStatus";
+    Button,
+    Col,
+    DatePicker,
+    Form,
+    message,
+    Modal,
+    Row,
+    Tag,
+    Input,
+    InputNumber,
+    Tabs,
+} from 'antd'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import dayjs from 'dayjs'
+import { SquarePen } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 
 interface DoAnForm {
-  subjectClassId: string;
+    subjectClassId: string
 }
-const { TextArea } = Input;
+const { TextArea } = Input
 
 export default function DanhMucDoAn() {
-  const [form] = Form.useForm<DoAnForm>();
-  const [searchParams, setSearchParams] = useState<Partial<DoAnForm>>({});
-  const [isSearched, setIsSearched] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE);
-  const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
-  const [currentProject, setCurrentProject] = useState<any>(null);
-  const {
-    getThesisProjectStatusLabel,
-    getThesisProjectStatusColor,
-    thesisProjectStatusOptions,
-  } = useThesisProjectStatusOptions();
-  const [editingRowKeys, setEditingRowKeys] = useState<string[]>([]);
-  const [editingValues, setEditingValues] = useState<
-    Record<string, Record<string, any>>
-  >({});
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [form] = Form.useForm<DoAnForm>()
+    const [searchParams, setSearchParams] = useState<Partial<DoAnForm>>({})
+    const [isSearched, setIsSearched] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [isMemberModalOpen, setIsMemberModalOpen] = useState(false)
+    const [currentProject, setCurrentProject] = useState<any>(null)
+    const { getThesisProjectStatusLabel, getThesisProjectStatusColor, thesisProjectStatusOptions } =
+        useThesisProjectStatusOptions()
+    const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
+    const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (newSelectedRowKeys: React.Key[]) => {
-      setSelectedRowKeys(newSelectedRowKeys);
-    },
-  };
-  const where = useMemo(() => {
-    if (!isSearched) return { id: { in: [] } };
-    const filter: any = {
-      thesisType: ThesisType.PROJECT,
-    };
-    if (searchParams.subjectClassId) {
-      filter.subjectClassId = searchParams.subjectClassId;
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: (newSelectedRowKeys: React.Key[]) => {
+            setSelectedRowKeys(newSelectedRowKeys)
+        },
     }
-    return filter;
-  }, [isSearched, searchParams]);
-  const { data: subjectClassData = [] } = useFindManySubjectClass({
-    where: {
-      subject: {
-        type: SubjectVersionType.Project,
-      },
-    },
-    include: {
-      subjectClassStudent: {
-        include: {
-          student: {
-            include: {
-              userProfile: true,
-            },
-          },
-          studentThesisRegistration: true,
-        },
-      },
-    },
-  });
-  const { data: thesisProjectData = [], refetch: refetchThesisProjectData } =
-    useFindManyThesisProject({
-      where,
-      include: {
-        subjectClass: {
-          include: {
-            subject: true,
-          },
-        },
-        supervisor: {
-          include: {
-            lecturer: {
-              include: {
-                userProfile: true,
-              },
-            },
-          },
-        },
-        coSupervisor: {
-          include: {
-            lecturer: {
-              include: {
-                userProfile: true,
-              },
-            },
-          },
-        },
-        registrations: {
-          include: {
-            student: {
-              include: {
-                userProfile: true,
-              },
-            },
-            studentSubjectScore: true,
-          },
-        },
-        room: true,
-        defenseSession: true,
-        defenseRecord: true,
-        council: {
-          include: {
-            members: {
-              include: {
-                expert: {
-                  include: {
-                    lecturer: {
-                      include: {
-                        userProfile: true,
-                      },
-                    },
-                  },
-                },
-                payment: true,
-              },
-            },
-          },
-        },
-      },
-      take: numberOfPages,
-      skip: (currentPage - 1) * numberOfPages,
-    });
-  const { data: defenseSessionData = [] } = useFindManyDefenseSession();
-  const { data: roomsData = [] } = useFindManyRoom();
-  const { data: expertProfiles = [] } = useFindManyExpertProfile({
-    where: {
-      projectExpert: true,
-    },
-    include: {
-      lecturer: {
-        include: {
-          userProfile: true,
-        },
-      },
-    },
-  });
-  const { data: thesisProjectDataCount = 0 } = useCountThesisProject({
-    where: where,
-  });
-  const studentsInSelectedClass = useMemo(() => {
-    if (!currentProject || !subjectClassData) return [];
-    
-    const targetClass = subjectClassData.find(c => c.id === currentProject.subjectClassId);
-    
-    return targetClass?.subjectClassStudent || [];
-}, [currentProject, subjectClassData]);
-  const handleEditChange = (rowId: string, field: string, value: any) => {
-    setEditingValues((prev) => ({
-      ...prev,
-      [rowId]: {
-        ...prev[rowId],
-        [field]: value,
-      },
-    }));
-  };
-  const handleSearch = () => {
-    const values = form.getFieldsValue();
-    setSearchParams(values);
-    setIsSearched(true);
-    setCurrentPage(1);
-  };
-
-  const handleGenerateMockData = async () => {
-    const subjectClassId = form.getFieldValue("subjectClassId");
-
-    if (!subjectClassId) {
-      message.warning("Vui lòng chọn một lớp môn học");
-      return;
-    }
-
-    const assignedStudentIds = thesisProjectData.flatMap(
-      (project) => project.registrations?.map((reg: any) => reg.studentId) || []
-    );
-
-    const currentClass = subjectClassData.find((c) => c.id === subjectClassId);
-    const allStudentsInClass = currentClass?.subjectClassStudent || [];
-
-    const unassignedStudents = allStudentsInClass.filter(
-      (item) => !assignedStudentIds.includes(item.studentId)
-    );
-
-    if (unassignedStudents.length === 0) {
-      message.info("Tất cả sinh viên trong lớp đã có bản ghi đồ án.");
-      return;
-    }
-
-    try {
-      const transactions = unassignedStudents.map((item: any) => ({
-        model: "ThesisProject" as const,
-        operation: "create" as const,
-        data: {
-          data: {
-            title: "",
-            subjectClassId: subjectClassId,
+    const where = useMemo(() => {
+        if (!isSearched) return { id: { in: [] } }
+        const filter: any = {
             thesisType: ThesisType.PROJECT,
-            status: ThesisProjectStatus.PROPOSED,
-            registrations: {
-              create: {
-                studentId: item.studentId,
-                studentSubjectScoreId: item.id,
-                status: StudentThesisRegistrationStatus.ACCEPTED,
-                registeredAt: new Date(),
-              },
+        }
+        if (searchParams.subjectClassId) {
+            filter.subjectClassId = searchParams.subjectClassId
+        }
+        return filter
+    }, [isSearched, searchParams])
+    const { data: subjectClassData = [] } = useFindManySubjectClass({
+        where: {
+            subject: {
+                type: SubjectVersionType.Project,
             },
-          },
         },
-      }));
-
-      await sqlTransaction(transactions);
-      await refetchThesisProjectData();
-      message.success(
-        `Đã tạo thành công ${unassignedStudents.length} đồ án cho sinh viên chưa có đề tài.`
-      );
-      handleSearch();
-    } catch (error) {
-      console.error("Lỗi tạo dữ liệu mẫu:", error);
-      message.error(
-        "Không thể tạo dữ liệu mẫu. Vui lòng kiểm tra lại dữ liệu."
-      );
-    }
-  };
-
-  const handleActivateEdit = () => {
-    if (!thesisProjectData || thesisProjectData.length === 0) {
-      message.info("Không có dữ liệu đồ án để chỉnh sửa.");
-      return;
-    }
-    const newEditingRowKeys = thesisProjectData.map((s) => s.id);
-    const initialEditingValues: Record<string, Record<string, any>> = {};
-    thesisProjectData.forEach((record) => {
-      initialEditingValues[record.id] = {
-        title: record.title || "",
-        supervisor: record.supervisor?.id || "",
-        coSupervisor: record.coSupervisor?.id || "",
-        defenseDate: record.defenseDate || "",
-        defenseSession: record.defenseSession?.id || "",
-        room: record.room?.id || "",
-        chairman:
-          record.council?.members.find(
-            (x: any) => x.role === CouncilRole.CHAIRMAN
-          )?.expert?.id || "",
-        secretary:
-          record.council?.members.find(
-            (x: any) => x.role === CouncilRole.SECRETARY
-          )?.expert?.id || "",
-        reviewer1:
-          record.council?.members.find(
-            (x: any) => x.role === CouncilRole.REVIEWER_1
-          )?.expert?.id || "",
-        reviewer2:
-          record.council?.members.find(
-            (x: any) => x.role === CouncilRole.REVIEWER_2
-          )?.expert?.id || "",
-        councilMember:
-          record.council?.members.find(
-            (x: any) => x.role === CouncilRole.MEMBER
-          )?.expert?.id || "",
-        status: record.status || "",
-        defenseRecordComments: record.defenseRecord?.comments || "",
-        defenseRecordFinalScore: record.defenseRecord?.finalScore || null,
-      };
-    });
-    setEditingRowKeys(newEditingRowKeys);
-    setEditingValues(initialEditingValues);
-  };
-  const handleSaveChanges = async () => {
-    if (Object.keys(editingValues).length === 0) {
-      setEditingRowKeys([]);
-      return;
-    }
-
-    try {
-      const transactions: any[] = [];
-
-      for (const thesisId of Object.keys(editingValues)) {
-        const values = editingValues[thesisId];
-        const originalRecord = thesisProjectData.find((t) => t.id === thesisId);
-
-        const finalScore =
-          values.defenseRecordFinalScore === "" ||
-          values.defenseRecordFinalScore === undefined
-            ? null
-            : Number(values.defenseRecordFinalScore);
-
-        const relation = (id: string | null | undefined) => {
-          return id ? { connect: { id } } : { disconnect: true };
-        };
-
-        const expertRolesMapping = [
-          { key: "chairman", role: CouncilRole.CHAIRMAN },
-          { key: "secretary", role: CouncilRole.SECRETARY },
-          { key: "reviewer1", role: CouncilRole.REVIEWER_1 },
-          { key: "reviewer2", role: CouncilRole.REVIEWER_2 },
-          { key: "councilMember", role: CouncilRole.MEMBER },
-        ];
-
-        const memberUpserts = expertRolesMapping
-          .filter((m) => values[m.key])
-          .map((m) => {
-            const existingMember = originalRecord?.council?.members?.find(
-              (em: any) => em.role === m.role
-            );
-            return {
-              where: { id: existingMember?.id || "new-id" },
-              create: { role: m.role, expertId: values[m.key] },
-              update: { expertId: values[m.key] },
-            };
-          });
-
-        const updateData: any = {
-          title: values.title || "",
-          status: values.status || "PROPOSED",
-          defenseDate: values.defenseDate
-            ? dayjs(values.defenseDate).toDate()
-            : null,
-          supervisor: relation(values.supervisor),
-          coSupervisor: relation(values.coSupervisor),
-          room: relation(values.room),
-          defenseSession: relation(values.defenseSession),
-          defenseRecord: {
-            upsert: {
-              create: {
-                finalScore,
-                comments: values.defenseRecordComments || null,
-              },
-              update: {
-                finalScore,
-                comments: values.defenseRecordComments || null,
-              },
+        include: {
+            subjectClassStudent: {
+                include: {
+                    student: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                    studentThesisRegistration: true,
+                },
             },
-          },
-        };
-
-        if (originalRecord?.councilId) {
-          if (memberUpserts.length > 0) {
-            updateData.council = {
-              update: { members: { upsert: memberUpserts } },
-            };
-          }
-        } else if (memberUpserts.length > 0) {
-          updateData.council = {
-            create: {
-              members: { create: memberUpserts.map((m) => m.create) },
+        },
+    })
+    const { data: thesisProjectData = [], refetch: refetchThesisProjectData } =
+        useFindManyThesisProject({
+            where,
+            include: {
+                subjectClass: {
+                    include: {
+                        subject: true,
+                    },
+                },
+                supervisor: {
+                    include: {
+                        lecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                    },
+                },
+                coSupervisor: {
+                    include: {
+                        lecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                    },
+                },
+                registrations: {
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        studentSubjectScore: true,
+                    },
+                },
+                room: true,
+                defenseSession: true,
+                defenseRecord: true,
+                council: {
+                    include: {
+                        members: {
+                            include: {
+                                expert: {
+                                    include: {
+                                        lecturer: {
+                                            include: {
+                                                userProfile: true,
+                                            },
+                                        },
+                                    },
+                                },
+                                payment: true,
+                            },
+                        },
+                    },
+                },
             },
-          };
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
+        })
+    const { data: defenseSessionData = [] } = useFindManyDefenseSession()
+    const { data: roomsData = [] } = useFindManyRoom()
+    const { data: expertProfiles = [] } = useFindManyExpertProfile({
+        where: {
+            projectExpert: true,
+        },
+        include: {
+            lecturer: {
+                include: {
+                    userProfile: true,
+                },
+            },
+        },
+    })
+    const { data: thesisProjectDataCount = 0 } = useCountThesisProject({
+        where: where,
+    })
+    const studentsInSelectedClass = useMemo(() => {
+        if (!currentProject || !subjectClassData) return []
+
+        const targetClass = subjectClassData.find((c) => c.id === currentProject.subjectClassId)
+
+        return targetClass?.subjectClassStudent || []
+    }, [currentProject, subjectClassData])
+    const handleEditChange = (rowId: string, field: string, value: any) => {
+        setEditingValues((prev) => ({
+            ...prev,
+            [rowId]: {
+                ...prev[rowId],
+                [field]: value,
+            },
+        }))
+    }
+    const handleSearch = () => {
+        const values = form.getFieldsValue()
+        setSearchParams(values)
+        setIsSearched(true)
+        setCurrentPage(1)
+    }
+
+    const handleGenerateMockData = async () => {
+        const subjectClassId = form.getFieldValue('subjectClassId')
+
+        if (!subjectClassId) {
+            message.warning('Vui lòng chọn một lớp môn học')
+            return
         }
 
-        transactions.push({
-          model: "ThesisProject" as const,
-          operation: "update" as const,
-          data: {
-            where: { id: thesisId },
-            data: updateData,
-          },
-        });
-      }
+        const assignedStudentIds = thesisProjectData.flatMap(
+            (project) => project.registrations?.map((reg: any) => reg.studentId) || []
+        )
 
-      await sqlTransaction(transactions);
-      await refetchThesisProjectData();
-      message.success("Đã lưu tất cả thay đổi thành công!");
-      setEditingRowKeys([]);
-      setEditingValues({});
-      handleSearch();
-    } catch (error) {
-      console.error("Lỗi khi lưu:", error);
-      message.error(
-        "Không thể lưu dữ liệu. Vui lòng kiểm tra lại các trường thông tin."
-      );
+        const currentClass = subjectClassData.find((c) => c.id === subjectClassId)
+        const allStudentsInClass = currentClass?.subjectClassStudent || []
+
+        const unassignedStudents = allStudentsInClass.filter(
+            (item) => !assignedStudentIds.includes(item.studentId)
+        )
+
+        if (unassignedStudents.length === 0) {
+            message.info('Tất cả sinh viên trong lớp đã có bản ghi đồ án.')
+            return
+        }
+
+        try {
+            const transactions = unassignedStudents.map((item: any) => ({
+                model: 'ThesisProject' as const,
+                operation: 'create' as const,
+                data: {
+                    data: {
+                        title: '',
+                        subjectClassId: subjectClassId,
+                        thesisType: ThesisType.PROJECT,
+                        status: ThesisProjectStatus.PROPOSED,
+                        registrations: {
+                            create: {
+                                studentId: item.studentId,
+                                studentSubjectScoreId: item.id,
+                                status: StudentThesisRegistrationStatus.ACCEPTED,
+                                registeredAt: new Date(),
+                            },
+                        },
+                    },
+                },
+            }))
+
+            await sqlTransaction(transactions)
+            await refetchThesisProjectData()
+            message.success(
+                `Đã tạo thành công ${unassignedStudents.length} đồ án cho sinh viên chưa có đề tài.`
+            )
+            handleSearch()
+        } catch (error) {
+            console.error('Lỗi tạo dữ liệu mẫu:', error)
+            message.error('Không thể tạo dữ liệu mẫu. Vui lòng kiểm tra lại dữ liệu.')
+        }
     }
-  };
 
-  return (
-    <Row gutter={[16, 0]}>
-      <Col span={24}>
-        <Row gutter={[16, 16]} align="top" justify="space-between">
-          <Col span={24}>
-            <Form
-              form={form}
-              layout="horizontal"
-              className="w-full mb-4 flex flex-wrap items-end gap-4"
-            >
-              <Form.Item
-                name="subjectClassId"
-                label="Lớp môn học"
-                className="mb-0 w-86"
-              >
-                <Select
-                  className="w-86"
-                  options={subjectClassData?.map((item) => ({
-                    label: `${item.code} - ${item.name}`,
-                    value: item.id,
-                  }))}
-                  placeholder="Chọn lớp môn học"
-                />
-              </Form.Item>
+    const handleActivateEdit = () => {
+        if (!thesisProjectData || thesisProjectData.length === 0) {
+            message.info('Không có dữ liệu đồ án để chỉnh sửa.')
+            return
+        }
+        const newEditingRowKeys = thesisProjectData.map((s) => s.id)
+        const initialEditingValues: Record<string, Record<string, any>> = {}
+        thesisProjectData.forEach((record) => {
+            initialEditingValues[record.id] = {
+                title: record.title || '',
+                supervisor: record.supervisor?.id || '',
+                coSupervisor: record.coSupervisor?.id || '',
+                defenseDate: record.defenseDate || '',
+                defenseSession: record.defenseSession?.id || '',
+                room: record.room?.id || '',
+                chairman:
+                    record.council?.members.find((x: any) => x.role === CouncilRole.CHAIRMAN)
+                        ?.expert?.id || '',
+                secretary:
+                    record.council?.members.find((x: any) => x.role === CouncilRole.SECRETARY)
+                        ?.expert?.id || '',
+                reviewer1:
+                    record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_1)
+                        ?.expert?.id || '',
+                reviewer2:
+                    record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_2)
+                        ?.expert?.id || '',
+                councilMember:
+                    record.council?.members.find((x: any) => x.role === CouncilRole.MEMBER)?.expert
+                        ?.id || '',
+                status: record.status || '',
+                defenseRecordComments: record.defenseRecord?.comments || '',
+                defenseRecordFinalScore: record.defenseRecord?.finalScore || null,
+            }
+        })
+        setEditingRowKeys(newEditingRowKeys)
+        setEditingValues(initialEditingValues)
+    }
+    const handleSaveChanges = async () => {
+        if (Object.keys(editingValues).length === 0) {
+            setEditingRowKeys([])
+            return
+        }
 
-              <Form.Item className="mb-0">
-                <div className="flex gap-2">
-                  <Button
-                    type="primary"
-                    onClick={async () => await handleGenerateMockData()}
-                  >
-                    Tạo dữ liệu mẫu
-                  </Button>
-                  <Button type="primary" onClick={handleSearch}>
-                    Xem kết quả
-                  </Button>
-                  {editingRowKeys.length > 0 ? (
-                    <>
-                      <Button
-                        type="default"
-                        className="ml-2"
-                        onClick={() => {
-                          setEditingRowKeys([]);
-                          setEditingValues({});
-                          message.info("Đã hủy tất cả các thay đổi chưa lưu.");
-                        }}
-                      >
-                        Hủy thay đổi
-                      </Button>
-                      <Button
-                        type="primary"
-                        className="ml-2"
-                        onClick={async () => await handleSaveChanges()}
-                      >
-                        Lưu thay đổi
-                      </Button>
-                    </>
-                  ) : (
-                    <Button
-                      type="default"
-                      className="ml-2"
-                      onClick={handleActivateEdit}
-                    >
-                      Chỉnh sửa
-                    </Button>
-                  )}
-                </div>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
-        <Table
-          rowKey="id"
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => {
-                return <div>{index + 1}</div>;
-              },
-            },
-            {
-              title: "Lớp môn học",
-              width: 150,
-              align: "left",
-              render: (_, record) => {
-                return (
-                  `${record?.subjectClass?.code} - ${record?.subjectClass?.name}` ||
-                  ""
-                );
-              },
-            },
-            {
-              title: "Học viên bảo vệ",
-              width: 200,
-              align: "left",
-              fixed: "left",
-              render: (_, record) => {
-                const registrations = record?.registrations || [];
+        try {
+            const transactions: any[] = []
 
-                return (
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    {registrations.map((x: any, index: number) => (
-                      <div key={index}>{x.student?.userProfile?.fullname}</div>
-                    ))}
-                  </div>
-                );
-              },
-            },
-            {
-              title: "Tên đề tài đồ án",
-              width: 250,
-              fixed: "left",
-              align: "left",
-              dataIndex: "title",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue =
-                    editingValues[record.id]?.title ?? record.title;
-                  return (
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <TextArea
-                        rows={2}
-                        value={currentValue}
-                        onChange={(e) => {
-                          handleEditChange(record?.id, "title", e.target.value);
-                        }}
-                      />
-                    </div>
-                  );
-                }
-                return record?.title || "";
-              },
-            },
-            {
-              title: "GVHD1",
-              width: 250,
-              align: "left",
-              dataIndex: "supervisor",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue =
-                    editingValues[record?.id]?.supervisorId ??
-                    record?.supervisorId;
-                  return (
-                    <Select
-                      className="w-46"
-                      options={expertProfiles?.map((item: any) => ({
-                        label: item.lecturer
-                          ? item.lecturer?.userProfile?.fullname
-                          : item.name,
-                        value: item.id,
-                      }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn GVHD1"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "supervisor", value)
-                      }
-                    />
-                  );
-                }
-                const data = record?.supervisor;
-                const name = data?.lecturer
-                  ? data?.lecturer?.userProfile?.fullname
-                  : data?.name || "";
-                return name;
-              },
-            },
-            {
-              title: "GVHD2",
-              width: 250,
-              align: "left",
-              dataIndex: "coSupervisor",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue =
-                    editingValues[record?.id]?.coSupervisorId ??
-                    record?.coSupervisorId;
-                  return (
-                    <Select
-                      className="w-46"
-                      options={expertProfiles?.map((item: any) => ({
-                        label: item.lecturer
-                          ? item.lecturer?.userProfile?.fullname
-                          : item.name,
-                        value: item.id,
-                      }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn GVHD2"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "coSupervisor", value)
-                      }
-                    />
-                  );
-                }
-                const data = record?.coSupervisor;
-                const name = data?.lecturer
-                  ? data?.lecturer?.userProfile?.fullname
-                  : data?.name || "";
-                return name;
-              },
-            },
-            {
-              title: "Chủ tịch",
-              width: 200,
-              align: "left",
-              dataIndex: "chairman",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const originalChairmanId = record?.council?.members?.find(
-                    (x: any) => x.role === CouncilRole.CHAIRMAN
-                  )?.expert?.id;
+            for (const thesisId of Object.keys(editingValues)) {
+                const values = editingValues[thesisId]
+                const originalRecord = thesisProjectData.find((t) => t.id === thesisId)
 
-                  const currentValue =
-                    editingValues[record.id]?.chairman ??
-                    originalChairmanId ??
-                    undefined;
-                  return (
-                    <Select
-                      className="w-40"
-                      options={expertProfiles
-                        ?.filter((x: any) => x.eligiblePresident === true)
-                        ?.map((item: any) => ({
-                          label: item.lecturer
-                            ? item.lecturer?.userProfile?.fullname
-                            : item.name,
-                          value: item.id,
-                        }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn chủ tịch"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "chairman", value)
-                      }
-                    />
-                  );
-                }
-                const data = record?.council?.members.find(
-                  (x: any) => x.role === CouncilRole.CHAIRMAN
-                );
-                const name = data?.expert?.lecturer
-                  ? data?.expert?.lecturer?.userProfile?.fullname
-                  : data?.expert?.name || "";
-                return name;
-              },
-            },
-            {
-              title: "Thư ký",
-              width: 200,
-              align: "left",
-              dataIndex: "secretary",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const originalSecretaryId = record?.council?.members?.find(
-                    (x: any) => x.role === CouncilRole.SECRETARY
-                  )?.expert?.id;
+                const finalScore =
+                    values.defenseRecordFinalScore === '' ||
+                    values.defenseRecordFinalScore === undefined
+                        ? null
+                        : Number(values.defenseRecordFinalScore)
 
-                  const currentValue =
-                    editingValues[record.id]?.secretary ??
-                    originalSecretaryId ??
-                    undefined;
-                  return (
-                    <Select
-                      className="w-40"
-                      options={expertProfiles
-                        ?.filter((x: any) => x.eligibleSecretary === true)
-                        ?.map((item: any) => ({
-                          label: item.lecturer
-                            ? item.lecturer?.userProfile?.fullname
-                            : item.name,
-                          value: item.id,
-                        }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn thư ký"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "secretary", value)
-                      }
-                    />
-                  );
-                }
-                const name =
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.SECRETARY
-                  )?.expert?.lecturer.userProfile.fullname ||
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.SECRETARY
-                  )?.expert?.name ||
-                  "";
-                return name;
-              },
-            },
-            {
-              title: "Phản biện 1",
-              width: 200,
-              align: "left",
-              dataIndex: "reviewer1",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const originalReviewer1Id = record?.council?.members?.find(
-                    (x: any) => x.role === CouncilRole.REVIEWER_1
-                  )?.expert?.id;
-
-                  const currentValue =
-                    editingValues[record.id]?.reviewer1 ??
-                    originalReviewer1Id ??
-                    undefined;
-                  return (
-                    <Select
-                      className="w-40"
-                      options={expertProfiles?.map((item: any) => ({
-                        label: item.lecturer
-                          ? item.lecturer?.userProfile?.fullname
-                          : item.name,
-                        value: item.id,
-                      }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn Phản biện 1"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "reviewer1", value)
-                      }
-                    />
-                  );
-                }
-                const name =
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.REVIEWER_1
-                  )?.expert?.lecturer.userProfile.fullname ||
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.REVIEWER_1
-                  )?.expert?.name ||
-                  "";
-                return name;
-              },
-            },
-            {
-              title: "Phản biện 2",
-              width: 200,
-              align: "left",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const originalReviewer2Id = record?.council?.members?.find(
-                    (x: any) => x.role === CouncilRole.REVIEWER_2
-                  )?.expert?.id;
-
-                  const currentValue =
-                    editingValues[record.id]?.reviewer2 ??
-                    originalReviewer2Id ??
-                    undefined;
-
-                  return (
-                    <Select
-                      className="w-40"
-                      options={expertProfiles?.map((item: any) => ({
-                        label: item.lecturer
-                          ? item.lecturer?.userProfile?.fullname
-                          : item.name,
-                        value: item.id,
-                      }))}
-                      value={currentValue}
-                      placeholder="Chọn Phản biện 2"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "reviewer2", value)
-                      }
-                    />
-                  );
-                }
-                const name =
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.REVIEWER_2
-                  )?.expert?.lecturer.userProfile.fullname ||
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.REVIEWER_2
-                  )?.expert?.name ||
-                  "";
-                return name;
-              },
-            },
-            {
-              title: "Ủy viên",
-              width: 200,
-              align: "left",
-              dataIndex: "councilMember",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const originalCouncilMemberId =
-                    record?.council?.members?.find(
-                      (x: any) => x.role === CouncilRole.MEMBER
-                    )?.expert?.id;
-                  const currentValue =
-                    editingValues[record.id]?.councilMember ??
-                    originalCouncilMemberId ??
-                    undefined;
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.MEMBER
-                  )?.expert?.id || "";
-                  return (
-                    <Select
-                      className="w-40"
-                      options={expertProfiles?.map((item: any) => ({
-                        label: item.lecturer
-                          ? item.lecturer?.userProfile?.fullname
-                          : item.name,
-                        value: item.id,
-                      }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn ủy viên"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "councilMember", value)
-                      }
-                    />
-                  );
-                }
-                const name =
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.MEMBER
-                  )?.expert?.lecturer.userProfile.fullname ||
-                  record?.council?.members.find(
-                    (x: any) => x.role === CouncilRole.MEMBER
-                  )?.expert?.name ||
-                  "";
-                return name;
-              },
-            },
-
-            {
-              title: "Phòng bảo vệ",
-              width: 150,
-              align: "left",
-              dataIndex: "room",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue = record?.roomId || "";
-                  return (
-                    <Select
-                      className="w-28"
-                      options={roomsData?.map((item) => ({
-                        label: item.name,
-                        value: item.id,
-                      }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn phòng"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "room", value)
-                      }
-                    />
-                  );
-                }
-                return record?.room?.name || "";
-              },
-            },
-            {
-              title: "Ngày bảo vệ",
-              width: 150,
-              align: "left",
-              dataIndex: "defenseDate",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue = record?.defenseDate
-                    ? dayjs(record?.defenseDate)
-                    : "";
-                  return (
-                    <DatePicker
-                      className="w-28"
-                      value={currentValue || undefined}
-                      placeholder="Chọn ngày"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "defenseDate", value)
-                      }
-                    />
-                  );
-                }
-                return record?.defenseDate
-                  ? dayjs(record?.defenseDate).format("DD/MM/YYYY")
-                  : "";
-              },
-            },
-            {
-              title: "Ca bảo vệ",
-              width: 150,
-              align: "left",
-              dataIndex: "defenseSession",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue = record?.defenseSessionId || "";
-                  return (
-                    <Select
-                      className="w-28"
-                      options={defenseSessionData?.map((item) => ({
-                        label: item?.startTime
-                          ? dayjs(record?.defenseSession?.startTime).format(
-                              "HH:mm"
-                            )
-                          : "",
-                        value: item.id,
-                      }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn ca"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "defenseSession", value)
-                      }
-                    />
-                  );
+                const relation = (id: string | null | undefined) => {
+                    return id ? { connect: { id } } : { disconnect: true }
                 }
 
-                return record?.defenseSession?.startTime
-                  ? dayjs(record?.defenseSession?.startTime).format("HH:mm")
-                  : "";
-              },
-            },
-            {
-              title: "Điểm bảo vệ",
-              width: 150,
-              align: "left",
-              dataIndex: "defenseRecordFinalScore",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue =
-                    editingValues[record.id]?.defenseRecordFinalScore ??
-                    record?.defenseRecord?.finalScore;
-                  return (
-                    <InputNumber
-                      className="w-28"
-                      value={currentValue || undefined}
-                      placeholder="Nhập điểm"
-                      onChange={(value) =>
-                        handleEditChange(
-                          record?.id,
-                          "defenseRecordFinalScore",
-                          value
+                const expertRolesMapping = [
+                    { key: 'chairman', role: CouncilRole.CHAIRMAN },
+                    { key: 'secretary', role: CouncilRole.SECRETARY },
+                    { key: 'reviewer1', role: CouncilRole.REVIEWER_1 },
+                    { key: 'reviewer2', role: CouncilRole.REVIEWER_2 },
+                    { key: 'councilMember', role: CouncilRole.MEMBER },
+                ]
+
+                const memberUpserts = expertRolesMapping
+                    .filter((m) => values[m.key])
+                    .map((m) => {
+                        const existingMember = originalRecord?.council?.members?.find(
+                            (em: any) => em.role === m.role
                         )
-                      }
-                    />
-                  );
-                }
-                return record?.defenseRecord
-                  ? Number(record?.defenseRecord?.finalScore).toFixedSmart(2)
-                  : "";
-              },
-            },
-            {
-              title: "Nhận xét",
-              width: 250,
-              align: "left",
-              dataIndex: "defenseRecordComments",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue =
-                    editingValues[record.id]?.defenseRecordComments ??
-                    record?.defenseRecord?.comments ??
-                    "";
-                  return (
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <TextArea
-                        rows={2}
-                        value={currentValue}
-                        onChange={(e) =>
-                          handleEditChange(
-                            record?.id,
-                            "defenseRecordComments",
-                            e.target.value
-                          )
+                        return {
+                            where: { id: existingMember?.id || 'new-id' },
+                            create: { role: m.role, expertId: values[m.key] },
+                            update: { expertId: values[m.key] },
                         }
-                      />
-                    </div>
-                  );
+                    })
+
+                const updateData: any = {
+                    title: values.title || '',
+                    status: values.status || 'PROPOSED',
+                    defenseDate: values.defenseDate ? dayjs(values.defenseDate).toDate() : null,
+                    supervisor: relation(values.supervisor),
+                    coSupervisor: relation(values.coSupervisor),
+                    room: relation(values.room),
+                    defenseSession: relation(values.defenseSession),
+                    defenseRecord: {
+                        upsert: {
+                            create: {
+                                finalScore,
+                                comments: values.defenseRecordComments || null,
+                            },
+                            update: {
+                                finalScore,
+                                comments: values.defenseRecordComments || null,
+                            },
+                        },
+                    },
                 }
-                return record?.defenseRecord?.comments || "";
-              },
-            },
-            {
-              title: "Trạng thái",
-              width: 150,
-              fixed: "right",
-              align: "center",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue = editingValues[record.id]?.status;
-                  return (
-                    <Select
-                      className="w-28"
-                      options={thesisProjectStatusOptions?.map((item) => ({
-                        label: item.label,
-                        value: item.value,
-                      }))}
-                      value={currentValue || undefined}
-                      placeholder="Chọn trạng thái"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "status", value)
-                      }
-                    />
-                  );
+
+                if (originalRecord?.councilId) {
+                    if (memberUpserts.length > 0) {
+                        updateData.council = {
+                            update: { members: { upsert: memberUpserts } },
+                        }
+                    }
+                } else if (memberUpserts.length > 0) {
+                    updateData.council = {
+                        create: {
+                            members: { create: memberUpserts.map((m) => m.create) },
+                        },
+                    }
                 }
-                const label = getThesisProjectStatusLabel(record?.status);
-                const color = getThesisProjectStatusColor(record?.status);
-                return <Tag color={color}>{label}</Tag>;
-              },
-            },
-            {
-              title: "Cài đặt",
-              width: 80,
-              fixed: "right",
-              align: "center",
-              render: (_, record) => (
-                <Button
-                  type="text"
-                  icon={<SquarePen size={18} />}
-                  onClick={() => {
-                    setCurrentProject(record);
-                    setIsMemberModalOpen(true);
-                  }}
+
+                transactions.push({
+                    model: 'ThesisProject' as const,
+                    operation: 'update' as const,
+                    data: {
+                        where: { id: thesisId },
+                        data: updateData,
+                    },
+                })
+            }
+
+            await sqlTransaction(transactions)
+            await refetchThesisProjectData()
+            message.success('Đã lưu tất cả thay đổi thành công!')
+            setEditingRowKeys([])
+            setEditingValues({})
+            handleSearch()
+        } catch (error) {
+            console.error('Lỗi khi lưu:', error)
+            message.error('Không thể lưu dữ liệu. Vui lòng kiểm tra lại các trường thông tin.')
+        }
+    }
+
+    return (
+        <Row gutter={[16, 0]}>
+            <Col span={24}>
+                <Row gutter={[16, 16]} align="top" justify="space-between">
+                    <Col span={24}>
+                        <Form
+                            form={form}
+                            layout="horizontal"
+                            className="w-full mb-4 flex flex-wrap items-end gap-4"
+                        >
+                            <Form.Item
+                                name="subjectClassId"
+                                label="Lớp môn học"
+                                className="mb-0 w-86"
+                            >
+                                <Select
+                                    className="w-86"
+                                    options={subjectClassData?.map((item) => ({
+                                        label: `${item.code} - ${item.name}`,
+                                        value: item.id,
+                                    }))}
+                                    placeholder="Chọn lớp môn học"
+                                />
+                            </Form.Item>
+
+                            <Form.Item className="mb-0">
+                                <div className="flex gap-2">
+                                    <Button
+                                        type="primary"
+                                        onClick={async () => await handleGenerateMockData()}
+                                    >
+                                        Tạo dữ liệu mẫu
+                                    </Button>
+                                    <Button type="primary" onClick={handleSearch}>
+                                        Xem kết quả
+                                    </Button>
+                                    {editingRowKeys.length > 0 ? (
+                                        <>
+                                            <Button
+                                                type="default"
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setEditingRowKeys([])
+                                                    setEditingValues({})
+                                                    message.info(
+                                                        'Đã hủy tất cả các thay đổi chưa lưu.'
+                                                    )
+                                                }}
+                                            >
+                                                Hủy thay đổi
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                className="ml-2"
+                                                onClick={async () => await handleSaveChanges()}
+                                            >
+                                                Lưu thay đổi
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <Button
+                                            type="default"
+                                            className="ml-2"
+                                            onClick={handleActivateEdit}
+                                        >
+                                            Chỉnh sửa
+                                        </Button>
+                                    )}
+                                </div>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                </Row>
+                <Table
+                    rowKey="id"
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 50,
+                            align: 'center',
+                            render: (_, __, index) => {
+                                return <div>{index + 1}</div>
+                            },
+                        },
+                        {
+                            title: 'Lớp môn học',
+                            width: 150,
+                            align: 'left',
+                            render: (_, record) => {
+                                return (
+                                    `${record?.subjectClass?.code} - ${record?.subjectClass?.name}` ||
+                                    ''
+                                )
+                            },
+                        },
+                        {
+                            title: 'Học viên bảo vệ',
+                            width: 200,
+                            align: 'left',
+                            fixed: 'left',
+                            render: (_, record) => {
+                                const registrations = record?.registrations || []
+
+                                return (
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        {registrations.map((x: any, index: number) => (
+                                            <div key={index}>
+                                                {x.student?.userProfile?.fullname}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Tên đề tài đồ án',
+                            width: 250,
+                            fixed: 'left',
+                            align: 'left',
+                            dataIndex: 'title',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue =
+                                        editingValues[record.id]?.title ?? record.title
+                                    return (
+                                        <div onClick={(e) => e.stopPropagation()}>
+                                            <TextArea
+                                                rows={2}
+                                                value={currentValue}
+                                                onChange={(e) => {
+                                                    handleEditChange(
+                                                        record?.id,
+                                                        'title',
+                                                        e.target.value
+                                                    )
+                                                }}
+                                            />
+                                        </div>
+                                    )
+                                }
+                                return record?.title || ''
+                            },
+                        },
+                        {
+                            title: 'GVHD1',
+                            width: 250,
+                            align: 'left',
+                            dataIndex: 'supervisor',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue =
+                                        editingValues[record?.id]?.supervisorId ??
+                                        record?.supervisorId
+                                    return (
+                                        <Select
+                                            className="w-46"
+                                            options={expertProfiles?.map((item: any) => ({
+                                                label: item.lecturer
+                                                    ? item.lecturer?.userProfile?.fullname
+                                                    : item.name,
+                                                value: item.id,
+                                            }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn GVHD1"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'supervisor', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                const data = record?.supervisor
+                                const name = data?.lecturer
+                                    ? data?.lecturer?.userProfile?.fullname
+                                    : data?.name || ''
+                                return name
+                            },
+                        },
+                        {
+                            title: 'GVHD2',
+                            width: 250,
+                            align: 'left',
+                            dataIndex: 'coSupervisor',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue =
+                                        editingValues[record?.id]?.coSupervisorId ??
+                                        record?.coSupervisorId
+                                    return (
+                                        <Select
+                                            className="w-46"
+                                            options={expertProfiles?.map((item: any) => ({
+                                                label: item.lecturer
+                                                    ? item.lecturer?.userProfile?.fullname
+                                                    : item.name,
+                                                value: item.id,
+                                            }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn GVHD2"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'coSupervisor', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                const data = record?.coSupervisor
+                                const name = data?.lecturer
+                                    ? data?.lecturer?.userProfile?.fullname
+                                    : data?.name || ''
+                                return name
+                            },
+                        },
+                        {
+                            title: 'Chủ tịch',
+                            width: 200,
+                            align: 'left',
+                            dataIndex: 'chairman',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const originalChairmanId = record?.council?.members?.find(
+                                        (x: any) => x.role === CouncilRole.CHAIRMAN
+                                    )?.expert?.id
+
+                                    const currentValue =
+                                        editingValues[record.id]?.chairman ??
+                                        originalChairmanId ??
+                                        undefined
+                                    return (
+                                        <Select
+                                            className="w-40"
+                                            options={expertProfiles
+                                                ?.filter((x: any) => x.eligiblePresident === true)
+                                                ?.map((item: any) => ({
+                                                    label: item.lecturer
+                                                        ? item.lecturer?.userProfile?.fullname
+                                                        : item.name,
+                                                    value: item.id,
+                                                }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn chủ tịch"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'chairman', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                const data = record?.council?.members.find(
+                                    (x: any) => x.role === CouncilRole.CHAIRMAN
+                                )
+                                const name = data?.expert?.lecturer
+                                    ? data?.expert?.lecturer?.userProfile?.fullname
+                                    : data?.expert?.name || ''
+                                return name
+                            },
+                        },
+                        {
+                            title: 'Thư ký',
+                            width: 200,
+                            align: 'left',
+                            dataIndex: 'secretary',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const originalSecretaryId = record?.council?.members?.find(
+                                        (x: any) => x.role === CouncilRole.SECRETARY
+                                    )?.expert?.id
+
+                                    const currentValue =
+                                        editingValues[record.id]?.secretary ??
+                                        originalSecretaryId ??
+                                        undefined
+                                    return (
+                                        <Select
+                                            className="w-40"
+                                            options={expertProfiles
+                                                ?.filter((x: any) => x.eligibleSecretary === true)
+                                                ?.map((item: any) => ({
+                                                    label: item.lecturer
+                                                        ? item.lecturer?.userProfile?.fullname
+                                                        : item.name,
+                                                    value: item.id,
+                                                }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn thư ký"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'secretary', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                const name =
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.SECRETARY
+                                    )?.expert?.lecturer.userProfile.fullname ||
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.SECRETARY
+                                    )?.expert?.name ||
+                                    ''
+                                return name
+                            },
+                        },
+                        {
+                            title: 'Phản biện 1',
+                            width: 200,
+                            align: 'left',
+                            dataIndex: 'reviewer1',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const originalReviewer1Id = record?.council?.members?.find(
+                                        (x: any) => x.role === CouncilRole.REVIEWER_1
+                                    )?.expert?.id
+
+                                    const currentValue =
+                                        editingValues[record.id]?.reviewer1 ??
+                                        originalReviewer1Id ??
+                                        undefined
+                                    return (
+                                        <Select
+                                            className="w-40"
+                                            options={expertProfiles?.map((item: any) => ({
+                                                label: item.lecturer
+                                                    ? item.lecturer?.userProfile?.fullname
+                                                    : item.name,
+                                                value: item.id,
+                                            }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn Phản biện 1"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'reviewer1', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                const name =
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.REVIEWER_1
+                                    )?.expert?.lecturer.userProfile.fullname ||
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.REVIEWER_1
+                                    )?.expert?.name ||
+                                    ''
+                                return name
+                            },
+                        },
+                        {
+                            title: 'Phản biện 2',
+                            width: 200,
+                            align: 'left',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const originalReviewer2Id = record?.council?.members?.find(
+                                        (x: any) => x.role === CouncilRole.REVIEWER_2
+                                    )?.expert?.id
+
+                                    const currentValue =
+                                        editingValues[record.id]?.reviewer2 ??
+                                        originalReviewer2Id ??
+                                        undefined
+
+                                    return (
+                                        <Select
+                                            className="w-40"
+                                            options={expertProfiles?.map((item: any) => ({
+                                                label: item.lecturer
+                                                    ? item.lecturer?.userProfile?.fullname
+                                                    : item.name,
+                                                value: item.id,
+                                            }))}
+                                            value={currentValue}
+                                            placeholder="Chọn Phản biện 2"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'reviewer2', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                const name =
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.REVIEWER_2
+                                    )?.expert?.lecturer.userProfile.fullname ||
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.REVIEWER_2
+                                    )?.expert?.name ||
+                                    ''
+                                return name
+                            },
+                        },
+                        {
+                            title: 'Ủy viên',
+                            width: 200,
+                            align: 'left',
+                            dataIndex: 'councilMember',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const originalCouncilMemberId = record?.council?.members?.find(
+                                        (x: any) => x.role === CouncilRole.MEMBER
+                                    )?.expert?.id
+                                    const currentValue =
+                                        editingValues[record.id]?.councilMember ??
+                                        originalCouncilMemberId ??
+                                        undefined
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.MEMBER
+                                    )?.expert?.id || ''
+                                    return (
+                                        <Select
+                                            className="w-40"
+                                            options={expertProfiles?.map((item: any) => ({
+                                                label: item.lecturer
+                                                    ? item.lecturer?.userProfile?.fullname
+                                                    : item.name,
+                                                value: item.id,
+                                            }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn ủy viên"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'councilMember', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                const name =
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.MEMBER
+                                    )?.expert?.lecturer.userProfile.fullname ||
+                                    record?.council?.members.find(
+                                        (x: any) => x.role === CouncilRole.MEMBER
+                                    )?.expert?.name ||
+                                    ''
+                                return name
+                            },
+                        },
+
+                        {
+                            title: 'Phòng bảo vệ',
+                            width: 150,
+                            align: 'left',
+                            dataIndex: 'room',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue = record?.roomId || ''
+                                    return (
+                                        <Select
+                                            className="w-28"
+                                            options={roomsData?.map((item) => ({
+                                                label: item.name,
+                                                value: item.id,
+                                            }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn phòng"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'room', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                return record?.room?.name || ''
+                            },
+                        },
+                        {
+                            title: 'Ngày bảo vệ',
+                            width: 150,
+                            align: 'left',
+                            dataIndex: 'defenseDate',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue = record?.defenseDate
+                                        ? dayjs(record?.defenseDate)
+                                        : ''
+                                    return (
+                                        <DatePicker
+                                            className="w-28"
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn ngày"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'defenseDate', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                return record?.defenseDate
+                                    ? dayjs(record?.defenseDate).format('DD/MM/YYYY')
+                                    : ''
+                            },
+                        },
+                        {
+                            title: 'Ca bảo vệ',
+                            width: 150,
+                            align: 'left',
+                            dataIndex: 'defenseSession',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue = record?.defenseSessionId || ''
+                                    return (
+                                        <Select
+                                            className="w-28"
+                                            options={defenseSessionData?.map((item) => ({
+                                                label: item?.startTime
+                                                    ? dayjs(
+                                                          record?.defenseSession?.startTime
+                                                      ).format('HH:mm')
+                                                    : '',
+                                                value: item.id,
+                                            }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn ca"
+                                            onChange={(value) =>
+                                                handleEditChange(
+                                                    record?.id,
+                                                    'defenseSession',
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    )
+                                }
+
+                                return record?.defenseSession?.startTime
+                                    ? dayjs(record?.defenseSession?.startTime).format('HH:mm')
+                                    : ''
+                            },
+                        },
+                        {
+                            title: 'Điểm bảo vệ',
+                            width: 150,
+                            align: 'left',
+                            dataIndex: 'defenseRecordFinalScore',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue =
+                                        editingValues[record.id]?.defenseRecordFinalScore ??
+                                        record?.defenseRecord?.finalScore
+                                    return (
+                                        <InputNumber
+                                            className="w-28"
+                                            value={currentValue || undefined}
+                                            placeholder="Nhập điểm"
+                                            onChange={(value) =>
+                                                handleEditChange(
+                                                    record?.id,
+                                                    'defenseRecordFinalScore',
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    )
+                                }
+                                return record?.defenseRecord
+                                    ? Number(record?.defenseRecord?.finalScore).toFixedSmart(2)
+                                    : ''
+                            },
+                        },
+                        {
+                            title: 'Nhận xét',
+                            width: 250,
+                            align: 'left',
+                            dataIndex: 'defenseRecordComments',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue =
+                                        editingValues[record.id]?.defenseRecordComments ??
+                                        record?.defenseRecord?.comments ??
+                                        ''
+                                    return (
+                                        <div onClick={(e) => e.stopPropagation()}>
+                                            <TextArea
+                                                rows={2}
+                                                value={currentValue}
+                                                onChange={(e) =>
+                                                    handleEditChange(
+                                                        record?.id,
+                                                        'defenseRecordComments',
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    )
+                                }
+                                return record?.defenseRecord?.comments || ''
+                            },
+                        },
+                        {
+                            title: 'Trạng thái',
+                            width: 150,
+                            fixed: 'right',
+                            align: 'center',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue = editingValues[record.id]?.status
+                                    return (
+                                        <Select
+                                            className="w-28"
+                                            options={thesisProjectStatusOptions?.map((item) => ({
+                                                label: item.label,
+                                                value: item.value,
+                                            }))}
+                                            value={currentValue || undefined}
+                                            placeholder="Chọn trạng thái"
+                                            onChange={(value) =>
+                                                handleEditChange(record?.id, 'status', value)
+                                            }
+                                        />
+                                    )
+                                }
+                                const label = getThesisProjectStatusLabel(record?.status)
+                                const color = getThesisProjectStatusColor(record?.status)
+                                return <Tag color={color}>{label}</Tag>
+                            },
+                        },
+                        {
+                            title: 'Cài đặt',
+                            width: 80,
+                            fixed: 'right',
+                            align: 'center',
+                            render: (_, record) => (
+                                <Button
+                                    type="text"
+                                    icon={<SquarePen size={18} />}
+                                    onClick={() => {
+                                        setCurrentProject(record)
+                                        setIsMemberModalOpen(true)
+                                    }}
+                                />
+                            ),
+                        },
+                    ]}
+                    data={thesisProjectData}
+                    rowSelection={rowSelection}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: thesisProjectDataCount,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
+                    }}
                 />
-              ),
-            },
-          ]}
-          data={thesisProjectData}
-          rowSelection={rowSelection}
-          pagination={{
-            current: currentPage,
-            pageSize: numberOfPages,
-            total: thesisProjectDataCount,
-            onChange: (page, pageSize) => {
-              if (numberOfPages === pageSize) {
-                setCurrentPage(page);
-              } else {
-                setCurrentPage(1);
-                setNumberOfPages(pageSize);
-              }
-            },
-          }}
-        />
-      </Col>
-      {isMemberModalOpen && (
-        <StudentManagementModal
-          isOpen={isMemberModalOpen}
-          onClose={() => setIsMemberModalOpen(false)}
-          project={currentProject}
-          allStudentsInClass={studentsInSelectedClass}
-          onRefresh={async () => {
-            handleSearch(); 
-            await refetchThesisProjectData(); 
-        }}
-        />
-      )}
-    </Row>
-  );
+            </Col>
+            {isMemberModalOpen && (
+                <StudentManagementModal
+                    isOpen={isMemberModalOpen}
+                    onClose={() => setIsMemberModalOpen(false)}
+                    project={currentProject}
+                    allStudentsInClass={studentsInSelectedClass}
+                    onRefresh={async () => {
+                        handleSearch()
+                        await refetchThesisProjectData()
+                    }}
+                />
+            )}
+        </Row>
+    )
 }
 // Tách riêng để khi nhập điểm, chỉ có Modal này re-render, trang chính không bị ảnh hưởng
 const StudentManagementModal = ({
-  isOpen,
-  onClose,
-  project,
-  allStudentsInClass,
-  onRefresh,
+    isOpen,
+    onClose,
+    project,
+    allStudentsInClass,
+    onRefresh,
 }: any) => {
-  const [activeTab, setActiveTab] = useState("1");
-  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
-  const [gradeValues, setGradeValues] = useState<Record<string, any>>({});
-  useEffect(() => {
-    if (project && isOpen) {
-      setSelectedStudentIds(
-        project.registrations?.map((r: any) => r.studentId) || []
-      );
+    const [activeTab, setActiveTab] = useState('1')
+    const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
+    const [gradeValues, setGradeValues] = useState<Record<string, any>>({})
+    useEffect(() => {
+        if (project && isOpen) {
+            setSelectedStudentIds(project.registrations?.map((r: any) => r.studentId) || [])
 
-      const initialGrades: Record<string, any> = {};
-      project.registrations?.forEach((reg: any) => {
-        const s = reg.studentSubjectScore;
-        initialGrades[reg.studentId] = {
-          scoreId: s?.id,
-          attendanceScore: s?.attendanceScore,
-          midtermScore: s?.midtermScore,
-          examScore: s?.examScore,
-          finalScore: s?.finalScore ? Number(s.finalScore) : null,
-        };
-      });
-      setGradeValues(initialGrades);
-    }
-  }, [project, isOpen]);
-
-  const handleScoreChange = (
-    studentId: string,
-    field: string,
-    val: number | null
-  ) => {
-    setGradeValues((prev) => ({
-      ...prev,
-      [studentId]: { ...prev[studentId], [field]: val },
-    }));
-  };
-
-  const gradeColumns = useMemo(
-    () => [
-      {
-        title: "Học viên",
-        render: (_: any, reg: any) => (
-          <div>
-            <div className="font-bold">
-              {reg.student?.userProfile?.fullname}
-            </div>
-            <div className="text-xs text-gray-400">{reg.student?.code}</div>
-          </div>
-        ),
-      },
-      {
-        title: "Chuyên cần",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.attendanceScore}
-            onChange={(val) =>
-              handleScoreChange(reg.studentId, "attendanceScore", val)
-            }
-          />
-        ),
-      },
-      {
-        title: "Giữa kỳ",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.midtermScore}
-            onChange={(val) =>
-              handleScoreChange(reg.studentId, "midtermScore", val)
-            }
-          />
-        ),
-      },
-      {
-        title: "Điểm thi",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.examScore}
-            onChange={(val) =>
-              handleScoreChange(reg.studentId, "examScore", val)
-            }
-          />
-        ),
-      },
-      {
-        title: "Tổng kết",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            className="font-bold text-blue-600"
-            value={gradeValues[reg.studentId]?.finalScore}
-            onChange={(val) =>
-              handleScoreChange(reg.studentId, "finalScore", val)
-            }
-          />
-        ),
-      },
-    ],
-    [gradeValues]
-  ); // Chỉ tính toán lại cột khi dữ liệu điểm thay đổi
-  const handleSaveMembers = async () => {
-    try {
-      const transactions: any[] = [];
-
-      const affectedProjectIds = new Set<string>();
-      affectedProjectIds.add(project.id);
-
-      selectedStudentIds.forEach((studentId) => {
-        const reg = allStudentsInClass.find(
-          (s: any) => s.studentId === studentId
-        )?.studentThesisRegistration?.[0];
-        if (reg?.thesisProjectId) {
-          affectedProjectIds.add(reg.thesisProjectId);
+            const initialGrades: Record<string, any> = {}
+            project.registrations?.forEach((reg: any) => {
+                const s = reg.studentSubjectScore
+                initialGrades[reg.studentId] = {
+                    scoreId: s?.id,
+                    attendanceScore: s?.attendanceScore,
+                    midtermScore: s?.midtermScore,
+                    examScore: s?.examScore,
+                    finalScore: s?.finalScore ? Number(s.finalScore) : null,
+                }
+            })
+            setGradeValues(initialGrades)
         }
-      });
+    }, [project, isOpen])
 
-      const oldStudentIds =
-        project.registrations?.map((r: any) => r.studentId) || [];
-      const removedStudentIds = oldStudentIds.filter(
-        (id: string) => !selectedStudentIds.includes(id)
-      );
-
-      if (removedStudentIds.length > 0) {
-        transactions.push({
-          model: "StudentThesisRegistration" as const,
-          operation: "deleteMany" as const,
-          data: {
-            where: {
-              thesisProjectId: project.id,
-              studentId: { in: removedStudentIds },
-            },
-          },
-        });
-      }
-      for (const studentId of selectedStudentIds) {
-        const existingReg = allStudentsInClass.find(
-          (s: any) => s.studentId === studentId
-        )?.studentThesisRegistration?.[0];
-
-        if (existingReg) {
-          transactions.push({
-            model: "StudentThesisRegistration" as const,
-            operation: "update" as const,
-            data: {
-              where: { id: existingReg.id },
-              data: {
-                thesisProject: { connect: { id: project.id } },
-                status: StudentThesisRegistrationStatus.ACCEPTED,
-              },
-            },
-          });
-        } else {
-          const studentScore = allStudentsInClass.find(
-            (s: any) => s.studentId === studentId
-          );
-          transactions.push({
-            model: "StudentThesisRegistration" as const,
-            operation: "create" as const,
-            data: {
-              data: {
-                studentId: studentId,
-                studentSubjectScoreId: studentScore?.id,
-                thesisProject: { connect: { id: project.id } },
-                status: StudentThesisRegistrationStatus.ACCEPTED,
-                registeredAt: new Date(),
-              },
-            },
-          });
-        }
-      }
-
-      transactions.push({
-        model: "ThesisProject" as const,
-        operation: "updateMany" as const,
-        data: {
-          where: {
-            id: { in: Array.from(affectedProjectIds) },
-            registrations: {
-              none: {},
-            },
-            deletedAt: null,
-          },
-          data: {
-            deletedAt: new Date(),
-          },
-        },
-      });
-      await sqlTransaction(transactions);
-
-      message.success("Cập nhật thành viên đồ án thành công");
-      onClose();
-      onRefresh();
-    } catch (error) {
-      console.error("Lỗi cập nhật nhóm:", error);
-      message.error("Có lỗi xảy ra trong quá trình xử lý nhóm.");
+    const handleScoreChange = (studentId: string, field: string, val: number | null) => {
+        setGradeValues((prev) => ({
+            ...prev,
+            [studentId]: { ...prev[studentId], [field]: val },
+        }))
     }
-  };
-  const handleSaveScores = async () => {
-    try {
-      const transactions: any[] = [];
 
-      Object.keys(gradeValues).forEach((studentId) => {
-        const grades = gradeValues[studentId];
-        if (grades.scoreId) {
-          transactions.push({
-            model: "StudentSubjectScore" as const,
-            operation: "update" as const,
-            data: {
-              where: { id: grades.scoreId },
-              data: {
-                attendanceScore: grades.attendanceScore ?? null,
-                midtermScore: grades.midtermScore ?? null,
-                examScore: grades.examScore ?? null,
-                finalScore: grades.finalScore ?? null,
-              },
+    const gradeColumns = useMemo(
+        () => [
+            {
+                title: 'Học viên',
+                render: (_: any, reg: any) => (
+                    <div>
+                        <div className="font-bold">{reg.student?.userProfile?.fullname}</div>
+                        <div className="text-xs text-gray-400">{reg.student?.code}</div>
+                    </div>
+                ),
             },
-          });
-        }
-      });
-      if (transactions.length === 0) {
-        message.info("Không có thay đổi về điểm số");
-        return;
-      }
+            {
+                title: 'Chuyên cần',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        value={gradeValues[reg.studentId]?.attendanceScore}
+                        onChange={(val) => handleScoreChange(reg.studentId, 'attendanceScore', val)}
+                    />
+                ),
+            },
+            {
+                title: 'Giữa kỳ',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        value={gradeValues[reg.studentId]?.midtermScore}
+                        onChange={(val) => handleScoreChange(reg.studentId, 'midtermScore', val)}
+                    />
+                ),
+            },
+            {
+                title: 'Điểm thi',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        value={gradeValues[reg.studentId]?.examScore}
+                        onChange={(val) => handleScoreChange(reg.studentId, 'examScore', val)}
+                    />
+                ),
+            },
+            {
+                title: 'Tổng kết',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        className="font-bold text-blue-600"
+                        value={gradeValues[reg.studentId]?.finalScore}
+                        onChange={(val) => handleScoreChange(reg.studentId, 'finalScore', val)}
+                    />
+                ),
+            },
+        ],
+        [gradeValues]
+    ) // Chỉ tính toán lại cột khi dữ liệu điểm thay đổi
+    const handleSaveMembers = async () => {
+        try {
+            const transactions: any[] = []
 
-      await sqlTransaction(transactions);
-      message.success("Cập nhật bảng điểm thành công");
-      onClose();
-      onRefresh();
-    } catch (error) {
-      message.error("Lỗi khi lưu điểm số");
-    }
-  };
-  const handleOk = async () => {
-    if (activeTab === "1") {
-      await handleSaveMembers();
-    } else {
-      await handleSaveScores();
-    }
-  };
-  const GradeTable = () => {
-    const columns = [
-      {
-        title: "Học viên",
-        width: 150,
-        render: (_: any, reg: any) => (
-          <div>
-            <div>
-              <b>{reg.student?.userProfile?.fullname}</b>
-            </div>
-            <div className="text-xs text-gray-500">{reg.student?.code}</div>
-          </div>
-        ),
-      },
-      {
-        title: "Chuyên cần",
-        dataIndex: "attendanceScore",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.attendanceScore}
-            onChange={(val) =>
-              setGradeValues((prev) => ({
-                ...prev,
-                [reg.studentId]: {
-                  ...prev[reg.studentId],
-                  attendanceScore: val,
+            const affectedProjectIds = new Set<string>()
+            affectedProjectIds.add(project.id)
+
+            selectedStudentIds.forEach((studentId) => {
+                const reg = allStudentsInClass.find((s: any) => s.studentId === studentId)
+                    ?.studentThesisRegistration?.[0]
+                if (reg?.thesisProjectId) {
+                    affectedProjectIds.add(reg.thesisProjectId)
+                }
+            })
+
+            const oldStudentIds = project.registrations?.map((r: any) => r.studentId) || []
+            const removedStudentIds = oldStudentIds.filter(
+                (id: string) => !selectedStudentIds.includes(id)
+            )
+
+            if (removedStudentIds.length > 0) {
+                transactions.push({
+                    model: 'StudentThesisRegistration' as const,
+                    operation: 'deleteMany' as const,
+                    data: {
+                        where: {
+                            thesisProjectId: project.id,
+                            studentId: { in: removedStudentIds },
+                        },
+                    },
+                })
+            }
+            for (const studentId of selectedStudentIds) {
+                const existingReg = allStudentsInClass.find((s: any) => s.studentId === studentId)
+                    ?.studentThesisRegistration?.[0]
+
+                if (existingReg) {
+                    transactions.push({
+                        model: 'StudentThesisRegistration' as const,
+                        operation: 'update' as const,
+                        data: {
+                            where: { id: existingReg.id },
+                            data: {
+                                thesisProject: { connect: { id: project.id } },
+                                status: StudentThesisRegistrationStatus.ACCEPTED,
+                            },
+                        },
+                    })
+                } else {
+                    const studentScore = allStudentsInClass.find(
+                        (s: any) => s.studentId === studentId
+                    )
+                    transactions.push({
+                        model: 'StudentThesisRegistration' as const,
+                        operation: 'create' as const,
+                        data: {
+                            data: {
+                                studentId: studentId,
+                                studentSubjectScoreId: studentScore?.id,
+                                thesisProject: { connect: { id: project.id } },
+                                status: StudentThesisRegistrationStatus.ACCEPTED,
+                                registeredAt: new Date(),
+                            },
+                        },
+                    })
+                }
+            }
+
+            transactions.push({
+                model: 'ThesisProject' as const,
+                operation: 'updateMany' as const,
+                data: {
+                    where: {
+                        id: { in: Array.from(affectedProjectIds) },
+                        registrations: {
+                            none: {},
+                        },
+                        deletedAt: null,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
                 },
-              }))
+            })
+            await sqlTransaction(transactions)
+
+            message.success('Cập nhật thành viên đồ án thành công')
+            onClose()
+            onRefresh()
+        } catch (error) {
+            console.error('Lỗi cập nhật nhóm:', error)
+            message.error('Có lỗi xảy ra trong quá trình xử lý nhóm.')
+        }
+    }
+    const handleSaveScores = async () => {
+        try {
+            const transactions: any[] = []
+
+            Object.keys(gradeValues).forEach((studentId) => {
+                const grades = gradeValues[studentId]
+                if (grades.scoreId) {
+                    transactions.push({
+                        model: 'StudentSubjectScore' as const,
+                        operation: 'update' as const,
+                        data: {
+                            where: { id: grades.scoreId },
+                            data: {
+                                attendanceScore: grades.attendanceScore ?? null,
+                                midtermScore: grades.midtermScore ?? null,
+                                examScore: grades.examScore ?? null,
+                                finalScore: grades.finalScore ?? null,
+                            },
+                        },
+                    })
+                }
+            })
+            if (transactions.length === 0) {
+                message.info('Không có thay đổi về điểm số')
+                return
             }
-          />
-        ),
-      },
-      {
-        title: "Giữa kỳ",
-        dataIndex: "midtermScore",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.midtermScore}
-            onChange={(val) =>
-              setGradeValues((prev) => ({
-                ...prev,
-                [reg.studentId]: { ...prev[reg.studentId], midtermScore: val },
-              }))
-            }
-          />
-        ),
-      },
-      {
-        title: "Điểm thi",
-        dataIndex: "examScore",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.examScore}
-            onChange={(val) =>
-              setGradeValues((prev) => ({
-                ...prev,
-                [reg.studentId]: { ...prev[reg.studentId], examScore: val },
-              }))
-            }
-          />
-        ),
-      },
-      {
-        title: "Tổng kết",
-        dataIndex: "finalScore",
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            className="font-bold"
-            status={gradeValues[reg.studentId]?.examScore < 4 ? "warning" : ""}
-            value={gradeValues[reg.studentId]?.finalScore}
-            onChange={(val) =>
-              setGradeValues((prev) => ({
-                ...prev,
-                [reg.studentId]: { ...prev[reg.studentId], finalScore: val },
-              }))
-            }
-          />
-        ),
-      },
-    ];
+
+            await sqlTransaction(transactions)
+            message.success('Cập nhật bảng điểm thành công')
+            onClose()
+            onRefresh()
+        } catch (error) {
+            message.error('Lỗi khi lưu điểm số')
+        }
+    }
+    const handleOk = async () => {
+        if (activeTab === '1') {
+            await handleSaveMembers()
+        } else {
+            await handleSaveScores()
+        }
+    }
+    const GradeTable = () => {
+        const columns = [
+            {
+                title: 'Học viên',
+                width: 150,
+                render: (_: any, reg: any) => (
+                    <div>
+                        <div>
+                            <b>{reg.student?.userProfile?.fullname}</b>
+                        </div>
+                        <div className="text-xs text-gray-500">{reg.student?.code}</div>
+                    </div>
+                ),
+            },
+            {
+                title: 'Chuyên cần',
+                dataIndex: 'attendanceScore',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        value={gradeValues[reg.studentId]?.attendanceScore}
+                        onChange={(val) =>
+                            setGradeValues((prev) => ({
+                                ...prev,
+                                [reg.studentId]: {
+                                    ...prev[reg.studentId],
+                                    attendanceScore: val,
+                                },
+                            }))
+                        }
+                    />
+                ),
+            },
+            {
+                title: 'Giữa kỳ',
+                dataIndex: 'midtermScore',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        value={gradeValues[reg.studentId]?.midtermScore}
+                        onChange={(val) =>
+                            setGradeValues((prev) => ({
+                                ...prev,
+                                [reg.studentId]: { ...prev[reg.studentId], midtermScore: val },
+                            }))
+                        }
+                    />
+                ),
+            },
+            {
+                title: 'Điểm thi',
+                dataIndex: 'examScore',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        value={gradeValues[reg.studentId]?.examScore}
+                        onChange={(val) =>
+                            setGradeValues((prev) => ({
+                                ...prev,
+                                [reg.studentId]: { ...prev[reg.studentId], examScore: val },
+                            }))
+                        }
+                    />
+                ),
+            },
+            {
+                title: 'Tổng kết',
+                dataIndex: 'finalScore',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        className="font-bold"
+                        status={gradeValues[reg.studentId]?.examScore < 4 ? 'warning' : ''}
+                        value={gradeValues[reg.studentId]?.finalScore}
+                        onChange={(val) =>
+                            setGradeValues((prev) => ({
+                                ...prev,
+                                [reg.studentId]: { ...prev[reg.studentId], finalScore: val },
+                            }))
+                        }
+                    />
+                ),
+            },
+        ]
+
+        return (
+            <Table
+                dataSource={project?.registrations || []}
+                columns={columns}
+                pagination={false}
+                rowKey="id"
+                size="small"
+            />
+        )
+    }
 
     return (
-      <Table
-        dataSource={project?.registrations || []}
-        columns={columns}
-        pagination={false}
-        rowKey="id"
-        size="small"
-      />
-    );
-  };
-
-  return (
-    <Modal
-      title={`Cài đặt: ${project?.title || "Đồ án"}`}
-      open={isOpen}
-      onOk={handleOk}
-      onCancel={onClose}
-      width={activeTab === "1" ? 600 : 950}
-      okText="Lưu thay đổi"
-      destroyOnClose
-    >
-      <Tabs activeKey={activeTab} onChange={setActiveTab}>
-        <Tabs.TabPane tab="Thành viên nhóm" key="1">
-          <div className="py-4">
-            <Select
-              mode="multiple"
-              className="w-full"
-              value={selectedStudentIds}
-              onChange={setSelectedStudentIds}
-              options={allStudentsInClass.map((item: any) => ({
-                label: `${item.student?.userProfile?.fullname}`,
-                value: item.studentId,
-              }))}
-            />
-          </div>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Nhập điểm" key="2">
-          <div className="py-4">
-            <Table
-              dataSource={project?.registrations || []}
-              columns={gradeColumns}
-              pagination={false}
-              rowKey="id"
-              size="small"
-            />
-          </div>
-        </Tabs.TabPane>
-      </Tabs>
-    </Modal>
-  );
-};
+        <Modal
+            title={`Cài đặt: ${project?.title || 'Đồ án'}`}
+            open={isOpen}
+            onOk={handleOk}
+            onCancel={onClose}
+            width={activeTab === '1' ? 600 : 950}
+            okText="Lưu thay đổi"
+            destroyOnClose
+        >
+            <Tabs activeKey={activeTab} onChange={setActiveTab}>
+                <Tabs.TabPane tab="Thành viên nhóm" key="1">
+                    <div className="py-4">
+                        <Select
+                            mode="multiple"
+                            className="w-full"
+                            value={selectedStudentIds}
+                            onChange={setSelectedStudentIds}
+                            options={allStudentsInClass.map((item: any) => ({
+                                label: `${item.student?.userProfile?.fullname}`,
+                                value: item.studentId,
+                            }))}
+                        />
+                    </div>
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Nhập điểm" key="2">
+                    <div className="py-4">
+                        <Table
+                            dataSource={project?.registrations || []}
+                            columns={gradeColumns}
+                            pagination={false}
+                            rowKey="id"
+                            size="small"
+                        />
+                    </div>
+                </Tabs.TabPane>
+            </Tabs>
+        </Modal>
+    )
+}
 
 DanhMucDoAn.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>;
-};
+    return <DefaultLayout>{page}</DefaultLayout>
+}

@@ -24,7 +24,13 @@ interface ChatHeaderProps {
     onSignIn?: () => void
 }
 
-const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true, isSSOAuthenticated = false, onSignIn }: ChatHeaderProps) => {
+const ChatHeader = ({
+    collapsed,
+    onCollapse,
+    showCollapseButton = true,
+    isSSOAuthenticated = false,
+    onSignIn,
+}: ChatHeaderProps) => {
     const pathname = usePathname()
     const router = useRouter()
     const { onOpen: openAppSwitcher } = useDisclosure({
@@ -73,7 +79,7 @@ const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true, isSSOAut
                         {currentApp.label}
                     </Title>
                 )}
-                
+
                 {/* Nút Quản trị - chỉ hiện khi đã đăng nhập SSO */}
                 {isSSOAuthenticated && (
                     <Button
