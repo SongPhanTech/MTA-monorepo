@@ -303,8 +303,9 @@ export default function DanhMucDoAn() {
                 const originalRecord = thesisProjectData.find((t) => t.id === thesisId)
 
                 const finalScore =
-                    values.defenseRecordFinalScore === '' ||
-                    values.defenseRecordFinalScore === undefined
+                    (values.defenseRecordFinalScore === '' ||
+                    values.defenseRecordFinalScore === undefined 
+                || values.defenseRecordFinalScore === null)
                         ? null
                         : Number(values.defenseRecordFinalScore)
 
@@ -917,28 +918,28 @@ export default function DanhMucDoAn() {
                             align: 'left',
                             dataIndex: 'defenseRecordFinalScore',
                             render: (_, record) => {
+                                const scoreValue = record?.defenseRecord?.finalScore;
+                        
                                 if (editingRowKeys.includes(record?.id)) {
-                                    const currentValue =
-                                        editingValues[record.id]?.defenseRecordFinalScore ??
-                                        record?.defenseRecord?.finalScore
+                                    const currentValue = editingValues[record.id]?.defenseRecordFinalScore ?? scoreValue;
+                                    
                                     return (
                                         <InputNumber
                                             className='w-28'
-                                            value={currentValue || undefined}
+                                            value={(currentValue === null || currentValue === undefined) ? undefined : currentValue}
                                             placeholder='Nhập điểm'
                                             onChange={(value) =>
-                                                handleEditChange(
-                                                    record?.id,
-                                                    'defenseRecordFinalScore',
-                                                    value
-                                                )
+                                                handleEditChange(record?.id, 'defenseRecordFinalScore', value)
                                             }
                                         />
-                                    )
+                                    );
                                 }
-                                return record?.defenseRecord
-                                    ? Number(record?.defenseRecord?.finalScore).toFixedSmart(2)
-                                    : ''
+                        
+                                if (scoreValue === null || scoreValue === undefined) {
+                                    return '';
+                                }
+                        
+                                return Number(scoreValue).toFixedSmart(2);
                             },
                         },
                         {
