@@ -1,15 +1,17 @@
 import {
     AppstoreOutlined,
     ExportOutlined,
+    LoginOutlined,
     MenuOutlined,
     UnorderedListOutlined,
 } from '@ant-design/icons'
 import { Button, Layout, Typography } from 'antd'
 import { usePathname } from 'next/navigation'
+import { useRouter } from 'next/router'
 import APPS_TYPES from '@/navigations/header-content/app_types'
 import HeaderApp from '@/components/header'
-import LoginButton from '@/components/commons/login-button'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { ROUTER_PATH } from '@workspace/router'
 
 const { Header } = Layout
 const { Title } = Typography
@@ -18,10 +20,19 @@ interface ChatHeaderProps {
     collapsed: boolean
     onCollapse: (collapsed: boolean) => void
     showCollapseButton?: boolean
+    isSSOAuthenticated?: boolean
+    onSignIn?: () => void
 }
 
-const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHeaderProps) => {
+const ChatHeader = ({
+    collapsed,
+    onCollapse,
+    showCollapseButton = true,
+    isSSOAuthenticated = false,
+    onSignIn,
+}: ChatHeaderProps) => {
     const pathname = usePathname()
+    const router = useRouter()
     const { onOpen: openAppSwitcher } = useDisclosure({
         tag: 'AppSwitcherModal',
     })
@@ -37,6 +48,10 @@ const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHe
         if (typeof window !== 'undefined' && pathname) {
             window.open(window.location.href, '_blank')
         }
+    }
+
+    const handleNavigateToAdmin = () => {
+        router.push(ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_TAI_LIEU)
     }
 
     return (
@@ -64,6 +79,18 @@ const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHe
                         {currentApp.label}
                     </Title>
                 )}
+
+                {/* Nút Quản trị - chỉ hiện khi đã đăng nhập SSO */}
+                {isSSOAuthenticated && (
+                    <Button
+                        type="link"
+                        onClick={handleNavigateToAdmin}
+                        className="!text-primary hover:!text-primary/80 font-medium"
+                        title="Chuyển sang trang quản trị"
+                    >
+                        Quản trị →
+                    </Button>
+                )}
             </div>
 
             {/* Menu SSO bên phải */}
@@ -77,8 +104,17 @@ const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHe
                         title="Mở trong tab mới"
                     />
                 )}
-                <LoginButton />
-                <HeaderApp />
+                {!isSSOAuthenticated && onSignIn && (
+                    <Button
+                        type="primary"
+                        icon={<LoginOutlined />}
+                        onClick={onSignIn}
+                        className="flex items-center justify-center"
+                    >
+                        Đăng nhập
+                    </Button>
+                )}
+                {isSSOAuthenticated && <HeaderApp />}
             </div>
         </Header>
     )

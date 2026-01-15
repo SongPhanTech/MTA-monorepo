@@ -9,15 +9,12 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import type { ExamType } from '@workspace/db/client'
 import {
     useCountSubject,
     useCreateSubjectVersionHistory,
-    useFindManyDM_DonVi,
     useFindManySubject,
-    useFindUniqueTrainingObjectType,
     useUpdateManySubjectVersion,
     useUpdateSubject,
     useUpdateSubjectVersion,
@@ -57,15 +54,6 @@ export default function SubjectList() {
     })
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: selectedTrainingObjectType } = useFindUniqueTrainingObjectType(
-        {
-            where: { id: trainingObjectTypeId },
-            select: { name: true },
-        },
-        {
-            enabled: !!trainingObjectTypeId,
-        }
-    )
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
     const { mutateAsync: updateManySubjectVersion } = useUpdateManySubjectVersion()
     async function handleToggleLock() {
@@ -87,19 +75,20 @@ export default function SubjectList() {
             hideSpinner()
         }
     }
-    const { data: organization = [] } = useFindManyDM_DonVi({
-        orderBy: { sTen: 'asc' },
-    })
-    const treeData = buildOrgTree(organization)
 
-    const where = useMemo(() => {
-        const subjectVersionFilter = {
+    const subjectVersionWhere = useMemo(() => {
+        return {
             ...(filters.name && {
                 name: { contains: filters.name, mode: 'insensitive' as const },
             }),
             ...(filters.code && {
                 code: { contains: filters.code, mode: 'insensitive' as const },
             }),
+            ...(filters.examType
+                ? {
+                      examType: { in: filters.examType },
+                  }
+                : {}),
             ...(filters.isTeaching !== undefined &&
                 filters.isTeaching.length === 1 && {
                     subjectClass: filters.isTeaching[0]
@@ -107,15 +96,11 @@ export default function SubjectList() {
                         : { none: {} },
                 }),
         }
+    }, [filters.name, filters.code, filters.examType, filters.isTeaching])
 
+    const where = useMemo(() => {
         return {
-            ...(trainingObjectTypeId
-                ? {
-                      subjectVersion: {
-                          some: { trainingObjectTypeId },
-                      },
-                  }
-                : {}),
+            ...(trainingObjectTypeId ? { subjectVersion: { some: { trainingObjectTypeId } } } : {}),
             ...(filters.searchText
                 ? {
                       name: {
@@ -139,17 +124,18 @@ export default function SubjectList() {
                       },
                   }
                 : {}),
-            ...(Object.keys(subjectVersionFilter).length > 0 && {
-                subjectVersion: { some: subjectVersionFilter },
+            ...(Object.keys(subjectVersionWhere).length > 0 && {
+                subjectVersion: { some: subjectVersionWhere },
             }),
         }
-    }, [trainingObjectTypeId, filters])
+    }, [trainingObjectTypeId, filters, subjectVersionWhere])
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where,
         include: {
             _count: true,
             subjectVersion: {
+                where: subjectVersionWhere,
                 orderBy: [
                     ...emptyObjectIf([{ credit: filters.credit }], !!filters.credit),
                     ...emptyObjectIf([{ period: filters.period }], !!filters.period),

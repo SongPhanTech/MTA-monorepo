@@ -20,6 +20,7 @@
     "docxtemplater": "catalog:",
     "exceljs": "catalog:",
     "hono": "catalog:",
+    "p-map": "^7.0.4",
     "pizzip": "catalog:",
     "pptx-automizer": "catalog:",
     "prom-client": "catalog:",

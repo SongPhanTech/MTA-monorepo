@@ -85,12 +85,12 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
             {
                 label: 'Kỳ thi',
                 key: '1',
-                children: <KyThi />,
+                children: <KyThi setActiveKey={setActiveKey} />,
             },
             {
                 label: 'Phòng thi',
                 key: '11',
-                children: <PhongThi />,
+                children: <PhongThi setActiveKey={setActiveKey} />,
                 disabled: !examId,
             },
         ]
@@ -112,7 +112,7 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
                 ...baseMenu,
                 {
                     label: 'Nhập điểm theo phách',
-                    key: '3',
+                    key: '2',
                     children: <NhapDiemPhach />,
                     disabled: !selectedExamListId,
                 },

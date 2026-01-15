@@ -1059,44 +1059,51 @@ export default function NhapDiem({
                                 title: 'Điểm thi',
                                 dataIndex: 'examScore',
                                 width: 65,
-                                // type: 'order',
                                 align: 'center',
-                                render: (_, record) => {
-                                    if (role !== 'GV' || score === 'CC/TX' || !!record.examBanned) {
-                                        return record.examScore ?? ''
+                                render: (
+                                    _,
+                                    {
+                                        id,
+                                        attendanceScore,
+                                        midtermScore,
+                                        examBanned,
+                                        subjectClass,
+                                    }: any
+                                ) => {
+                                    const isMissingScore =
+                                        attendanceScore == null || midtermScore == null
+                                    if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
+                                        return midtermScore ?? ''
                                     }
+
                                     return (
                                         <Form.Item
                                             className="w-full m-0"
-                                            name={['list', record.id, 'examScore']}
-                                            label=""
+                                            name={['list', id, 'examScore']}
                                             rules={[
                                                 {
                                                     validator: (_, value) =>
                                                         validateExamScore(
                                                             value,
-                                                            record?.subjectClass?.subject?.onePoint
+                                                            subjectClass?.subject?.onePoint
                                                         ),
                                                 },
                                             ]}
                                         >
                                             <InputNumber
-                                                readOnly={disabledForm}
-                                                variant={disabledForm ? 'underlined' : 'outlined'}
-                                                disabled={disabledForm}
-                                                id={`score-thi-${record.id}`}
-                                                style={{
-                                                    width: '100%',
-                                                }}
-                                                step={0}
+                                                disabled={disabledForm || isMissingScore}
+                                                readOnly={disabledForm || isMissingScore}
+                                                variant={
+                                                    disabledForm || isMissingScore
+                                                        ? 'underlined'
+                                                        : 'outlined'
+                                                }
+                                                id={`score-thi-${id}`}
+                                                style={{ width: '100%' }}
+                                                placeholder={isMissingScore ? 'Thiếu điểm' : ''}
                                                 controls={false}
                                                 onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(
-                                                        e,
-                                                        record.id,
-                                                        'thi',
-                                                        dataTable
-                                                    )
+                                                    handleScoreInputKeyDown(e, id, 'thi', dataTable)
                                                 }
                                             />
                                         </Form.Item>
@@ -1238,7 +1245,17 @@ export default function NhapDiem({
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox disabled={score === 'THI' || disabledForm} />
+                                            <Checkbox
+                                                disabled={score === 'THI' || disabledForm}
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'examBannedReason'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
+                                            />
                                         </Form.Item>
                                     )
                                 },
@@ -1295,7 +1312,17 @@ export default function NhapDiem({
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox disabled={score === 'THI' || disabledForm} />
+                                            <Checkbox
+                                                disabled={score === 'THI' || disabledForm}
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'examPostponed'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
+                                            />
                                         </Form.Item>
                                     )
                                 },
@@ -1360,6 +1387,14 @@ export default function NhapDiem({
                                                     score === 'CC/TX' ||
                                                     disabledForm
                                                 }
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'suspendedReason'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
                                             />
                                         </Form.Item>
                                     )

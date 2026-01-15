@@ -1,10 +1,19 @@
-import { AuditOutlined, EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons'
+// Trong code này có code sv: do cả khi upload và download lúc lư
+
+import {
+    AuditOutlined,
+    DownloadOutlined,
+    EditOutlined,
+    EyeOutlined,
+    ReloadOutlined,
+} from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DocumentSidebar from '@components/commons/document-sidebar'
 import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
+import { fetchPresignedGetObject } from '@/lib/api/common/commonComponents'
 import { $Enums } from '@workspace/db'
 import {
     useCountDocument,
@@ -96,6 +105,7 @@ function Page() {
         skip: (tableParams.pagination.current - 1) * tableParams.pagination.pageSize,
         take: tableParams.pagination.pageSize,
     })
+
     useEffect(() => {
         setTableParams((prev) => ({
             ...prev,
@@ -119,6 +129,51 @@ function Page() {
 
     const { mutateAsync: deleteDocument } = useDeleteDocument()
     const { mutateAsync: deleteManyDocumentTopic } = useDeleteManyDocumentTopic()
+
+    const onDownload = async (objectName: string, fileName: string) => {
+        try {
+            // Kiểm tra nếu uri là blob URL (dữ liệu cũ bị lỗi)
+            if (objectName.startsWith('blob:')) {
+                message.error('Tài liệu này không thể tải xuống. Vui lòng xóa và tải lên lại.')
+                return
+            }
+
+            // Loại bỏ bucket name prefix nếu có (fix duplicate mta/mta)
+            let cleanObjectName = objectName
+            if (objectName.startsWith('mta/')) {
+                cleanObjectName = objectName.substring(4) // Bỏ "mta/"
+            }
+
+            // Lấy presigned URL từ API MinIO
+            const result = await fetchPresignedGetObject({
+                queryParams: { objectName: cleanObjectName },
+            })
+
+            const presignedUrl = result.url
+            if (!presignedUrl) {
+                message.error('Không thể lấy đường dẫn tải file')
+                return
+            }
+
+            // Tải file từ presigned URL
+            const response = await fetch(presignedUrl)
+            if (!response.ok) {
+                message.error('Lỗi khi tải file')
+                return
+            }
+            const blob = await response.blob()
+            const blobUrl = window.URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = blobUrl
+            link.setAttribute('download', fileName)
+            document.body.appendChild(link)
+            link.click()
+            link.parentNode?.removeChild(link)
+            window.URL.revokeObjectURL(blobUrl)
+        } catch (_error) {
+            message.error('Lỗi khi tải file')
+        }
+    }
 
     const handleDeleteDocument = async (id: string) => {
         if (!id) return
@@ -390,6 +445,19 @@ function Page() {
                                                 <AuditOutlined
                                                     onClick={() => openPheDuyetTaiLieu(record.id)}
                                                     className="text-green-600 cursor-pointer text-lg"
+                                                />
+                                            </Tooltip>
+                                        )}
+                                        {record.uri && (
+                                            <Tooltip title="Tải xuống" placement="top">
+                                                <DownloadOutlined
+                                                    onClick={() =>
+                                                        onDownload(
+                                                            record.uri!,
+                                                            record.title || record.id
+                                                        )
+                                                    }
+                                                    className="text-cyan-600 cursor-pointer text-lg"
                                                 />
                                             </Tooltip>
                                         )}

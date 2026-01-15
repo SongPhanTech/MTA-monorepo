@@ -21,6 +21,7 @@ import dayjs from 'dayjs'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import FilterSelect from './filter-select'
+import { normalizeVietnamese } from '@workspace/libs/utils'
 
 dayjs.locale('vi')
 
@@ -147,15 +148,6 @@ const Table = <T extends AnyObject>({
         }
 
         return result
-    }
-
-    function normalizeVietnamese(str: string): string {
-        return str
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd')
-            .replace(/Đ/g, 'D')
-            .toLowerCase()
     }
 
     function searchVietnamese(

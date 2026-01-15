@@ -9,12 +9,13 @@ import type { AcademicRankingConvert, FixedClass } from '@workspace/db/client'
 import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from '@workspace/db/hooks'
 import { useCalculateStudentSchoolYearResult } from '@workspace/libs/api/training'
 import {
+    Select,
     SelectTrainingCourse,
     useSemesterStore,
     useTrainingCourseStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import _ from 'lodash'

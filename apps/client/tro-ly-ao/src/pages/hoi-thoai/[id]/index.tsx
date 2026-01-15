@@ -114,6 +114,11 @@ export default function Page() {
     const [selectedCitationContent, setSelectedCitationContent] = useState<string | null>(null)
     const [selectedFaqData, setSelectedFaqData] = useState<FAQCitation | null>(null)
     const [selectedDocumentIds, setSelectedDocumentIds] = useState<string[]>([])
+    const [isStoppedByUser, setIsStoppedByUser] = useState(false)
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+    // Timeout configuration (30 seconds)
+    const API_TIMEOUT_MS = 30000
 
     // Initialize selectedDocumentIds from query params
     useEffect(() => {
@@ -167,8 +172,23 @@ export default function Page() {
     const sendMessage = useCallback(
         async (text: string, userMessageId: number, skipUserMessage = false) => {
             setLoading(true)
+            setIsStoppedByUser(false)
             const controller = new AbortController()
             setAbortController(controller)
+
+            // Setup timeout
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current)
+            }
+            timeoutRef.current = setTimeout(() => {
+                if (controller && !controller.signal.aborted) {
+                    controller.abort()
+                    message.warning('Yêu cầu đã hết thời gian chờ (30s). Vui lòng thử lại.')
+                    setLoading(false)
+                    setIsStreaming(false)
+                    setAbortController(null)
+                }
+            }, API_TIMEOUT_MS)
 
             try {
                 // Chỉ tạo USER message nếu chưa có (khi user gửi từ input)
@@ -396,22 +416,39 @@ export default function Page() {
                 }, 0)
             } catch (err) {
                 if (err instanceof Error && err.name === 'AbortError') {
-                    // message.warning('Đã hủy yêu cầu')
-                    // hủy yêu cầu khi chuyển sang cuộc hội thoại khác
+                    // Hiển thị thông báo phù hợp dựa trên nguyên nhân abort
+                    if (isStoppedByUser) {
+                        message.info('Đã dừng trả lời')
+                    }
+                    // Nếu là timeout thì đã hiển thị thông báo ở timeout handler
                 } else {
                     console.error(err)
-                    message.error('Đã xảy ra lỗi khi gửi tin nhắn')
+                    message.error('Đã xảy ra lỗi khi gửi tin nhắn. Vui lòng thử lại.')
                 }
                 setLoading(false)
                 setIsStreaming(false)
             } finally {
+                // Clear timeout khi hoàn thành
+                if (timeoutRef.current) {
+                    clearTimeout(timeoutRef.current)
+                    timeoutRef.current = null
+                }
                 setAbortController(null)
             }
         },
-        [id, isFaqMode, updateConversation, refetchMessages]
+        [id, isFaqMode, updateConversation, refetchMessages, isStoppedByUser, selectedDocumentIds]
     )
 
     const handleStop = () => {
+        // Đánh dấu là user chủ động dừng
+        setIsStoppedByUser(true)
+
+        // Clear timeout nếu có
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
+            timeoutRef.current = null
+        }
+
         if (abortController) {
             abortController.abort()
             setAbortController(null)
@@ -512,6 +549,12 @@ export default function Page() {
             abortController.abort()
         }
 
+        // Clear timeout khi chuyển conversation
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
+            timeoutRef.current = null
+        }
+
         setLoading(false)
         setIsStreaming(false)
         setAbortController(null)
@@ -522,6 +565,7 @@ export default function Page() {
         setSelectedDocumentId(null)
         setSelectedCitationContent(null)
         setSelectedFaqData(null)
+        setIsStoppedByUser(false)
     }, [id])
 
     // Tự động gọi API cho conversation mới (chỉ có USER message, chưa có BOT reply)

@@ -9,11 +9,12 @@ import useSpinner from '@hooks/spinner'
 import type { Prisma } from '@workspace/db/client'
 import {
     useCountStudent,
-    useFindManyStudent,
     useFindManyFixedClass,
+    useFindManyStudent,
     useUpdateManyStudent,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Select, Tag, Tooltip } from 'antd'
+import { Select } from '@workspace/ui'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { ArrowBigLeftDash, ArrowBigRightDash } from 'lucide-react'
@@ -452,10 +453,6 @@ const ModalChuyenLop = () => {
                             }}
                             className="w-96 flex-1 min-w-0"
                             allowClear
-                            showSearch
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
                             options={fixedClasses.map((fixedClass) => ({
                                 label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
                                 value: fixedClass.id,
@@ -621,10 +618,6 @@ const ModalChuyenLop = () => {
                             }}
                             className="w-96 flex-1 min-w-0"
                             allowClear
-                            showSearch
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
                             options={fixedClasses.map((fixedClass) => ({
                                 label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
                                 value: fixedClass.id,

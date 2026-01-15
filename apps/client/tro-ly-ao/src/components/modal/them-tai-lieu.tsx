@@ -360,6 +360,7 @@ const ThemTaiLieu = () => {
                 valuesWithId.map(async (file) => {
                     let documentBody = ''
                     let similarScore = 0
+                    let similarDocId: string | undefined
                     let needOCR = false
 
                     if (isImageFile(file.file)) {
@@ -390,6 +391,10 @@ const ThemTaiLieu = () => {
                         path: 'tai-lieu',
                         extension: file.file.name.split('.').pop() || '',
                     })
+
+                    // Lưu lại MinIO path để sử dụng sau
+                    const minioPath = resPresignedUrl.fileName
+
                     await axios.put(resPresignedUrl.url, file.file, {
                         onUploadProgress: (progressEvent) => {
                             const { loaded, total = 1, estimated = 0 } = progressEvent
@@ -407,7 +412,7 @@ const ThemTaiLieu = () => {
                                     ...currentFiles,
                                     [file.id]: {
                                         ...currentFile,
-                                        url: resPresignedUrl.fileName,
+                                        url: minioPath,
                                         progress: Math.min(percent, 90),
                                         timeLeft: estimated,
                                     },
@@ -415,9 +420,53 @@ const ThemTaiLieu = () => {
                             })
                         },
                     })
+
+                    // Đảm bảo cập nhật URL ngay sau khi upload xong (đề phòng onUploadProgress không được gọi)
+                    {
+                        const currentFiles = form.getFieldValue('files')
+                        const currentFile = currentFiles?.[file.id]
+                        if (
+                            currentFile &&
+                            (!currentFile.url || currentFile.url.startsWith('blob:'))
+                        ) {
+                            form.setFieldsValue({
+                                files: {
+                                    ...currentFiles,
+                                    [file.id]: {
+                                        ...currentFile,
+                                        url: minioPath,
+                                    },
+                                },
+                            })
+                        }
+                    }
+
                     const currentTopicIds = form.getFieldValue('topicIds')
 
-                    let similarDocId: string | undefined
+                    if (needOCR && documentBody && documentBody.trim().length > 0) {
+                        try {
+                            console.log('[OCR] Kiểm tra trùng lặp cho file OCR')
+                            pendingAPICallsRef.current++
+                            const resReaderDocument =
+                                await fetchReadDocumentContentDocumentDocumentReaderPost({
+                                    body: {
+                                        uri_file: resPresignedUrl.fileName,
+                                        topic_ids: currentTopicIds,
+                                    },
+                                } as any)
+
+                            const similarDocs = resReaderDocument.document_simmilar || []
+                            if (similarDocs.length > 0) {
+                                similarScore = similarDocs[0].score
+                                similarDocId = similarDocs[0].id
+                            }
+                        } catch (error) {
+                            console.error('[OCR] Lỗi khi kiểm tra trùng lặp:', error)
+                        } finally {
+                            pendingAPICallsRef.current--
+                        }
+                    }
+
                     if (!needOCR) {
                         try {
                             pendingAPICallsRef.current++
@@ -456,6 +505,34 @@ const ThemTaiLieu = () => {
                             })
                             documentBody = await processWithOCR(file.file, file.id)
                             needOCR = true
+
+                            if (documentBody && documentBody.trim().length > 0) {
+                                try {
+                                    console.log('[OCR Fallback] Kiểm tra trùng lặp')
+                                    pendingAPICallsRef.current++
+                                    const resReaderDocumentRetry =
+                                        await fetchReadDocumentContentDocumentDocumentReaderPost({
+                                            body: {
+                                                uri_file: resPresignedUrl.fileName,
+                                                topic_ids: currentTopicIds,
+                                            },
+                                        } as any)
+
+                                    const similarDocsRetry =
+                                        resReaderDocumentRetry.document_simmilar || []
+                                    if (similarDocsRetry.length > 0) {
+                                        similarScore = similarDocsRetry[0].score
+                                        similarDocId = similarDocsRetry[0].id
+                                    }
+                                } catch (error) {
+                                    console.error(
+                                        '[OCR Fallback] Lỗi khi kiểm tra trùng lặp:',
+                                        error
+                                    )
+                                } finally {
+                                    pendingAPICallsRef.current--
+                                }
+                            }
                         }
                     }
 

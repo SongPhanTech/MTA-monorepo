@@ -104,6 +104,8 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
     lecturerTypeId?: string
     staffTypeId?: string
     staffPositionId?: string
+    lectureID?: string
+    organizationId?: string
 }
 
 export default function CreateUserPage() {
@@ -434,6 +436,8 @@ export default function CreateUserPage() {
         lecturerTypeId,
         staffTypeId,
         staffPositionId,
+        lectureID,
+        organizationId,
         // Loại bỏ tất cả relation fields khỏi spread để tránh lỗi Prisma
         tinHoc,
         hocVi,
@@ -507,7 +511,7 @@ export default function CreateUserPage() {
         try {
             showSpinner()
             const res = await postDMNhanViens({
-                sDM_DonViId: values.sDM_DonViId,
+                sDM_DonViId: organizationId,
                 sMa: values.code,
                 sHoVaDem: values.lastName.trim(),
                 sTen: values.firstName.trim(),
@@ -921,7 +925,8 @@ export default function CreateUserPage() {
                             userProfileId: resProfile?.id,
                             lecturerTypeId: lecturerTypeId,
                             code: values.code,
-                            organizationId: values.sDM_DonViId || '',
+                            organizationId: organizationId || '',
+                            lectureID: lectureID || '',
                         },
                     })
                 }
@@ -932,7 +937,7 @@ export default function CreateUserPage() {
                             staffPositionId: staffPositionId,
                             staffTypeId: staffTypeId,
                             code: values.code,
-                            organizationId: values.sDM_DonViId || '',
+                            organizationId: organizationId || '',
                         },
                     })
                 }

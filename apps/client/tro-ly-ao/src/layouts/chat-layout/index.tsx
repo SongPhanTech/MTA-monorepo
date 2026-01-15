@@ -12,6 +12,7 @@ import { Layout, message, Spin } from 'antd'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
 import { useUserSession } from '@/hooks/useUserSession'
+import { useSSOSession } from '@/hooks/useSSOSession'
 import type { ConversationDataFromAPI } from '@/navigations/sider-tro-ly-ao'
 import { generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
 
@@ -28,6 +29,7 @@ const ChatLayout = ({
 }) => {
     const router = useRouter()
     const { sessionId } = useUserSession()
+    const { isAuthenticated: isSSOAuthenticated, signIn, session: ssoSession } = useSSOSession()
     const [isDeleting, setIsDeleting] = useState(false)
     const [isInIframe, setIsInIframe] = useState(false)
     const [isResizing, setIsResizing] = useState(false)
@@ -131,12 +133,19 @@ const ChatLayout = ({
         }
     }, [])
 
+    // Build where clause based on authentication status
+    const conversationWhereClause =
+        isSSOAuthenticated && ssoSession?.userId
+            ? { userId: ssoSession.userId } // Logged in SSO user - filter by userId
+            : { sessionId: sessionId || '' } // Guest user - filter by sessionId
+
     const { data: conversation } = useFindManyConversation({
-        where: {
-            sessionId: sessionId || '',
-        },
+        where: conversationWhereClause,
         include: {
             message: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
         },
     })
     const conversationMenuList: ConversationDataFromAPI = (conversation || []).map((item) => ({
@@ -187,6 +196,8 @@ const ChatLayout = ({
                     collapsed={collapsed}
                     onCollapse={handleCollapsed}
                     showCollapseButton={showSiderChat}
+                    isSSOAuthenticated={isSSOAuthenticated}
+                    onSignIn={signIn}
                 />
                 <Layout className="flex-1 relative">
                     {/* Backdrop overlay for mobile when sider is open */}

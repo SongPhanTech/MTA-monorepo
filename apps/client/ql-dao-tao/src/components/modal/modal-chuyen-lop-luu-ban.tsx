@@ -9,7 +9,8 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { updateStudentStatus } from '@workspace/libs/api/training'
-import { Col, Form, message, Select, Switch } from 'antd'
+import { Select } from '@workspace/ui'
+import { Col, Form, message, Switch } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ModalChuyenLopLuuBan = () => {

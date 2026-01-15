@@ -2,7 +2,13 @@ import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
-import { useCreateFAQ, useDeleteFAQ, useFindFirstFAQ, useUpdateFAQ } from '@workspace/db/hooks'
+import {
+    useCreateFAQ,
+    useDeleteFAQ,
+    useFindFirstFAQ,
+    useFindManyFAQ,
+    useUpdateFAQ,
+} from '@workspace/db/hooks'
 import { Button, Col, Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -32,6 +38,13 @@ const PutCauHoi = () => {
         },
     })
 
+    const { data: allFAQs } = useFindManyFAQ({
+        select: {
+            id: true,
+            question: true,
+        },
+    })
+
     const [form] = Form.useForm<FAQFormType>()
 
     useEffect(() => {
@@ -52,6 +65,28 @@ const PutCauHoi = () => {
 
     const onFinish = async (values: FAQFormType) => {
         try {
+            const trimmedQuestion = values.question?.trim()
+            if (!trimmedQuestion) {
+                message.error('Vui lòng nhập câu hỏi')
+                return
+            }
+
+            if (allFAQs && allFAQs.length > 0) {
+                const isDuplicate = allFAQs.some((faq) => {
+                    if (id && faq.id === id) {
+                        return false
+                    }
+                    return faq.question?.trim().toLowerCase() === trimmedQuestion.toLowerCase()
+                })
+
+                if (isDuplicate) {
+                    message.error(
+                        'Câu hỏi này đã tồn tại trong hệ thống. Vui lòng nhập câu hỏi khác.'
+                    )
+                    return
+                }
+            }
+
             if (id) {
                 await update({
                     where: {
