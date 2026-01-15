@@ -20,6 +20,50 @@ import { XMLParser } from 'fast-xml-parser'
 import { PizZip } from '@workspace/libs/docxjs'
 
 export type PutSurveyQuestionType = SurveyQuestion
+
+function joinRunsWithSpace(runs: any[]): string {
+    let text = ''
+    let prevEndedWithChar = false
+
+    for (const r of runs) {
+        const t = r?.['w:t']
+        const value =
+            typeof t === 'string' ? t : typeof t === 'object' && t?.['#text'] ? t['#text'] : ''
+
+        if (!value) continue
+
+        const startsWithPunctuation = /^[.,!?;:]/.test(value)
+        const endsWithChar = /[A-Za-zÀ-ỹ0-9]$/.test(value)
+
+        if (text && prevEndedWithChar && !startsWithPunctuation) {
+            text += ' '
+        }
+
+        text += value
+        prevEndedWithChar = endsWithChar
+    }
+
+    return text.trim()
+}
+
+function stripLeadingIndex(text: string): string {
+    return (
+        text
+            .trim()
+            // dấu . hoặc - đứng một mình
+            .replace(/^[\.\-]\s*/, '')
+            // 1. , 1.1 , 1.2.3 , 01.02
+            .replace(/^\d+(?:\.\d+)*\s*[\.\)\-]?\s*/, '')
+            // I. II. III.
+            .replace(/^[IVX]+\s*[\.\)\-]?\s*/i, '')
+            // a) b) c.
+            .replace(/^[a-zA-Z]\s*[\.\)\-]\s*/, '')
+            // Câu 1:, Câu hỏi 2:
+            .replace(/^(Câu|Câu hỏi)\s*\d+\s*[:\-]?\s*/i, '')
+            .trim()
+    )
+}
+
 const PutSurveyImportQuestionModal = () => {
     const [form] = Form.useForm<SurveyQuestion>()
     const { isOpen, onClose, input } = useDisclosure<{
@@ -76,15 +120,11 @@ const PutSurveyImportQuestionModal = () => {
 
             for (const p of paragraphs) {
                 const runs = Array.isArray(p['w:r']) ? p['w:r'] : [p['w:r']]
-                let text = ''
+                const text = joinRunsWithSpace(runs)
+                const cleaned = stripLeadingIndex(text)
 
-                for (const r of runs) {
-                    const t = r?.['w:t']
-                    if (typeof t === 'string') text += t
-                    else if (t?.['#text']) text += t['#text']
-                }
-                if (text && text.trim().length > 0) {
-                    questions.push(text)
+                if (cleaned) {
+                    questions.push(cleaned)
                 }
             }
 
@@ -92,7 +132,8 @@ const PutSurveyImportQuestionModal = () => {
                 message.error('Không có câu hỏi hợp lệ')
                 return
             }
-            const uniqueQuestions = Array.from(new Set(questions))
+            const uniqueQuestions = questions.filter((q, index, arr) => arr.indexOf(q) === index)
+
             setImportedQuestions(uniqueQuestions)
             setSelectedRowKeys([])
         } catch (err) {
