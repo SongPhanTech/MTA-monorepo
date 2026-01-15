@@ -1080,12 +1080,13 @@ export default function NhapDiem({
                                         midtermScore,
                                         examBanned,
                                         subjectClass,
+                                        examScore
                                     }: any
                                 ) => {
                                     const isMissingScore =
                                         attendanceScore == null || midtermScore == null
-                                    if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
-                                        return midtermScore ?? ''
+                                     if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
+                                        return examScore ?? ''
                                     }
 
                                     return (
