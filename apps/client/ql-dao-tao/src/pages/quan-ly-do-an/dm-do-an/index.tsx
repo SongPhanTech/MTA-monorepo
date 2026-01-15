@@ -1,3 +1,4 @@
+// biome-ignore assist/source/organizeImports: <ignore>
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -5,7 +6,6 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     CouncilRole,
     StudentThesisRegistrationStatus,
-    SubjectClassType,
     SubjectVersionType,
     ThesisProjectStatus,
     ThesisType,
@@ -1048,7 +1048,6 @@ export default function DanhMucDoAn() {
         </Row>
     )
 }
-// Tách riêng để khi nhập điểm, chỉ có Modal này re-render, trang chính không bị ảnh hưởng
 const StudentManagementModal = ({
     isOpen,
     onClose,
@@ -1085,6 +1084,7 @@ const StudentManagementModal = ({
         }))
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
     const gradeColumns = useMemo(
         () => [
             {
@@ -1094,30 +1094,6 @@ const StudentManagementModal = ({
                         <div className="font-bold">{reg.student?.userProfile?.fullname}</div>
                         <div className="text-xs text-gray-400">{reg.student?.code}</div>
                     </div>
-                ),
-            },
-            {
-                title: 'Chuyên cần',
-                render: (_: any, reg: any) => (
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        step={0.1}
-                        value={gradeValues[reg.studentId]?.attendanceScore}
-                        onChange={(val) => handleScoreChange(reg.studentId, 'attendanceScore', val)}
-                    />
-                ),
-            },
-            {
-                title: 'Giữa kỳ',
-                render: (_: any, reg: any) => (
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        step={0.1}
-                        value={gradeValues[reg.studentId]?.midtermScore}
-                        onChange={(val) => handleScoreChange(reg.studentId, 'midtermScore', val)}
-                    />
                 ),
             },
             {
@@ -1147,7 +1123,7 @@ const StudentManagementModal = ({
             },
         ],
         [gradeValues]
-    ) // Chỉ tính toán lại cột khi dữ liệu điểm thay đổi
+    )
     const handleSaveMembers = async () => {
         try {
             const transactions: any[] = []
@@ -1255,8 +1231,8 @@ const StudentManagementModal = ({
                         data: {
                             where: { id: grades.scoreId },
                             data: {
-                                attendanceScore: grades.attendanceScore ?? null,
-                                midtermScore: grades.midtermScore ?? null,
+                                attendanceScore: grades.examScore ?? null,
+                                midtermScore: grades.examScore ?? null,
                                 examScore: grades.examScore ?? null,
                                 finalScore: grades.finalScore ?? null,
                             },

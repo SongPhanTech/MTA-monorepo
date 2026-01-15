@@ -1,4 +1,4 @@
-import { DownloadOutlined } from '@ant-design/icons'
+import { CheckOutlined, DownloadOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'

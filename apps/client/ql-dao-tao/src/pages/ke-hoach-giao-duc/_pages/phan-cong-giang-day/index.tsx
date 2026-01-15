@@ -128,25 +128,25 @@ export default function PhanCongGiangDay({
     const where = useMemo(
         () =>
             ({
-                ...(filters.name
+                ...(filters?.name
                     ? {
                           name: { contains: filters.name, mode: 'insensitive' as const },
                       }
                     : {}),
-                ...(filters.code
+                ...(filters?.code
                     ? {
                           code: { contains: filters.code, mode: 'insensitive' as const },
                       }
                     : {}),
 
-                ...(filters.examType
+                ...(filters?.examType
                     ? {
                           examType: {
                               in: filters.examType,
                           },
                       }
                     : {}),
-                ...(filters.schedule
+                ...(filters?.schedule
                     ? {
                           schedule: {
                               in: filters.schedule,
@@ -1395,7 +1395,8 @@ export default function PhanCongGiangDay({
                                                                                 e.fixedClasses
                                                                                     .length > 0
                                                                         ),
-                                                                        (item) => item.subject.code
+                                                                        (item) =>
+                                                                            item?.subject?.code
                                                                     )
 
                                                                 return {
@@ -1440,19 +1441,19 @@ export default function PhanCongGiangDay({
                                                                                             {
                                                                                                 value: item
                                                                                                     .subject
-                                                                                                    .code,
+                                                                                                    ?.code,
                                                                                                 rowSpan,
                                                                                             },
                                                                                             {
                                                                                                 value: item
                                                                                                     .subject
-                                                                                                    .name,
+                                                                                                    ?.name,
                                                                                                 rowSpan,
                                                                                             },
                                                                                             {
                                                                                                 value: item
                                                                                                     .subject
-                                                                                                    .credit,
+                                                                                                    ?.credit,
                                                                                                 rowSpan,
                                                                                                 align: 'right',
                                                                                             },
@@ -1505,7 +1506,7 @@ export default function PhanCongGiangDay({
                                                                                                         (
                                                                                                             fc
                                                                                                         ) =>
-                                                                                                            fc.code
+                                                                                                            fc?.code
                                                                                                     )
                                                                                                     .join(
                                                                                                         ', '
@@ -1840,7 +1841,7 @@ export default function PhanCongGiangDay({
                                     width: 120,
                                     render: (_, record) => (
                                         <p className="text-left">
-                                            {record?.fixedClasses?.map((e) => e.code).join('\n') ||
+                                            {record?.fixedClasses?.map((e) => e?.code).join('\n') ||
                                                 '-'}
                                         </p>
                                     ),
