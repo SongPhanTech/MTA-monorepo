@@ -1,3 +1,4 @@
+// biome-ignore assist/source/organizeImports: <ignore>
 import Select from "@components/commons/select";
 import Table from "@components/commons/table";
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants";
@@ -5,7 +6,6 @@ import DefaultLayout from "@layouts/default-layout";
 import {
   CouncilRole,
   StudentThesisRegistrationStatus,
-  SubjectClassType,
   SubjectVersionType,
   ThesisProjectStatus,
   ThesisType,
@@ -1095,6 +1095,7 @@ const StudentManagementModal = ({
     }));
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
   const gradeColumns = useMemo(
     () => [
       {
