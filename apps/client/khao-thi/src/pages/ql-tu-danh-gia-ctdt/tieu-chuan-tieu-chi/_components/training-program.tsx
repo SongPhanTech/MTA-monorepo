@@ -216,7 +216,7 @@ export default function TrainingProgram() {
                                                 standardId: record?.id,
                                             })
                                         }}
-                                        title="Thêm mới phiên bản"
+                                        title="Thêm mới tiêu chuẩn"
                                     />
                                 )}
                                 {can(
@@ -237,20 +237,47 @@ export default function TrainingProgram() {
                                 {can(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
                                     'XOA'
-                                ) && (
-                                    <DeleteIcon
-                                        popConfirm={{
-                                            onConfirm: (e) => {
-                                                handleDeleteStandardCatalog(record?.id)
-                                                e?.stopPropagation()
-                                            },
-                                            onCancel: (e) => {
-                                                e?.stopPropagation()
-                                            },
-                                        }}
-                                        onClick={(e) => e.stopPropagation()}
-                                    />
-                                )}
+                                ) &&
+                                    (() => {
+                                        const hasCriteria = record?.criteria?.length > 0
+
+                                        return (
+                                            <Tooltip
+                                                title={
+                                                    hasCriteria
+                                                        ? 'Không thể xóa vì tiêu chuẩn đã có tiêu chí'
+                                                        : 'Xóa tiêu chuẩn'
+                                                }
+                                            >
+                                                <DeleteIcon
+                                                    disabled={hasCriteria}
+                                                    className={
+                                                        hasCriteria
+                                                            ? 'opacity-50 cursor-not-allowed'
+                                                            : 'cursor-pointer'
+                                                    }
+                                                    popConfirm={
+                                                        hasCriteria
+                                                            ? undefined
+                                                            : {
+                                                                  onConfirm: (e) => {
+                                                                      handleDeleteStandardCatalog(
+                                                                          record?.id
+                                                                      )
+                                                                      e?.stopPropagation()
+                                                                  },
+                                                                  onCancel: (e) => {
+                                                                      e?.stopPropagation()
+                                                                  },
+                                                              }
+                                                    }
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                        )
+                                    })()}
                             </div>
                         )}
                         onRowClick={({ id }) => {

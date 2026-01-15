@@ -19,6 +19,7 @@ import {
     useFindManyFixedClass,
     useFindManySchoolYear,
     useFindManySubjectClass,
+    useFindManySurveyObjectType,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
@@ -29,7 +30,7 @@ import { Col, Form, Input, message, Row, Tabs, TreeSelect as TreeSelectAnt } fro
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
-import type { TreeNodeType } from './put-modal-survey'
+import { TreeNodeType } from './put-modal-survey'
 export type PutSurveyObjectType = SurveyObjectType & {
     Organizations: string[]
     TrainingFields: string[]
@@ -58,9 +59,19 @@ const PutSurveyObjectTypeModal = () => {
     const selectedTrainingMajors = Form.useWatch('TrainingMajors', form) || []
     const selectedTrainingCourses = Form.useWatch('TrainingCourses', form) || []
     const selectedFixedClasses = Form.useWatch('FixedClasses', form) || []
+    const isStudentType = type.includes('MILITARY_STUDENT') || type.includes('CIVILIAN_STUDENT')
 
     async function onOk(output?: PutSurveyObjectType) {
         if (!output) return
+        try {
+            await form.validateFields()
+        } catch {
+            if (isStudentType) {
+                setActiveKey('STUDENT')
+            }
+            return
+        }
+
         try {
             showSpinner()
             if (id) {
@@ -189,6 +200,28 @@ const PutSurveyObjectTypeModal = () => {
         { enabled: !!id }
     )
 
+    const { data: surveyObjectTypes = [] } = useFindManySurveyObjectType({
+        where: {
+            deletedAt: null,
+        },
+    })
+
+    const validateCodeDuplicate = async (_: any, value?: string) => {
+        if (!value?.trim()) return Promise.resolve()
+
+        const codeTrimmed = value.trim()
+
+        const isDuplicate = surveyObjectTypes.some(
+            (item) => item.code === codeTrimmed && item.id !== id && item.deletedAt === null
+        )
+
+        if (isDuplicate) {
+            return Promise.reject('Mã đối tượng làm khảo sát đã tồn tại')
+        }
+
+        return Promise.resolve()
+    }
+
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
@@ -296,7 +329,16 @@ const PutSurveyObjectTypeModal = () => {
                 children: (
                     <Row gutter={[16, 0]}>
                         <Col span={12}>
-                            <FormItem form={form} name="TrainingFields" label="Ngành">
+                            <FormItem
+                                form={form}
+                                name="TrainingFields"
+                                label="Ngành"
+                                rules={
+                                    isStudentType
+                                        ? [{ required: true, message: 'Vui lòng chọn ngành' }]
+                                        : []
+                                }
+                            >
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
@@ -311,7 +353,21 @@ const PutSurveyObjectTypeModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem form={form} name="TrainingMajors" label="Chuyên ngành">
+                            <FormItem
+                                form={form}
+                                name="TrainingMajors"
+                                label="Chuyên ngành"
+                                rules={
+                                    isStudentType
+                                        ? [
+                                              {
+                                                  required: true,
+                                                  message: 'Vui lòng chọn chuyên ngành',
+                                              },
+                                          ]
+                                        : []
+                                }
+                            >
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
@@ -326,7 +382,16 @@ const PutSurveyObjectTypeModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem form={form} name="TrainingCourses" label="Khóa">
+                            <FormItem
+                                form={form}
+                                name="TrainingCourses"
+                                label="Khóa"
+                                rules={
+                                    isStudentType
+                                        ? [{ required: true, message: 'Vui lòng chọn khóa' }]
+                                        : []
+                                }
+                            >
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
@@ -341,7 +406,21 @@ const PutSurveyObjectTypeModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem form={form} name="FixedClasses" label="Lớp niên chế">
+                            <FormItem
+                                form={form}
+                                name="FixedClasses"
+                                label="Lớp niên chế"
+                                rules={
+                                    isStudentType
+                                        ? [
+                                              {
+                                                  required: true,
+                                                  message: 'Vui lòng chọn lớp niên chế',
+                                              },
+                                          ]
+                                        : []
+                                }
+                            >
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
@@ -356,7 +435,16 @@ const PutSurveyObjectTypeModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem form={form} name="semesterId" label="Kỳ học">
+                            <FormItem
+                                form={form}
+                                name="semesterId"
+                                label="Kỳ học"
+                                rules={
+                                    isStudentType
+                                        ? [{ required: true, message: 'Vui lòng chọn kỳ học' }]
+                                        : []
+                                }
+                            >
                                 <TreeSelectAnt
                                     multiple
                                     disabled={
@@ -377,7 +465,16 @@ const PutSurveyObjectTypeModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem form={form} name="SubjectClasses" label="Lớp môn học">
+                            <FormItem
+                                form={form}
+                                name="SubjectClasses"
+                                label="Lớp môn học"
+                                rules={
+                                    isStudentType
+                                        ? [{ required: true, message: 'Vui lòng chọn lớp môn học' }]
+                                        : []
+                                }
+                            >
                                 <Select
                                     disabled={
                                         TrainingFields?.length > 0 ||
@@ -476,8 +573,22 @@ const PutSurveyObjectTypeModal = () => {
             className="w-[1000px]"
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã đối tượng làm khảo sát" required>
-                    <Input placeholder="Nhập mã đối tượng làm khảo sát" />
+                <FormItem
+                    form={form}
+                    name="code"
+                    label="Mã đối tượng làm khảo sát"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập mã đối tượng làm khảo sát',
+                        },
+                        { validator: validateCodeDuplicate },
+                    ]}
+                >
+                    <Input
+                        placeholder="Nhập mã đối tượng làm khảo sát"
+                        onBlur={() => form.validateFields(['code'])}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

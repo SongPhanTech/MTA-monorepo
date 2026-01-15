@@ -236,7 +236,7 @@ export default function EvaluationCouncilTab() {
                                         })
                                     }}
                                 >
-                                    Thêm thành viên
+                                    Thêm thành viên hội đồng đánh giá
                                 </Button>
                             </Empty>
                         </Flex>
@@ -256,7 +256,7 @@ export default function EvaluationCouncilTab() {
                                         })
                                     }}
                                 >
-                                    Thêm thành viên
+                                    Thêm thành viên hội đồng đánh giá
                                 </Button>
                             </Flex>
 
