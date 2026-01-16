@@ -103,12 +103,8 @@ const saveCache = (cache: CacheEntry) => {
 }
 
 export const useSSOSession = () => {
-    const [status, setStatus] = useState<SSOSessionStatus>(
-        globalCache?.status || 'loading'
-    )
-    const [session, setSession] = useState<SSOSession | null>(
-        globalCache?.session || null
-    )
+    const [status, setStatus] = useState<SSOSessionStatus>(globalCache?.status || 'loading')
+    const [session, setSession] = useState<SSOSession | null>(globalCache?.session || null)
 
     const fetchSSOSession = useCallback(async () => {
         // Check cache first
@@ -151,7 +147,7 @@ export const useSSOSession = () => {
             listeners.forEach((listener) => listener())
         } catch (error) {
             console.warn('[useSSOSession] SSO session fetch failed:', error)
-            
+
             globalCache = {
                 status: 'unauthenticated',
                 session: null,

@@ -146,20 +146,14 @@ export default function StudentFixedClassPage() {
         where: {
             fixedClassId,
             userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                            mode: 'insensitive',
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                            mode: 'insensitive',
-                        },
-                    },
-                ],
+                ...(filters.name
+                    ? {
+                          fullname: {
+                              contains: filters.name,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
                 ...(filters.rank
                     ? {
                           rank: {
@@ -2302,9 +2296,12 @@ export default function StudentFixedClassPage() {
                                         Xuất bảng điểm
                                     </Button>
                                 </Dropdown>
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm SV
-                                </Button>
+
+                                <Tooltip title="Thêm Học viên/Sinh viên">
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm HV/SV
+                                    </Button>
+                                </Tooltip>
                                 {/* <Dropdown overlay={menuDownload} trigger={['hover']}>
                                     <Button type="primary" icon={<DownloadOutlined />}>
                                         Tải file mẫu

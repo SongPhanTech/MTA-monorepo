@@ -10,7 +10,7 @@ import {
     useFindUniqueThesisSession,
     useUpdateManyThesisProject,
 } from '@workspace/db/hooks'
-import { Badge, Button, Col, Empty, Form, message, Select, Tag, Typography } from 'antd'
+import { Badge, Button, Col, Empty, Form, message, Tag, Typography } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ArrowLeftOutlined, InboxOutlined, ReloadOutlined } from '@ant-design/icons'
+import { Select } from '@workspace/ui'
 
 export type PutSettingClass = SubjectClass & {
     roomIds?: string[]

@@ -470,6 +470,7 @@ const exportSubjectClassScore = createRoute({
     request: {
         query: z.object({
             id: z.string().openapi('id', { description: 'ID của lớp môn học' }),
+            type: z.string().default(''),
         }),
     },
     responses: {
@@ -1576,7 +1577,7 @@ app.openapi(uploadExcelImportScore, async (c) => {
 })
 
 app.openapi(exportSubjectClassScore, async (c) => {
-    const { id } = c.req.valid('query')
+    const { id, type } = c.req.valid('query')
 
     const subjectClass = await prisma.subjectClass.findUnique({
         where: { id },
@@ -1626,7 +1627,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     if (!subjectClass) {
         return c.json({ message: 'Không tìm thấy lớp học' }, 404)
     }
-    const res = await fetch(getMinioUrl('/mta/template/PHIEU-DIEM.xlsx'))
+    const res = await fetch(getMinioUrl(`/mta/template/PHIEU-DIEM${type ? `-${type}` : ''}.xlsx`))
     const buffer = await res.arrayBuffer()
     const nodeBuffer = Buffer.from(buffer)
     const template = new XlsxTemplate(nodeBuffer)

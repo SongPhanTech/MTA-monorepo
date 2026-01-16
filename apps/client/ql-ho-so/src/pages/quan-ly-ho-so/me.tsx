@@ -400,6 +400,8 @@ export default function UpdateUserPage() {
         ethnicityId,
         bLaGiangVien,
         lecturerTypeId,
+        lectureID,
+        organizationId,
         staffTypeId,
         staffPositionId,
         ...values
@@ -433,7 +435,7 @@ export default function UpdateUserPage() {
         try {
             showSpinner()
             putDMNhanViens({
-                sDM_DonViId: values.sDM_DonViId,
+                sDM_DonViId: organizationId,
                 sMa: values.code,
                 sHoVaDem: values.lastName.trim(),
                 sTen: values.firstName.trim(),
@@ -944,6 +946,16 @@ export default function UpdateUserPage() {
                 },
             ]
             if (cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
+                const lecturerUpdateData: any = {
+                    code: values?.code,
+                    lecturerTypeId,
+                    lectureID: lectureID,
+                }
+
+                if (organizationId) {
+                    lecturerUpdateData.organizationId = organizationId
+                }
+
                 listTransaction = [
                     ...listTransaction,
                     {
@@ -953,28 +965,30 @@ export default function UpdateUserPage() {
                             where: {
                                 id: cccdUserProfileData?.lecturer?.id,
                             },
-                            data: {
-                                code: values?.code,
-                                lecturerTypeId,
-                                organizationId: values?.sDM_DonViId,
-                            },
+                            data: lecturerUpdateData,
                         },
                     },
                 ]
             }
             if (!cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
+                const lecturerData: any = {
+                    userProfileId: id,
+                    code: values?.code,
+                    lecturerTypeId,
+                    lectureID: lectureID,
+                }
+
+                if (organizationId) {
+                    lecturerData.organizationId = organizationId
+                }
+
                 listTransaction = [
                     ...listTransaction,
                     {
                         model: 'Lecturer',
                         operation: 'create',
                         data: {
-                            data: {
-                                userProfileId: id,
-                                code: values?.code,
-                                lecturerTypeId,
-                                organizationId: values?.sDM_DonViId,
-                            },
+                            data: lecturerData,
                         },
                     },
                 ]

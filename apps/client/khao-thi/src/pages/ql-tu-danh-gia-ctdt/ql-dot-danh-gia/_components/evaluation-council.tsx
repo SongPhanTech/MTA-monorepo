@@ -46,26 +46,10 @@ export default function EvaluationCouncilTab() {
                             ...(filters.name && {
                                 lecturer: {
                                     userProfile: {
-                                        OR: [
-                                            {
-                                                fullname: {
-                                                    contains: filters.name,
-                                                    mode: 'insensitive',
-                                                },
-                                            },
-                                            {
-                                                firstName: {
-                                                    contains: filters.name,
-                                                    mode: 'insensitive',
-                                                },
-                                            },
-                                            {
-                                                lastName: {
-                                                    contains: filters.name,
-                                                    mode: 'insensitive',
-                                                },
-                                            },
-                                        ],
+                                        fullname: {
+                                            contains: filters.name,
+                                            mode: 'insensitive',
+                                        },
                                     },
                                 },
                             }),

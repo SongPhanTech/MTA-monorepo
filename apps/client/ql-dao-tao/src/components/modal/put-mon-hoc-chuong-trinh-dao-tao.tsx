@@ -21,10 +21,10 @@ import { useTrainingObjectTypeStore } from '@workspace/ui'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
+import { normalizeVietnamese } from '@workspace/libs/utils'
 export type PutTrainingBlockSubject = TrainingBlockSubject & {
     conditional?: boolean
 }
-import { normalizeVietnamese } from '@lib/utils'
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {

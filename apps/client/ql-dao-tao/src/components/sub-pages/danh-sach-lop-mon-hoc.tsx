@@ -153,44 +153,28 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
             ...(filters.mainLecturer
                 ? {
                       mainLecturer: {
-                          userProfile: {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.mainLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.mainLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                              ],
-                          },
+                          userProfile: filters.mainLecturer
+                              ? {
+                                    fullname: {
+                                        contains: filters.mainLecturer,
+                                        mode: 'insensitive' as const,
+                                    },
+                                }
+                              : {},
                       },
                   }
                 : {}),
             ...(filters.enterGradeLecturer
                 ? {
                       enterGradeLecturer: {
-                          userProfile: {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.enterGradeLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.enterGradeLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                              ],
-                          },
+                          userProfile: filters.enterGradeLecturer
+                              ? {
+                                    fullname: {
+                                        contains: filters.enterGradeLecturer,
+                                        mode: 'insensitive' as const,
+                                    },
+                                }
+                              : {},
                       },
                   }
                 : {}),
@@ -391,21 +375,25 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
                             },
                             {
                                 title: 'Mã lớp',
+                                dataIndex: 'code',
                                 align: 'center',
                                 width: 120,
                                 type: 'input',
                                 render: (_, record) => (
-                                    <p
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenDetailSubjectClass({
-                                                id: record.id,
-                                                mode: 'view',
-                                            })
-                                        }}
-                                        className="cursor-pointer hover:text-primary"
-                                    >
+                                    <p>
                                         {record.code}
+                                        <span
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenDetailSubjectClass({
+                                                    id: record.id,
+                                                    mode: 'view',
+                                                })
+                                            }}
+                                            className="rounded p-1 cursor-pointer hover:bg-green-400"
+                                        >
+                                            🔍
+                                        </span>
                                     </p>
                                 ),
                             },

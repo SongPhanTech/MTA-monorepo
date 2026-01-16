@@ -45,7 +45,6 @@ export default function Scholarship() {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-
     const where: Prisma.ScholarshipWhereInput = useMemo(
         () =>
             Object.assign(

@@ -175,7 +175,7 @@ export default function PostgraduateProject({
                 console.log('rowdata', rowData)
             })
 
-            await Promise.all(updatePromises.filter((p) => p !== undefined)) // Chờ tất cả promise hoàn thành
+            await Promise.all(updatePromises.filter((p) => p !== undefined))
 
             message.success(`Lưu thành công ${selectedRowKeys.length} hàng đã chỉnh sửa.`)
         } catch (error) {
@@ -1962,7 +1962,6 @@ export default function PostgraduateProject({
                                 title: 'Điểm',
                                 width: 150,
                                 align: 'center',
-
                                 dataIndex: 'score',
                                 render: (_, record) => {
                                     return (

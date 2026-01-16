@@ -72,22 +72,14 @@ const AddStudentToFixedClassModal = () => {
                     },
                 },
                 {
-                    userProfile: {
-                        OR: [
-                            {
-                                firstName: {
-                                    contains: filters.searchText,
-                                    mode: 'insensitive',
-                                },
-                            },
-                            {
-                                fullname: {
-                                    contains: filters.searchText,
-                                    mode: 'insensitive',
-                                },
-                            },
-                        ],
-                    },
+                    userProfile: filters.searchText
+                        ? {
+                              fullname: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {},
                 },
             ],
         },
@@ -127,42 +119,23 @@ const AddStudentToFixedClassModal = () => {
     const { data: countNotClass } = useCountStudent({
         where: {
             fixedClassId: null,
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
-                    },
-                    {
-                        code: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
-                    },
-                ],
-            },
+            userProfile: filters.searchText
+                ? {
+                      fullname: {
+                          contains: filters.searchText,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {},
         },
     })
 
-    const { data = [], refetch: refetchStudent } = useFindManyStudent({
+    const { data = [] } = useFindManyStudent({
         where: {
             fixedClassId,
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                ],
-            },
+            userProfile: filters.searchText
+                ? { fullname: { contains: filters.searchText, mode: 'insensitive' } }
+                : {},
         },
         include: {
             userProfile: true,
@@ -200,20 +173,14 @@ const AddStudentToFixedClassModal = () => {
     const { data: count } = useCountStudent({
         where: {
             fixedClassId,
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                ],
-            },
+            userProfile: filters.searchText
+                ? {
+                      fullname: {
+                          contains: filters.searchText,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {},
             deletedAt: null,
         },
     })

@@ -15,7 +15,7 @@ import {
     useFindUniqueStudent,
     useFindUniqueStudentScoreConvert,
 } from '@workspace/db/hooks'
-import { Button, Col, Form, Input, InputNumber, message, Row, Select, Table } from 'antd'
+import { Button, Col, Form, Input, InputNumber, message, Row, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -24,6 +24,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import DocumentPaths from '@components/commons/documentPaths'
 import { $Enums } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { Select } from '@workspace/ui'
 import type { TableColumnsType } from 'antd'
 import { Trash2 } from 'lucide-react'
 
@@ -70,15 +71,9 @@ const PutStudentScoreConvertModal = () => {
             active: true,
             OR: [
                 {
-                    userProfile: {
-                        is: {
-                            OR: [
-                                { firstName: { contains: studentKeyword, mode: 'insensitive' } },
-                                { lastName: { contains: studentKeyword, mode: 'insensitive' } },
-                                { fullname: { contains: studentKeyword, mode: 'insensitive' } },
-                            ],
-                        },
-                    },
+                    userProfile: studentKeyword
+                        ? { fullname: { contains: studentKeyword, mode: 'insensitive' } }
+                        : {},
                 },
                 { code: { contains: studentKeyword, mode: 'insensitive' } },
             ],

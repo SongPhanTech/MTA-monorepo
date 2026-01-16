@@ -442,13 +442,13 @@ export default function Page() {
     const handleStop = () => {
         // Đánh dấu là user chủ động dừng
         setIsStoppedByUser(true)
-        
+
         // Clear timeout nếu có
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current)
             timeoutRef.current = null
         }
-        
+
         if (abortController) {
             abortController.abort()
             setAbortController(null)
@@ -548,7 +548,7 @@ export default function Page() {
         if (abortController) {
             abortController.abort()
         }
-        
+
         // Clear timeout khi chuyển conversation
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current)

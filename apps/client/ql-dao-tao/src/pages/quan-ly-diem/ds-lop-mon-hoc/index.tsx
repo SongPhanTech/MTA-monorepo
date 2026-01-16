@@ -212,44 +212,28 @@ export default function ClassSubject() {
             ...(filters.mainLecturer
                 ? {
                       mainLecturer: {
-                          userProfile: {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.mainLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.mainLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                              ],
-                          },
+                          userProfile: filters.mainLecturer
+                              ? {
+                                    fullname: {
+                                        contains: filters.mainLecturer,
+                                        mode: 'insensitive' as const,
+                                    },
+                                }
+                              : {},
                       },
                   }
                 : {}),
             ...(filters.enterGradeLecturer
                 ? {
                       enterGradeLecturer: {
-                          userProfile: {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.enterGradeLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.enterGradeLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                              ],
-                          },
+                          userProfile: filters.enterGradeLecturer
+                              ? {
+                                    fullname: {
+                                        contains: filters.enterGradeLecturer,
+                                        mode: 'insensitive' as const,
+                                    },
+                                }
+                              : {},
                       },
                   }
                 : {}),

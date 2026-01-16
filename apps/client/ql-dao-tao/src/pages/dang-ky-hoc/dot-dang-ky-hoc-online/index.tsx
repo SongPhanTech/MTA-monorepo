@@ -9,14 +9,14 @@ import DefaultLayout from '@layouts/default-layout'
 import type { Prisma, TrainingCourse } from '@workspace/db/client'
 import {
     useCountClassRegisterSession,
-    useDeleteClassRegisterSession,
     useFindManyClassRegisterSession,
     useFindManyTrainingCourse,
+    useUpdateClassRegisterSession,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, message, Row, Select, Tag, Tooltip } from 'antd'
+import { Select, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -139,12 +139,15 @@ export default function ClassRegisterSession() {
         tag: 'PutClassRegisterSession',
     })
 
-    const { mutateAsync: deleteClassRegisterSession } = useDeleteClassRegisterSession()
+    const { mutateAsync: deleteClassRegisterSession } = useUpdateClassRegisterSession()
     async function handleDeleteClassRegisterSession(id: string) {
         try {
             showSpinner()
             await deleteClassRegisterSession({
                 where: { id },
+                data: {
+                    deletedAt: new Date(),
+                },
             })
         } catch (error: any) {
             if (error?.info?.message) {

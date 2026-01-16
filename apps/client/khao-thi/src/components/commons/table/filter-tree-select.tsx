@@ -1,22 +1,15 @@
+import { normalizeVietnamese } from '@workspace/libs/utils'
 import { Input, Tree } from 'antd'
 import { Search } from 'lucide-react'
 import { useState } from 'react'
 import type { FilterProps } from '../typeFilter'
+
 type TreeNode = {
     value: string
     label: string
     children?: TreeNode[]
 }
 export default function FilterTreeSelect({ item, filtersTable, setFiltersTable }: any) {
-    function normalizeVietnamese(str: string): string {
-        return str
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd')
-            .replace(/Đ/g, 'D')
-            .toLowerCase()
-    }
-
     function searchVietnamese(
         data: { value: string; label: string }[],
         keyword: string

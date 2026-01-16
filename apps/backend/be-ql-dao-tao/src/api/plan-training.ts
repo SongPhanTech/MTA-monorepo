@@ -39,7 +39,15 @@ const importPhanCongGiangDay = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.object({ message: z.string(), time: z.number() }),
+                    schema: z.object({
+                        message: z.string(),
+                        time: z.number(),
+                        error: z.array(
+                            z.object({
+                                message: z.string(),
+                            })
+                        ),
+                    }),
                 },
             },
             description: 'Tải danh sách thành công',
@@ -63,7 +71,10 @@ const importFileGiaoVienCoGioGiay = async (
     trainingObjectTypeId: string,
     danhSachLopMonHoc: Array<SubjectClass>,
     importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC',
-    type: $Enums.SubjectClassType
+    type: $Enums.SubjectClassType,
+    error: {
+        message: string
+    }[] = []
 ) => {
     const rowData = utils.sheet_to_json<string[]>(sheet, {
         header: 1,
@@ -90,7 +101,7 @@ const importFileGiaoVienCoGioGiay = async (
     for (const row of rowData) {
         // Xử lý từng dòng dữ liệu ở đây
         const [
-            ,
+            idx,
             maGV,
             tenGV,
             maMon,
@@ -226,7 +237,7 @@ const importFileGiaoVienCoGioGiay = async (
             for (const row of rowData) {
                 // Xử lý từng dòng dữ liệu ở đây
                 const [
-                    ,
+                    idx,
                     maGV,
                     tenGV,
                     maMon,
@@ -242,6 +253,21 @@ const importFileGiaoVienCoGioGiay = async (
                     tietHoc,
                     hocChung,
                 ] = row
+                console.log('Xử lý dòng', {
+                    idx,
+                    maGV,
+                    tenGV,
+                    maMon,
+                    tenMon,
+                    maLopNienChe,
+                    quanSo,
+                    maPhongHoc,
+                    hinhThucHoc,
+                    ngayHoc,
+                    caHoc,
+                    tietHoc,
+                    hocChung,
+                })
                 const subjectClass = {
                     gvChinh: null as string | null,
                     gvPhu: null as string | null,
@@ -299,7 +325,9 @@ const importFileGiaoVienCoGioGiay = async (
                     if (gvChinh) {
                         subjectClass.gvChinh = gvChinh.id
                     } else {
-                        console.log(`Không tìm thấy giảng viên chính với mã: ${maGV}`)
+                        error.push({
+                            message: `Không tìm thấy giảng viên chính với mã: ${maGV}`,
+                        })
                     }
                     if (tenGvPhu) {
                         const gvPhu = danhSachGV.find(
@@ -310,7 +338,9 @@ const importFileGiaoVienCoGioGiay = async (
                         if (gvPhu) {
                             subjectClass.gvPhu = gvPhu.id
                         } else {
-                            console.log(`Không tìm thấy giảng viên phụ với tên: ${tenGvPhu}`)
+                            error.push({
+                                message: `Không tìm thấy giảng viên phụ với tên: ${tenGvPhu}`,
+                            })
                         }
                     }
                 }
@@ -321,7 +351,9 @@ const importFileGiaoVienCoGioGiay = async (
                     if (monHoc) {
                         subjectClass.monHoc = monHoc.id
                     } else {
-                        console.log(`Không tìm thấy môn học với mã: ${maMon}`)
+                        error.push({
+                            message: `Không tìm thấy môn học với mã: ${maMon}`,
+                        })
                     }
                 }
                 if (maLopNienChe) {
@@ -332,7 +364,9 @@ const importFileGiaoVienCoGioGiay = async (
                     if (lopNienChe) {
                         subjectClass.lopNienChe.push(lopNienChe.id)
                     } else {
-                        console.log(`Không tìm thấy lớp niên chế với mã: ${maLopNienChe}`)
+                        error.push({
+                            message: `Không tìm thấy lớp niên chế với mã: ${maLopNienChe}`,
+                        })
                     }
                 }
                 if (hocChung) {
@@ -346,7 +380,9 @@ const importFileGiaoVienCoGioGiay = async (
                             if (lopNienChe) {
                                 subjectClass.lopNienChe.push(lopNienChe.id)
                             } else {
-                                console.log(`Không tìm thấy lớp niên chế với mã: ${e}`)
+                                error.push({
+                                    message: `Không tìm thấy lớp niên chế với mã: ${e}`,
+                                })
                             }
                         })
                 }
@@ -357,7 +393,9 @@ const importFileGiaoVienCoGioGiay = async (
                     if (phongHoc) {
                         subjectClass.phongHoc = phongHoc.id
                     } else {
-                        console.log(`Không tìm thấy phòng học với mã: ${maPhongHoc}`)
+                        error.push({
+                            message: `Không tìm thấy phòng học với mã: ${maPhongHoc}`,
+                        })
                     }
                 }
                 subjectClass.ngayKetThuc = scheduleInfo.ngayHoc
@@ -1095,6 +1133,9 @@ app.openapi(importPhanCongGiangDay, async (c) => {
         type = $Enums.SubjectClassType.NORMAL,
     } = c.req.valid('form')
 
+    const errorImport: {
+        message: string
+    }[] = []
     const maxFileSize = 50 * 1024 * 1024 // 50MB
     if (file.size > maxFileSize) {
         return c.json({ message: 'File vượt quá 50MB' }, 400)
@@ -1124,14 +1165,15 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         trainingObjectTypeId,
                         danhSachLopMonHoc,
                         importType,
-                        type
+                        type,
+                        errorImport
                     )
                 } catch (error) {
                     console.log('Error during preview import:', error)
                 }
                 console.log(
                     'danhSachLopMonHoc',
-                    danhSachLopMonHoc.map((e) => e.code)
+                    danhSachLopMonHoc.uniqueByKey('code').map((e) => e.code)
                 )
             } else {
                 await importFileGiaoVienCoGioGiay(
@@ -1140,7 +1182,8 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     trainingObjectTypeId,
                     danhSachLopMonHoc,
                     importType,
-                    type
+                    type,
+                    errorImport
                 )
             }
         } else if (fileType === 'TKB_THEO_LOP_HOC_PHAN') {
@@ -1161,7 +1204,12 @@ app.openapi(importPhanCongGiangDay, async (c) => {
     const endTime = Date.now()
 
     return c.json(
-        { message: 'Tải danh sách thành công', time: endTime - startTime, data: danhSachLopMonHoc },
+        {
+            message: 'Tải danh sách thành công',
+            time: endTime - startTime,
+            data: danhSachLopMonHoc.uniqueByKey('code'),
+            error: errorImport,
+        },
         200
     )
 })

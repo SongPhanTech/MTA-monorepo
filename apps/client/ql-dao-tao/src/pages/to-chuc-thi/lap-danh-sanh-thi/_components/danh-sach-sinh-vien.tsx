@@ -56,6 +56,62 @@ export default function DanhSachSinhVien() {
                         capacity: true,
                     },
                 },
+                firstSupervisor: {
+                    select: {
+                        id: true,
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                                hocHam: {
+                                    select: {
+                                        academicRankType: {
+                                            select: {
+                                                sTen: true,
+                                            },
+                                        },
+                                    },
+                                },
+                                hocVi: {
+                                    select: {
+                                        academicDegreeType: {
+                                            select: {
+                                                sTen: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                secondSupervisor: {
+                    select: {
+                        id: true,
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                                hocHam: {
+                                    select: {
+                                        academicRankType: {
+                                            select: {
+                                                sTen: true,
+                                            },
+                                        },
+                                    },
+                                },
+                                hocVi: {
+                                    select: {
+                                        academicDegreeType: {
+                                            select: {
+                                                sTen: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
                 examPapers: {
                     include: {
                         studentSubjectScore: {
@@ -299,6 +355,11 @@ export default function DanhSachSinhVien() {
                             subjectClass: {
                                 select: {
                                     subjectClassStudent: true,
+                                    subject: {
+                                        select: {
+                                            onePoint: true,
+                                        },
+                                    },
                                 },
                             },
                             examRooms: {
@@ -323,6 +384,11 @@ export default function DanhSachSinhVien() {
                     subjectClass: {
                         select: {
                             subjectClassStudent: true
+                            subject: {
+                                select: {
+                                    onePoint: true
+                                }
+                            }
                         }
                     }
                     examRooms: {
@@ -333,14 +399,29 @@ export default function DanhSachSinhVien() {
                     }
                 }
             }>
-            const allStudentSubjectScores = exam.subjectClass.flatMap((e) => e.subjectClassStudent)
+
+            const allStudentSubjectScores = exam.subjectClass
+                .map((e) => ({
+                    ...e,
+                    subjectClassStudent: e.subjectClassStudent.map((scs) => ({
+                        ...scs,
+                        onePoint: !!e.subject.onePoint,
+                    })),
+                }))
+                .flatMap((e) => e.subjectClassStudent)
             type StudentSubjectScore = (typeof allStudentSubjectScores)[number]
 
             const filteredStudentSubjectScores = allStudentSubjectScores.filter(
-                (score) => !score.examBanned && !score.examPostponed
+                (score) =>
+                    !score.examBanned &&
+                    !score.examPostponed &&
+                    (!score.onePoint ? score.attendanceScore && score.midtermScore : true)
             )
             const skippedStudentSubjectScores = allStudentSubjectScores.filter(
-                (score) => score.examBanned || score.examPostponed
+                (score) =>
+                    score.examBanned ||
+                    score.examPostponed ||
+                    (!score.onePoint && (!score.attendanceScore || !score.midtermScore))
             )
 
             const allExamLists = exam.examRooms.flatMap((er) =>
@@ -472,9 +553,8 @@ export default function DanhSachSinhVien() {
         } catch (error: any) {
             console.error(error)
             message.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại sau!')
-        } finally {
-            hideSpinner()
         }
+        hideSpinner()
     }
 
     const handleSaveExamDecision = async () => {
@@ -643,9 +723,27 @@ export default function DanhSachSinhVien() {
                         rowKey="id"
                         id="danh-sach-sinh-vien"
                         headerTitleKey={(record) =>
-                            record.examRoom?.room
-                                ? `Phòng thi: ${record.examRoom?.room?.name} - Ca ${record.start} ${record.examRoom?.capacity ? ` : ${record.examRoom?.capacity}` : ''}`
-                                : 'Chưa phân phòng thi'
+                            record.examRoom?.room ? (
+                                <span>
+                                    Phòng thi: {record.examRoom?.room?.name} - Ca {record.start}{' '}
+                                    {record.examRoom?.capacity
+                                        ? ` : ${record.examRoom?.capacity}`
+                                        : ''}
+                                    {/* <Tag>
+                                        {
+                                            record.firstSupervisor?.userProfile?.hocHam?.[0]
+                                                ?.academicRankType?.sTen
+                                        }
+                                        {
+                                            record.firstSupervisor?.userProfile?.hocVi?.[0]
+                                                ?.academicDegreeType?.sTen
+                                        }
+                                        {record.firstSupervisor?.userProfile.fullname}
+                                    </Tag> */}
+                                </span>
+                            ) : (
+                                'Chưa phân phòng thi'
+                            )
                         }
                         childrenFieldName="examPapers"
                         defaultExpandAll
@@ -724,7 +822,16 @@ export default function DanhSachSinhVien() {
                             {
                                 title: 'Lý do cấm thi',
                                 render: (_, record) => {
-                                    return record?.studentSubjectScore?.examBannedReason
+                                    return (
+                                        <Input.TextArea
+                                            autoSize
+                                            readOnly
+                                            variant="underlined"
+                                            value={
+                                                record?.studentSubjectScore?.examBannedReason ?? ''
+                                            }
+                                        />
+                                    )
                                 },
                             },
                             {
@@ -749,6 +856,18 @@ export default function DanhSachSinhVien() {
                                                     examData?.lockExamSessions ||
                                                     isCreatedExamCode
                                                 }
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            [
+                                                                'list',
+                                                                record.studentSubjectScoreId,
+                                                                'examPostponedReason',
+                                                            ],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
                                             />
                                         </Form.Item>
                                     )
@@ -769,7 +888,11 @@ export default function DanhSachSinhVien() {
                                             className="m-0"
                                         >
                                             {!examPostponed ? (
-                                                <Input readOnly variant="underlined" />
+                                                <Input.TextArea
+                                                    autoSize
+                                                    readOnly
+                                                    variant="underlined"
+                                                />
                                             ) : (
                                                 <AutoComplete
                                                     placeholder="Nhập lý do hoãn thi"
@@ -784,7 +907,13 @@ export default function DanhSachSinhVien() {
                                                         examData?.lockExamSessions ||
                                                         isCreatedExamCode
                                                     }
-                                                />
+                                                >
+                                                    <Input.TextArea
+                                                        autoSize
+                                                        readOnly
+                                                        variant="underlined"
+                                                    />
+                                                </AutoComplete>
                                             )}
                                         </Form.Item>
                                     )
@@ -804,6 +933,7 @@ export default function DanhSachSinhVien() {
                                             label=""
                                         >
                                             <Input
+                                                variant="underlined"
                                                 disabled={
                                                     examData?.lockExamSessions || isCreatedExamCode
                                                 }

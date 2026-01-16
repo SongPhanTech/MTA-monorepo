@@ -5,9 +5,11 @@ import {
     AcademicRankingBaseType,
     type AcademicRankingConvert,
     type AcademicWarningRule,
+    createId,
     CriteriaField,
     CriteriaOperator,
     DecisionStatus,
+    Prisma,
     RankingContext,
     type Scholarship,
     type ScholarshipCriteria,
@@ -20,6 +22,7 @@ import {
 import { criteriaFieldLabels, criteriaOperatorLabels } from '@workspace/libs/constants'
 import Decimal from 'decimal.js'
 import { prisma } from '..'
+import pMap from 'p-map'
 import {
     CourseStudentResult,
     type ListAcademicAction,
@@ -684,7 +687,7 @@ export const calculateStudentSemesterResult = async (
     semesterId: string,
     trainingCourseId: string
 ): Promise<string> => {
-    const results: StudentSemesterResult[] = []
+    // const results: StudentSemesterResult[] = []
 
     try {
         // Thông tin học kỳ
@@ -759,9 +762,9 @@ export const calculateStudentSemesterResult = async (
             },
         })
 
-        // Kiểm tra xem có kết quả sinh viên trong học kỳ này không
-        await Promise.allSettled(
-            studentsIDs.map(async (student) => {
+        await pMap(
+            studentsIDs,
+            async (student) => {
                 const existingResult = await checkStudentSemesterResult(semesterId, student.id)
                 // lấy khoá học
                 const trainingCourseId = student.fixedClass?.trainingCourseId
@@ -816,8 +819,8 @@ export const calculateStudentSemesterResult = async (
                         `Không tìm thấy kết quả học kỳ cho sinh viên ${student.id}, tạo mới...`
                     )
                     // Nếu không có kết quả, tạo mới
-                    const newResult: StudentSemesterResult = {
-                        id: crypto.randomUUID(), // Tạo ID ngẫu nhiên
+                    const newResult: Prisma.StudentSemesterResultUncheckedCreateInput = {
+                        id: createId(), // Tạo ID ngẫu nhiên
                         conductScore: conductScore?.score || 10,
                         studentId: student.id,
                         semesterId,
@@ -864,10 +867,10 @@ export const calculateStudentSemesterResult = async (
                         active: true,
                         description: null,
                         deletedAt: null,
-                        createdBy: '',
+                        // createdBy: '',
                     }
                     // Lưu kết quả học kỳ mới
-                    results.push(newResult)
+                    // results.push(newResult)
                     console.log(`Tạo mới kết quả học kỳ cho sinh viên ${student.id}`)
                     await prisma.studentSemesterResult.create({
                         data: newResult,
@@ -936,7 +939,7 @@ export const calculateStudentSemesterResult = async (
                         createdBy: existingResult?.createdBy,
                     }
                     // Cập nhật kết quả học kỳ
-                    results.push(updatedResult)
+                    // results.push(updatedResult)
                     console.log(`Cập nhật kết quả học kỳ cho sinh viên ${student.id}`)
                     await prisma.studentSemesterResult.update({
                         where: {
@@ -947,8 +950,202 @@ export const calculateStudentSemesterResult = async (
                         data: updatedResult,
                     })
                 }
-            })
+            },
+            {
+                concurrency: 10,
+                stopOnError: false,
+            }
         )
+        // Kiểm tra xem có kết quả sinh viên trong học kỳ này không
+        // await Promise.allSettled(
+        //     studentsIDs.map(async (student) => {
+        //         const existingResult = await checkStudentSemesterResult(semesterId, student.id)
+        //         // lấy khoá học
+        //         const trainingCourseId = student.fixedClass?.trainingCourseId
+        //         if (!trainingCourseId) {
+        //             console.log(`Không tìm thấy khoá học cho sinh viên ${student.id}`)
+        //             return
+        //         }
+        //         // Lấy thông tin tích lũy của sinh viên
+        //         const thongTinTichLuy = await ThongTinTichLuy(
+        //             student.id,
+        //             student.curriculumVersionId || student.fixedClass?.curriculumVersionId || '',
+        //             trainingCourseId,
+        //             hocKyDauVao?.startDate || new Date() // Sử dụng ngày bắt đầu của học kỳ check
+        //         )
+
+        //         if (!thongTinTichLuy) {
+        //             console.log(`Không tìm thấy thông tin học kỳ cho sinh viên ${student.id}`)
+        //             return
+        //         }
+
+        //         // Lấy thông tin điểm học viên
+        //         const baseType =
+        //             student.fixedClass?.trainingCourse?.baseScore || AcademicRankingBaseType.Base10 // Mặc định là Base10 nếu không có thông tin
+
+        //         // Lấy thông tin điểm học kỳ
+        //         const thongTinDiemHocKy = await ThongTinDiemHocKy(
+        //             student.id,
+        //             student.curriculumVersionId || student.fixedClass?.curriculumVersionId || '',
+        //             trainingCourseId,
+        //             semesterId,
+        //             baseType
+        //         )
+        //         if (!thongTinDiemHocKy) {
+        //             console.error(
+        //                 `Không tìm thấy thông tin điểm học kỳ cho sinh viên ${student.id}`
+        //             )
+        //             return
+        //         }
+
+        //         const conductScore = await prisma.studentTrainingScore.findFirst({
+        //             where: {
+        //                 studentId: student.id,
+        //                 trainingScoreSession: { semesterId },
+        //                 deletedAt: null,
+        //                 active: true,
+        //             },
+        //             orderBy: { createdAt: 'desc' },
+        //         })
+
+        //         if (!existingResult) {
+        //             console.log(
+        //                 `Không tìm thấy kết quả học kỳ cho sinh viên ${student.id}, tạo mới...`
+        //             )
+        //             // Nếu không có kết quả, tạo mới
+        //             const newResult: StudentSemesterResult = {
+        //                 id: crypto.randomUUID(), // Tạo ID ngẫu nhiên
+        //                 conductScore: conductScore?.score || 10,
+        //                 studentId: student.id,
+        //                 semesterId,
+        //                 createdAt: new Date(),
+        //                 updatedAt: new Date(),
+        //                 studyYear: Math.floor(thongTinTichLuy.kyDangHoc / 2), // năm học thứ mấy
+        //                 semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
+        //                 isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
+
+        //                 baseScore:
+        //                     student.fixedClass?.trainingCourse?.baseScore ||
+        //                     AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base10
+        //                 gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
+        //                 gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
+        //                 cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
+        //                 cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
+
+        //                 lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
+        //                 lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
+        //                 totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
+        //                 registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
+        //                 passedCredits: thongTinDiemHocKy.soTinChiDat,
+        //                 failedCredits: thongTinDiemHocKy.soTinChiKhongDat,
+        //                 accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
+        //                 totalCreditsByCurriculum:
+        //                     thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
+        //                 totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
+        //                 studentTrainingType:
+        //                     conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
+        //                 rankId: thongTinTichLuy.rank?.id ?? null,
+        //                 foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
+        //                 isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
+        //                 isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
+        //                 entryScore: student.entryScore, // Điểm đầu vào
+        //                 academicWarningLevel: student.academicWarningLevel, // mức cảnh cáo học tập
+        //                 disciplinaryWarningLevel: student.disciplinaryWarningLevel, // mức cảnh cáo học đường
+        //                 suspended: student.suspended, // đình chỉ học
+        //                 expelled: student.expelled, // đuổi học
+        //                 //TODO: Chưa có thông tin này
+        //                 retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
+        //                 isImproving: false, // Đang cải thiện (hiện tại chưa có thông tin này)
+        //                 postponeWithReason: false, // tạm ngưng có lý do
+        //                 code: student.code || '', // Mã sinh viên
+        //                 active: true,
+        //                 description: null,
+        //                 deletedAt: null,
+        //                 createdBy: '',
+        //             }
+        //             // Lưu kết quả học kỳ mới
+        //             results.push(newResult)
+        //             console.log(`Tạo mới kết quả học kỳ cho sinh viên ${student.id}`)
+        //             await prisma.studentSemesterResult.create({
+        //                 data: newResult,
+        //             })
+        //         } else {
+        //             // Cập nhật kết quả học kỳ nếu đã tồn tại
+
+        //             if (!existingResult) {
+        //                 console.error(
+        //                     `Không tìm thấy kết quả học kỳ để cập nhật cho sinh viên ${student.id}`
+        //                 )
+        //                 return
+        //             }
+        //             const updatedResult: StudentSemesterResult = {
+        //                 id: existingResult.id, // Giữ nguyên ID để cập nhật
+        //                 studentId: student.id,
+        //                 conductScore: conductScore?.score || 10,
+        //                 semesterId,
+        //                 createdAt: new Date(),
+        //                 updatedAt: new Date(),
+        //                 studyYear: Math.floor((thongTinTichLuy.kyDangHoc + 1) / 2), // năm học thứ mấy: kỳ 1,2 -> năm 1; kỳ 3,4 -> năm 2
+        //                 semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
+        //                 isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
+
+        //                 baseScore:
+        //                     student.fixedClass?.trainingCourse?.baseScore ||
+        //                     AcademicRankingBaseType.Base10,
+        //                 gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
+        //                 gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
+        //                 cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
+        //                 cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
+
+        //                 lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
+        //                 lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
+        //                 totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
+
+        //                 registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
+
+        //                 //TODO: Chưa biết xác định thi lại ntn
+        //                 retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
+        //                 passedCredits: thongTinDiemHocKy.soTinChiDat,
+        //                 failedCredits: thongTinDiemHocKy.soTinChiKhongDat,
+
+        //                 accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
+        //                 totalCreditsByCurriculum:
+        //                     thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
+        //                 totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ
+        //                 studentTrainingType:
+        //                     conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
+        //                 rankId: thongTinTichLuy.rank?.id ?? null,
+        //                 //NOTE: Chưa có thông tin này nên lấy thông tin cũ gán lại
+        //                 foreignLangPass: existingResult?.foreignLangPass || true, // Đạt trình độ ngoại ngữ theo quy định
+        //                 isClassMonitor: existingResult?.isClassMonitor || false, // Chức vụ học viên (hiện tại chưa có thông tin này)
+        //                 isUnionLeader: existingResult?.isUnionLeader || false, // Chức vụ đoàn viên (hiện tại chưa có thông tin này)
+        //                 entryScore: existingResult?.entryScore || null, // Điểm đầu vào (hiện tại chưa có thông tin này)
+        //                 isImproving: existingResult?.isImproving || false, // Đang cải thiện (hiện tại chưa có thông tin này)
+        //                 postponeWithReason: existingResult?.postponeWithReason || false, // tạm ngưng có lý do
+        //                 academicWarningLevel: existingResult?.academicWarningLevel || 0, // mức cảnh cáo học tập
+        //                 disciplinaryWarningLevel: existingResult?.disciplinaryWarningLevel || 0, // mức cảnh cáo học đường
+        //                 suspended: existingResult?.suspended || false, // đình chỉ học
+        //                 expelled: existingResult?.expelled || false, // đuổi học.
+        //                 code: existingResult?.code || '',
+        //                 active: existingResult?.active || true, // Trạng thái hoạt động
+        //                 description: existingResult?.description || null,
+        //                 deletedAt: existingResult?.deletedAt || null,
+        //                 createdBy: existingResult?.createdBy,
+        //             }
+        //             // Cập nhật kết quả học kỳ
+        //             results.push(updatedResult)
+        //             console.log(`Cập nhật kết quả học kỳ cho sinh viên ${student.id}`)
+        //             await prisma.studentSemesterResult.update({
+        //                 where: {
+        //                     id: existingResult.id,
+        //                     deletedAt: null,
+        //                     active: true,
+        //                 },
+        //                 data: updatedResult,
+        //             })
+        //         }
+        //     })
+        // )
 
         console.log('Tính toán kết quả học kỳ cho tất cả sinh viên đã hoàn thành.')
 

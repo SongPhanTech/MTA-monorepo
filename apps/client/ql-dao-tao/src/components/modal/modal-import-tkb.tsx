@@ -8,6 +8,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import type { $Enums, Prisma, SubjectClassSchedule, SubjectClassTime } from '@workspace/db/client'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, message, Radio, Space, Tag } from 'antd'
 import { useState } from 'react'
@@ -90,6 +91,10 @@ const ModalNhapTKB = () => {
         | 'THONG_KE_GIAO_VIEN_GIANG_DAY'
         | 'TKB_THEO_LOP_HOC_PHAN'
     const previewData = (Form.useWatch('previewData', form) as SubjectClassPreviewData[]) || []
+    const errorData =
+        (Form.useWatch('errorData', form) as {
+            message: string
+        }[]) || []
     const { isOpen, onClose, input } = useDisclosure<{
         type: $Enums.SubjectClassType
     }>({
@@ -125,6 +130,7 @@ const ModalNhapTKB = () => {
         })
         if (res?.status === 200) {
             form.setFieldValue('previewData', (res.data as any)?.data || [])
+            form.setFieldValue('errorData', (res.data as any)?.error || [])
         } else {
             message.error(res?.data?.message || 'Nhập dữ liệu từ file thất bại')
         }
@@ -269,14 +275,41 @@ const ModalNhapTKB = () => {
                         const fileType = form.getFieldValue('fileType')
                         const link =
                             fileType === 'THONG_KE_GIAO_VIEN_GIANG_DAY'
-                                ? 'https://minio.swantech.vn/mta/template/MAU1.TKB.GIAO-VIEN-DANH-CHO-QUAN-SU.xls'
-                                : 'https://minio.swantech.vn/mta/template/MAU2.TKB.LOP-HOC-PHAN-DU-KIEN-DANH-CHO-DAN-SU.xls'
+                                ? getMinioUrl(
+                                      'mta/template/MAU1.TKB.GIAO-VIEN-DANH-CHO-QUAN-SU.xls'
+                                  )
+                                : getMinioUrl(
+                                      'mta/template/MAU2.TKB.LOP-HOC-PHAN-DU-KIEN-DANH-CHO-DAN-SU.xls'
+                                  )
                         window.open(link, '_blank')
                     }}
                 >
                     Tải mẫu file Excel
                 </Button>
             </Col>
+            {errorData.length > 0 && (
+                <Col span={24}>
+                    <p>Danh sách lỗi nhập TKB</p>
+                    <Table
+                        data={errorData}
+                        columns={[
+                            {
+                                title: 'TT',
+                                width: 35,
+                                align: 'center',
+                                render: (_value, _record, index) => index + 1,
+                            },
+                            {
+                                title: 'Mô tả',
+                                dataIndex: 'message',
+                            },
+                        ]}
+                        pagination={{
+                            defaultPageSize: 10,
+                        }}
+                    />
+                </Col>
+            )}
             {previewData.length > 0 && (
                 <Col span={24}>
                     <p>Xem trước dữ liệu TKB</p>

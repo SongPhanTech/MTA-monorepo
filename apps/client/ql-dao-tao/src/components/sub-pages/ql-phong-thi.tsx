@@ -15,7 +15,7 @@ import { Col, Flex, Input, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 
-export default function PhongThi() {
+export default function PhongThi({ setActiveKey }: { setActiveKey: (key: string) => void }) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -162,6 +162,9 @@ export default function PhongThi() {
                                 onClick: () => {
                                     diemPhongThiStore.setState({ selectedExamListId: record.id })
                                     debouncedRefetch()
+                                },
+                                onDoubleClick: () => {
+                                    setActiveKey('2')
                                 },
                                 className: cn(
                                     selectedExamListId === record.id ? 'bg-orange-200' : ''

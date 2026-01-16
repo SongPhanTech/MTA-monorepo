@@ -71,20 +71,10 @@ function DanhSachHocVien({
             //         some: {
             //             student: {
             //                 userProfile: {
-            //                     OR: [
-            //                         {
-            //                             firstName: {
+            //                     fullname: {
             //                                 contains: filters.name,
             //                                 mode: 'insensitive' as const,
-            //                             },
-            //                         },
-            //                         {
-            //                             lastName: {
-            //                                 contains: filters.name,
-            //                                 mode: 'insensitive' as const,
-            //                             },
-            //                         },
-            //                     ],
+            //                             }
             //                 },
             //             },
             //         },
@@ -128,24 +118,16 @@ function DanhSachHocVien({
                 subjectClassStudent: {
                     where: {
                         student: {
-                            ...(filters.name && {
-                                userProfile: {
-                                    OR: [
-                                        {
-                                            firstName: {
-                                                contains: filters.name,
-                                                mode: 'insensitive' as const,
-                                            },
-                                        },
-                                        {
-                                            lastName: {
-                                                contains: filters.name,
-                                                mode: 'insensitive' as const,
-                                            },
-                                        },
-                                    ],
-                                },
-                            }),
+                            ...(filters.name
+                                ? {
+                                      userProfile: {
+                                          fullname: {
+                                              contains: filters.name,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  }
+                                : {}),
                             ...(filters.code && {
                                 code: {
                                     contains: filters.code,

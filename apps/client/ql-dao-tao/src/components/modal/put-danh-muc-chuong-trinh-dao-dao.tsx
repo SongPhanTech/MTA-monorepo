@@ -50,15 +50,13 @@ const PutCurriculum = () => {
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
-        where: {
-            ...(trainingObjectTypeIdForm
-                ? {
-                      trainingObjectTypes: {
-                          some: { trainingObjectTypeId: trainingObjectTypeIdForm },
-                      },
-                  }
-                : {}),
-        },
+        where: trainingObjectTypeIdForm
+            ? {
+                  trainingObjectTypes: {
+                      some: { trainingObjectTypeId: trainingObjectTypeIdForm },
+                  },
+              }
+            : {},
     })
 
     const { mutateAsync: createCurriculum } = useCreateCurriculum()

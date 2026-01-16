@@ -5,13 +5,14 @@ import ThongKeNoThiLai from '@pages/ke-hoach-thi-lai/_pages/thong-ke-thi-lai'
 import type { $Enums } from '@workspace/db/client'
 import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import {
+    Select,
     SelectTrainingCourse,
     useFixedClassStore,
     useTrainingCourseStore,
     useTrainingMajorStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import { Flex, Form, Select, Tabs } from 'antd'
+import { Flex, Form, Tabs } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import KeHoachMoLopMonHoc from './_pages/ke-hoach-mo-lop-mon-hoc'
@@ -166,6 +167,7 @@ export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPa
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
         where: {
+            trainingObjectTypes: { some: { trainingObjectTypeId } },
             active: true,
             deletedAt: null,
         },
@@ -211,9 +213,6 @@ export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPa
                             label: i.name,
                         }))}
                         showSearch
-                        filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input?.toLowerCase())
-                        }
                         value={trainingMajorId}
                         onChange={onSelectTrainingMajor}
                         dropdownStyle={{
@@ -229,10 +228,6 @@ export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPa
                         value: i.id,
                         label: [i.code, i.name].filter(Boolean).join(' - '),
                     }))}
-                    showSearch
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input?.toLowerCase())
-                    }
                     value={fixedClassId}
                     onChange={onSelectFixedClass}
                     styles={{ popup: { root: { minWidth: 600 } } }}

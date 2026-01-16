@@ -703,6 +703,9 @@ importers:
       hono:
         specifier: 'catalog:'
         version: 4.10.6
+      p-map:
+        specifier: ^7.0.4
+        version: 7.0.4
       pizzip:
         specifier: 'catalog:'
         version: 3.2.0
@@ -2101,7 +2104,7 @@ importers:
     devDependencies:
       '@paralleldrive/cuid2':
         specifier: github:paralleldrive/cuid2
-        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/21a0e27c819d94765b01eed4c1800e4c5f0a49ec
+        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/0870bc8109736ae9f4c4eeab29169153b73bff35
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
@@ -3582,8 +3585,8 @@ packages:
   '@paralleldrive/cuid2@2.3.1':
     resolution: {integrity: sha512-XO7cAxhnTZl0Yggq6jOgjiOHhbgcO4NqFqwSmQpjK3b6TEE6Uj/jfSk6wzYyemh3+I0sHirKSetjQwn5cZktFw==}
 
-  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/21a0e27c819d94765b01eed4c1800e4c5f0a49ec':
-    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/21a0e27c819d94765b01eed4c1800e4c5f0a49ec}
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/0870bc8109736ae9f4c4eeab29169153b73bff35':
+    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/0870bc8109736ae9f4c4eeab29169153b73bff35}
     version: 3.0.6
     hasBin: true
 
@@ -7433,6 +7436,10 @@ packages:
     resolution: {integrity: sha512-/bjOqmgETBYB5BoEeGVea8dmvHb2m9GLy1E9W43yeyfP6QQCZGFNa+XRceJEuDB6zqr+gKpIAmlLebMpykw/MQ==}
     engines: {node: '>=10'}
 
+  p-map@7.0.4:
+    resolution: {integrity: sha512-tkAQEw8ysMzmkhgw8k+1U/iPhWNhykKnSk4Rd5zLoPJCuJaGRPo6YposrZgaxHKzDHdDWWZvE/Sk7hsL2X/CpQ==}
+    engines: {node: '>=18'}
+
   p-retry@4.6.2:
     resolution: {integrity: sha512-312Id396EbJdvRONlngUx0NydfrIQ5lsYu0znKVUzVvArzEIt08V1qhtyESbGVd1FGX7UKtiFp5uwKZdM8wIuQ==}
     engines: {node: '>=8'}
@@ -10876,7 +10883,7 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
 
-  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/21a0e27c819d94765b01eed4c1800e4c5f0a49ec':
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/0870bc8109736ae9f4c4eeab29169153b73bff35':
     dependencies:
       '@noble/hashes': 2.0.1
       bignumber.js: 9.3.1
@@ -15478,6 +15485,8 @@ snapshots:
   p-map@4.0.0:
     dependencies:
       aggregate-error: 3.1.0
+
+  p-map@7.0.4: {}
 
   p-retry@4.6.2:
     dependencies:

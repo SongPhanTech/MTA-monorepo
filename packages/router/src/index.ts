@@ -484,9 +484,9 @@ const NAVIGATION: NavigationType = {
                         description: 'Đợt xét đồ án',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN,
                         label: 'Quản lý đồ án',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DM_DO_AN,
                         description: 'Quản lý đồ án',
                     },
                     {
@@ -587,6 +587,12 @@ const NAVIGATION: NavigationType = {
                         label: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
                         path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
                         description: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU,
+                        label: 'Chuyên đề nghiên cứu',
+                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU,
+                        description: 'Chuyên đề nghiên cứu',
                     },
                 ],
             },

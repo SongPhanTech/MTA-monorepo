@@ -3,19 +3,7 @@ import TreeSelectDepartment from '@components/commons/department-select/TreeSele
 import TreeSelectLecture from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import Select from '@components/commons/select'
 import { useExamTypeOptions } from '@hooks/examType'
-import {
-    Button,
-    Col,
-    DatePicker,
-    Divider,
-    Flex,
-    Form,
-    Popover,
-    Row,
-    //   Select,
-    Space,
-    Typography,
-} from 'antd'
+import { Button, Col, DatePicker, Divider, Flex, Form, Popover, Row, Space, Typography } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import customParseFormat from 'dayjs/plugin/customParseFormat'

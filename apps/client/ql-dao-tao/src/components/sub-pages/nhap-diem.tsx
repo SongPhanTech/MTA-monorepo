@@ -3,9 +3,9 @@ import ImportScoreModal, { type ImportScoreData } from '@components/commons/prin
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Table from '@components/commons/table'
 import type { DataTable } from '@components/modal/modal-in-phieu-diem'
-import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import { examBanReason, examPostponeReason, examSuspendedReason } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
+import { scoreConvert } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import { validateExamScore, validateScore } from '@lib/utils'
 import {
@@ -15,9 +15,15 @@ import {
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums, type StudentSubjectScore } from '@workspace/db/client'
-import { useFindManyStudentSubjectScore, useFindUniqueSubjectClass } from '@workspace/db/hooks'
+import {
+    useFindManyStudentSubjectScore,
+    useFindUniqueSubjectClass,
+    useUpdateSubjectClass,
+} from '@workspace/db/hooks'
+import { getUrl } from '@workspace/libs/api/custom-instance'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
+import { getExportSubjectClassScoreUrl } from '@workspace/libs/api/training'
 import { calcFinalScore, fastIsEqual, getRuntimeEnv } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -43,9 +49,6 @@ import _ from 'lodash'
 import { FileUp, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { scoreConvert } from '@hooks/scoreConverter'
-import { getUrl } from '@workspace/libs/api/custom-instance'
-import { getExportSubjectClassScoreUrl } from '@workspace/libs/api/training'
 
 type FilterTable = FilterProps & {
     fullname?: string
@@ -414,12 +417,24 @@ export default function NhapDiem({
                         scoreToTakeExam !== null &&
                         scoreToTakeExam !== undefined &&
                         item.midtermScore < scoreToTakeExam)
+
+                const scoreInfo = !score
+                    ? {
+                          attendanceScore: item.attendanceScore,
+                          midtermScore: item.midtermScore,
+                          examScore: item.examScore,
+                      }
+                    : score === 'CC/TX'
+                      ? {
+                            attendanceScore: item.attendanceScore,
+                            midtermScore: item.midtermScore,
+                        }
+                      : { examScore: item.examScore }
+
                 return [
                     item.id,
                     {
-                        attendanceScore: item.attendanceScore,
-                        midtermScore: item.midtermScore,
-                        examScore: item.examScore,
+                        ...scoreInfo,
                         isChanged:
                             listForm[item.id].attendanceScore !== item.attendanceScore ||
                             listForm[item.id].midtermScore !== item.midtermScore ||
@@ -602,7 +617,17 @@ export default function NhapDiem({
     }>({
         tag: 'ModalPrintStudentSubjectScore',
     })
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
+    const lockExam = async (subjectClassId?: string) => {
+        if (subjectClassId) {
+            await updateSubjectClass({
+                where: { id: subjectClassId },
+                data: { isLockScore: true, isLockExamScore: true },
+            })
+            message.success('Cập nhật thành công')
+        }
+    }
     const handlePrint = async () => {
         Modal.confirm({
             title: 'Xác nhận',
@@ -614,6 +639,7 @@ export default function NhapDiem({
                 //     dataTable,
                 //     type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
                 // })
+                lockExam(selectedSubjectClassId)
                 openXemTaiLieu({
                     uri: getUrl(
                         getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
@@ -622,7 +648,7 @@ export default function NhapDiem({
                             id: selectedSubjectClassId ?? '',
                         })}`
                     ),
-                    name: 'PhieuDiemNhap',
+                    name: 'Phiếu điểm',
                     mimeType: 'xlsx',
                     convertTo: 'pdf',
                 })
@@ -738,13 +764,37 @@ export default function NhapDiem({
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
                                 'IN_DS_THI'
                             )) && (
-                            <ExportTemplateExam
-                                dataClass={dataDetailSubjectClass}
-                                dataTable={dataTable}
+                            // <ExportTemplateExam
+                            //     dataClass={dataDetailSubjectClass}
+                            //     dataTable={dataTable}
+                            //     disabled={
+                            //         !dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId
+                            //     }
+                            // />
+                            <Button
+                                // onClick={exportTemplate}
+                                onClick={() => {
+                                    openXemTaiLieu({
+                                        uri: getUrl(
+                                            getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                                'https://api.daotao.mta.swantech.vn',
+                                            `${getExportSubjectClassScoreUrl({
+                                                id: selectedSubjectClassId ?? '',
+                                                type: 'DANH-SACH-THI',
+                                            })}`
+                                        ),
+                                        name: 'Danh sách thi',
+                                        mimeType: 'xlsx',
+                                        convertTo: 'pdf',
+                                    })
+                                }}
                                 disabled={
                                     !dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId
                                 }
-                            />
+                            >
+                                <Printer />
+                                Danh sách thi
+                            </Button>
                         )}
                     {score !== 'CC/TX' &&
                         (can(
@@ -785,9 +835,10 @@ export default function NhapDiem({
                                                     'https://api.daotao.mta.swantech.vn',
                                                 `${getExportSubjectClassScoreUrl({
                                                     id: selectedSubjectClassId ?? '',
+                                                    type: 'NHAP',
                                                 })}`
                                             ),
-                                            name: 'PhieuDiemNhap',
+                                            name: 'Phiếu điểm nháp',
                                             mimeType: 'xlsx',
                                             convertTo: 'pdf',
                                         })
@@ -1059,44 +1110,52 @@ export default function NhapDiem({
                                 title: 'Điểm thi',
                                 dataIndex: 'examScore',
                                 width: 65,
-                                // type: 'order',
                                 align: 'center',
-                                render: (_, record) => {
-                                    if (role !== 'GV' || score === 'CC/TX' || !!record.examBanned) {
-                                        return record.examScore ?? ''
+                                render: (
+                                    _,
+                                    {
+                                        id,
+                                        attendanceScore,
+                                        midtermScore,
+                                        examBanned,
+                                        subjectClass,
+                                        examScore,
+                                    }: any
+                                ) => {
+                                    const isMissingScore =
+                                        attendanceScore == null || midtermScore == null
+                                    if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
+                                        return examScore ?? ''
                                     }
+
                                     return (
                                         <Form.Item
                                             className="w-full m-0"
-                                            name={['list', record.id, 'examScore']}
-                                            label=""
+                                            name={['list', id, 'examScore']}
                                             rules={[
                                                 {
                                                     validator: (_, value) =>
                                                         validateExamScore(
                                                             value,
-                                                            record?.subjectClass?.subject?.onePoint
+                                                            subjectClass?.subject?.onePoint
                                                         ),
                                                 },
                                             ]}
                                         >
                                             <InputNumber
-                                                readOnly={disabledForm}
-                                                variant={disabledForm ? 'underlined' : 'outlined'}
-                                                disabled={disabledForm}
-                                                id={`score-thi-${record.id}`}
-                                                style={{
-                                                    width: '100%',
-                                                }}
-                                                step={0}
+                                                disabled={disabledForm || isMissingScore}
+                                                readOnly={disabledForm || isMissingScore}
+                                                variant={
+                                                    disabledForm || isMissingScore
+                                                        ? 'underlined'
+                                                        : 'outlined'
+                                                }
+                                                id={`score-thi-${id}`}
+                                                style={{ width: '100%' }}
+                                                placeholder={isMissingScore ? 'Thiếu điểm' : ''}
                                                 controls={false}
                                                 onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(
-                                                        e,
-                                                        record.id,
-                                                        'thi',
-                                                        dataTable
-                                                    )
+                                                    handleScoreInputKeyDown(e, id, 'thi', dataTable)
                                                 }
                                             />
                                         </Form.Item>
@@ -1238,7 +1297,17 @@ export default function NhapDiem({
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox disabled={score === 'THI' || disabledForm} />
+                                            <Checkbox
+                                                disabled={score === 'THI' || disabledForm}
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'examBannedReason'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
+                                            />
                                         </Form.Item>
                                     )
                                 },
@@ -1295,7 +1364,17 @@ export default function NhapDiem({
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox disabled={score === 'THI' || disabledForm} />
+                                            <Checkbox
+                                                disabled={score === 'THI' || disabledForm}
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'examPostponed'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
+                                            />
                                         </Form.Item>
                                     )
                                 },
@@ -1360,6 +1439,14 @@ export default function NhapDiem({
                                                     score === 'CC/TX' ||
                                                     disabledForm
                                                 }
+                                                onChange={(e) => {
+                                                    if (!e.target.checked) {
+                                                        form.setFieldValue(
+                                                            ['list', record.id, 'suspendedReason'],
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
                                             />
                                         </Form.Item>
                                     )

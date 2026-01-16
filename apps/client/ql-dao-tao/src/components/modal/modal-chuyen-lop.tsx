@@ -9,11 +9,12 @@ import useSpinner from '@hooks/spinner'
 import type { Prisma } from '@workspace/db/client'
 import {
     useCountStudent,
-    useFindManyStudent,
     useFindManyFixedClass,
+    useFindManyStudent,
     useUpdateManyStudent,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Select, Tag, Tooltip } from 'antd'
+import { Select } from '@workspace/ui'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { ArrowBigLeftDash, ArrowBigRightDash } from 'lucide-react'
@@ -63,34 +64,16 @@ const ModalChuyenLop = () => {
     const { data = [], refetch } = useFindManyStudent(
         {
             where: {
-                OR: filter.search
-                    ? [
-                          {
-                              userProfile: {
-                                  firstName: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
+                ...(filter.search
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filter.search,
+                                  mode: 'insensitive',
                               },
                           },
-                          {
-                              userProfile: {
-                                  lastName: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      ]
-                    : undefined,
+                      }
+                    : {}),
                 fixedClassId: filter.fixedClassId,
             },
             include: {
@@ -144,34 +127,16 @@ const ModalChuyenLop = () => {
     const { data: count } = useCountStudent(
         {
             where: {
-                OR: filter.search
-                    ? [
-                          {
-                              userProfile: {
-                                  firstName: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
+                ...(filter.search
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filter.search,
+                                  mode: 'insensitive',
                               },
                           },
-                          {
-                              userProfile: {
-                                  lastName: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      ]
-                    : undefined,
+                      }
+                    : {}),
                 fixedClassId: filter.fixedClassId,
             },
         },
@@ -183,34 +148,16 @@ const ModalChuyenLop = () => {
     const { data: studentClassArrives = [], refetch: refetchClassArrives } = useFindManyStudent(
         {
             where: {
-                OR: filter.searchClassArrive
-                    ? [
-                          {
-                              userProfile: {
-                                  firstName: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
+                ...(filter.searchClassArrive
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filter.searchClassArrive,
+                                  mode: 'insensitive',
                               },
                           },
-                          {
-                              userProfile: {
-                                  lastName: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      ]
-                    : undefined,
+                      }
+                    : {}),
                 fixedClassId: filter.fixedClassArriveId,
             },
             include: {
@@ -264,34 +211,16 @@ const ModalChuyenLop = () => {
     const { data: countStudentClassArrives } = useCountStudent(
         {
             where: {
-                OR: filter.searchClassArrive
-                    ? [
-                          {
-                              userProfile: {
-                                  firstName: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
+                ...(filter.searchClassArrive
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filter.searchClassArrive,
+                                  mode: 'insensitive',
                               },
                           },
-                          {
-                              userProfile: {
-                                  lastName: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      ]
-                    : undefined,
+                      }
+                    : {}),
                 fixedClassId: filter.fixedClassArriveId,
             },
         },
@@ -452,10 +381,6 @@ const ModalChuyenLop = () => {
                             }}
                             className="w-96 flex-1 min-w-0"
                             allowClear
-                            showSearch
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
                             options={fixedClasses.map((fixedClass) => ({
                                 label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
                                 value: fixedClass.id,
@@ -621,10 +546,6 @@ const ModalChuyenLop = () => {
                             }}
                             className="w-96 flex-1 min-w-0"
                             allowClear
-                            showSearch
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
                             options={fixedClasses.map((fixedClass) => ({
                                 label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
                                 value: fixedClass.id,

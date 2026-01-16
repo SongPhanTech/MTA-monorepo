@@ -1,23 +1,26 @@
-import fs from 'fs'
-import XlsxTemplate from 'xlsx-template'
+import { PrismaClient } from '@workspace/db'
 
-// Load the template
-fs.readFile('PHIEU-DIEM.xlsx', (err, data) => {
-    const template = new XlsxTemplate(data)
-
-    // Define replacement values
-    const values = {
-        MA_LMH: 'CS101',
-    }
-
-    // Perform substitution on sheet 1 (can also use sheet name as string: 'Sheet1')
-    template.substitute(1, values)
-
-    // Generate the output file
-    const output = template.generate({
-        type: 'nodebuffer',
-    })
-
-    // Save to disk
-    fs.writeFileSync('output.xlsx', output)
+const prisma = new PrismaClient({
+    datasourceUrl: 'postgres://admin:123456654321@192.168.3.37:5432/mta',
 })
+
+const classes = await prisma.subjectClass.findMany({
+    where: {
+        examId: { in: ['008528', '008529'] },
+        cancelled: false,
+        deletedAt: null,
+        status: 'OFFICIAL',
+    },
+    select: {
+        id: true,
+        examId: true,
+        subjectId: true,
+        semesterId: true,
+    },
+})
+
+console.log('classes', classes)
+
+const subjectVersionIds = [...new Set(classes.map((cls) => cls.subjectId))]
+
+console.log('subjectVersionIds', subjectVersionIds)
