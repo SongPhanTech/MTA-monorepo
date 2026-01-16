@@ -7,6 +7,7 @@ import '../ql-dao-tao/ranking'
 import 'notification'
 import '../ql-dao-tao/note.zmodel'
 import '../khao-thi/evaluate'
+import '../khao-thi/exam'
 
 model DocumentFile extends Base {
   name                       String
@@ -71,5 +72,8 @@ model DocumentFile extends Base {
 
 	evaluationPeriod EvaluationPeriod? @relation(fields: [evaluationPeriodId], references: [id])
 	evaluationPeriodId String?
+  knowledgeBlock KnowledgeBlock? @relation(fields: [knowledgeBlockId], references: [id])
+	knowledgeBlockId String?
+  
   @@schema("ql-danh-muc")
 }
