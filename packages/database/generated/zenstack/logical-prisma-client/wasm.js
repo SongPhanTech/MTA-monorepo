@@ -7467,6 +7467,7 @@ exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Internship: 'Internship',
   Research: 'Research',
   Project: 'Project',
+  Thesis: 'Thesis',
   Practice: 'Practice',
   Graduation: 'Graduation'
 };
