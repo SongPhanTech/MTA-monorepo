@@ -27,24 +27,62 @@ interface CacheEntry {
 }
 
 const CACHE_KEY = 'sso-session-cache'
+const SSO_REDIRECT_FLAG = 'sso-pending-redirect'
+const SSO_CHECKED_FLAG = 'sso-redirect-checked' // Flag để đánh dấu đã check rồi trong session này
 const CACHE_TIME = 5 * 60 * 1000 // 5 phút
 
-// Load from localStorage on init
+const checkSSORedirect = (): boolean => {
+    if (typeof window === 'undefined') return false
+    
+    if (sessionStorage.getItem(SSO_CHECKED_FLAG)) {
+        return false
+    }
+    
+    sessionStorage.setItem(SSO_CHECKED_FLAG, 'true')
+    
+    if (sessionStorage.getItem(SSO_REDIRECT_FLAG)) {
+        console.log('[useSSOSession] Detected pending SSO redirect flag, invalidating cache')
+        sessionStorage.removeItem(SSO_REDIRECT_FLAG)
+        return true
+    }
+    
+    const authIssuer = getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')
+    if (authIssuer) {
+        try {
+            const authHostname = new URL(authIssuer).hostname
+            if (document.referrer && document.referrer.includes(authHostname)) {
+                console.log('[useSSOSession] Detected redirect from SSO via referrer, invalidating cache')
+                return true
+            }
+        } catch {
+            // Invalid URL, ignore
+        }
+    }
+    
+    return false
+}
+
 let globalCache: CacheEntry | null = null
 if (typeof window !== 'undefined') {
-    try {
-        const stored = localStorage.getItem(CACHE_KEY)
-        if (stored) {
-            const parsed = JSON.parse(stored) as CacheEntry
-            // Check if cache is still valid
-            if (Date.now() - parsed.timestamp < CACHE_TIME) {
-                globalCache = parsed
-            } else {
-                localStorage.removeItem(CACHE_KEY)
+    const fromSSO = checkSSORedirect()
+    
+    if (fromSSO) {
+        localStorage.removeItem(CACHE_KEY)
+        globalCache = null
+    } else {
+        try {
+            const stored = localStorage.getItem(CACHE_KEY)
+            if (stored) {
+                const parsed = JSON.parse(stored) as CacheEntry
+                if (Date.now() - parsed.timestamp < CACHE_TIME) {
+                    globalCache = parsed
+                } else {
+                    localStorage.removeItem(CACHE_KEY)
+                }
             }
+        } catch (error) {
+            console.warn('[useSSOSession] Failed to load cache from localStorage:', error)
         }
-    } catch (error) {
-        console.warn('[useSSOSession] Failed to load cache from localStorage:', error)
     }
 }
 
@@ -64,16 +102,6 @@ const saveCache = (cache: CacheEntry) => {
     }
 }
 
-/**
- * Hook để kiểm tra SSO session cho tro-ly-ao
- * KHÔNG tự động redirect về trang đăng nhập khi chưa authenticated
- *
- * Features:
- * - Global cache 5 phút với localStorage persistence
- * - Share state giữa các instances
- * - Prevent duplicate fetches
- * - Reload không mất cache
- */
 export const useSSOSession = () => {
     const [status, setStatus] = useState<SSOSessionStatus>(globalCache?.status || 'loading')
     const [session, setSession] = useState<SSOSession | null>(globalCache?.session || null)
@@ -162,8 +190,19 @@ export const useSSOSession = () => {
      * Chỉ gọi khi người dùng chủ động click nút đăng nhập
      */
     const signIn = useCallback(() => {
-        const tenantCode = (typeof window !== 'undefined' && (window as any).tenantCode) || 'dev'
-        window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE')}&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
+        const tenantCode =
+            (typeof window !== 'undefined' && (window as any).tenantCode) || 'dev'
+        
+        // Clear the "already checked" flag so we can check again when returning
+        sessionStorage.removeItem(SSO_CHECKED_FLAG)
+        
+        // Set flag before redirect - this will be checked when user returns
+        // to invalidate cache and force fresh session check
+        sessionStorage.setItem(SSO_REDIRECT_FLAG, 'true')
+        
+       // window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE')}&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
+        window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=chatbot&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
+
     }, [])
 
     /**
