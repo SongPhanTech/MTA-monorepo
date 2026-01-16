@@ -701,8 +701,10 @@ model SubjectVersion extends BaseNoCode {
 
   subjectVersionHistory    SubjectVersionHistory[]
   exams                    Exam[]
+	examFramework             ExamFramework[]
 
   @@schema("ql-dao-tao")
+
 }
 
 model SubjectVersionHistory extends Base {
