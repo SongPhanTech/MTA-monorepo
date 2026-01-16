@@ -48,7 +48,7 @@ export default function ClassRegisterLogs() {
     const where = useMemo(
         () => ({
             classRegisterSessionId: id,
-            ...(filters.code && filters.code !== ''
+            ...(filters.code
                 ? {
                       student: {
                           code: {
@@ -58,30 +58,14 @@ export default function ClassRegisterLogs() {
                       },
                   }
                 : {}),
-            ...(filters.name && filters.name !== ''
+            ...(filters.name
                 ? {
                       student: {
                           userProfile: {
-                              OR: [
-                                  {
-                                      fullname: {
-                                          contains: filters.name,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                                  {
-                                      firstName: {
-                                          contains: filters.name,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.name,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                              ],
+                              fullname: {
+                                  contains: filters.name,
+                                  mode: 'insensitive' as const,
+                              },
                           },
                       },
                   }

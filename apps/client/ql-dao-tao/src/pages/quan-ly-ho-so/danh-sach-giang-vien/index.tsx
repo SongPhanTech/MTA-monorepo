@@ -86,7 +86,7 @@ export default function UserProfilePageLecture() {
     const where = useMemo(
         () => ({
             deletedAt: null,
-            ...(filters.code && filters.code !== ''
+            ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
@@ -94,29 +94,13 @@ export default function UserProfilePageLecture() {
                       },
                   }
                 : {}),
-            ...(filters.name && filters.name !== ''
+            ...(filters.name
                 ? {
                       userProfile: {
-                          OR: [
-                              {
-                                  firstName: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                              },
-                              {
-                                  lastName: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                              },
-                              {
-                                  fullname: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                              },
-                          ],
+                          fullname: {
+                              contains: filters.name,
+                              mode: 'insensitive' as const,
+                          },
                       },
                   }
                 : {}),

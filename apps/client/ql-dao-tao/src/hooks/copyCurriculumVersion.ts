@@ -39,9 +39,15 @@ export const useCloneCurriculumVersion = () => {
                     : `COPY-${Date.now()}`,
                 curriculum: { connect: { id: originalVersion?.curriculumId } },
                 trainingObjectType: { connect: { id: originalVersion.trainingObjectTypeId } },
-                trainingLevel: { connect: { id: originalVersion.trainingLevelId ?? '' } },
-                trainingTime: { connect: { id: originalVersion.trainingTimeId ?? '' } },
-                trainingType: { connect: { id: originalVersion.trainingTypeId ?? '' } },
+                ...(originalVersion.trainingLevelId
+                    ? { trainingLevel: { connect: { id: originalVersion.trainingLevelId ?? '' } } }
+                    : {}),
+                ...(originalVersion.trainingTimeId
+                    ? { trainingTime: { connect: { id: originalVersion.trainingTimeId ?? '' } } }
+                    : {}),
+                ...(originalVersion.trainingTypeId
+                    ? { trainingType: { connect: { id: originalVersion.trainingTypeId ?? '' } } }
+                    : {}),
                 shortName: originalVersion.shortName,
                 englishName: originalVersion.englishName,
                 trainingLanguage: {
@@ -62,7 +68,6 @@ export const useCloneCurriculumVersion = () => {
                 summary: originalVersion.summary,
                 learningDiagram: originalVersion.learningDiagram,
                 guide: originalVersion.guide,
-                diplomaType: { connect: { id: originalVersion.diplomaTypeId ?? '' } },
                 documentFiles: {
                     createMany: {
                         data: (originalVersion.documentFiles || []).map(

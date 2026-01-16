@@ -19,7 +19,7 @@ import { useCertificateScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Select, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, message, Modal, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, Modal, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { InfoIcon } from 'lucide-react'
 import type React from 'react'
@@ -135,25 +135,11 @@ export default function ArchivedCertificate() {
     const where = useMemo(() => {
         const conditions: any = {}
 
-        if (filters.name && filters.name !== '') {
-            conditions.OR = [
-                {
-                    userProfile: {
-                        firstName: {
-                            contains: filters.name,
-                            mode: 'insensitive' as const,
-                        },
-                    },
-                },
-                {
-                    userProfile: {
-                        lastName: {
-                            contains: filters.name,
-                            mode: 'insensitive' as const,
-                        },
-                    },
-                },
-            ]
+        if (filters.name) {
+            conditions.fullname = {
+                contains: filters.name,
+                mode: 'insensitive' as const,
+            }
         }
 
         if (filters.fixedClassId) {

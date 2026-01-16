@@ -36,6 +36,7 @@ import dayjs from 'dayjs'
 import { SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
+import { useSemesterStore } from '@workspace/ui'
 
 interface DoAnForm {
     subjectClassId: string
@@ -56,6 +57,8 @@ export default function DanhMucDoAn() {
     const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
+    const { id: semesterId } = useSemesterStore()
+
     const rowSelection = {
         selectedRowKeys,
         onChange: (newSelectedRowKeys: React.Key[]) => {
@@ -74,9 +77,8 @@ export default function DanhMucDoAn() {
     }, [isSearched, searchParams])
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         where: {
-            subject: {
-                type: SubjectVersionType.Project,
-            },
+            semesterId,
+            subject: { type: SubjectVersionType.Project },
         },
         include: {
             subjectClassStudent: {

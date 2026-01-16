@@ -146,20 +146,14 @@ export default function StudentFixedClassPage() {
         where: {
             fixedClassId,
             userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                            mode: 'insensitive',
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                            mode: 'insensitive',
-                        },
-                    },
-                ],
+                ...(filters.name
+                    ? {
+                          fullname: {
+                              contains: filters.name,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
                 ...(filters.rank
                     ? {
                           rank: {

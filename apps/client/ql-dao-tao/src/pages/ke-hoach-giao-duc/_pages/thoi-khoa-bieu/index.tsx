@@ -118,44 +118,28 @@ export default function ThoiKhoaBieu({
                 ...(filters.mainLecturer
                     ? {
                           mainLecturer: {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.mainLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.mainLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                  ],
-                              },
+                              userProfile: filters.mainLecturer
+                                  ? {
+                                        fullname: {
+                                            contains: filters.mainLecturer,
+                                            mode: 'insensitive' as const,
+                                        },
+                                    }
+                                  : {},
                           },
                       }
                     : {}),
                 ...(filters.extraLecturer
                     ? {
                           extraLecturer: {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.extraLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.extraLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                  ],
-                              },
+                              userProfile: filters.extraLecturer
+                                  ? {
+                                        fullname: {
+                                            contains: filters.extraLecturer,
+                                            mode: 'insensitive' as const,
+                                        },
+                                    }
+                                  : {},
                           },
                       }
                     : {}),
