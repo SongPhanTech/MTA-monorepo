@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
-import type { SurveyQuestion, SurveyQuestionGroup } from '@workspace/db'
+import { type SurveyQuestion, type SurveyQuestionGroup, SurveyQuestionType } from '@workspace/db'
 import {
     useCreateSurveyQuestion,
     useFindManySurveyQuestionGroup,
@@ -20,6 +20,22 @@ import { XMLParser } from 'fast-xml-parser'
 import { PizZip } from '@workspace/libs/docxjs'
 
 export type PutSurveyQuestionType = SurveyQuestion
+type ImportedQuestion = {
+    content: string
+    type: SurveyQuestionType
+}
+function detectQuestionType(text: string): SurveyQuestionType {
+    if (/\(TN\)/i.test(text)) {
+        return SurveyQuestionType.SINGLE_CHOICE
+    }
+
+    if (/\(TL\)/i.test(text)) {
+        return SurveyQuestionType.ESSAY
+    }
+
+    // fallback nếu không có
+    return SurveyQuestionType.SINGLE_CHOICE
+}
 
 function joinRunsWithSpace(runs: any[]): string {
     let text = ''
@@ -50,6 +66,8 @@ function stripLeadingIndex(text: string): string {
     return (
         text
             .trim()
+            // remove (TN) / (TL)
+            .replace(/\((TN|TL)\)/gi, '')
             // dấu . hoặc - đứng một mình
             .replace(/^[\.\-]\s*/, '')
             // 1. , 1.1 , 1.2.3 , 01.02
@@ -73,17 +91,19 @@ const PutSurveyImportQuestionModal = () => {
         tag: 'PutSurveyImportQuestionModal',
         onClose: form.resetFields,
     })
-    const [importedQuestions, setImportedQuestions] = useState<string[]>([])
+    const [importedQuestions, setImportedQuestions] = useState<ImportedQuestion[]>([])
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const tableData = importedQuestions.map((q, index) => ({
-        key: index,
-        content: q,
-    }))
-
     const { options: surveyQuestionTypeOptions, getSurveyQuestionTypeLabel } =
         useSurveyQuestionTypeOptions()
+
+    const tableData = importedQuestions.map((q, index) => ({
+        key: index,
+        content: q.content,
+        type: getSurveyQuestionTypeLabel(q.type),
+    }))
+
     const { mutateAsync: create } = useCreateSurveyQuestion()
 
     const { data: surveyQuestionGroupData = [] } = useFindManySurveyQuestionGroup()
@@ -116,23 +136,32 @@ const PutSurveyImportQuestionModal = () => {
                 return
             }
 
-            const questions: string[] = []
+            const questions: ImportedQuestion[] = []
 
             for (const p of paragraphs) {
                 const runs = Array.isArray(p['w:r']) ? p['w:r'] : [p['w:r']]
-                const text = joinRunsWithSpace(runs)
-                const cleaned = stripLeadingIndex(text)
+                const rawText = joinRunsWithSpace(runs)
 
-                if (cleaned) {
-                    questions.push(cleaned)
-                }
+                if (!rawText) continue
+
+                const type = detectQuestionType(rawText)
+                const content = stripLeadingIndex(rawText)
+
+                if (!content) continue
+
+                questions.push({
+                    content,
+                    type,
+                })
             }
 
             if (!questions.length) {
                 message.error('Không có câu hỏi hợp lệ')
                 return
             }
-            const uniqueQuestions = questions.filter((q, index, arr) => arr.indexOf(q) === index)
+            const uniqueQuestions = questions.filter(
+                (q, index, arr) => arr.findIndex((x) => x.content === q.content) === index
+            )
 
             setImportedQuestions(uniqueQuestions)
             setSelectedRowKeys([])
@@ -144,18 +173,14 @@ const PutSurveyImportQuestionModal = () => {
 
     async function onOk(output?: SurveyQuestion) {
         if (!output) return
-        if (!output.type) {
-            message.warning('Vui lòng chọn loại câu hỏi')
-            return
-        }
 
         if (!output.surveyQuestionGroupId) {
             message.warning('Vui lòng chọn nhóm câu hỏi khảo sát')
             return
         }
-        const selectedQuestions: string[] = selectedRowKeys
+        const selectedQuestions = selectedRowKeys
             .map((key) => importedQuestions[Number(key)])
-            .filter((q): q is string => Boolean(q))
+            .filter(Boolean)
 
         if (!selectedQuestions.length) {
             message.warning('Vui lòng chọn ít nhất một câu hỏi')
@@ -165,12 +190,12 @@ const PutSurveyImportQuestionModal = () => {
         try {
             showSpinner()
 
-            for (const question of selectedQuestions) {
+            for (const q of selectedQuestions) {
                 await create({
                     data: {
-                        name: question,
+                        name: q.content,
                         surveyQuestionGroupId: output.surveyQuestionGroupId,
-                        type: output.type,
+                        type: q.type,
                         description: null,
                     },
                 })
@@ -253,14 +278,14 @@ const PutSurveyImportQuestionModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="type" label="Loại câu hỏi khảo sát" required>
                     <Select
                         placeholder="Chọn loại câu hỏi khảo sát"
                         options={surveyQuestionTypeOptions}
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={24}>
                 {importedQuestions.length > 0 && (
                     <Col span={24}>
@@ -285,6 +310,12 @@ const PutSurveyImportQuestionModal = () => {
                                     {
                                         title: 'Nội dung câu hỏi',
                                         dataIndex: 'content',
+                                    },
+                                    {
+                                        title: 'Loại',
+                                        dataIndex: 'type',
+                                        width: 120,
+                                        align: 'center',
                                     },
                                 ]}
                             />
