@@ -56,7 +56,7 @@ export default function RequirementCriterionCatalog() {
                 ],
                 !!filters.order
             ),
-            { order: 'asc' },
+            { order: 'desc' },
         ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,

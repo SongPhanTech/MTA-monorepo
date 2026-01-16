@@ -33,6 +33,8 @@ import ReviewSurveyModal from './review-survey-modal'
 import { XemTaiLieu } from '@workspace/ui'
 import ModalPrintExamClusterSurvey from './modal-print-de-khao-sat'
 import ModalPrintExamSurvey from './modal-print-de-khao-sat-chung'
+import PutSurveyImportQuestionModal from './put-modal-survey-import-question'
+
 export {
     ConfirmModal,
     PutSurveyObjectTypeModal,
@@ -69,4 +71,5 @@ export {
     XemTaiLieu,
     ModalPrintExamSurvey,
     ModalPrintExamClusterSurvey,
+    PutSurveyImportQuestionModal,
 }
