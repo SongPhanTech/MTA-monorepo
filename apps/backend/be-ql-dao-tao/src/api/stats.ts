@@ -4243,4 +4243,85 @@ app.openapi(
         })
     }
 )
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/subjects-high-absent-students',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().optional().default(false),
+                            limit: z.number().min(1).max(50).optional().default(10),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Học phần có sinh viên vắng thi cao',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    name: z.string(),
+                                    data: z.array(z.number()),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }), 
+    async (c) => {
+        const { preview, limit } = c.req.valid('json')
+        if (preview) {
+            const subjects = [
+                { name: 'Trí Tuệ Nhân Tạo', absentCount: 140, totalStudents: 200 },
+                { name: 'Hệ Điều Hành', absentCount: 120, totalStudents: 180 },
+                { name: 'Lý Thuyết Thông Tin', absentCount: 100, totalStudents: 150 },
+                { name: 'Mạng Máy Tính', absentCount: 90, totalStudents: 140 },
+                { name: 'Lập Trình Java', absentCount: 80, totalStudents: 130 },
+                { name: 'Kỹ Thuật Phần Mềm', absentCount: 70, totalStudents: 120 },
+                { name: 'Cơ Sở Dữ Liệu', absentCount: 60, totalStudents: 110 },
+                { name: 'An Toàn Thông Tin', absentCount: 50, totalStudents: 100 },
+                { name: 'Đồ Họa Máy Tính', absentCount: 40, totalStudents: 90 },
+                { name: 'Toán Cao Cấp', absentCount: 30, totalStudents: 80 },
+                { name: 'Công Nghệ Web', absentCount: 20, totalStudents: 70 },
+                { name: 'Phân Tích Thiết Kế', absentCount: 10, totalStudents: 60 },
+            ]
+            const sortedSubjects = subjects.sort((a, b) => b.absentCount - a.absentCount).slice(0, limit)
+            const labels = sortedSubjects.map(s => s.name)
+            const countData = sortedSubjects.map(s => s.absentCount)
+            const percentData = sortedSubjects.map(s => Math.round((s.absentCount / s.totalStudents) * 100 * 100) / 100)
+            const data = [
+                { name: 'Vắng thi (số lượng)', data: countData },
+                { name: 'Vắng thi (%)', data: percentData },
+            ]
+            const summary = { totalSubjects: sortedSubjects.length, limit }
+            const count = sortedSubjects.reduce((sum, s) => sum + s.absentCount, 0)
+      
+            return c.json({
+                summary,
+                count,
+                preview: true,
+                labels,
+                data,
+            })
+        }
+
+        return c.json({
+            summary: {},
+            count: 0,
+            preview: false,
+            labels: [],
+            data: [],
+        })
+    }
+)
 export default app
