@@ -230,12 +230,12 @@ const PutClassRegisterSession = () => {
             title={id ? 'Chỉnh sửa đợt đăng ký học' : 'Thêm mới đợt đăng ký học'}
             className="w-[50vw]"
         >
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="code" label="Mã đợt đăng ký" required>
                     <Input placeholder="Nhập mã đợt đăng ký" />
                 </FormItem>
-            </Col>
-            <Col span={12}>
+            </Col> */}
+            <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt đăng ký" required>
                     <Input placeholder="Nhập tên đợt đăng ký" />
                 </FormItem>
