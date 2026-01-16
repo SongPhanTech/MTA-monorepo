@@ -4324,4 +4324,73 @@ app.openapi(
         })
     }
 )
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/statistics-exam-bank-not-yet',
+        tags: ['Stats'],
+        summary: 'Thống kê số lượng ngân hàng đề chưa có',
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().optional().default(false),
+                            limit: z.number().min(1).max(100).optional().default(10),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê số lượng ngân hàng đề chưa có',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    name: z.string(),
+                                    data: z.array(z.number()),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview, limit = 10 } = c.req.valid('json')
+        if(preview){
+        const labels = ['Bộ môn CNTT', 'Bộ môn Tiếng Anh', 'Bộ môn Toán', 'Bộ môn Vật Lý', 'Bộ môn Hoá']
+        const rawData = [
+            { name: 'Số học phần chưa có đề', data: [25, 18, 12, 8, 5] },
+        ]
+        const data = rawData
+        const summary = { totalDepartments: labels.length, totalSubjectsWithoutBank: 68 }
+        const count = rawData.reduce(
+            (sum, item) => sum + item.data.reduce((a, b) => a + b, 0),
+            0
+        )
+        
+        return c.json({
+            summary,
+            count,
+            preview: true,
+            labels,
+            data,
+        })
+        }
+         return c.json({
+            summary:{},
+            count:0,
+            preview: false,
+            labels:[],
+            data:[]
+        })
+    }
+)
+
 export default app
