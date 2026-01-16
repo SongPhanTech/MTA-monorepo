@@ -1,15 +1,15 @@
 // biome-ignore assist/source/organizeImports: <ignore>
-import Select from '@components/commons/select';
-import Table from '@components/commons/table';
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants';
-import DefaultLayout from '@layouts/default-layout';
+import Select from '@components/commons/select'
+import Table from '@components/commons/table'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import DefaultLayout from '@layouts/default-layout'
 import {
-  CouncilRole,
-  StudentThesisRegistrationStatus,
-  SubjectVersionType,
-  ThesisProjectStatus,
-  ThesisType,
-} from '@workspace/db';
+    CouncilRole,
+    StudentThesisRegistrationStatus,
+    SubjectVersionType,
+    ThesisProjectStatus,
+    ThesisType,
+} from '@workspace/db'
 import {
     useCountThesisProject,
     useFindManyDefenseSession,
@@ -395,44 +395,44 @@ export default function DanhMucDoAn() {
     return (
         <Row gutter={[16, 0]}>
             <Col span={24}>
-                <Row gutter={[16, 16]} align='top' justify='space-between'>
+                <Row gutter={[16, 16]} align="top" justify="space-between">
                     <Col span={24}>
                         <Form
                             form={form}
-                            layout='horizontal'
-                            className='w-full mb-4 flex flex-wrap items-end gap-4'
+                            layout="horizontal"
+                            className="w-full mb-4 flex flex-wrap items-end gap-4"
                         >
                             <Form.Item
-                                name='subjectClassId'
-                                label='Lớp môn học'
-                                className='mb-0 w-86'
+                                name="subjectClassId"
+                                label="Lớp môn học"
+                                className="mb-0 w-86"
                             >
                                 <Select
-                                    className='w-86'
+                                    className="w-86"
                                     options={subjectClassData?.map((item) => ({
                                         label: `${item.code} - ${item.name}`,
                                         value: item.id,
                                     }))}
-                                    placeholder='Chọn lớp môn học'
+                                    placeholder="Chọn lớp môn học"
                                 />
                             </Form.Item>
 
-                            <Form.Item className='mb-0'>
-                                <div className='flex gap-2'>
+                            <Form.Item className="mb-0">
+                                <div className="flex gap-2">
                                     <Button
-                                        type='primary'
+                                        type="primary"
                                         onClick={async () => await handleGenerateMockData()}
                                     >
                                         Tạo dữ liệu mẫu
                                     </Button>
-                                    <Button type='primary' onClick={handleSearch}>
+                                    <Button type="primary" onClick={handleSearch}>
                                         Xem kết quả
                                     </Button>
                                     {editingRowKeys.length > 0 ? (
                                         <>
                                             <Button
-                                                type='default'
-                                                className='ml-2'
+                                                type="default"
+                                                className="ml-2"
                                                 onClick={() => {
                                                     setEditingRowKeys([])
                                                     setEditingValues({})
@@ -444,8 +444,8 @@ export default function DanhMucDoAn() {
                                                 Hủy thay đổi
                                             </Button>
                                             <Button
-                                                type='primary'
-                                                className='ml-2'
+                                                type="primary"
+                                                className="ml-2"
                                                 onClick={async () => await handleSaveChanges()}
                                             >
                                                 Lưu thay đổi
@@ -453,8 +453,8 @@ export default function DanhMucDoAn() {
                                         </>
                                     ) : (
                                         <Button
-                                            type='default'
-                                            className='ml-2'
+                                            type="default"
+                                            className="ml-2"
                                             onClick={handleActivateEdit}
                                         >
                                             Chỉnh sửa
@@ -466,7 +466,7 @@ export default function DanhMucDoAn() {
                     </Col>
                 </Row>
                 <Table
-                    rowKey='id'
+                    rowKey="id"
                     columns={[
                         {
                             title: 'STT',
@@ -547,7 +547,7 @@ export default function DanhMucDoAn() {
                                         record?.supervisorId
                                     return (
                                         <Select
-                                            className='w-46'
+                                            className="w-46"
                                             options={expertProfiles?.map((item: any) => ({
                                                 label: item.lecturer
                                                     ? item.lecturer?.userProfile?.fullname
@@ -555,7 +555,7 @@ export default function DanhMucDoAn() {
                                                 value: item.id,
                                             }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn GVHD1'
+                                            placeholder="Chọn GVHD1"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'supervisor', value)
                                             }
@@ -581,7 +581,7 @@ export default function DanhMucDoAn() {
                                         record?.coSupervisorId
                                     return (
                                         <Select
-                                            className='w-46'
+                                            className="w-46"
                                             options={expertProfiles?.map((item: any) => ({
                                                 label: item.lecturer
                                                     ? item.lecturer?.userProfile?.fullname
@@ -589,7 +589,7 @@ export default function DanhMucDoAn() {
                                                 value: item.id,
                                             }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn GVHD2'
+                                            placeholder="Chọn GVHD2"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'coSupervisor', value)
                                             }
@@ -620,7 +620,7 @@ export default function DanhMucDoAn() {
                                         undefined
                                     return (
                                         <Select
-                                            className='w-40'
+                                            className="w-40"
                                             options={expertProfiles
                                                 ?.filter((x: any) => x.eligiblePresident === true)
                                                 ?.map((item: any) => ({
@@ -630,7 +630,7 @@ export default function DanhMucDoAn() {
                                                     value: item.id,
                                                 }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn chủ tịch'
+                                            placeholder="Chọn chủ tịch"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'chairman', value)
                                             }
@@ -663,7 +663,7 @@ export default function DanhMucDoAn() {
                                         undefined
                                     return (
                                         <Select
-                                            className='w-40'
+                                            className="w-40"
                                             options={expertProfiles
                                                 ?.filter((x: any) => x.eligibleSecretary === true)
                                                 ?.map((item: any) => ({
@@ -673,7 +673,7 @@ export default function DanhMucDoAn() {
                                                     value: item.id,
                                                 }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn thư ký'
+                                            placeholder="Chọn thư ký"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'secretary', value)
                                             }
@@ -708,7 +708,7 @@ export default function DanhMucDoAn() {
                                         undefined
                                     return (
                                         <Select
-                                            className='w-40'
+                                            className="w-40"
                                             options={expertProfiles?.map((item: any) => ({
                                                 label: item.lecturer
                                                     ? item.lecturer?.userProfile?.fullname
@@ -716,7 +716,7 @@ export default function DanhMucDoAn() {
                                                 value: item.id,
                                             }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn Phản biện 1'
+                                            placeholder="Chọn Phản biện 1"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'reviewer1', value)
                                             }
@@ -751,7 +751,7 @@ export default function DanhMucDoAn() {
 
                                     return (
                                         <Select
-                                            className='w-40'
+                                            className="w-40"
                                             options={expertProfiles?.map((item: any) => ({
                                                 label: item.lecturer
                                                     ? item.lecturer?.userProfile?.fullname
@@ -759,7 +759,7 @@ export default function DanhMucDoAn() {
                                                 value: item.id,
                                             }))}
                                             value={currentValue}
-                                            placeholder='Chọn Phản biện 2'
+                                            placeholder="Chọn Phản biện 2"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'reviewer2', value)
                                             }
@@ -796,7 +796,7 @@ export default function DanhMucDoAn() {
                                     )?.expert?.id || ''
                                     return (
                                         <Select
-                                            className='w-40'
+                                            className="w-40"
                                             options={expertProfiles?.map((item: any) => ({
                                                 label: item.lecturer
                                                     ? item.lecturer?.userProfile?.fullname
@@ -804,7 +804,7 @@ export default function DanhMucDoAn() {
                                                 value: item.id,
                                             }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn ủy viên'
+                                            placeholder="Chọn ủy viên"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'councilMember', value)
                                             }
@@ -833,13 +833,13 @@ export default function DanhMucDoAn() {
                                     const currentValue = record?.roomId || ''
                                     return (
                                         <Select
-                                            className='w-28'
+                                            className="w-28"
                                             options={roomsData?.map((item) => ({
                                                 label: item.name,
                                                 value: item.id,
                                             }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn phòng'
+                                            placeholder="Chọn phòng"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'room', value)
                                             }
@@ -861,9 +861,9 @@ export default function DanhMucDoAn() {
                                         : ''
                                     return (
                                         <DatePicker
-                                            className='w-28'
+                                            className="w-28"
                                             value={currentValue || undefined}
-                                            placeholder='Chọn ngày'
+                                            placeholder="Chọn ngày"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'defenseDate', value)
                                             }
@@ -885,7 +885,7 @@ export default function DanhMucDoAn() {
                                     const currentValue = record?.defenseSessionId || ''
                                     return (
                                         <Select
-                                            className='w-28'
+                                            className="w-28"
                                             options={defenseSessionData?.map((item) => ({
                                                 label: item?.startTime
                                                     ? dayjs(
@@ -895,7 +895,7 @@ export default function DanhMucDoAn() {
                                                 value: item.id,
                                             }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn ca'
+                                            placeholder="Chọn ca"
                                             onChange={(value) =>
                                                 handleEditChange(
                                                     record?.id,
@@ -982,13 +982,13 @@ export default function DanhMucDoAn() {
                                     const currentValue = editingValues[record.id]?.status
                                     return (
                                         <Select
-                                            className='w-28'
+                                            className="w-28"
                                             options={thesisProjectStatusOptions?.map((item) => ({
                                                 label: item.label,
                                                 value: item.value,
                                             }))}
                                             value={currentValue || undefined}
-                                            placeholder='Chọn trạng thái'
+                                            placeholder="Chọn trạng thái"
                                             onChange={(value) =>
                                                 handleEditChange(record?.id, 'status', value)
                                             }
@@ -1007,7 +1007,7 @@ export default function DanhMucDoAn() {
                             align: 'center',
                             render: (_, record) => (
                                 <Button
-                                    type='text'
+                                    type="text"
                                     icon={<SquarePen size={18} />}
                                     onClick={() => {
                                         setCurrentProject(record)
@@ -1085,55 +1085,49 @@ const StudentManagementModal = ({
         }))
     }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
-  const gradeColumns = useMemo(
-    () => [
-      {
-        title: 'Học viên',
-        render: (_: any, reg: any) => (
-          <div>
-            <div className='font-bold'>
-              {reg.student?.userProfile?.fullname}
-            </div>
-            <div className='text-xs text-gray-400'>{reg.student?.code}</div>
-          </div>
-        ),
-      },
-      {
-        title: 'Điểm thi',
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            value={gradeValues[reg.studentId]?.examScore}
-            onChange={(val) =>
-              handleScoreChange(reg.studentId, 'examScore', val)
-            }
-          />
-        ),
-      },
-      {
-        title: 'Tổng kết',
-        render: (_: any, reg: any) => (
-          <InputNumber
-            min={0}
-            max={10}
-            step={0.1}
-            className='font-bold text-blue-600'
-            value={gradeValues[reg.studentId]?.finalScore}
-            onChange={(val) =>
-              handleScoreChange(reg.studentId, 'finalScore', val)
-            }
-          />
-        ),
-      },
-    ],
-    [gradeValues]
-  );
-  const handleSaveMembers = async () => {
-    try {
-      const transactions: any[] = [];
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
+    const gradeColumns = useMemo(
+        () => [
+            {
+                title: 'Học viên',
+                render: (_: any, reg: any) => (
+                    <div>
+                        <div className="font-bold">{reg.student?.userProfile?.fullname}</div>
+                        <div className="text-xs text-gray-400">{reg.student?.code}</div>
+                    </div>
+                ),
+            },
+            {
+                title: 'Điểm thi',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        value={gradeValues[reg.studentId]?.examScore}
+                        onChange={(val) => handleScoreChange(reg.studentId, 'examScore', val)}
+                    />
+                ),
+            },
+            {
+                title: 'Tổng kết',
+                render: (_: any, reg: any) => (
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        className="font-bold text-blue-600"
+                        value={gradeValues[reg.studentId]?.finalScore}
+                        onChange={(val) => handleScoreChange(reg.studentId, 'finalScore', val)}
+                    />
+                ),
+            },
+        ],
+        [gradeValues]
+    )
+    const handleSaveMembers = async () => {
+        try {
+            const transactions: any[] = []
 
             const affectedProjectIds = new Set<string>()
             affectedProjectIds.add(project.id)
@@ -1229,28 +1223,28 @@ const StudentManagementModal = ({
         try {
             const transactions: any[] = []
 
-      Object.keys(gradeValues).forEach((studentId) => {
-        const grades = gradeValues[studentId];
-        if (grades.scoreId) {
-          transactions.push({
-            model: 'StudentSubjectScore' as const,
-            operation: 'update' as const,
-            data: {
-              where: { id: grades.scoreId },
-              data: {
-                attendanceScore: grades.examScore ?? null,
-                midtermScore: grades.examScore ?? null,
-                examScore: grades.examScore ?? null,
-                finalScore: grades.finalScore ?? null,
-              },
-            },
-          });
-        }
-      });
-      if (transactions.length === 0) {
-        message.info('Không có thay đổi về điểm số');
-        return;
-      }
+            Object.keys(gradeValues).forEach((studentId) => {
+                const grades = gradeValues[studentId]
+                if (grades.scoreId) {
+                    transactions.push({
+                        model: 'StudentSubjectScore' as const,
+                        operation: 'update' as const,
+                        data: {
+                            where: { id: grades.scoreId },
+                            data: {
+                                attendanceScore: grades.examScore ?? null,
+                                midtermScore: grades.examScore ?? null,
+                                examScore: grades.examScore ?? null,
+                                finalScore: grades.finalScore ?? null,
+                            },
+                        },
+                    })
+                }
+            })
+            if (transactions.length === 0) {
+                message.info('Không có thay đổi về điểm số')
+                return
+            }
 
             await sqlTransaction(transactions)
             message.success('Cập nhật bảng điểm thành công')
@@ -1276,15 +1270,15 @@ const StudentManagementModal = ({
             onOk={handleOk}
             onCancel={onClose}
             width={activeTab === '1' ? 600 : 950}
-            okText='Lưu thay đổi'
+            okText="Lưu thay đổi"
             destroyOnClose
         >
             <Tabs activeKey={activeTab} onChange={setActiveTab}>
-                <Tabs.TabPane tab='Thành viên nhóm' key='1'>
-                    <div className='py-4'>
+                <Tabs.TabPane tab="Thành viên nhóm" key="1">
+                    <div className="py-4">
                         <Select
-                            mode='multiple'
-                            className='w-full'
+                            mode="multiple"
+                            className="w-full"
                             value={selectedStudentIds}
                             onChange={setSelectedStudentIds}
                             options={allStudentsInClass.map((item: any) => ({
@@ -1294,14 +1288,14 @@ const StudentManagementModal = ({
                         />
                     </div>
                 </Tabs.TabPane>
-                <Tabs.TabPane tab='Nhập điểm' key='2'>
-                    <div className='py-4'>
+                <Tabs.TabPane tab="Nhập điểm" key="2">
+                    <div className="py-4">
                         <Table
                             dataSource={project?.registrations || []}
                             columns={gradeColumns}
                             pagination={false}
-                            rowKey='id'
-                            size='small'
+                            rowKey="id"
+                            size="small"
                         />
                     </div>
                 </Tabs.TabPane>

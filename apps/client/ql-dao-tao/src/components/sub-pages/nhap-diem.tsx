@@ -6,6 +6,7 @@ import type { DataTable } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import { examBanReason, examPostponeReason, examSuspendedReason } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
+import { scoreConvert } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import { validateExamScore, validateScore } from '@lib/utils'
 import {
@@ -16,8 +17,10 @@ import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums, type StudentSubjectScore } from '@workspace/db/client'
 import { useFindManyStudentSubjectScore, useFindUniqueSubjectClass } from '@workspace/db/hooks'
+import { getUrl } from '@workspace/libs/api/custom-instance'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
+import { getExportSubjectClassScoreUrl } from '@workspace/libs/api/training'
 import { calcFinalScore, fastIsEqual, getRuntimeEnv } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -43,9 +46,6 @@ import _ from 'lodash'
 import { FileUp, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { scoreConvert } from '@hooks/scoreConverter'
-import { getUrl } from '@workspace/libs/api/custom-instance'
-import { getExportSubjectClassScoreUrl } from '@workspace/libs/api/training'
 
 type FilterTable = FilterProps & {
     fullname?: string
@@ -414,12 +414,24 @@ export default function NhapDiem({
                         scoreToTakeExam !== null &&
                         scoreToTakeExam !== undefined &&
                         item.midtermScore < scoreToTakeExam)
+
+                const scoreInfo = !score
+                    ? {
+                          attendanceScore: item.attendanceScore,
+                          midtermScore: item.midtermScore,
+                          examScore: item.examScore,
+                      }
+                    : score === 'CC/TX'
+                      ? {
+                            attendanceScore: item.attendanceScore,
+                            midtermScore: item.midtermScore,
+                        }
+                      : { examScore: item.examScore }
+
                 return [
                     item.id,
                     {
-                        attendanceScore: item.attendanceScore,
-                        midtermScore: item.midtermScore,
-                        examScore: item.examScore,
+                        ...scoreInfo,
                         isChanged:
                             listForm[item.id].attendanceScore !== item.attendanceScore ||
                             listForm[item.id].midtermScore !== item.midtermScore ||
@@ -1068,12 +1080,13 @@ export default function NhapDiem({
                                         midtermScore,
                                         examBanned,
                                         subjectClass,
+                                        examScore
                                     }: any
                                 ) => {
                                     const isMissingScore =
                                         attendanceScore == null || midtermScore == null
-                                    if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
-                                        return midtermScore ?? ''
+                                     if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
+                                        return examScore ?? ''
                                     }
 
                                     return (

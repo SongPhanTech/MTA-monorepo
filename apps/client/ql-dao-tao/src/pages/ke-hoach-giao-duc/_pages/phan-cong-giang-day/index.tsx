@@ -50,7 +50,7 @@ import {
     Row,
     Switch,
     Tooltip,
-    TreeSelect,
+    TreeSelect
 } from 'antd'
 import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
@@ -85,6 +85,8 @@ type XepKhuVucForm = {
     isOverride: boolean
 }
 
+type FilterStatus = 'YEU_CAU_PCGD' | 'LMH_DA_HUY' | 'CHO_DUYET_PCGD' | 'DA_DUYET_PCGD'
+
 export default function PhanCongGiangDay({
     type,
     khoaBoMon = false,
@@ -107,9 +109,9 @@ export default function PhanCongGiangDay({
         enterGradeLecturer: undefined,
         examType: undefined,
         room: undefined,
-        pcgd: undefined,
-        approved: undefined,
     })
+
+    const [filterStatus, setFilterStatus] = useState<FilterStatus>()
 
     const [form] = Form.useForm<TeachingAssignmentForm>()
 
@@ -128,25 +130,24 @@ export default function PhanCongGiangDay({
     const where = useMemo(
         () =>
             ({
-                ...(filters.name
+                ...(filters?.name
                     ? {
                           name: { contains: filters.name, mode: 'insensitive' as const },
                       }
                     : {}),
-                ...(filters.code
+                ...(filters?.code
                     ? {
                           code: { contains: filters.code, mode: 'insensitive' as const },
                       }
                     : {}),
-
-                ...(filters.examType
+                ...(filters?.examType
                     ? {
                           examType: {
                               in: filters.examType,
                           },
                       }
                     : {}),
-                ...(filters.schedule
+                ...(filters?.schedule
                     ? {
                           schedule: {
                               in: filters.schedule,
@@ -161,11 +162,9 @@ export default function PhanCongGiangDay({
                       }
                     : {}),
                 ...(filters.lecturerId?.length === 1
-                    ? {
-                          ...(filters.lecturerId[0]
-                              ? { lecturerId: { not: null } }
-                              : { lecturerId: null }),
-                      }
+                    ? filters.lecturerId[0]
+                        ? { lecturerId: { not: null } }
+                        : { lecturerId: null }
                     : {}),
                 ...(filters.mainLecturer
                     ? {
@@ -225,38 +224,6 @@ export default function PhanCongGiangDay({
                           },
                       }
                     : {}),
-                ...(filters.pcgd && filters.pcgd.length === 1 && filters.pcgd[0]
-                    ? {
-                          lecturerId: { not: null },
-                          extraLecturerId: { not: null },
-                          submitLecturerAssignmentAt: { not: null },
-                      }
-                    : {}),
-                ...(filters.pcgd && filters.pcgd.length === 1 && !filters.pcgd[0]
-                    ? {
-                          OR: [
-                              {
-                                  lecturerId: null,
-                              },
-                              {
-                                  extraLecturerId: null,
-                              },
-                              {
-                                  submitLecturerAssignmentAt: null,
-                              },
-                          ],
-                      }
-                    : {}),
-                ...(filters.approved && filters.approved.length === 1 && filters.approved[0]
-                    ? {
-                          approveLecturerAssignmentAt: { not: null },
-                      }
-                    : {}),
-                ...(filters.approved && filters.approved.length === 1 && !filters.approved[0]
-                    ? {
-                          approveLecturerAssignmentAt: null,
-                      }
-                    : {}),
                 subject: {
                     ...(filters.organization && filters.organization.length > 0
                         ? {
@@ -295,8 +262,48 @@ export default function PhanCongGiangDay({
                       }
                     : {}),
                 type: type,
+                ...(filterStatus === 'CHO_DUYET_PCGD'
+                    ? {
+                          submitLecturerAssignmentAt: {
+                              not: null,
+                          },
+                      }
+                    : filterStatus === 'YEU_CAU_PCGD'
+                      ? {
+                            OR: [
+                                {
+                                    lecturerId: null,
+                                },
+                                {
+                                    extraLecturerId: null,
+                                },
+                                {
+                                    enterGradeLecturerId: null,
+                                },
+                            ],
+                        }
+                      : filterStatus === 'DA_DUYET_PCGD'
+                        ? {
+                              approveLecturerAssignmentAt: {
+                                  not: null,
+                              },
+                          }
+                        : filterStatus === 'LMH_DA_HUY'
+                          ? {
+                                cancelled: true,
+                            }
+                          : {}),
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, trainingCourseId, fixedClassId, khoaBoMon, type]
+        [
+            filters,
+            semesterId,
+            trainingObjectTypeId,
+            trainingCourseId,
+            fixedClassId,
+            khoaBoMon,
+            type,
+            filterStatus,
+        ]
     )
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
@@ -773,23 +780,61 @@ export default function PhanCongGiangDay({
                                         phân công giảng dạy.
                                     </p>
                                 )}
-                                <Flex gap={16} className="px-2">
-                                    <p className="flex gap-1 items-center">
+                                <Flex gap={2} className="px-1">
+                                    <Button
+                                        type={
+                                            filterStatus === 'YEU_CAU_PCGD' ? 'primary' : 'link'
+                                        }
+                                        className="flex gap-1 items-center cursor-pointer px-1"
+                                        onClick={() => {
+                                            filterStatus === 'YEU_CAU_PCGD'
+                                                ? setFilterStatus(undefined)
+                                                : setFilterStatus('YEU_CAU_PCGD')
+                                        }}
+                                    >
                                         <p className="bg-slate-200 h-4 w-4 rounded" />
                                         <span>Yêu cầu PCGD</span>
-                                    </p>
-                                    <p className="flex gap-1 items-center">
+                                    </Button>
+                                    <Button
+                                        type={filterStatus === 'LMH_DA_HUY' ? 'primary' : 'link'}
+                                        className="flex gap-1 items-center cursor-pointer"
+                                        onClick={() => {
+                                            filterStatus === 'LMH_DA_HUY'
+                                                ? setFilterStatus(undefined)
+                                                : setFilterStatus('LMH_DA_HUY')
+                                        }}
+                                    >
                                         <p className="bg-red-200 h-4 w-4 rounded" />
                                         <span>LMH đã huỷ</span>
-                                    </p>
-                                    <p className="flex gap-1 items-center">
+                                    </Button>
+                                    <Button
+                                        type={
+                                            filterStatus === 'CHO_DUYET_PCGD' ? 'primary' : 'link'
+                                        }
+                                        className="flex gap-1 items-center cursor-pointer"
+                                        onClick={() => {
+                                            filterStatus === 'CHO_DUYET_PCGD'
+                                                ? setFilterStatus(undefined)
+                                                : setFilterStatus('CHO_DUYET_PCGD')
+                                        }}
+                                    >
                                         <p className="bg-yellow-200 h-4 w-4 rounded" />
                                         <span>Chờ duyệt PCGD</span>
-                                    </p>
-                                    <p className="flex gap-1 items-center">
-                                        <p className="bg-green-200 h-4 w-4 rounded" />
+                                    </Button>
+                                    <Button
+                                        type={
+                                            filterStatus === 'DA_DUYET_PCGD' ? 'primary' : 'link'
+                                        }
+                                        className="flex gap-1 items-center"
+                                        onClick={() => {
+                                            filterStatus === 'DA_DUYET_PCGD'
+                                                ? setFilterStatus(undefined)
+                                                : setFilterStatus('DA_DUYET_PCGD')
+                                        }}
+                                    >
+                                        <p className="bg-green-200 h-4 w-4 rounded " />
                                         <span>Đã duyệt PCGD</span>
-                                    </p>
+                                    </Button>
                                     {!khoaBoMon && (
                                         <p className="flex gap-1 items-center">
                                             <Checkbox
@@ -1395,7 +1440,8 @@ export default function PhanCongGiangDay({
                                                                                 e.fixedClasses
                                                                                     .length > 0
                                                                         ),
-                                                                        (item) => item.subject.code
+                                                                        (item) =>
+                                                                            item?.subject?.code
                                                                     )
 
                                                                 return {
@@ -1440,19 +1486,19 @@ export default function PhanCongGiangDay({
                                                                                             {
                                                                                                 value: item
                                                                                                     .subject
-                                                                                                    .code,
+                                                                                                    ?.code,
                                                                                                 rowSpan,
                                                                                             },
                                                                                             {
                                                                                                 value: item
                                                                                                     .subject
-                                                                                                    .name,
+                                                                                                    ?.name,
                                                                                                 rowSpan,
                                                                                             },
                                                                                             {
                                                                                                 value: item
                                                                                                     .subject
-                                                                                                    .credit,
+                                                                                                    ?.credit,
                                                                                                 rowSpan,
                                                                                                 align: 'right',
                                                                                             },
@@ -1505,7 +1551,7 @@ export default function PhanCongGiangDay({
                                                                                                         (
                                                                                                             fc
                                                                                                         ) =>
-                                                                                                            fc.code
+                                                                                                            fc?.code
                                                                                                     )
                                                                                                     .join(
                                                                                                         ', '
@@ -1673,92 +1719,11 @@ export default function PhanCongGiangDay({
                                 }
                             }}
                             columns={[
-                                // {
-                                //     title: 'Duyệt',
-                                //     align: 'center',
-                                //     width: 80,
-                                //     type: 'select',
-                                //     options: [
-                                //         { value: true, label: 'Đã duyệt' },
-                                //         { value: false, label: 'Chưa duyệt' },
-                                //     ],
-                                //     render: (_, record) =>
-                                //         record?.approveLecturerAssignmentAt ? (
-                                //             <Checkbox checked />
-                                //         ) : (
-                                //             <FormItem
-                                //                 form={form}
-                                //                 name={[
-                                //                     'subjectClass',
-                                //                     record.id,
-                                //                     'approveLecturerAssignmentAt',
-                                //                 ]}
-                                //                 valuePropName="checked"
-                                //             >
-                                //                 <Checkbox
-                                //                     disabled={
-                                //                         subjectClassForm?.[record.id]?.cancelled ||
-                                //                         khoaBoMon ||
-                                //                         !record?.submitLecturerAssignmentAt
-                                //                     }
-                                //                 />
-                                //             </FormItem>
-                                //         ),
-                                // },
-                                // {
-                                //     title: <Tooltip title="Phân công giảng dạy">PCGD</Tooltip>,
-                                //     align: 'center',
-                                //     width: 80,
-                                //     type: 'select',
-                                //     options: [
-                                //         { value: true, label: 'Đã phân công giảng dạy' },
-                                //         { value: false, label: 'Chưa phân công giảng dạy' },
-                                //     ],
-                                //     render: (_, record) =>
-                                //         !!record?.approveLecturerAssignmentAt ||
-                                //         !!record?.submitLecturerAssignmentAt ? (
-                                //             <Checkbox checked />
-                                //         ) : (
-                                //             <>
-                                //                 <FormItem
-                                //                     form={form}
-                                //                     name={['subjectClass', record.id, 'isEdit']}
-                                //                     hidden
-                                //                 />
-                                //                 <FormItem
-                                //                     form={form}
-                                //                     name={[
-                                //                         'subjectClass',
-                                //                         record.id,
-                                //                         'submitLecturerAssignmentAt',
-                                //                     ]}
-                                //                     valuePropName="checked"
-                                //                 >
-                                //                     <Checkbox
-                                //                         disabled={
-                                //                             subjectClassForm?.[record.id]
-                                //                                 ?.cancelled ||
-                                //                             !khoaBoMon ||
-                                //                             !subjectClassForm?.[record.id]
-                                //                                 ?.lecturerId ||
-                                //                             !subjectClassForm?.[record.id]
-                                //                                 ?.extraLecturerId ||
-                                //                             !subjectClassForm?.[record.id]
-                                //                                 ?.enterGradeLecturerId ||
-                                //                             (!!record.lecturerAssignmentDeadline &&
-                                //                                 dayjs(
-                                //                                     record.lecturerAssignmentDeadline
-                                //                                 ).isBefore(dayjs().startOf('day')))
-                                //                         }
-                                //                     />
-                                //                 </FormItem>
-                                //             </>
-                                //         ),
-                                // },
                                 {
                                     title: 'Hạn PCGD',
                                     width: 100,
                                     align: 'center',
+                                    distinctFilters: [],
                                     render: (_, record) =>
                                         canXemTatCa && !khoaBoMon ? (
                                             <FormItem
@@ -1799,6 +1764,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Mã LMH',
                                     width: 90,
+                                    dataIndex: 'code',
                                     align: 'center',
                                     type: 'input',
                                     render: (_, record) => record?.code || '',
@@ -1806,6 +1772,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Tên môn',
                                     align: 'center',
+                                    dataIndex: ['subject', 'name'],
                                     type: 'input',
                                     onCell: (record) => ({
                                         rowSpan: record.rowSpan,
@@ -1819,7 +1786,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Kíp',
                                     align: 'center',
-                                    type: 'select',
+                                    // type: 'select',
                                     width: 60,
                                     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
                                         ([key, value_]) => {
@@ -1837,11 +1804,12 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Lớp QL',
                                     align: 'center',
-                                    width: 120,
+                                    width: 100,
                                     render: (_, record) => (
                                         <p className="text-left">
-                                            {record?.fixedClasses?.map((e) => e.code).join('\n') ||
-                                                '-'}
+                                            {record?.fixedClasses?.map((e) => (
+                                                <p>{e?.code}</p>
+                                            ))}
                                         </p>
                                     ),
                                 },
@@ -1867,6 +1835,7 @@ export default function PhanCongGiangDay({
                                     title: 'Giảng viên 1',
                                     align: 'center',
                                     type: 'input',
+                                    dataIndex: 'mainLecturer',
                                     render: (__, record) =>
                                         // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
@@ -1903,6 +1872,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Giảng viên 2',
                                     align: 'center',
+                                    dataIndex: 'extraLecturer',
                                     type: 'input',
                                     render: (__, record) =>
                                         // khoaBoMon &&
@@ -1943,7 +1913,9 @@ export default function PhanCongGiangDay({
                                 },
                                 {
                                     title: 'GV nhập điểm',
+                                    dataIndex: 'enterGradeLecturer',
                                     align: 'center',
+                                    type: 'input',
                                     render: (__, record) =>
                                         // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&

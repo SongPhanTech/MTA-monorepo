@@ -2,6 +2,7 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import { useStore } from '@tanstack/react-store'
+import type { StudentSubjectScore } from '@workspace/db'
 import type { ScoreConvert } from '@workspace/db/client'
 import {
     useCountStudent,
@@ -190,6 +191,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 id: subjectClassId as string,
             },
             select: {
+                id: true,
                 subjectId: true,
                 subjectClassStudent: {
                     select: {
@@ -282,49 +284,62 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleSaveDangKyHoc = async () => {
+        if (!subjectClassId) {
+            message.warning('Chưa chọn lớp môn học')
+            return
+        }
         try {
             showSpinner()
-            const res = await sqlTransaction([
+            const scoreRes = await sqlTransaction([
                 {
-                    model: 'SubjectClass',
-                    operation: 'update',
+                    model: 'StudentSubjectScore',
+                    operation: 'findMany',
                     data: {
                         where: {
-                            id: subjectClassId as string,
+                            subjectClassId,
+                            OR: [
+                                { attendanceScore: { not: null } },
+                                { midtermScore: { not: null } },
+                                { examScore: { not: null } },
+                            ],
                         },
-                        data: {
-                            subjectClassStudent: {
-                                deleteMany: {},
-                            },
-                            // fixedClasses: {
-                            //     set: fixedClassesIds.map((id) => ({ id })),
-                            // },
+                    },
+                },
+            ])
+
+            const studentSubjectScores = scoreRes.data[0] as StudentSubjectScore[]
+            const studentIds = studentSubjectScores.map((s) => s.id)
+
+            for (const studentId of studentIds) {
+                if (!selectedRowKeys.includes(studentId)) {
+                    message.error('Không thể huỷ đăng ký SV đã có điểm, vui lòng thử lại')
+                    return
+                }
+            }
+
+            const res = await sqlTransaction([
+                {
+                    model: 'StudentSubjectScore',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            subjectClassId,
+                            attendanceScore: { not: null },
+                            midtermScore: { not: null },
+                            examScore: { not: null },
                         },
                     },
                 },
                 {
-                    model: 'SubjectClass',
-                    operation: 'update',
+                    model: 'StudentSubjectScore',
+                    operation: 'createMany',
                     data: {
-                        where: {
-                            id: subjectClassId as string,
-                        },
-                        data: {
-                            subjectClassStudent: {
-                                create: selectedRowKeys.map((studentId) => ({
-                                    student: {
-                                        connect: {
-                                            id: studentId as string,
-                                        },
-                                    },
-                                    subjectVersion: {
-                                        connect: {
-                                            id: selectedSubjectClass?.subjectId as string,
-                                        },
-                                    },
-                                })),
-                            },
-                        },
+                        data: selectedRowKeys.map((studentId) => ({
+                            subjectClassId: selectedSubjectClass?.id,
+                            studentId,
+                            subjectVersionId: selectedSubjectClass?.subjectId,
+                        })),
+                        skipDuplicates: true,
                     },
                 },
             ])
@@ -340,9 +355,11 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             })
             message.success('Lưu danh sách đăng ký học thành công')
         } catch (error) {
+            console.error(error)
             message.error('Lưu danh sách đăng ký học thất bại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     return (

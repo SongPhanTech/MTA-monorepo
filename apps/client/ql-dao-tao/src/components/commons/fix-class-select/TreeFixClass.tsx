@@ -1,4 +1,5 @@
 import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks' // Thay bằng hook thực tế của bạn
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Spin, Tree } from 'antd'
 import type React from 'react'
 
@@ -8,9 +9,14 @@ interface TreeFixClassProps {
 
 const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
     // Lấy danh sách Training Courses
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
         useFindManyTrainingCourse({
             orderBy: { name: 'asc' },
+            where: {
+                trainingObjectTypeId,
+            },
         })
 
     // Lấy danh sách Fixed Classes

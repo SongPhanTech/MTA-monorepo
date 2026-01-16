@@ -391,21 +391,25 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
                             },
                             {
                                 title: 'Mã lớp',
+                                dataIndex: 'code',
                                 align: 'center',
                                 width: 120,
                                 type: 'input',
                                 render: (_, record) => (
-                                    <p
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenDetailSubjectClass({
-                                                id: record.id,
-                                                mode: 'view',
-                                            })
-                                        }}
-                                        className="cursor-pointer hover:text-primary"
-                                    >
+                                    <p>
                                         {record.code}
+                                        <span
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenDetailSubjectClass({
+                                                    id: record.id,
+                                                    mode: 'view',
+                                                })
+                                            }}
+                                            className="rounded p-1 cursor-pointer hover:bg-green-400"
+                                        >
+                                            🔍
+                                        </span>
                                     </p>
                                 ),
                             },

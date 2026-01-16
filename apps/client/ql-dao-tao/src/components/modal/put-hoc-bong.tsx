@@ -16,6 +16,7 @@ import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 dayjs.locale('vi')
 const PutHocBong = () => {
@@ -29,9 +30,10 @@ const PutHocBong = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        where: { active: true },
+        where: { active: true, trainingObjectTypeId, deletedAt: null },
         orderBy: { name: 'asc' },
     })
 

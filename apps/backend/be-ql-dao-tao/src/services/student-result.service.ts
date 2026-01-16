@@ -5,9 +5,11 @@ import {
     AcademicRankingBaseType,
     type AcademicRankingConvert,
     type AcademicWarningRule,
+    createId,
     CriteriaField,
     CriteriaOperator,
     DecisionStatus,
+    Prisma,
     RankingContext,
     type Scholarship,
     type ScholarshipCriteria,
@@ -817,8 +819,8 @@ export const calculateStudentSemesterResult = async (
                         `Không tìm thấy kết quả học kỳ cho sinh viên ${student.id}, tạo mới...`
                     )
                     // Nếu không có kết quả, tạo mới
-                    const newResult: StudentSemesterResult = {
-                        id: crypto.randomUUID(), // Tạo ID ngẫu nhiên
+                    const newResult: Prisma.StudentSemesterResultUncheckedCreateInput = {
+                        id: createId(), // Tạo ID ngẫu nhiên
                         conductScore: conductScore?.score || 10,
                         studentId: student.id,
                         semesterId,
@@ -865,7 +867,7 @@ export const calculateStudentSemesterResult = async (
                         active: true,
                         description: null,
                         deletedAt: null,
-                        createdBy: '',
+                        // createdBy: '',
                     }
                     // Lưu kết quả học kỳ mới
                     // results.push(newResult)
