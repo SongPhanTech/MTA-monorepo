@@ -8,4 +8,5 @@ import type { Id } from './id'
 
 export type ExportSubjectClassScoreParams = {
     id: Id
+    type?: string
 }

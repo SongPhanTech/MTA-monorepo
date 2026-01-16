@@ -4011,7 +4011,7 @@ app.openapi(
         return c.json({
             summary: {},
             count: 0,
-            preview:false,
+            preview: false,
             labels: [],
             data: [],
         })

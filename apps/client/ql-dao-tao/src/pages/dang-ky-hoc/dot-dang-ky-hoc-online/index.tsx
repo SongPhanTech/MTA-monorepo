@@ -11,7 +11,7 @@ import {
     useCountClassRegisterSession,
     useFindManyClassRegisterSession,
     useFindManyTrainingCourse,
-    useUpdateClassRegisterSession
+    useUpdateClassRegisterSession,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'

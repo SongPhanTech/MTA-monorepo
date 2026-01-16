@@ -105,7 +105,7 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
             const convertedCount = existingScores.filter(
                 (score: any) => score.subjectClassId === sc.id
             ).length
-            
+
             const totalStudents = input?.studentIds?.length || 0
             const isConverted = convertedCount === totalStudents && totalStudents > 0
 
@@ -214,7 +214,6 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
             disabled: record.isConverted,
         }),
     }
-
 
     return (
         <Modal
