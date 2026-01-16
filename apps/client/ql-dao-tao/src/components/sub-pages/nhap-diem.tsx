@@ -634,7 +634,7 @@ export default function NhapDiem({
                             id: selectedSubjectClassId ?? '',
                         })}`
                     ),
-                    name: 'PhieuDiemNhap',
+                    name: 'Phiếu điểm',
                     mimeType: 'xlsx',
                     convertTo: 'pdf',
                 })
@@ -750,13 +750,35 @@ export default function NhapDiem({
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
                                 'IN_DS_THI'
                             )) && (
-                            <ExportTemplateExam
-                                dataClass={dataDetailSubjectClass}
-                                dataTable={dataTable}
-                                disabled={
-                                    !dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId
-                                }
-                            />
+                            // <ExportTemplateExam
+                            //     dataClass={dataDetailSubjectClass}
+                            //     dataTable={dataTable}
+                            //     disabled={
+                            //         !dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId
+                            //     }
+                            // />
+                            <Button
+                                // onClick={exportTemplate}
+                                onClick={() => {
+                                    openXemTaiLieu({
+                                        uri: getUrl(
+                                            getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                                'https://api.daotao.mta.swantech.vn',
+                                            `${getExportSubjectClassScoreUrl({
+                                                id: selectedSubjectClassId ?? '',
+                                                type: 'DANH-SACH-THI',
+                                            })}`
+                                        ),
+                                        name: 'Danh sách thi',
+                                        mimeType: 'xlsx',
+                                        convertTo: 'pdf',
+                                    })
+                                }}
+                                disabled={!dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId}
+                            >
+                                <Printer />
+                                Danh sách thi
+                            </Button>
                         )}
                     {score !== 'CC/TX' &&
                         (can(
@@ -797,9 +819,10 @@ export default function NhapDiem({
                                                     'https://api.daotao.mta.swantech.vn',
                                                 `${getExportSubjectClassScoreUrl({
                                                     id: selectedSubjectClassId ?? '',
+                                                    type: 'NHAP',
                                                 })}`
                                             ),
-                                            name: 'PhieuDiemNhap',
+                                            name: 'Phiếu điểm nháp',
                                             mimeType: 'xlsx',
                                             convertTo: 'pdf',
                                         })
@@ -1080,12 +1103,12 @@ export default function NhapDiem({
                                         midtermScore,
                                         examBanned,
                                         subjectClass,
-                                        examScore
+                                        examScore,
                                     }: any
                                 ) => {
                                     const isMissingScore =
                                         attendanceScore == null || midtermScore == null
-                                     if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
+                                    if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
                                         return examScore ?? ''
                                     }
 
