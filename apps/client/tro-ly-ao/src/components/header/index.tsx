@@ -1,16 +1,26 @@
 // Header.tsx
 
-import { getRuntimeEnv } from '@workspace/libs/utils'
 import type React from 'react'
 import { useEffect, useRef } from 'react'
 
+// Global flag to track initialization across component mounts/unmounts
+let hasPluginInitialized = false
+
 const HeaderApp: React.FC = () => {
-    const hasInitialized = useRef(false)
     const retryTimerRef = useRef<NodeJS.Timeout | null>(null)
 
     useEffect(() => {
         // Đã khởi tạo rồi thì không làm gì
-        if (hasInitialized.current) return
+        // Check both global flag and if container already has content
+        if (hasPluginInitialized) {
+            // Verify the container still has content (not removed from DOM)
+            const container = document.getElementById('pluginContainer')
+            if (container && container.children.length > 0) {
+                return
+            }
+            // Container was cleared, need to reinitialize
+            hasPluginInitialized = false
+        }
 
         const initializePlugin = () => {
             try {
@@ -20,9 +30,9 @@ const HeaderApp: React.FC = () => {
                         notificationAppId: 'notificationContainer',
                         userAppId: 'userContainer',
                         tenantCode: window.tenantCode || 'dev',
-                        appCode: getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'chatbot',
+                        appCode: 'chatbot', // Hardcoded to ensure lowercase
                     })
-                    hasInitialized.current = true
+                    hasPluginInitialized = true
                     return true
                 }
                 return false
