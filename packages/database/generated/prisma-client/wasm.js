@@ -2651,7 +2651,8 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
   noteId: 'noteId',
-  evaluationPeriodId: 'evaluationPeriodId'
+  evaluationPeriodId: 'evaluationPeriodId',
+  knowledgeBlockId: 'knowledgeBlockId'
 };
 
 exports.Prisma.AcademicActionConfigScalarFieldEnum = {
@@ -3539,32 +3540,6 @@ exports.Prisma.QuestionBankScalarFieldEnum = {
   subjectVersionId: 'subjectVersionId'
 };
 
-exports.Prisma.DifficultyScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  level: 'level'
-};
-
-exports.Prisma.KnowledgeBlockScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  subjectVersionId: 'subjectVersionId',
-  name: 'name'
-};
-
 exports.Prisma.QuestionScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3579,9 +3554,9 @@ exports.Prisma.QuestionScalarFieldEnum = {
   point: 'point',
   explanation: 'explanation',
   isAutoGraded: 'isAutoGraded',
+  difficult: 'difficult',
   questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId',
-  difficultyId: 'difficultyId'
+  knowledgeBlockId: 'knowledgeBlockId'
 };
 
 exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
@@ -3636,7 +3611,6 @@ exports.Prisma.ExamScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  questionBankId: 'questionBankId',
   lockExamSessions: 'lockExamSessions',
   duration: 'duration',
   session: 'session',
@@ -3676,23 +3650,6 @@ exports.Prisma.ExamListScalarFieldEnum = {
   end: 'end'
 };
 
-exports.Prisma.TestStructureRuleScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  examId: 'examId',
-  questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId',
-  questionPoint: 'questionPoint',
-  questionType: 'questionType',
-  count: 'count'
-};
-
 exports.Prisma.ExamBankScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3703,7 +3660,13 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   examId: 'examId',
-  examCode: 'examCode'
+  examCode: 'examCode',
+  subjectClass: 'subjectClass',
+  explain: 'explain',
+  examDay: 'examDay',
+  examType: 'examType',
+  examMatrixId: 'examMatrixId',
+  isLock: 'isLock'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {
@@ -3732,6 +3695,64 @@ exports.Prisma.ExamPaperScalarFieldEnum = {
   examListId: 'examListId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examCode: 'examCode'
+};
+
+exports.Prisma.ExamFrameworkScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  time: 'time',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ExamMatrixScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  isDefault: 'isDefault',
+  examFrameworkId: 'examFrameworkId'
+};
+
+exports.Prisma.KnowledgeBlockScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  examMatrixId: 'examMatrixId',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ConfigExamScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  difficult: 'difficult',
+  type: 'type',
+  quantity: 'quantity',
+  point: 'point',
+  knowledgeBlockId: 'knowledgeBlockId'
 };
 
 exports.Prisma.StaffScalarFieldEnum = {
@@ -6184,7 +6205,8 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
   noteId: 'noteId',
-  evaluationPeriodId: 'evaluationPeriodId'
+  evaluationPeriodId: 'evaluationPeriodId',
+  knowledgeBlockId: 'knowledgeBlockId'
 };
 
 exports.Prisma.AcademicActionConfigOrderByRelevanceFieldEnum = {
@@ -6745,23 +6767,6 @@ exports.Prisma.QuestionBankOrderByRelevanceFieldEnum = {
   subjectVersionId: 'subjectVersionId'
 };
 
-exports.Prisma.DifficultyOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.KnowledgeBlockOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  subjectVersionId: 'subjectVersionId',
-  name: 'name'
-};
-
 exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6770,8 +6775,7 @@ exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
   content: 'content',
   explanation: 'explanation',
   questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId',
-  difficultyId: 'difficultyId'
+  knowledgeBlockId: 'knowledgeBlockId'
 };
 
 exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
@@ -6806,7 +6810,6 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  questionBankId: 'questionBankId',
   subjectVersionId: 'subjectVersionId',
   semesterId: 'semesterId'
 };
@@ -6830,23 +6833,16 @@ exports.Prisma.ExamListOrderByRelevanceFieldEnum = {
   secondSupervisorId: 'secondSupervisorId'
 };
 
-exports.Prisma.TestStructureRuleOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  examId: 'examId',
-  questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId'
-};
-
 exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   examId: 'examId',
-  examCode: 'examCode'
+  examCode: 'examCode',
+  subjectClass: 'subjectClass',
+  explain: 'explain',
+  examMatrixId: 'examMatrixId'
 };
 
 exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
@@ -6866,6 +6862,42 @@ exports.Prisma.ExamPaperOrderByRelevanceFieldEnum = {
   examListId: 'examListId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examCode: 'examCode'
+};
+
+exports.Prisma.ExamFrameworkOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ExamMatrixOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  examFrameworkId: 'examFrameworkId'
+};
+
+exports.Prisma.KnowledgeBlockOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  examMatrixId: 'examMatrixId',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ConfigExamOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  knowledgeBlockId: 'knowledgeBlockId'
 };
 
 exports.Prisma.StaffOrderByRelevanceFieldEnum = {
@@ -7467,6 +7499,7 @@ exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Internship: 'Internship',
   Research: 'Research',
   Project: 'Project',
+  Thesis: 'Thesis',
   Practice: 'Practice',
   Graduation: 'Graduation'
 };
@@ -7762,6 +7795,13 @@ exports.QuestionType = exports.$Enums.QuestionType = {
   ORDERING: 'ORDERING'
 };
 
+exports.Difficult = exports.$Enums.Difficult = {
+  D1: 'D1',
+  D2: 'D2',
+  D3: 'D3',
+  D4: 'D4'
+};
+
 exports.GraduationSessionStatus = exports.$Enums.GraduationSessionStatus = {
   PLANNING: 'PLANNING',
   OPEN_FOR_APPLICATION: 'OPEN_FOR_APPLICATION',
@@ -8006,8 +8046,6 @@ exports.Prisma.ModelName = {
   SurveySession: 'SurveySession',
   SurveyResponse: 'SurveyResponse',
   QuestionBank: 'QuestionBank',
-  Difficulty: 'Difficulty',
-  KnowledgeBlock: 'KnowledgeBlock',
   Question: 'Question',
   MultipleChoiceOption: 'MultipleChoiceOption',
   FillInBlankSlot: 'FillInBlankSlot',
@@ -8015,10 +8053,13 @@ exports.Prisma.ModelName = {
   Exam: 'Exam',
   ExamRoom: 'ExamRoom',
   ExamList: 'ExamList',
-  TestStructureRule: 'TestStructureRule',
   ExamBank: 'ExamBank',
   ExamBankQuestion: 'ExamBankQuestion',
   ExamPaper: 'ExamPaper',
+  ExamFramework: 'ExamFramework',
+  ExamMatrix: 'ExamMatrix',
+  KnowledgeBlock: 'KnowledgeBlock',
+  ConfigExam: 'ConfigExam',
   Staff: 'Staff',
   StaffHistory: 'StaffHistory',
   Scholarship: 'Scholarship',

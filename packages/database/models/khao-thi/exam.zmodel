@@ -363,10 +363,10 @@ model KnowledgeBlock extends Base {
 
   documentFiles DocumentFile[]
   configExams   ConfigExam[]
-  @@schema("khao-thi")
-
-	subjectVersion SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersion SubjectVersion @relation(fields: [subjectVersionId], references: [id])
 	subjectVersionId String
+  
+  @@schema("khao-thi")
 }
 
 // Cấu hình trọng số sinh đề

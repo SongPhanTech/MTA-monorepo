@@ -10366,6 +10366,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectVersion',
+                }, examFramework: {
+                    name: "examFramework",
+                    type: "ExamFramework",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -14734,6 +14740,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'evaluationPeriod',
+                }, knowledgeBlock: {
+                    name: "knowledgeBlock",
+                    type: "KnowledgeBlock",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "knowledgeBlockId" },
+                }, knowledgeBlockId: {
+                    name: "knowledgeBlockId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'knowledgeBlock',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19909,18 +19929,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'questionBank',
-                }, testStructureRules: {
-                    name: "testStructureRules",
-                    type: "TestStructureRule",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'questionBank',
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'questionBank',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19932,151 +19940,6 @@ const metadata: ModelMeta = {
                 }, subjectVersionId_name: {
                     name: "subjectVersionId_name",
                     fields: ["subjectVersionId", "name"]
-                },
-            },
-        },
-        difficulty: {
-            name: 'Difficulty', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Difficulty$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, level: {
-                    name: "level",
-                    type: "Int",
-                    isOptional: true,
-                }, questions: {
-                    name: "questions",
-                    type: "Question",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'difficulty',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                }, level: {
-                    name: "level",
-                    fields: ["level"]
-                },
-            },
-        },
-        knowledgeBlock: {
-            name: 'KnowledgeBlock', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$KnowledgeBlock$createdBy,
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    backLink: 'knowledgeBlocks',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'subjectVersion',
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, questions: {
-                    name: "questions",
-                    type: "Question",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'knowledgeBlock',
-                }, structureRules: {
-                    name: "structureRules",
-                    type: "TestStructureRule",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'knowledgeBlock',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name_subjectVersionId: {
-                    name: "name_subjectVersionId",
-                    fields: ["name", "subjectVersionId"]
                 },
             },
         },
@@ -20136,6 +19999,9 @@ const metadata: ModelMeta = {
                     name: "isAutoGraded",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, difficult: {
+                    name: "difficult",
+                    type: "Difficult",
                 }, multipleChoiceOptions: {
                     name: "multipleChoiceOptions",
                     type: "MultipleChoiceOption",
@@ -20180,20 +20046,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'knowledgeBlock',
-                }, difficulty: {
-                    name: "difficulty",
-                    type: "Difficulty",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'questions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "difficultyId" },
-                }, difficultyId: {
-                    name: "difficultyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'difficulty',
                 }, sessionQuestions: {
                     name: "sessionQuestions",
                     type: "ExamBankQuestion",
@@ -20459,20 +20311,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Exam$createdBy,
-                }, questionBank: {
-                    name: "questionBank",
-                    type: "QuestionBank",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'exam',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "questionBankId" },
-                }, questionBankId: {
-                    name: "questionBankId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'questionBank',
                 }, lockExamSessions: {
                     name: "lockExamSessions",
                     type: "Boolean",
@@ -20518,12 +20356,6 @@ const metadata: ModelMeta = {
                 }, examBank: {
                     name: "examBank",
                     type: "ExamBank",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'exam',
-                }, testStructureRules: {
-                    name: "testStructureRules",
-                    type: "TestStructureRule",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
@@ -20743,109 +20575,6 @@ const metadata: ModelMeta = {
                 },
             },
         },
-        testStructureRule: {
-            name: 'TestStructureRule', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TestStructureRule$createdBy,
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'testStructureRules',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examId" },
-                }, examId: {
-                    name: "examId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'exam',
-                }, questionBank: {
-                    name: "questionBank",
-                    type: "QuestionBank",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'testStructureRules',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "questionBankId" },
-                }, questionBankId: {
-                    name: "questionBankId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'questionBank',
-                }, knowledgeBlock: {
-                    name: "knowledgeBlock",
-                    type: "KnowledgeBlock",
-                    isDataModel: true,
-                    backLink: 'structureRules',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "knowledgeBlockId" },
-                }, knowledgeBlockId: {
-                    name: "knowledgeBlockId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'knowledgeBlock',
-                }, questionPoint: {
-                    name: "questionPoint",
-                    type: "Float",
-                }, questionType: {
-                    name: "questionType",
-                    type: "QuestionType",
-                }, count: {
-                    name: "count",
-                    type: "Int",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, examId_knowledgeBlockId_questionPoint_questionType: {
-                    name: "examId_knowledgeBlockId_questionPoint_questionType",
-                    fields: ["examId", "knowledgeBlockId", "questionPoint", "questionType"]
-                }, questionBankId_knowledgeBlockId_questionPoint_questionType: {
-                    name: "questionBankId_knowledgeBlockId_questionPoint_questionType",
-                    fields: ["questionBankId", "knowledgeBlockId", "questionPoint", "questionType"]
-                },
-            },
-        },
         examBank: {
             name: 'ExamBank', fields: {
                 id: {
@@ -20898,12 +20627,47 @@ const metadata: ModelMeta = {
                 }, examCode: {
                     name: "examCode",
                     type: "String",
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "String",
+                    isOptional: true,
+                }, explain: {
+                    name: "explain",
+                    type: "String",
+                    isOptional: true,
+                }, examDay: {
+                    name: "examDay",
+                    type: "DateTime",
+                    isOptional: true,
+                }, examType: {
+                    name: "examType",
+                    type: "ExamType",
+                    isOptional: true,
                 }, questions: {
                     name: "questions",
                     type: "ExamBankQuestion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'examBank',
+                }, examMatrix: {
+                    name: "examMatrix",
+                    type: "ExamMatrix",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examBank',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examMatrixId" },
+                }, examMatrixId: {
+                    name: "examMatrixId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examMatrix',
+                }, isLock: {
+                    name: "isLock",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -21082,6 +20846,325 @@ const metadata: ModelMeta = {
                 }, examCode_examListId: {
                     name: "examCode_examListId",
                     fields: ["examCode", "examListId"]
+                },
+            },
+        },
+        examFramework: {
+            name: 'ExamFramework', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamFramework$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, time: {
+                    name: "time",
+                    type: "Int",
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    backLink: 'examFramework',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, examMatrixs: {
+                    name: "examMatrixs",
+                    type: "ExamMatrix",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examFramework',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        examMatrix: {
+            name: 'ExamMatrix', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamMatrix$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, isDefault: {
+                    name: "isDefault",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, examFramework: {
+                    name: "examFramework",
+                    type: "ExamFramework",
+                    isDataModel: true,
+                    backLink: 'examMatrixs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examFrameworkId" },
+                }, examFrameworkId: {
+                    name: "examFrameworkId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'examFramework',
+                }, knowledgeBlocks: {
+                    name: "knowledgeBlocks",
+                    type: "KnowledgeBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examMatrix',
+                }, examBank: {
+                    name: "examBank",
+                    type: "ExamBank",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examMatrix',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        knowledgeBlock: {
+            name: 'KnowledgeBlock', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$KnowledgeBlock$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, examMatrix: {
+                    name: "examMatrix",
+                    type: "ExamMatrix",
+                    isDataModel: true,
+                    backLink: 'knowledgeBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examMatrixId" },
+                }, examMatrixId: {
+                    name: "examMatrixId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'examMatrix',
+                }, questions: {
+                    name: "questions",
+                    type: "Question",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'knowledgeBlock',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'knowledgeBlock',
+                }, configExams: {
+                    name: "configExams",
+                    type: "ConfigExam",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'knowledgeBlock',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    backLink: 'knowledgeBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        configExam: {
+            name: 'ConfigExam', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ConfigExam$createdBy,
+                }, difficult: {
+                    name: "difficult",
+                    type: "Difficult",
+                }, type: {
+                    name: "type",
+                    type: "QuestionType",
+                    isOptional: true,
+                }, quantity: {
+                    name: "quantity",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, point: {
+                    name: "point",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, knowledgeBlock: {
+                    name: "knowledgeBlock",
+                    type: "KnowledgeBlock",
+                    isDataModel: true,
+                    backLink: 'configExams',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "knowledgeBlockId" },
+                }, knowledgeBlockId: {
+                    name: "knowledgeBlockId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'knowledgeBlock',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 },
             },
         },
@@ -26185,14 +26268,6 @@ function $default$QuestionBank$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$Difficulty$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$KnowledgeBlock$createdBy(user: any): unknown {
-    return user?.id;
-}
-
 function $default$Question$createdBy(user: any): unknown {
     return user?.id;
 }
@@ -26221,10 +26296,6 @@ function $default$ExamList$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$TestStructureRule$createdBy(user: any): unknown {
-    return user?.id;
-}
-
 function $default$ExamBank$createdBy(user: any): unknown {
     return user?.id;
 }
@@ -26234,6 +26305,22 @@ function $default$ExamBankQuestion$createdBy(user: any): unknown {
 }
 
 function $default$ExamPaper$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamFramework$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamMatrix$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$KnowledgeBlock$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ConfigExam$createdBy(user: any): unknown {
     return user?.id;
 }
 

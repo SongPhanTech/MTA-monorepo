@@ -15,7 +15,7 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    level: z.number().nullish(),
+    isDefault: z.boolean().default(false),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -28,38 +28,44 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    level: z.number().nullish(),
+    isDefault: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
-    questions: z.array(z.unknown()).optional(),
+    examFramework: z.record(z.string(), z.unknown()),
+    knowledgeBlocks: z.array(z.unknown()).optional(),
+    examBank: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    examFrameworkId: z.string(),
 }
 );
 
 /**
- * `Difficulty` schema excluding foreign keys and relations.
+ * `ExamMatrix` schema excluding foreign keys and relations.
  */
-export const DifficultyScalarSchema = baseSchema;
+export const ExamMatrixScalarSchema = baseSchema;
 
 
 /**
- * `Difficulty` schema including all fields (scalar, foreign key, and relations) and validations.
+ * `ExamMatrix` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DifficultySchema = DifficultyScalarSchema.merge(relationSchema.partial());
+export const ExamMatrixSchema = ExamMatrixScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DifficultyPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ExamMatrixPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
  * Schema used for validating Prisma update input. For internal use only.
  * @private
  */
-export const DifficultyPrismaUpdateSchema = z.object({
+export const ExamMatrixPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
     active: z.boolean(),
@@ -69,34 +75,32 @@ export const DifficultyPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    level: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    isDefault: z.boolean()
 }).partial().passthrough();
 
 
 /**
- * `Difficulty` schema for create operations excluding foreign keys and relations.
+ * `ExamMatrix` schema for create operations excluding foreign keys and relations.
  */
-export const DifficultyCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+export const ExamMatrixCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isDefault: true
 });
 
 
 /**
- * `Difficulty` schema for create operations including scalar fields, foreign key fields, and validations.
+ * `ExamMatrix` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DifficultyCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
-});
+export const ExamMatrixCreateSchema = ExamMatrixCreateScalarSchema.merge(fkSchema);
 
 
 /**
- * `Difficulty` schema for update operations excluding foreign keys and relations.
+ * `ExamMatrix` schema for update operations excluding foreign keys and relations.
  */
-export const DifficultyUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ExamMatrixUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
- * `Difficulty` schema for update operations including scalar fields, foreign key fields, and validations.
+ * `ExamMatrix` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const DifficultyUpdateSchema = DifficultyUpdateScalarSchema;
+export const ExamMatrixUpdateSchema = ExamMatrixUpdateScalarSchema.merge(fkSchema.partial());
 

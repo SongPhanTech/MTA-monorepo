@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DifficultyOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name"])
+export const ExamFrameworkScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "time", "subjectVersionId"])
