@@ -4401,4 +4401,104 @@ app.openapi(
     }
 )
 
+const LateGradeItemSchema = z.object({
+    subjectName: z.string(),
+    department: z.string(),
+    faculty: z.string(),
+    dueDate: z.string(), 
+    daysLate: z.number(),
+    status: z.enum(['OVERDUE', 'NEAR_DUE']),
+})
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/late-grade-subjects',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                            page: z.number().optional().default(1),
+                            pageSize: z.number().optional().default(10),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê các học phần chưa nhập điểm đúng hạn',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(LateGradeItemSchema),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview, page = 1, pageSize = 10 } = c.req.valid('json')
+        const allData: z.infer<typeof LateGradeItemSchema>[] = Array.from({ length: 25 }).map((_, index) => {
+            const daysLate = Math.floor(Math.random() * 10) - 3
+            return {
+                subjectName: `Học phần ${index + 1}`,
+                department: 'Công nghệ phần mềm',
+                faculty: 'Khoa Công nghệ thông tin',
+                dueDate: '2026-01-10',
+                daysLate: daysLate > 0 ? daysLate : 0,
+                status: (daysLate > 0 ? 'OVERDUE' : 'NEAR_DUE') as 'OVERDUE' | 'NEAR_DUE',
+            }
+        })
+
+        const start = (page - 1) * pageSize
+        const data = allData.slice(start, start + pageSize)
+        const lateSubjects = allData.filter((i) => i.status === 'OVERDUE').length
+        const nearDueSubjects = allData.filter((i) => i.status === 'NEAR_DUE').length
+        const totalSubjects = 120
+
+        const summary = {
+            totalSubjects,
+            lateSubjects,
+            nearDueSubjects,
+            latePercentage: Math.round((lateSubjects / totalSubjects) * 100),
+        }
+        if (preview) {
+            return c.json({
+                data,
+                count: allData.length,
+                summary,
+                preview: true,
+                labels: [
+                    'Tên học phần',
+                    'Bộ môn',
+                    'Khoa',
+                    'Hạn nhập điểm',
+                    'Số ngày trễ',
+                    'Trạng thái',
+                ],
+            })
+        }
+        return c.json(
+            {
+                data,
+                count: allData.length,
+                summary,
+                preview,
+                labels: [
+                    'Tên học phần',
+                    'Bộ môn',
+                    'Khoa',
+                    'Hạn nhập điểm',
+                    'Số ngày trễ',
+                    'Trạng thái',
+                ],
+            },
+            200
+        )
+    }
+)
 export default app
