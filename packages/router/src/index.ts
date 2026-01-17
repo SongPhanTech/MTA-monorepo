@@ -20,6 +20,7 @@ import {
     FolderOpen,
     GraduationCap,
     House,
+    Landmark,
     Library,
     ListChecks,
     ListTree,
@@ -759,23 +760,23 @@ const NAVIGATION: NavigationType = {
             //     path: ROUTER_PATH.KHAO_THI.HOME,
             //     description: 'Thông tin trang chủ',
             // },
-            // {
-            //     id: 'thiet-lap-de-thi',
-            //     label: 'Thiết lập đề thi',
-            //     icon: Landmark,
-            //     children: [
-            //         {
-            //             id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
-            //             label: 'Danh sách kỳ thi',
-            //             path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI,
-            //         },
-            //         {
-            //             id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
-            //             label: 'Ngân hàng câu hỏi',
-            //             path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
-            //         },
-            //     ],
-            // },
+            {
+                id: 'thiet-lap-de-thi',
+                label: 'Thiết lập đề thi',
+                icon: Landmark,
+                children: [
+                    {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
+                        label: 'Ngân hàng câu hỏi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
+                    },
+                    {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+                        label: 'Danh sách kỳ thi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI,
+                    },
+                ],
+            },
             // {
             //     id: 'category',
             //     label: 'Danh mục',
