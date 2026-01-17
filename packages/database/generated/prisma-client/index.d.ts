@@ -1424,6 +1424,7 @@ export const SubjectVersionType: {
   Internship: 'Internship',
   Research: 'Research',
   Project: 'Project',
+  Thesis: 'Thesis',
   Practice: 'Practice',
   Graduation: 'Graduation'
 };

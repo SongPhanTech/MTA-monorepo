@@ -5310,6 +5310,7 @@ export namespace $Enums {
         Internship: 'Internship',
         Research: 'Research',
         Project: 'Project',
+        Thesis: 'Thesis',
         Practice: 'Practice',
         Graduation: 'Graduation'
     };
