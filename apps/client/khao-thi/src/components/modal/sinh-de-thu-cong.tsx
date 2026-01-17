@@ -9,16 +9,12 @@ import {
   Row,
   Steps,
 } from "antd";
-import type { ExamBank } from "../../../../prisma/client";
-import PutFormModal from "../put-modal";
-import FormItem from "../../commoms/form-item";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import TreeSelect from "../tree-select";
 import { GripVertical } from "lucide-react";
-import Select from "../select";
 import {
   useCreateExamBank,
   useFindManyKnowledgeBlock,
@@ -27,11 +23,17 @@ import {
   useFindUniqueExamBank,
   useUpdateExamBank,
   useUpdateExamBankQuestion,
-} from "@/hooks/zenstack";
+} from "@workspace/db/hooks";
 import { useStore } from "@tanstack/react-store";
-import { store } from "@/pages/main";
-import { queryClient } from "../../../libs/api";
-import { renderWithMath } from "../rick-text-editor/renderWithMath";
+import { store } from "@/pages/thiet-lap-de-thi/danh-sach-de/index";
+import {type ExamBank } from "@workspace/db";
+import FormItem from "@components/commons/form-item";
+import Select from "@components/commons/select";
+import { queryClient } from "@api/index";
+import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath";
+import TreeSelect from "@components/commons/tree-select";
+import PutFormModal from "@components/commons/put-modal";
+
 type PutMaTranDeInputType = ExamBank & {
   questions: string[];
   subjectVersionId: string;
@@ -123,16 +125,19 @@ const SinhDeThuCongModal = () => {
   const {data: dataExam}=useFindUniqueExam(
     {
       where: { id: selectedExamId },
+      include:{
+        subjectClass:true
+      }
     },{
       enabled: !!selectedExamId
     }
   )
 
   const dataOption = useMemo(() => {
-    return !!dataExam?.subjectClasses ? dataExam?.subjectClasses.split(',').map((item) => {
+    return !!dataExam?.subjectClass ? dataExam?.subjectClass.map((item) => {
       return {
-        value: item,
-        label: item,
+        value: item?.id,
+        label: `${item?.code}-${item?.name}`,
       };
     }):[];
   }, [dataExam]);
@@ -178,7 +183,7 @@ const SinhDeThuCongModal = () => {
   const orderedQuestionIds = items.map((it: { value: string }) => it.value);
   const onOk = async (values: PutMaTranDeInputType) => {
     try {
-      if (!values) return;
+      if (!values || !selectedExamId) return;
       if (!!input?.id) {
         await update({
           where: {

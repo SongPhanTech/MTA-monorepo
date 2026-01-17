@@ -1,6 +1,5 @@
 import { Modal, Button, Flex, Input } from "antd";
 import { useDisclosure } from "react-hook-disclosure-modal";
-import { useFindUniqueExamBank, useUpdateExamBank } from "@/hooks/zenstack";
 import { useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import {
@@ -17,9 +16,10 @@ import {
   VerticalAlign,
   ImageRun,
 } from "docx";
-import { queryClient } from "@/libs/api";
-import { renderWithMath } from "@/components/commoms/rick-text-editor/renderWithMath";
 import html2canvas from "html2canvas";
+import { queryClient } from "@api/index";
+import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath";
+import { useFindUniqueExamBank, useUpdateExamBank } from "@workspace/db/hooks";
 
 // Type cho content elements
 type ContentElement =
@@ -47,7 +47,7 @@ const PrintExamBank = () => {
   const { data } = useFindUniqueExamBank(
     {
       where: {
-        id: input.id,
+        id: input?.id,
       },
       include: {
         exam: {
@@ -64,7 +64,7 @@ const PrintExamBank = () => {
       },
     },
     {
-      enabled: !!input.id,
+      enabled: !!input?.id,
     }
   );
 
@@ -641,7 +641,7 @@ const PrintExamBank = () => {
   const handleClose = async () => {
     if (hasDownloaded) {
       await updateExamBank({
-        where: { id: input.id },
+        where: { id: input?.id },
         data: { isLock: true },
       });
     }

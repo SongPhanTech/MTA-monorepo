@@ -1,6 +1,5 @@
 import { Modal, Button, Flex, Divider, Input } from "antd";
 import { useDisclosure } from "react-hook-disclosure-modal";
-import { useFindManyExamBank, useUpdateExamBank } from "@/hooks/zenstack";
 import { useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import {
@@ -19,6 +18,10 @@ import {
   SectionType,
   ImageRun,
 } from "docx";
+import { useFindManyExamBank, useUpdateExamBank } from "@workspace/db/hooks";
+import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath";
+import html2canvas from "html2canvas";
+import { queryClient } from "@api/index";
 
 // Type cho content elements (text hoặc image)
 type ContentElement =
@@ -48,7 +51,7 @@ const PrintBatchExplanation = () => {
     {
       where: {
         id: {
-          in: input.ids || [],
+          in: input?.ids || [],
         },
       },
       include: {
@@ -75,7 +78,7 @@ const PrintBatchExplanation = () => {
       },
     },
     {
-      enabled: !!input.ids && input.ids.length > 0,
+      enabled: !!input?.ids && input?.ids.length > 0,
     }
   );
 

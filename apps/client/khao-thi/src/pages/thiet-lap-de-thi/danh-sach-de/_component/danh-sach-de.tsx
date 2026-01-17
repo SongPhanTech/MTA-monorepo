@@ -15,11 +15,13 @@ import EditIcon from "@components/icons/edit";
 import DeleteIcon from "@components/icons/delete";
 import Table from "@components/commons/table";
 import { formatDate } from "@lib/utils";
+import PrintIcon from "@components/icons/print";
+import DownloadIcon from "@components/icons/download";
 
 
 export default function ExamListPage() {
   const { onOpen: onOpenExamList } = useDisclosure<{
-    id?: string;
+    id?: string | null;
     subjectVersionId?: string;
   }>({
     tag: "SinhDeThuCongModal",
@@ -51,9 +53,7 @@ export default function ExamListPage() {
   const subjectVersionId = useStore(store, (state) => state.subjectVersionId);
   const where = useMemo(() => {
     return {
-      ...(selectedExamId && {
-        examId: selectedExamId,
-      }),
+     examId:selectedExamId,
       ...(filters.exam &&
         filters.exam !== "" && {
           OR: [
@@ -193,7 +193,7 @@ export default function ExamListPage() {
     }
   );
   const { mutateAsync: update } = useUpdateExamBank();
-  const { onOpen: onOpenExamListAuto } = useDisclosure<{ id?: string }>({
+  const { onOpen: onOpenExamListAuto } = useDisclosure<{ id?: string | null }>({
     tag: "SinhDeModal",
     onClose: () => {
       setCurrentPage(1);

@@ -1,6 +1,5 @@
 import { Modal, Button, Flex, Divider, Input } from "antd";
 import { useDisclosure } from "react-hook-disclosure-modal";
-import { useFindManyExamBank, useUpdateExamBank } from "@/hooks/zenstack";
 import { useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import {
@@ -18,9 +17,10 @@ import {
   PageBreak,
   ImageRun,
 } from "docx";
-import { queryClient } from "@/libs/api";
-import { renderWithMath } from "@/components/commoms/rick-text-editor/renderWithMath";
 import html2canvas from "html2canvas";
+import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath";
+import { queryClient } from "@api/index";
+import { useFindManyExamBank, useUpdateExamBank } from "@workspace/db/hooks";
 
 // Type cho content elements
 type ContentElement =
@@ -48,7 +48,7 @@ const PrintBatchExamBank = () => {
     {
       where: {
         id: {
-          in: input.ids || [],
+          in: input?.ids || [],
         },
       },
       include: {
@@ -69,7 +69,7 @@ const PrintBatchExamBank = () => {
       },
     },
     {
-      enabled: !!input.ids && input.ids.length > 0,
+      enabled: !!input?.ids && input?.ids.length > 0,
     }
   );
 
@@ -667,7 +667,7 @@ const PrintBatchExamBank = () => {
     if (hasDownloaded) {
       // Cập nhật isLock cho tất cả các đề đã tải
       await Promise.all(
-        exams.map((exam) =>
+        exams.map((exam:any) =>
           updateExamBank({
             where: { id: exam.id },
             data: { isLock: true },
@@ -920,7 +920,7 @@ const PrintBatchExamBank = () => {
       >
         <div ref={printRef}>
           {exams.length > 0 ? (
-            exams.map((exam, index) => renderExamPreview(exam, index))
+            exams.map((exam:any, index:number) => renderExamPreview(exam, index))
           ) : (
             <div style={{ textAlign: "center", padding: "40px" }}>
               Không có đề thi nào được chọn

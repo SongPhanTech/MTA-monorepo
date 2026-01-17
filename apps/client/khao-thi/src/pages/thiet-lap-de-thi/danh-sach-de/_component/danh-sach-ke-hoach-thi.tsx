@@ -1,10 +1,11 @@
 import { Checkbox, Col, Flex, Input, Popover, Row } from 'antd'
 import { useCallback, useMemo, useState } from 'react'
 import { useStore } from '@tanstack/react-store'
-import Table from '@/components/commoms/table'
-import { cn } from '@/utils/utils'
-import { store } from '@/pages/main'
-import { useCountExam, useCreateExam, useFindManyExam } from '@/hooks/zenstack'
+import { store } from '../index'
+import { useCountExam, useCreateExam, useFindManyExam } from '@workspace/db/hooks'
+import Table from '@components/commons/table'
+import { cn } from '@workspace/ui/lib/utils'
+import { SubjectClass } from '@workspace/db'
 
 interface Props {
     setActiveKey: (key: string) => void
@@ -17,7 +18,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     const [numberOfPages, setNumberOfPages] = useState(10)
 
     const updateStateselectedExamId = (value: string, item: string) => {
-        store.setState((state) => {
+        store.setState((state:any) => {
             return {
                 ...state,
                 selectedExamId: value,
@@ -61,11 +62,11 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 subjectVersion: {
                     include: {
                         subject: true,
-                        donVi: true,
+                        managementOrganization: true,
                     },
                 },
                 semester: true,
-                examRoom: {
+                examRooms: {
                     include: {
                         examList: true,
                         room: {
@@ -77,6 +78,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     },
                 },
                 examBank: true,
+                subjectClass:true
             },
             orderBy: {
                 subjectVersionId: 'asc',
@@ -244,7 +246,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             width: 60,
                             render: (_, record) => {
                                 let total = 0
-                                record?.examRoom?.forEach((item: any) => {
+                                record?.examRooms?.forEach((item: any) => {
                                     total += item?.examList?.length
                                 })
                                 return total
@@ -266,7 +268,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             // type:'input',
                             width: 150,
                             render: (_, record) => {
-                                if (!record?.examRoom || record.examRoom?.length === 0) {
+                                if (!record?.examRooms || record.examRooms?.length === 0) {
                                     return (
                                         <span className="text-gray-400 text-left">
                                             Chưa có phòng thi
@@ -274,15 +276,15 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     )
                                 }
 
-                                const totalRooms = record.examRoom.length
+                                const totalRooms = record.examRooms.length
                                 const displayLimit = 3 // Hiển thị tối đa 3 phòng
-                                const displayRooms = record.examRoom.slice(0, displayLimit)
+                                const displayRooms = record.examRooms.slice(0, displayLimit)
                                 const remainingCount = totalRooms - displayLimit
 
                                 // Nội dung đầy đủ cho Popover
                                 const fullContent = (
                                     <div className="max-h-60 overflow-y-auto">
-                                        {record.examRoom.map((examRoom: any, index: number) => (
+                                        {record.examRooms.map((examRoom: any, index: number) => (
                                             <div key={examRoom.id} className="py-1">
                                                 {examRoom.room?.name} - {examRoom.capacity} chỗ
                                             </div>
@@ -313,7 +315,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             align: 'center',
                             width: 120,
                             render: (_, record) => {
-                                return record?.examRoom?.length
+                                return record?.examRooms?.length
                             },
                         },
                         {
@@ -329,7 +331,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             align: 'center',
                             width: 150,
                             render: (_, record) => {
-                              return record?.subjectClasses ||''
+                              return record?.subjectClass.length>0 ? record?.subjectClass.map((i:SubjectClass)=>i.name).join(', ') :''
                             },
                         },
                           {

@@ -1,17 +1,17 @@
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { Col, Form, Input, InputNumber, message, Row } from 'antd'
-import  { type ExamBank, PrismaClient} from '../../../../prisma/client'
-import PutFormModal from '../put-modal'
-import FormItem from '../../commoms/form-item'
-import { useFindManyExamFramework, useFindManyExamMatrix, useFindUniqueExam } from '@/hooks/zenstack'
-import { useStore } from '@tanstack/react-store'
-import { store } from '@/pages/main'
-import Select from '../select'
-import DatePicker from '../date-picker'
+
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
+import { useStore } from '@tanstack/react-store'
+import { store } from '@pages/thiet-lap-de-thi/danh-sach-de'
+import { useFindManyExamFramework, useFindManyExamMatrix, useFindUniqueExam } from '@workspace/db/hooks'
+import PutFormModal from '@components/commons/put-modal'
+import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
+import DatePicker from '@components/commons/date-picker'
+import { ExamBank } from '@workspace/db'
 
-const prisma = new PrismaClient()
 type PutMaTranDeInputType = ExamBank & {
     quantity: number
     examFrameworkId: string
@@ -34,19 +34,23 @@ const SinhDeModal = () => {
       const {data: dataExam}=useFindUniqueExam(
         {
           where: { id: selectedExamId },
+           include:{
+        subjectClass:true
+      }
         },{
           enabled: !!selectedExamId
         }
       )
     
-      const dataOption = useMemo(() => {
-        return !!dataExam?.subjectClasses ? dataExam?.subjectClasses.split(',').map((item) => {
-          return {
-            value: item,
-            label: item,
-          };
-        }):[];
-      }, [dataExam]);
+
+  const dataOption = useMemo(() => {
+    return !!dataExam?.subjectClass ? dataExam?.subjectClass.map((item) => {
+      return {
+        value: item?.id,
+        label: `${item?.code}-${item?.name}`,
+      };
+    }):[];
+  }, [dataExam]);
 
     const { data: examFrameworkData = [] } = useFindManyExamFramework(
         {
@@ -172,7 +176,7 @@ const SinhDeModal = () => {
                     <Col span={24}>
                         <FormItem form={form} name="examMatrixId" label="Ma trận đề" required>
                             <Select
-                                options={ExamMatrixData.map((i) => {
+                                options={ExamMatrixData.map((i:{name:string,id:string}) => {
                                     return {
                                         label: i.name,
                                         value: i.id,

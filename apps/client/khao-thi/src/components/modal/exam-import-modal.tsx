@@ -8,7 +8,9 @@ import { useState } from "react";
 import { useDisclosure } from "react-hook-disclosure-modal";
 import { useStore } from "@tanstack/react-store";
 import { useCreateExamBank, useCreateQuestion, useCreateQuestionBank, useFindManyQuestion, useFindManyQuestionBank, useFindUniqueExamBank } from "@workspace/db/hooks";
-
+import {store} from "@/pages/thiet-lap-de-thi/danh-sach-de/index"
+import { queryClient } from "@api/index";
+import { Difficult, ExamType, QuestionType } from "@workspace/db";
 interface ParsedQuestion {
   order: number;
   content: string;
@@ -329,14 +331,19 @@ const ExamImportModal: React.FC = () => {
     where: { subjectVersionId },
   });
   const { mutateAsync: createQuestionBank } = useCreateQuestionBank();
+
   const { data: existingExamBank } = useFindUniqueExamBank(
     {
       where: {
-        examId_examCode: {
+        examId_examCode:{
           examId: selectedExamId,
           examCode: parsedData?.examCode,
-        },
+        }
       },
+      include:{
+        questions:true,
+        exam:true
+      }
     },
     {
       enabled: !!parsedData && !!selectedExamId,
@@ -377,13 +384,13 @@ const ExamImportModal: React.FC = () => {
       let questionBankId = questionBanks[0]?.id;
 
       if (!questionBankId && subjectVersionId) {
-        const newQB = await createQuestionBank({
+        const newQB:any = await createQuestionBank({
           data: {
             name: "Ngân hàng câu hỏi tổng hợp",
             subjectVersionId,
           },
         });
-        questionBankId = newQB.id;
+        questionBankId = newQB?.id;
       }
 
       if (!questionBankId) {
@@ -404,7 +411,7 @@ const ExamImportModal: React.FC = () => {
           questionIds.push(existingQuestion.id);
         } else {
           // Nếu chưa có → tạo câu hỏi mới (chưa có đáp án)
-          const newQuestion = await createQuestion({
+          const newQuestion:any = await createQuestion({
             data: {
               content: q.content,
               point: q.point,

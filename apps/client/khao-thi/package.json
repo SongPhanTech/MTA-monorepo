@@ -57,6 +57,7 @@
 		"exceljs": "catalog:",
 		"fast-xml-parser": "catalog:",
 		"file-saver": "catalog:",
+		"html2canvas": "^1.4.1",
 		"katex": "catalog:",
 		"lodash": "catalog:",
 		"lucide-react": "catalog:",
