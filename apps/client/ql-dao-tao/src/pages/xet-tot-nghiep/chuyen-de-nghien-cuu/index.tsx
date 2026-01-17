@@ -24,6 +24,7 @@ import { useMemo, useState } from 'react'
 import {  useSemesterStore,
 useTrainingObjectTypeStore } from '@workspace/ui'
 import DatePicker from '@components/commons/date-picker';
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -39,12 +40,18 @@ export default function ChuyenDeNghienCuu() {
     const [timeReportForm] = Form.useForm<TimeReportForm>()
     const [searchParams, setSearchParams] = useState<Partial<ChuyenDeNghienCuuForm>>({})
     const [timeReportParams, setTimeReportParams] = useState<Partial<TimeReportForm>>({})
-
+    
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [isSearched, setIsSearched] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
+    const { onOpen: openPutResearchTopicModal } = useDisclosure<{
+        studentResearchTopicId: string
+        studentSubjectScoreId: string
+    }>({
+        tag: 'PutResearchTopicModal',
+    })
     const courseWhere = useMemo(() => {
         return {
             trainingObjectTypeId: trainingObjectTypeId,
@@ -908,7 +915,10 @@ export default function ChuyenDeNghienCuu() {
                             render: (_, record) => {
                                 return (
                                     <div className="flex justify-center items-center">
-                                        <SquarePen className="text-sm cursor-pointer" />
+                                        <SquarePen className="text-sm cursor-pointer" onClick={() =>
+                                             openPutResearchTopicModal({
+                                                 studentResearchTopicId: record.studentResearchTopic?.id,
+                                                 studentSubjectScoreId: record.id })} />
                                     </div>
                                 )
                             },

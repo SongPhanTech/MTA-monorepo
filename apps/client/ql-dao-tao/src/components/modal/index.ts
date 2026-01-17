@@ -106,6 +106,7 @@ import ModalChiTietSinhVien from './modal-chi-tiet-sinh-vien'
 import ModalChiTietMonHoc from './modal-chi-tiet-mon-hoc'
 import ModalChiTietLopBienChe from './modal-chi-tiet-lop-bien-che'
 import ModalChiTietGiangVien from './modal-chi-tiet-giang-vien'
+import PutResearchTopicModal from './put-chuyen-de-nghien-cuu'
 export {
     ModalChiTietLopBienChe,
     ModalChiTietGiangVien,
@@ -217,6 +218,7 @@ export {
     ModalCauHinhLuanVan,
     ModalDanhSachChungChi,
     ModalChuyenDoiChungChiThanhDiem,
+    PutResearchTopicModal,
 }
 export * from './ke-hoach-dao-tao'
 export * from './thong-bao'
