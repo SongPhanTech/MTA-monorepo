@@ -4,6 +4,7 @@ import {Store, useStore } from "@tanstack/react-store";
 import DefaultLayout from '@layouts/default-layout';
 import DanhSachKeHoachThi from './_component/danh-sach-ke-hoach-thi';
 import ExamListPage from './_component/danh-sach-de';
+import { useSemesterStore } from '@workspace/ui';
 
 export const store = new Store({
   examFrameworkId: undefined,
@@ -14,7 +15,7 @@ export const store = new Store({
 
 export default function LapDanhSachThiPage() {
     const [activeKey, setActiveKey] = useState('1')
-    const semesterId = localStorage.getItem('semesterId')
+   const { id: semesterId } = useSemesterStore()
     const selectedExamId = useStore(store, (state) => state["selectedExamId"]);
     const tabItems = useMemo(() => {
         return [
