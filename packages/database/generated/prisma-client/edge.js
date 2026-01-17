@@ -8116,7 +8116,7 @@ const config = {
     },
     "output": {
       "value": "/Users/luanbt/swantech/MTA-monorepo/packages/database/generated/prisma-client",
-      "fromEnvVar": null
+ß      "fromEnvVar": null
     },
     "config": {
       "engineType": "library"
