@@ -5,7 +5,6 @@ import ModalPrintAllExams from './modal-print-all-exam-bank'
 import ModalPrintDotDanhGia from './modal-print-dot-danh-gia'
 import ModalPrintExamBank from './modal-print-exam-bank'
 import ModalSinhDeThiTuDong from './modal-sinh-de-thi-tu-dong'
-import PutKnowledgeBlock from './put-chuong-muc'
 import PutExamBank from './put-de-thi'
 import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
 import PutEvaluationCouncilMember from './put-evaluation-council-member'
@@ -55,7 +54,6 @@ export {
     PutSurveyModal,
     PutSurveyQuestionModal,
     PutQuestionBank,
-    PutKnowledgeBlock,
     ModalSinhDeThiTuDong,
     PutExamBank,
     ModalPrintExamBank,
