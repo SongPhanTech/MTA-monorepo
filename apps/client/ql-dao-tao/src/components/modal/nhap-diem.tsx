@@ -72,9 +72,7 @@ const NhapDiemThuCong = () => {
                     data: {
                         where: {
                             studentId: id as string,
-                            manualFinalScore: {
-                                gt: 0,
-                            },
+                            manualFinalScore: { gt: 0 },
                         },
                     },
                 },
@@ -86,6 +84,7 @@ const NhapDiemThuCong = () => {
                             output?.subjectClassStudent.map((i) => ({
                                 studentId: id as string,
                                 subjectVersionId: i?.id as string,
+                                finalScore: i?.manualFinalScore as number,
                                 manualFinalScore: i?.manualFinalScore as number,
                             })) || [],
                     },
