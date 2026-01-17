@@ -7,7 +7,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { GripVertical } from 'lucide-react'
 
 import { useStore } from '@tanstack/react-store'
-import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de/index'
+import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
 import { type ExamBank } from '@workspace/db'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'

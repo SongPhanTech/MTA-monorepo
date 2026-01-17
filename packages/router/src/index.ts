@@ -777,7 +777,7 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
-                        label: 'Danh sách kỳ thi',
+                        label: 'Danh sách đề thi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DANH_SACH_DE,
                     },
                 ],

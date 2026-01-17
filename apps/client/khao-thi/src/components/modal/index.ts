@@ -44,7 +44,6 @@ import PrintBatchExplanation from "./print-dap-an-hang-loat"
 import MoveQuestionModal from "./modal-chuyen-question"
 import PickQuestionFromBankModal from "./pick-question-from-bank-modal"
 import QuestionListByKnowledgeBlockModal from "./modal-question-by-knowledge"
-import ExcelPreviewModal from './import_du_lieu_dong_bo.tsx'
 import ExportExcelModal from './export-data-modal'
 
 export {
@@ -94,6 +93,5 @@ export {
   MoveQuestionModal,
   PickQuestionFromBankModal,
   QuestionListByKnowledgeBlockModal,
-  ExcelPreviewModal,
   ExportExcelModal,
 }

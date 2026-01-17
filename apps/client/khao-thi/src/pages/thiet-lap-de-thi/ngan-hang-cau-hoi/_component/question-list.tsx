@@ -17,7 +17,7 @@ interface QuestionListProps {
   questionBankId: string;
 }
 
-export function QuestionList({ questionBankId }: QuestionListProps) {
+export default function QuestionList({ questionBankId }: QuestionListProps) {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys as string[]);

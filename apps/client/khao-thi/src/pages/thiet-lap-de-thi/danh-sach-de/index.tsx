@@ -7,7 +7,6 @@ import ExamListPage from './_component/danh-sach-de';
 import { useSemesterStore } from '@workspace/ui';
 
 export const store = new Store({
-  examFrameworkId: undefined,
   selectedExamId: undefined,
   subjectVersionId: undefined,
 });

@@ -166,7 +166,7 @@ const QuestionBankTitle = memo(
 );
 QuestionBankTitle.displayName = "QuestionBankTitle";
 
-export function QuestionBankTree({
+export default function QuestionBankTree({
   searchName,
   expandedKeys,
   setExpandedKeys,

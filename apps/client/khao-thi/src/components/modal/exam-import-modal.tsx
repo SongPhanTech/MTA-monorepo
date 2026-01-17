@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useDisclosure } from "react-hook-disclosure-modal";
 import { useStore } from "@tanstack/react-store";
 import { useCreateExamBank, useCreateQuestion, useCreateQuestionBank, useFindManyQuestion, useFindManyQuestionBank, useFindUniqueExamBank } from "@workspace/db/hooks";
-import {store} from "@/pages/thiet-lap-de-thi/danh-sach-de/index"
+import {store} from "@/pages/thiet-lap-de-thi/danh-sach-de"
 import { queryClient } from "@api/index";
 import { Difficult, ExamType, QuestionType } from "@workspace/db";
 interface ParsedQuestion {
@@ -336,8 +336,8 @@ const ExamImportModal: React.FC = () => {
     {
       where: {
         examId_examCode:{
-          examId: selectedExamId,
-          examCode: parsedData?.examCode,
+          examId: selectedExamId? selectedExamId as string :'',
+          examCode: parsedData?.examCode as string,
         }
       },
       include:{

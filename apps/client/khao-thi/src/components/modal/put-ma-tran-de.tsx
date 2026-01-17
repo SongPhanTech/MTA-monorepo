@@ -50,7 +50,7 @@ const PutMaTranDeModal = () => {
 
     const onOk = async (values: PutMaTranDeInputType) => {
         try {
-            if (!values) return
+            if (!values ||!examFrameworkId) return
 
             if (input?.id) {
                 await updateExamMatrix({
