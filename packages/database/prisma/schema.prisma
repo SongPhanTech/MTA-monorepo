@@ -132,6 +132,7 @@ enum SubjectVersionType {
   Internship
   Research
   Project
+  Thesis
   Practice
   Graduation
 
@@ -478,6 +479,15 @@ enum QuestionType {
   MULTIPLE_CHOICE
   FILL_IN_BLANK
   ORDERING
+
+  @@schema("khao-thi")
+}
+
+enum Difficult {
+  D1
+  D2
+  D3
+  D4
 
   @@schema("khao-thi")
 }
@@ -3055,6 +3065,7 @@ model SubjectVersion {
   subjectScoreConvert      SubjectScoreConvert[]
   subjectVersionHistory    SubjectVersionHistory[]
   exams                    Exam[]
+  examFramework            ExamFramework[]
 
   @@schema("ql-dao-tao")
 }
@@ -4110,6 +4121,8 @@ model DocumentFile {
   noteId                     String?
   evaluationPeriod           EvaluationPeriod?               @relation(fields: [evaluationPeriodId], references: [id])
   evaluationPeriodId         String?
+  knowledgeBlock             KnowledgeBlock?                 @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId           String?
 
   @@schema("ql-danh-muc")
 }
@@ -5347,59 +5360,20 @@ model SurveyResponse {
 
 /// Phiên bản ngân hàng câu hỏi
 model QuestionBank {
-  id                 String              @id() @default(cuid())
-  code               String?             @unique()
-  active             Boolean             @default(true)
-  description        String?             @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @default(now()) @updatedAt()
-  createdBy          String?             @db.Uuid()
-  name               String
-  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId   String
-  questions          Question[]
-  testStructureRules TestStructureRule[]
-  exam               Exam[]
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @db.Uuid()
+  name             String
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  questions        Question[]
 
   @@unique([subjectVersionId, name])
-  @@schema("khao-thi")
-}
-
-/// Mức độ
-model Difficulty {
-  id          String     @id() @default(cuid())
-  code        String?    @unique()
-  active      Boolean    @default(true)
-  description String?    @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now()) @updatedAt()
-  createdBy   String?    @db.Uuid()
-  name        String     @unique()
-  level       Int?       @unique()
-  questions   Question[]
-
-  @@schema("khao-thi")
-}
-
-/// Khối kiến thức / Chương mục
-model KnowledgeBlock {
-  id               String              @id() @default(cuid())
-  code             String?             @unique()
-  active           Boolean             @default(true)
-  description      String?             @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @default(now()) @updatedAt()
-  createdBy        String?             @db.Uuid()
-  subjectVersion   SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
-  name             String
-  questions        Question[]
-  structureRules   TestStructureRule[]
-
-  @@unique([name, subjectVersionId])
   @@schema("khao-thi")
 }
 
@@ -5418,6 +5392,7 @@ model Question {
   point                 Float                  @default(1)
   explanation           String?
   isAutoGraded          Boolean                @default(false)
+  difficult             Difficult
   multipleChoiceOptions MultipleChoiceOption[]
   fillInBlankSlots      FillInBlankSlot[]
   orderingItems         OrderingItem[]
@@ -5425,8 +5400,6 @@ model Question {
   questionBankId        String
   knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId      String?
-  difficulty            Difficulty?            @relation(fields: [difficultyId], references: [id])
-  difficultyId          String?
   sessionQuestions      ExamBankQuestion[]
 
   @@schema("khao-thi")
@@ -5491,30 +5464,27 @@ model OrderingItem {
 
 /// Kỳ thi
 model Exam {
-  id                 String              @id() @default(cuid())
-  code               String?             @unique()
-  active             Boolean             @default(true)
-  description        String?             @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @default(now()) @updatedAt()
-  createdBy          String?             @db.Uuid()
-  questionBank       QuestionBank?       @relation(fields: [questionBankId], references: [id])
-  questionBankId     String?
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @db.Uuid()
   /// khoá DS thi
-  lockExamSessions   Boolean             @default(false)
+  lockExamSessions Boolean        @default(false)
   /// thời gian thi
-  duration           Int?
-  session            Int                 @default(1)
-  subjectVersionId   String
-  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  semester           Semester            @relation(fields: [semesterId], references: [id])
-  semesterId         String
+  duration         Int?
+  session          Int            @default(1)
+  subjectVersionId String
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  semester         Semester       @relation(fields: [semesterId], references: [id])
+  semesterId       String
   /// Lớp môn học
-  subjectClass       SubjectClass[]
-  examBank           ExamBank[]
-  testStructureRules TestStructureRule[]
-  examRooms          ExamRoom[]
+  subjectClass     SubjectClass[]
+  examBank         ExamBank[]
+  examRooms        ExamRoom[]
 
   @@schema("khao-thi")
 }
@@ -5565,45 +5535,27 @@ model ExamList {
   @@schema("khao-thi")
 }
 
-/// Cấu hình tạo đề tự động cho kỳ thi
-model TestStructureRule {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @db.Uuid()
-  exam             Exam?          @relation(fields: [examId], references: [id])
-  examId           String?
-  questionBank     QuestionBank?  @relation(fields: [questionBankId], references: [id])
-  questionBankId   String?
-  knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId String
-  questionPoint    Float
-  questionType     QuestionType
-  count            Int
-
-  @@unique([examId, knowledgeBlockId, questionPoint, questionType])
-  @@unique([questionBankId, knowledgeBlockId, questionPoint, questionType])
-  @@schema("khao-thi")
-}
-
 /// Đề thi
 model ExamBank {
-  id          String             @id() @default(cuid())
-  code        String?            @unique()
-  active      Boolean            @default(true)
-  description String?            @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @default(now()) @updatedAt()
-  createdBy   String?            @db.Uuid()
-  exam        Exam               @relation(fields: [examId], references: [id])
-  examId      String
-  examCode    String
-  questions   ExamBankQuestion[]
+  id           String             @id() @default(cuid())
+  code         String?            @unique()
+  active       Boolean            @default(true)
+  description  String?            @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @default(now()) @updatedAt()
+  createdBy    String?            @db.Uuid()
+  exam         Exam               @relation(fields: [examId], references: [id])
+  examId       String
+  examCode     String
+  subjectClass String?
+  explain      String?
+  examDay      DateTime?
+  examType     ExamType?
+  questions    ExamBankQuestion[]
+  examMatrix   ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
+  examMatrixId String?
+  isLock       Boolean?           @default(false)
 
   @@unique([examId, examCode])
   @@schema("khao-thi")
@@ -5648,6 +5600,84 @@ model ExamPaper {
   examCode              String?
 
   @@unique([examCode, examListId])
+  @@schema("khao-thi")
+}
+
+model ExamFramework {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @db.Uuid()
+  name             String
+  time             Int
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  examMatrixs      ExamMatrix[]
+
+  @@schema("khao-thi")
+}
+
+model ExamMatrix {
+  id              String           @id() @default(cuid())
+  code            String?          @unique()
+  active          Boolean          @default(true)
+  description     String?          @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt()
+  createdBy       String?          @db.Uuid()
+  name            String
+  isDefault       Boolean          @default(false)
+  examFramework   ExamFramework    @relation(fields: [examFrameworkId], references: [id])
+  examFrameworkId String
+  knowledgeBlocks KnowledgeBlock[]
+  examBank        ExamBank[]
+
+  @@schema("khao-thi")
+}
+
+/// Khối kiến thức / Chuẩn đầu ra
+model KnowledgeBlock {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @db.Uuid()
+  name             String
+  examMatrix       ExamMatrix     @relation(fields: [examMatrixId], references: [id])
+  examMatrixId     String
+  questions        Question[]
+  documentFiles    DocumentFile[]
+  configExams      ConfigExam[]
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+
+  @@schema("khao-thi")
+}
+
+model ConfigExam {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @db.Uuid()
+  difficult        Difficult
+  type             QuestionType?
+  quantity         Int            @default(0)
+  point            Int            @default(0)
+  knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId String
+
   @@schema("khao-thi")
 }
 

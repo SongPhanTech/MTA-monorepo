@@ -5,6 +5,7 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { ExamTypeSchema } from '../enums/ExamType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -15,6 +16,11 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     examCode: z.string(),
+    subjectClass: z.string().nullish(),
+    explain: z.string().nullish(),
+    examDay: z.coerce.date().nullish(),
+    examType: ExamTypeSchema.nullish(),
+    isLock: z.boolean().default(false).nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -27,15 +33,22 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     examCode: z.string(),
+    subjectClass: z.string().nullish(),
+    explain: z.string().nullish(),
+    examDay: z.coerce.date().nullish(),
+    examType: ExamTypeSchema.nullish(),
+    isLock: z.boolean().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
     exam: z.record(z.string(), z.unknown()),
     questions: z.array(z.unknown()).optional(),
+    examMatrix: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     examId: z.string(),
+    examMatrixId: z.string().nullish(),
 }
 );
 
@@ -71,7 +84,12 @@ export const ExamBankPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    examCode: z.string()
+    examCode: z.string(),
+    subjectClass: z.string().nullish(),
+    explain: z.string().nullish(),
+    examDay: z.coerce.date().nullish(),
+    examType: ExamTypeSchema.nullish(),
+    isLock: z.boolean().nullish()
 }).partial().passthrough();
 
 
@@ -79,7 +97,7 @@ export const ExamBankPrismaUpdateSchema = z.object({
  * `ExamBank` schema for create operations excluding foreign keys and relations.
  */
 export const ExamBankCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isLock: true
 });
 
 

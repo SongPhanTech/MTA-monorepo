@@ -4277,7 +4277,7 @@ app.openapi(
                 },
             },
         },
-    }), 
+    }),
     async (c) => {
         const { preview, limit } = c.req.valid('json')
         if (preview) {
@@ -4295,17 +4295,21 @@ app.openapi(
                 { name: 'Công Nghệ Web', absentCount: 20, totalStudents: 70 },
                 { name: 'Phân Tích Thiết Kế', absentCount: 10, totalStudents: 60 },
             ]
-            const sortedSubjects = subjects.sort((a, b) => b.absentCount - a.absentCount).slice(0, limit)
-            const labels = sortedSubjects.map(s => s.name)
-            const countData = sortedSubjects.map(s => s.absentCount)
-            const percentData = sortedSubjects.map(s => Math.round((s.absentCount / s.totalStudents) * 100 * 100) / 100)
+            const sortedSubjects = subjects
+                .sort((a, b) => b.absentCount - a.absentCount)
+                .slice(0, limit)
+            const labels = sortedSubjects.map((s) => s.name)
+            const countData = sortedSubjects.map((s) => s.absentCount)
+            const percentData = sortedSubjects.map(
+                (s) => Math.round((s.absentCount / s.totalStudents) * 100 * 100) / 100
+            )
             const data = [
                 { name: 'Vắng thi (số lượng)', data: countData },
                 { name: 'Vắng thi (%)', data: percentData },
             ]
             const summary = { totalSubjects: sortedSubjects.length, limit }
             const count = sortedSubjects.reduce((sum, s) => sum + s.absentCount, 0)
-      
+
             return c.json({
                 summary,
                 count,
@@ -4363,32 +4367,36 @@ app.openapi(
     }),
     async (c) => {
         const { preview, limit = 10 } = c.req.valid('json')
-        if(preview){
-        const labels = ['Bộ môn CNTT', 'Bộ môn Tiếng Anh', 'Bộ môn Toán', 'Bộ môn Vật Lý', 'Bộ môn Hoá']
-        const rawData = [
-            { name: 'Số học phần chưa có đề', data: [25, 18, 12, 8, 5] },
-        ]
-        const data = rawData
-        const summary = { totalDepartments: labels.length, totalSubjectsWithoutBank: 68 }
-        const count = rawData.reduce(
-            (sum, item) => sum + item.data.reduce((a, b) => a + b, 0),
-            0
-        )
-        
-        return c.json({
-            summary,
-            count,
-            preview: true,
-            labels,
-            data,
-        })
+        if (preview) {
+            const labels = [
+                'Bộ môn CNTT',
+                'Bộ môn Tiếng Anh',
+                'Bộ môn Toán',
+                'Bộ môn Vật Lý',
+                'Bộ môn Hoá',
+            ]
+            const rawData = [{ name: 'Số học phần chưa có đề', data: [25, 18, 12, 8, 5] }]
+            const data = rawData
+            const summary = { totalDepartments: labels.length, totalSubjectsWithoutBank: 68 }
+            const count = rawData.reduce(
+                (sum, item) => sum + item.data.reduce((a, b) => a + b, 0),
+                0
+            )
+
+            return c.json({
+                summary,
+                count,
+                preview: true,
+                labels,
+                data,
+            })
         }
-         return c.json({
-            summary:{},
-            count:0,
+        return c.json({
+            summary: {},
+            count: 0,
             preview: false,
-            labels:[],
-            data:[]
+            labels: [],
+            data: [],
         })
     }
 )

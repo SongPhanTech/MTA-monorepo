@@ -326,8 +326,9 @@ export function useSuspenseCountExamBank<TArgs extends Prisma.ExamBankCountArgs,
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExamBank', `${endpoint}/examBank/count`, args, options, fetch);
 }
+import type { ExamType } from '../zenstack/models';
 
-export function useCheckExamBank<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; examId?: string; examCode?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExamBank<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; examId?: string; examCode?: string; subjectClass?: string; explain?: string; examType?: ExamType; examMatrixId?: string; isLock?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExamBank', `${endpoint}/examBank/check`, args, options, fetch);
 }
