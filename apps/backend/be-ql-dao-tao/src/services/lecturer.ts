@@ -1,24 +1,9 @@
-import { ExamType, SubjectClassSchedule } from '@workspace/db'
+import { type ExamType, SubjectClassSchedule } from '@workspace/db'
+import { examTypeOptions } from '@workspace/libs/constants'
 
 const getExamTypeVietNamese = (examType: ExamType) => {
-    switch (examType) {
-        // case ExamType.OfflineChoices:
-        // return 'Trắc nghiệp Trực tiếp'
-        // case ExamType.OnlineChoices:
-        // return 'Trắc nghiệp Trực tuyến'
-        case ExamType.OfflineWritten:
-            return 'Tự luận Trực tiếp'
-        // case ExamType.OnlineWritten:
-        //     return 'Tự luận Trực tuyến'
-        case ExamType.Oral:
-            return 'Vấn đáp'
-        case ExamType.Practice:
-            return 'Thực hành'
-        case ExamType.Project:
-            return 'BTL'
-        default:
-            return ''
-    }
+    const label = examTypeOptions.find((o) => o.value === examType)?.label
+    return label
 }
 
 const getScheduleVietNamese = (schedule: SubjectClassSchedule) => {
