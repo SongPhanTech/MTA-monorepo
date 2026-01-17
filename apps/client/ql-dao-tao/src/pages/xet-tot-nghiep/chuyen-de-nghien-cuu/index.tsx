@@ -14,7 +14,7 @@ import {
     useFindManySubjectClass,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { Button, Col, DatePicker, Form, message, Modal, Row } from 'antd'
+import { Button, Col, Form, message, Modal, Row } from 'antd'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import dayjs from 'dayjs'
 import { SquarePen } from 'lucide-react'
@@ -23,6 +23,7 @@ import { saveAs } from 'file-saver'
 import { useMemo, useState } from 'react'
 import {  useSemesterStore,
 useTrainingObjectTypeStore } from '@workspace/ui'
+import DatePicker from '@components/commons/date-picker';
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -63,6 +64,7 @@ export default function ChuyenDeNghienCuu() {
             subject: {
                 type: SubjectVersionType.Research,
             },
+            semesterId
         },
     })
     const where = useMemo(() => {
@@ -309,7 +311,7 @@ export default function ChuyenDeNghienCuu() {
             ])
             if (res.status !== 200) {
                 if (res.status === 409) {
-                    return message.error('Chuyên đề  đã có trong lớp môn học này.')
+                    return message.error('Chuyên đề đã có trong lớp môn học này.')
                 }
             }
 
@@ -618,7 +620,7 @@ export default function ChuyenDeNghienCuu() {
                         <Form
                             form={form}
                             layout="horizontal"
-                            className="w-full mb-6 flex flex-wrap items-end gap-4"
+                            className="w-full mb-2 flex flex-wrap items-end gap-4"
                         >
                             {/* <Form.Item
                                 name="trainingObjectTypeId"
@@ -695,12 +697,12 @@ export default function ChuyenDeNghienCuu() {
                         </Form>
                     </Col>
                 </Row>
-                <Row gutter={[16, 16]} align="top" justify="space-between">
+                <Row gutter={[8, 8]} align="top" justify="space-between">
                     <Col span={24}>
                         <Form
                             form={timeReportForm}
                             layout="horizontal"
-                            className="w-full mb-6 flex flex-wrap items-end gap-4"
+                            className="w-full mb-2 flex flex-wrap items-end gap-4"
                         >
                             <Form.Item name="subjectClassId" label="Lớp môn học" className="mb-0">
                                 <Select
@@ -751,11 +753,10 @@ export default function ChuyenDeNghienCuu() {
                             <Form.Item
                                 name="reportDate"
                                 label="Hạn nhập chuyên đề"
-                                className="mb-0 ml-10"
+                                className="mb-0 ml-2"
                             >
                                 <DatePicker
-                                    className="w-36"
-                                    format="DD/MM/YYYY"
+                                    className="w-44"
                                     placeholder="Chọn hạn nhập chuyên đề"
                                 />
                             </Form.Item>
@@ -787,14 +788,14 @@ export default function ChuyenDeNghienCuu() {
                                 )
                             },
                         },
-                        {
-                            title: 'ĐTĐT',
-                            width: 150,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.subjectClass?.trainingObjectType?.name || ''
-                            },
-                        },
+                        // {
+                        //     title: 'ĐTĐT',
+                        //     width: 150,
+                        //     align: 'left',
+                        //     render: (_, record) => {
+                        //         return record?.subjectClass?.trainingObjectType?.name || ''
+                        //     },
+                        // },
                         {
                             title: 'Khóa học',
                             width: 150,
@@ -803,14 +804,14 @@ export default function ChuyenDeNghienCuu() {
                                 return record?.student?.fixedClass?.trainingCourse?.name || ''
                             },
                         },
-                        {
-                            title: 'Học kỳ',
-                            width: 150,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.subjectClass?.semester?.name || ''
-                            },
-                        },
+                        // {
+                        //     title: 'Học kỳ',
+                        //     width: 150,
+                        //     align: 'left',
+                        //     render: (_, record) => {
+                        //         return record?.subjectClass?.semester?.name || ''
+                        //     },
+                        // },
                         {
                             title: 'Sinh viên',
                             width: 150,
