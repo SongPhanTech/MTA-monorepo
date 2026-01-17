@@ -1,30 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { Col, Form, Row, Table, Button, message, Switch } from "antd";
 import { useDisclosure } from "react-hook-disclosure-modal";
-import PutFormModal from "@/components/commoms/put-modal";
-import FormItem from "@/components/commoms/form-item";
-import Select from "@/components/commoms/select";
-import HtmlTruncate from "@/components/commoms/html-truncate";
-import { renderWithMath } from "@/components/commoms/rick-text-editor/renderWithMath";
-import {
-  useCountQuestion,
-  useCreateQuestion,
-  useFindManyExamFramework,
-  useFindManyExamMatrix,
-  useFindManyKnowledgeBlock,
-  useFindManyQuestion,
-  useFindManyQuestionBank,
-  useUpdateQuestion,
-} from "@/hooks/zenstack";
-import { QUESTION_TYPE_LABELS, LEVEL_COLUMNS } from "@/constants/exam-config";
-import { QuestionType } from "../../../../prisma/client";
-import { queryClient } from "@/libs/api";
+import { useCountQuestion, useCreateQuestion, useFindManyExamFramework, useFindManyExamMatrix, useFindManyKnowledgeBlock, useFindManyQuestion, useFindManyQuestionBank, useUpdateQuestion } from "@workspace/db/hooks";
+import { queryClient } from "@api/index";
+import PutFormModal from "@components/commons/put-modal";
+import FormItem from "@components/commons/form-item";
+import Select from "@components/commons/select";
+import HtmlTruncate from "@components/commons/html-truncate";
+import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath";
+import { QuestionType } from "@workspace/db/client";
+import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from "@constants/constants";
 
 const PickQuestionFromBankModal = () => {
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [selectedQuestions, setSelectedQuestions] = useState<any[]>([]);
-  const [questionBankId, setQuestionBankId] = useState<string | null>(null);
+  const [questionBankId, setQuestionBankId] = useState<string | undefined>(undefined);
   const [keepOld, setKeepOld] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -37,7 +28,7 @@ const PickQuestionFromBankModal = () => {
       form.resetFields();
       setSelectedRowKeys([]);
       setSelectedQuestions([]);
-      setQuestionBankId(null);
+      setQuestionBankId(undefined);
       setKeepOld(false);
     },
   });
@@ -114,7 +105,7 @@ const PickQuestionFromBankModal = () => {
       knowledgeBlockId: undefined,
     });
 
-    setQuestionBankId(null);
+    setQuestionBankId(undefined);
     setSelectedRowKeys([]);
     setSelectedQuestions([]);
   }, [examFrameworkId, form]);
@@ -125,7 +116,7 @@ const PickQuestionFromBankModal = () => {
     form.setFieldsValue({
       knowledgeBlockId: undefined,
     });
-    setQuestionBankId(null);
+    setQuestionBankId(undefined);
     setSelectedRowKeys([]);
     setSelectedQuestions([]);
   }, [examMatrixId, form]);

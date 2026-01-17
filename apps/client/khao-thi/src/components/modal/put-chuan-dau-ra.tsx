@@ -1,21 +1,24 @@
 import { useDisclosure } from "react-hook-disclosure-modal";
-import PutFormModal from "../put-modal";
 import { Col, Form, Input, Row, InputNumber, message } from "antd";
-import FormItem from "../form-item";
-import {
-  LEVEL_COLUMNS,
-  QUESTION_TYPE_OPTIONS,
-} from "../../../constants/exam-config";
-import type { KnowledgeBlockFormData } from "../../../types/knowledge-block-form";
-import Select from "../select";
-import {
-  useCreateKnowledgeBlock,
-  useUpdateKnowledgeBlock,
-  useFindUniqueKnowledgeBlock,
-  useFindManyKnowledgeBlock,
-} from "../../../hooks/zenstack";
 import { useEffect } from "react";
-import { queryClient } from "@/libs/api";
+import { useCreateKnowledgeBlock, useFindManyKnowledgeBlock, useFindUniqueKnowledgeBlock, useUpdateKnowledgeBlock } from "@workspace/db/hooks";
+import { LEVEL_COLUMNS, QUESTION_TYPE_OPTIONS } from "@constants/constants";
+import { queryClient } from "@api/index";
+import PutFormModal from "@components/commons/put-modal";
+import FormItem from "@components/commons/form-item";
+import Select from "@components/commons/select";
+import { ConfigExam} from "@workspace/db/client";
+
+
+export interface KnowledgeBlockFormData extends Record<string, unknown> {
+ name: string,
+ code: string,
+ description?: string
+ biet: ConfigExam
+ hieu: ConfigExam
+ vanDung: ConfigExam
+ VanDungCao: ConfigExam
+}
 
 const PutChuongMucModal = () => {
   const [form] = Form.useForm<KnowledgeBlockFormData>();
@@ -76,17 +79,19 @@ const PutChuongMucModal = () => {
   }, [knowledgeBlockData, input?.id, form]);
 
   const onOk = async (values: KnowledgeBlockFormData) => {
-    const configExams = LEVEL_COLUMNS.map((level) => {
-      const levelData = values[level.key];
-      if (!levelData?.quantity || levelData.quantity <= 0) return null;
+    const configExams = LEVEL_COLUMNS.reduce<any[]>((acc, level) => {
+  const levelData = values[level.key] as ConfigExam
+  if (!levelData?.quantity || levelData.quantity <= 0) return acc
 
-      return {
-        difficult: level.difficult,
-        type: levelData.type,
-        quantity: levelData.quantity || 0,
-        point: levelData.point || 0,
-      };
-    }).filter(Boolean);
+  acc.push({
+    difficult: level.difficult,
+    type: levelData.type,
+    quantity: levelData.quantity,
+    point: levelData.point ?? 0,
+  })
+
+  return acc
+}, [])
 
     try {
       if (!values) return;
@@ -107,17 +112,17 @@ const PutChuongMucModal = () => {
           },
         });
       } else {
-        await createKnowledgeBlock({
-          data: {
-            code: values.code,
-            name: values.name,
-            description: values.description,
-            examMatrixId: input.matrixId,
-            configExams: {
-              create: configExams,
-            },
-          },
-        });
+        // await createKnowledgeBlock({
+        //   data: {
+        //     code: values.code,
+        //     name: values.name,
+        //     description: values.description,
+        //     ...(input?.matrixId && { examMatrixId: input.matrixId }),
+        //     configExams: {
+        //       create: configExams,
+        //     },
+        //   },
+        // });
       }
 
       message.success(
@@ -261,7 +266,7 @@ const PutChuongMucModal = () => {
           <Col xs={24} sm={18}>
             <Row gutter={12}>
               {LEVEL_COLUMNS.map((col) => {
-                const quantity = watchedValues?.[col.key]?.quantity;
+                const quantity = (watchedValues?.[col.key] as ConfigExam)?.quantity;
                 const isDisabled = !quantity || quantity === 0;
 
                 return (
@@ -293,7 +298,7 @@ const PutChuongMucModal = () => {
           <Col xs={24} sm={18}>
             <Row gutter={12}>
               {LEVEL_COLUMNS.map((col) => {
-                const quantity = watchedValues?.[col.key]?.quantity;
+                const quantity = (watchedValues?.[col.key] as ConfigExam)?.quantity;
                 const isDisabled = !quantity || quantity === 0;
 
                 return (

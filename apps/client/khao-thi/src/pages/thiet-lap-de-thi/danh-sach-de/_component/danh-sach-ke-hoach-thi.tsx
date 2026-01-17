@@ -19,11 +19,11 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     const [numberOfPages, setNumberOfPages] = useState(10)
 
     const updateStateselectedExamId = (value: string, item: string) => {
-        store.setState((state:any) => {
+        store.setState((state: any) => {
             return {
                 ...state,
-                selectedExamId: value,
-                subjectVersionId: item,
+                selectedExamId: value as any,
+                subjectVersionId: item as any,
             }
         })
     }
@@ -79,7 +79,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     },
                 },
                 examBank: true,
-                subjectClass:true
+                subjectClass: true,
             },
             orderBy: {
                 subjectVersionId: 'asc',
@@ -332,15 +332,19 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             align: 'center',
                             width: 150,
                             render: (_, record) => {
-                              return record?.subjectClass.length>0 ? record?.subjectClass.map((i:SubjectClass)=>i.name).join(', ') :''
+                                return record?.subjectClass.length > 0
+                                    ? record?.subjectClass
+                                          .map((i: SubjectClass) => i.name)
+                                          .join(', ')
+                                    : ''
                             },
                         },
-                          {
+                        {
                             title: 'Đã tạo đề',
                             align: 'center',
                             width: 100,
                             render: (_, record) => {
-                                const lockExamSessions = record?.examBank?.length>0
+                                const lockExamSessions = record?.examBank?.length > 0
                                 return <Checkbox checked={lockExamSessions} />
                             },
                         },

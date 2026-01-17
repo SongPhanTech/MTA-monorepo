@@ -5,7 +5,11 @@ import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import { useStore } from '@tanstack/react-store'
 import { store } from '@pages/thiet-lap-de-thi/danh-sach-de'
-import { useFindManyExamFramework, useFindManyExamMatrix, useFindUniqueExam } from '@workspace/db/hooks'
+import {
+    useFindManyExamFramework,
+    useFindManyExamMatrix,
+    useFindUniqueExam,
+} from '@workspace/db/hooks'
 import PutFormModal from '@components/commons/put-modal'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
@@ -31,26 +35,30 @@ const SinhDeModal = () => {
     })
     const selectedExamId = useStore(store, (state) => state['selectedExamId'])
     const subjectVersionId = useStore(store, (state) => state['subjectVersionId'])
-      const {data: dataExam}=useFindUniqueExam(
+    const { data: dataExam } = useFindUniqueExam(
         {
-          where: { id: selectedExamId },
-           include:{
-        subjectClass:true
-      }
-        },{
-          enabled: !!selectedExamId
+            where: { id: selectedExamId },
+            include: {
+                subjectClass: true,
+            },
+        },
+        {
+            enabled: !!selectedExamId,
         }
-      )
-    
+    )
 
-  const dataOption = useMemo(() => {
-    return !!dataExam?.subjectClass ? dataExam?.subjectClass.map((item) => {
-      return {
-        value: item?.id,
-        label: `${item?.code}-${item?.name}`,
-      };
-    }):[];
-  }, [dataExam]);
+    console.log('dataExam: ', dataExam)
+
+    const dataOption = useMemo(() => {
+        return !!dataExam?.subjectClass
+            ? dataExam?.subjectClass.map((item) => {
+                  return {
+                      value: item?.id,
+                      label: `${item?.code}-${item?.name}`,
+                  }
+              })
+            : []
+    }, [dataExam])
 
     const { data: examFrameworkData = [] } = useFindManyExamFramework(
         {
@@ -91,21 +99,21 @@ const SinhDeModal = () => {
             //         configExams: true,
             //     },
             // })
-            const matrixData= await fetch('http://localhost:3030/sinh-de', {
+            const matrixData = await fetch('http://localhost:3030/sinh-de', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({...values,examId:selectedExamId}),
+                body: JSON.stringify({ ...values, examId: selectedExamId }),
             })
-            const res=await matrixData.json();
-            if(res?.status==='200'){
+            const res = await matrixData.json()
+            if (res?.status === '200') {
                 message.success('Tạo đề thành cong!')
                 onClose()
-            }else {
+            } else {
                 message.error(res?.message)
             }
-           
+
             // onClose()
         } catch (error) {
             console.log(error)
@@ -143,23 +151,23 @@ const SinhDeModal = () => {
                             />
                         </FormItem>
                     </Col>
-                         <Col span={24}>
-                            <FormItem form={form} name="examType" label="Hình thức thi" required>
-                                <Select
-                                    options={[
-                                        {
-                                            label: 'Thi viết',
-                                            value: 'OfflineWritten',
-                                        },
-                                        {
-                                            label: 'Thi vấn đáp',
-                                            value: 'Oral',
-                                        },
-                                    ]}
-                                    placeholder="Chọn hình thức thi"
-                                />
-                            </FormItem>
-                        </Col>
+                    <Col span={24}>
+                        <FormItem form={form} name="examType" label="Hình thức thi" required>
+                            <Select
+                                options={[
+                                    {
+                                        label: 'Thi viết',
+                                        value: 'OfflineWritten',
+                                    },
+                                    {
+                                        label: 'Thi vấn đáp',
+                                        value: 'Oral',
+                                    },
+                                ]}
+                                placeholder="Chọn hình thức thi"
+                            />
+                        </FormItem>
+                    </Col>
                     <Col span={24}>
                         <FormItem form={form} name="examFrameworkId" label="Khung đề" required>
                             <Select
@@ -176,7 +184,7 @@ const SinhDeModal = () => {
                     <Col span={24}>
                         <FormItem form={form} name="examMatrixId" label="Ma trận đề" required>
                             <Select
-                                options={ExamMatrixData.map((i:{name:string,id:string}) => {
+                                options={ExamMatrixData.map((i: { name: string; id: string }) => {
                                     return {
                                         label: i.name,
                                         value: i.id,
@@ -194,38 +202,31 @@ const SinhDeModal = () => {
                             </Radio.Group>
                         </FormItem>
                     </Col> */}
-                     <Col span={24}>
-                            <FormItem form={form} name="examDay" label="Ngày thi" required>
-                                <DatePicker
-                                    format={{
-                                        format: 'DD/MM/YYYY',
-                                        type: 'mask',
-                                    }}
-                                    className="w-full"
-                                    placeholder="Chọn ngày thi"
-                                    disabledDate={(current) => {
-                                        return current && current < dayjs().subtract(1, 'd')
-                                    }}
-                                />
-                            </FormItem>
-                        </Col>
-                                <Col span={24}>
-                                <FormItem
-                                    form={form}
-                                    name="subjectClass"
-                                    label="Dùng cho lớp"
-                                >
-                                    <Select
-                                    options={dataOption}
-                                    placeholder="Chọn lớp môn học"
-                                    />
-                                </FormItem>
-                                </Col>
-                        <Col span={24}>
-                            <FormItem form={form} name="explain" label="Chú thích">
-                                <Input.TextArea placeholder="Nhập chú thích" />
-                            </FormItem>
-                        </Col>
+                    <Col span={24}>
+                        <FormItem form={form} name="examDay" label="Ngày thi" required>
+                            <DatePicker
+                                format={{
+                                    format: 'DD/MM/YYYY',
+                                    type: 'mask',
+                                }}
+                                className="w-full"
+                                placeholder="Chọn ngày thi"
+                                disabledDate={(current) => {
+                                    return current && current < dayjs().subtract(1, 'd')
+                                }}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={24}>
+                        <FormItem form={form} name="subjectClass" label="Dùng cho lớp">
+                            <Select options={dataOption} placeholder="Chọn lớp môn học" />
+                        </FormItem>
+                    </Col>
+                    <Col span={24}>
+                        <FormItem form={form} name="explain" label="Chú thích">
+                            <Input.TextArea placeholder="Nhập chú thích" />
+                        </FormItem>
+                    </Col>
                 </Row>
             </Col>
         </PutFormModal>

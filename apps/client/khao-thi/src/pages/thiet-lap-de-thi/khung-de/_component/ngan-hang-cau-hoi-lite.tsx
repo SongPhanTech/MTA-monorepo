@@ -1,198 +1,192 @@
-import { Button, Row, Col, message, Tooltip } from "antd";
-import { useMemo, useState } from "react";
-import {
-  useCountQuestion,
-  useFindManyExamMatrix,
-  useFindManyKnowledgeBlock,
-  useFindManyQuestion,
-  useFindUniqueQuestionBank,
-  useUpdateQuestion,
-} from "@/hooks/zenstack";
-import Table from "@/components/commoms/table";
-import { BookPlus } from "lucide-react";
-import { useDisclosure } from "react-hook-disclosure-modal";
+import { Button, Row, Col, message, Tooltip } from 'antd'
+import { useMemo, useState } from 'react'
+
+import { BookPlus } from 'lucide-react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 // import DeleteIcon from "@/components/commoms/icons/delete";
 // import EditIcon from "@/components/commoms/icons/edit";
 // import HtmlTruncate from "@/components/commoms/html-truncate";
 // import { renderWithMath } from "@/components/commoms/rick-text-editor/renderWithMath";
-import {
-  LEVEL_COLORS,
-  // LEVEL_COLUMNS,
-  // QUESTION_TYPE_LABELS,
-} from "@/constants/exam-config";
+
 // import type { MultipleChoiceOption } from "../../prisma/client";
 // import { QuestionType } from "../../prisma/client";
-import { EyeOutlined } from "@ant-design/icons";
+import { EyeOutlined } from '@ant-design/icons'
+import {
+    useCountQuestion,
+    useFindManyExamMatrix,
+    useFindManyKnowledgeBlock,
+    useFindManyQuestion,
+    useFindUniqueQuestionBank,
+} from '@workspace/db/hooks'
+import { LEVEL_COLORS } from '@constants/constants'
+import Table from '@components/commons/table'
 
 interface QuestionBankLiteProps {
-  examFrameworkId: string | null;
-  questionBankId: string;
+    examFrameworkId: string | null
+    questionBankId: string
 }
 
 export default function QuestionBankLite({
-  examFrameworkId,
-  questionBankId,
+    examFrameworkId,
+    questionBankId,
 }: QuestionBankLiteProps) {
-  // const [showAllQuestions, setShowAllQuestions] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
-  // const [activeKnowledgeBlockId, setActiveKnowledgeBlockId] = useState<
-  //   string | null
-  // >(null);
+    // const [showAllQuestions, setShowAllQuestions] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
+    // const [activeKnowledgeBlockId, setActiveKnowledgeBlockId] = useState<
+    //   string | null
+    // >(null);
 
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys as string[]);
-  };
-
-  const { onOpen: onOpenPutQuestion } = useDisclosure<{
-    id: string;
-    questionBankId: string;
-    subjectVersionId: string;
-  }>({
-    tag: "PutQuestionModal",
-  });
-  const { onOpen: onOpenQuestionListModal } = useDisclosure<{
-    knowledgeBlockId: string;
-    questionBankId: string;
-    subjectVersionId: string;
-    matrixName: string;
-  }>({
-    tag: "QuestionListByKnowledgeBlockModal",
-  });
-
-  const { onOpen: onOpenPickQuestionFromBank } = useDisclosure<{
-    examFrameworkId: string;
-  }>({
-    tag: "PickQuestionFromBankModal",
-  });
-
-  const { mutateAsync: updateQuestion } = useUpdateQuestion();
-
-  async function handleDeleteQuestion(id: string) {
-    try {
-      await updateQuestion({
-        where: { id },
-        data: { deletedAt: new Date() },
-      });
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message);
-        return;
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại");
+    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+        setSelectedRowKeys(newSelectedRowKeys as string[])
     }
-  }
 
-  const { data: examMatrixs = [] } = useFindManyExamMatrix(
-    {
-      where: {
-        examFrameworkId,
-        deletedAt: null,
-      },
-    },
-    { enabled: !!examFrameworkId }
-  );
+    const { onOpen: onOpenPutQuestion } = useDisclosure<{
+        id: string
+        questionBankId: string
+        subjectVersionId: string
+    }>({
+        tag: 'PutQuestionModal',
+    })
+    const { onOpen: onOpenQuestionListModal } = useDisclosure<{
+        knowledgeBlockId: string
+        questionBankId: string
+        subjectVersionId: string
+        matrixName: string
+    }>({
+        tag: 'QuestionListByKnowledgeBlockModal',
+    })
 
-  const matrixIds = useMemo(() => examMatrixs.map((m) => m.id), [examMatrixs]);
+    const { onOpen: onOpenPickQuestionFromBank } = useDisclosure<{
+        examFrameworkId: string
+    }>({
+        tag: 'PickQuestionFromBankModal',
+    })
 
-  const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
-    {
-      where: { examMatrixId: { in: matrixIds }, deletedAt: null },
-    },
-    { enabled: matrixIds.length > 0 }
-  );
+    const { mutateAsync: updateQuestion } = useUpdateQuestion()
 
-  const knowledgeBlockIds = useMemo(
-    () => knowledgeBlocks.map((k) => k.id),
-    [knowledgeBlocks]
-  );
+    async function handleDeleteQuestion(id: string) {
+        try {
+            await updateQuestion({
+                where: { id },
+                data: { deletedAt: new Date() },
+            })
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+    }
 
-  const { data: questions = [] } = useFindManyQuestion(
-    {
-      where: {
-        knowledgeBlockId: { in: knowledgeBlockIds },
-        deletedAt: null,
-      },
-      include: {
-        knowledgeBlock: true,
-        multipleChoiceOptions: true,
-      },
-      take: pageSize,
-      skip: (currentPage - 1) * pageSize,
-      orderBy: { createdAt: "desc" },
-    },
-    { enabled: knowledgeBlockIds.length > 0 }
-  );
+    const { data: examMatrixs = [] } = useFindManyExamMatrix(
+        {
+            where: {
+                examFrameworkId,
+                deletedAt: null,
+            },
+        },
+        { enabled: !!examFrameworkId }
+    )
 
-  const { data: initialValue } = useFindUniqueQuestionBank(
-    {
-      where: { id: questionBankId },
-      include: {
-        subjectVersion: true,
-      },
-    },
-    { enabled: !!questionBankId }
-  );
+    const matrixIds = useMemo(() => examMatrixs.map((m) => m.id), [examMatrixs])
 
-  const matrixMap = useMemo(() => {
-    const map = new Map<string, string>();
-    examMatrixs.forEach((m) => {
-      map.set(m.id, m.name);
-    });
-    return map;
-  }, [examMatrixs]);
+    const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
+        {
+            where: { examMatrixId: { in: matrixIds }, deletedAt: null },
+        },
+        { enabled: matrixIds.length > 0 }
+    )
 
-  const data = useMemo(() => {
-    return knowledgeBlocks.map((kb) => {
-      const qs = questions.filter((q) => q.knowledgeBlockId === kb.id);
+    const knowledgeBlockIds = useMemo(() => knowledgeBlocks.map((k) => k.id), [knowledgeBlocks])
 
-      const stats: Record<string, number> = {};
-      LEVEL_COLORS.forEach((l) => {
-        stats[l.key] = qs.filter((q) => q.difficult === l.key).length;
-      });
+    const { data: questions = [] } = useFindManyQuestion(
+        {
+            where: {
+                knowledgeBlockId: { in: knowledgeBlockIds },
+                deletedAt: null,
+            },
+            include: {
+                knowledgeBlock: true,
+                multipleChoiceOptions: true,
+            },
+            take: pageSize,
+            skip: (currentPage - 1) * pageSize,
+            orderBy: { createdAt: 'desc' },
+        },
+        { enabled: knowledgeBlockIds.length > 0 }
+    )
 
-      return {
-        key: kb.id,
-        // name: kb.name,
-        examMatrixName: matrixMap.get(kb.examMatrixId) || "",
-        knowledgeBlockName: kb.name,
-        knowledgeBlockId: kb.id,
-        ...stats,
-      };
-    });
-  }, [knowledgeBlocks, questions, matrixMap]);
+    const { data: initialValue } = useFindUniqueQuestionBank(
+        {
+            where: { id: questionBankId },
+            include: {
+                subjectVersion: true,
+            },
+        },
+        { enabled: !!questionBankId }
+    )
 
-  // const filteredQuestions = useMemo(() => {
-  //   // if (!showAllQuestions) return [];
+    const matrixMap = useMemo(() => {
+        const map = new Map<string, string>()
+        examMatrixs.forEach((m) => {
+            map.set(m.id, m.name)
+        })
+        return map
+    }, [examMatrixs])
 
-  //   if (!activeKnowledgeBlockId) return questions;
+    const data = useMemo(() => {
+        return knowledgeBlocks.map((kb) => {
+            const qs = questions.filter((q) => q.knowledgeBlockId === kb.id)
 
-  //   return questions.filter(
-  //     (q) => q.knowledgeBlockId === activeKnowledgeBlockId
-  //   );
-  // }, [questions, activeKnowledgeBlockId]);
+            const stats: Record<string, number> = {}
+            LEVEL_COLORS.forEach((l) => {
+                stats[l.key] = qs.filter((q) => q.difficult === l.key).length
+            })
 
-  const { data: totalQuestions = 0 } = useCountQuestion(
-    {
-      where: {
-        knowledgeBlockId: { in: knowledgeBlockIds },
-        deletedAt: null,
-      },
-    },
-    { enabled: knowledgeBlockIds.length > 0 }
-  );
+            return {
+                key: kb.id,
+                // name: kb.name,
+                examMatrixName: matrixMap.get(kb.examMatrixId) || '',
+                knowledgeBlockName: kb.name,
+                knowledgeBlockId: kb.id,
+                ...stats,
+            }
+        })
+    }, [knowledgeBlocks, questions, matrixMap])
 
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  // }, [activeKnowledgeBlockId, examFrameworkId]);
+    // const filteredQuestions = useMemo(() => {
+    //   // if (!showAllQuestions) return [];
 
-  return (
-    <div>
-      <Row gutter={[16, 0]}>
-        <Col span={24} className="mt-4">
-          <Row justify="end" gutter={8} className="gap-2">
-            {/* <Button
+    //   if (!activeKnowledgeBlockId) return questions;
+
+    //   return questions.filter(
+    //     (q) => q.knowledgeBlockId === activeKnowledgeBlockId
+    //   );
+    // }, [questions, activeKnowledgeBlockId]);
+
+    const { data: totalQuestions = 0 } = useCountQuestion(
+        {
+            where: {
+                knowledgeBlockId: { in: knowledgeBlockIds },
+                deletedAt: null,
+            },
+        },
+        { enabled: knowledgeBlockIds.length > 0 }
+    )
+
+    // useEffect(() => {
+    //   setCurrentPage(1);
+    // }, [activeKnowledgeBlockId, examFrameworkId]);
+
+    return (
+        <div>
+            <Row gutter={[16, 0]}>
+                <Col span={24} className="mt-4">
+                    <Row justify="end" gutter={8} className="gap-2">
+                        {/* <Button
               size="middle"
               onClick={() => setActiveKnowledgeBlockId(null)}
             >
@@ -200,19 +194,19 @@ export default function QuestionBankLite({
               Xem tất cả câu hỏi
             </Button> */}
 
-            <Button
-              type="primary"
-              size="middle"
-              onClick={() => {
-                onOpenPickQuestionFromBank({
-                  examFrameworkId: examFrameworkId,
-                });
-              }}
-            >
-              <BookPlus size={15} />
-              Thêm câu hỏi từ ngân hàng
-            </Button>
-            {/* <Button
+                        <Button
+                            type="primary"
+                            size="middle"
+                            onClick={() => {
+                                onOpenPickQuestionFromBank({
+                                    examFrameworkId: examFrameworkId,
+                                })
+                            }}
+                        >
+                            <BookPlus size={15} />
+                            Thêm câu hỏi từ ngân hàng
+                        </Button>
+                        {/* <Button
               type="primary"
               size="middle"
               onClick={() =>
@@ -226,77 +220,77 @@ export default function QuestionBankLite({
               <BookPlus size={15} />
               Thêm câu hỏi mới
             </Button> */}
-          </Row>
-        </Col>
+                    </Row>
+                </Col>
 
-        <Col span={24}>
-          <Table
-            rowKey="id"
-            className="mt-2"
-            scroll={{ y: "calc(100vh - 260px)" }}
-            bordered
-            data={data}
-            pagination={false}
-            // pagination={{
-            //   current: currentPage,
-            //   pageSize,
-            //   total: totalQuestions,
-            //   onChange: (page, size) => {
-            //     if (size === pageSize) {
-            //       setCurrentPage(page);
-            //     } else {
-            //       setCurrentPage(1);
-            //       setPageSize(size);
-            //     }
-            //   },
-            //   showSizeChanger: true,
-            //   showTotal: (total, range) =>
-            //     `${range[0]} - ${range[1]} trong tổng số ${total} câu hỏi`,
-            // }}
-            columns={[
-              {
-                title: "Ma trận",
-                dataIndex: "examMatrixName",
-                width: 180,
-              },
-              {
-                title: "Chuẩn đầu ra",
-                dataIndex: "knowledgeBlockName",
-                width: 220,
-              },
-              ...LEVEL_COLORS.map((l) => ({
-                title: l.label,
-                dataIndex: l.key,
-                align: "center" as const,
-                render: (v: number) => (
-                  <span style={{ fontWeight: 500, color: "#1677ff" }}>{v}</span>
-                ),
-              })),
-              {
-                title: "Thao tác",
-                width: 100,
-                align: "center" as const,
-                render: (_: unknown, record: any) => (
-                  <Tooltip title="Xem câu hỏi">
-                    <EyeOutlined
-                      className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      onClick={() =>
-                        onOpenQuestionListModal({
-                          knowledgeBlockId: record.knowledgeBlockId,
-                          questionBankId,
-                          subjectVersionId:
-                            initialValue?.subjectVersionId || "",
-                          matrixName: record.examMatrixName,
-                        })
-                      }
+                <Col span={24}>
+                    <Table
+                        rowKey="id"
+                        className="mt-2"
+                        scroll={{ y: 'calc(100vh - 260px)' }}
+                        bordered
+                        data={data}
+                        pagination={false}
+                        // pagination={{
+                        //   current: currentPage,
+                        //   pageSize,
+                        //   total: totalQuestions,
+                        //   onChange: (page, size) => {
+                        //     if (size === pageSize) {
+                        //       setCurrentPage(page);
+                        //     } else {
+                        //       setCurrentPage(1);
+                        //       setPageSize(size);
+                        //     }
+                        //   },
+                        //   showSizeChanger: true,
+                        //   showTotal: (total, range) =>
+                        //     `${range[0]} - ${range[1]} trong tổng số ${total} câu hỏi`,
+                        // }}
+                        columns={[
+                            {
+                                title: 'Ma trận',
+                                dataIndex: 'examMatrixName',
+                                width: 180,
+                            },
+                            {
+                                title: 'Chuẩn đầu ra',
+                                dataIndex: 'knowledgeBlockName',
+                                width: 220,
+                            },
+                            ...LEVEL_COLORS.map((l) => ({
+                                title: l.label,
+                                dataIndex: l.key,
+                                align: 'center' as const,
+                                render: (v: number) => (
+                                    <span style={{ fontWeight: 500, color: '#1677ff' }}>{v}</span>
+                                ),
+                            })),
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center' as const,
+                                render: (_: unknown, record: any) => (
+                                    <Tooltip title="Xem câu hỏi">
+                                        <EyeOutlined
+                                            className="cursor-pointer text-blue-600 hover:text-blue-800"
+                                            onClick={() =>
+                                                onOpenQuestionListModal({
+                                                    knowledgeBlockId: record.knowledgeBlockId,
+                                                    questionBankId,
+                                                    subjectVersionId:
+                                                        initialValue?.subjectVersionId || '',
+                                                    matrixName: record.examMatrixName,
+                                                })
+                                            }
+                                        />
+                                    </Tooltip>
+                                ),
+                            },
+                        ]}
                     />
-                  </Tooltip>
-                ),
-              },
-            ]}
-          />
-        </Col>
-{/* 
+                </Col>
+                {/* 
         <Col span={24} className="mt-4">
           <Table
             rowKey="id"
@@ -454,7 +448,7 @@ export default function QuestionBankLite({
             ]}
           />
         </Col> */}
-      </Row>
-    </div>
-  );
+            </Row>
+        </div>
+    )
 }
