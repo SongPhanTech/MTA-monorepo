@@ -38,21 +38,17 @@ export default function StaffManagement() {
         idCardNumber: undefined,
     })
 
-    const { data, refetch } = useFindManyStaff({
+    const { data } = useFindManyStaff({
         where: {
             userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
+                ...(filters.name
+                    ? {
+                          fullname: {
+                              contains: filters.name,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
                 ...(filters.idCardNumber
                     ? {
                           idCardNumber: {
@@ -152,18 +148,9 @@ export default function StaffManagement() {
     const { data: count } = useCountStaff({
         where: {
             userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
+                ...(filters.name
+                    ? { fullname: { contains: filters.name, mode: 'insensitive' } }
+                    : {}),
                 ...(filters.idCardNumber
                     ? {
                           idCardNumber: {
@@ -172,13 +159,7 @@ export default function StaffManagement() {
                           },
                       }
                     : {}),
-                ...(filters.gender
-                    ? {
-                          genderId: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
+                ...(filters.gender ? { genderId: { in: filters.gender } } : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {

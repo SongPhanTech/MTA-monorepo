@@ -1,15 +1,15 @@
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import {
-    useFindManyStudentSubjectScore,
-    useFindManyCertificate,
     useCreateManyStudentSubjectScore,
-    useFindManySubjectClass,
+    useFindManyCertificate,
     useFindManyStudent,
+    useFindManyStudentSubjectScore,
+    useFindManySubjectClass,
 } from '@workspace/db/hooks'
-import { Modal, message, Row, Col, Typography } from 'antd'
+import { Col, Modal, message, Row, Typography } from 'antd'
 import type React from 'react'
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title } = Typography
@@ -105,7 +105,7 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
             const convertedCount = existingScores.filter(
                 (score: any) => score.subjectClassId === sc.id
             ).length
-            
+
             const totalStudents = input?.studentIds?.length || 0
             const isConverted = convertedCount === totalStudents && totalStudents > 0
 
@@ -215,7 +215,6 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
         }),
     }
 
-
     return (
         <Modal
             title="Chuyển đổi chứng chỉ thành điểm môn học"
@@ -225,7 +224,7 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
             width={1400}
             okText="Xác nhận chuyển đổi"
             cancelText="Hủy"
-            destroyOnClose
+            destroyOnHidden
         >
             <div className="mb-4">
                 <Title level={5}>Danh sách học viên được chọn ({students.length})</Title>

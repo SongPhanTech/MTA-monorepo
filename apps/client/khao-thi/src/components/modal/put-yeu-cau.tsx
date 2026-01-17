@@ -129,8 +129,21 @@ const PutRequirementCriterionCatalog = () => {
             </Col>
             <Col span={24}>
                 <Form.Item label="Câu hỏi" required>
-                    <Form.List name="questions">
-                        {(fields, { add, remove }) => (
+                    <Form.List
+                        name="questions"
+                        rules={[
+                            {
+                                validator: async (_, questions) => {
+                                    if (!questions || questions.length === 0) {
+                                        return Promise.reject(
+                                            new Error('Vui lòng thêm ít nhất 1 câu hỏi')
+                                        )
+                                    }
+                                },
+                            },
+                        ]}
+                    >
+                        {(fields, { add, remove }, { errors }) => (
                             <>
                                 {fields.map(({ key, name, ...restField }, index) => (
                                     <div key={key} className="flex items-center gap-2 mb-2">
@@ -151,11 +164,15 @@ const PutRequirementCriterionCatalog = () => {
                                             />
                                         </Form.Item>
                                         <DeleteOutlined
-                                            onClick={() => remove(name)}
+                                            onClick={() => {
+                                                remove(name)
+                                                form.validateFields(['questions'])
+                                            }}
                                             className="text-red-500 cursor-pointer"
                                         />
                                     </div>
                                 ))}
+
                                 <Form.Item>
                                     <Button
                                         type="dashed"
@@ -172,6 +189,7 @@ const PutRequirementCriterionCatalog = () => {
                                     >
                                         Thêm câu hỏi
                                     </Button>
+                                    <Form.ErrorList errors={errors} />
                                 </Form.Item>
                             </>
                         )}

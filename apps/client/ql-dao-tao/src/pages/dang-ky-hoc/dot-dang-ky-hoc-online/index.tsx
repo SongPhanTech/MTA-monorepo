@@ -11,7 +11,7 @@ import {
     useCountClassRegisterSession,
     useFindManyClassRegisterSession,
     useFindManyTrainingCourse,
-    useUpdateClassRegisterSession
+    useUpdateClassRegisterSession,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
@@ -218,14 +218,14 @@ export default function ClassRegisterSession() {
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * numberOfPages,
                             },
-                            {
-                                title: 'Mã đợt đăng ký',
-                                align: 'center',
-                                dataIndex: 'code',
-                                type: 'input',
-                                width: 100,
-                                fixed: 'left',
-                            },
+                            // {
+                            //     title: 'Mã đợt đăng ký',
+                            //     align: 'center',
+                            //     dataIndex: 'code',
+                            //     type: 'input',
+                            //     width: 100,
+                            //     fixed: 'left',
+                            // },
                             {
                                 title: 'Tên đợt đăng ký',
                                 align: 'center',
@@ -238,10 +238,7 @@ export default function ClassRegisterSession() {
                                 title: 'Học kỳ',
                                 align: 'center',
                                 width: 150,
-                                render: (_, record) =>
-                                    [record?.semester?.name, record?.semester?.schoolYear?.name]
-                                        .filter(Boolean)
-                                        .join(' - '),
+                                render: (_, record) => record?.semester?.name,
                             },
                             {
                                 title: 'Khoá học',

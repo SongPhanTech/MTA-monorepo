@@ -30,12 +30,15 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    subjectVersion: z.record(z.string(), z.unknown()),
+    examMatrix: z.record(z.string(), z.unknown()),
     questions: z.array(z.unknown()).optional(),
-    structureRules: z.array(z.unknown()).optional(),
+    documentFiles: z.array(z.unknown()).optional(),
+    configExams: z.array(z.unknown()).optional(),
+    subjectVersion: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
+    examMatrixId: z.string(),
     subjectVersionId: z.string(),
 }
 );

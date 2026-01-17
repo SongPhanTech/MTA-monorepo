@@ -50,7 +50,7 @@ import {
     Row,
     Switch,
     Tooltip,
-    TreeSelect
+    TreeSelect,
 } from 'antd'
 import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
@@ -169,44 +169,28 @@ export default function PhanCongGiangDay({
                 ...(filters.mainLecturer
                     ? {
                           mainLecturer: {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.mainLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.mainLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                  ],
-                              },
+                              userProfile: filters.mainLecturer
+                                  ? {
+                                        fullname: {
+                                            contains: filters.mainLecturer,
+                                            mode: 'insensitive' as const,
+                                        },
+                                    }
+                                  : {},
                           },
                       }
                     : {}),
                 ...(filters.extraLecturer
                     ? {
                           extraLecturer: {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.extraLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.extraLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                  ],
-                              },
+                              userProfile: filters.extraLecturer
+                                  ? {
+                                        fullname: {
+                                            contains: filters.extraLecturer,
+                                            mode: 'insensitive' as const,
+                                        },
+                                    }
+                                  : {},
                           },
                       }
                     : {}),
@@ -782,14 +766,14 @@ export default function PhanCongGiangDay({
                                 )}
                                 <Flex gap={2} className="px-1">
                                     <Button
-                                        type={
-                                            filterStatus === 'YEU_CAU_PCGD' ? 'primary' : 'link'
-                                        }
+                                        type={filterStatus === 'YEU_CAU_PCGD' ? 'primary' : 'link'}
                                         className="flex gap-1 items-center cursor-pointer px-1"
                                         onClick={() => {
-                                            filterStatus === 'YEU_CAU_PCGD'
-                                                ? setFilterStatus(undefined)
-                                                : setFilterStatus('YEU_CAU_PCGD')
+                                            if (filterStatus === 'YEU_CAU_PCGD') {
+                                                setFilterStatus(undefined)
+                                            } else {
+                                                setFilterStatus('YEU_CAU_PCGD')
+                                            }
                                         }}
                                     >
                                         <p className="bg-slate-200 h-4 w-4 rounded" />
@@ -799,9 +783,11 @@ export default function PhanCongGiangDay({
                                         type={filterStatus === 'LMH_DA_HUY' ? 'primary' : 'link'}
                                         className="flex gap-1 items-center cursor-pointer"
                                         onClick={() => {
-                                            filterStatus === 'LMH_DA_HUY'
-                                                ? setFilterStatus(undefined)
-                                                : setFilterStatus('LMH_DA_HUY')
+                                            if (filterStatus === 'LMH_DA_HUY') {
+                                                setFilterStatus(undefined)
+                                            } else {
+                                                setFilterStatus('LMH_DA_HUY')
+                                            }
                                         }}
                                     >
                                         <p className="bg-red-200 h-4 w-4 rounded" />
@@ -813,18 +799,18 @@ export default function PhanCongGiangDay({
                                         }
                                         className="flex gap-1 items-center cursor-pointer"
                                         onClick={() => {
-                                            filterStatus === 'CHO_DUYET_PCGD'
-                                                ? setFilterStatus(undefined)
-                                                : setFilterStatus('CHO_DUYET_PCGD')
+                                            if (filterStatus === 'CHO_DUYET_PCGD') {
+                                                setFilterStatus(undefined)
+                                            } else {
+                                                setFilterStatus('CHO_DUYET_PCGD')
+                                            }
                                         }}
                                     >
                                         <p className="bg-yellow-200 h-4 w-4 rounded" />
                                         <span>Chờ duyệt PCGD</span>
                                     </Button>
                                     <Button
-                                        type={
-                                            filterStatus === 'DA_DUYET_PCGD' ? 'primary' : 'link'
-                                        }
+                                        type={filterStatus === 'DA_DUYET_PCGD' ? 'primary' : 'link'}
                                         className="flex gap-1 items-center"
                                         onClick={() => {
                                             filterStatus === 'DA_DUYET_PCGD'

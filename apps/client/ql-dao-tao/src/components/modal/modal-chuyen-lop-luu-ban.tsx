@@ -71,7 +71,7 @@ const ModalChuyenLopLuuBan = () => {
         where: {
             active: true,
             deletedAt: null,
-            trainingObjectTypeId
+            trainingObjectTypeId,
         },
     })
 

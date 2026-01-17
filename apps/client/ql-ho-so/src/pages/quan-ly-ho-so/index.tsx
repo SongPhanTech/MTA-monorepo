@@ -74,26 +74,10 @@ export default function UserProfilePageDs() {
                 : {}),
             ...(filters.name
                 ? {
-                      OR: [
-                          {
-                              firstName: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              lastName: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              fullname: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
+                      fullname: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
                   }
                 : {}),
             ...(filters.dateOfBirth?.length === 2

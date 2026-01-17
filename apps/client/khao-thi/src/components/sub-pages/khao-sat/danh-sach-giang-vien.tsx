@@ -55,22 +55,14 @@ export default function DetailSurveyPage({
                               },
                           },
                           {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.name,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.name,
-                                              mode: 'insensitive' as const,
-                                          },
-                                      },
-                                  ],
-                              },
+                              userProfile: filters.name
+                                  ? {
+                                        fullname: {
+                                            contains: filters.name,
+                                            mode: 'insensitive' as const,
+                                        },
+                                    }
+                                  : {},
                           },
                       ],
                   }

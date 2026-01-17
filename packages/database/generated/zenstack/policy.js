@@ -2436,32 +2436,6 @@ const policy = {
                 update: {},
             },
         },
-        difficulty: {
-            modelLevel: {
-                read: { guard: Difficulty_read, },
-                create: { guard: Difficulty_create, inputChecker: Difficulty_create_input, },
-                update: { guard: Difficulty_update, },
-                postUpdate: { guard: Difficulty_postUpdate, },
-                delete: { guard: Difficulty_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        knowledgeBlock: {
-            modelLevel: {
-                read: { guard: KnowledgeBlock_read, },
-                create: { guard: KnowledgeBlock_create, inputChecker: KnowledgeBlock_create_input, },
-                update: { guard: KnowledgeBlock_update, },
-                postUpdate: { guard: KnowledgeBlock_postUpdate, },
-                delete: { guard: KnowledgeBlock_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
         question: {
             modelLevel: {
                 read: { guard: Question_read, },
@@ -2553,19 +2527,6 @@ const policy = {
                 update: {},
             },
         },
-        testStructureRule: {
-            modelLevel: {
-                read: { guard: TestStructureRule_read, },
-                create: { guard: TestStructureRule_create, inputChecker: TestStructureRule_create_input, },
-                update: { guard: TestStructureRule_update, },
-                postUpdate: { guard: TestStructureRule_postUpdate, },
-                delete: { guard: TestStructureRule_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
         examBank: {
             modelLevel: {
                 read: { guard: ExamBank_read, },
@@ -2599,6 +2560,58 @@ const policy = {
                 update: { guard: ExamPaper_update, },
                 postUpdate: { guard: ExamPaper_postUpdate, },
                 delete: { guard: ExamPaper_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        examFramework: {
+            modelLevel: {
+                read: { guard: ExamFramework_read, },
+                create: { guard: ExamFramework_create, inputChecker: ExamFramework_create_input, },
+                update: { guard: ExamFramework_update, },
+                postUpdate: { guard: ExamFramework_postUpdate, },
+                delete: { guard: ExamFramework_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        examMatrix: {
+            modelLevel: {
+                read: { guard: ExamMatrix_read, },
+                create: { guard: ExamMatrix_create, inputChecker: ExamMatrix_create_input, },
+                update: { guard: ExamMatrix_update, },
+                postUpdate: { guard: ExamMatrix_postUpdate, },
+                delete: { guard: ExamMatrix_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        knowledgeBlock: {
+            modelLevel: {
+                read: { guard: KnowledgeBlock_read, },
+                create: { guard: KnowledgeBlock_create, inputChecker: KnowledgeBlock_create_input, },
+                update: { guard: KnowledgeBlock_update, },
+                postUpdate: { guard: KnowledgeBlock_postUpdate, },
+                delete: { guard: KnowledgeBlock_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        configExam: {
+            modelLevel: {
+                read: { guard: ConfigExam_read, },
+                create: { guard: ConfigExam_create, inputChecker: ConfigExam_create_input, },
+                update: { guard: ConfigExam_update, },
+                postUpdate: { guard: ConfigExam_postUpdate, },
+                delete: { guard: ConfigExam_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3522,8 +3535,6 @@ const policy = {
         surveySession: { hasValidation: false },
         surveyResponse: { hasValidation: false },
         questionBank: { hasValidation: false },
-        difficulty: { hasValidation: false },
-        knowledgeBlock: { hasValidation: false },
         question: { hasValidation: false },
         multipleChoiceOption: { hasValidation: false },
         fillInBlankSlot: { hasValidation: false },
@@ -3531,10 +3542,13 @@ const policy = {
         exam: { hasValidation: false },
         examRoom: { hasValidation: false },
         examList: { hasValidation: false },
-        testStructureRule: { hasValidation: false },
         examBank: { hasValidation: false },
         examBankQuestion: { hasValidation: false },
         examPaper: { hasValidation: false },
+        examFramework: { hasValidation: false },
+        examMatrix: { hasValidation: false },
+        knowledgeBlock: { hasValidation: false },
+        configExam: { hasValidation: false },
         staff: { hasValidation: false },
         staffHistory: { hasValidation: false },
         scholarship: { hasValidation: false },
@@ -18134,162 +18148,6 @@ function $check_QuestionBank_delete(input, context) {
     }
     return false;
 }
-function Difficulty_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Difficulty_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Difficulty_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Difficulty_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Difficulty_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function Difficulty_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Difficulty_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Difficulty_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Difficulty_postUpdate(input, context) {
-    return true;
-}
-function Difficulty_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Difficulty_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KnowledgeBlock_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_KnowledgeBlock_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KnowledgeBlock_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KnowledgeBlock_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KnowledgeBlock_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function KnowledgeBlock_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KnowledgeBlock_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KnowledgeBlock_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_KnowledgeBlock_postUpdate(input, context) {
-    return true;
-}
-function KnowledgeBlock_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KnowledgeBlock_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
 function Question_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -18836,84 +18694,6 @@ function $check_ExamList_delete(input, context) {
     }
     return false;
 }
-function TestStructureRule_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_TestStructureRule_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TestStructureRule_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TestStructureRule_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TestStructureRule_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function TestStructureRule_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TestStructureRule_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TestStructureRule_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_TestStructureRule_postUpdate(input, context) {
-    return true;
-}
-function TestStructureRule_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TestStructureRule_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
 function ExamBank_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -19141,6 +18921,318 @@ function ExamPaper_delete(context, db) {
     return { OR: [] };
 }
 function $check_ExamPaper_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamFramework_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ExamFramework_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamFramework_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamFramework_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamFramework_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ExamFramework_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamFramework_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamFramework_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ExamFramework_postUpdate(input, context) {
+    return true;
+}
+function ExamFramework_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamFramework_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamMatrix_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ExamMatrix_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamMatrix_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamMatrix_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamMatrix_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ExamMatrix_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamMatrix_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamMatrix_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ExamMatrix_postUpdate(input, context) {
+    return true;
+}
+function ExamMatrix_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamMatrix_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KnowledgeBlock_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_KnowledgeBlock_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KnowledgeBlock_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KnowledgeBlock_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KnowledgeBlock_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function KnowledgeBlock_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KnowledgeBlock_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KnowledgeBlock_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_KnowledgeBlock_postUpdate(input, context) {
+    return true;
+}
+function KnowledgeBlock_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KnowledgeBlock_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ConfigExam_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ConfigExam_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ConfigExam_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ConfigExam_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ConfigExam_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ConfigExam_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ConfigExam_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ConfigExam_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ConfigExam_postUpdate(input, context) {
+    return true;
+}
+function ConfigExam_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ConfigExam_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

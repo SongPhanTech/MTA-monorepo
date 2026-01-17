@@ -19,13 +19,13 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { Select } from '@workspace/ui'
 import { Button, Col, Divider, Flex, message, Popover, Row, Tag } from 'antd'
 import { Save } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import LopBienCheItem from './lop-bien-che'
-import { Select } from '@workspace/ui'
 
 export default function SubjectClassScore() {
     const router = useRouter()
@@ -450,21 +450,10 @@ export default function SubjectClassScore() {
                                         width: 250,
                                         align: 'center',
                                         render: (_, record) => {
-                                            return record.scoreStatus === 'APPROVED' ||
-                                                can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
-                                                    'SUA'
-                                                ) ? (
-                                                <Tag
-                                                    color={getStudentTrainingTypeColor(
-                                                        record.studentTrainingType
-                                                    )}
-                                                >
-                                                    {getStudentTrainingTypeLabel(
-                                                        record.studentTrainingType
-                                                    )}
-                                                </Tag>
-                                            ) : (
+                                            return can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                                'SUA'
+                                            ) || record.scoreStatus !== 'APPROVED' ? (
                                                 <Select
                                                     style={{ width: '100%' }}
                                                     value={
@@ -511,6 +500,16 @@ export default function SubjectClassScore() {
                                                         </Tag>
                                                     )}
                                                 />
+                                            ) : (
+                                                <Tag
+                                                    color={getStudentTrainingTypeColor(
+                                                        record.studentTrainingType
+                                                    )}
+                                                >
+                                                    {getStudentTrainingTypeLabel(
+                                                        record.studentTrainingType
+                                                    )}
+                                                </Tag>
                                             )
                                         },
                                     },

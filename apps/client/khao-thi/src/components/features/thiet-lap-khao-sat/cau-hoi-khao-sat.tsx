@@ -85,18 +85,31 @@ function CauHoiKhaoSat({ id }: { id: string }) {
     })
     // const { data: surveyData } = useFindManySurvey({ orderBy: { createdAt: 'desc' } })
 
-    const { onOpen } = useDisclosure<{
+    const { onOpen: openSurveyQuestionModal } = useDisclosure<{
         id: string
         surveyQuestionGroupId?: string
     }>({
         tag: 'PutSurveyQuestionModal',
     })
+    const { onOpen: openImportQuestionModal } = useDisclosure<{
+        id: string
+        surveyQuestionGroupId?: string
+    }>({
+        tag: 'PutSurveyImportQuestionModal',
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen({ id: '', surveyQuestionGroupId: id })
+        openSurveyQuestionModal({ id: '', surveyQuestionGroupId: id })
     }
+    const handleImport = () => {
+        openImportQuestionModal({
+            id,
+            surveyQuestionGroupId: id,
+        })
+    }
+
     const { mutateAsync: updateSurveyQuestion } = useUpdateSurveyQuestion()
 
     async function handleDelete(id: string) {
@@ -124,7 +137,10 @@ function CauHoiKhaoSat({ id }: { id: string }) {
         <div>
             <Row gutter={[16, 8]}>
                 <Col span={24}>
-                    <Flex justify="end">
+                    <Flex justify="end" className="gap-2">
+                        <Button onClick={handleImport} size="small">
+                            Import câu hỏi
+                        </Button>
                         {can(
                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
                             'THEM'
@@ -182,7 +198,7 @@ function CauHoiKhaoSat({ id }: { id: string }) {
                                             'SUA'
                                         ) && (
                                             <EditIcon
-                                                onClick={onOpen.bind(null, {
+                                                onClick={openSurveyQuestionModal.bind(null, {
                                                     id,
                                                     surveyQuestionGroupId,
                                                 })}

@@ -57,17 +57,83 @@ export default function StudentFixedClassPage() {
         rank: undefined,
         curriculumVersionParallel: undefined,
     })
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
 
-    const { data: trainingFieldData = [] } = useFindManyTrainingField({
-        orderBy: { name: 'asc' },
-    })
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor(
+        {
+            where: {
+                curriculum: {
+                    some: {
+                        curriculumVersion: {
+                            some: {
+                                OR: [
+                                    {
+                                        fixedClass: { id: fixedClassId },
+                                    },
+                                    {
+                                        students: { some: { fixedClassId } },
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                },
+            },
+            orderBy: { name: 'asc' },
+        },
+        {
+            enabled: !!fixedClassId,
+        }
+    )
 
-    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
-        orderBy: { name: 'asc' },
-    })
+    const { data: trainingFieldData = [] } = useFindManyTrainingField(
+        {
+            where: {
+                trainingMajors: {
+                    some: {
+                        curriculum: {
+                            some: {
+                                curriculumVersion: {
+                                    some: {
+                                        OR: [
+                                            {
+                                                fixedClass: { id: fixedClassId },
+                                            },
+                                            {
+                                                students: { some: { fixedClassId } },
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            orderBy: { name: 'asc' },
+        },
+        {
+            enabled: !!fixedClassId,
+        }
+    )
+
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion(
+        {
+            where: {
+                OR: [
+                    {
+                        students: { some: { fixedClassId } },
+                    },
+                    {
+                        fixedClass: { id: fixedClassId },
+                    },
+                ],
+            },
+            orderBy: { name: 'asc' },
+        },
+        {
+            enabled: !!fixedClassId,
+        }
+    )
 
     const { getLabel: getLabelTrainingObjectType } = useTrainingObjectTypeStore()
     const { data: genderData = [] } = useFindManyDM_GioiTinh()
@@ -142,147 +208,143 @@ export default function StudentFixedClassPage() {
         }
     )
 
-    const { data = [], refetch } = useFindManyStudent({
-        where: {
-            fixedClassId,
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                            mode: 'insensitive',
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                            mode: 'insensitive',
-                        },
-                    },
-                ],
-                ...(filters.rank
-                    ? {
-                          rank: {
-                              sTen: {
-                                  contains: filters.rank,
+    const { data = [], refetch } = useFindManyStudent(
+        {
+            where: {
+                fixedClassId,
+                userProfile: {
+                    ...(filters.name
+                        ? {
+                              fullname: {
+                                  contains: filters.name,
                                   mode: 'insensitive',
                               },
-                          },
-                      }
-                    : {}),
-                ...(filters.phone
+                          }
+                        : {}),
+                    ...(filters.rank
+                        ? {
+                              rank: {
+                                  sTen: {
+                                      contains: filters.rank,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          }
+                        : {}),
+                    ...(filters.phone
+                        ? {
+                              phoneNumber: {
+                                  contains: filters.phone,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.gender
+                        ? {
+                              genderId: {
+                                  in: filters.gender,
+                              },
+                          }
+                        : {}),
+                    ...(filters.dateOfBirth?.length === 2
+                        ? {
+                              dateOfBirth: {
+                                  gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                                  lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                              },
+                          }
+                        : {}),
+                },
+
+                ...(filters.code
                     ? {
-                          phoneNumber: {
-                              contains: filters.phone,
+                          code: {
+                              contains: filters.code,
                               mode: 'insensitive',
                           },
                       }
                     : {}),
-                ...(filters.gender
+                ...(filters.curriculumVersion
                     ? {
-                          genderId: {
-                              in: filters.gender,
+                          curriculumVersionId: {
+                              in: filters.curriculumVersion,
                           },
                       }
                     : {}),
-                ...(filters.dateOfBirth?.length === 2
+                ...(filters.statusStudent
                     ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                          status: {
+                              in: filters.statusStudent,
                           },
                       }
                     : {}),
-            },
-
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.curriculumVersion
-                ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
-                      },
-                  }
-                : {}),
-            ...(filters.statusStudent
-                ? {
-                      status: {
-                          in: filters.statusStudent,
-                      },
-                  }
-                : {}),
-            ...(filters.curriculumVersionParallel
-                ? {
-                      curriculumVersionParallelId: {
-                          in: filters.curriculumVersionParallel,
-                      },
-                  }
-                : {}),
-            fixedClass: {
-                curriculumVersion: {
-                    curriculum: {
-                        trainingMajor: {
-                            ...(filters.trainingMajors
-                                ? {
-                                      id: {
-                                          in: filters.trainingMajors,
-                                      },
-                                  }
-                                : {}),
-                            ...(filters.trainingField
-                                ? {
-                                      trainingFieldId: {
-                                          in: filters.trainingField,
-                                      },
-                                  }
-                                : {}),
-                        },
-                    },
-                },
-            },
-        },
-        include: {
-            userProfile: {
-                include: {
-                    rank: true,
-                    gender: true,
-                },
-            },
-            fixedClass: {
-                include: {
-                    trainingCourse: {
-                        include: {
-                            scoreConverts: true,
-                            trainingObjectType: {
-                                include: {
-                                    trainingFields: {
-                                        include: {
-                                            trainingField: true,
-                                        },
-                                    },
-                                    trainingMajors: {
-                                        include: {
-                                            trainingMajor: true,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
+                ...(filters.curriculumVersionParallel
+                    ? {
+                          curriculumVersionParallelId: {
+                              in: filters.curriculumVersionParallel,
+                          },
+                      }
+                    : {}),
+                fixedClass: {
                     curriculumVersion: {
-                        include: {
-                            curriculum: {
-                                include: {
-                                    trainingObjectType: {},
-                                    trainingMajor: {
-                                        include: {
-                                            trainingField: true,
+                        curriculum: {
+                            trainingMajor: {
+                                ...(filters.trainingMajors
+                                    ? {
+                                          id: {
+                                              in: filters.trainingMajors,
+                                          },
+                                      }
+                                    : {}),
+                                ...(filters.trainingField
+                                    ? {
+                                          trainingFieldId: {
+                                              in: filters.trainingField,
+                                          },
+                                      }
+                                    : {}),
+                            },
+                        },
+                    },
+                },
+            },
+            include: {
+                userProfile: {
+                    include: {
+                        rank: true,
+                        gender: true,
+                    },
+                },
+                fixedClass: {
+                    include: {
+                        trainingCourse: {
+                            include: {
+                                scoreConverts: true,
+                                trainingObjectType: {
+                                    include: {
+                                        trainingFields: {
+                                            include: {
+                                                trainingField: true,
+                                            },
+                                        },
+                                        trainingMajors: {
+                                            include: {
+                                                trainingMajor: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        curriculumVersion: {
+                            include: {
+                                curriculum: {
+                                    include: {
+                                        trainingObjectType: {},
+                                        trainingMajor: {
+                                            include: {
+                                                trainingField: true,
+                                            },
                                         },
                                     },
                                 },
@@ -290,35 +352,38 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 },
-            },
-            curriculumVersion: {
-                include: {
-                    curriculum: true,
-                    trainingTime: true,
-                    trainingLanguage: true,
+                curriculumVersion: {
+                    include: {
+                        curriculum: true,
+                        trainingTime: true,
+                        trainingLanguage: true,
+                    },
                 },
-            },
-            curriculumVersionParallel: true,
-            subjectClassStudent: {
-                include: {
-                    subjectVersion: {
-                        include: {
-                            subject: true,
+                curriculumVersionParallel: true,
+                subjectClassStudent: {
+                    include: {
+                        subjectVersion: {
+                            include: {
+                                subject: true,
+                            },
                         },
                     },
                 },
+                studentSemesterResult: {
+                    orderBy: { semester: { startDate: 'desc' } },
+                    include: { semester: true },
+                },
             },
-            studentSemesterResult: {
-                orderBy: { semester: { startDate: 'desc' } },
-                include: { semester: true },
+            orderBy: {
+                userProfile: {
+                    firstName: 'asc',
+                },
             },
         },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
-            },
-        },
-    })
+        {
+            enabled: !!fixedClassId,
+        }
+    )
     const handleTest = () => {
         const testRows: TableRow[] = [
             {
@@ -551,12 +616,8 @@ export default function StudentFixedClassPage() {
         try {
             showSpinner()
             await updateUserProfile({
-                where: {
-                    id,
-                },
-                data: {
-                    fixedClassId: null,
-                },
+                where: { id },
+                data: { fixedClassId: null },
             })
             setSelectedRowKeys([])
         } catch (error: any) {
@@ -575,14 +636,8 @@ export default function StudentFixedClassPage() {
             showSpinner()
             if (selectedRowKeys?.length > 0) {
                 await updateManyUserProfile({
-                    where: {
-                        id: {
-                            in: selectedRowKeys,
-                        },
-                    },
-                    data: {
-                        fixedClassId: null,
-                    },
+                    where: { id: { in: selectedRowKeys } },
+                    data: { fixedClassId: null },
                 })
             }
             setOpen(false)
@@ -2416,8 +2471,11 @@ export default function StudentFixedClassPage() {
                                 })),
                                 render: (__, record) => {
                                     return (
+                                        record?.curriculumVersion?.curriculum?.trainingMajor
+                                            ?.trainingField?.name ||
                                         record?.fixedClass?.curriculumVersion?.curriculum
-                                            ?.trainingMajor?.trainingField?.name || ''
+                                            ?.trainingMajor?.trainingField?.name ||
+                                        ''
                                     )
                                 },
                             },
@@ -2433,8 +2491,11 @@ export default function StudentFixedClassPage() {
                                 })),
                                 render: (__, record) => {
                                     return (
+                                        record?.curriculumVersion?.curriculum?.trainingMajor
+                                            ?.name ||
                                         record?.fixedClass?.curriculumVersion?.curriculum
-                                            ?.trainingMajor?.name || ''
+                                            ?.trainingMajor?.name ||
+                                        ''
                                     )
                                 },
                             },
@@ -2449,7 +2510,9 @@ export default function StudentFixedClassPage() {
                                     value: item.id,
                                 })),
                                 render: (__, record) => {
-                                    const curriculum = record.curriculumVersion
+                                    const curriculum =
+                                        record.curriculumVersion ||
+                                        record.fixedClass?.curriculumVersion
                                     return curriculum ? curriculum.name : ''
                                 },
                             },

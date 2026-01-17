@@ -42,6 +42,7 @@ const ModalLearningResult = () => {
                                                     studentSubjectScore: {
                                                         where: {
                                                             studentId: id,
+                                                            finalScore: { not: null },
                                                         },
                                                         orderBy: {
                                                             finalScore: 'desc',

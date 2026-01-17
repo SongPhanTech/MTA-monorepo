@@ -176,9 +176,26 @@ const PutEvaluationCouncilMember = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="lecturerId" label="Giảng viên">
+                <FormItem
+                    form={form}
+                    name="lecturerId"
+                    label="Giảng viên"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng chọn giáo viên',
+                        },
+                    ]}
+                >
                     <Select
+                        showSearch
                         placeholder="Chọn giảng viên"
+                        optionFilterProp="label"
+                        filterOption={(input, option) =>
+                            String(option?.label ?? '')
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                        }
                         options={filteredLecturers.map((i) => {
                             const academicRank = i.userProfile?.academicRankType?.sTen || ''
                             const degree = i.userProfile?.academicDegreeType?.sTen || ''

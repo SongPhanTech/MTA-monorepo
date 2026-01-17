@@ -3,7 +3,6 @@ import ImportScoreModal, { type ImportScoreData } from '@components/commons/prin
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Table from '@components/commons/table'
 import type { DataTable } from '@components/modal/modal-in-phieu-diem'
-import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import { examBanReason, examPostponeReason, examSuspendedReason } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { scoreConvert } from '@hooks/scoreConverter'
@@ -16,7 +15,11 @@ import {
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums, type StudentSubjectScore } from '@workspace/db/client'
-import { useFindManyStudentSubjectScore, useFindUniqueSubjectClass } from '@workspace/db/hooks'
+import {
+    useFindManyStudentSubjectScore,
+    useFindUniqueSubjectClass,
+    useUpdateSubjectClass,
+} from '@workspace/db/hooks'
 import { getUrl } from '@workspace/libs/api/custom-instance'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
@@ -614,7 +617,17 @@ export default function NhapDiem({
     }>({
         tag: 'ModalPrintStudentSubjectScore',
     })
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
+    const lockExam = async (subjectClassId?: string) => {
+        if (subjectClassId) {
+            await updateSubjectClass({
+                where: { id: subjectClassId },
+                data: { isLockScore: true, isLockExamScore: true },
+            })
+            message.success('Cập nhật thành công')
+        }
+    }
     const handlePrint = async () => {
         Modal.confirm({
             title: 'Xác nhận',
@@ -626,6 +639,7 @@ export default function NhapDiem({
                 //     dataTable,
                 //     type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
                 // })
+                lockExam(selectedSubjectClassId)
                 openXemTaiLieu({
                     uri: getUrl(
                         getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
@@ -634,7 +648,7 @@ export default function NhapDiem({
                             id: selectedSubjectClassId ?? '',
                         })}`
                     ),
-                    name: 'PhieuDiemNhap',
+                    name: 'Phiếu điểm',
                     mimeType: 'xlsx',
                     convertTo: 'pdf',
                 })
@@ -750,13 +764,37 @@ export default function NhapDiem({
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
                                 'IN_DS_THI'
                             )) && (
-                            <ExportTemplateExam
-                                dataClass={dataDetailSubjectClass}
-                                dataTable={dataTable}
+                            // <ExportTemplateExam
+                            //     dataClass={dataDetailSubjectClass}
+                            //     dataTable={dataTable}
+                            //     disabled={
+                            //         !dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId
+                            //     }
+                            // />
+                            <Button
+                                // onClick={exportTemplate}
+                                onClick={() => {
+                                    openXemTaiLieu({
+                                        uri: getUrl(
+                                            getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                                'https://api.daotao.mta.swantech.vn',
+                                            `${getExportSubjectClassScoreUrl({
+                                                id: selectedSubjectClassId ?? '',
+                                                type: 'DANH-SACH-THI',
+                                            })}`
+                                        ),
+                                        name: 'Danh sách thi',
+                                        mimeType: 'xlsx',
+                                        convertTo: 'pdf',
+                                    })
+                                }}
                                 disabled={
                                     !dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId
                                 }
-                            />
+                            >
+                                <Printer />
+                                Danh sách thi
+                            </Button>
                         )}
                     {score !== 'CC/TX' &&
                         (can(
@@ -797,9 +835,10 @@ export default function NhapDiem({
                                                     'https://api.daotao.mta.swantech.vn',
                                                 `${getExportSubjectClassScoreUrl({
                                                     id: selectedSubjectClassId ?? '',
+                                                    type: 'NHAP',
                                                 })}`
                                             ),
-                                            name: 'PhieuDiemNhap',
+                                            name: 'Phiếu điểm nháp',
                                             mimeType: 'xlsx',
                                             convertTo: 'pdf',
                                         })
@@ -1080,12 +1119,12 @@ export default function NhapDiem({
                                         midtermScore,
                                         examBanned,
                                         subjectClass,
-                                        examScore
+                                        examScore,
                                     }: any
                                 ) => {
                                     const isMissingScore =
                                         attendanceScore == null || midtermScore == null
-                                     if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
+                                    if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
                                         return examScore ?? ''
                                     }
 

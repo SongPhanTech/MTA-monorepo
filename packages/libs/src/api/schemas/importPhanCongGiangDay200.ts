@@ -4,8 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { ImportPhanCongGiangDay200ErrorItem } from './importPhanCongGiangDay200ErrorItem'
 
 export type ImportPhanCongGiangDay200 = {
     message: string
     time: number
+    error: ImportPhanCongGiangDay200ErrorItem[]
 }

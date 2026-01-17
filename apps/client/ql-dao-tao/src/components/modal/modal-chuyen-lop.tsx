@@ -64,34 +64,16 @@ const ModalChuyenLop = () => {
     const { data = [], refetch } = useFindManyStudent(
         {
             where: {
-                OR: filter.search
-                    ? [
-                          {
-                              userProfile: {
-                                  firstName: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
+                ...(filter.search
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filter.search,
+                                  mode: 'insensitive',
                               },
                           },
-                          {
-                              userProfile: {
-                                  lastName: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      ]
-                    : undefined,
+                      }
+                    : {}),
                 fixedClassId: filter.fixedClassId,
             },
             include: {
@@ -145,34 +127,16 @@ const ModalChuyenLop = () => {
     const { data: count } = useCountStudent(
         {
             where: {
-                OR: filter.search
-                    ? [
-                          {
-                              userProfile: {
-                                  firstName: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
+                ...(filter.search
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filter.search,
+                                  mode: 'insensitive',
                               },
                           },
-                          {
-                              userProfile: {
-                                  lastName: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filter.search,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      ]
-                    : undefined,
+                      }
+                    : {}),
                 fixedClassId: filter.fixedClassId,
             },
         },
@@ -184,34 +148,16 @@ const ModalChuyenLop = () => {
     const { data: studentClassArrives = [], refetch: refetchClassArrives } = useFindManyStudent(
         {
             where: {
-                OR: filter.searchClassArrive
-                    ? [
-                          {
-                              userProfile: {
-                                  firstName: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
+                ...(filter.searchClassArrive
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filter.searchClassArrive,
+                                  mode: 'insensitive',
                               },
                           },
-                          {
-                              userProfile: {
-                                  lastName: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      ]
-                    : undefined,
+                      }
+                    : {}),
                 fixedClassId: filter.fixedClassArriveId,
             },
             include: {
@@ -265,34 +211,16 @@ const ModalChuyenLop = () => {
     const { data: countStudentClassArrives } = useCountStudent(
         {
             where: {
-                OR: filter.searchClassArrive
-                    ? [
-                          {
-                              userProfile: {
-                                  firstName: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
+                ...(filter.searchClassArrive
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filter.searchClassArrive,
+                                  mode: 'insensitive',
                               },
                           },
-                          {
-                              userProfile: {
-                                  lastName: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filter.searchClassArrive,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      ]
-                    : undefined,
+                      }
+                    : {}),
                 fixedClassId: filter.fixedClassArriveId,
             },
         },
