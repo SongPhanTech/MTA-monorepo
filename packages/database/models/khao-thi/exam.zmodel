@@ -3,6 +3,7 @@ import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/lecturer'
+import '../ql-danh-muc/document'
 
 /// Loại câu hỏi
 enum QuestionType {
@@ -16,6 +17,28 @@ enum QuestionType {
   @@schema("khao-thi")
 }
 
+//Mức độ
+enum Difficult {
+  D1         // Biết
+  D2         // Hiểu
+  D3         // Vận dụng
+  D4         // Vận dụng cao
+  
+  @@schema("khao-thi")
+}
+
+// enum ExamType {
+//   OfflineWritten // thi viết (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
+//   // OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
+//   // OfflineChoices // thi trắc nghiệm
+//   // OnlineChoices // thi trắc nghiệm trực tuyến
+//   Oral // thi vấn đáp
+//   // Practice // thi thực hành
+//   // Project // thi đồ án
+//   // Other // loại khác
+//   @@schema("khao-thi")
+// }
+
 /// Phiên bản ngân hàng câu hỏi
 model QuestionBank extends Base {
   name               String           // Tên ngân hàng câu hỏi
@@ -24,37 +47,11 @@ model QuestionBank extends Base {
   subjectVersionId   String
 
   questions          Question[]
-  testStructureRules TestStructureRule[]
-  exam               Exam[]
 
   @@unique([subjectVersionId, name])
   @@schema("khao-thi")
 }
 
-/// Mức độ
-model Difficulty extends Base {
-  name      String     @unique // VD: "Nhận biết", "Thông hiểu", "Vận dụng", "Vận dụng cao"
-  level     Int?       @unique // Mức độ ưu tiên hoặc sắp xếp, VD: 1, 2, 3, 4
-
-  questions Question[]
-  // structureRules TestStructureRule[]
-
-  @@schema("khao-thi")
-}
-
-/// Khối kiến thức / Chương mục
-model KnowledgeBlock extends Base {
-  subjectVersion   SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
-
-  name             String // Tên chương / khối kiến thức
-
-  questions        Question[]
-  structureRules   TestStructureRule[]
-
-  @@unique([name, subjectVersionId])
-  @@schema("khao-thi")
-}
 
 /// Câu hỏi
 model Question extends Base {
@@ -63,7 +60,7 @@ model Question extends Base {
   point                 Float                  @default(1) // Điểm số
   explanation           String? // Giải thích đáp án
   isAutoGraded          Boolean                @default(false)
-
+  difficult             Difficult
   // Liên kết với các bảng dữ liệu chi tiết theo từng loại câu hỏi
   multipleChoiceOptions MultipleChoiceOption[]
   fillInBlankSlots      FillInBlankSlot[]
@@ -73,8 +70,8 @@ model Question extends Base {
   questionBankId        String
   knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId      String?
-  difficulty            Difficulty?            @relation(fields: [difficultyId], references: [id])
-  difficultyId          String?
+
+
 
   sessionQuestions      ExamBankQuestion[]
   /// Câu trả lời của thí sinh trong các phiên thi
@@ -179,9 +176,6 @@ model OrderingItem extends Base {
 
 /// Kỳ thi
 model Exam extends Base {
-  questionBank       QuestionBank?       @relation(fields: [questionBankId], references: [id])
-  questionBankId     String?
-
   /// khoá DS thi
   // giao diện đánh phách, nhập điểm theo phách chỉ query lockExamSessions=true
   lockExamSessions   Boolean             @default(false)
@@ -209,9 +203,7 @@ model Exam extends Base {
   subjectClass       SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
 
   examBank           ExamBank[]
-  testStructureRules TestStructureRule[]
   examRooms          ExamRoom[]
-
   @@schema("khao-thi")
 }
 
@@ -258,27 +250,27 @@ model ExamList extends Base {
   @@schema("khao-thi")
 }
 
-/// Cấu hình tạo đề tự động cho kỳ thi
-model TestStructureRule extends Base {
-  exam             Exam?          @relation(fields: [examId], references: [id])
-  examId           String?
+// /// Cấu hình tạo đề tự động cho kỳ thi
+// model TestStructureRule extends Base {
+//   exam             Exam?          @relation(fields: [examId], references: [id])
+//   examId           String?
 
-  questionBank     QuestionBank?  @relation(fields: [questionBankId], references: [id])
-  questionBankId   String?
+//   questionBank     QuestionBank?  @relation(fields: [questionBankId], references: [id])
+//   questionBankId   String?
 
-  knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId String
-  questionPoint    Float
-  // difficulty       Difficulty     @relation(fields: [difficultyId], references: [id])
-  // difficultyId     String         // Dùng ID của mức độ khó
-  questionType     QuestionType
-  count            Int
+//   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
+//   knowledgeBlockId String
+//   questionPoint    Float
+//   // difficult       Difficult     @relation(fields: [difficultyId], references: [id])
+//   // difficultyId     String         // Dùng ID của mức độ khó
+//   questionType     QuestionType
+//   count            Int
 
-  @@unique([examId, knowledgeBlockId, questionPoint, questionType])
-  @@unique([questionBankId, knowledgeBlockId, questionPoint, questionType])
+//   @@unique([examId, knowledgeBlockId, questionPoint, questionType])
+//   @@unique([questionBankId, knowledgeBlockId, questionPoint, questionType])
 
-  @@schema("khao-thi")
-}
+//   @@schema("khao-thi")
+// }
 
 /// Đề thi
 model ExamBank extends Base {
@@ -287,7 +279,15 @@ model ExamBank extends Base {
 
   examCode  String
 
-  questions ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
+  subjectClass String?
+
+  explain      String?
+  examDay      DateTime?
+  examType     ExamType?
+  questions    ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
+  examMatrix   ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
+  examMatrixId String?
+  isLock        Boolean?          @default(false)
 
   @@unique([examId, examCode])
   @@schema("khao-thi")
@@ -326,5 +326,56 @@ model ExamPaper extends Base {
 
   @@unique([examCode, examListId])
 
+  @@schema("khao-thi")
+}
+
+//khung đề thi
+model ExamFramework extends Base {
+  name             String
+  time             Int
+
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+
+  examMatrixs      ExamMatrix[]
+  @@schema("khao-thi")
+}
+
+// ma trận đề thi
+model ExamMatrix extends Base {
+  name            String
+  isDefault       Boolean          @default(false)
+  examFramework   ExamFramework    @relation(fields: [examFrameworkId], references: [id])
+  examFrameworkId String
+  knowledgeBlocks KnowledgeBlock[]
+  examBank        ExamBank[]
+   @@schema("khao-thi")
+}
+
+/// Khối kiến thức / Chuẩn đầu ra
+model KnowledgeBlock extends Base {
+  name          String // Tên chương / khối kiến thức
+  examMatrix    ExamMatrix     @relation(fields: [examMatrixId], references: [id])
+  examMatrixId  String
+
+  questions     Question[]
+
+
+  documentFiles DocumentFile[]
+  configExams   ConfigExam[]
+  subjectVersion SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+	subjectVersionId String
+  
+  @@schema("khao-thi")
+}
+
+// Cấu hình trọng số sinh đề
+model ConfigExam extends Base {
+  difficult        Difficult
+  type             QuestionType? // null thì là tất cả
+  quantity         Int            @default(0)
+  point            Int            @default(0)
+  knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId String
   @@schema("khao-thi")
 }

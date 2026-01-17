@@ -97,6 +97,7 @@ const relationSchema = z.object({
     subjectScoreConvert: z.array(z.unknown()).optional(),
     subjectVersionHistory: z.array(z.unknown()).optional(),
     exams: z.array(z.unknown()).optional(),
+    examFramework: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

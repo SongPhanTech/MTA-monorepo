@@ -102,6 +102,29 @@ const PutSurveyModal = () => {
             requireExplanation: false,
         },
     ])
+    const validateStartDate = async (_: any, value?: dayjs.Dayjs) => {
+        if (!value) return Promise.resolve()
+
+        const today = dayjs().startOf('day')
+
+        if (value.startOf('day').isBefore(today)) {
+            return Promise.reject('Thời gian bắt đầu phải từ ngày hiện tại trở đi')
+        }
+
+        return Promise.resolve()
+    }
+
+    const validateEndDate = async (_: any, value?: dayjs.Dayjs) => {
+        const startDate = form.getFieldValue('startDate')
+
+        if (!value || !startDate) return Promise.resolve()
+
+        if (!value.isAfter(startDate)) {
+            return Promise.reject('Thời gian kết thúc phải lớn hơn thời gian bắt đầu')
+        }
+
+        return Promise.resolve()
+    }
 
     const next = async () => {
         try {
@@ -416,13 +439,24 @@ const PutSurveyModal = () => {
                                 form={form}
                                 name="startDate"
                                 label="Thời gian bắt đầu"
-                                required
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng chọn thời gian bắt đầu',
+                                    },
+                                    { validator: validateStartDate },
+                                ]}
                             >
                                 <DatePicker format="DD/MM/YYYY" className="w-full" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem form={form} name="endDate" label="Thời gian kết thúc">
+                            <FormItem
+                                form={form}
+                                name="endDate"
+                                label="Thời gian kết thúc"
+                                rules={[{ validator: validateEndDate }]}
+                            >
                                 <DatePicker format="DD/MM/YYYY" className="w-full" />
                             </FormItem>
                         </Col>
