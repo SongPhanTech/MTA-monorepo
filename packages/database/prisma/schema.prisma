@@ -129,11 +129,11 @@ enum ExamType {
 
 enum SubjectVersionType {
   Normal
+  Practice
   Internship
   Research
   Project
   Thesis
-  Practice
   Graduation
 
   @@schema("ql-dao-tao")

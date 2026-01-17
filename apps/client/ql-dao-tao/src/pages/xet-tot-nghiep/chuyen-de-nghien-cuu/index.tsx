@@ -24,7 +24,9 @@ import { useMemo, useState } from 'react'
 import {  useSemesterStore,
 useTrainingObjectTypeStore } from '@workspace/ui'
 import DatePicker from '@components/commons/date-picker';
+
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -46,12 +48,14 @@ export default function ChuyenDeNghienCuu() {
     const [isSearched, setIsSearched] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
+
     const { onOpen: openPutResearchTopicModal } = useDisclosure<{
         studentResearchTopicId: string
         studentSubjectScoreId: string
     }>({
         tag: 'PutResearchTopicModal',
     })
+
     const courseWhere = useMemo(() => {
         return {
             trainingObjectTypeId: trainingObjectTypeId,

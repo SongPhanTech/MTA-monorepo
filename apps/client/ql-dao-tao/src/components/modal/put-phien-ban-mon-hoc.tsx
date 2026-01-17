@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import { queryClient } from '@api/index'
 import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
@@ -19,7 +18,9 @@ import {
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message, Radio, Row, Switch } from 'antd'
 import dayjs from 'dayjs'
+import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
+import { subjectVersionTypeOptions } from '@workspace/libs/constants'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -38,14 +39,6 @@ export enum HistorySubjectVersionType {
     UPDATE = 'UPDATE',
     DELETE = 'DELETE',
 }
-
-const subjectVersionTypeOptions = [
-    { label: 'Lý thuyết', value: SubjectVersionType.Normal },
-    { label: 'Thí nghiệm/Thực hành', value: SubjectVersionType.Practice },
-    { label: 'Thực tập', value: SubjectVersionType.Internship },
-    { label: 'Chuyên đề nghiên cứu', value: SubjectVersionType.Research },
-    { label: 'Đồ án tốt nghiệp', value: SubjectVersionType.Project },
-]
 
 const PutVersionSubjectModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])

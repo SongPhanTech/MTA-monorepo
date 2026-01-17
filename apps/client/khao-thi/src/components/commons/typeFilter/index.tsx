@@ -4,6 +4,7 @@ import type {
     CriteriaField,
     CriteriaOperator,
     DecisionStatus,
+    Difficult,
     ExamType,
     GraduationSessionStatus,
     QuestionType,
@@ -143,6 +144,8 @@ export type FilterProps = {
     isStudent?: GetSurveyObjectsIsStudent
     subjectClassName?: string
     semesterIds?: string[]
+    difficult?:Difficult[]
+    subjectVersionIdString?:string
 }
 
 export type ColumnTypeProps = ColumnsType & {

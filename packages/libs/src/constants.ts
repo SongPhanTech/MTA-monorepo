@@ -1,9 +1,31 @@
-import { CriteriaField, CriteriaOperator, QuestionType } from '@workspace/db'
+import { $Enums, CriteriaField, CriteriaOperator, QuestionType } from '@workspace/db'
 
-export type CriteriaOperatorOption = {
-    value: CriteriaOperator
-    label: string
+export const subjectVersionTypes: Record<string, $Enums.SubjectVersionType> = {
+    Thường: $Enums.SubjectVersionType.Normal,
+    'Thí nghiệm/Thực hành': $Enums.SubjectVersionType.Practice,
+    'Thực tập': $Enums.SubjectVersionType.Internship,
+    'Chuyên đề nghiên cứu': $Enums.SubjectVersionType.Research,
+    'Đồ án/Đề án': $Enums.SubjectVersionType.Project,
+    'Thi tốt nghiệp': $Enums.SubjectVersionType.Graduation,
 }
+
+export const subjectVersionTypeOptions = Object.entries(subjectVersionTypes).map(
+    ([label, value]) => ({ label, value })
+)
+
+export const examTypes: Record<string, $Enums.ExamType> = {
+    'Thi viết': $Enums.ExamType.OfflineWritten,
+    'Trực tuyến': $Enums.ExamType.OnlineWritten,
+    'Vấn đáp': $Enums.ExamType.Oral,
+    'Thực hành - Thí nghiệm': $Enums.ExamType.Practice,
+    'Đồ án': $Enums.ExamType.Project,
+    Khác: $Enums.ExamType.Other,
+}
+
+export const examTypeOptions = Object.entries(examTypes).map(([label, value]) => ({
+    label,
+    value,
+}))
 
 export const criteriaOperatorLabels: Record<CriteriaOperator, string> = {
     [CriteriaOperator.GT]: '> (Lớn hơn)',
@@ -14,12 +36,12 @@ export const criteriaOperatorLabels: Record<CriteriaOperator, string> = {
     [CriteriaOperator.IN]: 'IN (Thuộc danh sách)',
 }
 
-export const criteriaOperatorOptions: CriteriaOperatorOption[] = Object.entries(
-    criteriaOperatorLabels
-).map(([value, label]) => ({
-    value: value as CriteriaOperator,
-    label,
-}))
+export const criteriaOperatorOptions = Object.entries(criteriaOperatorLabels).map(
+    ([value, label]) => ({
+        value: value as CriteriaOperator,
+        label,
+    })
+)
 
 export type CriteriaFieldOption = {
     value: CriteriaField
