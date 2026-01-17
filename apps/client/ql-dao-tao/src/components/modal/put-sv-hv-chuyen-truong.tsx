@@ -188,6 +188,7 @@ const PutStudentScoreConvertModal = () => {
                     .map((row) => ({
                         studentId: output.studentId,
                         subjectVersionId: row.subjectVersionId,
+                        finalScore: Number(row.score),
                         manualFinalScore: Number(row.score),
                     }))
                 const listSqlTransaction: any[] = [

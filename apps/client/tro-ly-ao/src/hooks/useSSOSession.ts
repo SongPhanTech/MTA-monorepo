@@ -33,39 +33,41 @@ const CACHE_TIME = 5 * 60 * 1000 // 5 phút
 
 const checkSSORedirect = (): boolean => {
     if (typeof window === 'undefined') return false
-    
+
     if (sessionStorage.getItem(SSO_CHECKED_FLAG)) {
         return false
     }
-    
+
     sessionStorage.setItem(SSO_CHECKED_FLAG, 'true')
-    
+
     if (sessionStorage.getItem(SSO_REDIRECT_FLAG)) {
         console.log('[useSSOSession] Detected pending SSO redirect flag, invalidating cache')
         sessionStorage.removeItem(SSO_REDIRECT_FLAG)
         return true
     }
-    
+
     const authIssuer = getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')
     if (authIssuer) {
         try {
             const authHostname = new URL(authIssuer).hostname
             if (document.referrer && document.referrer.includes(authHostname)) {
-                console.log('[useSSOSession] Detected redirect from SSO via referrer, invalidating cache')
+                console.log(
+                    '[useSSOSession] Detected redirect from SSO via referrer, invalidating cache'
+                )
                 return true
             }
         } catch {
             // Invalid URL, ignore
         }
     }
-    
+
     return false
 }
 
 let globalCache: CacheEntry | null = null
 if (typeof window !== 'undefined') {
     const fromSSO = checkSSORedirect()
-    
+
     if (fromSSO) {
         localStorage.removeItem(CACHE_KEY)
         globalCache = null
@@ -190,19 +192,17 @@ export const useSSOSession = () => {
      * Chỉ gọi khi người dùng chủ động click nút đăng nhập
      */
     const signIn = useCallback(() => {
-        const tenantCode =
-            (typeof window !== 'undefined' && (window as any).tenantCode) || 'dev'
-        
+        const tenantCode = (typeof window !== 'undefined' && (window as any).tenantCode) || 'dev'
+
         // Clear the "already checked" flag so we can check again when returning
         sessionStorage.removeItem(SSO_CHECKED_FLAG)
-        
+
         // Set flag before redirect - this will be checked when user returns
         // to invalidate cache and force fresh session check
         sessionStorage.setItem(SSO_REDIRECT_FLAG, 'true')
-        
-       // window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE')}&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
-        window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=chatbot&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
 
+        // window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE')}&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
+        window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=chatbot&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
     }, [])
 
     /**
