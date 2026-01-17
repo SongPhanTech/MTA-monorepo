@@ -288,13 +288,18 @@ export default function UserProfilePageDs() {
         })
     }
 
-    const { data: trainingFieldData = [] } = useFindManyTrainingField()
+    const { data: trainingFieldData = [] } = useFindManyTrainingField({
+        where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
+        orderBy: { name: 'asc' },
+    })
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
         orderBy: { name: 'asc' },
     })
 
     const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
+        where: { trainingObjectTypeId },
         orderBy: { name: 'asc' },
     })
 

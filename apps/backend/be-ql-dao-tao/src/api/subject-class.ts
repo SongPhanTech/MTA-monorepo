@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { $Enums, ExamType, Prisma, type ScoreConvert } from '@workspace/db'
+import { $Enums, Prisma, type ScoreConvert } from '@workspace/db'
+import { examTypeOptions } from '@workspace/libs/constants'
 import { getMinioUrl, getScoreStatistics, numberToWords } from '@workspace/libs/utils'
 import dayjs from 'dayjs'
 import { read, utils } from 'xlsx'
@@ -1631,16 +1632,6 @@ app.openapi(exportSubjectClassScore, async (c) => {
     const buffer = await res.arrayBuffer()
     const nodeBuffer = Buffer.from(buffer)
     const template = new XlsxTemplate(nodeBuffer)
-    const examOptions = [
-        { value: ExamType.OfflineWritten, label: 'Thi viết' },
-        { value: ExamType.OnlineWritten, label: 'Trực tuyến' },
-        // { value: ExamType.OfflineChoices, label: 'Thi trắc nghiệm' },
-        // { value: ExamType.OnlineChoices, label: 'Thi trắc nghiệm trực tuyến' },
-        { value: ExamType.Oral, label: 'Vấn đáp' },
-        { value: ExamType.Practice, label: 'Thực hành - Thí nghiệm' },
-        { value: ExamType.Project, label: 'Đồ án' },
-        { value: ExamType.Other, label: 'Loại khác' },
-    ]
 
     const scoreConvert = (finalScore: number, scoreRanges: ScoreConvert[] = []) => {
         const sortedRanges = [...scoreRanges].sort((a, b) => b.base10Min - a.base10Min)
@@ -1694,7 +1685,8 @@ app.openapi(exportSubjectClassScore, async (c) => {
                       : ''
               }`,
         KHOA: subjectClass.subject?.managementOrganization?.sCode || '',
-        HINH_THUC_THI: examOptions.find((et) => et.value === subjectClass.examType)?.label || '',
+        HINH_THUC_THI:
+            examTypeOptions.find((et) => et.value === subjectClass.examType)?.label || '',
         d: dayjs().date(),
         m: dayjs().month() + 1,
         y: dayjs().year(),

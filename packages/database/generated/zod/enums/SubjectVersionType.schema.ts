@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SubjectVersionTypeSchema = z.enum(["Normal", "Internship", "Research", "Project", "Thesis", "Practice", "Graduation"])
+export const SubjectVersionTypeSchema = z.enum(["Normal", "Practice", "Internship", "Research", "Project", "Thesis", "Graduation"])

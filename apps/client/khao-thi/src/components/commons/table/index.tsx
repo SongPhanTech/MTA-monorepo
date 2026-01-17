@@ -68,6 +68,7 @@ type TableProps<T = AnyObject> = {
     scrollable?: boolean
     maxHeight?: number
     rowSelection?: TableRowSelection<T>
+    summary?: TableAntdProps<T>['summary']
 } & Omit<TableAntdProps, 'pagination'>
 
 const Table = <T extends AnyObject>({
@@ -85,6 +86,7 @@ const Table = <T extends AnyObject>({
     scrollable,
     maxHeight,
     rowSelection,
+    summary,
     ...rest
 }: TableProps<T>) => {
     const [filtersTable, setFiltersTable] = useState<FilterProps>(filters || {})
@@ -793,6 +795,7 @@ const Table = <T extends AnyObject>({
                     : false
             }
             expandable={expandable}
+            summary={summary}
             {...rest}
             onRow={(record) => ({
                 onClick: () => {
@@ -814,5 +817,7 @@ const Table = <T extends AnyObject>({
         />
     )
 }
+
+Table.Summary = TableAntd.Summary
 
 export default Table

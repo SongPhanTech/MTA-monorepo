@@ -7496,11 +7496,11 @@ exports.ExamType = exports.$Enums.ExamType = {
 
 exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Normal: 'Normal',
+  Practice: 'Practice',
   Internship: 'Internship',
   Research: 'Research',
   Project: 'Project',
   Thesis: 'Thesis',
-  Practice: 'Practice',
   Graduation: 'Graduation'
 };
 
