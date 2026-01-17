@@ -12,7 +12,7 @@ export const useExamTypeOptions = () => {
     }
 
     return {
-        examTypeOptions,
+        options: examTypeOptions,
         getExamTypeLabel,
     }
 }

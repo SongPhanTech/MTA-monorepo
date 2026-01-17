@@ -5326,11 +5326,11 @@ export namespace $Enums {
     export type ExamType = (typeof ExamType)[keyof typeof ExamType];
     export const SubjectVersionType: {
         Normal: 'Normal',
+        Practice: 'Practice',
         Internship: 'Internship',
         Research: 'Research',
         Project: 'Project',
         Thesis: 'Thesis',
-        Practice: 'Practice',
         Graduation: 'Graduation'
     };
     export type SubjectVersionType = (typeof SubjectVersionType)[keyof typeof SubjectVersionType];

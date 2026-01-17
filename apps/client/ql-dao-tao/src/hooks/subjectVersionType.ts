@@ -12,7 +12,7 @@ export const useSubjectVersionTypeOptions = () => {
     }
 
     return {
-        subjectVersionTypeOptions,
+        options: subjectVersionTypeOptions,
         getSubjectVersionTypeLabel,
     }
 }

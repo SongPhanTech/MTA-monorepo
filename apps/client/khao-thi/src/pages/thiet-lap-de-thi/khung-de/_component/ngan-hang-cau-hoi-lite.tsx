@@ -1,7 +1,6 @@
 import { Button, Row, Col, message, Tooltip } from 'antd'
-import { useMemo, useState } from 'react'
-
 import { BookPlus } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 // import DeleteIcon from "@/components/commoms/icons/delete";
 // import EditIcon from "@/components/commoms/icons/edit";
@@ -11,18 +10,19 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 // import type { MultipleChoiceOption } from "../../prisma/client";
 // import { QuestionType } from "../../prisma/client";
 import { EyeOutlined } from '@ant-design/icons'
+import Table from '@components/commons/table'
+import { LEVEL_COLORS } from '@constants/constants'
 import {
     useCountQuestion,
     useFindManyExamMatrix,
     useFindManyKnowledgeBlock,
     useFindManyQuestion,
     useFindUniqueQuestionBank,
+    useUpdateQuestion,
 } from '@workspace/db/hooks'
-import { LEVEL_COLORS } from '@constants/constants'
-import Table from '@components/commons/table'
 
 interface QuestionBankLiteProps {
-    examFrameworkId: string | null
+    examFrameworkId?: string
     questionBankId: string
 }
 
@@ -198,6 +198,7 @@ export default function QuestionBankLite({
                             type="primary"
                             size="middle"
                             onClick={() => {
+                                if (!examFrameworkId) return
                                 onOpenPickQuestionFromBank({
                                     examFrameworkId: examFrameworkId,
                                 })

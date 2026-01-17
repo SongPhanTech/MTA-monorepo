@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
-import { Form, Input, InputNumber, message, Col } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { queryClient } from '@api/index'
+import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { buildOrgTree } from '@lib/utils'
 import { ExamFramework, Subject, SubjectVersion } from '@workspace/db/client'
 import {
     useCreateExamFramework,
@@ -11,10 +12,9 @@ import {
     useFindUniqueExamFramework,
     useUpdateExamFramework,
 } from '@workspace/db/hooks'
-import { buildOrgTree } from '@lib/utils'
-import { queryClient } from '@api/index'
-import PutFormModal from '@components/commons/put-modal'
-import Select from '@components/commons/select'
+import { Col, Form, Input, InputNumber, message } from 'antd'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type CreateExamFrameworkPayload = ExamFramework
 export type SubjectVersionItem = SubjectVersion
@@ -105,44 +105,6 @@ export default function ModalTaoKhungDe() {
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-    }
-
-    const handleAddNewSubject = async () => {
-        try {
-            const values = await newSubjectForm.validateFields()
-
-            const subject = await createSubject({
-                data: {
-                    name: values.name,
-                    managementOrganizationId: values.managementOrganizationId || null,
-                },
-            })
-
-            if (!subject?.id) {
-                message.error('Không thể tạo môn học')
-                return
-            }
-
-            const subjectVersion = await createSubjectVersion({
-                data: {
-                    name: values.name,
-                    subjectId: subject.id,
-                },
-            })
-
-            if (!subjectVersion) {
-                message.error('Không thể tạo phiên bản môn học')
-                return
-            }
-
-            // Gán vào form chính
-            form.setFieldValue('subjectVersionId', subjectVersion.id)
-            newSubjectForm.resetFields()
-
-            message.success('Đã thêm môn học!')
-        } catch (error) {
-            message.error('Không thể tạo môn học')
         }
     }
 

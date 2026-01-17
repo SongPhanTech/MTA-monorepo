@@ -1,14 +1,14 @@
-import { Col, Row, Button, Typography, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { useFindManyExamMatrix, useUpdateExamMatrix } from '@workspace/db/hooks'
+import { Button, Col, message, Row, Typography } from 'antd'
+import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-import { useState, useEffect } from 'react'
-import { useFindManyExamMatrix, useUpdateExamMatrix } from '@workspace/db/hooks'
-import { queryClient } from '@api/index'
-import EditIcon from '@components/icons/edit'
-import DeleteIcon from '@components/icons/delete'
-
-export default function MaTranDePage({ id }: { id: string }) {
+export default function MaTranDePage({ id }: { id?: string }) {
     const [selectedMatrixId, setSelectedMatrixId] = useState<string | null>(null)
     const { onOpen } = useDisclosure<{
         id?: string
