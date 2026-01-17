@@ -10,11 +10,9 @@ import {
     useCountStudentSubjectScore,
     useFindManyDM_DonVi,
     useFindManyLecturer,
-    useFindManySemester,
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { Button, Col, DatePicker, Form, message, Modal, Row } from 'antd'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -23,12 +21,12 @@ import { SquarePen } from 'lucide-react'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useMemo, useState } from 'react'
+import {  useSemesterStore,
+useTrainingObjectTypeStore } from '@workspace/ui'
 
 interface ChuyenDeNghienCuuForm {
-    trainingObjectTypeId: string
     trainingCourseId: string
     organizationId: string
-    semesterId: string
 }
 interface TimeReportForm {
     subjectClassId: string
@@ -44,14 +42,13 @@ export default function ChuyenDeNghienCuu() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [isSearched, setIsSearched] = useState(false)
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
-    const watchTrainingObjectTypeId = Form.useWatch('trainingObjectTypeId', form)
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: semesterId } = useSemesterStore()
     const courseWhere = useMemo(() => {
-        if (!watchTrainingObjectTypeId) return {}
         return {
-            trainingObjectTypeId: watchTrainingObjectTypeId,
+            trainingObjectTypeId: trainingObjectTypeId,
         }
-    }, [watchTrainingObjectTypeId])
+    }, [trainingObjectTypeId])
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: courseWhere,
     })
@@ -61,7 +58,6 @@ export default function ChuyenDeNghienCuu() {
         },
     })
     const { data: organizationData = [] } = useFindManyDM_DonVi()
-    const { data: semesterData = [] } = useFindManySemester()
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         where: {
             subject: {
@@ -84,18 +80,18 @@ export default function ChuyenDeNghienCuu() {
             },
         }
 
-        if (searchParams.trainingObjectTypeId) {
+        if (trainingObjectTypeId) {
             filter.subjectClass = {
                 ...filter.subjectClass,
 
-                trainingObjectTypeId: searchParams.trainingObjectTypeId,
+                trainingObjectTypeId: trainingObjectTypeId,
             }
         }
 
-        if (searchParams.semesterId) {
+        if (semesterId) {
             filter.subjectClass = {
                 ...filter.subjectClass,
-                semesterId: searchParams.semesterId,
+                semesterId: semesterId,
             }
         }
 
@@ -122,7 +118,7 @@ export default function ChuyenDeNghienCuu() {
         }
 
         return filter
-    }, [searchParams, isSearched, timeReportParams])
+    }, [searchParams, isSearched, timeReportParams, trainingObjectTypeId,semesterId])
     const { data: studentSubjectScoreData = [], refetch: refetchStudentSubjectScore } =
         useFindManyStudentSubjectScore({
             where,
@@ -364,15 +360,15 @@ export default function ChuyenDeNghienCuu() {
             data.find((item) => item.id === id)?.name || 'Tất cả'
 
         const searchRows = [
-            [
-                'trainingObjectTypeId',
-                `Đối tượng đào tạo: ${getNameById(searchParams.trainingObjectTypeId, trainingObjectTypeData)}`,
-            ],
+            // [
+            //     'trainingObjectTypeId',
+            //     `Đối tượng đào tạo: ${getNameById(searchParams.trainingObjectTypeId, trainingObjectTypeData)}`,
+            // ],
             [
                 'trainingCourseId',
                 `Khóa học: ${getNameById(searchParams.trainingCourseId, trainingCourseData)}`,
             ],
-            ['semesterId', `Học kỳ: ${getNameById(searchParams.semesterId, semesterData)}`],
+            // ['semesterId', `Học kỳ: ${getNameById(searchParams.semesterId, semesterData)}`],
             [
                 'organizationId',
                 `Khoa quản lý: ${organizationData.find((o) => o.Id === searchParams.organizationId)?.sTen || 'Tất cả'}`,
@@ -388,9 +384,9 @@ export default function ChuyenDeNghienCuu() {
         const columns = [
             { header: 'ID_RECORD', key: 'recordId', width: 0, hidden: true },
             { header: 'Hạn nhập', key: 'deadline', width: 15 },
-            { header: 'ĐTĐT', key: 'trainingType', width: 15 },
+            // { header: 'ĐTĐT', key: 'trainingType', width: 15 },
             { header: 'Khóa học', key: 'course', width: 15 },
-            { header: 'Học kỳ', key: 'semester', width: 15 },
+            // { header: 'Học kỳ', key: 'semester', width: 15 },
             { header: 'Mã SV', key: 'studentCode', width: 15 },
             { header: 'Họ và tên SV', key: 'studentName', width: 25 },
             { header: 'Lớp môn học', key: 'subjectClass', width: 20 },
@@ -624,7 +620,7 @@ export default function ChuyenDeNghienCuu() {
                             layout="horizontal"
                             className="w-full mb-6 flex flex-wrap items-end gap-4"
                         >
-                            <Form.Item
+                            {/* <Form.Item
                                 name="trainingObjectTypeId"
                                 label="Đối tượng"
                                 className="mb-0"
@@ -640,7 +636,7 @@ export default function ChuyenDeNghienCuu() {
                                     }
                                     placeholder="Chọn đối tượng"
                                 />
-                            </Form.Item>
+                            </Form.Item> */}
 
                             <Form.Item name="trainingCourseId" label="Khóa học" className="mb-0">
                                 <Select
@@ -651,6 +647,7 @@ export default function ChuyenDeNghienCuu() {
                                             value: item.id,
                                         })) || []
                                     }
+                                    popupMatchSelectWidth={false} 
                                     placeholder="Chọn khóa học"
                                 />
                             </Form.Item>
@@ -665,8 +662,7 @@ export default function ChuyenDeNghienCuu() {
                                     treeData={treeOrgData}
                                 />
                             </Form.Item>
-
-                            <Form.Item name="semesterId" label="Học kỳ" className="mb-0">
+                            {/* <Form.Item name="semesterId" label="Học kỳ" className="mb-0">
                                 <Select
                                     className="w-64"
                                     maxTagCount="responsive"
@@ -681,8 +677,7 @@ export default function ChuyenDeNghienCuu() {
                                     })}
                                     placeholder="Chọn học kỳ"
                                 />
-                            </Form.Item>
-
+                            </Form.Item> */}
                             <Form.Item className="mb-0">
                                 <div className="flex gap-2">
                                     <Button type="primary" onClick={handleSearch}>
@@ -714,6 +709,7 @@ export default function ChuyenDeNghienCuu() {
                                         label: `${item.code} - ${item.name}`,
                                         value: item.id,
                                     }))}
+                                    popupMatchSelectWidth={false} 
                                     placeholder="Chọn lớp môn học"
                                 />
                             </Form.Item>
