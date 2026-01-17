@@ -7,9 +7,10 @@ import { Button, Col, message, Row, Typography } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TableChuongMuc from './table-chuong-muc'
 
 export default function MaTranDePage({ id }: { id?: string }) {
-    const [selectedMatrixId, setSelectedMatrixId] = useState<string | null>(null)
+    const [selectedMatrixId, setSelectedMatrixId] = useState<string | undefined>(undefined)
     const { onOpen } = useDisclosure<{
         id?: string
     }>({
@@ -56,7 +57,7 @@ export default function MaTranDePage({ id }: { id?: string }) {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        setSelectedMatrixId(null)
+        setSelectedMatrixId(undefined)
     }, [id])
 
     useEffect(() => {
@@ -113,9 +114,9 @@ export default function MaTranDePage({ id }: { id?: string }) {
                     </div>
                 </div>
             </Col>
-            {/* <Col span={19}>
-        <TableChuongMuc matrixId={selectedMatrixId} />
-      </Col> */}
+            <Col span={19}>
+                <TableChuongMuc matrixId={selectedMatrixId} />
+            </Col>
         </Row>
     )
 }

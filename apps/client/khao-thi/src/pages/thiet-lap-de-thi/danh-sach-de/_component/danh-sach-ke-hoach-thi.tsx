@@ -5,8 +5,8 @@ import { store } from '../index'
 import { useCountExam, useCreateExam, useFindManyExam } from '@workspace/db/hooks'
 import Table from '@components/commons/table'
 import { cn } from '@workspace/ui/lib/utils'
-import { SubjectClass } from '@workspace/db'
 import { useSemesterStore } from '@workspace/ui'
+import type { SubjectClass } from '@workspace/db/client'
 
 interface Props {
     setActiveKey: (key: string) => void
@@ -14,7 +14,7 @@ interface Props {
 
 export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     const { id: semesterId } = useSemesterStore()
-    const selectedExamId = useStore(store, (state) => state['selectedExamId'])
+    const selectedExamId = useStore(store, (state) => state.selectedExamId)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(10)
 
@@ -22,8 +22,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         store.setState((state: any) => {
             return {
                 ...state,
-                selectedExamId: value as any,
-                subjectVersionId: item as any,
+                selectedExamId: value,
+                subjectVersionId: item,
             }
         })
     }
