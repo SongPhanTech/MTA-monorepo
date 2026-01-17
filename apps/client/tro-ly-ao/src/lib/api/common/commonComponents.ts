@@ -1928,6 +1928,128 @@ export const usePresignedGetObject = <TData = Schemas.UrlDto,>(
   });
 };
 
+export type ConvertDocumentQueryParams = {
+  /**
+   * @format uri
+   */
+  url: string;
+  fileType: string;
+  outputtype: string;
+  title?: string;
+};
+
+export type ConvertDocumentError = Fetcher.ErrorWrapper<undefined>;
+
+export type ConvertDocumentResponse = {
+  /**
+   * @format uri
+   */
+  fileUrl: string;
+};
+
+export type ConvertDocumentVariables = {
+  queryParams: ConvertDocumentQueryParams;
+} & CommonContext["fetcherOptions"];
+
+export const fetchConvertDocument = (
+  variables: ConvertDocumentVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    ConvertDocumentResponse,
+    ConvertDocumentError,
+    undefined,
+    {},
+    ConvertDocumentQueryParams,
+    {}
+  >({
+    url: "/api/minio/convert-document",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export function convertDocumentQuery(variables: ConvertDocumentVariables): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<ConvertDocumentResponse>;
+};
+
+export function convertDocumentQuery(
+  variables: ConvertDocumentVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((options: QueryFnOptions) => Promise<ConvertDocumentResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function convertDocumentQuery(
+  variables: ConvertDocumentVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/api/minio/convert-document",
+      operationId: "convertDocument",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchConvertDocument(variables, signal),
+  };
+}
+
+export const useSuspenseConvertDocument = <TData = ConvertDocumentResponse,>(
+  variables: ConvertDocumentVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      ConvertDocumentResponse,
+      ConvertDocumentError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  return reactQuery.useSuspenseQuery<
+    ConvertDocumentResponse,
+    ConvertDocumentError,
+    TData
+  >({
+    ...convertDocumentQuery(deepMerge(fetcherOptions, variables)),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export const useConvertDocument = <TData = ConvertDocumentResponse,>(
+  variables: ConvertDocumentVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      ConvertDocumentResponse,
+      ConvertDocumentError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  return reactQuery.useQuery<
+    ConvertDocumentResponse,
+    ConvertDocumentError,
+    TData
+  >({
+    ...convertDocumentQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type SqlTransactionError = Fetcher.ErrorWrapper<undefined>;
 
 export type SqlTransactionResponse = (void | null)[];
@@ -2313,4 +2435,9 @@ export type QueryOperation =
       path: "/api/minio/presigned-url";
       operationId: "presignedGetObject";
       variables: PresignedGetObjectVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/api/minio/convert-document";
+      operationId: "convertDocument";
+      variables: ConvertDocumentVariables | reactQuery.SkipToken;
     };
