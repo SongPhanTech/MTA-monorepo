@@ -1,7 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Col, Form, Row, Table, Button, message, Switch } from "antd";
 import { useDisclosure } from "react-hook-disclosure-modal";
-import { useCountQuestion, useCreateQuestion, useFindManyExamFramework, useFindManyExamMatrix, useFindManyKnowledgeBlock, useFindManyQuestion, useFindManyQuestionBank, useUpdateQuestion } from "@workspace/db/hooks";
+import {
+  useCountQuestion,
+  useCreateQuestion,
+  useFindManyExamFramework,
+  useFindManyExamMatrix,
+  useFindManyKnowledgeBlock,
+  useFindManyQuestion,
+  useFindManyQuestionBank,
+  useUpdateQuestion,
+} from "@workspace/db/hooks";
 import { queryClient } from "@api/index";
 import PutFormModal from "@components/commons/put-modal";
 import FormItem from "@components/commons/form-item";
@@ -15,7 +24,9 @@ const PickQuestionFromBankModal = () => {
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [selectedQuestions, setSelectedQuestions] = useState<any[]>([]);
-  const [questionBankId, setQuestionBankId] = useState<string | undefined>(undefined);
+  const [questionBankId, setQuestionBankId] = useState<string | undefined>(
+    undefined,
+  );
   const [keepOld, setKeepOld] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -30,6 +41,7 @@ const PickQuestionFromBankModal = () => {
       setSelectedQuestions([]);
       setQuestionBankId(undefined);
       setKeepOld(false);
+      setCurrentPage(1);
     },
   });
 
@@ -43,18 +55,18 @@ const PickQuestionFromBankModal = () => {
 
   const { data: examMatrixs = [] } = useFindManyExamMatrix(
     { where: { examFrameworkId } },
-    { enabled: !!examFrameworkId }
+    { enabled: !!examFrameworkId },
   );
 
   const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
     { where: { examMatrixId } },
-    { enabled: !!examMatrixId }
+    { enabled: !!examMatrixId },
   );
 
   const subjectVersionId = useMemo(
     () =>
       examFrameworks.find((f) => f.id === examFrameworkId)?.subjectVersionId,
-    [examFrameworks, examFrameworkId]
+    [examFrameworks, examFrameworkId],
   );
 
   const { data: questionBanks = [] } = useFindManyQuestionBank(
@@ -65,7 +77,7 @@ const PickQuestionFromBankModal = () => {
     },
     {
       enabled: !!subjectVersionId,
-    }
+    },
   );
 
   const { data: questions = [] } = useFindManyQuestion(
@@ -84,7 +96,7 @@ const PickQuestionFromBankModal = () => {
       skip: (currentPage - 1) * pageSize,
       orderBy: { createdAt: "desc" },
     },
-    { enabled: !!questionBankId }
+    { enabled: !!questionBankId },
   );
 
   const { data: totalQuestions = 0 } = useCountQuestion(
@@ -94,7 +106,7 @@ const PickQuestionFromBankModal = () => {
         deletedAt: null,
       },
     },
-    { enabled: !!questionBankId }
+    { enabled: !!questionBankId },
   );
 
   useEffect(() => {
@@ -129,9 +141,12 @@ const PickQuestionFromBankModal = () => {
     });
   }, [isOpen, input?.examFrameworkId, form]);
 
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  // }, [questionBankId]);
+  useEffect(() => {
+    if (!questionBankId) return;
+    setCurrentPage(1);
+    setSelectedRowKeys([]);
+    setSelectedQuestions([]);
+  }, [questionBankId]);
 
   async function onSubmit() {
     try {
@@ -140,7 +155,7 @@ const PickQuestionFromBankModal = () => {
         return;
       }
 
-      const { knowledgeBlockId } = form.getFieldsValue();
+      // const { knowledgeBlockId } = form.getFieldsValue();
 
       if (!knowledgeBlockId) {
         message.error("Vui lòng chọn chuẩn đầu ra");
@@ -148,61 +163,63 @@ const PickQuestionFromBankModal = () => {
       }
 
       if (keepOld) {
-        for (const q of selectedQuestions) {
-          await createQuestion({
-            data: {
-              content: q.content,
-              explanation: q.explanation,
-              type: q.type,
-              difficult: q.difficult,
-              point: q.point ?? 1,
-              isAutoGraded: q.isAutoGraded ?? false,
-              knowledgeBlockId,
-              questionBankId: q.questionBankId,
+        await Promise.all(
+          selectedQuestions.map((q) =>
+            createQuestion({
+              data: {
+                content: q.content,
+                explanation: q.explanation,
+                type: q.type,
+                difficult: q.difficult,
+                point: q.point ?? 1,
+                isAutoGraded: q.isAutoGraded ?? false,
+                knowledgeBlockId,
+                questionBankId: q.questionBankId,
 
-              multipleChoiceOptions:
-                q.multipleChoiceOptions?.length > 0
-                  ? {
-                      createMany: {
-                        data: q.multipleChoiceOptions.map(
-                          (opt: any, index: number) => ({
-                            content: opt.content,
-                            isCorrect: !!opt.isCorrect,
-                            order: opt.order ?? index + 1,
-                          })
-                        ),
-                      },
-                    }
-                  : undefined,
+                multipleChoiceOptions:
+                  q.multipleChoiceOptions?.length > 0
+                    ? {
+                        createMany: {
+                          data: q.multipleChoiceOptions.map(
+                            (opt: any, index: number) => ({
+                              content: opt.content,
+                              isCorrect: !!opt.isCorrect,
+                              order: opt.order ?? index + 1,
+                            }),
+                          ),
+                        },
+                      }
+                    : undefined,
 
-              orderingItems:
-                q.orderingItems?.length > 0
-                  ? {
-                      createMany: {
-                        data: q.orderingItems.map((item: any) => ({
-                          content: item.content,
-                          correctOrder: item.correctOrder,
-                        })),
-                      },
-                    }
-                  : undefined,
+                orderingItems:
+                  q.orderingItems?.length > 0
+                    ? {
+                        createMany: {
+                          data: q.orderingItems.map((item: any) => ({
+                            content: item.content,
+                            correctOrder: item.correctOrder,
+                          })),
+                        },
+                      }
+                    : undefined,
 
-              fillInBlankSlots:
-                q.fillInBlankSlots?.length > 0
-                  ? {
-                      createMany: {
-                        data: q.fillInBlankSlots.map(
-                          (slot: any, index: number) => ({
-                            order: slot.order ?? index + 1,
-                            correctAnswer: slot.correctAnswer,
-                          })
-                        ),
-                      },
-                    }
-                  : undefined,
-            },
-          });
-        }
+                fillInBlankSlots:
+                  q.fillInBlankSlots?.length > 0
+                    ? {
+                        createMany: {
+                          data: q.fillInBlankSlots.map(
+                            (slot: any, index: number) => ({
+                              order: slot.order ?? index + 1,
+                              correctAnswer: slot.correctAnswer,
+                            }),
+                          ),
+                        },
+                      }
+                    : undefined,
+              },
+            }),
+          ),
+        );
         message.success(`Đã sao chép ${selectedQuestions.length} câu hỏi`);
       } else {
         await Promise.all(
@@ -212,8 +229,8 @@ const PickQuestionFromBankModal = () => {
               data: {
                 knowledgeBlockId,
               },
-            })
-          )
+            }),
+          ),
         );
         message.success(`Đã chuyển ${selectedQuestions.length} câu hỏi`);
       }
@@ -252,54 +269,59 @@ const PickQuestionFromBankModal = () => {
       ]}
     >
       <Col span={24}>
-            <Row gutter={[16, 16]}>
-        <Col span={8}>
-          <FormItem
-            form={form}
-            name="examFrameworkId"
-            label="Khung đề"
-            required
-          >
-            <Select
-              disabled={!!input?.examFrameworkId}
-              placeholder="Chọn khung đề"
-              options={examFrameworks.map((i) => ({
-                value: i.id,
-                label: i.name,
-              }))}
-            />
-          </FormItem>
-        </Col>
-        <Col span={8}>
-          <FormItem form={form} name="examMatrixId" label="Ma trận đề" required>
-            <Select
-              disabled={!examFrameworkId}
-              placeholder="Chọn ma trận"
-              options={examMatrixs.map((i) => ({
-                value: i.id,
-                label: i.name,
-              }))}
-            />
-          </FormItem>
-        </Col>
-        <Col span={8}>
-          <FormItem
-            form={form}
-            name="knowledgeBlockId"
-            label="Chuẩn đầu ra"
-            required
-          >
-            <Select
-              disabled={!examMatrixId}
-              placeholder="Chọn chuẩn đầu ra"
-              options={knowledgeBlocks.map((i) => ({
-                value: i.id,
-                label: i.name,
-              }))}
-            />
-          </FormItem>
-        </Col>
-      </Row>
+        <Row gutter={[16, 16]}>
+          <Col span={8}>
+            <FormItem
+              form={form}
+              name="examFrameworkId"
+              label="Khung đề"
+              required
+            >
+              <Select
+                disabled={!!input?.examFrameworkId}
+                placeholder="Chọn khung đề"
+                options={examFrameworks.map((i) => ({
+                  value: i.id,
+                  label: i.name,
+                }))}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem
+              form={form}
+              name="examMatrixId"
+              label="Ma trận đề"
+              required
+            >
+              <Select
+                disabled={!examFrameworkId}
+                placeholder="Chọn ma trận"
+                options={examMatrixs.map((i) => ({
+                  value: i.id,
+                  label: i.name,
+                }))}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem
+              form={form}
+              name="knowledgeBlockId"
+              label="Chuẩn đầu ra"
+              required
+            >
+              <Select
+                disabled={!examMatrixId}
+                placeholder="Chọn chuẩn đầu ra"
+                options={knowledgeBlocks.map((i) => ({
+                  value: i.id,
+                  label: i.name,
+                }))}
+              />
+            </FormItem>
+          </Col>
+        </Row>
       </Col>
 
       <Col span={24}>
@@ -319,7 +341,6 @@ const PickQuestionFromBankModal = () => {
                   key={qb.id}
                   onClick={() => {
                     setQuestionBankId(qb.id);
-                    setCurrentPage(1);
                   }}
                   className={`p-2 rounded cursor-pointer ${
                     qb.id === questionBankId
@@ -392,7 +413,7 @@ const PickQuestionFromBankModal = () => {
                           {record?.multipleChoiceOptions
                             ?.sort(
                               (a: any, b: any) =>
-                                (a.order || 0) - (b.order || 0)
+                                (a.order || 0) - (b.order || 0),
                             )
                             .map((option: any) => (
                               <div
@@ -415,7 +436,7 @@ const PickQuestionFromBankModal = () => {
                           {record?.orderingItems
                             ?.sort(
                               (a: any, b: any) =>
-                                (a.correctOrder || 0) - (b.correctOrder || 0)
+                                (a.correctOrder || 0) - (b.correctOrder || 0),
                             )
                             .map((item: any, index: number) => (
                               <div
@@ -455,7 +476,7 @@ const PickQuestionFromBankModal = () => {
                 align: "center",
                 render: (_: unknown, record: any) =>
                   LEVEL_COLUMNS.find(
-                    (level) => level.difficult === record.difficult
+                    (level) => level.difficult === record.difficult,
                   )?.label || "",
               },
 

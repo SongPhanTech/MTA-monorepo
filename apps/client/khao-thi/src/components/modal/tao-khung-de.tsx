@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
-import { ExamFramework, Subject, SubjectVersion } from '@workspace/db/client'
+import type { ExamFramework, Subject, SubjectVersion } from '@workspace/db/client'
 import {
     useCreateExamFramework,
     useCreateSubject,

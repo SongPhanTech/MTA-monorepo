@@ -1,4 +1,5 @@
 import { DownloadOutlined, FileWordOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
 import HtmlTruncate from '@components/commons/html-truncate'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
@@ -51,6 +52,7 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
 
     const { onOpen: onOpenMoveQuestion } = useDisclosure<{
         questionIds: string[]
+        onDone?: () => void
     }>({
         tag: 'MoveQuestionModal',
     })
@@ -166,6 +168,9 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
 
             message.success(`Đã xóa ${selectedRowKeys.length} câu hỏi`)
             setSelectedRowKeys([])
+            queryClient.invalidateQueries({
+                queryKey: ['Question'],
+            })
         } catch {
             message.error('Xóa câu hỏi thất bại')
         }
@@ -210,6 +215,9 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                                         onClick={() =>
                                             onOpenMoveQuestion({
                                                 questionIds: selectedRowKeys,
+                                                onDone: () => {
+                                                    setSelectedRowKeys([])
+                                                },
                                             })
                                         }
                                     >

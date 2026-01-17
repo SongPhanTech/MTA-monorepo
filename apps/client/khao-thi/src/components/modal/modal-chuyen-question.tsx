@@ -2,7 +2,14 @@ import { queryClient } from "@api/index";
 import FormItem from "@components/commons/form-item";
 import PutFormModal from "@components/commons/put-modal";
 import Select from "@components/commons/select";
-import { useCreateQuestion, useFindManyExamFramework, useFindManyExamMatrix, useFindManyKnowledgeBlock, useFindManyQuestion, useUpdateQuestion } from "@workspace/db/hooks";
+import {
+  useCreateQuestion,
+  useFindManyExamFramework,
+  useFindManyExamMatrix,
+  useFindManyKnowledgeBlock,
+  useFindManyQuestion,
+  useUpdateQuestion,
+} from "@workspace/db/hooks";
 import { Col, Form, message, Row, Switch } from "antd";
 import { useState } from "react";
 import { useDisclosure } from "react-hook-disclosure-modal";
@@ -20,6 +27,7 @@ const MoveQuestionModal = () => {
 
   const { isOpen, onClose, input } = useDisclosure<{
     questionIds: string[];
+    onDone?: () => void;
   }>({
     tag: "MoveQuestionModal",
     onClose: () => {
@@ -51,7 +59,7 @@ const MoveQuestionModal = () => {
     },
     {
       enabled: !!input?.questionIds?.length,
-    }
+    },
   );
 
   const { data: examFrameworks = [] } = useFindManyExamFramework();
@@ -64,7 +72,7 @@ const MoveQuestionModal = () => {
     },
     {
       enabled: !!examFrameworkId,
-    }
+    },
   );
 
   const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
@@ -75,7 +83,7 @@ const MoveQuestionModal = () => {
     },
     {
       enabled: !!examMatrixId,
-    }
+    },
   );
 
   async function onSubmit(values: MoveQuestionForm) {
@@ -90,71 +98,75 @@ const MoveQuestionModal = () => {
       }
 
       const { knowledgeBlockId } = values;
-      //TODO: Làm lại
-      // for (const q of selectedQuestions) {
-      //   await createQuestion({
-      //     data: {
-      //       content: q.content,
-      //       explanation: q.explanation,
-      //       type: q.type,
-      //       difficult: q.difficult,
-      //       point: q.point ?? 1,
-      //       isAutoGraded: q.isAutoGraded ?? false,
-      //       knowledgeBlockId,
-      //      questionBankId: keepOld ? undefined : q.questionBankId,
 
-      //       multipleChoiceOptions:
-      //         q.multipleChoiceOptions?.length > 0
-      //           ? {
-      //               createMany: {
-      //                 data: q.multipleChoiceOptions.map((opt, index) => ({
-      //                   content: opt.content,
-      //                   isCorrect: opt.isCorrect,
-      //                   order: opt.order ?? index + 1,
-      //                 })),
-      //               },
-      //             }
-      //           : undefined,
-      //       orderingItems:
-      //         q.orderingItems?.length > 0
-      //           ? {
-      //               createMany: {
-      //                 data: q.orderingItems.map((item) => ({
-      //                   content: item.content,
-      //                   correctOrder: item.correctOrder,
-      //                 })),
-      //               },
-      //             }
-      //           : undefined,
-      //       fillInBlankSlots:
-      //         q.fillInBlankSlots?.length > 0
-      //           ? {
-      //               createMany: {
-      //                 data: q.fillInBlankSlots.map((slot, index) => ({
-      //                   order: slot.order ?? index + 1,
-      //                   correctAnswer: slot.correctAnswer,
-      //                 })),
-      //               },
-      //             }
-      //           : undefined,
+      await Promise.all(
+        selectedQuestions.map((q) =>
+          createQuestion({
+            data: {
+              content: q.content,
+              explanation: q.explanation,
+              type: q.type,
+              difficult: q.difficult,
+              point: q.point ?? 1,
+              isAutoGraded: q.isAutoGraded ?? false,
+              knowledgeBlockId,
+              questionBankId: q.questionBankId,
 
-      //     },
-      //   });
-      // }
+              multipleChoiceOptions:
+                q.multipleChoiceOptions?.length > 0
+                  ? {
+                      createMany: {
+                        data: q.multipleChoiceOptions.map((opt, index) => ({
+                          content: opt.content,
+                          isCorrect: opt.isCorrect,
+                          order: opt.order ?? index + 1,
+                        })),
+                      },
+                    }
+                  : undefined,
+
+              orderingItems:
+                q.orderingItems?.length > 0
+                  ? {
+                      createMany: {
+                        data: q.orderingItems.map((item) => ({
+                          content: item.content,
+                          correctOrder: item.correctOrder,
+                        })),
+                      },
+                    }
+                  : undefined,
+
+              fillInBlankSlots:
+                q.fillInBlankSlots?.length > 0
+                  ? {
+                      createMany: {
+                        data: q.fillInBlankSlots.map((slot, index) => ({
+                          order: slot.order ?? index + 1,
+                          correctAnswer: slot.correctAnswer,
+                        })),
+                      },
+                    }
+                  : undefined,
+            },
+          }),
+        ),
+      );
       if (!keepOld) {
         await Promise.all(
           input.questionIds.map((id) =>
             updateQuestion({
               where: { id },
               data: { deletedAt: new Date() },
-            })
-          )
+            }),
+          ),
         );
         message.success(`Đã chuyển ${selectedQuestions.length} câu hỏi`);
       } else {
         message.success(`Đã sao chép ${selectedQuestions.length} câu hỏi`);
       }
 
+      input?.onDone?.();
       form.resetFields();
       onClose();
     } catch (error) {
