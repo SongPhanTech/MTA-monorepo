@@ -115,20 +115,12 @@ const QuestionBankTitle = memo(
         )
 
         const handleDeleteConfirm = useCallback(
-            (e: any) => {
-                handleDeleteQuestionBank(qb.id)
+            (e?: React.MouseEvent) => {
                 e?.stopPropagation()
+                handleDeleteQuestionBank(qb.id)
             },
             [qb.id, handleDeleteQuestionBank]
         )
-
-        const handleDeleteCancel = useCallback((e: any) => {
-            e?.stopPropagation()
-        }, [])
-
-        const handleDeleteClick = useCallback((e: React.MouseEvent) => {
-            e.stopPropagation()
-        }, [])
 
         return (
             <div className="flex items-center justify-between w-full py-2">
@@ -136,7 +128,7 @@ const QuestionBankTitle = memo(
                     <Database className="w-4 h-4 flex-shrink-0 text-green-600" />
                     <span className="font-medium">{qb.name}</span>
                 </Space>
-                <div className="flex items-center gap-2 ml-5">
+                <div className="flex items-center gap-2 ml-5" onClick={(e) => e.stopPropagation()}>
                     <EditIcon
                         onClick={handleEditClick}
                         className="text-blue-700 cursor-pointer flex-shrink-0 w-4 h-4"
@@ -144,10 +136,7 @@ const QuestionBankTitle = memo(
                     <DeleteIcon
                         popConfirm={{
                             onConfirm: handleDeleteConfirm,
-                            onCancel: handleDeleteCancel,
                         }}
-                        onClick={handleDeleteClick}
-                        className="flex-shrink-0 text-red-500 w-4 h-4"
                     />
                 </div>
             </div>
@@ -202,7 +191,7 @@ export default function QuestionBankTree({
                                     const versionKey = `ver-${version.id}`
                                     const versionMatches = matchesSearch(version.name, version.code)
 
-                                    const bankData = (version.questionBank || [])
+                                    const bankData = (version.questionBanks || [])
                                         .filter((qb: QuestionBank) => qb.deletedAt === null)
                                         .map((qb: QuestionBank) => {
                                             const qbMatches = matchesSearch(qb.name, qb.code)

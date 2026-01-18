@@ -14,7 +14,7 @@ import PutFormModal from '@components/commons/put-modal'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
-import { ExamBank } from '@workspace/db'
+import type { ExamBank } from '@workspace/db/client'
 
 type PutMaTranDeInputType = ExamBank & {
     quantity: number
@@ -33,8 +33,8 @@ const SinhDeModal = () => {
         tag: 'SinhDeModal',
         onClose: form.resetFields,
     })
-    const selectedExamId = useStore(store, (state) => state['selectedExamId'])
-    const subjectVersionId = useStore(store, (state) => state['subjectVersionId'])
+    const selectedExamId = useStore(store, (state) => state.selectedExamId)
+    const subjectVersionId = useStore(store, (state) => state.subjectVersionId)
     const { data: dataExam } = useFindUniqueExam(
         {
             where: { id: selectedExamId },
