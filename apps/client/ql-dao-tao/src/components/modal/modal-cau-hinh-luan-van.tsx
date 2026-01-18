@@ -1218,7 +1218,7 @@ const ModalCauHinhLuanVan = () => {
                                 <FormItem
                                     form={form}
                                     name="councilChairmanId"
-                                    label="GVHD 1"
+                                    label=""
                                     className="mb-5 hidden"
                                     labelAlign="left"
                                     {...formItemLayout}
@@ -1252,7 +1252,7 @@ const ModalCauHinhLuanVan = () => {
                                         }
                                         suffix="VNĐ"
                                         disabled={
-                                            !form.getFieldValue('councilChairmanPaymentAmount')
+                                            !form.getFieldValue('councilChairmanId')
                                         }
                                     />
                                 </FormItem>
@@ -1308,7 +1308,7 @@ const ModalCauHinhLuanVan = () => {
                                         placeholder="Nhập số tiền"
                                         suffix="VNĐ"
                                         disabled={
-                                            !form.getFieldValue('councilSecretaryPaymentAmount')
+                                            !form.getFieldValue('councilSecretaryId')
                                         }
                                     />
                                 </FormItem>
@@ -1420,7 +1420,7 @@ const ModalCauHinhLuanVan = () => {
                                         }
                                         suffix="VNĐ"
                                         disabled={
-                                            !form.getFieldValue('councilReviewer2PaymentAmount')
+                                            !form.getFieldValue('councilReviewer2Id')
                                         }
                                     />
                                 </FormItem>
@@ -1474,7 +1474,7 @@ const ModalCauHinhLuanVan = () => {
                                             value?.replace(/\$\s?|(,*)/g, '') as unknown as number
                                         }
                                         suffix="VNĐ"
-                                        disabled={!form.getFieldValue('councilMemberPaymentAmount')}
+                                        disabled={!form.getFieldValue('councilMemberId')}
                                     />
                                 </FormItem>
                             </Col>

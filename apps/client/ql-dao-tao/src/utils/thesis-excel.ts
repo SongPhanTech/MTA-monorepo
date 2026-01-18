@@ -3,18 +3,17 @@ import { getMinioUrl } from '@workspace/libs/utils'
 import { dayjs } from '@workspace/ui'
 import { CouncilRole } from '@workspace/db/client'
 
-
 interface ExportOptions {
-    allStudentsInClasses: any[];
-    showSpinner: () => void;
-    hideSpinner: () => void;
-    message: any; // Antd message instance
+    allStudentsInClasses: any[]
+    showSpinner: () => void
+    hideSpinner: () => void
+    message: any // Antd message instance
 }
-export const exportPhuLucDsLuanVan = async ({ 
-    allStudentsInClasses, 
-    showSpinner, 
-    hideSpinner, 
-    message 
+export const exportPhuLucDsLuanVan = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
 }: ExportOptions) => {
     showSpinner()
     if (!allStudentsInClasses?.length) {
@@ -80,7 +79,7 @@ export const exportPhuLucDsLuanVan = async ({
                         align: 'center',
                         colSpan: 6,
                         bold: true,
-                    }, 
+                    },
                 ],
             }
             const thesisRows: TableRow[] = item.thesisProject.map((thesis: any) => {
@@ -119,7 +118,7 @@ export const exportPhuLucDsLuanVan = async ({
                     border: false,
                 },
             ],
-        }       
+        }
         await exportFromTemplate({
             templateUrl: getMinioUrl('mta/template/phulucluanvanthacsi.xlsx'),
             sheets: [
@@ -192,11 +191,11 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
 
     return Array.from(expertStatsMap.values())
 }
-export const  exportThongKeCbHdlv  = async ({ 
-    allStudentsInClasses, 
-    showSpinner, 
-    hideSpinner, 
-    message 
+export const exportThongKeCbHdlv = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
 }: ExportOptions) => {
     if (!allStudentsInClasses?.length) {
         message.error('Không có dữ liệu để tạo thống kê cán bộ hướng dẫn LV')
@@ -208,7 +207,10 @@ export const  exportThongKeCbHdlv  = async ({
     const ngay = ngayhientai.split('/')[0]
     const thang = ngayhientai.split('/')[1]
     const nam = ngayhientai.split('/')[2]
-    const tendot = allStudentsInClasses?.length > 0 ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name : ''
+    const tendot =
+        allStudentsInClasses?.length > 0
+            ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
+            : ''
 
     const tenkhoa = ''
     const rows: TableRow[] = dataMapping?.map((item, index) => {
@@ -298,11 +300,11 @@ export const  exportThongKeCbHdlv  = async ({
         hideSpinner()
     }
 }
-export const exportDanhSachBaoVe = async ({ 
-    allStudentsInClasses, 
-    showSpinner, 
-    hideSpinner, 
-    message 
+export const exportDanhSachBaoVe = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
 }: ExportOptions) => {
     if (!allStudentsInClasses?.length) {
         message.error('Không có dữ liệu để tạo danh sách bảo vệ LV')
@@ -317,15 +319,14 @@ export const exportDanhSachBaoVe = async ({
                         { value: index + 1, border: true, align: 'center' },
                         {
                             value:
-                                student?.fixedClass?.curriculumVersion?.curriculum
-                                    ?.trainingMajor?.name || '',
+                                student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                                    ?.name || '',
                             border: true,
                             align: 'center',
                         },
                         {
                             value:
-                                student?.fixedClass?.trainingCourse?.trainingObjectType?.name ||
-                                '',
+                                student?.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
                             border: true,
                             align: 'center',
                         },
@@ -343,16 +344,15 @@ export const exportDanhSachBaoVe = async ({
                         {
                             value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                                 ? dayjs(
-                                      student?.thesisRegistrations?.[0]?.thesisProject
-                                          ?.defenseDate
+                                      student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                                   ).format('DD/MM/YYYY')
                                 : '',
                             border: true,
                             align: 'center',
                         },
                         {
-                            value: student?.thesisRegistrations?.[0]?.thesisProject
-                                ?.defenseSession?.startTime
+                            value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession
+                                ?.startTime
                                 ? dayjs(
                                       student?.thesisRegistrations?.[0]?.thesisProject
                                           ?.defenseSession?.startTime
@@ -363,8 +363,7 @@ export const exportDanhSachBaoVe = async ({
                         },
                         {
                             value:
-                                student?.thesisRegistrations?.[0]?.thesisProject?.room?.name ||
-                                '',
+                                student?.thesisRegistrations?.[0]?.thesisProject?.room?.name || '',
                             border: true,
                             align: 'center',
                         },
@@ -388,7 +387,11 @@ export const exportDanhSachBaoVe = async ({
                 },
             ],
         }
-        const dotxet = allStudentsInClasses?.length > 0 ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name : ''
+        const dotxet =
+            allStudentsInClasses?.length > 0
+                ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession
+                      ?.name
+                : ''
         await exportFromTemplate({
             templateUrl: getMinioUrl('mta/template/DanhSachBaoVe.xlsx'),
             sheets: [
@@ -409,11 +412,11 @@ export const exportDanhSachBaoVe = async ({
         hideSpinner()
     }
 }
-export const exportHosobvlv = async ({ 
-    allStudentsInClasses, 
-    showSpinner, 
-    hideSpinner, 
-    message 
+export const exportHosobvlv = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
 }: ExportOptions) => {
     if (!allStudentsInClasses?.length) {
         message.error('Không có dữ liệu để tạo danh sách bảo vệ LV dán PBV')
@@ -450,16 +453,15 @@ export const exportHosobvlv = async ({
                         .toLowerCase() || '',
                 khoa: student?.fixedClass?.trainingCourse?.name || '',
                 chuyennganh:
-                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-                    '',
+                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
                 nganh:
-                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                        ?.trainingField?.name || '',
+                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
+                        ?.name || '',
                 detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
                 ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-                    ? dayjs(
-                          student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-                      ).format('DD/MM/YYYY')
+                    ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
+                          'DD/MM/YYYY'
+                      )
                     : '',
                 phanbien1: phanbien1?.expert?.name || '',
                 phanbien2: phanbien2?.expert?.name || '',
@@ -490,11 +492,11 @@ export const exportHosobvlv = async ({
         hideSpinner()
     }
 }
-export const exportGiayMoiHdlv = async ({ 
-    allStudentsInClasses, 
-    showSpinner, 
-    hideSpinner, 
-    message 
+export const exportGiayMoiHdlv = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
 }: ExportOptions) => {
     if (!allStudentsInClasses?.length) {
         message.error('Không có dữ liệu đế tạo giấy mời HDLV')
@@ -502,60 +504,58 @@ export const exportGiayMoiHdlv = async ({
     }
     showSpinner()
     const presentDay = dayjs().format('DD/MM/YYYY')
-        const ngay = presentDay.split('/')[0]
-        const thang = presentDay.split('/')[1]
-        const nam = presentDay.split('/')[2]
-        try {
-            const allSheetOptions = allStudentsInClasses?.map((student) => {
-                const supervisor =
-                    student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-                const data = {
-                    ngay: ngay,
-                    thang: thang,
-                    nam: nam,
-                    tenhocvien: student?.userProfile?.fullname,
-                    tenhuongdan: supervisor ? ` ${supervisor}` : '',
-                    khoa: student?.fixedClass?.trainingCourse?.name || '',
-                    chuyennganh:
-                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-                        '',
-                    tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
-                    type:
-                        student?.thesisRegistrations?.[0]?.thesisProject?.description
-                            ?.split('-')[1]
-                            .trim()
-                            .split(':')[1]
-                            .trim()
-                            .toLowerCase() || '',
-                }
-                const gapRow: TableRow = {
-                    cells: [{ value: null, colSpan: 18, border: false }],
-                }
-                return {
-                    sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
-                    data: data,
-                    tableStartCell: { row: 25, col: 1 },
-                    rows: [gapRow],
-                }
-            })
-            await exportFromTemplate({
-                templateUrl: getMinioUrl('mta/template/GiayMoiHDLV.xlsx'),
-                sheets: allSheetOptions ?? [],
-                fileName: 'GiayMoiHDLV',
-                mergeSheetsToOne: true,
-                sheetName: 'GiayMoiHDLV',
-            })
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
+    const ngay = presentDay.split('/')[0]
+    const thang = presentDay.split('/')[1]
+    const nam = presentDay.split('/')[2]
+    try {
+        const allSheetOptions = allStudentsInClasses?.map((student) => {
+            const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+            const data = {
+                ngay: ngay,
+                thang: thang,
+                nam: nam,
+                tenhocvien: student?.userProfile?.fullname,
+                tenhuongdan: supervisor ? ` ${supervisor}` : '',
+                khoa: student?.fixedClass?.trainingCourse?.name || '',
+                chuyennganh:
+                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
+                tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                type:
+                    student?.thesisRegistrations?.[0]?.thesisProject?.description
+                        ?.split('-')[1]
+                        .trim()
+                        .split(':')[1]
+                        .trim()
+                        .toLowerCase() || '',
+            }
+            const gapRow: TableRow = {
+                cells: [{ value: null, colSpan: 18, border: false }],
+            }
+            return {
+                sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+                data: data,
+                tableStartCell: { row: 25, col: 1 },
+                rows: [gapRow],
+            }
+        })
+        await exportFromTemplate({
+            templateUrl: getMinioUrl('mta/template/GiayMoiHDLV.xlsx'),
+            sheets: allSheetOptions ?? [],
+            fileName: 'GiayMoiHDLV',
+            mergeSheetsToOne: true,
+            sheetName: 'GiayMoiHDLV',
+        })
+    } catch (error) {
+        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+    } finally {
+        hideSpinner()
+    }
 }
-export const exportSaoQDHDLV = async ({ 
-    allStudentsInClasses, 
-    showSpinner, 
-    hideSpinner, 
-    message 
+export const exportSaoQDHDLV = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
 }: ExportOptions) => {
     if (!allStudentsInClasses?.length) {
         message.error('Không có dữ liệu đế tạo sao QĐ HDLV')
@@ -568,8 +568,7 @@ export const exportSaoQDHDLV = async ({
     const namQD = presentDay.split('/')[2]
     try {
         const allSheetOptions = allStudentsInClasses?.map((student) => {
-            const supervisor =
-                student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+            const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
             if (!supervisor) {
                 return null
             }
@@ -586,11 +585,10 @@ export const exportSaoQDHDLV = async ({
                         .split(':')[1] || '',
                 khoa: student?.fixedClass?.trainingCourse?.name || '',
                 chuyennganh:
-                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-                    '',
+                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
                 nganh:
-                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                        ?.trainingField?.name || '',
+                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
+                        ?.name || '',
                 detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
                 hoten: student?.userProfile?.fullname,
                 canbohuongdan1: supervisor ? `1. ${supervisor}` : '',
@@ -626,11 +624,11 @@ export const exportSaoQDHDLV = async ({
         hideSpinner()
     }
 }
-export const exportKiemTraTienDo = async ({ 
-    allStudentsInClasses, 
-    showSpinner, 
-    hideSpinner, 
-    message 
+export const exportKiemTraTienDo = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
 }: ExportOptions) => {
     if (!allStudentsInClasses?.length) {
         message.error('Không có dữ liệu để tạo kiểm tra tiến độ')
@@ -693,9 +691,9 @@ export const exportKiemTraTienDo = async ({
                         value: `${index + 1}.  - ${item.sTen}`,
                         border: true,
                         align: 'center',
-                        colSpan: 6,
+                        colSpan: 5,
                         bold: true,
-                    }, 
+                    },
                 ],
             }
             const thesisRows: TableRow[] = item.thesisProject.map((thesis: any, index: number) => {
@@ -710,14 +708,11 @@ export const exportKiemTraTienDo = async ({
                         },
                         { value: `${thesis.tendetai}`, border: true, align: 'left' },
                         {
-                            value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ''}\n${
-                                thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ''
-                            }`,
+                            value: '',
                             border: true,
                             align: 'left',
                         },
-                        { value: `${thesis.isThesis}`, border: true, align: 'center' },
-                        { value: `${thesis.language}`, border: true, align: 'center' },
+                        { value: '', border: true, align: 'center' },
                     ],
                 }
             })
@@ -731,19 +726,41 @@ export const exportKiemTraTienDo = async ({
                 {
                     value: `(Tổng số: ${count - 1} học viên)`,
                     align: 'center',
-                    colSpan: 6,
+                    colSpan: 5,
                     border: false,
                 },
             ],
-        }       
+        }
+        const signRow: TableRow = {
+            cells: [
+                { value: '', border: false, align: 'center' },
+                { value: '', border: false, align: 'center' },
+                { value: '', border: false, align: 'center' },
+                {
+                    value: 'Chủ nhiệm khoa/viện trường'.toUpperCase(),
+                    colSpan: 2,
+                    border: false,
+                    bold: true,
+                    align: 'center',
+                },
+            ],
+        }
+        const signRow2: TableRow = {
+            cells: [
+                { value: '', border: false, align: 'center' },
+                { value: '', border: false, align: 'center' },
+                { value: '', border: false, align: 'center' },
+                { value: '(Ký và ghi rõ họ tên)', colSpan: 2, border: false, align: 'center' },
+            ],
+        }
         await exportFromTemplate({
             templateUrl: getMinioUrl('mta/template/KiemTraTienDoLuanVan.xlsx'),
             sheets: [
                 {
                     sheet: 'Detai',
-                    rows: [...dataRows, gapRow, totalRow],
+                    rows: [...dataRows, gapRow, totalRow, gapRow, signRow, signRow2],
                     tableStartCell: { row: 8, col: 1 },
-                    data: { dotxet: dotxet || '' },
+                    data: { dotxet: dotxet.toUpperCase() || '' },
                 },
             ],
             fileName: 'KiemTraTienDoLuanVan',
