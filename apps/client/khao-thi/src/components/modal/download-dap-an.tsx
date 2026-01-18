@@ -2,6 +2,7 @@ import { queryClient } from '@api/index'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { useFindUniqueExamBank, useUpdateExamBank } from '@workspace/db/hooks'
 import { Button, Flex, Input, Modal } from 'antd'
+import { getMinioUrl } from '@workspace/libs/utils'
 import {
     Document,
     Packer,
@@ -238,20 +239,11 @@ const PrintExplanation = () => {
         return 'jpg'
     }
 
-    // Hàm đọc file ảnh qua Electron IPC
+    // Hàm đọc file ảnh từ Minio URL
     const readImageFile = async (src: string): Promise<Uint8Array | null> => {
         try {
-            // Sử dụng electronAPI để đọc file từ main process
-            // if (window.electronAPI?.readImageFile) {
-            //   const result = await window.electronAPI.readImageFile(src);
-            //   if (result.success && result.buffer) {
-            //     return new Uint8Array(result.buffer);
-            //   }
-            //   console.error("Failed to read image:", result.error);
-            //   return null;
-            // }
-
-            const response = await fetch(src)
+            const fullUrl = getMinioUrl(src)
+            const response = await fetch(fullUrl)
             if (!response.ok) return null
             const arrayBuffer = await response.arrayBuffer()
             return new Uint8Array(arrayBuffer)
@@ -285,7 +277,7 @@ const PrintExplanation = () => {
             img.onerror = () => {
                 resolve({ width: 200, height: 150 })
             }
-            img.src = src
+            img.src = getMinioUrl(src)
         })
     }
 
