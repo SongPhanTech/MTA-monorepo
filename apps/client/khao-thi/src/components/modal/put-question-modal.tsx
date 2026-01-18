@@ -1,531 +1,520 @@
-import { queryClient } from "@api/index";
-import FormItem from "@components/commons/form-item";
-import PutFormModal from "@components/commons/put-modal";
-import { RichTextEditor } from "@components/commons/rich-text-editor";
-import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath";
-import Select from "@components/commons/select";
-import Table from "@components/commons/table";
-import { DIFFICULT_OPTIONS, QUESTION_TYPE_OPTIONS } from "@constants/constants";
-import { Prisma, QuestionType } from "@workspace/db";
-import { useCreateQuestion, useFindManyKnowledgeBlock, useFindUniqueQuestion, useUpdateQuestion } from "@workspace/db/hooks";
+import { queryClient } from '@api/index'
+import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import { RichTextEditor } from '@components/commons/rich-text-editor'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
+import Select from '@components/commons/select'
+import Table from '@components/commons/table'
+import { DIFFICULT_OPTIONS, QUESTION_TYPE_OPTIONS } from '@constants/constants'
+import { type Prisma, QuestionType } from '@workspace/db/client'
 import {
-  Button,
-  Checkbox,
-  Col,
-  Form,
-  Input,
-  message,
-  Radio,
-  Row,
-  Tooltip,
-} from "antd";
-import { Trash2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { useDisclosure } from "react-hook-disclosure-modal";
-
+    useCreateQuestion,
+    useFindManyKnowledgeBlock,
+    useFindUniqueQuestion,
+    useUpdateQuestion,
+} from '@workspace/db/hooks'
+import { Button, Checkbox, Col, Form, Input, message, Radio, Row, Tooltip } from 'antd'
+import { Trash2 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutQuestionType = Prisma.QuestionGetPayload<{
-  include: {
-    multipleChoiceOptions: {
-      select: {
-        id?: true;
-        isCorrect: true;
-        content: true;
-      };
-    };
-    fillInBlankSlots: {
-      select: {
-        id: true;
-        order: true;
-        correctAnswer: true;
-      };
-    };
-    orderingItems: {
-      select: {
-        id?: true;
-        content: true;
-        correctOrder: true;
-      };
-    };
-  };
-}>;
+    include: {
+        multipleChoiceOptions: {
+            select: {
+                id?: true
+                isCorrect: true
+                content: true
+            }
+        }
+        fillInBlankSlots: {
+            select: {
+                id: true
+                order: true
+                correctAnswer: true
+            }
+        }
+        orderingItems: {
+            select: {
+                id?: true
+                content: true
+                correctOrder: true
+            }
+        }
+    }
+}>
 
 const PutQuestionModal = () => {
-  const [form] = Form.useForm<PutQuestionType>();
-  const [storageType, setStorageType] = useState<"khung" | "kho">("khung");
-  const [dataOptions, setDataOptions] = useState<any>([
-    {
-      key: "1",
-      content: "",
-      isCorrect: false,
-    },
-    {
-      key: "2",
-      content: "",
-      isCorrect: false,
-    },
-    {
-      key: "3",
-      content: "",
-      isCorrect: false,
-    },
-    {
-      key: "4",
-      content: "",
-      isCorrect: false,
-    },
-  ]);
-
-  const { isOpen, onClose, input } = useDisclosure<{
-    id: string;
-    questionBankId: string;
-    subjectVersionId: string;
-  }>({
-    tag: "PutQuestionModal",
-    onClose: form.resetFields,
-  });
-
-  const typeQuestion = Form.useWatch("type", form);
-  const content = Form.useWatch("content", form);
-  const explanation = Form.useWatch("explanation", form);
-  const listForm =
-    (Form.useWatch("multipleChoiceOptions", form) as Array<{
-      key?: string;
-      content: string;
-      isCorrect?: boolean;
-      correctOrder?: number;
-    }>) || [];
-
-  const { mutateAsync: createQuestion } = useCreateQuestion();
-  const { mutateAsync: updateQuestion } = useUpdateQuestion();
-
-  const { data: initialValue } = useFindUniqueQuestion(
-    {
-      where: { id: input?.id },
-      include: {
-        questionBank: true,
-        multipleChoiceOptions: true,
-        fillInBlankSlots: true,
-        orderingItems: true,
-      },
-    },
-    {
-      enabled: !!input?.id,
-    }
-  );
-
-  const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
-    where: {
-      deletedAt: null,
-      examMatrix: {
-        examFramework: {
-          subjectVersionId: input?.subjectVersionId,
+    const [form] = Form.useForm<PutQuestionType>()
+    const [storageType, setStorageType] = useState<'khung' | 'kho'>('khung')
+    const [dataOptions, setDataOptions] = useState<any>([
+        {
+            key: '1',
+            content: '',
+            isCorrect: false,
         },
-      },
-    },
-  });
+        {
+            key: '2',
+            content: '',
+            isCorrect: false,
+        },
+        {
+            key: '3',
+            content: '',
+            isCorrect: false,
+        },
+        {
+            key: '4',
+            content: '',
+            isCorrect: false,
+        },
+    ])
 
-  async function onOk(output?: PutQuestionType) {
-    if (!output) return;
-    try {
-      if (!input?.questionBankId) {
-        message.error("Thiếu mã ngân hàng câu hỏi");
-        return;
-      }
-      const data = {
-        content: output.content,
-        type: output.type,
-        explanation: output.explanation,
-        isAutoGraded: output.isAutoGraded,
-        questionBankId: input?.questionBankId,
-        knowledgeBlockId: output.knowledgeBlockId,
-        difficult: output.difficult,
-      };
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+        questionBankId: string
+        subjectVersionId: string
+    }>({
+        tag: 'PutQuestionModal',
+        onClose: form.resetFields,
+    })
 
-      let res: any = null;
+    const typeQuestion = Form.useWatch('type', form)
+    const content = Form.useWatch('content', form)
+    const explanation = Form.useWatch('explanation', form)
+    const listForm =
+        (Form.useWatch('multipleChoiceOptions', form) as Array<{
+            key?: string
+            content: string
+            isCorrect?: boolean
+            correctOrder?: number
+        }>) || []
 
-      if (output.type === QuestionType.FILL_IN_BLANK) {
-        if (!output.multipleChoiceOptions?.length) {
-          message.error("Vui lòng nhập đáp án");
-          return;
+    const { mutateAsync: createQuestion } = useCreateQuestion()
+    const { mutateAsync: updateQuestion } = useUpdateQuestion()
+
+    const { data: initialValue } = useFindUniqueQuestion(
+        {
+            where: { id: input?.id },
+            include: {
+                questionBank: true,
+                multipleChoiceOptions: true,
+                fillInBlankSlots: true,
+                orderingItems: true,
+            },
+        },
+        {
+            enabled: !!input?.id,
+        }
+    )
+
+    const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
+        where: {
+            deletedAt: null,
+            examMatrix: {
+                examFramework: {
+                    subjectVersionId: input?.subjectVersionId,
+                },
+            },
+        },
+    })
+
+    async function onOk(output?: PutQuestionType) {
+        if (!output) return
+        try {
+            if (!input?.questionBankId) {
+                message.error('Thiếu mã ngân hàng câu hỏi')
+                return
+            }
+            const data = {
+                content: output.content,
+                type: output.type,
+                explanation: output.explanation,
+                isAutoGraded: output.isAutoGraded,
+                questionBankId: input?.questionBankId,
+                knowledgeBlockId: output.knowledgeBlockId,
+                difficult: output.difficult,
+            }
+
+            let res: any = null
+
+            if (output.type === QuestionType.FILL_IN_BLANK) {
+                if (!output.multipleChoiceOptions?.length) {
+                    message.error('Vui lòng nhập đáp án')
+                    return
+                }
+
+                const payload = {
+                    ...data,
+                    fillInBlankSlots: input?.id
+                        ? {
+                              deleteMany: {},
+                              createMany: {
+                                  data: output.multipleChoiceOptions.map((i, index) => ({
+                                      order: index + 1,
+                                      correctAnswer: i.content,
+                                  })),
+                              },
+                          }
+                        : {
+                              createMany: {
+                                  data: output.multipleChoiceOptions.map((i, index) => ({
+                                      order: index + 1,
+                                      correctAnswer: i.content,
+                                  })),
+                              },
+                          },
+                }
+
+                input?.id
+                    ? await updateQuestion({ data: payload, where: { id: input.id } })
+                    : await createQuestion({ data: payload })
+
+                message.success('Lưu câu hỏi điền khuyết thành công')
+                onClose()
+                return
+            }
+
+            if (output.type === QuestionType.ORDERING) {
+                if (!output.multipleChoiceOptions?.length) {
+                    message.error('Vui lòng nhập các bước')
+                    return
+                }
+
+                const orderingData = (output.multipleChoiceOptions as any[])
+                    .filter((i) => i.content && i.correctOrder !== undefined)
+                    .map((i) => ({
+                        content: i.content,
+                        correctOrder: Number(i.correctOrder),
+                    }))
+
+                const payload = {
+                    ...data,
+                    orderingItems: input?.id
+                        ? {
+                              deleteMany: {},
+                              createMany: {
+                                  data: orderingData,
+                              },
+                          }
+                        : {
+                              createMany: {
+                                  data: orderingData,
+                              },
+                          },
+                }
+
+                input?.id
+                    ? await updateQuestion({ data: payload, where: { id: input.id } })
+                    : await createQuestion({ data: payload })
+
+                message.success('Lưu câu hỏi sắp xếp thành công')
+                onClose()
+                return
+            }
+
+            if (
+                output.type === QuestionType.MULTIPLE_CHOICE ||
+                output.type === QuestionType.SINGLE_CHOICE
+            ) {
+                const error = output.multipleChoiceOptions.find((i) => !i.content)
+                if (error || !output.multipleChoiceOptions.length) {
+                    message.error('Vui lòng nhập đáp án')
+                    return
+                }
+                const error1 = output.multipleChoiceOptions.filter((i) => !!i.isCorrect)
+                if (
+                    error1.length === 0 ||
+                    (error1.length < 2 && output.type === QuestionType.MULTIPLE_CHOICE) ||
+                    (error1.length > 1 && output.type === QuestionType.SINGLE_CHOICE)
+                ) {
+                    message.error('Vui lòng nhập đúng đáp án')
+                    return
+                }
+                if (input?.id) {
+                    await updateQuestion({
+                        data: {
+                            ...data,
+                            multipleChoiceOptions: {
+                                deleteMany: {},
+                                createMany: {
+                                    data: output.multipleChoiceOptions.map((i, index: number) => {
+                                        return {
+                                            content: i.content,
+                                            isCorrect: i.isCorrect,
+                                            order: index + 1,
+                                        }
+                                    }),
+                                },
+                            },
+                        },
+                        where: {
+                            id: input.id,
+                        },
+                    })
+                    message.success('Cập nhật thành công')
+                } else {
+                    res = await createQuestion({
+                        data: {
+                            ...data,
+                            multipleChoiceOptions: {
+                                createMany: {
+                                    data: output.multipleChoiceOptions.map((i, index: number) => {
+                                        return {
+                                            content: i.content,
+                                            isCorrect: i.isCorrect,
+                                            order: index + 1,
+                                        }
+                                    }),
+                                },
+                            },
+                        },
+                    })
+                    message.success('Thêm câu hỏi thành công')
+                }
+            } else {
+                if (input?.id) {
+                    await updateQuestion({
+                        data,
+                        where: {
+                            id: input.id,
+                        },
+                    })
+                    message.success('Cập nhật thành công')
+                } else {
+                    res = await createQuestion({
+                        data,
+                    })
+                    message.success('Thêm câu hỏi thành công')
+                }
+            }
+
+            queryClient.invalidateQueries({
+                queryKey: ['Question'],
+            })
+
+            onClose()
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+    }
+
+    const handleDeleteAnswer = (index: number) => {
+        const data = form.getFieldValue('multipleChoiceOptions') || []
+        const newData = data.filter((_: any, i: number) => i !== index)
+
+        form.setFieldValue('multipleChoiceOptions', newData)
+        setDataOptions(newData)
+    }
+
+    const handleAddAnswer = () => {
+        const data = form.getFieldValue('multipleChoiceOptions') || []
+
+        const newItem =
+            typeQuestion === QuestionType.SINGLE_CHOICE ||
+            typeQuestion === QuestionType.MULTIPLE_CHOICE
+                ? { key: String(data.length + 1), content: '', isCorrect: false }
+                : { key: String(data.length + 1), content: '' }
+
+        const newData = [...data, newItem]
+        form.setFieldValue('multipleChoiceOptions', newData)
+        setDataOptions(newData)
+    }
+
+    // useEffect(() => {
+    //   if (initialValue) {
+    //     setDataOptions(
+    //       initialValue.multipleChoiceOptions.map((i) => ({
+    //         key: String(i.order),
+    //         content: i.content,
+    //         isCorrect: i.isCorrect,
+    //         id: i.id,
+    //       }))
+    //     );
+    //     form.setFieldsValue({
+    //       ...initialValue,
+    //       multipleChoiceOptions: initialValue.multipleChoiceOptions.map((i) => ({
+    //         content: i.content,
+    //         isCorrect: i.isCorrect,
+    //         key: String(i.order),
+    //       })),
+    //     });
+    //   } else {
+    //     form.setFieldsValue({ isAutoGraded: false });
+    //     setStorageType("khung");
+    //   }
+    // }, [initialValue, form]);
+    useEffect(() => {
+        if (!initialValue) return
+        const type = initialValue.type
+        let options: any[] = []
+
+        switch (type) {
+            // ===== TRẮC NGHIỆM =====
+            case QuestionType.SINGLE_CHOICE:
+            case QuestionType.MULTIPLE_CHOICE:
+                options =
+                    initialValue.multipleChoiceOptions
+                        ?.sort((a, b) => a.order - b.order)
+                        .map((i) => ({
+                            key: String(i.order),
+                            content: i.content,
+                            isCorrect: i.isCorrect,
+                            id: i.id,
+                        })) || []
+                break
+
+            // ===== ĐIỀN KHUYẾT =====
+            case QuestionType.FILL_IN_BLANK:
+                options =
+                    initialValue.fillInBlankSlots
+                        ?.sort((a, b) => a.order - b.order)
+                        .map((s) => ({
+                            key: String(s.order),
+                            content: s.correctAnswer,
+                        })) || []
+                break
+
+            // ===== SẮP XẾP =====
+            case QuestionType.ORDERING:
+                options =
+                    initialValue.orderingItems?.map((o) => ({
+                        key: String(o.id),
+                        content: o.content,
+                        correctOrder: o.correctOrder,
+                    })) || []
+                break
+
+            // ===== TỰ LUẬN / VẤN ĐÁP =====
+            case QuestionType.ESSAY:
+            case QuestionType.ORAL:
+                options = []
+                break
+
+            default:
+                options = []
         }
 
-        const payload = {
-          ...data,
-          fillInBlankSlots: input?.id
-            ? {
-                deleteMany: {},
-                createMany: {
-                  data: output.multipleChoiceOptions.map((i, index) => ({
-                    order: index + 1,
-                    correctAnswer: i.content,
-                  })),
-                },
-              }
-            : {
-                createMany: {
-                  data: output.multipleChoiceOptions.map((i, index) => ({
-                    order: index + 1,
-                    correctAnswer: i.content,
-                  })),
-                },
-              },
-        };
+        setDataOptions(options)
 
-        input?.id
-          ? await updateQuestion({ data: payload, where: { id: input.id } })
-          : await createQuestion({ data: payload });
+        form.setFieldsValue({
+            ...initialValue,
+            multipleChoiceOptions: options,
+        })
+    }, [initialValue, form])
 
-        message.success("Lưu câu hỏi điền khuyết thành công");
-        onClose();
-        return;
-      }
+    useEffect(() => {
+        if (!typeQuestion) return
 
-      if (output.type === QuestionType.ORDERING) {
-        if (!output.multipleChoiceOptions?.length) {
-          message.error("Vui lòng nhập các bước");
-          return;
-        }
+        if (input?.id) return
 
-        const orderingData = (output.multipleChoiceOptions as any[])
-          .filter((i) => i.content && i.correctOrder !== undefined)
-          .map((i) => ({
-            content: i.content,
-            correctOrder: Number(i.correctOrder),
-          }));
+        let defaultOptions: any[] = []
 
-        const payload = {
-          ...data,
-          orderingItems: input?.id
-            ? {
-                deleteMany: {},
-                createMany: {
-                  data: orderingData,
-                },
-              }
-            : {
-                createMany: {
-                  data: orderingData,
-                },
-              },
-        };
-
-        input?.id
-          ? await updateQuestion({ data: payload, where: { id: input.id } })
-          : await createQuestion({ data: payload });
-
-        message.success("Lưu câu hỏi sắp xếp thành công");
-        onClose();
-        return;
-      }
-
-      if (
-        output.type === QuestionType.MULTIPLE_CHOICE ||
-        output.type === QuestionType.SINGLE_CHOICE
-      ) {
-        const error = output.multipleChoiceOptions.find((i) => !i.content);
-        if (error || !output.multipleChoiceOptions.length) {
-          message.error("Vui lòng nhập đáp án");
-          return;
-        }
-        const error1 = output.multipleChoiceOptions.filter(
-          (i) => !!i.isCorrect
-        );
-        if (
-          error1.length === 0 ||
-          (error1.length < 2 && output.type === QuestionType.MULTIPLE_CHOICE) ||
-          (error1.length > 1 && output.type === QuestionType.SINGLE_CHOICE)
+        if (typeQuestion === QuestionType.FILL_IN_BLANK) {
+            defaultOptions = [{ key: '1', content: '' }]
+        } else if (typeQuestion === QuestionType.ORDERING) {
+            defaultOptions = [
+                { key: '1', content: '' },
+                { key: '2', content: '' },
+                { key: '3', content: '' },
+            ]
+        } else if (
+            typeQuestion === QuestionType.SINGLE_CHOICE ||
+            typeQuestion === QuestionType.MULTIPLE_CHOICE
         ) {
-          message.error("Vui lòng nhập đúng đáp án");
-          return;
+            defaultOptions = [
+                { key: '1', content: '', isCorrect: false },
+                { key: '2', content: '', isCorrect: false },
+                { key: '3', content: '', isCorrect: false },
+                { key: '4', content: '', isCorrect: false },
+            ]
         }
-        if (input?.id) {
-          await updateQuestion({
-            data: {
-              ...data,
-              multipleChoiceOptions: {
-                deleteMany: {},
-                createMany: {
-                  data: output.multipleChoiceOptions.map((i, index: number) => {
-                    return {
-                      content: i.content,
-                      isCorrect: i.isCorrect,
-                      order: index + 1,
-                    };
-                  }),
-                },
-              },
-            },
-            where: {
-              id: input.id,
-            },
-          });
-          message.success("Cập nhật thành công");
-        } else {
-          res = await createQuestion({
-            data: {
-              ...data,
-              multipleChoiceOptions: {
-                createMany: {
-                  data: output.multipleChoiceOptions.map((i, index: number) => {
-                    return {
-                      content: i.content,
-                      isCorrect: i.isCorrect,
-                      order: index + 1,
-                    };
-                  }),
-                },
-              },
-            },
-          });
-          message.success("Thêm câu hỏi thành công");
-        }
-      } else {
-        if (input?.id) {
-          await updateQuestion({
-            data,
-            where: {
-              id: input.id,
-            },
-          });
-          message.success("Cập nhật thành công");
-        } else {
-          res = await createQuestion({
-            data,
-          });
-          message.success("Thêm câu hỏi thành công");
-        }
-      }
 
-      queryClient.invalidateQueries({
-        queryKey: ["Question"],
-      });
+        setDataOptions(defaultOptions)
+        form.setFieldValue('multipleChoiceOptions', defaultOptions)
+    }, [typeQuestion, input?.id, form])
 
-      onClose();
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message);
-        return;
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại");
-    }
-  }
+    const fixedHtmlContent = useMemo(() => {
+        return content?.replace(/<li>\s*<p>(.*?)<\/p>\s*<\/li>/g, '<li>$1</li>')
+    }, [content])
 
-  const handleDeleteAnswer = (index: number) => {
-    const data = form.getFieldValue("multipleChoiceOptions") || [];
-    const newData = data.filter((_: any, i: number) => i !== index);
+    const fixedHtmlExplanation = useMemo(() => {
+        return explanation?.replace(/<li>\s*<p>(.*?)<\/p>\s*<\/li>/g, '<li>$1</li>')
+    }, [explanation])
 
-    form.setFieldValue("multipleChoiceOptions", newData);
-    setDataOptions(newData);
-  };
-
-  const handleAddAnswer = () => {
-    const data = form.getFieldValue("multipleChoiceOptions") || [];
-
-    const newItem =
-      typeQuestion === QuestionType.SINGLE_CHOICE ||
-      typeQuestion === QuestionType.MULTIPLE_CHOICE
-        ? { key: String(data.length + 1), content: "", isCorrect: false }
-        : { key: String(data.length + 1), content: "" };
-
-    const newData = [...data, newItem];
-    form.setFieldValue("multipleChoiceOptions", newData);
-    setDataOptions(newData);
-  };
-
-  // useEffect(() => {
-  //   if (initialValue) {
-  //     setDataOptions(
-  //       initialValue.multipleChoiceOptions.map((i) => ({
-  //         key: String(i.order),
-  //         content: i.content,
-  //         isCorrect: i.isCorrect,
-  //         id: i.id,
-  //       }))
-  //     );
-  //     form.setFieldsValue({
-  //       ...initialValue,
-  //       multipleChoiceOptions: initialValue.multipleChoiceOptions.map((i) => ({
-  //         content: i.content,
-  //         isCorrect: i.isCorrect,
-  //         key: String(i.order),
-  //       })),
-  //     });
-  //   } else {
-  //     form.setFieldsValue({ isAutoGraded: false });
-  //     setStorageType("khung");
-  //   }
-  // }, [initialValue, form]);
-  useEffect(() => {
-    if (!initialValue) return;
-    const type = initialValue.type;
-    let options: any[] = [];
-
-    switch (type) {
-      // ===== TRẮC NGHIỆM =====
-      case QuestionType.SINGLE_CHOICE:
-      case QuestionType.MULTIPLE_CHOICE:
-        options =
-          initialValue.multipleChoiceOptions
-            ?.sort((a, b) => a.order - b.order)
-            .map((i) => ({
-              key: String(i.order),
-              content: i.content,
-              isCorrect: i.isCorrect,
-              id: i.id,
-            })) || [];
-        break;
-
-      // ===== ĐIỀN KHUYẾT =====
-      case QuestionType.FILL_IN_BLANK:
-        options =
-          initialValue.fillInBlankSlots
-            ?.sort((a, b) => a.order - b.order)
-            .map((s) => ({
-              key: String(s.order),
-              content: s.correctAnswer,
-            })) || [];
-        break;
-
-      // ===== SẮP XẾP =====
-      case QuestionType.ORDERING:
-        options =
-          initialValue.orderingItems?.map((o) => ({
-            key: String(o.id),
-            content: o.content,
-            correctOrder: o.correctOrder,
-          })) || [];
-        break;
-
-      // ===== TỰ LUẬN / VẤN ĐÁP =====
-      case QuestionType.ESSAY:
-      case QuestionType.ORAL:
-        options = [];
-        break;
-
-      default:
-        options = [];
-    }
-
-    setDataOptions(options);
-
-    form.setFieldsValue({
-      ...initialValue,
-      multipleChoiceOptions: options,
-    });
-  }, [initialValue, form]);
-
-  useEffect(() => {
-    if (!typeQuestion) return;
-
-    if (input?.id) return;
-
-    let defaultOptions: any[] = [];
-
-    if (typeQuestion === QuestionType.FILL_IN_BLANK) {
-      defaultOptions = [{ key: "1", content: "" }];
-    } else if (typeQuestion === QuestionType.ORDERING) {
-      defaultOptions = [
-        { key: "1", content: "" },
-        { key: "2", content: "" },
-        { key: "3", content: "" },
-      ];
-    } else if (
-      typeQuestion === QuestionType.SINGLE_CHOICE ||
-      typeQuestion === QuestionType.MULTIPLE_CHOICE
-    ) {
-      defaultOptions = [
-        { key: "1", content: "", isCorrect: false },
-        { key: "2", content: "", isCorrect: false },
-        { key: "3", content: "", isCorrect: false },
-        { key: "4", content: "", isCorrect: false },
-      ];
-    }
-
-    setDataOptions(defaultOptions);
-    form.setFieldValue("multipleChoiceOptions", defaultOptions);
-  }, [typeQuestion, input?.id, form]);
-
-  const fixedHtmlContent = useMemo(() => {
-    return content?.replace(/<li>\s*<p>(.*?)<\/p>\s*<\/li>/g, "<li>$1</li>");
-  }, [content]);
-
-  const fixedHtmlExplanation = useMemo(() => {
-    return explanation?.replace(
-      /<li>\s*<p>(.*?)<\/p>\s*<\/li>/g,
-      "<li>$1</li>"
-    );
-  }, [explanation]);
-
-  return (
-    <PutFormModal
-      open={isOpen}
-      form={form}
-      onFinish={onOk}
-      onCancel={onClose}
-      maskClosable={true}
-      title={input?.id ? "Chỉnh sửa câu hỏi" : "Thêm câu hỏi"}
-      width="80vw"
-    >
-      <Col span={24}>
-        <div className="flex">
-          <Col span={12}>
-            <Row gutter={[16, 0]}>
-              <Col span={12}>
-                <FormItem form={form} name="type" label="Loại câu hỏi" required>
-                  <Select
-                    maxTagCount={"responsive"}
-                    placeholder="Chọn loại câu hỏi"
-                    options={QUESTION_TYPE_OPTIONS}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <div>
-                  <div className="text-sm font-medium mb-3">Vị trí lưu trữ</div>
-                  <Radio.Group
-                    value={storageType}
-                    onChange={(e) => setStorageType(e.target.value)}
-                  >
-                    <Radio value="khung">Lưu tại khung</Radio>
-                    <Radio value="kho">Lưu tại kho</Radio>
-                  </Radio.Group>
-                </div>
-              </Col>
-              {storageType === "khung" && (
-                <Col span={12}>
-                  <FormItem
-                    form={form}
-                    name="knowledgeBlockId"
-                    label="Chuẩn đầu ra"
-                    required
-                  >
-                    <Select
-                      maxTagCount={"responsive"}
-                      placeholder="Chọn chuẩn đầu ra"
-                      options={knowledgeBlockData?.map(({ id, name }) => ({
-                        value: id,
-                        label: name,
-                      }))}
-                    />
-                  </FormItem>
-                </Col>
-              )}
-              <Col span={12}>
-                <FormItem
-                  form={form}
-                  name="difficult"
-                  label="Mức độ tư duy"
-                  required
-                >
-                  <Select
-                    maxTagCount={"responsive"}
-                    placeholder="Chọn mức độ"
-                    options={DIFFICULT_OPTIONS}
-                  />
-                </FormItem>
-              </Col>
-              {/* <Col span={12}>
+    return (
+        <PutFormModal
+            open={isOpen}
+            form={form}
+            onFinish={onOk}
+            onCancel={onClose}
+            maskClosable={true}
+            title={input?.id ? 'Chỉnh sửa câu hỏi' : 'Thêm câu hỏi'}
+            width="80vw"
+        >
+            <Col span={24}>
+                <div className="flex">
+                    <Col span={12}>
+                        <Row gutter={[16, 0]}>
+                            <Col span={12}>
+                                <FormItem form={form} name="type" label="Loại câu hỏi" required>
+                                    <Select
+                                        maxTagCount={'responsive'}
+                                        placeholder="Chọn loại câu hỏi"
+                                        options={QUESTION_TYPE_OPTIONS}
+                                    />
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <div>
+                                    <div className="text-sm font-medium mb-3">Vị trí lưu trữ</div>
+                                    <Radio.Group
+                                        value={storageType}
+                                        onChange={(e) => setStorageType(e.target.value)}
+                                    >
+                                        <Radio value="khung">Lưu tại khung</Radio>
+                                        <Radio value="kho">Lưu tại kho</Radio>
+                                    </Radio.Group>
+                                </div>
+                            </Col>
+                            {storageType === 'khung' && (
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="knowledgeBlockId"
+                                        label="Chuẩn đầu ra"
+                                        required
+                                    >
+                                        <Select
+                                            maxTagCount={'responsive'}
+                                            placeholder="Chọn chuẩn đầu ra"
+                                            options={knowledgeBlockData?.map(({ id, name }) => ({
+                                                value: id,
+                                                label: name,
+                                            }))}
+                                        />
+                                    </FormItem>
+                                </Col>
+                            )}
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="difficult"
+                                    label="Mức độ tư duy"
+                                    required
+                                >
+                                    <Select
+                                        maxTagCount={'responsive'}
+                                        placeholder="Chọn mức độ"
+                                        options={DIFFICULT_OPTIONS}
+                                    />
+                                </FormItem>
+                            </Col>
+                            {/* <Col span={12}>
                 <FormItem form={form} name="point" label="Điểm" required>
                   <InputNumber
                     min={0}
@@ -551,366 +540,385 @@ const PutQuestionModal = () => {
                   </FormItem>
                 </Col>
               )} */}
-              <Col span={24}>
-                <div className="border-t border-[#D1D5DB] x-auto my-2" />
-              </Col>
-              <Col span={24}>
-                <FormItem
-                  form={form}
-                  label="Câu hỏi"
-                  name={"content"}
-                  required
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập câu hỏi",
-                    },
-                  ]}
-                >
-                  <RichTextEditor />
-                </FormItem>
-              </Col>
-              {/* Tự luận */}
-              <Col span={24}>
-                {(typeQuestion === QuestionType.ESSAY ||
-                  typeQuestion === QuestionType.ORAL) && (
-                  <FormItem
-                    form={form}
-                    label="Giải thích đáp án"
-                    name={"explanation"}
-                  >
-                    <RichTextEditor />
-                  </FormItem>
-                )}
-                {(typeQuestion === QuestionType.SINGLE_CHOICE ||
-                  typeQuestion === QuestionType.MULTIPLE_CHOICE) && (
-                  <>
-                    <FormItem
-                      form={form}
-                      label="Đáp án"
-                      name={"multipleChoiceOptions"}
-                    >
-                      <Table
-                        rowKey="key"
-                        pagination={false}
-                        data={dataOptions}
-                        columns={[
-                          {
-                            title: "Đáp án",
-                            width: 100,
-                            align: "left",
-                            render: (_, __, index) => {
-                              return `Đáp án ${index + 1}`;
-                            },
-                          },
-                          {
-                            title: "Đáp án",
-                            dataIndex: "content",
-                            align: "center",
-                            render: (__, record, index: number) => {
-                              return (
-                                <Form.Item
-                                  className="w-full mb-0"
-                                  name={[
-                                    "multipleChoiceOptions",
-                                    index,
-                                    "content",
-                                  ]}
-                                  label=""
-                                  required
+                            <Col span={24}>
+                                <div className="border-t border-[#D1D5DB] x-auto my-2" />
+                            </Col>
+                            <Col span={24}>
+                                <FormItem
+                                    form={form}
+                                    label="Câu hỏi"
+                                    name={'content'}
+                                    required
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng nhập câu hỏi',
+                                        },
+                                    ]}
                                 >
-                                  <Input placeholder="Nhập đáp án" />
-                                  {/* <EditorContent editor={editor} {...editorProps} /> */}
-                                </Form.Item>
-                              );
-                            },
-                          },
-                          {
-                            title: "Đúng/sai",
-                            dataIndex: "questionType",
-                            width: 100,
-                            align: "center",
-                            render: (__, record, index: number) => {
-                              return (
-                                <Form.Item
-                                  className="w-full mb-0"
-                                  name={[
-                                    "multipleChoiceOptions",
-                                    index,
-                                    "isCorrect",
-                                  ]}
-                                  label=""
-                                  valuePropName="checked"
-                                >
-                                  <Checkbox />
-                                </Form.Item>
-                              );
-                            },
-                          },
-                          {
-                            title: "",
-                            dataIndex: "questionType",
-                            width: 50,
-                            align: "center",
-                            render: (__, record, index: number) => {
-                              return (
-                                <Tooltip title={"Xoá"}>
-                                  <Trash2
-                                    size={16}
-                                    strokeWidth={1.5}
-                                    className="text-red-600 cursor-pointer"
-                                    onClick={() => {
-                                      handleDeleteAnswer(index);
-                                    }}
-                                  />
-                                </Tooltip>
-                              );
-                            },
-                          },
-                        ]}
-                      />
-                    </FormItem>
-                    <div className="flex justify-end">
-                      <Button onClick={handleAddAnswer}>Thêm đáp án</Button>
-                    </div>
-                  </>
-                )}
-                {typeQuestion === QuestionType.FILL_IN_BLANK && (
-                  <>
-                    <FormItem
-                      form={form}
-                      label="Đáp án đúng theo thứ tự ô trống"
-                      name="multipleChoiceOptions"
-                    >
-                      <Table
-                        rowKey="key"
-                        pagination={false}
-                        data={dataOptions}
-                        columns={[
-                          {
-                            title: "Ô trống",
-                            width: 80,
-                            render: (_, __, index) => `#${index + 1}`,
-                          },
-                          {
-                            title: "Đáp án",
-                            render: (_, __, index) => (
-                              <Form.Item
-                                name={[
-                                  "multipleChoiceOptions",
-                                  index,
-                                  "content",
-                                ]}
-                                className="mb-0"
-                                rules={[
-                                  { required: true, message: "Nhập đáp án" },
-                                ]}
-                              >
-                                <Input />
-                              </Form.Item>
-                            ),
-                          },
-                          {
-                            width: 50,
-                            render: (_, __, index) => (
-                              <Trash2
-                                size={16}
-                                className="text-red-600 cursor-pointer"
-                                onClick={() => handleDeleteAnswer(index)}
-                              />
-                            ),
-                          },
-                        ]}
-                      />
-                    </FormItem>
+                                    <RichTextEditor />
+                                </FormItem>
+                            </Col>
+                            {/* Tự luận */}
+                            <Col span={24}>
+                                {(typeQuestion === QuestionType.ESSAY ||
+                                    typeQuestion === QuestionType.ORAL) && (
+                                    <FormItem
+                                        form={form}
+                                        label="Giải thích đáp án"
+                                        name={'explanation'}
+                                    >
+                                        <RichTextEditor />
+                                    </FormItem>
+                                )}
+                                {(typeQuestion === QuestionType.SINGLE_CHOICE ||
+                                    typeQuestion === QuestionType.MULTIPLE_CHOICE) && (
+                                    <>
+                                        <FormItem
+                                            form={form}
+                                            label="Đáp án"
+                                            name={'multipleChoiceOptions'}
+                                        >
+                                            <Table
+                                                rowKey="key"
+                                                pagination={false}
+                                                data={dataOptions}
+                                                columns={[
+                                                    {
+                                                        title: 'Đáp án',
+                                                        width: 100,
+                                                        align: 'left',
+                                                        render: (_, __, index) => {
+                                                            return `Đáp án ${index + 1}`
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Đáp án',
+                                                        dataIndex: 'content',
+                                                        align: 'center',
+                                                        render: (__, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'multipleChoiceOptions',
+                                                                        index,
+                                                                        'content',
+                                                                    ]}
+                                                                    label=""
+                                                                    required
+                                                                >
+                                                                    <Input placeholder="Nhập đáp án" />
+                                                                    {/* <EditorContent editor={editor} {...editorProps} /> */}
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Đúng/sai',
+                                                        dataIndex: 'questionType',
+                                                        width: 100,
+                                                        align: 'center',
+                                                        render: (__, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'multipleChoiceOptions',
+                                                                        index,
+                                                                        'isCorrect',
+                                                                    ]}
+                                                                    label=""
+                                                                    valuePropName="checked"
+                                                                >
+                                                                    <Checkbox />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        title: '',
+                                                        dataIndex: 'questionType',
+                                                        width: 50,
+                                                        align: 'center',
+                                                        render: (__, record, index: number) => {
+                                                            return (
+                                                                <Tooltip title={'Xoá'}>
+                                                                    <Trash2
+                                                                        size={16}
+                                                                        strokeWidth={1.5}
+                                                                        className="text-red-600 cursor-pointer"
+                                                                        onClick={() => {
+                                                                            handleDeleteAnswer(
+                                                                                index
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                </Tooltip>
+                                                            )
+                                                        },
+                                                    },
+                                                ]}
+                                            />
+                                        </FormItem>
+                                        <div className="flex justify-end">
+                                            <Button onClick={handleAddAnswer}>Thêm đáp án</Button>
+                                        </div>
+                                    </>
+                                )}
+                                {typeQuestion === QuestionType.FILL_IN_BLANK && (
+                                    <>
+                                        <FormItem
+                                            form={form}
+                                            label="Đáp án đúng theo thứ tự ô trống"
+                                            name="multipleChoiceOptions"
+                                        >
+                                            <Table
+                                                rowKey="key"
+                                                pagination={false}
+                                                data={dataOptions}
+                                                columns={[
+                                                    {
+                                                        title: 'Ô trống',
+                                                        width: 80,
+                                                        render: (_, __, index) => `#${index + 1}`,
+                                                    },
+                                                    {
+                                                        title: 'Đáp án',
+                                                        render: (_, __, index) => (
+                                                            <Form.Item
+                                                                name={[
+                                                                    'multipleChoiceOptions',
+                                                                    index,
+                                                                    'content',
+                                                                ]}
+                                                                className="mb-0"
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message: 'Nhập đáp án',
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <Input />
+                                                            </Form.Item>
+                                                        ),
+                                                    },
+                                                    {
+                                                        width: 50,
+                                                        render: (_, __, index) => (
+                                                            <Trash2
+                                                                size={16}
+                                                                className="text-red-600 cursor-pointer"
+                                                                onClick={() =>
+                                                                    handleDeleteAnswer(index)
+                                                                }
+                                                            />
+                                                        ),
+                                                    },
+                                                ]}
+                                            />
+                                        </FormItem>
 
-                    <div className="flex justify-end">
-                      <Button onClick={handleAddAnswer}>Thêm ô trống</Button>
-                    </div>
-                  </>
-                )}
-                {typeQuestion === QuestionType.ORDERING && (
-                  <>
-                    <FormItem
-                      form={form}
-                      label="Đáp án"
-                      name="multipleChoiceOptions"
-                    >
-                      <Table
-                        rowKey="key"
-                        pagination={false}
-                        data={dataOptions}
-                        columns={[
-                          {
-                            title: "Đáp án",
-                            width: 100,
-                            render: (_, __, index) => `Đáp án ${index + 1}`,
-                          },
-                          {
-                            title: "Đáp án",
-                            render: (_, __, index) => (
-                              <Form.Item
-                                name={[
-                                  "multipleChoiceOptions",
-                                  index,
-                                  "content",
-                                ]}
-                                className="mb-0"
-                                rules={[
-                                  { required: true, message: "Nhập đáp án" },
-                                ]}
-                              >
-                                <Input placeholder="Nhập đáp án" />
-                              </Form.Item>
-                            ),
-                          },
-                          {
-                            title: "Thứ tự đúng",
-                            width: 120,
-                            align: "center",
-                            render: (_, __, index) => (
-                              <Form.Item
-                                name={[
-                                  "multipleChoiceOptions",
-                                  index,
-                                  "correctOrder",
-                                ]}
-                                className="mb-0"
-                                rules={[
-                                  { required: true, message: "Nhập số thứ tự" },
-                                ]}
-                              >
-                                <Input type="number" placeholder="VD: 1" />
-                              </Form.Item>
-                            ),
-                          },
-                          {
-                            width: 50,
-                            align: "center",
-                            render: (_, __, index) => (
-                              <Tooltip title="Xoá">
-                                <Trash2
-                                  size={16}
-                                  className="text-red-600 cursor-pointer"
-                                  onClick={() => handleDeleteAnswer(index)}
-                                />
-                              </Tooltip>
-                            ),
-                          },
-                        ]}
-                      />
-                    </FormItem>
+                                        <div className="flex justify-end">
+                                            <Button onClick={handleAddAnswer}>Thêm ô trống</Button>
+                                        </div>
+                                    </>
+                                )}
+                                {typeQuestion === QuestionType.ORDERING && (
+                                    <>
+                                        <FormItem
+                                            form={form}
+                                            label="Đáp án"
+                                            name="multipleChoiceOptions"
+                                        >
+                                            <Table
+                                                rowKey="key"
+                                                pagination={false}
+                                                data={dataOptions}
+                                                columns={[
+                                                    {
+                                                        title: 'Đáp án',
+                                                        width: 100,
+                                                        render: (_, __, index) =>
+                                                            `Đáp án ${index + 1}`,
+                                                    },
+                                                    {
+                                                        title: 'Đáp án',
+                                                        render: (_, __, index) => (
+                                                            <Form.Item
+                                                                name={[
+                                                                    'multipleChoiceOptions',
+                                                                    index,
+                                                                    'content',
+                                                                ]}
+                                                                className="mb-0"
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message: 'Nhập đáp án',
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <Input placeholder="Nhập đáp án" />
+                                                            </Form.Item>
+                                                        ),
+                                                    },
+                                                    {
+                                                        title: 'Thứ tự đúng',
+                                                        width: 120,
+                                                        align: 'center',
+                                                        render: (_, __, index) => (
+                                                            <Form.Item
+                                                                name={[
+                                                                    'multipleChoiceOptions',
+                                                                    index,
+                                                                    'correctOrder',
+                                                                ]}
+                                                                className="mb-0"
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message: 'Nhập số thứ tự',
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <Input
+                                                                    type="number"
+                                                                    placeholder="VD: 1"
+                                                                />
+                                                            </Form.Item>
+                                                        ),
+                                                    },
+                                                    {
+                                                        width: 50,
+                                                        align: 'center',
+                                                        render: (_, __, index) => (
+                                                            <Tooltip title="Xoá">
+                                                                <Trash2
+                                                                    size={16}
+                                                                    className="text-red-600 cursor-pointer"
+                                                                    onClick={() =>
+                                                                        handleDeleteAnswer(index)
+                                                                    }
+                                                                />
+                                                            </Tooltip>
+                                                        ),
+                                                    },
+                                                ]}
+                                            />
+                                        </FormItem>
 
-                    <div className="flex justify-end">
-                      <Button onClick={handleAddAnswer}>Thêm đáp án</Button>
-                    </div>
-                  </>
-                )}
-              </Col>
-            </Row>
-          </Col>
+                                        <div className="flex justify-end">
+                                            <Button onClick={handleAddAnswer}>Thêm đáp án</Button>
+                                        </div>
+                                    </>
+                                )}
+                            </Col>
+                        </Row>
+                    </Col>
 
-          <div className="border-r border-[#D1D5DB] h-auto mx-2" />
+                    <div className="border-r border-[#D1D5DB] h-auto mx-2" />
 
-          <Col span={12}>
-            <Row gutter={[16, 0]}>
-              <Col span={24}>
-                <div className="flex gap-4 flex-col">
-                  <div className="flex gap-2 flex-col">
-                    <p className="font-medium text-sm text-[#111827]">
-                      Câu hỏi
-                    </p>
-                    <div className="bg-[#FAFAFA] rounded-xl p-4">
-                      <div
-                        className="prose max-w-none text-sm text-gray-800"
-                        dangerouslySetInnerHTML={{
-                          __html: fixedHtmlContent
-                            ? renderWithMath(fixedHtmlContent)
-                            : "<i>Chưa có nội dung</i>",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  {/* Tự luận */}
-                  {(typeQuestion === QuestionType.ESSAY ||
-                    typeQuestion === QuestionType.ORAL) && (
-                    <div className="flex gap-2 flex-col">
-                      <p className="font-medium text-sm text-[#111827]">
-                        Giải thích đáp án
-                      </p>
-                      <div className="bg-white p-2 rounded-lg border border-[#D1D5DB] min-h-[164px]">
-                        <div
-                          className="prose max-w-none text-sm text-gray-800"
-                          dangerouslySetInnerHTML={{
-                            __html: fixedHtmlExplanation
-                              ? renderWithMath(fixedHtmlExplanation)
-                              : "<i>Chưa có giải thích</i>",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  {(typeQuestion === QuestionType.SINGLE_CHOICE ||
-                    typeQuestion === QuestionType.MULTIPLE_CHOICE) && (
-                    <div>
-                      <div className="mb-3 font-[500]">Đáp án</div>
-                      {listForm.length &&
-                        listForm.map((i: any) => {
-                          return (
-                            <div
-                              key={i.key}
-                              className={`flex items-center gap-3 border-solid border-[1px] p-3 mb-3 rounded-[8px] ${i?.isCorrect ? "border-green-500 bg-green-100" : ""}`}
-                            >
-                              <Checkbox checked={i?.isCorrect} />
-                              <div>{i.content}</div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  )}
-                  {typeQuestion === QuestionType.FILL_IN_BLANK && (
-                    <div>
-                      <div className="mb-3 font-[500]">Đáp án đúng</div>
-                      {listForm.map((i: any, index: number) => (
-                        <div
-                          key={i.key}
-                          className="border border-dashed border-gray-300 p-3 mb-2 rounded"
-                        >
-                          <span className="font-medium mr-2">
-                            Ô trống {index + 1}:
-                          </span>
-                          <span className="text-green-700">
-                            {i.content || "—"}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  {typeQuestion === QuestionType.ORDERING && (
-                    <div>
-                      <div className="mb-3 font-[500]">Các lựa chọn</div>
+                    <Col span={12}>
+                        <Row gutter={[16, 0]}>
+                            <Col span={24}>
+                                <div className="flex gap-4 flex-col">
+                                    <div className="flex gap-2 flex-col">
+                                        <p className="font-medium text-sm text-[#111827]">
+                                            Câu hỏi
+                                        </p>
+                                        <div className="bg-[#FAFAFA] rounded-xl p-4">
+                                            <div
+                                                className="prose max-w-none text-sm text-gray-800"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: fixedHtmlContent
+                                                        ? renderWithMath(fixedHtmlContent)
+                                                        : '<i>Chưa có nội dung</i>',
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    {/* Tự luận */}
+                                    {(typeQuestion === QuestionType.ESSAY ||
+                                        typeQuestion === QuestionType.ORAL) && (
+                                        <div className="flex gap-2 flex-col">
+                                            <p className="font-medium text-sm text-[#111827]">
+                                                Giải thích đáp án
+                                            </p>
+                                            <div className="bg-white p-2 rounded-lg border border-[#D1D5DB] min-h-[164px]">
+                                                <div
+                                                    className="prose max-w-none text-sm text-gray-800"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: fixedHtmlExplanation
+                                                            ? renderWithMath(fixedHtmlExplanation)
+                                                            : '<i>Chưa có giải thích</i>',
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                    {(typeQuestion === QuestionType.SINGLE_CHOICE ||
+                                        typeQuestion === QuestionType.MULTIPLE_CHOICE) && (
+                                        <div>
+                                            <div className="mb-3 font-[500]">Đáp án</div>
+                                            {listForm.length &&
+                                                listForm.map((i: any) => {
+                                                    return (
+                                                        <div
+                                                            key={i.key}
+                                                            className={`flex items-center gap-3 border-solid border-[1px] p-3 mb-3 rounded-[8px] ${i?.isCorrect ? 'border-green-500 bg-green-100' : ''}`}
+                                                        >
+                                                            <Checkbox checked={i?.isCorrect} />
+                                                            <div>{i.content}</div>
+                                                        </div>
+                                                    )
+                                                })}
+                                        </div>
+                                    )}
+                                    {typeQuestion === QuestionType.FILL_IN_BLANK && (
+                                        <div>
+                                            <div className="mb-3 font-[500]">Đáp án đúng</div>
+                                            {listForm.map((i: any, index: number) => (
+                                                <div
+                                                    key={i.key}
+                                                    className="border border-dashed border-gray-300 p-3 mb-2 rounded"
+                                                >
+                                                    <span className="font-medium mr-2">
+                                                        Ô trống {index + 1}:
+                                                    </span>
+                                                    <span className="text-green-700">
+                                                        {i.content || '—'}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {typeQuestion === QuestionType.ORDERING && (
+                                        <div>
+                                            <div className="mb-3 font-[500]">Các lựa chọn</div>
 
-                      {listForm.map((i: any, index: number) => (
-                        <div
-                          key={i.key}
-                          className="flex items-center gap-3 border border-gray-300 p-3 mb-2 rounded"
-                        >
-                          <div className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-400 text-white text-sm">
-                            {index + 1}
-                          </div>
-                          <div>{i.content}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                                            {listForm.map((i: any, index: number) => (
+                                                <div
+                                                    key={i.key}
+                                                    className="flex items-center gap-3 border border-gray-300 p-3 mb-2 rounded"
+                                                >
+                                                    <div className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-400 text-white text-sm">
+                                                        {index + 1}
+                                                    </div>
+                                                    <div>{i.content}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </Col>
+                        </Row>
+                    </Col>
                 </div>
-              </Col>
-            </Row>
-          </Col>
-        </div>
-      </Col>
-    </PutFormModal>
-  );
-};
+            </Col>
+        </PutFormModal>
+    )
+}
 
-export default PutQuestionModal;
+export default PutQuestionModal
