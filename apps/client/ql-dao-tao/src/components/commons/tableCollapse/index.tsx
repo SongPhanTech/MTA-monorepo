@@ -108,7 +108,8 @@ const TableCollapse = <
             const hasChildren = Array.isArray(children)
             // Nếu item không có key thì tạo key mới
             if (!item.key) {
-                item.key = item.id
+                // @ts-expect-error
+                item.key = item.id || item?.[rowKey]
             }
 
             if (hasChildren) {
@@ -138,7 +139,7 @@ const TableCollapse = <
                 $type: 'child',
             }
         })
-    }, [data, childrenFieldName])
+    }, [data, childrenFieldName, rowKey])
 
     useEffect(() => {
         if (!defaultExpandAll) {

@@ -1,5 +1,5 @@
 import type { SubjectVersionType } from '@workspace/db/client'
-import { subjectVersionTypesOptions } from '@workspace/libs/constants'
+import { subjectVersionTypeOptions } from '@workspace/libs/constants'
 
 export type SubjectVersionTypeOption = {
     value: SubjectVersionType
@@ -8,11 +8,11 @@ export type SubjectVersionTypeOption = {
 
 export const useSubjectVersionTypeOptions = () => {
     const getSubjectVersionTypeLabel = (value: SubjectVersionType | null | undefined): string => {
-        return subjectVersionTypesOptions.find((opt) => opt.value === value)?.label || ''
+        return subjectVersionTypeOptions.find((opt) => opt.value === value)?.label || ''
     }
 
     return {
-        subjectVersionTypesOptions,
+        options: subjectVersionTypeOptions,
         getSubjectVersionTypeLabel,
     }
 }
