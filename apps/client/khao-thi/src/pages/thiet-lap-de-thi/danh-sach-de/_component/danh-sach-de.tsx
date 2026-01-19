@@ -2,7 +2,6 @@ import { Button, Input, Space, Flex, Row, message } from 'antd'
 import { PlusOutlined, SearchOutlined, DatabaseOutlined } from '@ant-design/icons'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useStore } from '@tanstack/react-store'
-
 import { useMemo, useState } from 'react'
 import { store } from '../index'
 import dayjs from 'dayjs'
@@ -57,15 +56,6 @@ export default function ExamListPage() {
                                 contains: filters?.exam || '',
                             },
                         },
-                        // {
-                        //   exam: {
-                        //     semester: {
-                        //       name: {
-                        //         contains: filters.name,
-                        //       },
-                        //     },
-                        //   },
-                        // },
                     ],
                 }),
             ...(filters.examCode &&
@@ -140,6 +130,12 @@ export default function ExamListPage() {
                 deletedAt: null,
             },
             include: {
+                subjectClass: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
                 exam: {
                     include: {
                         semester: true,
@@ -207,9 +203,11 @@ export default function ExamListPage() {
                     deletedAt: new Date(),
                 },
             })
+
+            message.success('Xoá đề thi thành công')
         } catch (error: any) {
             if (error?.info?.message) {
-                message.error(error?.info?.message)
+                message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -306,6 +304,30 @@ export default function ExamListPage() {
                         setSelectedRowKeys(selectedKeys as string[])
                     },
                 }}
+                onRow={(record) => ({
+                    onClick: (e) => {
+                        // Prevent toggle if clicking on action buttons or interactive elements
+                        const target = e.target as HTMLElement
+                        if (
+                            target.closest('.ant-btn') ||
+                            target.closest('button') ||
+                            target.closest('a') ||
+                            target.closest('[role="button"]') ||
+                            target.closest('svg')
+                        ) {
+                            return
+                        }
+
+                        // Toggle selection
+                        setSelectedRowKeys((prev) => {
+                            if (prev.includes(record.id)) {
+                                return prev.filter((key) => key !== record.id)
+                            }
+                            return [...prev, record.id]
+                        })
+                    },
+                    style: { cursor: 'pointer' },
+                })}
                 filters={filters}
                 setFilters={(value) => {
                     setFilters(value)
@@ -324,7 +346,7 @@ export default function ExamListPage() {
                     {
                         title: 'Mã đề',
                         dataIndex: 'examCode',
-                        width: 150,
+                        width: 70,
                         type: 'input',
                         render: (__, record) => {
                             return (
@@ -348,7 +370,7 @@ export default function ExamListPage() {
                     {
                         title: 'Hình thức thi',
                         dataIndex: 'examType',
-                        width: 150,
+                        width: 130,
                         type: 'select',
                         options: [
                             {
@@ -382,7 +404,7 @@ export default function ExamListPage() {
                     {
                         title: 'Ngày tạo đề',
                         dataIndex: 'createdAt',
-                        width: 150,
+                        width: 130,
                         type: 'date',
                         align: 'center' as const,
                         render: (_, record) => {
@@ -392,7 +414,7 @@ export default function ExamListPage() {
                     {
                         title: 'Số câu hỏi trong đề',
                         dataIndex: 'questions',
-                        width: 200,
+                        width: 150,
                         type: 'order',
                         align: 'center' as const,
                         render: (_, record) => {
@@ -402,9 +424,9 @@ export default function ExamListPage() {
                     {
                         title: 'Lớp môn học',
                         align: 'center',
-                        width: 150,
+                        width: 220,
                         render: (_, record) => {
-                            return record?.subjectClass || ''
+                            return record?.subjectClass?.name || ''
                         },
                     },
                     {

@@ -2,17 +2,13 @@ import { Checkbox, Col, Flex, Input, Popover, Row } from 'antd'
 import { useCallback, useMemo, useState } from 'react'
 import { useStore } from '@tanstack/react-store'
 import { store } from '../index'
-import { useCountExam, useCreateExam, useFindManyExam } from '@workspace/db/hooks'
+import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import Table from '@components/commons/table'
 import { cn } from '@workspace/ui/lib/utils'
 import { useSemesterStore } from '@workspace/ui'
 import type { SubjectClass } from '@workspace/db/client'
 
-interface Props {
-    setActiveKey: (key: string) => void
-}
-
-export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
+export default function DanhSachKeHoachThi() {
     const { id: semesterId } = useSemesterStore()
     const selectedExamId = useStore(store, (state) => state.selectedExamId)
     const [currentPage, setCurrentPage] = useState(1)
@@ -56,7 +52,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         [filters.searchText, semesterId]
     )
 
-    const { data: exams = [], refetch: refetchExams } = useFindManyExam(
+    const { data: exams = [] } = useFindManyExam(
         {
             where,
             include: {
@@ -79,7 +75,12 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     },
                 },
                 examBank: true,
-                subjectClass: true,
+                subjectClass: {
+                    select: {
+                        name: true,
+                        id: true,
+                    },
+                },
             },
             orderBy: {
                 subjectVersionId: 'asc',
@@ -92,7 +93,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         }
     )
 
-    const { data: count, refetch: refetchCount } = useCountExam(
+    const { data: count } = useCountExam(
         {
             where,
         },
@@ -100,30 +101,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
             enabled: !!semesterId,
         }
     )
-
-    const { mutateAsync: createExam } = useCreateExam()
-
-    // const rowSelection: TableRowSelection = {
-    //     selectedRowKeys: selectedRowKeys,
-    //     onChange: (selectedKeys: React.Key[], selectedRows) => {
-    //         setSelectedRowKeys(selectedKeys)
-    //         if (selectedKeys.length === 0) {
-    //             setSelectedSubjectId(undefined)
-    //             return
-    //         }
-    //         setSelectedSubjectId(selectedRows[0]?.subjectClass?.[0]?.subjectId)
-    //     },
-    //     getCheckboxProps(record) {
-    //         return {
-    //             disabled:
-    //                 record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
-    //                 selectedSubjectId !== undefined,
-    //         }
-    //     },
-    //     hideSelectAll: true,
-    //     columnWidth: 35,
-    //     columnTitle: 'Ghép/Tách',
-    // }
 
     const debouncedSearch = useCallback((value: string) => {
         setFilters((prev: any) => ({
@@ -173,32 +150,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     style={{
                         marginTop: '10px',
                     }}
-                    // rowSelection={{
-                    //     type: 'checkbox',
-                    //     ...rowSelection,
-                    // }}
                     onRow={(record) => ({
-                        // onClick: () => {
-                        //     const selectedKeys = [...selectedRowKeys]
-                        //     if (
-                        //         selectedSubjectId &&
-                        //         record.subjectClass?.[0]?.subjectId !== selectedSubjectId
-                        //     ) {
-                        //         return
-                        //     }
-                        //     const index = selectedKeys.indexOf(record.id)
-                        //     if (index >= 0) {
-                        //         selectedKeys.splice(index, 1)
-                        //     } else {
-                        //         selectedKeys.push(record.id)
-                        //     }
-                        //     setSelectedRowKeys(selectedKeys)
-                        //     setSelectedSubjectId(
-                        //         selectedKeys.length > 0
-                        //             ? record.subjectClass?.[0]?.subjectId
-                        //             : undefined
-                        //     )
-                        // },
                         className: cn(selectedExamId === record.id && 'bg-orange-100'),
                         onClick: (e) => {
                             const target = e.target as HTMLElement
@@ -223,7 +175,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                         },
                         {
-                            title: 'Tên môn học',
+                            title: 'Môn thi',
                             align: 'center',
                             dataIndex: 'searchText',
                             type: 'input',
