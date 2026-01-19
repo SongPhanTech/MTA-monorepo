@@ -296,7 +296,7 @@ const PutQuestionModal = () => {
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
-                message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+                message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -455,7 +455,7 @@ const PutQuestionModal = () => {
             maskClosable={true}
             title={input?.id ? 'Chỉnh sửa câu hỏi' : 'Thêm câu hỏi'}
             width="80vw"
-            className='top-2'
+            className="top-2"
         >
             <Col span={24}>
                 <div className="flex">

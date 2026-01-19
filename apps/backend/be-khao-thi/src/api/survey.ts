@@ -1206,7 +1206,7 @@ const sinhdetudong = createRoute({
                         examMatrixId: z.string().nonempty(),
                         examId: z.string().nonempty(),
                         codeFrom: z.number(),
-                        subjectClassId:z.string()
+                        subjectClassId: z.string(),
                     }),
                 },
             },

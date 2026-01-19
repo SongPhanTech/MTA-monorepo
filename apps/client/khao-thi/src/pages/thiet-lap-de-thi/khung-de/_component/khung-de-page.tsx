@@ -127,7 +127,6 @@ export default function KhungDeList() {
         }
     }
 
-    
     return (
         <div>
             <Col className="mb-2">
@@ -199,7 +198,7 @@ export default function KhungDeList() {
                     columns={[
                         {
                             title: 'STT',
-                            width: "40px",
+                            width: '40px',
                             align: 'center',
                             render: (_, __, index) => index + 1,
                         },
@@ -237,7 +236,7 @@ export default function KhungDeList() {
                             title: 'Thời gian thi',
                             dataIndex: 'time',
                             type: 'input',
-                            width: "120px",
+                            width: '120px',
                             align: 'center',
                             render: (time) => (
                                 <Space>
@@ -256,7 +255,7 @@ export default function KhungDeList() {
                         {
                             title: 'Thao tác',
                             align: 'center',
-                            width: "70px",
+                            width: '70px',
                             fixed: 'right',
                             render: (record) => (
                                 <Row className="justify-center gap-2">

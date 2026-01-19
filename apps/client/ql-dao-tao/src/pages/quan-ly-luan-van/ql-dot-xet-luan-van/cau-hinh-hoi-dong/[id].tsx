@@ -10,7 +10,7 @@ import {
     useFindUniqueThesisSession,
     useUpdateManyThesisProject,
 } from '@workspace/db/hooks'
-import {  Button, Col, Empty, Form, message, Tag, Typography } from 'antd'
+import { Button, Col, Empty, Form, message, Tag, Typography } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
@@ -145,10 +145,18 @@ export default function SettingCouncil() {
             thesisProject: {
                 include: {
                     registrations: {
-                        include: { student: { include: { userProfile: true } } }
+                        include: { student: { include: { userProfile: true } } },
                     },
                     council: {
-                        include: { members: { include: { expert: { include: { lecturer: { include: { userProfile: true } } } } } } },
+                        include: {
+                            members: {
+                                include: {
+                                    expert: {
+                                        include: { lecturer: { include: { userProfile: true } } },
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },
@@ -200,49 +208,59 @@ export default function SettingCouncil() {
     }
     const handleCreateCouncil = async () => {
         try {
-            const values = await form.validateFields();
-            const { defenseSessionIds, defenseDate, roomIds } = values;
-            const allProjects = [...(thesisSession?.thesisProject || [])];
-            const expertPool = [...rightData]; //
-    
-            const totalProjects = allProjects.length;
-            const numRooms = roomIds?.length || 0;
-            const numDates = defenseDate?.length || 0;
-            const numSessions = defenseSessionIds?.length || 0;
-            const totalSlots = numRooms * numDates * numSessions;
-    
+            const values = await form.validateFields()
+            const { defenseSessionIds, defenseDate, roomIds } = values
+            const allProjects = [...(thesisSession?.thesisProject || [])]
+            const expertPool = [...rightData] //
+
+            const totalProjects = allProjects.length
+            const numRooms = roomIds?.length || 0
+            const numDates = defenseDate?.length || 0
+            const numSessions = defenseSessionIds?.length || 0
+            const totalSlots = numRooms * numDates * numSessions
+
             if (expertPool.length < 5) {
-                message.error("Cần ít nhất 5 chuyên gia để lập hội đồng.");
-                return;
+                message.error('Cần ít nhất 5 chuyên gia để lập hội đồng.')
+                return
             }
-    
+
             if (totalSlots < totalProjects) {
-                message.error(`Không đủ chỗ! Có ${totalProjects} đề tài nhưng chỉ có ${totalSlots} ô lịch.`);
-                return;
+                message.error(
+                    `Không đủ chỗ! Có ${totalProjects} đề tài nhưng chỉ có ${totalSlots} ô lịch.`
+                )
+                return
             }
-    
-            showSpinner();
-            const shuffle = (array: any[]) => array.sort(() => Math.random() - 0.5);
-    
+
+            showSpinner()
+            const shuffle = (array: any[]) => array.sort(() => Math.random() - 0.5)
+
             for (let i = 0; i < totalProjects; i++) {
-                const project = allProjects[i];
-                
-                const shuffledExperts = shuffle([...expertPool]);
-    
-                const validExperts = shuffledExperts.filter(exp => exp.id !== project.supervisorId);
-    
-                const chairman = validExperts.find(exp => exp.eligiblePresident);
-                const secretary = validExperts.find(exp => exp.eligibleSecretary && exp.id !== chairman?.id);
-                const others = validExperts.filter(exp => exp.id !== chairman?.id && exp.id !== secretary?.id);
-    
+                const project = allProjects[i]
+
+                const shuffledExperts = shuffle([...expertPool])
+
+                const validExperts = shuffledExperts.filter(
+                    (exp) => exp.id !== project.supervisorId
+                )
+
+                const chairman = validExperts.find((exp) => exp.eligiblePresident)
+                const secretary = validExperts.find(
+                    (exp) => exp.eligibleSecretary && exp.id !== chairman?.id
+                )
+                const others = validExperts.filter(
+                    (exp) => exp.id !== chairman?.id && exp.id !== secretary?.id
+                )
+
                 if (!chairman || !secretary || others.length < 3) {
-                    throw new Error(`Không đủ nhân sự phù hợp (Chủ tịch/Thư ký/Thành viên) cho đề tài: ${project.title}`);
+                    throw new Error(
+                        `Không đủ nhân sự phù hợp (Chủ tịch/Thư ký/Thành viên) cho đề tài: ${project.title}`
+                    )
                 }
-    
-                const reviewer1 = others[0];
-                const reviewer2 = others[1];
-                const member = others[2];
-    
+
+                const reviewer1 = others[0]
+                const reviewer2 = others[1]
+                const member = others[2]
+
                 const newCouncil = await createCouncil({
                     data: {
                         status: 'PENDING',
@@ -257,12 +275,12 @@ export default function SettingCouncil() {
                             ],
                         },
                     },
-                });
-    
-                const roomIdx = i % numRooms;
-                const sessionIdx = Math.floor(i / numRooms) % numSessions;
-                const dateIdx = Math.floor(i / (numRooms * numSessions)) % numDates;
-    
+                })
+
+                const roomIdx = i % numRooms
+                const sessionIdx = Math.floor(i / numRooms) % numSessions
+                const dateIdx = Math.floor(i / (numRooms * numSessions)) % numDates
+
                 await updateProjects({
                     where: { id: project.id },
                     data: {
@@ -271,19 +289,19 @@ export default function SettingCouncil() {
                         defenseSessionId: defenseSessionIds?.[sessionIdx],
                         defenseDate: dayjs(defenseDate?.[dateIdx], 'DD/MM/YYYY').toDate(),
                     },
-                });
+                })
             }
-    
-            message.success(`Đã tạo ${totalProjects} hội đồng riêng biệt cho từng đề tài.`);
+
+            message.success(`Đã tạo ${totalProjects} hội đồng riêng biệt cho từng đề tài.`)
             // router.reload();
         } catch (error: any) {
-            message.error(error.message || 'Lỗi hệ thống');
+            message.error(error.message || 'Lỗi hệ thống')
         } finally {
-            hideSpinner();
+            hideSpinner()
         }
-    };
+    }
     const minRoomsRequired =
-    selectedDefenseSessionIds.length > 0 && selectedDefenseDate.length > 0
+        selectedDefenseSessionIds.length > 0 && selectedDefenseDate.length > 0
             ? Math.ceil(
                   (thesisSession?.thesisProject?.length || 0) /
                       (selectedDefenseSessionIds.length * selectedDefenseDate.length)
@@ -325,8 +343,8 @@ export default function SettingCouncil() {
                 key: 'session',
                 width: 100,
                 render: (_: any, record: any) => {
-                    const startTime = record.thesis?.[0]?.defenseSession?.startTime;
-                    return startTime ? dayjs(startTime).format('HH:mm') : 'N/A';
+                    const startTime = record.thesis?.[0]?.defenseSession?.startTime
+                    return startTime ? dayjs(startTime).format('HH:mm') : 'N/A'
                 },
             },
             {
@@ -334,8 +352,8 @@ export default function SettingCouncil() {
                 key: 'date',
                 width: 120,
                 render: (_: any, record: any) => {
-                    const date = record.thesis?.[0]?.defenseDate;
-                    return date ? dayjs(date).format('DD/MM/YYYY') : 'N/A';
+                    const date = record.thesis?.[0]?.defenseDate
+                    return date ? dayjs(date).format('DD/MM/YYYY') : 'N/A'
                 },
             },
             {
@@ -343,14 +361,16 @@ export default function SettingCouncil() {
                 key: 'student',
                 width: 200,
                 render: (_: any, record: any) => {
-                    const student = record.thesis?.[0]?.registrations?.[0]?.student;
-                    console.log(student);
+                    const student = record.thesis?.[0]?.registrations?.[0]?.student
+                    console.log(student)
                     return (
                         <div>
-                            <div className="font-bold text-primary">{student?.userProfile?.fullname || 'N/A'}</div>
+                            <div className="font-bold text-primary">
+                                {student?.userProfile?.fullname || 'N/A'}
+                            </div>
                             <div className="text-xs text-gray-500">{student?.code || 'N/A'}</div>
                         </div>
-                    );
+                    )
                 },
             },
             {
@@ -372,15 +392,17 @@ export default function SettingCouncil() {
                     <div className="grid grid-cols-1 gap-1">
                         {members.map((m) => (
                             <div key={m.id} className="text-[13px] leading-5">
-                                <span className="font-semibold text-gray-700">{getRoleText(m.role)}:</span>{' '}
+                                <span className="font-semibold text-gray-700">
+                                    {getRoleText(m.role)}:
+                                </span>{' '}
                                 <span className="text-gray-600">{m.expert?.name}</span>
                             </div>
                         ))}
                     </div>
                 ),
             },
-        ];
-    
+        ]
+
         return (
             <div className="mt-10 bg-white p-6 rounded-xl shadow-md border border-gray-200">
                 <Typography.Title level={4} className="mb-6 flex items-center">
@@ -392,18 +414,18 @@ export default function SettingCouncil() {
                     columns={mainColumns}
                     dataSource={councils}
                     loading={isLoadingCouncils}
-                    pagination={{ 
+                    pagination={{
                         pageSize: 10,
                         showSizeChanger: true,
-                        showTotal: (total) => `Tổng cộng ${total} hội đồng`
+                        showTotal: (total) => `Tổng cộng ${total} hội đồng`,
                     }}
                     bordered
                     scroll={{ x: 1300 }} // Đảm bảo bảng không bị vỡ khi nhiều cột
                     className="custom-table"
                 />
             </div>
-        );
-    };
+        )
+    }
     const getRoleText = (role: string) => {
         const roles: Record<string, string> = {
             CHAIRMAN: 'Chủ tịch',
