@@ -12,16 +12,16 @@ import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
-import { ConfigExam } from '@workspace/db/client'
+import type { ConfigExam } from '@workspace/db/client'
 
 export interface KnowledgeBlockFormData extends Record<string, unknown> {
     name: string
     code: string
     description?: string
-    biet: ConfigExam
-    hieu: ConfigExam
-    vanDung: ConfigExam
-    VanDungCao: ConfigExam
+    biet?: ConfigExam
+    hieu?: ConfigExam
+    vanDung?: ConfigExam
+    VanDungCao?: ConfigExam
 }
 
 const PutChuongMucModal = () => {
@@ -81,7 +81,7 @@ const PutChuongMucModal = () => {
     const onOk = async (values: KnowledgeBlockFormData) => {
         const configExams = LEVEL_COLUMNS.reduce<any[]>((acc, level) => {
             const levelData = values[level.key] as ConfigExam
-            if (!levelData?.quantity || levelData.quantity <= 0) return acc
+            if (!levelData?.quantity) return acc
 
             acc.push({
                 difficult: level.difficult,
@@ -112,17 +112,22 @@ const PutChuongMucModal = () => {
                     },
                 })
             } else {
-                // await createKnowledgeBlock({
-                //   data: {
-                //     code: values.code,
-                //     name: values.name,
-                //     description: values.description,
-                //     ...(input?.matrixId && { examMatrixId: input.matrixId }),
-                //     configExams: {
-                //       create: configExams,
-                //     },
-                //   },
-                // });
+                const createData: any = {
+                    code: values.code,
+                    name: values.name,
+                    description: values.description,
+                    configExams: {
+                        create: configExams,
+                    },
+                }
+
+                if (input?.matrixId) {
+                    createData.examMatrixId = input.matrixId
+                }
+
+                await createKnowledgeBlock({
+                    data: createData,
+                })
             }
 
             message.success(
@@ -231,21 +236,6 @@ const PutChuongMucModal = () => {
                                         name={[col.key, 'quantity']}
                                         style={{ marginBottom: 8 }}
                                         initialValue={0}
-                                        rules={[
-                                            {
-                                                validator: (_, value) => {
-                                                    if (value == null) return Promise.resolve()
-                                                    if (value === 0 || value === undefined) {
-                                                        return Promise.reject(
-                                                            new Error(
-                                                                'Số lượng câu hỏi phải lớn hơn 0'
-                                                            )
-                                                        )
-                                                    }
-                                                    return Promise.resolve()
-                                                },
-                                            },
-                                        ]}
                                     >
                                         <InputNumber min={0} className="w-full" />
                                     </Form.Item>

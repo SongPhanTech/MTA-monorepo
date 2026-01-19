@@ -95,7 +95,7 @@ const PutMaTranDeModal = () => {
             title={input?.id ? 'Cập nhật ma trận đề' : 'Thêm mới ma trận đề'}
             onCancel={onClose}
             onFinish={onOk}
-            className="w-[30vw]"
+            className="w-[50vw] top-5"
         >
             <Col span={24}>
                 <FormItem form={form} name="code" label="Mã ma trận đề">
