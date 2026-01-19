@@ -1,12 +1,12 @@
 import DefaultLayout from '@layouts/default-layout'
-import PostgraduateProject, { type PostgraduateProjectProps } from '../danh-muc-luan-van'
+import DanhMucLuanVan, { type DanhMucLuanVanProps } from '../dm-luan-van'
 
 export default function PostgraduateProjectP7() {
-    const data: PostgraduateProjectProps = {
+    const data: DanhMucLuanVanProps = {
         isManage: true,
         role: 'P7',
     }
-    return <PostgraduateProject {...data} />
+    return <DanhMucLuanVan {...data} />
 }
 PostgraduateProjectP7.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>

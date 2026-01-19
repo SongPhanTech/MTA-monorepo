@@ -14,7 +14,7 @@ import PutFormModal from '@components/commons/put-modal'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
-import { ExamBank } from '@workspace/db'
+import type { ExamBank } from '@workspace/db/client'
 
 type PutMaTranDeInputType = ExamBank & {
     quantity: number
@@ -33,8 +33,8 @@ const SinhDeModal = () => {
         tag: 'SinhDeModal',
         onClose: form.resetFields,
     })
-    const selectedExamId = useStore(store, (state) => state['selectedExamId'])
-    const subjectVersionId = useStore(store, (state) => state['subjectVersionId'])
+    const selectedExamId = useStore(store, (state) => state.selectedExamId)
+    const subjectVersionId = useStore(store, (state) => state.subjectVersionId)
     const { data: dataExam } = useFindUniqueExam(
         {
             where: { id: selectedExamId },
@@ -90,29 +90,21 @@ const SinhDeModal = () => {
     const onOk = async (values: PutMaTranDeInputType) => {
         try {
             if (!values) return
-            // const matrixData:any = await prisma.knowledgeBlock.findMany({
-            //     where: {
-            //        examMatrixId: values?.examMatrixId,
+            
+            // const matrixData = await fetch('http://localhost:3030/sinh-de', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
             //     },
-            //     include: {
-            //         questions: true,
-            //         configExams: true,
-            //     },
+            //     body: JSON.stringify({ ...values, examId: selectedExamId }),
             // })
-            const matrixData = await fetch('http://localhost:3030/sinh-de', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ ...values, examId: selectedExamId }),
-            })
-            const res = await matrixData.json()
-            if (res?.status === '200') {
-                message.success('Tạo đề thành cong!')
-                onClose()
-            } else {
-                message.error(res?.message)
-            }
+            // const res = await matrixData.json()
+            // if (res?.status === '200') {
+            //     message.success('Tạo đề thành cong!')
+            //     onClose()
+            // } else {
+            //     message.error(res?.message)
+            // }
 
             // onClose()
         } catch (error) {

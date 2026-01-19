@@ -1,4 +1,5 @@
 # Base Variables
+DOCKER := $(shell which docker 2>/dev/null || echo docker)
 REGISTRY := ghcr.io/songphantech
 DEV_TAG := latest
 RELEASE_TAG := release
@@ -99,7 +100,7 @@ save-docker-images:
 	@mkdir -p docker-images
 	@for pkg in $(BE_PKGS); do \
 		echo "Saving $$pkg..."; \
-		docker save $(REGISTRY)/$(IMG_PREFIX)$$pkg:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$$pkg.tar.gz; \
+		$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$$pkg:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$$pkg.tar.gz; \
 	done
 
 package-cdn:
@@ -122,7 +123,7 @@ deploy-cdn:
 # Pattern rule: all-<name> = build + push + deploy
 all-%: build-%
 	@if echo "$(BE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
-		docker push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG); \
+		$(DOCKER) push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG); \
 		ssh $(SERVER) "cd mta-be && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"; \
 	elif echo "$(FE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
 		$(MAKE) _deploy-fe PACKAGE=$*; \
@@ -130,7 +131,7 @@ all-%: build-%
 
 # Internal backend build
 _build-be:
-	docker build -f Dockerfile.backend --platform linux/amd64 \
+	$(DOCKER) build -f Dockerfile.backend --platform linux/amd64 \
 		-t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) \
 		--build-arg PACKAGE=${PACKAGE} \
 		. --output type=docker
@@ -169,15 +170,15 @@ push:
 ifndef PACKAGE
 	$(error PACKAGE is not set. Use 'make push PACKAGE=<package-name>')
 endif
-	docker push $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG)
+	$(DOCKER) push $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG)
 
 # Release
 release:
 ifndef PACKAGE
 	$(error PACKAGE is not set. Use 'make release PACKAGE=<package-name>')
 endif
-	docker build -t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG) .
-	docker push $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG)
+	$(DOCKER) build -t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG) .
+	$(DOCKER) push $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG)
 	ssh $(SERVER) "cd docker-compose && $(COMPOSE_CMD) $(IMG_PREFIX)${PACKAGE} -d"
 
 # Deploy only
@@ -189,4 +190,4 @@ clean:
 ifndef PACKAGE
 	$(error PACKAGE is not set. Use 'make clean PACKAGE=<package-name>')
 endif
-	docker rmi $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) || true
+	$(DOCKER) rmi $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) || true

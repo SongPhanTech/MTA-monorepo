@@ -8,7 +8,6 @@ import { GripVertical } from 'lucide-react'
 
 import { useStore } from '@tanstack/react-store'
 import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
-import { type ExamBank } from '@workspace/db'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 
@@ -25,6 +24,7 @@ import {
 } from '@workspace/db/hooks'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { queryClient } from '@api/index'
+import type { ExamBank } from '@workspace/db/client'
 
 type PutMaTranDeInputType = ExamBank & {
     questions: string[]
@@ -48,7 +48,7 @@ export type ItemProps = {
 
 const SinhDeThuCongModal = () => {
     const [form] = Form.useForm<PutMaTranDeInputType>()
-    const selectedExamId = useStore(store, (state) => state['selectedExamId'])
+    const selectedExamId = useStore(store, (state) => state.selectedExamId)
     const [current, setCurrent] = useState(0)
     const [items, setItems] = useState<any[] | []>([])
     const { isOpen, onClose, input } = useDisclosure<{
@@ -126,7 +126,7 @@ const SinhDeThuCongModal = () => {
     )
 
     const dataOption = useMemo(() => {
-        return !!dataExam?.subjectClass
+        return dataExam?.subjectClass
             ? dataExam?.subjectClass.map((item) => {
                   return {
                       value: item?.id,
@@ -178,7 +178,7 @@ const SinhDeThuCongModal = () => {
     const onOk = async (values: PutMaTranDeInputType) => {
         try {
             if (!values || !selectedExamId) return
-            if (!!input?.id) {
+            if (input?.id) {
                 await update({
                     where: {
                         id: input.id,
@@ -333,7 +333,7 @@ const SinhDeThuCongModal = () => {
         if (input?.subjectVersionId) {
             form.setFieldValue('subjectVersionId', input.subjectVersionId)
         }
-    }, [input?.subjectVersionId])
+    }, [input?.subjectVersionId, form.setFieldValue])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const steps: StepItem[] = useMemo(() => {
