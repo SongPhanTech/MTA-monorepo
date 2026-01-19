@@ -275,7 +275,7 @@ export default function SettingCouncil() {
             }
     
             message.success(`Đã tạo ${totalProjects} hội đồng riêng biệt cho từng đề tài.`);
-            router.reload();
+            // router.reload();
         } catch (error: any) {
             message.error(error.message || 'Lỗi hệ thống');
         } finally {
@@ -283,7 +283,7 @@ export default function SettingCouncil() {
         }
     };
     const minRoomsRequired =
-        selectedDefenseSessionIds.length * selectedDefenseDate.length > 0
+    selectedDefenseSessionIds.length > 0 && selectedDefenseDate.length > 0
             ? Math.ceil(
                   (thesisSession?.thesisProject?.length || 0) /
                       (selectedDefenseSessionIds.length * selectedDefenseDate.length)
@@ -620,7 +620,7 @@ export default function SettingCouncil() {
                             }}
                         >
                             Danh sách chuyên gia hội đồng{' '}
-                            {selectedDefenseSessionIds.length
+                            {selectedDefenseSessionIds.length && selectedDefenseDate.length
                                 ? `(Cần ít nhất ${
                                       Math.ceil(
                                           (thesisSession?.thesisProject?.length || 0) /
