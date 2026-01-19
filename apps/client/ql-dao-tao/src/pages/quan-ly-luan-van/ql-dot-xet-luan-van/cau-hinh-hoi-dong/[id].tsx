@@ -10,7 +10,7 @@ import {
     useFindUniqueThesisSession,
     useUpdateManyThesisProject,
 } from '@workspace/db/hooks'
-import { Badge, Button, Col, Empty, Form, message, Tag, Typography } from 'antd'
+import {  Button, Col, Empty, Form, message, Tag, Typography } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
@@ -55,7 +55,7 @@ export default function SettingCouncil() {
                     room: true,
                     defenseSession: true,
                     registrations: {
-                        include: { student: true },
+                        include: { student: { include: { userProfile: true } } },
                     },
                 },
             },
@@ -144,8 +144,11 @@ export default function SettingCouncil() {
         include: {
             thesisProject: {
                 include: {
+                    registrations: {
+                        include: { student: { include: { userProfile: true } } }
+                    },
                     council: {
-                        include: { members: { include: { expert: true } } },
+                        include: { members: { include: { expert: { include: { lecturer: { include: { userProfile: true } } } } } } },
                     },
                 },
             },
@@ -197,116 +200,90 @@ export default function SettingCouncil() {
     }
     const handleCreateCouncil = async () => {
         try {
-            const values = await form.validateFields()
-
-            const { defenseSessionIds, defenseDate, roomIds } = values
-            const allProjects = [...(thesisSession?.thesisProject || [])]
-            const availableExperts = [...rightData]
-            const slotsPerCouncil = (defenseDate?.length || 0) * (defenseSessionIds?.length || 0)
-
-            const requiredCouncilsCount = Math.ceil(allProjects.length / slotsPerCouncil)
-            console.log('requiredCouncilsCount', requiredCouncilsCount)
-            console.log('roomIds?.length', roomIds?.length)
-
-            if ((roomIds?.length || 0) < requiredCouncilsCount) {
-                message.error(
-                    `Bạn cần chọn ít nhất ${requiredCouncilsCount} phòng để đáp ứng ${allProjects.length} đề tài.`
-                )
-                return
+            const values = await form.validateFields();
+            const { defenseSessionIds, defenseDate, roomIds } = values;
+            const allProjects = [...(thesisSession?.thesisProject || [])];
+            const expertPool = [...rightData]; //
+    
+            const totalProjects = allProjects.length;
+            const numRooms = roomIds?.length || 0;
+            const numDates = defenseDate?.length || 0;
+            const numSessions = defenseSessionIds?.length || 0;
+            const totalSlots = numRooms * numDates * numSessions;
+    
+            if (expertPool.length < 5) {
+                message.error("Cần ít nhất 5 chuyên gia để lập hội đồng.");
+                return;
             }
-
-            if (availableExperts.length < requiredCouncilsCount * 5) {
-                message.error(
-                    `Cần ít nhất ${
-                        requiredCouncilsCount * 5
-                    } chuyên gia để lập ${requiredCouncilsCount} hội đồng.`
-                )
-                return
+    
+            if (totalSlots < totalProjects) {
+                message.error(`Không đủ chỗ! Có ${totalProjects} đề tài nhưng chỉ có ${totalSlots} ô lịch.`);
+                return;
             }
-
-            const usedChairmanIds = new Set<string>()
-            let projectOffset = 0
-
-            for (let i = 0; i < requiredCouncilsCount; i++) {
-                const roomId = roomIds?.[i]
-                const councilProjects = allProjects.slice(
-                    projectOffset,
-                    projectOffset + slotsPerCouncil
-                )
-
-                if (councilProjects.length === 0) break
-
-                const councilSupervisorIds = new Set(councilProjects.map((p) => p.supervisorId))
-                const validExperts = availableExperts.filter(
-                    (exp) => !councilSupervisorIds.has(exp.id)
-                )
-
-                const chairman = validExperts.find(
-                    (exp) => exp.eligiblePresident && !usedChairmanIds.has(exp.id)
-                )
-
-                if (!chairman)
-                    throw new Error(
-                        `Không tìm thấy chủ tịch phù hợp cho hội đồng tại phòng ${roomId}.`
-                    )
-                usedChairmanIds.add(chairman.id)
-
-                const others = validExperts.filter((e) => e.id !== chairman.id)
-                const secretary = others.find((e) => e.eligibleSecretary)
-                const remaining = others.filter((e) => e.id !== secretary?.id)
-
-                if (!secretary || remaining.length < 3) {
-                    throw new Error(`Không đủ nhân sự để cấu hình hội đồng tại phòng ${roomId}.`)
+    
+            showSpinner();
+            const shuffle = (array: any[]) => array.sort(() => Math.random() - 0.5);
+    
+            for (let i = 0; i < totalProjects; i++) {
+                const project = allProjects[i];
+                
+                const shuffledExperts = shuffle([...expertPool]);
+    
+                const validExperts = shuffledExperts.filter(exp => exp.id !== project.supervisorId);
+    
+                const chairman = validExperts.find(exp => exp.eligiblePresident);
+                const secretary = validExperts.find(exp => exp.eligibleSecretary && exp.id !== chairman?.id);
+                const others = validExperts.filter(exp => exp.id !== chairman?.id && exp.id !== secretary?.id);
+    
+                if (!chairman || !secretary || others.length < 3) {
+                    throw new Error(`Không đủ nhân sự phù hợp (Chủ tịch/Thư ký/Thành viên) cho đề tài: ${project.title}`);
                 }
-
+    
+                const reviewer1 = others[0];
+                const reviewer2 = others[1];
+                const member = others[2];
+    
                 const newCouncil = await createCouncil({
                     data: {
                         status: 'PENDING',
-                        description: `Hội đồng ${i + 1}`,
+                        description: `Hội đồng đề tài: ${project.registrations?.[0]?.student?.userProfile?.fullname}`,
                         members: {
                             create: [
                                 { expertId: chairman.id, role: 'CHAIRMAN' },
                                 { expertId: secretary.id, role: 'SECRETARY' },
-                                { expertId: remaining[0].id, role: 'REVIEWER_1' },
-                                { expertId: remaining[1].id, role: 'REVIEWER_2' },
-                                { expertId: remaining[2].id, role: 'MEMBER' },
+                                { expertId: reviewer1.id, role: 'REVIEWER_1' },
+                                { expertId: reviewer2.id, role: 'REVIEWER_2' },
+                                { expertId: member.id, role: 'MEMBER' },
                             ],
                         },
                     },
-                })
-
-                let slotIdx = 0
-                for (const date of defenseDate || []) {
-                    for (const sessionId of defenseSessionIds || []) {
-                        if (slotIdx >= councilProjects.length) break
-
-                        const project = councilProjects[slotIdx]
-                        await updateProjects({
-                            where: { id: project.id },
-                            data: {
-                                councilId: newCouncil?.id,
-                                roomId: roomId,
-                                defenseSessionId: sessionId,
-                                defenseDate: dayjs(date, 'DD/MM/YYYY').toDate(),
-                            },
-                        })
-                        slotIdx++
-                    }
-                }
-
-                projectOffset += slotsPerCouncil
+                });
+    
+                const roomIdx = i % numRooms;
+                const sessionIdx = Math.floor(i / numRooms) % numSessions;
+                const dateIdx = Math.floor(i / (numRooms * numSessions)) % numDates;
+    
+                await updateProjects({
+                    where: { id: project.id },
+                    data: {
+                        councilId: newCouncil?.id,
+                        roomId: roomIds?.[roomIdx],
+                        defenseSessionId: defenseSessionIds?.[sessionIdx],
+                        defenseDate: dayjs(defenseDate?.[dateIdx], 'DD/MM/YYYY').toDate(),
+                    },
+                });
             }
-
-            message.success(
-                `Đã tạo ${requiredCouncilsCount} hội đồng và phân bổ thành công ${allProjects.length} đề tài.`
-            )
-        } catch {
-            message.error('Lỗi hệ thống khi tạo hội đồng')
+    
+            message.success(`Đã tạo ${totalProjects} hội đồng riêng biệt cho từng đề tài.`);
+            // router.reload();
+        } catch (error: any) {
+            message.error(error.message || 'Lỗi hệ thống');
         } finally {
+            hideSpinner();
         }
-    }
+    };
     const minRoomsRequired =
-        selectedDefenseSessionIds.length * selectedDefenseDate.length > 0
+    selectedDefenseSessionIds.length > 0 && selectedDefenseDate.length > 0
             ? Math.ceil(
                   (thesisSession?.thesisProject?.length || 0) /
                       (selectedDefenseSessionIds.length * selectedDefenseDate.length)
@@ -332,104 +309,101 @@ export default function SettingCouncil() {
         []
     )
     const CouncilListTable = () => {
-        const expandedRowRender = (council: any) => {
-            const projectColumns = [
-                {
-                    title: 'Ngày bảo vệ',
-                    dataIndex: 'defenseDate',
-                    render: (date: Date) => (date ? dayjs(date).format('DD/MM/YYYY') : 'Chưa xếp'),
-                },
-                {
-                    title: 'Ca',
-                    dataIndex: ['defenseSession', 'startTime'],
-                    render: (time: Date) => (time ? dayjs(time).format('HH:mm') : 'Chưa xếp'),
-                },
-                {
-                    title: 'Sinh viên',
-                    render: (_: any, record: any) => {
-                        const reg = record.registrations?.[0]
-                        return (
-                            <div>
-                                <div className="font-medium">{reg?.student?.name || 'N/A'}</div>
-                                <div className="text-xs text-gray-500">
-                                    {reg?.student?.code || 'N/A'}
-                                </div>
-                            </div>
-                        )
-                    },
-                },
-                {
-                    title: 'Tên đề tài',
-                    dataIndex: 'title',
-                    ellipsis: true,
-                },
-            ]
-
-            return (
-                <Table
-                    columns={projectColumns}
-                    dataSource={council.thesis}
-                    pagination={false}
-                    rowKey="id"
-                    size="small"
-                    bordered
-                />
-            )
-        }
-
         const mainColumns = [
             {
                 title: 'Phòng bảo vệ',
-                render: (_: any, record: any) => record.thesis?.[0]?.room?.name || 'Chưa gán',
+                key: 'room',
+                width: 120,
+                render: (_: any, record: any) => (
+                    <Tag color="blue" className="font-medium">
+                        {record.thesis?.[0]?.room?.name || 'Chưa gán'}
+                    </Tag>
+                ),
+            },
+            {
+                title: 'Ca bảo vệ',
+                key: 'session',
+                width: 100,
+                render: (_: any, record: any) => {
+                    const startTime = record.thesis?.[0]?.defenseSession?.startTime;
+                    return startTime ? dayjs(startTime).format('HH:mm') : 'N/A';
+                },
+            },
+            {
+                title: 'Ngày bảo vệ',
+                key: 'date',
+                width: 120,
+                render: (_: any, record: any) => {
+                    const date = record.thesis?.[0]?.defenseDate;
+                    return date ? dayjs(date).format('DD/MM/YYYY') : 'N/A';
+                },
+            },
+            {
+                title: 'Sinh viên',
+                key: 'student',
+                width: 200,
+                render: (_: any, record: any) => {
+                    const student = record.thesis?.[0]?.registrations?.[0]?.student;
+                    console.log(student);
+                    return (
+                        <div>
+                            <div className="font-bold text-primary">{student?.userProfile?.fullname || 'N/A'}</div>
+                            <div className="text-xs text-gray-500">{student?.code || 'N/A'}</div>
+                        </div>
+                    );
+                },
+            },
+            {
+                title: 'Tên đề tài',
+                key: 'title',
+                width: 250,
+                render: (_: any, record: any) => (
+                    <Typography.Text ellipsis={{ tooltip: record.thesis?.[0]?.title }}>
+                        {record.thesis?.[0]?.title || 'N/A'}
+                    </Typography.Text>
+                ),
             },
             {
                 title: 'Thành viên hội đồng',
                 dataIndex: 'members',
+                key: 'members',
+                width: 300,
                 render: (members: any[]) => (
-                    <div className="space-y-1">
+                    <div className="grid grid-cols-1 gap-1">
                         {members.map((m) => (
-                            <div key={m.id} className="text-sm">
-                                <Badge status="processing" className="mr-2" />
-                                <span className="font-semibold">{getRoleText(m.role)}:</span>{' '}
-                                {m.expert?.name}
+                            <div key={m.id} className="text-[13px] leading-5">
+                                <span className="font-semibold text-gray-700">{getRoleText(m.role)}:</span>{' '}
+                                <span className="text-gray-600">{m.expert?.name}</span>
                             </div>
                         ))}
                     </div>
                 ),
             },
-            {
-                title: 'Số đề tài',
-                render: (_: any, record: any) => (
-                    <Tag color="cyan" className="text-base px-3">
-                        {record.thesis?.length || 0} đề tài
-                    </Tag>
-                ),
-                align: 'center' as const,
-            },
-        ]
-
+        ];
+    
         return (
-            <div className="mt-10 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <Typography.Title level={4} className="mb-4">
-                    <span className="border-l-4 border-primary pl-3">
-                        Thông tin các hội đồng đã thiết lập
-                    </span>
+            <div className="mt-10 bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <Typography.Title level={4} className="mb-6 flex items-center">
+                    <div className="w-1 h-6 bg-primary mr-3 rounded-full" />
+                    Danh sách hội đồng bảo vệ chi tiết
                 </Typography.Title>
                 <Table
                     rowKey="id"
                     columns={mainColumns}
                     dataSource={councils}
                     loading={isLoadingCouncils}
-                    expandable={{
-                        expandedRowRender,
-                        expandRowByClick: true,
-                        columnTitle: 'Lịch chi tiết',
+                    pagination={{ 
+                        pageSize: 10,
+                        showSizeChanger: true,
+                        showTotal: (total) => `Tổng cộng ${total} hội đồng`
                     }}
-                    pagination={{ pageSize: 5 }}
+                    bordered
+                    scroll={{ x: 1300 }} // Đảm bảo bảng không bị vỡ khi nhiều cột
+                    className="custom-table"
                 />
             </div>
-        )
-    }
+        );
+    };
     const getRoleText = (role: string) => {
         const roles: Record<string, string> = {
             CHAIRMAN: 'Chủ tịch',
@@ -646,7 +620,7 @@ export default function SettingCouncil() {
                             }}
                         >
                             Danh sách chuyên gia hội đồng{' '}
-                            {selectedDefenseSessionIds.length
+                            {selectedDefenseSessionIds.length && selectedDefenseDate.length
                                 ? `(Cần ít nhất ${
                                       Math.ceil(
                                           (thesisSession?.thesisProject?.length || 0) /

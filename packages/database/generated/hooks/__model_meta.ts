@@ -9076,10 +9076,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'semesterStart',
-                }, startYear: {
-                    name: "startYear",
-                    type: "Int",
-                    isOptional: true,
                 }, endYear: {
                     name: "endYear",
                     type: "Int",
@@ -9094,6 +9090,14 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, admissionQuota: {
                     name: "admissionQuota",
+                    type: "Int",
+                    isOptional: true,
+                }, admittedStudent: {
+                    name: "admittedStudent",
+                    type: "Int",
+                    isOptional: true,
+                }, enrolledStudent: {
+                    name: "enrolledStudent",
                     type: "Int",
                     isOptional: true,
                 }, admissionStartDate: {
@@ -11272,6 +11276,12 @@ const metadata: ModelMeta = {
                 }, subjectClassHistory: {
                     name: "subjectClassHistory",
                     type: "SubjectClassHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
+                }, examBank: {
+                    name: "examBank",
+                    type: "ExamBank",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
@@ -20629,8 +20639,18 @@ const metadata: ModelMeta = {
                     type: "String",
                 }, subjectClass: {
                     name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examBank',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
                     type: "String",
                     isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, explain: {
                     name: "explain",
                     type: "String",

@@ -16,7 +16,6 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     examCode: z.string(),
-    subjectClass: z.string().nullish(),
     explain: z.string().nullish(),
     examDay: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
@@ -33,7 +32,6 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     examCode: z.string(),
-    subjectClass: z.string().nullish(),
     explain: z.string().nullish(),
     examDay: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
@@ -42,12 +40,14 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     exam: z.record(z.string(), z.unknown()),
+    subjectClass: z.record(z.string(), z.unknown()).optional(),
     questions: z.array(z.unknown()).optional(),
     examMatrix: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     examId: z.string(),
+    subjectClassId: z.string().nullish(),
     examMatrixId: z.string().nullish(),
 }
 );
@@ -85,7 +85,6 @@ export const ExamBankPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     examCode: z.string(),
-    subjectClass: z.string().nullish(),
     explain: z.string().nullish(),
     examDay: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
