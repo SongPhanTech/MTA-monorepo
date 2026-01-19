@@ -15,6 +15,7 @@ import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import type { ExamBank } from '@workspace/db/client'
+import { automaticTopicGeneration } from '@workspace/libs/api/exam'
 
 type PutMaTranDeInputType = ExamBank & {
     quantity: number
@@ -89,7 +90,7 @@ const SinhDeModal = () => {
 
     const onOk = async (values: PutMaTranDeInputType) => {
         try {
-            if (!values) return
+            if (!values || !selectedExamId) return
 
             // const matrixData = await fetch('http://localhost:3030/sinh-de', {
             //     method: 'POST',
@@ -98,13 +99,19 @@ const SinhDeModal = () => {
             //     },
             //     body: JSON.stringify({ ...values, examId: selectedExamId }),
             // })
-            // const res = await matrixData.json()
-            // if (res?.status === '200') {
-            //     message.success('Tạo đề thành cong!')
-            //     onClose()
-            // } else {
-            //     message.error(res?.message)
-            // }
+
+            // console.log(values,selectedExamId);
+            // return
+            console.log(values,selectedExamId);
+            
+            
+            const res = await automaticTopicGeneration({...values, examId: selectedExamId,deletedAt:null,createdAt:new Date().toISOString(),updatedAt:null,examDay:values?.examDay?new Date(values?.examDay).toISOString():null})
+            if (res?.status === 200) {
+                message.success('Tạo đề thành cong!')
+                onClose()
+            } else {
+                message.error('Lỗi tạo đề')
+            }
 
             // onClose()
         } catch (error) {
@@ -120,7 +127,7 @@ const SinhDeModal = () => {
             title="Thông tin tạo đề"
             onCancel={onClose}
             onFinish={onOk}
-            className="w-[500px]"
+            className="w-[1000px]"
         >
             <Col span={24}>
                 <Row gutter={[16, 0]}>
@@ -134,7 +141,7 @@ const SinhDeModal = () => {
                             <InputNumber className="w-full" placeholder="Nhập mã đề" />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <FormItem form={form} name="quantity" label="Số đề cần tạo" required>
                             <InputNumber
                                 className="w-full"
@@ -143,7 +150,7 @@ const SinhDeModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <FormItem form={form} name="examType" label="Hình thức thi" required>
                             <Select
                                 options={[
@@ -160,7 +167,7 @@ const SinhDeModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <FormItem form={form} name="examFrameworkId" label="Khung đề" required>
                             <Select
                                 options={examFrameworkData.map((i) => {
@@ -173,7 +180,7 @@ const SinhDeModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <FormItem form={form} name="examMatrixId" label="Ma trận đề" required>
                             <Select
                                 options={ExamMatrixData.map((i: { name: string; id: string }) => {
@@ -194,7 +201,7 @@ const SinhDeModal = () => {
                             </Radio.Group>
                         </FormItem>
                     </Col> */}
-                    <Col span={24}>
+                    <Col span={12}>
                         <FormItem form={form} name="examDay" label="Ngày thi" required>
                             <DatePicker
                                 format={{
@@ -209,7 +216,7 @@ const SinhDeModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <FormItem form={form} name="subjectClass" label="Dùng cho lớp">
                             <Select options={dataOption} placeholder="Chọn lớp môn học" />
                         </FormItem>

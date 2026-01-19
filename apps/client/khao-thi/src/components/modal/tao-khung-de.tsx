@@ -127,7 +127,7 @@ export default function ModalTaoKhungDe() {
             onCancel={onClose}
             onFinish={onOk}
             maskClosable={true}
-            className="w-[30vw]"
+            className="w-[600px]"
         >
             <Col span={24}>
                 <Form.Item
