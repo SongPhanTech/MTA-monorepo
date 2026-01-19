@@ -2,7 +2,7 @@ import { UploadOutlined } from '@ant-design/icons'
 import FormItem from '@components/commons/form-item'
 import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { Difficult, QuestionType } from '@workspace/db'
+import { type Difficult, QuestionType } from '@workspace/db'
 import { useCreateQuestion, useFindManyKnowledgeBlock } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { env } from '@workspace/libs/utils'
@@ -96,13 +96,12 @@ const WordImportModal: React.FC = () => {
             let content = match[2].trim()
 
             // Detect đáp án đúng - hỗ trợ nhiều loại ngoặc đơn (ASCII và Unicode)
-            // Regex: [(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?
-            const correctPattern = /[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi
+            // Regex: [(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?
+            const correctPattern = /[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi
             const isCorrect = correctPattern.test(content)
 
             // Remove text "(đáp án đúng)" khỏi content - hỗ trợ nhiều loại ngoặc
-            content = content.replace(/[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi, '').trim()
-
+            content = content.replace(/[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi, '').trim()
             choices.push({ label, content, isCorrect })
         }
 
