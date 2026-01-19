@@ -406,7 +406,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                 <FormItem
                                     required
                                     form={form}
-                                    name="lectureID"
+                                    name="lectureCode"
                                     label="Mã giảng viên"
                                     className="mb-0"
                                 >

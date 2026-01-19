@@ -401,7 +401,7 @@ export default function UpdateUserPage() {
         ethnicityId,
         bLaGiangVien,
         lecturerTypeId,
-        lectureID,
+        lectureCode,
         organizationId,
         tinhTrangHonNhanId,
         dM_ChucDanhCMNVGiangVienId,
@@ -962,9 +962,8 @@ export default function UpdateUserPage() {
             ]
             if (cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
                 const lecturerUpdateData: any = {
-                    code: values?.code,
                     lecturerTypeId,
-                    lectureID: lectureID,
+                    code: lectureCode,
                 }
 
                 if (organizationId) {
@@ -988,9 +987,8 @@ export default function UpdateUserPage() {
             if (!cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
                 const lecturerData: any = {
                     userProfileId: id,
-                    code: values?.code,
                     lecturerTypeId,
-                    lectureID: lectureID,
+                    code: lectureCode,
                 }
 
                 if (organizationId) {
@@ -1179,8 +1177,8 @@ export default function UpdateUserPage() {
                 // staffPositionId: userData.staffs?.staffPositionId,
                 // staffTypeId: userData.staffs?.staffTypeId,
                 lecturerTypeId: userData.lecturer?.lecturerTypeId,
-                lectureID: userData.lecturer?.lectureID,
                 organizationId: userData.lecturer?.organizationId,
+                lectureCode: userData.lecturer?.code,
             })
             if (userData?.avatar) {
                 const imageUrl = await getLInkImage()
