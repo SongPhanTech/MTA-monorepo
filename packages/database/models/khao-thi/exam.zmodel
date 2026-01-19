@@ -23,7 +23,7 @@ enum Difficult {
   D2         // Hiểu
   D3         // Vận dụng
   D4         // Vận dụng cao
-  
+
   @@schema("khao-thi")
 }
 
@@ -41,12 +41,12 @@ enum Difficult {
 
 /// Phiên bản ngân hàng câu hỏi
 model QuestionBank extends Base {
-  name               String           // Tên ngân hàng câu hỏi
+  name             String           // Tên ngân hàng câu hỏi
 
-  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId   String
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
 
-  questions          Question[]
+  questions        Question[]
 
   @@unique([subjectVersionId, name])
   @@schema("khao-thi")
@@ -178,13 +178,13 @@ model OrderingItem extends Base {
 model Exam extends Base {
   /// khoá DS thi
   // giao diện đánh phách, nhập điểm theo phách chỉ query lockExamSessions=true
-  lockExamSessions   Boolean             @default(false)
+  lockExamSessions Boolean        @default(false)
 
   /// thời gian thi
-  duration           Int?
+  duration         Int?
 
   // Số ca thi
-  session            Int                 @default(1)
+  session          Int            @default(1)
 
   // passScore          Float               @default(5) // Điểm đạt
   // maxScore           Float               @default(10) // Điểm tối đa
@@ -192,18 +192,18 @@ model Exam extends Base {
   // shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
   // showResult         Boolean             @default(false) // Hiển thị kết quả ngay
 
-  subjectVersionId   String               // Môn thi
-  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String               // Môn thi
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
 
   // xuất sang PM quản lý đề
-  semester           Semester            @relation(fields: [semesterId], references: [id])
-  semesterId         String
+  semester         Semester       @relation(fields: [semesterId], references: [id])
+  semesterId       String
 
   /// Lớp môn học
-  subjectClass       SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
+  subjectClass     SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
 
-  examBank           ExamBank[]
-  examRooms          ExamRoom[]
+  examBank         ExamBank[]
+  examRooms        ExamRoom[]
   @@schema("khao-thi")
 }
 
@@ -274,10 +274,10 @@ model ExamList extends Base {
 
 /// Đề thi
 model ExamBank extends Base {
-  exam      Exam               @relation(fields: [examId], references: [id])
-  examId    String
+  exam         Exam               @relation(fields: [examId], references: [id])
+  examId       String
 
-  examCode  String
+  examCode     String
 
   subjectClass String?
 
@@ -287,7 +287,7 @@ model ExamBank extends Base {
   questions    ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
   examMatrix   ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
   examMatrixId String?
-  isLock        Boolean?          @default(false)
+  isLock       Boolean?           @default(false)
 
   @@unique([examId, examCode])
   @@schema("khao-thi")
@@ -349,23 +349,23 @@ model ExamMatrix extends Base {
   examFrameworkId String
   knowledgeBlocks KnowledgeBlock[]
   examBank        ExamBank[]
-   @@schema("khao-thi")
+  @@schema("khao-thi")
 }
 
 /// Khối kiến thức / Chuẩn đầu ra
 model KnowledgeBlock extends Base {
-  name          String // Tên chương / khối kiến thức
-  examMatrix    ExamMatrix     @relation(fields: [examMatrixId], references: [id])
-  examMatrixId  String
+  name             String // Tên chương / khối kiến thức
+  examMatrix       ExamMatrix      @relation(fields: [examMatrixId], references: [id])
+  examMatrixId     String
 
-  questions     Question[]
+  questions        Question[]
 
 
-  documentFiles DocumentFile[]
-  configExams   ConfigExam[]
-  subjectVersion SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-	subjectVersionId String
-  
+  documentFiles    DocumentFile[]
+  configExams      ConfigExam[]
+  subjectVersion   SubjectVersion? @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String?
+
   @@schema("khao-thi")
 }
 

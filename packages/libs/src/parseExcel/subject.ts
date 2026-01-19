@@ -1,5 +1,6 @@
 import { $Enums } from '@workspace/db'
 import { read, utils } from 'xlsx'
+import { examTypes, subjectVersionTypes } from '../constants'
 import type { ParseSheetError } from './types'
 export type SubjectResult = {
     name: string
@@ -32,22 +33,6 @@ export interface ParseSubjectResult {
 const subjectRequirementTypes: Record<string, $Enums.SubjectRequirementType> = {
     'Bắt buộc': $Enums.SubjectRequirementType.Mandatory,
     'Tự chọn': $Enums.SubjectRequirementType.Optional,
-}
-
-const subjectVersionTypes: Record<string, $Enums.SubjectVersionType> = {
-    Thường: $Enums.SubjectVersionType.Normal,
-    'Thực tập': $Enums.SubjectVersionType.Internship,
-    'Thực hành': $Enums.SubjectVersionType.Practice,
-    'Chuyên đề nghiên cứu': $Enums.SubjectVersionType.Research,
-    'Luận văn-Đề án': $Enums.SubjectVersionType.Project,
-    'Thi tốt nghiệp': $Enums.SubjectVersionType.Graduation,
-    'Thí nghiệm/Thực hành': $Enums.SubjectVersionType.Practice,
-}
-
-const examTypes: Record<string, $Enums.ExamType> = {
-    'Thi vấn đáp': $Enums.ExamType.Oral,
-    'Thi viết': $Enums.ExamType.OfflineWritten,
-    Khác: $Enums.ExamType.Other,
 }
 
 export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => {

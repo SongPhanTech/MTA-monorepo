@@ -20,6 +20,7 @@ import {
     FolderOpen,
     GraduationCap,
     House,
+    Landmark,
     Library,
     ListChecks,
     ListTree,
@@ -282,6 +283,12 @@ const NAVIGATION: NavigationType = {
                         label: 'SV/HV chuyển trường',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
                         description: 'SV/HV chuyển trường',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU,
+                        label: 'Chuyên đề nghiên cứu',
+                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU,
+                        description: 'Chuyên đề nghiên cứu',
                     },
                 ],
             },
@@ -588,12 +595,6 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
                         description: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
                     },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU,
-                        label: 'Chuyên đề nghiên cứu',
-                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU,
-                        description: 'Chuyên đề nghiên cứu',
-                    },
                 ],
             },
             {
@@ -759,23 +760,28 @@ const NAVIGATION: NavigationType = {
             //     path: ROUTER_PATH.KHAO_THI.HOME,
             //     description: 'Thông tin trang chủ',
             // },
-            // {
-            //     id: 'thiet-lap-de-thi',
-            //     label: 'Thiết lập đề thi',
-            //     icon: Landmark,
-            //     children: [
-            //         {
-            //             id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
-            //             label: 'Danh sách kỳ thi',
-            //             path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI,
-            //         },
-            //         {
-            //             id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
-            //             label: 'Ngân hàng câu hỏi',
-            //             path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
-            //         },
-            //     ],
-            // },
+            {
+                id: 'thiet-lap-de-thi',
+                label: 'Thiết lập đề thi',
+                icon: Landmark,
+                children: [
+                    {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        label: 'Ngân hàng câu hỏi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
+                    },
+                    {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        label: 'Khung đề',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_KHUNG_DE,
+                    },
+                    {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        label: 'Danh sách đề thi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DANH_SACH_DE,
+                    },
+                ],
+            },
             // {
             //     id: 'category',
             //     label: 'Danh mục',

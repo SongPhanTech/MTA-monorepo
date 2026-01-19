@@ -3220,8 +3220,6 @@ app.openapi(
                 labels,
             })
         }
-
-        // dữ liệu thật sẽ xử lý sau
         return c.json({
             data,
             count: data.length,
@@ -3821,206 +3819,6 @@ app.openapi(
 app.openapi(
     createRoute({
         method: 'post',
-        path: '/exam-info-by-day',
-        tags: ['Stats'],
-        request: {
-            body: {
-                content: {
-                    'application/json': {
-                        schema: z.object({
-                            preview: z.boolean().default(false),
-                        }),
-                    },
-                },
-            },
-        },
-        responses: {
-            200: {
-                description: 'Thông tin thi theo ngày',
-                content: {
-                    'application/json': {
-                        schema: StatBaseSchema.extend({
-                            data: z.array(
-                                z.object({
-                                    name: z.string(),
-                                    count: z.number(),
-                                })
-                            ),
-                        }),
-                    },
-                },
-            },
-        },
-    }),
-    async (c) => {
-        const { preview } = c.req.valid('json')
-        const data = [
-            { name: 'Ca thi', count: 120 },
-            { name: 'Học phần', count: 450 },
-            { name: 'Học viên', count: 600 },
-            { name: 'Phòng thi', count: 300 },
-            { name: 'Giám thị', count: 300 },
-        ]
-        if (preview) {
-            return c.json({
-                data,
-                count: data.length,
-                summary: {},
-                preview: true,
-                labels: ['Danh mục', 'Số lượng'],
-            })
-        }
-        return c.json(
-            { data, count: data.length, summary: {}, preview, labels: ['Danh mục', 'Số lượng'] },
-            200
-        )
-    }
-)
-
-app.openapi(
-    createRoute({
-        method: 'post',
-        path: '/final-exam-result',
-        tags: ['Stats'],
-        request: {
-            body: {
-                content: {
-                    'application/json': {
-                        schema: z.object({
-                            preview: z.boolean().default(false),
-                        }),
-                    },
-                },
-            },
-        },
-        responses: {
-            200: {
-                description: 'Tổng quan kết quả thi kết thúc học phần của học viện',
-                content: {
-                    'application/json': {
-                        schema: StatBaseSchema.extend({
-                            data: z.array(
-                                z.object({
-                                    name: z.string(),
-                                    count: z.number(),
-                                })
-                            ),
-                        }),
-                    },
-                },
-            },
-        },
-    }),
-    async (c) => {
-        const { preview } = c.req.valid('json')
-        const data = [
-            { name: 'Lượt thi', count: 21234 },
-            { name: 'Học phần', count: 150 },
-            { name: 'Tiến độ nhập điểm', count: 100 },
-            { name: 'Tỷ lệ vắng thi', count: 10 },
-            { name: 'Vi phạm quy chế', count: 6300 },
-            { name: 'Phúc khảo', count: 52 },
-        ]
-        if (preview) {
-            return c.json({
-                data,
-                count: data.length,
-                summary: {},
-                preview: true,
-                labels: ['Danh mục', 'Số lượng'],
-            })
-        }
-        return c.json(
-            { data, count: data.length, summary: {}, preview, labels: ['Danh mục', 'Số lượng'] },
-            200
-        )
-    }
-)
-
-app.openapi(
-    createRoute({
-        method: 'post',
-        path: '/trends-in-academic-results-by-year',
-        tags: ['Stats'],
-        request: {
-            body: {
-                content: {
-                    'application/json': {
-                        schema: z.object({
-                            preview: z.boolean().optional().default(false),
-                            year: z.number().min(2000).max(new Date().getFullYear()).optional(),
-                        }),
-                    },
-                },
-            },
-        },
-        responses: {
-            200: {
-                description: 'Xu hướng kết quả học tập theo năm',
-                content: {
-                    'application/json': {
-                        schema: StatBaseSchema.extend({
-                            data: z.array(
-                                z.object({
-                                    name: z.string(),
-                                    data: z.array(z.number()),
-                                })
-                            ),
-                        }),
-                    },
-                },
-            },
-        },
-    }),
-    async (c) => {
-        const { preview } = c.req.valid('json')
-        if (preview) {
-            const labels = ['2021-2022', '2022-2023', '2023-2024', '2024-2025']
-            const rawData = [
-                { name: 'Giỏi', data: [120, 135, 140, 150] },
-                { name: 'Khá', data: [200, 210, 220, 230] },
-                { name: 'Trung bình', data: [150, 160, 170, 180] },
-                { name: 'Không đạt', data: [30, 25, 20, 15] },
-            ]
-            const totals = labels.map((_, yearIndex) =>
-                rawData.reduce((sum, category) => sum + (category?.data?.[yearIndex] ?? 0), 0)
-            )
-            const data = rawData.map((category) => ({
-                name: category.name,
-                data: (category.data ?? []).map((value, yearIndex) => {
-                    const total = totals[yearIndex]
-                    if (!total || total === 0) return 0
-
-                    return Math.round((value / total) * 100 * 100) / 100
-                }),
-            }))
-            const summary = { totalYears: labels.length, totalCategories: data.length }
-            const count = rawData.reduce(
-                (sum, item) => sum + item.data.reduce((a, b) => a + b, 0),
-                0
-            )
-            return c.json({
-                summary,
-                count,
-                preview: true,
-                labels,
-                data,
-            })
-        }
-
-        return c.json({
-            summary: {},
-            count: 0,
-            preview: false,
-            labels: [],
-            data: [],
-        })
-    }
-)
-
-app.openapi(
-    createRoute({
-        method: 'post',
         path: '/student-count-by-academic-results',
         tags: ['Stats'],
         request: {
@@ -4391,6 +4189,304 @@ app.openapi(
                 data,
             })
         }
+        return c.json({
+            summary: {},
+            count: 0,
+            preview: false,
+            labels: [],
+            data: [],
+        })
+    }
+)
+
+const LateGradeItemSchema = z.object({
+    subjectName: z.string(),
+    department: z.string(),
+    faculty: z.string(),
+    dueDate: z.string(),
+    daysLate: z.number(),
+    status: z.enum(['OVERDUE', 'NEAR_DUE']),
+})
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/late-grade-subjects',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                            page: z.number().optional().default(1),
+                            pageSize: z.number().optional().default(10),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê các học phần chưa nhập điểm đúng hạn',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(LateGradeItemSchema),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview, page = 1, pageSize = 10 } = c.req.valid('json')
+        const allData: z.infer<typeof LateGradeItemSchema>[] = Array.from({ length: 25 }).map(
+            (_, index) => {
+                const daysLate = Math.floor(Math.random() * 10) - 3
+                return {
+                    subjectName: `Học phần ${index + 1}`,
+                    department: 'Công nghệ phần mềm',
+                    faculty: 'Khoa Công nghệ thông tin',
+                    dueDate: '2026-01-10',
+                    daysLate: daysLate > 0 ? daysLate : 0,
+                    status: (daysLate > 0 ? 'OVERDUE' : 'NEAR_DUE') as 'OVERDUE' | 'NEAR_DUE',
+                }
+            }
+        )
+
+        const start = (page - 1) * pageSize
+        const data = allData.slice(start, start + pageSize)
+        const lateSubjects = allData.filter((i) => i.status === 'OVERDUE').length
+        const nearDueSubjects = allData.filter((i) => i.status === 'NEAR_DUE').length
+        const totalSubjects = 120
+
+        const summary = {
+            totalSubjects,
+            lateSubjects,
+            nearDueSubjects,
+            latePercentage: Math.round((lateSubjects / totalSubjects) * 100),
+        }
+        if (preview) {
+            return c.json({
+                data,
+                count: allData.length,
+                summary,
+                preview: true,
+                labels: [
+                    'Tên học phần',
+                    'Bộ môn',
+                    'Khoa',
+                    'Hạn nhập điểm',
+                    'Số ngày trễ',
+                    'Trạng thái',
+                ],
+            })
+        }
+        return c.json(
+            {
+                data,
+                count: allData.length,
+                summary,
+                preview,
+                labels: [
+                    'Tên học phần',
+                    'Bộ môn',
+                    'Khoa',
+                    'Hạn nhập điểm',
+                    'Số ngày trễ',
+                    'Trạng thái',
+                ],
+            },
+            200
+        )
+    }
+)
+
+const ExamBankUpdateRequestSchema = z.object({
+    preview: z.boolean().default(false),
+    khoa: z.string().optional(),
+    vien: z.string().optional(),
+    boMon: z.string().optional(),
+    thoiGian: z
+        .object({
+            from: z.string(),
+            to: z.string(),
+        })
+        .optional(),
+})
+
+const ExamBankUpdateResponseSchema = StatBaseSchema.extend({
+    data: z.array(
+        z.object({
+            name: z.string(),
+            data: z.array(z.number()),
+        })
+    ),
+})
+
+type ExamBankUpdateData = z.infer<typeof ExamBankUpdateResponseSchema>['data']
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/exam-bank-update',
+        tags: ['Stats'],
+        summary: 'Thống kê số lượng ngân hàng đề đã bổ sung / cập nhật',
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: ExamBankUpdateRequestSchema,
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê số lượng ngân hàng đề đã bổ sung/cập nhật',
+                content: {
+                    'application/json': {
+                        schema: ExamBankUpdateResponseSchema,
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+
+        if (preview) {
+            const labels = ['HK1-2023', 'HK2-2023', 'HK1-2024', 'HK2-2024', 'HK1-2025']
+            const boSung = [15, 20, 18, 25, 22]
+            const capNhat = [10, 12, 14, 16, 18]
+
+            const data = [
+                {
+                    name: 'Bổ sung',
+                    data: boSung,
+                },
+                {
+                    name: 'Cập nhật',
+                    data: capNhat,
+                },
+            ]
+
+            const summary = {
+                totalBoSung: boSung.reduce((a, b) => a + b, 0),
+                totalCapNhat: capNhat.reduce((a, b) => a + b, 0),
+            }
+
+            return c.json(
+                {
+                    summary,
+                    count: labels.length,
+                    preview: true,
+                    labels,
+                    data,
+                },
+                200
+            )
+        }
+
+        return c.json(
+            {
+                summary: {},
+                count: 0,
+                preview: false,
+                labels: [],
+                data: [],
+            },
+            200
+        )
+    }
+)
+
+const LanguageProgressRequestSchema = z.object({
+    preview: z.boolean().default(false),
+    khoa: z.string().optional(),
+    vien: z.string().optional(),
+    namHoc: z.string().optional(),
+})
+
+const LanguageProgressResponseSchema = StatBaseSchema.extend({
+    data: z.array(
+        z.object({
+            x: z.string(),
+            y: z.number(),
+            line: z.enum(['datChuan', 'chuaDat']),
+        })
+    ),
+})
+
+type LanguageProgressData = z.infer<typeof LanguageProgressResponseSchema>['data']
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/language-standard-progress',
+        tags: ['Stats'],
+        summary: 'Thống kê tỷ lệ đạt và chưa đạt chuẩn ngoại ngữ theo tiến trình',
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().optional().default(false),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Tỷ lệ % đạt và chưa đạt chuẩn ngoại ngữ theo năm học - học kỳ',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    name: z.string(),
+                                    data: z.array(z.number()),
+                                })
+                            ),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
+
+        if (preview) {
+            const labels = ['HK1-2023', 'HK2-2023', 'HK1-2024', 'HK2-2024', 'HK1-2025']
+            const datChuan = [55, 60, 68, 75, 82]
+            const chuaDat = datChuan.map((v) => 100 - v)
+
+            const data = [
+                {
+                    name: '% đạt chuẩn',
+                    data: datChuan,
+                },
+                {
+                    name: '% chưa đạt',
+                    data: chuaDat,
+                },
+            ]
+
+            const summary = {
+                tyLeDatChuanHienTai: datChuan.at(-1),
+                tyLeChuaDatHienTai: chuaDat.at(-1),
+            }
+
+            return c.json({
+                summary,
+                count: labels.length,
+                preview: true,
+                labels,
+                data,
+            })
+        }
+
         return c.json({
             summary: {},
             count: 0,

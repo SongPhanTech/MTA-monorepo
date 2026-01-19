@@ -129,12 +129,6 @@ export default function ModalChiTietMonHoc() {
                                 exam: true,
                             },
                         },
-                        // Đề thi
-                        exams: {
-                            include: {
-                                questionBank: true,
-                            },
-                        },
                         // Tài liệu
                         documentFiles: true,
                         // Ngân hàng câu hỏi

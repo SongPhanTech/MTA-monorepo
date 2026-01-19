@@ -1,4 +1,4 @@
-import { $Enums } from '@workspace/db'
+import { $Enums, Difficult, QuestionType } from '@workspace/db'
 
 const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
@@ -154,6 +154,52 @@ const EVALUATION_PERIOD_STATUS_LABELS: Record<string, { label: string; color: st
     },
 }
 
+const DIFFICULT_LABELS: Record<Difficult, string> = {
+    D1: 'Biết',
+    D2: 'Hiểu',
+    D3: 'Vận dụng',
+    D4: 'Vận dụng cao',
+}
+
+const LEVEL_COLUMNS = [
+    { key: 'biet', label: 'Biết', difficult: 'D1' as Difficult },
+    { key: 'hieu', label: 'Hiểu', difficult: 'D2' as Difficult },
+    { key: 'vanDung', label: 'Vận dụng', difficult: 'D3' as Difficult },
+    { key: 'vanDungCao', label: 'Vận dụng cao', difficult: 'D4' as Difficult },
+] as const
+
+const LEVEL_COLORS = [
+    { key: 'D1', label: 'Biết', color: 'blue' },
+    { key: 'D2', label: 'Hiểu', color: 'cyan' },
+    { key: 'D3', label: 'Vận dụng', color: 'orange' },
+    { key: 'D4', label: 'Vận dụng cao', color: 'green' },
+]
+
+const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
+    [QuestionType.ESSAY]: 'Tự luận',
+    [QuestionType.ORAL]: 'Vấn đáp',
+    [QuestionType.SINGLE_CHOICE]: 'Trắc nghiệm 1 đáp án',
+    [QuestionType.MULTIPLE_CHOICE]: 'Trắc nghiệm nhiều đáp án',
+    [QuestionType.FILL_IN_BLANK]: 'Điền khuyết',
+    [QuestionType.ORDERING]: 'Sắp xếp',
+}
+
+const QUESTION_TYPE_OPTIONS: Array<{
+    value: QuestionType
+    label: string
+}> = Object.values(QuestionType).map((type) => ({
+    value: type,
+    label: QUESTION_TYPE_LABELS[type],
+}))
+
+const DIFFICULT_OPTIONS: Array<{
+    value: Difficult
+    label: string
+}> = LEVEL_COLUMNS.map(({ difficult, label }) => ({
+    value: difficult,
+    label: label,
+}))
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -166,4 +212,10 @@ export {
     EVALUATION_CRITERION_STATUS_OPTIONS,
     DEADLINE_OPTIONS,
     STANDARD_CATALOG_TYPE_OPTIONS,
+    DIFFICULT_OPTIONS,
+    QUESTION_TYPE_OPTIONS,
+    LEVEL_COLORS,
+    DIFFICULT_LABELS,
+    QUESTION_TYPE_LABELS,
+    LEVEL_COLUMNS,
 }

@@ -34,12 +34,12 @@ const relationSchema = z.object({
     questions: z.array(z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     configExams: z.array(z.unknown()).optional(),
-    subjectVersion: z.record(z.string(), z.unknown()),
+    subjectVersion: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     examMatrixId: z.string(),
-    subjectVersionId: z.string(),
+    subjectVersionId: z.string().nullish(),
 }
 );
 

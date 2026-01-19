@@ -622,11 +622,11 @@ model SubjectVersionCategory extends Base {
 
 enum SubjectVersionType {
   Normal // Học phần lý thuyết
+  Practice // Thí nghiệm/Thực hành
   Internship // Thực tập
   Research // Chuyên đề nghiên cứu
   Project // Đồ án
   Thesis // Luận văn/đề án
-  Practice // Thí nghiệm/Thực hành
   Graduation // Thi tốt nghiệp
 
   @@schema("ql-dao-tao")
@@ -701,7 +701,7 @@ model SubjectVersion extends BaseNoCode {
 
   subjectVersionHistory    SubjectVersionHistory[]
   exams                    Exam[]
-	examFramework             ExamFramework[]
+  examFramework            ExamFramework[]
 
   @@schema("ql-dao-tao")
 

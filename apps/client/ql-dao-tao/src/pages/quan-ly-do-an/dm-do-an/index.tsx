@@ -306,7 +306,8 @@ export default function DanhMucDoAn() {
 
                 const finalScore =
                     values.defenseRecordFinalScore === '' ||
-                    values.defenseRecordFinalScore === undefined
+                    values.defenseRecordFinalScore === undefined ||
+                    values.defenseRecordFinalScore === null
                         ? null
                         : Number(values.defenseRecordFinalScore)
 
@@ -919,14 +920,21 @@ export default function DanhMucDoAn() {
                             align: 'left',
                             dataIndex: 'defenseRecordFinalScore',
                             render: (_, record) => {
+                                const scoreValue = record?.defenseRecord?.finalScore
+
                                 if (editingRowKeys.includes(record?.id)) {
                                     const currentValue =
                                         editingValues[record.id]?.defenseRecordFinalScore ??
-                                        record?.defenseRecord?.finalScore
+                                        scoreValue
+
                                     return (
                                         <InputNumber
                                             className="w-28"
-                                            value={currentValue || undefined}
+                                            value={
+                                                currentValue === null || currentValue === undefined
+                                                    ? undefined
+                                                    : currentValue
+                                            }
                                             placeholder="Nhập điểm"
                                             onChange={(value) =>
                                                 handleEditChange(
@@ -938,9 +946,12 @@ export default function DanhMucDoAn() {
                                         />
                                     )
                                 }
-                                return record?.defenseRecord
-                                    ? Number(record?.defenseRecord?.finalScore).toFixedSmart(2)
-                                    : ''
+
+                                if (scoreValue === null || scoreValue === undefined) {
+                                    return ''
+                                }
+
+                                return Number(scoreValue).toFixedSmart(2)
                             },
                         },
                         {
@@ -1261,109 +1272,6 @@ const StudentManagementModal = ({
         } else {
             await handleSaveScores()
         }
-    }
-    const GradeTable = () => {
-        const columns = [
-            {
-                title: 'Học viên',
-                width: 150,
-                render: (_: any, reg: any) => (
-                    <div>
-                        <div>
-                            <b>{reg.student?.userProfile?.fullname}</b>
-                        </div>
-                        <div className="text-xs text-gray-500">{reg.student?.code}</div>
-                    </div>
-                ),
-            },
-            {
-                title: 'Chuyên cần',
-                dataIndex: 'attendanceScore',
-                render: (_: any, reg: any) => (
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        step={0.1}
-                        value={gradeValues[reg.studentId]?.attendanceScore}
-                        onChange={(val) =>
-                            setGradeValues((prev) => ({
-                                ...prev,
-                                [reg.studentId]: {
-                                    ...prev[reg.studentId],
-                                    attendanceScore: val,
-                                },
-                            }))
-                        }
-                    />
-                ),
-            },
-            {
-                title: 'Giữa kỳ',
-                dataIndex: 'midtermScore',
-                render: (_: any, reg: any) => (
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        step={0.1}
-                        value={gradeValues[reg.studentId]?.midtermScore}
-                        onChange={(val) =>
-                            setGradeValues((prev) => ({
-                                ...prev,
-                                [reg.studentId]: { ...prev[reg.studentId], midtermScore: val },
-                            }))
-                        }
-                    />
-                ),
-            },
-            {
-                title: 'Điểm thi',
-                dataIndex: 'examScore',
-                render: (_: any, reg: any) => (
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        step={0.1}
-                        value={gradeValues[reg.studentId]?.examScore}
-                        onChange={(val) =>
-                            setGradeValues((prev) => ({
-                                ...prev,
-                                [reg.studentId]: { ...prev[reg.studentId], examScore: val },
-                            }))
-                        }
-                    />
-                ),
-            },
-            {
-                title: 'Tổng kết',
-                dataIndex: 'finalScore',
-                render: (_: any, reg: any) => (
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        step={0.1}
-                        className="font-bold"
-                        status={gradeValues[reg.studentId]?.examScore < 4 ? 'warning' : ''}
-                        value={gradeValues[reg.studentId]?.finalScore}
-                        onChange={(val) =>
-                            setGradeValues((prev) => ({
-                                ...prev,
-                                [reg.studentId]: { ...prev[reg.studentId], finalScore: val },
-                            }))
-                        }
-                    />
-                ),
-            },
-        ]
-
-        return (
-            <Table
-                dataSource={project?.registrations || []}
-                columns={columns}
-                pagination={false}
-                rowKey="id"
-                size="small"
-            />
-        )
     }
 
     return (

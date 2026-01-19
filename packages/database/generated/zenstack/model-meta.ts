@@ -22235,6 +22235,7 @@ const metadata: ModelMeta = {
                     name: "subjectVersion",
                     type: "SubjectVersion",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'knowledgeBlocks',
                     isRelationOwner: true,
@@ -22242,6 +22243,7 @@ const metadata: ModelMeta = {
                 }, subjectVersionId: {
                     name: "subjectVersionId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'subjectVersion',
                 },

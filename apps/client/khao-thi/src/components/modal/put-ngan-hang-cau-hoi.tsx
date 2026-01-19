@@ -1,9 +1,8 @@
-import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import useSpinner from '@hooks/spinner'
-import type { QuestionBank, SubjectVersion } from '@workspace/db'
+import type { PutQuestionBankInput } from '@pages/thiet-lap-de-thi/ngan-hang-cau-hoi'
+import type { QuestionBank, SubjectVersion } from '@workspace/db/client'
 import {
     useCreateQuestionBank,
     useFindManySubjectVersion,
@@ -13,13 +12,12 @@ import {
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 export type PutQuestionBankType = QuestionBank
-export type PutQuestionBankInput = {
-    id?: string
-    subjectVersionId?: string
-}
+
 const PutQuestionBank = () => {
     const [form] = Form.useForm<PutQuestionBankType>()
+
     const { isOpen, onClose, input } = useDisclosure<PutQuestionBankInput>({
         tag: 'PutQuestionBank',
         onClose: form.resetFields,
@@ -28,19 +26,16 @@ const PutQuestionBank = () => {
     const id = input?.id
     const subjectVersionId = input?.subjectVersionId
 
-    const { showSpinner, hideSpinner } = useSpinner()
-
     const { mutateAsync: createQuestionBank } = useCreateQuestionBank()
     const { mutateAsync: updateQuestionBank } = useUpdateQuestionBank()
+
     async function onOk(output?: PutQuestionBankType) {
         if (!output) return
         try {
-            showSpinner()
             const data = {
                 code: output.code,
-                name: output.name.trim(),
+                name: output.name,
                 subjectVersionId: output.subjectVersionId,
-                description: output.description,
             }
             if (id) {
                 await updateQuestionBank({
@@ -56,9 +51,7 @@ const PutQuestionBank = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            queryClient.invalidateQueries({
-                queryKey: ['QuestionBank'],
-            })
+
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
@@ -66,8 +59,6 @@ const PutQuestionBank = () => {
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
         }
     }
 
@@ -84,14 +75,13 @@ const PutQuestionBank = () => {
         orderBy: { name: 'asc' },
     })
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({ ...initialValue })
         } else if (subjectVersionId && !id) {
             form.setFieldValue('subjectVersionId', subjectVersionId)
         }
-    }, [initialValue, subjectVersionId, id])
+    }, [initialValue, subjectVersionId, id, form])
 
     return (
         <PutFormModal
@@ -114,25 +104,18 @@ const PutQuestionBank = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="subjectVersionId" label="Phiên bản môn học" required>
+                <FormItem form={form} name="subjectVersionId" label="Môn học" required>
                     <Select
                         maxTagCount={'responsive'}
-                        placeholder="Chọn phiên bản môn học"
+                        placeholder="Chọn môn học"
                         options={subjectVersionData.map((i: SubjectVersion) => {
                             const name = i.name || ''
-                            const period = i.period ? ` (${i.period} tiết)` : ''
-                            const credit = i.credit ? `, ${i.credit} tín chỉ` : ''
                             return {
                                 value: i.id,
-                                label: `${name}${period}${credit}`,
+                                label: `${name}`,
                             }
                         })}
                     />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
         </PutFormModal>

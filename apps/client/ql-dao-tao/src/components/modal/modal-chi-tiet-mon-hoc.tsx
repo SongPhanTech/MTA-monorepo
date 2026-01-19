@@ -52,6 +52,7 @@ export default function ModalChiTietMonHoc() {
                         trainingObjectType: true,
                         subjectVersionCategory: true,
                         managementOrganization: true,
+                        examFramework: true,
                         // Môn tiên quyết
                         prerequisiteSubject: {
                             include: {
@@ -123,7 +124,7 @@ export default function ModalChiTietMonHoc() {
                         // Đề thi
                         exams: {
                             include: {
-                                questionBank: true,
+                                examBank: true,
                             },
                         },
                         // Tài liệu
@@ -966,7 +967,7 @@ export default function ModalChiTietMonHoc() {
                         {
                             title: 'Ngân hàng câu hỏi',
                             width: 150,
-                            render: (_: any, record: any) => record.questionBank?.name,
+                            render: (_: any, record: any) => record.examBank?.name,
                         },
                         {
                             title: 'Thời gian (phút)',
@@ -1055,11 +1056,11 @@ export default function ModalChiTietMonHoc() {
         },
         {
             key: '12',
-            label: `Ngân hàng câu hỏi (${currentVersion?.questionBanks.length || 0})`,
+            label: `Ngân hàng câu hỏi (${currentVersion?.examFramework?.length || 0})`,
             children: (
                 <Table
                     size="small"
-                    dataSource={currentVersion?.questionBanks}
+                    dataSource={currentVersion?.examFramework}
                     rowKey="id"
                     pagination={{
                         pageSize: 10,
