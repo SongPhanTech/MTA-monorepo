@@ -135,10 +135,6 @@ export default function PaymentRecordPage() {
         orderBy: { createdAt: 'desc' },
     })
 
-    useEffect(() => {
-        console.log(paymentRecordData)
-    }, [paymentRecordData])
-
     const { data: count } = useCountPaymentRecord({
         where: {
             ...where,
