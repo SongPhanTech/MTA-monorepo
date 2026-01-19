@@ -228,7 +228,7 @@ export default function QuestionBankLite({
                     <Table
                         rowKey="id"
                         className="mt-2"
-                        scroll={{ y: 'calc(100vh - 260px)' }}
+                        // scroll={{ y: 'calc(100vh - 260px)' }}
                         bordered
                         data={data}
                         pagination={false}

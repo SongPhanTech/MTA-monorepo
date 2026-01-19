@@ -488,12 +488,12 @@ const WordImportModal: React.FC = () => {
 
                 // Detect đáp án đúng
                 const correctPattern =
-                  /[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi;
+                  /[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi;
                 const isCorrect = correctPattern.test(content);
 
                 // Remove "(đáp án đúng)"
                 content = content
-                  .replace(/[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi, "")
+                  .replace(/[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi, "")
                   .trim();
 
                 options.push({ label, content, isCorrect });

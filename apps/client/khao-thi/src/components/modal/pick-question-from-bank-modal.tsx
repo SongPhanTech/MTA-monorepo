@@ -307,7 +307,7 @@ const PickQuestionFromBankModal = () => {
             </Col>
 
             <Col span={24}>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mt-2 mb-4">
                     <Switch checked={keepOld} onChange={setKeepOld} />
                     <span>Giữ lại câu hỏi cũ</span>
                 </div>
