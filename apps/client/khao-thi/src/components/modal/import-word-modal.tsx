@@ -4,6 +4,8 @@ import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from "@constants/constants";
 import useSpinner from "@hooks/spinner";
 import { Difficult, QuestionType } from "@workspace/db";
 import { useCreateQuestion, useFindManyKnowledgeBlock } from "@workspace/db/hooks";
+import { generatePresignedUrl } from "@workspace/libs/api/model";
+import { env } from "@workspace/libs/utils";
 import {
   Button,
   Modal,
@@ -358,32 +360,27 @@ const WordImportModal: React.FC = () => {
     let result = rawText;
 
     for (const img of images) {
-      try {
-        const arrayBuffer = await img.blob.arrayBuffer();
-        const buffer = Array.from(new Uint8Array(arrayBuffer));
+              try {
+                const extension = 'png'
+                const resPresignedUrl = await generatePresignedUrl({
+                    path: 'question-images',
+                    extension,
+                })
 
-        const timestamp = Date.now();
-        const randomSuffix = Math.random().toString(36).substring(2, 8);
-        const fileName = `question_image_${timestamp}_${randomSuffix}.png`;
+                await fetch(resPresignedUrl.data.url, {
+                    method: 'PUT',
+                    body: img.blob,
+                })
 
-        const uploadResult = await window.electronAPI.saveImageLocal({
-          buffer,
-          fileName,
-        });
-
-        if (!uploadResult.success) {
-          throw new Error(uploadResult.error || "Upload failed");
-        }
-
-        const imageUrl = uploadResult.imageUrl;
-        result = result.replace(
-          img.name,
-          `<img src="${imageUrl}" style="max-width: 100%;" />`
-        );
-      } catch (error) {
-        console.error(`Failed to upload image ${img.name}:`, error);
-        // Giữ nguyên placeholder nếu upload thất bại
-      }
+                const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
+                result = result.replace(
+                    img.name,
+                    `<img src="${imageUrl}" style="max-width: 100%;" />`
+                )
+            } catch (error) {
+                console.error(`Failed to upload image ${img.name}:`, error)
+                // Giữ nguyên placeholder nếu upload thất bại
+            }
     }
 
     result = result.replace(/\n/g, "<br />");
