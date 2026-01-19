@@ -28,22 +28,22 @@ import { XemTaiLieu } from '@workspace/ui'
 import ModalPrintExamClusterSurvey from './modal-print-de-khao-sat'
 import ModalPrintExamSurvey from './modal-print-de-khao-sat-chung'
 import PutSurveyImportQuestionModal from './put-modal-survey-import-question'
-import PutQuestionBank from "./put-ngan-hang-cau-hoi"
-import ModalTaoKhungDe from "./tao-khung-de"
-import PutMaTranDeModal from "./put-ma-tran-de"
-import PutChuongMucModal from "./put-chuan-dau-ra"
-import SinhDeModal from "./sinh-de-modal"
-import SinhDeThuCongModal from "./sinh-de-thu-cong"
-import PutQuestionModal from "./put-question-modal"
-import WordImportModal from "./import-word-modal"
-import ExamImportModal from "./exam-import-modal"
-import PrintExamBank from "./download-de-thi"
-import PrintExplanation from "./download-dap-an"
-import PrintBatchExamBank from "./print-de-thi-hang-loat"
-import PrintBatchExplanation from "./print-dap-an-hang-loat"
-import MoveQuestionModal from "./modal-chuyen-question"
-import PickQuestionFromBankModal from "./pick-question-from-bank-modal"
-import QuestionListByKnowledgeBlockModal from "./modal-question-by-knowledge"
+import PutQuestionBank from './put-ngan-hang-cau-hoi'
+import ModalTaoKhungDe from './tao-khung-de'
+import PutMaTranDeModal from './put-ma-tran-de'
+import PutChuongMucModal from './put-chuan-dau-ra'
+import SinhDeModal from './sinh-de-modal'
+import SinhDeThuCongModal from './sinh-de-thu-cong'
+import PutQuestionModal from './put-question-modal'
+import WordImportModal from './import-word-modal'
+import ExamImportModal from './exam-import-modal'
+import PrintExamBank from './download-de-thi'
+import PrintExplanation from './download-dap-an'
+import PrintBatchExamBank from './print-de-thi-hang-loat'
+import PrintBatchExplanation from './print-dap-an-hang-loat'
+import MoveQuestionModal from './modal-chuyen-question'
+import PickQuestionFromBankModal from './pick-question-from-bank-modal'
+import QuestionListByKnowledgeBlockModal from './modal-question-by-knowledge'
 import ExportExcelModal from './export-data-modal'
 
 export {
@@ -78,20 +78,20 @@ export {
     ModalPrintExamSurvey,
     ModalPrintExamClusterSurvey,
     PutSurveyImportQuestionModal,
-     ModalTaoKhungDe,
-  PutMaTranDeModal,
-  PutChuongMucModal,
-  SinhDeModal,
-  PutQuestionModal,
-  WordImportModal,
-  ExamImportModal,
-  SinhDeThuCongModal,
-  PrintExamBank,
-  PrintExplanation,
-  PrintBatchExamBank,
-  PrintBatchExplanation,
-  MoveQuestionModal,
-  PickQuestionFromBankModal,
-  QuestionListByKnowledgeBlockModal,
-  ExportExcelModal,
+    ModalTaoKhungDe,
+    PutMaTranDeModal,
+    PutChuongMucModal,
+    SinhDeModal,
+    PutQuestionModal,
+    WordImportModal,
+    ExamImportModal,
+    SinhDeThuCongModal,
+    PrintExamBank,
+    PrintExplanation,
+    PrintBatchExamBank,
+    PrintBatchExplanation,
+    MoveQuestionModal,
+    PickQuestionFromBankModal,
+    QuestionListByKnowledgeBlockModal,
+    ExportExcelModal,
 }
