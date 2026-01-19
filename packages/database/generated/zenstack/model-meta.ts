@@ -9566,10 +9566,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'semesterStart',
-                }, startYear: {
-                    name: "startYear",
-                    type: "Int",
-                    isOptional: true,
                 }, endYear: {
                     name: "endYear",
                     type: "Int",
@@ -9584,6 +9580,14 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, admissionQuota: {
                     name: "admissionQuota",
+                    type: "Int",
+                    isOptional: true,
+                }, admittedStudent: {
+                    name: "admittedStudent",
+                    type: "Int",
+                    isOptional: true,
+                }, enrolledStudent: {
+                    name: "enrolledStudent",
                     type: "Int",
                     isOptional: true,
                 }, admissionStartDate: {

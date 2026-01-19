@@ -684,6 +684,30 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
+                    <FormItem form={form} name="admittedStudent" label="Số lượng trúng tuyển">
+                        <InputNumber
+                            type="number"
+                            min={0}
+                            step={1}
+                            placeholder="300"
+                            className="w-full"
+                            readOnly={isRegulationLocked}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="enrolledStudent" label="Số lượng nhập học">
+                        <InputNumber
+                            type="number"
+                            min={0}
+                            step={1}
+                            placeholder="300"
+                            className="w-full"
+                            readOnly={isRegulationLocked}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
                     <FormItem form={form} name="admissionStartDate" label="Ngày nhập học">
                         <DatePicker
                             format={{

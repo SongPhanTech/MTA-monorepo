@@ -142940,10 +142940,11 @@ export namespace Prisma {
   }
 
   export type TrainingCourseAvgAggregateOutputType = {
-    startYear: number | null
     endYear: number | null
     maxTrainingTime: number | null
     admissionQuota: number | null
+    admittedStudent: number | null
+    enrolledStudent: number | null
     coef_1: number | null
     coef_2: number | null
     coef_3: number | null
@@ -142958,10 +142959,11 @@ export namespace Prisma {
   }
 
   export type TrainingCourseSumAggregateOutputType = {
-    startYear: number | null
     endYear: number | null
     maxTrainingTime: number | null
     admissionQuota: number | null
+    admittedStudent: number | null
+    enrolledStudent: number | null
     coef_1: number | null
     coef_2: number | null
     coef_3: number | null
@@ -142986,11 +142988,12 @@ export namespace Prisma {
     createdBy: string | null
     name: string | null
     semesterStartId: string | null
-    startYear: number | null
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
     admissionQuota: number | null
+    admittedStudent: number | null
+    enrolledStudent: number | null
     admissionStartDate: Date | null
     admissionEndDate: Date | null
     admissionDecision: string | null
@@ -143026,11 +143029,12 @@ export namespace Prisma {
     createdBy: string | null
     name: string | null
     semesterStartId: string | null
-    startYear: number | null
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
     admissionQuota: number | null
+    admittedStudent: number | null
+    enrolledStudent: number | null
     admissionStartDate: Date | null
     admissionEndDate: Date | null
     admissionDecision: string | null
@@ -143066,11 +143070,12 @@ export namespace Prisma {
     createdBy: number
     name: number
     semesterStartId: number
-    startYear: number
     endYear: number
     academicYear: number
     maxTrainingTime: number
     admissionQuota: number
+    admittedStudent: number
+    enrolledStudent: number
     admissionStartDate: number
     admissionEndDate: number
     admissionDecision: number
@@ -143098,10 +143103,11 @@ export namespace Prisma {
 
 
   export type TrainingCourseAvgAggregateInputType = {
-    startYear?: true
     endYear?: true
     maxTrainingTime?: true
     admissionQuota?: true
+    admittedStudent?: true
+    enrolledStudent?: true
     coef_1?: true
     coef_2?: true
     coef_3?: true
@@ -143116,10 +143122,11 @@ export namespace Prisma {
   }
 
   export type TrainingCourseSumAggregateInputType = {
-    startYear?: true
     endYear?: true
     maxTrainingTime?: true
     admissionQuota?: true
+    admittedStudent?: true
+    enrolledStudent?: true
     coef_1?: true
     coef_2?: true
     coef_3?: true
@@ -143144,11 +143151,12 @@ export namespace Prisma {
     createdBy?: true
     name?: true
     semesterStartId?: true
-    startYear?: true
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
     admissionQuota?: true
+    admittedStudent?: true
+    enrolledStudent?: true
     admissionStartDate?: true
     admissionEndDate?: true
     admissionDecision?: true
@@ -143184,11 +143192,12 @@ export namespace Prisma {
     createdBy?: true
     name?: true
     semesterStartId?: true
-    startYear?: true
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
     admissionQuota?: true
+    admittedStudent?: true
+    enrolledStudent?: true
     admissionStartDate?: true
     admissionEndDate?: true
     admissionDecision?: true
@@ -143224,11 +143233,12 @@ export namespace Prisma {
     createdBy?: true
     name?: true
     semesterStartId?: true
-    startYear?: true
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
     admissionQuota?: true
+    admittedStudent?: true
+    enrolledStudent?: true
     admissionStartDate?: true
     admissionEndDate?: true
     admissionDecision?: true
@@ -143351,11 +143361,12 @@ export namespace Prisma {
     createdBy: string | null
     name: string
     semesterStartId: string
-    startYear: number | null
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
     admissionQuota: number | null
+    admittedStudent: number | null
+    enrolledStudent: number | null
     admissionStartDate: Date | null
     admissionEndDate: Date | null
     admissionDecision: string | null
@@ -143410,11 +143421,12 @@ export namespace Prisma {
     createdBy?: boolean
     name?: boolean
     semesterStartId?: boolean
-    startYear?: boolean
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
     admissionQuota?: boolean
+    admittedStudent?: boolean
+    enrolledStudent?: boolean
     admissionStartDate?: boolean
     admissionEndDate?: boolean
     admissionDecision?: boolean
@@ -143469,11 +143481,12 @@ export namespace Prisma {
     createdBy?: boolean
     name?: boolean
     semesterStartId?: boolean
-    startYear?: boolean
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
     admissionQuota?: boolean
+    admittedStudent?: boolean
+    enrolledStudent?: boolean
     admissionStartDate?: boolean
     admissionEndDate?: boolean
     admissionDecision?: boolean
@@ -143512,11 +143525,12 @@ export namespace Prisma {
     createdBy?: boolean
     name?: boolean
     semesterStartId?: boolean
-    startYear?: boolean
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
     admissionQuota?: boolean
+    admittedStudent?: boolean
+    enrolledStudent?: boolean
     admissionStartDate?: boolean
     admissionEndDate?: boolean
     admissionDecision?: boolean
@@ -143555,11 +143569,12 @@ export namespace Prisma {
     createdBy?: boolean
     name?: boolean
     semesterStartId?: boolean
-    startYear?: boolean
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
     admissionQuota?: boolean
+    admittedStudent?: boolean
+    enrolledStudent?: boolean
     admissionStartDate?: boolean
     admissionEndDate?: boolean
     admissionDecision?: boolean
@@ -143584,7 +143599,7 @@ export namespace Prisma {
     trainingObjectTypeId?: boolean
   }
 
-  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
+  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
   export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
     trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
@@ -143650,7 +143665,6 @@ export namespace Prisma {
       createdBy: string | null
       name: string
       semesterStartId: string
-      startYear: number | null
       endYear: number | null
       academicYear: string | null
       maxTrainingTime: number | null
@@ -143658,6 +143672,14 @@ export namespace Prisma {
        * Chỉ tiêu tuyển sinh
        */
       admissionQuota: number | null
+      /**
+       * Số lượng trúng tuyển
+       */
+      admittedStudent: number | null
+      /**
+       * Số lượng nhập học
+       */
+      enrolledStudent: number | null
       /**
        * Ngày nhập học
        */
@@ -144164,11 +144186,12 @@ export namespace Prisma {
     readonly createdBy: FieldRef<"TrainingCourse", 'String'>
     readonly name: FieldRef<"TrainingCourse", 'String'>
     readonly semesterStartId: FieldRef<"TrainingCourse", 'String'>
-    readonly startYear: FieldRef<"TrainingCourse", 'Int'>
     readonly endYear: FieldRef<"TrainingCourse", 'Int'>
     readonly academicYear: FieldRef<"TrainingCourse", 'String'>
     readonly maxTrainingTime: FieldRef<"TrainingCourse", 'Float'>
     readonly admissionQuota: FieldRef<"TrainingCourse", 'Int'>
+    readonly admittedStudent: FieldRef<"TrainingCourse", 'Int'>
+    readonly enrolledStudent: FieldRef<"TrainingCourse", 'Int'>
     readonly admissionStartDate: FieldRef<"TrainingCourse", 'DateTime'>
     readonly admissionEndDate: FieldRef<"TrainingCourse", 'DateTime'>
     readonly admissionDecision: FieldRef<"TrainingCourse", 'String'>
@@ -359758,11 +359781,12 @@ export namespace Prisma {
     createdBy: 'createdBy',
     name: 'name',
     semesterStartId: 'semesterStartId',
-    startYear: 'startYear',
     endYear: 'endYear',
     academicYear: 'academicYear',
     maxTrainingTime: 'maxTrainingTime',
     admissionQuota: 'admissionQuota',
+    admittedStudent: 'admittedStudent',
+    enrolledStudent: 'enrolledStudent',
     admissionStartDate: 'admissionStartDate',
     admissionEndDate: 'admissionEndDate',
     admissionDecision: 'admissionDecision',
@@ -377806,11 +377830,12 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"TrainingCourse"> | string | null
     name?: StringFilter<"TrainingCourse"> | string
     semesterStartId?: StringFilter<"TrainingCourse"> | string
-    startYear?: IntNullableFilter<"TrainingCourse"> | number | null
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
     admissionQuota?: IntNullableFilter<"TrainingCourse"> | number | null
+    admittedStudent?: IntNullableFilter<"TrainingCourse"> | number | null
+    enrolledStudent?: IntNullableFilter<"TrainingCourse"> | number | null
     admissionStartDate?: DateTimeNullableFilter<"TrainingCourse"> | Date | string | null
     admissionEndDate?: DateTimeNullableFilter<"TrainingCourse"> | Date | string | null
     admissionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
@@ -377864,11 +377889,12 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
-    startYear?: SortOrderInput | SortOrder
     endYear?: SortOrderInput | SortOrder
     academicYear?: SortOrderInput | SortOrder
     maxTrainingTime?: SortOrderInput | SortOrder
     admissionQuota?: SortOrderInput | SortOrder
+    admittedStudent?: SortOrderInput | SortOrder
+    enrolledStudent?: SortOrderInput | SortOrder
     admissionStartDate?: SortOrderInput | SortOrder
     admissionEndDate?: SortOrderInput | SortOrder
     admissionDecision?: SortOrderInput | SortOrder
@@ -377926,11 +377952,12 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"TrainingCourse"> | string | null
     name?: StringFilter<"TrainingCourse"> | string
     semesterStartId?: StringFilter<"TrainingCourse"> | string
-    startYear?: IntNullableFilter<"TrainingCourse"> | number | null
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
     admissionQuota?: IntNullableFilter<"TrainingCourse"> | number | null
+    admittedStudent?: IntNullableFilter<"TrainingCourse"> | number | null
+    enrolledStudent?: IntNullableFilter<"TrainingCourse"> | number | null
     admissionStartDate?: DateTimeNullableFilter<"TrainingCourse"> | Date | string | null
     admissionEndDate?: DateTimeNullableFilter<"TrainingCourse"> | Date | string | null
     admissionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
@@ -377984,11 +378011,12 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
-    startYear?: SortOrderInput | SortOrder
     endYear?: SortOrderInput | SortOrder
     academicYear?: SortOrderInput | SortOrder
     maxTrainingTime?: SortOrderInput | SortOrder
     admissionQuota?: SortOrderInput | SortOrder
+    admittedStudent?: SortOrderInput | SortOrder
+    enrolledStudent?: SortOrderInput | SortOrder
     admissionStartDate?: SortOrderInput | SortOrder
     admissionEndDate?: SortOrderInput | SortOrder
     admissionDecision?: SortOrderInput | SortOrder
@@ -378032,11 +378060,12 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     name?: StringWithAggregatesFilter<"TrainingCourse"> | string
     semesterStartId?: StringWithAggregatesFilter<"TrainingCourse"> | string
-    startYear?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     endYear?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     admissionQuota?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
+    admittedStudent?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
+    enrolledStudent?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     admissionStartDate?: DateTimeNullableWithAggregatesFilter<"TrainingCourse"> | Date | string | null
     admissionEndDate?: DateTimeNullableWithAggregatesFilter<"TrainingCourse"> | Date | string | null
     admissionDecision?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
@@ -408042,11 +408071,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -408098,11 +408128,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -408152,11 +408183,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -408208,11 +408240,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -408263,11 +408296,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -408302,11 +408336,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -408340,11 +408375,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -436814,11 +436850,12 @@ export namespace Prisma {
     createdBy?: SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
-    startYear?: SortOrder
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
     admissionQuota?: SortOrder
+    admittedStudent?: SortOrder
+    enrolledStudent?: SortOrder
     admissionStartDate?: SortOrder
     admissionEndDate?: SortOrder
     admissionDecision?: SortOrder
@@ -436844,10 +436881,11 @@ export namespace Prisma {
   }
 
   export type TrainingCourseAvgOrderByAggregateInput = {
-    startYear?: SortOrder
     endYear?: SortOrder
     maxTrainingTime?: SortOrder
     admissionQuota?: SortOrder
+    admittedStudent?: SortOrder
+    enrolledStudent?: SortOrder
     coef_1?: SortOrder
     coef_2?: SortOrder
     coef_3?: SortOrder
@@ -436872,11 +436910,12 @@ export namespace Prisma {
     createdBy?: SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
-    startYear?: SortOrder
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
     admissionQuota?: SortOrder
+    admittedStudent?: SortOrder
+    enrolledStudent?: SortOrder
     admissionStartDate?: SortOrder
     admissionEndDate?: SortOrder
     admissionDecision?: SortOrder
@@ -436912,11 +436951,12 @@ export namespace Prisma {
     createdBy?: SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
-    startYear?: SortOrder
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
     admissionQuota?: SortOrder
+    admittedStudent?: SortOrder
+    enrolledStudent?: SortOrder
     admissionStartDate?: SortOrder
     admissionEndDate?: SortOrder
     admissionDecision?: SortOrder
@@ -436942,10 +436982,11 @@ export namespace Prisma {
   }
 
   export type TrainingCourseSumOrderByAggregateInput = {
-    startYear?: SortOrder
     endYear?: SortOrder
     maxTrainingTime?: SortOrder
     admissionQuota?: SortOrder
+    admittedStudent?: SortOrder
+    enrolledStudent?: SortOrder
     coef_1?: SortOrder
     coef_2?: SortOrder
     coef_3?: SortOrder
@@ -526236,11 +526277,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -526291,11 +526333,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -526530,11 +526573,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -526585,11 +526629,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -532533,11 +532578,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -532587,11 +532633,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -533325,11 +533372,12 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"TrainingCourse"> | string | null
     name?: StringFilter<"TrainingCourse"> | string
     semesterStartId?: StringFilter<"TrainingCourse"> | string
-    startYear?: IntNullableFilter<"TrainingCourse"> | number | null
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
     admissionQuota?: IntNullableFilter<"TrainingCourse"> | number | null
+    admittedStudent?: IntNullableFilter<"TrainingCourse"> | number | null
+    enrolledStudent?: IntNullableFilter<"TrainingCourse"> | number | null
     admissionStartDate?: DateTimeNullableFilter<"TrainingCourse"> | Date | string | null
     admissionEndDate?: DateTimeNullableFilter<"TrainingCourse"> | Date | string | null
     admissionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
@@ -533844,11 +533892,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -533899,11 +533948,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -535746,11 +535796,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -535801,11 +535852,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -535870,11 +535922,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535925,11 +535978,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536268,11 +536322,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -536323,11 +536378,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -537345,11 +537401,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -537400,11 +537457,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538604,11 +538662,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -538659,11 +538718,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -539518,11 +539578,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -539573,11 +539634,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544219,11 +544281,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -544274,11 +544337,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -549769,11 +549833,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -549824,11 +549889,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -556445,11 +556511,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -556500,11 +556567,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -556569,11 +556637,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -556624,11 +556693,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561555,11 +561625,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -561610,11 +561681,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -562057,11 +562129,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -562112,11 +562185,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -563213,11 +563287,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563268,11 +563343,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564416,11 +564492,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -564471,11 +564548,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -564626,11 +564704,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564681,11 +564760,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -571334,11 +571414,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -571389,11 +571470,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -571619,11 +571701,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -571674,11 +571757,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581643,11 +581727,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -581698,11 +581783,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -592261,11 +592347,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -592316,11 +592403,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -592471,11 +592559,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -592526,11 +592615,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -593434,11 +593524,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -593489,11 +593580,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -593670,11 +593762,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -593725,11 +593818,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -596803,11 +596897,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -596858,11 +596953,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -597363,11 +597459,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -597418,11 +597515,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -600078,11 +600176,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -600133,11 +600232,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -600239,11 +600339,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -600294,11 +600395,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -634192,11 +634294,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -634582,11 +634685,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -634636,11 +634740,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -634690,11 +634795,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635366,11 +635472,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -635443,11 +635550,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635498,11 +635606,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635552,11 +635661,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640674,11 +640784,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640729,11 +640840,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640783,11 +640895,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -642309,11 +642422,12 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
-    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
     admissionQuota?: number | null
+    admittedStudent?: number | null
+    enrolledStudent?: number | null
     admissionStartDate?: Date | string | null
     admissionEndDate?: Date | string | null
     admissionDecision?: string | null
@@ -642604,11 +642718,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -642659,11 +642774,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -642713,11 +642829,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649391,11 +649508,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649446,11 +649564,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649500,11 +649619,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656050,11 +656170,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656105,11 +656226,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656159,11 +656281,12 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
     admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null

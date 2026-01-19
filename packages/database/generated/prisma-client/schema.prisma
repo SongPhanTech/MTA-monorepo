@@ -2767,12 +2767,15 @@ model TrainingCourse {
   name                       String
   semesterStart              Semester                   @relation(fields: [semesterStartId], references: [id])
   semesterStartId            String
-  startYear                  Int?
   endYear                    Int?
   academicYear               String?
   maxTrainingTime            Float?
   /// Chỉ tiêu tuyển sinh
   admissionQuota             Int?
+  /// Số lượng trúng tuyển
+  admittedStudent            Int?
+  /// Số lượng nhập học
+  enrolledStudent            Int?
   /// Ngày nhập học
   admissionStartDate         DateTime?
   /// Ngày kết thúc
