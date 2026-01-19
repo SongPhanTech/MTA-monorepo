@@ -1,38 +1,34 @@
-import { Tooltip } from "antd";
-import { Download, type LucideProps } from "lucide-react";
-import clsx from "clsx";
+import { Tooltip } from 'antd'
+import { Download, type LucideProps } from 'lucide-react'
+import clsx from 'clsx'
 
 type DownloadIconProps = LucideProps & {
-  title?: string;
-  disabled?: boolean;
-};
+    title?: string
+    disabled?: boolean
+}
 
-const DownloadIcon = ({
-  title,
-  disabled = false,
-  ...props
-}: DownloadIconProps) => {
-  return (
-    <Tooltip title={title ?? "Tải xuống"} placement="top">
-      <span
-        className={clsx(
-          "inline-flex items-center",
-          disabled && "cursor-not-allowed opacity-50 pointer-events-none"
-        )}
-      >
-        <Download
-          size={16}
-          strokeWidth="1.5"
-          className={clsx(
-            "text-base",
-            disabled ? "text-gray-400" : "text-indigo-500 cursor-pointer"
-          )}
-          {...(!disabled && { onClick: (e) => e.stopPropagation() })}
-          {...props}
-        />
-      </span>
-    </Tooltip>
-  );
-};
+const DownloadIcon = ({ title, disabled = false, ...props }: DownloadIconProps) => {
+    return (
+        <Tooltip title={title ?? 'Tải xuống'} placement="top">
+            <span
+                className={clsx(
+                    'inline-flex items-center',
+                    disabled && 'cursor-not-allowed opacity-50 pointer-events-none'
+                )}
+            >
+                <Download
+                    size={16}
+                    strokeWidth="1.5"
+                    className={clsx(
+                        'text-base',
+                        disabled ? 'text-gray-400' : 'text-indigo-500 cursor-pointer'
+                    )}
+                    {...(!disabled && { onClick: (e) => e.stopPropagation() })}
+                    {...props}
+                />
+            </span>
+        </Tooltip>
+    )
+}
 
-export default DownloadIcon;
+export default DownloadIcon

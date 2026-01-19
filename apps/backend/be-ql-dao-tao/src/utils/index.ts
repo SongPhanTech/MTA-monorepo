@@ -260,7 +260,10 @@ export const buildTrainingBlockMapOrThrow = async (
     // })
 
     const existing = await prisma.trainingBlock.findMany({
-        where: { name: { in: uniqNames, trainingObjectTypeId, mode: 'insensitive' } },
+        where: {
+            name: { in: uniqNames, mode: 'insensitive' },
+            trainingObjectTypeId,
+        },
         select: { name: true, id: true },
     })
 
@@ -464,7 +467,11 @@ export const buildOrgNameMapOrThrow = async (
 
 export const buildFixedClassMap = async (
     prisma: PrismaClient,
-    classes: { name: string; trainingCourseId: string; curriculumVersionId: string }[]
+    classes: {
+        name: string
+        trainingCourseId: string
+        curriculumVersionId: string
+    }[]
 ) => {
     const subjectSet = new Set<string>(
         classes.map((s) => JSON.stringify([s.name, s.trainingCourseId, s.curriculumVersionId]))

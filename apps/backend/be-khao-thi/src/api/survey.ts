@@ -1189,4 +1189,141 @@ app.openapi(getPrivateSurvey, async (c) => {
     return c.json({ ...data, lectureInfo }, 200)
 })
 
+const sinhdetudong = createRoute({
+    operationId: 'automatic-topic-generation',
+    path: '/automatic-topic-generation',
+    tags: ['Survey'],
+    summary: 'Sinh đề tự động',
+    description: 'Sinh đề tự động',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: models.ExamBankScalarSchema.extend({
+                        quantity: z.number(),
+                        examFrameworkId: z.string().nonempty(),
+                        examMatrixId: z.string().nonempty(),
+                        sort: z.string().nonempty(),
+                        examId: z.string().nonempty(),
+                        codeFrom: z.number(),
+                    }),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+        400: {
+            description: 'Invalid request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(sinhdetudong, async (c) => {
+    const body = c.req.valid('json')
+    console.log(body)
+
+    function getRandomItems<T>(arr: T[], n: number): T[] {
+        const copy: any = [...arr]
+        const result: T[] = []
+
+        while (result.length < n) {
+            const idx = Math.floor(Math.random() * copy.length)
+            result.push(copy[idx])
+            copy.splice(idx, 1)
+        }
+
+        return result
+    }
+    const matrixData: any = await prisma.knowledgeBlock.findMany({
+        where: {
+            examMatrixId: body?.examMatrixId,
+        },
+        include: {
+            questions: true,
+            configExams: true,
+        },
+    })
+
+    if (!matrixData.length) {
+        return c.json(
+            {
+                message: 'Chưa có ma trận đề',
+            },
+            400
+        )
+    }
+    if (body?.quantity > 0) {
+        for (let t = 0; t < body?.quantity; t++) {
+            let questions: any = []
+
+            for (const knowledgeBlock of matrixData) {
+                if (knowledgeBlock.configExams.length) {
+                    for (const configExam of knowledgeBlock.configExams) {
+                        const listRamdom = knowledgeBlock.questions.filter(
+                            (i: any) => i?.difficult === configExam.difficult
+                        )
+                        if (listRamdom.length < configExam.quantity) {
+                            return c.json(
+                                {
+                                    message: 'Không đúng số câu hỏi',
+                                },
+                                400
+                            )
+                        }
+                        const selected = getRandomItems(listRamdom, configExam.quantity)
+                        questions = [...questions, ...selected]
+                    }
+                }
+            }
+            await prisma.examBank.create({
+                data: {
+                    examCode: `${body?.examCode}_${body?.codeFrom + t}`,
+                    explain: body.explain,
+                    examDay: body.examDay,
+                    examMatrixId: body?.examMatrixId,
+                    examId: body?.examId,
+                    examType: body?.examType,
+                    subjectClass: body?.subjectClass,
+                    questions: {
+                        createMany: {
+                            data: questions.map((item: any) => {
+                                return {
+                                    questionId: item.id,
+                                }
+                            }),
+                        },
+                    },
+                },
+            })
+        }
+    }
+    return c.json({ message: 'Success' })
+})
+
 export default app

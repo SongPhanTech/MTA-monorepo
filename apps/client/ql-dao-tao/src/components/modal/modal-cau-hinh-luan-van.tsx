@@ -1251,9 +1251,7 @@ const ModalCauHinhLuanVan = () => {
                                             value?.replace(/\$\s?|(,*)/g, '') as unknown as number
                                         }
                                         suffix="VNĐ"
-                                        disabled={
-                                            !form.getFieldValue('councilChairmanId')
-                                        }
+                                        disabled={!form.getFieldValue('councilChairmanId')}
                                     />
                                 </FormItem>
                             </Col>
@@ -1307,9 +1305,7 @@ const ModalCauHinhLuanVan = () => {
                                         }
                                         placeholder="Nhập số tiền"
                                         suffix="VNĐ"
-                                        disabled={
-                                            !form.getFieldValue('councilSecretaryId')
-                                        }
+                                        disabled={!form.getFieldValue('councilSecretaryId')}
                                     />
                                 </FormItem>
                             </Col>
@@ -1419,9 +1415,7 @@ const ModalCauHinhLuanVan = () => {
                                             value?.replace(/\$\s?|(,*)/g, '') as unknown as number
                                         }
                                         suffix="VNĐ"
-                                        disabled={
-                                            !form.getFieldValue('councilReviewer2Id')
-                                        }
+                                        disabled={!form.getFieldValue('councilReviewer2Id')}
                                     />
                                 </FormItem>
                             </Col>

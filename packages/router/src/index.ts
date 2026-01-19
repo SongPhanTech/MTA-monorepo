@@ -595,7 +595,6 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
                         description: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
                     },
-                    
                 ],
             },
             {

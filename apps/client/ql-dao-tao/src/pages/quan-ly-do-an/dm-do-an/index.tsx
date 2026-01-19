@@ -305,9 +305,9 @@ export default function DanhMucDoAn() {
                 const originalRecord = thesisProjectData.find((t) => t.id === thesisId)
 
                 const finalScore =
-                    (values.defenseRecordFinalScore === '' ||
-                    values.defenseRecordFinalScore === undefined 
-                || values.defenseRecordFinalScore === null)
+                    values.defenseRecordFinalScore === '' ||
+                    values.defenseRecordFinalScore === undefined ||
+                    values.defenseRecordFinalScore === null
                         ? null
                         : Number(values.defenseRecordFinalScore)
 
@@ -920,28 +920,38 @@ export default function DanhMucDoAn() {
                             align: 'left',
                             dataIndex: 'defenseRecordFinalScore',
                             render: (_, record) => {
-                                const scoreValue = record?.defenseRecord?.finalScore;
-                        
+                                const scoreValue = record?.defenseRecord?.finalScore
+
                                 if (editingRowKeys.includes(record?.id)) {
-                                    const currentValue = editingValues[record.id]?.defenseRecordFinalScore ?? scoreValue;
-                                    
+                                    const currentValue =
+                                        editingValues[record.id]?.defenseRecordFinalScore ??
+                                        scoreValue
+
                                     return (
                                         <InputNumber
-                                            className='w-28'
-                                            value={(currentValue === null || currentValue === undefined) ? undefined : currentValue}
-                                            placeholder='Nhập điểm'
+                                            className="w-28"
+                                            value={
+                                                currentValue === null || currentValue === undefined
+                                                    ? undefined
+                                                    : currentValue
+                                            }
+                                            placeholder="Nhập điểm"
                                             onChange={(value) =>
-                                                handleEditChange(record?.id, 'defenseRecordFinalScore', value)
+                                                handleEditChange(
+                                                    record?.id,
+                                                    'defenseRecordFinalScore',
+                                                    value
+                                                )
                                             }
                                         />
-                                    );
+                                    )
                                 }
-                        
+
                                 if (scoreValue === null || scoreValue === undefined) {
-                                    return '';
+                                    return ''
                                 }
-                        
-                                return Number(scoreValue).toFixedSmart(2);
+
+                                return Number(scoreValue).toFixedSmart(2)
                             },
                         },
                         {
@@ -1263,7 +1273,6 @@ const StudentManagementModal = ({
             await handleSaveScores()
         }
     }
-    
 
     return (
         <Modal
