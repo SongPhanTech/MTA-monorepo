@@ -1204,9 +1204,9 @@ const sinhdetudong = createRoute({
                         quantity: z.number(),
                         examFrameworkId: z.string().nonempty(),
                         examMatrixId: z.string().nonempty(),
-                        sort: z.string().nonempty(),
                         examId: z.string().nonempty(),
                         codeFrom: z.number(),
+                        subjectClassId:z.string()
                     }),
                 },
             },
@@ -1309,7 +1309,7 @@ app.openapi(sinhdetudong, async (c) => {
                     examMatrixId: body?.examMatrixId,
                     examId: body?.examId,
                     examType: body?.examType,
-                    subjectClass: body?.subjectClass,
+                    subjectClassId: body?.subjectClassId,
                     questions: {
                         createMany: {
                             data: questions.map((item: any) => {
