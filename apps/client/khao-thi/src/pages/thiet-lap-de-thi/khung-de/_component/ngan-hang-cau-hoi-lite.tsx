@@ -38,17 +38,18 @@ export default function QuestionBankLite({
     //   string | null
     // >(null);
 
-    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        setSelectedRowKeys(newSelectedRowKeys as string[])
-    }
+    // const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    //     setSelectedRowKeys(newSelectedRowKeys as string[])
+    // }
 
-    const { onOpen: onOpenPutQuestion } = useDisclosure<{
-        id: string
-        questionBankId: string
-        subjectVersionId: string
-    }>({
-        tag: 'PutQuestionModal',
-    })
+    // const { onOpen: onOpenPutQuestion } = useDisclosure<{
+    //     id: string
+    //     questionBankId: string
+    //     subjectVersionId: string
+    // }>({
+    //     tag: 'PutQuestionModal',
+    // })
+
     const { onOpen: onOpenQuestionListModal } = useDisclosure<{
         knowledgeBlockId: string
         questionBankId: string
@@ -96,6 +97,9 @@ export default function QuestionBankLite({
     const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
         {
             where: { examMatrixId: { in: matrixIds }, deletedAt: null },
+            include: {
+                configExams: true,
+            },
         },
         { enabled: matrixIds.length > 0 }
     )
@@ -141,9 +145,25 @@ export default function QuestionBankLite({
         return knowledgeBlocks.map((kb) => {
             const qs = questions.filter((q) => q.knowledgeBlockId === kb.id)
 
-            const stats: Record<string, number> = {}
+            const stats: Record<
+                string,
+                {
+                    current: number
+                    required: number
+                    missing: number
+                }
+            > = {}
+
             LEVEL_COLORS.forEach((l) => {
-                stats[l.key] = qs.filter((q) => q.difficult === l.key).length
+                const current = qs.filter((q) => q.difficult === l.key).length
+
+                const required = kb.configExams?.find((c) => c.difficult === l.key)?.quantity ?? 0
+
+                stats[l.key] = {
+                    current,
+                    required,
+                    missing: Math.max(required - current, 0),
+                }
             })
 
             return {
@@ -263,8 +283,34 @@ export default function QuestionBankLite({
                                 title: l.label,
                                 dataIndex: l.key,
                                 align: 'center' as const,
-                                render: (v: number) => (
-                                    <span style={{ fontWeight: 500, color: '#1677ff' }}>{v}</span>
+                                render: (v: {
+                                    current: number
+                                    required: number
+                                    missing: number
+                                }) => (
+                                    <div className="flex items-center justify-center gap-1">
+                                        {/* Số câu hiện tại */}
+                                        <span
+                                            className="inline-flex items-center justify-center min-w-[28px] h-[24px]
+                       rounded border border-green-300 text-green-600
+                       text-sm font-semibold bg-green-50"
+                                        >
+                                            {v.current}
+                                        </span>
+
+                                        {/* Badge thiếu */}
+                                        {v.missing > 0 && (
+                                            <span
+                                                className="inline-flex items-center justify-center
+                           px-1.5 h-[24px]
+                           rounded border border-red-300
+                           bg-red-50 text-red-500
+                           text-xs font-medium"
+                                            >
+                                                Thiếu {v.missing}
+                                            </span>
+                                        )}
+                                    </div>
                                 ),
                             })),
                             {

@@ -360,10 +360,20 @@ const PickQuestionFromBankModal = () => {
                                 `${range[0]} - ${range[1]} trong tổng số ${total} câu hỏi`,
                         }}
                         rowSelection={{
+                            preserveSelectedRowKeys: true,
                             selectedRowKeys,
                             onChange: (keys, rows) => {
                                 setSelectedRowKeys(keys)
-                                setSelectedQuestions(rows)
+
+                                setSelectedQuestions((prev) => {
+                                    const map = new Map(prev.map((q) => [q.id, q]))
+
+                                    rows.forEach((q) => {
+                                        map.set(q.id, q)
+                                    })
+
+                                    return Array.from(map.values())
+                                })
                             },
                         }}
                         columns={[
@@ -371,7 +381,8 @@ const PickQuestionFromBankModal = () => {
                                 title: 'STT',
                                 width: 60,
                                 align: 'center',
-                                render: (_: unknown, __: unknown, index: number) => index + 1,
+                                render: (_: unknown, __: unknown, index: number) =>
+                                    (currentPage - 1) * pageSize + index + 1,
                             },
 
                             {
