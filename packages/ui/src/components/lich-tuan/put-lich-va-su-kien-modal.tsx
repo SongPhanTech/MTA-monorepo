@@ -422,7 +422,14 @@ const PutLichVaSuKienModal = () => {
                             subjectClassId: (selectedSubjectClassId as string) || null,
                             startPeriod: values.startPeriod ?? 0,
                             endPeriod: values.endPeriod ?? 0,
-                            classDate: dayjs(finalStartTime).startOf('day').toISOString(),
+                            // classDate = DATE ONLY
+                            // Set to 12:00 to avoid timezone date-shift
+                            classDate: dayjs(finalStartTime)
+                                .hour(12)
+                                .minute(0)
+                                .second(0)
+                                .millisecond(0)
+                                .toDate(),
                             periodType: (event?.periodType as PeriodType) || PeriodType.WEEK,
                         },
                     })
@@ -440,7 +447,12 @@ const PutLichVaSuKienModal = () => {
                             subjectClassId: (selectedSubjectClassId as string) || null,
                             startPeriod: values.startPeriod ?? 0,
                             endPeriod: values.endPeriod ?? 0,
-                            classDate: dayjs(finalStartTime).startOf('day').toISOString(),
+                            classDate: dayjs(finalStartTime)
+                                .hour(12)
+                                .minute(0)
+                                .second(0)
+                                .millisecond(0)
+                                .toDate(),
                             periodType: (payload?.periodType as PeriodType) || PeriodType.WEEK,
                         },
                     })
