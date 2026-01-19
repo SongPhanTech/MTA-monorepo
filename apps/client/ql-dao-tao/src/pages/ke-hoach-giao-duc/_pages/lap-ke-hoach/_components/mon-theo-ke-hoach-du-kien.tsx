@@ -296,7 +296,7 @@ export default function MonTheoKeHoachDuKien() {
                                                 }}
                                                 className="hover:text-primary cursor-pointer"
                                             >
-                                                {`${record?.fixedClassCode} (${record?.fixedClassCount})`}
+                                                {`${record?.fixedClassCode ?? record?.fixedClassName ?? ''} (${record?.fixedClassCount})`}
                                             </span>
                                         )
                                     },
