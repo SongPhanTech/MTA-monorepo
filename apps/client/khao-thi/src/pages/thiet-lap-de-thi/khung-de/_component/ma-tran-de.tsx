@@ -8,6 +8,7 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TableChuongMuc from './table-chuong-muc'
+import { LayoutGrid } from 'lucide-react'
 
 export default function MaTranDePage({ id }: { id?: string }) {
     const [selectedMatrixId, setSelectedMatrixId] = useState<string | undefined>(undefined)
@@ -91,7 +92,10 @@ export default function MaTranDePage({ id }: { id?: string }) {
                                     <Typography.Text strong>{matrix.name}</Typography.Text>
                                 </div>
                                 <div className="flex justify-end items-center gap-2">
-                                    <EditIcon onClick={() => onOpen({ id: matrix.id })} />
+                                    <EditIcon
+                                        className="text-blue-600"
+                                        onClick={() => onOpen({ id: matrix.id })}
+                                    />
                                     <DeleteIcon
                                         popConfirm={{
                                             onConfirm: () => handleDeleteExamMatrix(matrix.id),
@@ -114,8 +118,23 @@ export default function MaTranDePage({ id }: { id?: string }) {
                     </div>
                 </div>
             </Col>
+
             <Col span={19}>
-                <TableChuongMuc matrixId={selectedMatrixId} />
+                {selectedMatrixId ? (
+                    <TableChuongMuc matrixId={selectedMatrixId} />
+                ) : (
+                    <div className="flex flex-col items-center justify-center h-[80vh] bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                        <div className="w-24 h-30 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                            <LayoutGrid className="w-12 h-12 text-green-600" />
+                        </div>
+                        <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                            Chọn ma trận đề
+                        </h3>
+                        <p className="text-gray-500 text-center max-w-md mb-4 text-sm">
+                            Vui lòng chọn một ma trận đề bên trái để xem và quản lý khung đề
+                        </p>
+                    </div>
+                )}
             </Col>
         </Row>
     )

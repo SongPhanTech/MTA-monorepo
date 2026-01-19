@@ -132,7 +132,7 @@ export default function QuestionBank() {
                     {selectedQuestionBankId ? (
                         <QuestionList questionBankId={selectedQuestionBankId} />
                     ) : (
-                        <div className="flex flex-col items-center justify-center h-[60vh] bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                        <div className="flex flex-col items-center justify-center h-[70vh] bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
                             <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
                                 <Database className="w-12 h-12 text-green-600" />
                             </div>

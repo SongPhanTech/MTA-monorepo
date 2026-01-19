@@ -31,7 +31,12 @@ export default function KhungDeList() {
         subjectVersionIdString: '',
     })
     const semesterId = useStore(store, (s) => s.semesterId)
-    const { data: examFrameworkList = [], isLoading: isExamLoading } = useFindManyExamFramework({
+
+    const { onOpen: onOpenExamFramework } = useDisclosure<{ id: string }>({
+        tag: 'ModalTaoKhungDe',
+    })
+
+    const { data: examFrameworkList = [] } = useFindManyExamFramework({
         where: {
             active: true,
             ...(semesterId ? { semesterId } : {}),
@@ -122,9 +127,7 @@ export default function KhungDeList() {
         }
     }
 
-    const { onOpen: onOpenExamFramework } = useDisclosure<{ id: string }>({
-        tag: 'ModalTaoKhungDe',
-    })
+    
     return (
         <div>
             <Col className="mb-2">
@@ -154,7 +157,6 @@ export default function KhungDeList() {
             </Col>
             <Col span={24}>
                 <Table
-                    loading={isExamLoading}
                     rowKey="id"
                     dataSource={filteredList}
                     filters={filters}
@@ -197,7 +199,7 @@ export default function KhungDeList() {
                     columns={[
                         {
                             title: 'STT',
-                            width: 60,
+                            width: "40px",
                             align: 'center',
                             render: (_, __, index) => index + 1,
                         },
@@ -235,6 +237,7 @@ export default function KhungDeList() {
                             title: 'Thời gian thi',
                             dataIndex: 'time',
                             type: 'input',
+                            width: "120px",
                             align: 'center',
                             render: (time) => (
                                 <Space>
@@ -253,6 +256,7 @@ export default function KhungDeList() {
                         {
                             title: 'Thao tác',
                             align: 'center',
+                            width: "70px",
                             fixed: 'right',
                             render: (record) => (
                                 <Row className="justify-center gap-2">

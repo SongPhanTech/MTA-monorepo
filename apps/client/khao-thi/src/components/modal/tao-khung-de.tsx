@@ -127,7 +127,7 @@ export default function ModalTaoKhungDe() {
             onCancel={onClose}
             onFinish={onOk}
             maskClosable={true}
-            className="w-[600px]"
+            className="w-[60vw] top-2"
         >
             <Col span={24}>
                 <Form.Item
@@ -152,7 +152,7 @@ export default function ModalTaoKhungDe() {
                     />
                 </Form.Item>
 
-                <Form.Item label="Đơn vị">
+                {/* <Form.Item label="Đơn vị">
                     <Select
                         allowClear
                         placeholder="Chọn đơn vị"
@@ -166,7 +166,7 @@ export default function ModalTaoKhungDe() {
                             form.setFieldValue('subjectVersionId', undefined)
                         }}
                     />
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item
                     label="Môn học"
