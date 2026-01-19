@@ -391,17 +391,12 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     }
 
     const rowSelection = {
-  selectedRowKeys,
-  hideSelectAll: true,
-  columnWidth: 48,
-  renderCell: (_: any, record: any) =>
-    record.id ? (
-      <Checkbox
-        checked={selectedRowKeys.includes(record.id)}
-        onChange={(e) => onSelectChange(record.id, e.target.checked)}
-      />
-    ) : null,
-}
+        selectedRowKeys,
+        hideSelectAll: true,
+        columnWidth: 48,
+        renderCell: (_: any, record: any) =>
+            record.id ? <Checkbox checked={selectedRowKeys.includes(record.id)} /> : null,
+    }
 
     const { mutateAsync: deleteScholarshipAward } = useDeleteScholarshipAward()
     async function handleDeleteScholarshipAward(id: string) {
@@ -595,6 +590,13 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                         childrenFieldName="students"
                                         defaultExpandAll
                                         rowSelection={rowSelection}
+                                        onRow={(record) => ({
+                                            onClick: () => {
+                                                if (!record.id) return
+                                                const selected = selectedRowKeys.includes(record.id)
+                                                onSelectChange(record.id, !selected)
+                                            },
+                                        })}
                                         columns={[
                                             {
                                                 title: 'Mã sinh viên',
