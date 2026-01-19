@@ -169,12 +169,11 @@ const WordImportModal: React.FC = () => {
                     let text = match[2].trim()
 
                     // Detect đáp án đúng - hỗ trợ nhiều loại ngoặc đơn
-                    const correctPattern = /[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi
+                    const correctPattern = /[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi
                     const isCorrect = correctPattern.test(text)
 
                     // Remove text "(đáp án đúng)" khỏi content
-                    text = text.replace(/[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi, '').trim()
-
+                    text = text.replace(/[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi, '').trim()
                     options.push({ label, content: text, isCorrect })
                     continue
                 }
