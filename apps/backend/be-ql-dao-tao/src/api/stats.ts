@@ -8,6 +8,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, type AcademicActionType, Prisma } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
+import { RequestSchema } from '../dto/training-coure.dto'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -4500,300 +4501,132 @@ app.openapi(
 app.openapi(
     createRoute({
         method: 'post',
-        path: '/admission-statistics-by-year',
+        path: '/admission-statistics',
         tags: ['Stats'],
         request: {
             body: {
                 content: {
                     'application/json': {
-                        schema: z.object({
-                            preview: z.boolean().default(false),
-                        }),
+                        schema: RequestSchema,
                     },
                 },
             },
         },
         responses: {
             200: {
-                description: 'Thống kê chỉ tiêu tuyển sinh theo năm, hệ và đối tượng',
+                description: 'Thống kê công tác tuyển sinh',
                 content: {
                     'application/json': {
-                        schema: StatBaseSchema.extend({
-                            data: z.array(
-                                z.object({
-                                    year: z.string(),
-                                    trainingLevel: z.string(),
-                                    trainingObjectType: z.string(),
-                                    totalQuota: z.number(),
-                                })
-                            ),
-                        }),
+                        schema: StatBaseSchema,
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const { preview } = c.req.valid('json')
+        const { preview, labels, trainingLevelNames } = c.req.valid('json')
         if (preview) {
             const data = [
                 {
-                    year: '2024-2025',
-                    trainingLevel: 'DH',
-                    trainingObjectType: 'DS',
-                    totalQuota: 1200,
+                    year: '2023',
+                    trainingLevel: 'Đại học',
+                    quota: 1000,
+                    admitted: 950,
+                    enrolled: 920,
+                    rate: 92,
                 },
             ]
 
             return c.json({
                 data,
                 count: data.length,
-                summary: {},
                 preview: true,
-                labels: ['Năm học', 'Hệ đào tạo', 'Đối tượng', 'Chỉ tiêu'],
+                summary: {},
             })
         }
-
-        const data = await prisma.$queryRaw<
+        const levelNameFilter =
+            trainingLevelNames && trainingLevelNames.length > 0
+                ? Prisma.sql`
+        AND LOWER(tl."name") IN (
+          ${Prisma.join(trainingLevelNames.map((v) => v.toLowerCase()))}
+        )
+      `
+                : Prisma.empty
+        const rows = await prisma.$queryRaw<
             Array<{
                 year: string
+                object_type: string
                 training_level: string
-                training_object_type: string
-                total_quota: number
+                quota: bigint | null
+                admitted: bigint | null
+                enrolled: bigint | null
             }>
         >`
-        SELECT
-  sy."name"                                   AS year,
-  tot."code"                                 AS training_object_type,  
-  tl."code"                                  AS training_level,        
-  SUM(tc."admissionQuota")                   AS total_quota
-FROM
- "ql-dao-tao"."TrainingCourse" tc
-JOIN
-  "ql-dao-tao"."Semester" s ON s."id" = tc."semesterStartId"
-JOIN
-  "ql-dao-tao"."SchoolYear" sy ON sy."id" = s."schoolYearId"
-JOIN
-  "ql-dao-tao"."TrainingObjectType" tot ON tot."id" = tc."trainingObjectTypeId"
-JOIN
- "ql-dao-tao"."TrainingLevel" tl ON tl."id" = tot."trainingLevelId"
+SELECT
+  sy."name"                 AS year,
+  tot."code"                AS object_type,
+  tl."name"                 AS training_level,      
+  SUM(tc."admissionQuota")  AS quota,
+  SUM(tc."admittedStudent") AS admitted,
+  SUM(tc."enrolledStudent") AS enrolled
+FROM "ql-dao-tao"."TrainingCourse" tc
+JOIN "ql-dao-tao"."Semester" s
+  ON s."id" = tc."semesterStartId"
+JOIN "ql-dao-tao"."SchoolYear" sy
+  ON sy."id" = s."schoolYearId"
+JOIN "ql-dao-tao"."TrainingObjectType" tot
+  ON tot."id" = tc."trainingObjectTypeId"
+JOIN "ql-dao-tao"."TrainingLevel" tl
+  ON tl."id" = tot."trainingLevelId"
+WHERE 1 = 1
+${levelNameFilter}
 GROUP BY
   sy."name",
   tot."code",
-  tl."code"
+  tl."name"
 ORDER BY
-  sy."name" ASC,
+  sy."name",
   tot."code",
-  tl."code";
+  tl."name";
 
-    `
+`
 
-        return c.json({
-            data: data.map((item) => ({
-                year: item.year,
-                trainingLevel: item.training_level,
-                trainingObjectType: item.training_object_type,
-                totalQuota: Number(item.total_quota),
-            })),
-            count: data.length,
-            summary: {},
-            preview: false,
-            labels: ['Năm học', 'Hệ đào tạo', 'Đối tượng', 'Chỉ tiêu'],
+        const normalize = (v: bigint | null) => Number(v ?? 0)
+
+        const computed = rows.map((r) => {
+            const quota = normalize(r.quota)
+            const enrolled = normalize(r.enrolled)
+
+            return {
+                year: r.year,
+                objectType: r.object_type,
+                trainingLevel: r.training_level,
+                quota,
+                admitted: normalize(r.admitted),
+                enrolled,
+                rate: quota ? Number(((enrolled / quota) * 100).toFixed(2)) : 0,
+            }
         })
-    }
-)
+        const data = computed.map((row) => {
+            const base: any = {
+                year: row.year,
+                objectType: row.objectType,
+                trainingLevel: row.trainingLevel,
+            }
 
-app.openapi(
-    createRoute({
-        method: 'post',
-        path: '/admission-admitted-by-year',
-        tags: ['Stats'],
-        request: {
-            body: {
-                content: {
-                    'application/json': {
-                        schema: z.object({
-                            preview: z.boolean().default(false),
-                        }),
-                    },
-                },
-            },
-        },
-        responses: {
-            200: {
-                description: 'Số lượng trúng tuyển theo năm',
-                content: {
-                    'application/json': {
-                        schema: StatBaseSchema.extend({
-                            data: z.array(
-                                z.object({
-                                    year: z.string(),
-                                    admitted: z.number(),
-                                    quota: z.number(),
-                                    rate: z.number(),
-                                })
-                            ),
-                        }),
-                    },
-                },
-            },
-        },
-    }),
-    async (c) => {
-        const { preview } = c.req.valid('json')
+            if (labels.includes('quota')) base.quota = row.quota
+            if (labels.includes('admitted')) base.admitted = row.admitted
+            if (labels.includes('enrolled')) base.enrolled = row.enrolled
+            if (labels.includes('rate')) base.rate = row.rate
 
-        if (preview) {
-            const data = [
-                { year: '2021', admitted: 445, quota: 450, rate: 99 },
-                { year: '2022', admitted: 480, quota: 500, rate: 96 },
-            ]
-
-            return c.json({
-                data,
-                count: data.length,
-                summary: {},
-                preview: true,
-                labels: ['Năm', 'Số trúng tuyển', 'Chỉ tiêu', 'Tỉ lệ (%)'],
-            })
-        }
-
-        const data = await prisma.$queryRaw<
-            Array<{
-                year: string
-                admitted: number
-                quota: number
-                rate: number
-            }>
-        >`
-     SELECT
-  sy."name"                                           AS year,
-  CAST(SUM(tc."admissionQuota") AS INTEGER)           AS quota,
-  CAST(SUM(tc."admittedStudent") AS INTEGER)          AS admitted,
-  CASE
-    WHEN SUM(tc."admissionQuota") > 0
-    THEN CAST(
-      ROUND(
-        SUM(tc."admittedStudent") * 100.0 / SUM(tc."admissionQuota")
-      ) AS INTEGER
-    )
-    ELSE 0
-  END                                                 AS rate
-FROM
-  "ql-dao-tao"."TrainingCourse" tc
-JOIN
-  "ql-dao-tao"."Semester" s ON s."id" = tc."semesterStartId"
-JOIN
-  "ql-dao-tao"."SchoolYear" sy ON sy."id" = s."schoolYearId"
-GROUP BY
-  sy."name"
-ORDER BY
-  sy."name" ASC;
-
-    `
+            return base
+        })
 
         return c.json({
             data,
             count: data.length,
-            summary: {},
             preview: false,
-            labels: ['Năm', 'Số trúng tuyển', 'Chỉ tiêu', 'Tỉ lệ (%)'],
-        })
-    }
-)
-
-app.openapi(
-    createRoute({
-        method: 'post',
-        path: '/admission-enrollment-by-year',
-        tags: ['Stats'],
-        request: {
-            body: {
-                content: {
-                    'application/json': {
-                        schema: z.object({
-                            preview: z.boolean().default(false),
-                        }),
-                    },
-                },
-            },
-        },
-        responses: {
-            200: {
-                description: 'Số lượng nhập học theo năm',
-                content: {
-                    'application/json': {
-                        schema: StatBaseSchema.extend({
-                            data: z.array(
-                                z.object({
-                                    year: z.string(),
-                                    enrolled: z.number(),
-                                    quota: z.number(),
-                                    rate: z.number(),
-                                })
-                            ),
-                        }),
-                    },
-                },
-            },
-        },
-    }),
-    async (c) => {
-        const { preview } = c.req.valid('json')
-
-        if (preview) {
-            const data = [
-                { year: '2022', enrolled: 880, quota: 900, rate: 98 },
-                { year: '2023', enrolled: 940, quota: 950, rate: 99 },
-            ]
-
-            return c.json({
-                data,
-                count: data.length,
-                summary: {},
-                preview: true,
-                labels: ['Năm', 'Số nhập học', 'Chỉ tiêu', 'Tỉ lệ (%)'],
-            })
-        }
-
-        const data = await prisma.$queryRaw<
-            Array<{
-                year: string
-                enrolled: number
-                quota: number
-                rate: number
-            }>
-        >`
-      SELECT
-  sy."name"                                                   AS year,
-  CAST(SUM(tc."admissionQuota") AS INTEGER)                   AS quota,
-  CAST(SUM(tc."enrolledStudent") AS INTEGER)            AS enrolled,
-  CASE
-    WHEN SUM(tc."admissionQuota") > 0
-    THEN CAST(
-      ROUND(
-        SUM(tc."enrolledStudent") * 100.0 / SUM(tc."admissionQuota")
-      ) AS INTEGER
-    )
-    ELSE 0
-  END                                                         AS rate
-FROM
-  "ql-dao-tao"."TrainingCourse" tc
-JOIN
-  "ql-dao-tao"."Semester" s ON s."id" = tc."semesterStartId"
-JOIN
-  "ql-dao-tao"."SchoolYear" sy ON sy."id" = s."schoolYearId"
-GROUP BY
-  sy."name"
-ORDER BY
-  sy."name" ASC;
-    `
-
-        return c.json({
-            data,
-            count: data.length,
             summary: {},
-            preview: false,
-            labels: ['Năm', 'Số nhập học', 'Chỉ tiêu', 'Tỉ lệ (%)'],
         })
     }
 )
