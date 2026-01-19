@@ -1742,6 +1742,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   semesterStartId: 'semesterStartId',
+  startYear: 'startYear',
   endYear: 'endYear',
   academicYear: 'academicYear',
   maxTrainingTime: 'maxTrainingTime',

@@ -380,7 +380,7 @@ model TrainingCourse extends Base {
   name                       String
   semesterStart              Semester                   @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
   semesterStartId            String
-  // startYear                  Int?
+  startYear                  Int?
   endYear                    Int?
   academicYear               String?
   maxTrainingTime            Float?

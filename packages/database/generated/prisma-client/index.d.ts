@@ -142949,6 +142949,7 @@ export namespace Prisma {
   }
 
   export type TrainingCourseAvgAggregateOutputType = {
+    startYear: number | null
     endYear: number | null
     maxTrainingTime: number | null
     admissionQuota: number | null
@@ -142968,6 +142969,7 @@ export namespace Prisma {
   }
 
   export type TrainingCourseSumAggregateOutputType = {
+    startYear: number | null
     endYear: number | null
     maxTrainingTime: number | null
     admissionQuota: number | null
@@ -142997,6 +142999,7 @@ export namespace Prisma {
     createdBy: string | null
     name: string | null
     semesterStartId: string | null
+    startYear: number | null
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
@@ -143038,6 +143041,7 @@ export namespace Prisma {
     createdBy: string | null
     name: string | null
     semesterStartId: string | null
+    startYear: number | null
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
@@ -143079,6 +143083,7 @@ export namespace Prisma {
     createdBy: number
     name: number
     semesterStartId: number
+    startYear: number
     endYear: number
     academicYear: number
     maxTrainingTime: number
@@ -143112,6 +143117,7 @@ export namespace Prisma {
 
 
   export type TrainingCourseAvgAggregateInputType = {
+    startYear?: true
     endYear?: true
     maxTrainingTime?: true
     admissionQuota?: true
@@ -143131,6 +143137,7 @@ export namespace Prisma {
   }
 
   export type TrainingCourseSumAggregateInputType = {
+    startYear?: true
     endYear?: true
     maxTrainingTime?: true
     admissionQuota?: true
@@ -143160,6 +143167,7 @@ export namespace Prisma {
     createdBy?: true
     name?: true
     semesterStartId?: true
+    startYear?: true
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
@@ -143201,6 +143209,7 @@ export namespace Prisma {
     createdBy?: true
     name?: true
     semesterStartId?: true
+    startYear?: true
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
@@ -143242,6 +143251,7 @@ export namespace Prisma {
     createdBy?: true
     name?: true
     semesterStartId?: true
+    startYear?: true
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
@@ -143370,6 +143380,7 @@ export namespace Prisma {
     createdBy: string | null
     name: string
     semesterStartId: string
+    startYear: number | null
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
@@ -143430,6 +143441,7 @@ export namespace Prisma {
     createdBy?: boolean
     name?: boolean
     semesterStartId?: boolean
+    startYear?: boolean
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
@@ -143490,6 +143502,7 @@ export namespace Prisma {
     createdBy?: boolean
     name?: boolean
     semesterStartId?: boolean
+    startYear?: boolean
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
@@ -143534,6 +143547,7 @@ export namespace Prisma {
     createdBy?: boolean
     name?: boolean
     semesterStartId?: boolean
+    startYear?: boolean
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
@@ -143578,6 +143592,7 @@ export namespace Prisma {
     createdBy?: boolean
     name?: boolean
     semesterStartId?: boolean
+    startYear?: boolean
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
@@ -143608,7 +143623,7 @@ export namespace Prisma {
     trainingObjectTypeId?: boolean
   }
 
-  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
+  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
   export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
     trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
@@ -143674,6 +143689,7 @@ export namespace Prisma {
       createdBy: string | null
       name: string
       semesterStartId: string
+      startYear: number | null
       endYear: number | null
       academicYear: string | null
       maxTrainingTime: number | null
@@ -144195,6 +144211,7 @@ export namespace Prisma {
     readonly createdBy: FieldRef<"TrainingCourse", 'String'>
     readonly name: FieldRef<"TrainingCourse", 'String'>
     readonly semesterStartId: FieldRef<"TrainingCourse", 'String'>
+    readonly startYear: FieldRef<"TrainingCourse", 'Int'>
     readonly endYear: FieldRef<"TrainingCourse", 'Int'>
     readonly academicYear: FieldRef<"TrainingCourse", 'String'>
     readonly maxTrainingTime: FieldRef<"TrainingCourse", 'Float'>
@@ -359845,6 +359862,7 @@ export namespace Prisma {
     createdBy: 'createdBy',
     name: 'name',
     semesterStartId: 'semesterStartId',
+    startYear: 'startYear',
     endYear: 'endYear',
     academicYear: 'academicYear',
     maxTrainingTime: 'maxTrainingTime',
@@ -377894,6 +377912,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"TrainingCourse"> | string | null
     name?: StringFilter<"TrainingCourse"> | string
     semesterStartId?: StringFilter<"TrainingCourse"> | string
+    startYear?: IntNullableFilter<"TrainingCourse"> | number | null
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
@@ -377953,6 +377972,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
+    startYear?: SortOrderInput | SortOrder
     endYear?: SortOrderInput | SortOrder
     academicYear?: SortOrderInput | SortOrder
     maxTrainingTime?: SortOrderInput | SortOrder
@@ -378016,6 +378036,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"TrainingCourse"> | string | null
     name?: StringFilter<"TrainingCourse"> | string
     semesterStartId?: StringFilter<"TrainingCourse"> | string
+    startYear?: IntNullableFilter<"TrainingCourse"> | number | null
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
@@ -378075,6 +378096,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
+    startYear?: SortOrderInput | SortOrder
     endYear?: SortOrderInput | SortOrder
     academicYear?: SortOrderInput | SortOrder
     maxTrainingTime?: SortOrderInput | SortOrder
@@ -378124,6 +378146,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     name?: StringWithAggregatesFilter<"TrainingCourse"> | string
     semesterStartId?: StringWithAggregatesFilter<"TrainingCourse"> | string
+    startYear?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     endYear?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableWithAggregatesFilter<"TrainingCourse"> | number | null
@@ -408141,6 +408164,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -408198,6 +408222,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -408253,6 +408278,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -408310,6 +408336,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -408366,6 +408393,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -408406,6 +408434,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -408445,6 +408474,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -436923,6 +436953,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
+    startYear?: SortOrder
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
@@ -436954,6 +436985,7 @@ export namespace Prisma {
   }
 
   export type TrainingCourseAvgOrderByAggregateInput = {
+    startYear?: SortOrder
     endYear?: SortOrder
     maxTrainingTime?: SortOrder
     admissionQuota?: SortOrder
@@ -436983,6 +437015,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
+    startYear?: SortOrder
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
@@ -437024,6 +437057,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     name?: SortOrder
     semesterStartId?: SortOrder
+    startYear?: SortOrder
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
@@ -437055,6 +437089,7 @@ export namespace Prisma {
   }
 
   export type TrainingCourseSumOrderByAggregateInput = {
+    startYear?: SortOrder
     endYear?: SortOrder
     maxTrainingTime?: SortOrder
     admissionQuota?: SortOrder
@@ -526408,6 +526443,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -526464,6 +526500,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -526704,6 +526741,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -526760,6 +526798,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -532715,6 +532754,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -532770,6 +532810,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -533509,6 +533550,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"TrainingCourse"> | string | null
     name?: StringFilter<"TrainingCourse"> | string
     semesterStartId?: StringFilter<"TrainingCourse"> | string
+    startYear?: IntNullableFilter<"TrainingCourse"> | number | null
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
@@ -534029,6 +534071,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -534085,6 +534128,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -535933,6 +535977,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -535989,6 +536034,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -536059,6 +536105,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -536115,6 +536162,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -536459,6 +536507,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -536515,6 +536564,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -537540,6 +537590,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -537596,6 +537647,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -538801,6 +538853,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -538857,6 +538910,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -539717,6 +539771,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -539773,6 +539828,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -544422,6 +544478,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -544478,6 +544535,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -550076,6 +550134,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -550132,6 +550191,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -556762,6 +556822,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -556818,6 +556879,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -556888,6 +556950,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -556944,6 +557007,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -561876,6 +561940,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -561932,6 +561997,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -562380,6 +562446,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -562436,6 +562503,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -563538,6 +563606,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -563594,6 +563663,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -564743,6 +564813,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -564799,6 +564870,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -564955,6 +565027,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -565011,6 +565084,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -571671,6 +571745,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -571727,6 +571802,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -571958,6 +572034,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -572014,6 +572091,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -581990,6 +582068,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -582046,6 +582125,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -592832,6 +592912,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -592888,6 +592969,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -593044,6 +593126,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -593100,6 +593183,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -594009,6 +594093,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -594065,6 +594150,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -594247,6 +594333,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -594303,6 +594390,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -597382,6 +597470,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -597438,6 +597527,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -597944,6 +598034,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -598000,6 +598091,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -600661,6 +600753,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -600717,6 +600810,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -600824,6 +600918,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -600880,6 +600975,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -634779,6 +634875,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -635172,6 +635269,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -635227,6 +635325,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -635282,6 +635381,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -635959,6 +636059,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -636037,6 +636138,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -636093,6 +636195,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -636148,6 +636251,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -641275,6 +641379,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -641331,6 +641436,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -641386,6 +641492,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -642987,6 +643094,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     semesterStartId: string
+    startYear?: number | null
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
@@ -643283,6 +643391,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -643339,6 +643448,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -643394,6 +643504,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -650081,6 +650192,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -650137,6 +650249,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -650192,6 +650305,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -656751,6 +656865,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -656807,6 +656922,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -656862,6 +656978,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null

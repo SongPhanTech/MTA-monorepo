@@ -9563,6 +9563,10 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'semesterStart',
+                }, startYear: {
+                    name: "startYear",
+                    type: "Int",
+                    isOptional: true,
                 }, endYear: {
                     name: "endYear",
                     type: "Int",

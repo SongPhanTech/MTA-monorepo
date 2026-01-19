@@ -3046,6 +3046,7 @@ model TrainingCourse {
   name                       String
   semesterStart              Semester                   @relation(fields: [semesterStartId], references: [id])
   semesterStartId            String
+  startYear                  Int?
   endYear                    Int?
   academicYear               String?
   maxTrainingTime            Float?
