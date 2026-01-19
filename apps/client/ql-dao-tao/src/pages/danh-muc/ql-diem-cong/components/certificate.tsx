@@ -159,10 +159,10 @@ export default function Certificate() {
 
     return (
         <div>
-            <Row gutter={[16, 0]}>
+            <Row gutter={[4, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24} className="mt-3">
+                    <Row gutter={[4, 4]} align="top" justify="space-between">
+                        <Col span={24}>
                             <Flex justify="end">
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
@@ -202,27 +202,20 @@ export default function Certificate() {
                             `${[code, name].filter(Boolean).join(' - ')}`
                         }
                         columns={[
+                            // {
+                            //     title: 'Tên chứng chỉ',
+                            //     dataIndex: 'name',
+                            //     align: 'center',
+                            //     width: 200,
+                            //     type: 'input',
+                            //     render: (__, record) => {
+                            //         return record?.certificate?.name || ''
+                            //     },
+                            // },
                             {
-                                title: 'Tên chứng chỉ',
-                                dataIndex: 'name',
-                                align: 'center',
-                                width: 200,
-                                type: 'input',
-                                render: (__, record) => {
-                                    return record?.certificate?.name || ''
-                                },
-                            },
-                            {
-                                title: 'Điểm phiên',
-                                dataIndex: 'finalScore',
-                                width: 200,
-                                align: 'center',
-                                type: 'order',
-                            },
-                            {
-                                title: 'Môn học có thể cộng điểm',
+                                title: 'Môn học phiên điểm',
                                 dataIndex: 'subjects',
-                                width: 300,
+                                // width: 300,
                                 align: 'center',
                                 type: 'input',
                                 render: (__, record) => {
@@ -232,8 +225,16 @@ export default function Certificate() {
                                 },
                             },
                             {
+                                title: 'Điểm phiên',
+                                dataIndex: 'finalScore',
+                                width: 200,
+                                align: 'center',
+                                type: 'order',
+                            },
+
+                            {
                                 title: 'Thao tác',
-                                width: 60,
+                                width: 100,
                                 align: 'center',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,

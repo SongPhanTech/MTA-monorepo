@@ -14,6 +14,7 @@ import {
     useFindManyTrainingField,
     useFindManyTrainingMajor,
     useUpdateArchivedCertificate,
+    useUpdateManyArchivedCertificate,
 } from '@workspace/db/hooks'
 import { useCertificateScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -110,6 +111,7 @@ export default function ArchivedCertificate() {
     }
 
     const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
+    const { mutateAsync: updateManyArchivedCertificate } = useUpdateManyArchivedCertificate()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -255,27 +257,28 @@ export default function ArchivedCertificate() {
     const handleOpenAprove = () => {
         Modal.confirm({
             title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn phê duyệt những giải thường được chọn không?',
+            content: 'Bạn có chắc chắn muốn phê duyệt không?',
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                handleAprove('APPROVED')
+                handleApprove('APPROVED')
             },
         })
     }
     const handleOpenReject = () => {
         Modal.confirm({
             title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn từ chối những giải thường được chọn không?',
+            content: 'Bạn có chắc chắn muốn từ chối không?',
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                handleAprove('REJECTED')
+                handleApprove('REJECTED')
             },
         })
     }
     const { mutateAsync: updateCertificateScore } = useCertificateScore()
-    const handleAprove = async (status: string) => {
+
+    const handleApprove = async (status: 'APPROVED' | 'REJECTED') => {
         try {
             if (selectedRowKeys?.length > 0) {
                 // Lấy tất cả các chứng chỉ PENDING từ các học viên được chọn
@@ -290,6 +293,23 @@ export default function ArchivedCertificate() {
                         })
                     }
                 })
+
+                if (status === 'REJECTED') {
+                    if (certificateIds.length === 0) {
+                        message.warning('Không có chứng chỉ nào cần từ chối')
+                        return
+                    }
+                    await updateManyArchivedCertificate({
+                        where: {
+                            id: { in: certificateIds },
+                        },
+                        data: { status: 'REJECTED' },
+                    })
+                    message.success('Từ chối thành công')
+                    refetch()
+                    setSelectedRowKeys([])
+                    return
+                }
 
                 if (certificateIds.length === 0) {
                     message.warning('Không có chứng chỉ nào cần phê duyệt')
@@ -393,7 +413,7 @@ export default function ArchivedCertificate() {
                                     >
                                         Phê duyệt
                                     </Button>
-                                    <Button
+                                    {/* <Button
                                         className="ml-3"
                                         onClick={() => {
                                             if (selectedRowKeys.length === 0) {
@@ -416,7 +436,7 @@ export default function ArchivedCertificate() {
                                         type="default"
                                     >
                                         Chuyển đổi CC → Điểm
-                                    </Button>
+                                    </Button> */}
                                 </>
                             )}
                             {can(
@@ -466,7 +486,7 @@ export default function ArchivedCertificate() {
                             fixed: 'left',
                             type: 'input',
                             render: (__, record) => {
-                                return `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
+                                return `${record?.userProfile?.fullname || ''}`.trim()
                             },
                         },
                         {
