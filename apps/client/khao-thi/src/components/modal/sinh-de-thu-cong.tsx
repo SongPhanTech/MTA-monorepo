@@ -5,12 +5,10 @@ import dayjs from 'dayjs'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { GripVertical } from 'lucide-react'
-
 import { useStore } from '@tanstack/react-store'
 import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
-
 import TreeSelect from '@components/commons/tree-select'
 import PutFormModal from '@components/commons/put-modal'
 import {
@@ -20,7 +18,6 @@ import {
     useFindUniqueExam,
     useFindUniqueExamBank,
     useUpdateExamBank,
-    useUpdateExamBankQuestion,
 } from '@workspace/db/hooks'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { queryClient } from '@api/index'
@@ -136,7 +133,6 @@ const SinhDeThuCongModal = () => {
             : []
     }, [dataExam])
 
-    // use
     const treeData = useMemo(() => {
         return KnowledgeBlockData.map((item) => {
             return {
@@ -157,9 +153,6 @@ const SinhDeThuCongModal = () => {
 
     const next = async () => {
         try {
-            console.log(current, steps[current].fields, '1233444')
-
-            // chỉ validate field trong bước hiện tại
             await form.validateFields(steps[current].fields)
             setCurrent(current + 1)
         } catch (err) {
@@ -173,7 +166,6 @@ const SinhDeThuCongModal = () => {
 
     const { mutateAsync: create } = useCreateExamBank()
     const { mutateAsync: update } = useUpdateExamBank()
-    const { mutateAsync: updateExamBankQuestion } = useUpdateExamBankQuestion()
     const orderedQuestionIds = items.map((it: { value: string }) => it.value)
     const onOk = async (values: PutMaTranDeInputType) => {
         try {
@@ -189,7 +181,7 @@ const SinhDeThuCongModal = () => {
                         examDay: values.examDay ? dayjs(values.examDay).toDate() : null,
                         examId: selectedExamId,
                         examType: values.examType,
-                        subjectClass: values.subjectClass,
+                        subjectClassId: values.subjectClassId ?? undefined,
                         questions: {
                             deleteMany: {},
                             createMany: {
@@ -207,13 +199,9 @@ const SinhDeThuCongModal = () => {
                         examCode: values.examCode,
                         explain: values.explain,
                         examDay: values.examDay ? dayjs(values.examDay).toDate() : null,
-                        exam: {
-                            connect: {
-                                id: selectedExamId,
-                            },
-                        },
+                        examId: selectedExamId,
                         examType: values.examType,
-                        subjectClass: values.subjectClass,
+                        subjectClassId: values.subjectClassId ?? undefined,
                         questions: {
                             createMany: {
                                 data: orderedQuestionIds.map((questionId, index) => ({
@@ -225,6 +213,9 @@ const SinhDeThuCongModal = () => {
                     },
                 })
             }
+
+            message.success(`${input?.id ? 'Cập nhật' : 'Tạo'} đề thành công!`)
+
             queryClient.invalidateQueries({
                 queryKey: ['ExamBank'],
             })
@@ -380,7 +371,7 @@ const SinhDeThuCongModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={24}>
-                            <FormItem form={form} name="subjectClass" label="Dùng cho lớp">
+                            <FormItem form={form} name="subjectClassId" label="Dùng cho lớp">
                                 <Select options={dataOption} placeholder="Chọn lớp môn học" />
                             </FormItem>
                         </Col>
@@ -397,24 +388,6 @@ const SinhDeThuCongModal = () => {
                 title: 'Cấu hình sinh đề',
                 content: (
                     <Row gutter={[16, 0]}>
-                        {/* <Col span={24}>
-                            <FormItem
-                                form={form}
-                                name="subjectVersionId"
-                                label="Chọn môn học"
-                                required
-                            >
-                                <Select
-                                    placeholder="Chọn môn học"
-                                    options={subjectVersions.map((i) => {
-                                        return {
-                                            value: i?.id,
-                                            label: `${i?.code || ''} ${i.name || ''}`,
-                                        }
-                                    })}
-                                />
-                            </FormItem>
-                        </Col> */}
                         <Col span={24}>
                             <FormItem form={form} name="questions" label="Chọn câu hỏi" required>
                                 <TreeSelect
@@ -444,11 +417,11 @@ const SinhDeThuCongModal = () => {
                         <Col span={24}>
                             <Row gutter={[16, 16]}>
                                 <Col span={24} className="font-semibold pl-4">
-                                    Danh sách câu hỏi trong đề
+                                    Danh sách câu hỏi trong đề:
                                 </Col>
                                 <Col span={24}>
                                     <DndProvider backend={HTML5Backend}>
-                                        <div className=" mt-6">
+                                        <div className="mt-3">
                                             {items.map((item: Item, index: number) => (
                                                 <DraggableItem
                                                     key={item.value}
@@ -483,7 +456,7 @@ const SinhDeThuCongModal = () => {
                 examDay: data.examDay ? dayjs(data.examDay) : undefined,
                 questions: initialItems.map((i) => i?.value),
                 subjectVersionId: input?.subjectVersionId,
-                subjectClass: data?.subjectClass || null,
+                subjectClassId: data?.subjectClassId || null,
             })
         }
     }, [data])
@@ -496,7 +469,7 @@ const SinhDeThuCongModal = () => {
             onCancel={onClose}
             onFinish={onOk}
             footer={null}
-            className="w-[500px]"
+            className="w-[50vw] top-2"
         >
             <Col span={24}>
                 <div className="w-full max-w-[500px] mx-auto mt-6">

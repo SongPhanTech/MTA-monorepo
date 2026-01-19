@@ -34,7 +34,6 @@ type ContentElement =
 
 const PrintBatchExamBank = () => {
     const [name, setName] = useState('Nguyễn Văn A')
-    const [className, setClassName] = useState('')
     const { isOpen, onClose, input } = useDisclosure<{
         ids: string[]
     }>({
@@ -61,6 +60,13 @@ const PrintBatchExamBank = () => {
                 questions: {
                     include: {
                         question: true,
+                    },
+                },
+                subjectClass: {
+                    select: {
+                        name: true,
+                        id: true,
+                        code: true,
                     },
                 },
             },
@@ -379,7 +385,7 @@ const PrintBatchExamBank = () => {
                                         spacing: { before: 100 },
                                         children: [
                                             new TextRun({
-                                                text: `(Dùng cho lớp: ${className})`,
+                                                text: `(Dùng cho lớp: ${exam?.subjectClass?.name || ''})`,
                                                 font: 'Times New Roman',
                                                 size: 24,
                                             }),
@@ -739,7 +745,9 @@ const PrintBatchExamBank = () => {
                             marginLeft: '10%',
                         }}
                     >
-                        <span style={{ fontWeight: 'normal' }}>(Dùng cho lớp: {className})</span>
+                        <span style={{ fontWeight: 'normal' }}>
+                            (Dùng cho lớp: {exam?.subjectClass?.name || ''})
+                        </span>
                     </div>
 
                     {/* Date */}
@@ -872,12 +880,6 @@ const PrintBatchExamBank = () => {
                 <div className="flex items-center gap-4">
                     <span>Xem trước {exams.length} đề thi</span>
                     <div className="flex-1 flex items-center justify-end gap-4 mr-6">
-                        {/* <Input
-              placeholder="Nhập tên lớp"
-              value={className}
-              onChange={(e) => setClassName(e.target.value)}
-              className="w-56"
-            /> */}
                         <Input
                             placeholder="Nhập tên"
                             value={name}

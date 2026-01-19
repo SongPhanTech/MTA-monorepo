@@ -35,7 +35,6 @@ type ContentElement =
 
 const PrintExplanation = () => {
     const [name, setName] = useState('Nguyễn Văn A')
-    const [className, setClassName] = useState('')
     const { isOpen, onClose, input } = useDisclosure<{
         id: string
     }>({
@@ -69,12 +68,20 @@ const PrintExplanation = () => {
                         },
                     },
                 },
+                subjectClass: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
             },
         },
         {
             enabled: !!input?.id,
         }
     )
+
+    const subjectClassName = data?.subjectClass?.name || ''
 
     const { mutateAsync: updateExamBank } = useUpdateExamBank()
 
@@ -527,7 +534,7 @@ const PrintExplanation = () => {
                                                     spacing: { before: 100 },
                                                     children: [
                                                         new TextRun({
-                                                            text: `(Dùng cho lớp: ${className})`,
+                                                            text: `(Dùng cho lớp: ${subjectClassName})`,
                                                             font: 'Times New Roman',
                                                             size: 24,
                                                         }),
@@ -946,12 +953,12 @@ const PrintExplanation = () => {
                 <div className="flex items-center gap-4">
                     <span>Xem trước đáp án</span>
                     <div className="flex-1 flex items-center justify-center gap-4">
-                        <Input
+                        {/* <Input
                             placeholder="Nhập tên lớp"
                             value={className}
                             onChange={(e) => setClassName(e.target.value)}
                             className="w-56"
-                        />
+                        /> */}
                         <Input
                             placeholder="Nhập tên"
                             value={name}
@@ -1039,7 +1046,9 @@ const PrintExplanation = () => {
                             marginLeft: '10%',
                         }}
                     >
-                        <span style={{ fontWeight: 'normal' }}>(Dùng cho lớp: {className})</span>
+                        <span style={{ fontWeight: 'normal' }}>
+                            (Dùng cho lớp: {subjectClassName})
+                        </span>
                     </div>
 
                     {/* Date */}
