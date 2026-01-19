@@ -1,22 +1,30 @@
-import { UploadOutlined } from '@ant-design/icons'
-import FormItem from '@components/commons/form-item'
-import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
-import { type Difficult, QuestionType } from '@workspace/db/client'
-import { useCreateQuestion, useFindManyKnowledgeBlock } from '@workspace/db/hooks'
-import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { env } from '@workspace/libs/utils'
-import { Button, Modal, message, Table, Col, Select, Radio, Form, Row } from 'antd'
-import { XMLParser } from 'fast-xml-parser'
-import PizZip from 'pizzip'
-import type React from 'react'
-import { useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { UploadOutlined } from "@ant-design/icons";
+import FormItem from "@components/commons/form-item";
+import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from "@constants/constants";
+import useSpinner from "@hooks/spinner";
+import { Difficult, QuestionType } from "@workspace/db";
+import { useCreateQuestion, useFindManyKnowledgeBlock } from "@workspace/db/hooks";
+import {
+  Button,
+  Modal,
+  message,
+  Table,
+  Col,
+  Select,
+  Radio,
+  Form,
+  Row,
+} from "antd";
+import { XMLParser } from "fast-xml-parser";
+import PizZip from "pizzip";
+import type React from "react";
+import { useState } from "react";
+import { useDisclosure } from "react-hook-disclosure-modal";
 
 interface WordImportModalInput {
-    questionBankId: string
-    knowledgeBlockId: string
-    subjectVersionId: string
+  questionBankId: string;
+  knowledgeBlockId: string;
+  subjectVersionId: string;
 }
 
 const WordImportModal: React.FC = () => {
@@ -39,16 +47,14 @@ const WordImportModal: React.FC = () => {
           }
         });
       });
-      form.resetFields();
+
       setQuestions([]);
       setSelectedRowKeys([]);
     },
   });
 
   const questionBankId = input?.questionBankId;
-  const knowledgeBlockId = Form.useWatch("knowledgeBlockId", form) as
-    | string
-    | undefined;
+  const knowledgeBlockId = input?.knowledgeBlockId;
   const DETECT_QUESTION_TYPE = (text: string): QuestionType | "" => {
     if (text.includes("SINGLE_CHOICE")) return QuestionType.SINGLE_CHOICE;
     if (text.includes("MULTIPLE_CHOICE")) return QuestionType.MULTIPLE_CHOICE;
@@ -68,7 +74,7 @@ const WordImportModal: React.FC = () => {
     rows: any[],
     startIndex: number,
     zip: PizZip,
-    relMap: Map<string, string>,
+    relMap: Map<string, string>
   ): { label: string; content: string; isCorrect: boolean }[] => {
     const choices = [];
     // chạy từ row kế tiếp câu hỏi
@@ -111,150 +117,100 @@ const WordImportModal: React.FC = () => {
       choices.push({ label, content, isCorrect });
     }
 
-    const parser = new XMLParser({
-        ignoreAttributes: false,
-        attributeNamePrefix: '@_',
-    })
+    return choices;
+  };
 
-    const parseMCQOptions = (
-        rows: any[],
-        startIndex: number,
-        zip: PizZip,
-        relMap: Map<string, string>
-    ): { label: string; content: string; isCorrect: boolean }[] => {
-        const choices = []
-        // chạy từ row kế tiếp câu hỏi
-        for (let i = startIndex + 1; i < rows.length; i++) {
-            const row = rows[i]
-            const cells = Array.isArray(row['w:tc']) ? row['w:tc'] : [row['w:tc']]
-            const { text } = extractTextAndImagesFromCell(cells[0], zip, relMap)
+  const parseQuestionsFromPlainText = (doc: any) => {
+    const paragraphs = doc["w:document"]["w:body"]["w:p"];
+    if (!paragraphs) return [];
 
-            if (!text) {
-                continue
-            }
+    const lines: string[] = [];
 
-            const clean = text.trim()
-            if (clean === '') {
-                continue
-            }
+    // thu thập mọi dòng text
+    for (const p of paragraphs) {
+      const runs = p["w:r"];
+      if (!runs) continue;
 
-            if (/^Giải thích|Đáp án/i.test(clean)) {
-                break
-            }
+      const runArray = Array.isArray(runs) ? runs : [runs];
+      let content = "";
 
-            const match = clean.match(/^([A-D])\.\s*(.+)$/i)
-            if (!match) {
-                break
-            }
+      for (const r of runArray) {
+        if (typeof r["w:t"] === "string") content += r["w:t"];
+        else if (typeof r["w:t"] === "object" && r["w:t"]["#text"])
+          content += r["w:t"]["#text"];
+      }
 
-            const label = match[1].toUpperCase()
-            let content = match[2].trim()
-
-            // Detect đáp án đúng - hỗ trợ nhiều loại ngoặc đơn (ASCII và Unicode)
-            // Regex: [(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?
-            const correctPattern = /[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi
-            const isCorrect = correctPattern.test(content)
-
-            // Remove text "(đáp án đúng)" khỏi content - hỗ trợ nhiều loại ngoặc
-            content = content.replace(/[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi, '').trim()
-
-            choices.push({ label, content, isCorrect })
-        }
-
-        return choices
+      if (content.trim().length > 0) lines.push(content.trim());
     }
 
-    const parseQuestionsFromPlainText = (doc: any) => {
-        const paragraphs = doc['w:document']['w:body']['w:p']
-        if (!paragraphs) return []
+    const questions = [];
+    let current: any = null;
 
-        const lines: string[] = []
-
-        // thu thập mọi dòng text
-        for (const p of paragraphs) {
-            const runs = p['w:r']
-            if (!runs) continue
-
-            const runArray = Array.isArray(runs) ? runs : [runs]
-            let content = ''
-
-            for (const r of runArray) {
-                if (typeof r['w:t'] === 'string') content += r['w:t']
-                else if (typeof r['w:t'] === 'object' && r['w:t']['#text'])
-                    content += r['w:t']['#text']
-            }
-
-            if (content.trim().length > 0) lines.push(content.trim())
-        }
-
-        const questions = []
-        let current: any = null
-
-        for (const line of lines) {
-            // detect câu mới
-            // Nhận dạng mọi kiểu bắt đầu câu
-            if (/^(Câu\s*\d+|Câu hỏi|Question\s*\d*|Q\d+)/i.test(line)) {
-                if (current) questions.push(current)
-                current = { raw: [] }
-            }
-            if (current) current.raw.push(line)
-        }
-        if (current) questions.push(current)
-
-        return questions
+    for (const line of lines) {
+      // detect câu mới
+      // Nhận dạng mọi kiểu bắt đầu câu
+      if (/^(Câu\s*\d+|Câu hỏi|Question\s*\d*|Q\d+)/i.test(line)) {
+        if (current) questions.push(current);
+        current = { raw: [] };
+      }
+      if (current) current.raw.push(line);
     }
+    if (current) questions.push(current);
 
-    const parsePlainTextToQuestions = (rawItems: any[]) => {
-        const result: any[] = []
+    return questions;
+  };
 
-        for (const item of rawItems) {
-            const lines = item.raw
+  const parsePlainTextToQuestions = (rawItems: any[]) => {
+    const result: any[] = [];
 
-            const questionText = lines[0]
-            const type = DETECT_QUESTION_TYPE(questionText)
+    for (const item of rawItems) {
+      const lines = item.raw;
 
-            let content = ''
-            let explanation = ''
-            const options: any[] = []
+      const questionText = lines[0];
+      const type = DETECT_QUESTION_TYPE(questionText);
 
-            for (const line of lines.slice(1)) {
-                // A. Option
-                const match = line.match(/^([A-D])\.\s*(.+)/i)
-                if (match) {
-                    const label = match[1].toUpperCase()
-                    let text = match[2].trim()
+      let content = "";
+      let explanation = "";
+      const options: any[] = [];
 
-                    // Detect đáp án đúng - hỗ trợ nhiều loại ngoặc đơn
-                    const correctPattern = /[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi
-                    const isCorrect = correctPattern.test(text)
+      for (const line of lines.slice(1)) {
+        // A. Option
+        const match = line.match(/^([A-D])\.\s*(.+)/i);
+        if (match) {
+          const label = match[1].toUpperCase();
+          let text = match[2].trim();
 
-                    // Remove text "(đáp án đúng)" khỏi content
-                    text = text.replace(/[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi, '').trim()
+          // Detect đáp án đúng - hỗ trợ nhiều loại ngoặc đơn
+          const correctPattern =
+            /[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi;
+          const isCorrect = correctPattern.test(text);
 
-                    options.push({ label, content: text, isCorrect })
-                    continue
-                }
+          // Remove text "(đáp án đúng)" khỏi content
+          text = text
+            .replace(/[(（]?\s*(đáp án đúng|Đáp án đúng)\s*[)）]?/gi, "")
+            .trim();
 
-                // Giải thích
-                if (/^Giải thích/i.test(line)) {
-                    explanation = line.replace(/^Giải thích[:]?/i, '').trim()
-                    continue
-                }
-
-                content += `${line}\n`
-            }
-
-            result.push({
-                type,
-                difficult: 'D1',
-                content: content.trim(),
-                optionsRaw: options,
-                explanation,
-                point: 1,
-            })
+          options.push({ label, content: text, isCorrect });
+          continue;
         }
 
-        return result
+        // Giải thích
+        if (/^Giải thích/i.test(line)) {
+          explanation = line.replace(/^Giải thích[:]?/i, "").trim();
+          continue;
+        }
+
+        content += `${line}\n`;
+      }
+
+      result.push({
+        type,
+        difficult: "D1",
+        content: content.trim(),
+        optionsRaw: options,
+        explanation,
+        point: 1,
+      });
     }
 
     return result;
@@ -266,13 +222,13 @@ const WordImportModal: React.FC = () => {
     result = result
       .replace(
         /^(ESSAY|ORAL|SINGLE_CHOICE|MULTIPLE_CHOICE|FILL_IN_BLANK|ORDERING)_(D1|D2|D3|D4)/,
-        "",
+        ""
       )
       .trim();
     result = result
       .replace(
         /(ESSAY|ORAL|SINGLE_CHOICE|MULTIPLE_CHOICE|FILL_IN_BLANK|ORDERING)_(D1|D2|D3|D4)/,
-        "",
+        ""
       )
       .trim();
     // Remove "(đáp án đúng)" - hỗ trợ nhiều loại ngoặc
@@ -299,7 +255,7 @@ const WordImportModal: React.FC = () => {
   const extractTextAndImagesFromCell = (
     cell: any,
     zip: PizZip,
-    relMap: Map<string, string>,
+    relMap: Map<string, string>
   ) => {
     const paragraphs = Array.isArray(cell?.["w:p"])
       ? cell["w:p"]
@@ -322,98 +278,56 @@ const WordImportModal: React.FC = () => {
           value = t["#text"];
         }
 
-        return (
-            text
-                // xóa "Đáp án:" / "Giải thích:" (mọi kiểu hoa thường)
-                .replace(/^(đáp án|giải thích)\s*[:\-]?\s*/i, '')
-                // xóa nếu nằm giữa đoạn
-                .replace(/(đáp án|giải thích)\s*[:\-]?\s*/gi, '')
-                .trim()
-        )
-    }
-
-    const extractTextAndImagesFromCell = (cell: any, zip: PizZip, relMap: Map<string, string>) => {
-        const paragraphs = Array.isArray(cell?.['w:p']) ? cell['w:p'] : [cell?.['w:p']]
-        let rawText = ''
-        let prevEndedWithChar = false
-        const images: { name: string; blob: Blob }[] = []
-        let imgIndex = 1
-
-        for (const p of paragraphs) {
-            const runs = Array.isArray(p?.['w:r']) ? p['w:r'] : [p?.['w:r']]
-            let paragraphText = ''
-
-            for (const r of runs) {
-                const t = r?.['w:t']
-                let value = ''
-                if (typeof t === 'string') {
-                    value = t
-                } else if (typeof t === 'object' && t?.['#text']) {
-                    value = t['#text']
-                }
-
-                if (value) {
-                    const startsWithPunctuation = /^[.,!?;:]/.test(value)
-                    const endsWithChar = /[a-zA-ZÀ-ỹ0-9]$/.test(value)
-                    if (paragraphText && prevEndedWithChar && !startsWithPunctuation) {
-                        paragraphText += ' '
-                    }
-                    paragraphText += value
-                    prevEndedWithChar = endsWithChar
-                }
-
-                const drawing = r?.['w:drawing']
-                const blip =
-                    drawing?.['wp:inline']?.['a:graphic']?.['a:graphicData']?.['pic:pic']?.[
-                        'pic:blipFill'
-                    ]?.['a:blip']
-                const relId = blip?.['@_r:embed']
-                if (relId) {
-                    const imagePath = `word/${relMap.get(relId)}`
-                    const file = zip.file(imagePath)
-                    if (file) {
-                        const blob = new Blob([file.asArrayBuffer()], {
-                            type: 'image/png',
-                        })
-                        const placeholder = `{img_${imgIndex}}`
-                        paragraphText += ` ${placeholder} `
-                        images.push({ name: placeholder, blob })
-                        imgIndex++
-                    }
-                }
-            }
-
-            rawText += `${paragraphText.trim()}\n`
+        if (value) {
+          const startsWithPunctuation = /^[.,!?;:]/.test(value);
+          const endsWithChar = /[a-zA-ZÀ-ỹ0-9]$/.test(value);
+          if (paragraphText && prevEndedWithChar && !startsWithPunctuation) {
+            paragraphText += " ";
+          }
+          paragraphText += value;
+          prevEndedWithChar = endsWithChar;
         }
 
-        const cleanedText = rawText.replace(/[ \t]{2,}/g, ' ').trim()
+        const drawing = r?.["w:drawing"];
+        const blip =
+          drawing?.["wp:inline"]?.["a:graphic"]?.["a:graphicData"]?.[
+            "pic:pic"
+          ]?.["pic:blipFill"]?.["a:blip"];
+        const relId = blip?.["@_r:embed"];
+        if (relId) {
+          const imagePath = `word/${relMap.get(relId)}`;
+          const file = zip.file(imagePath);
+          if (file) {
+            const blob = new Blob([file.asArrayBuffer()], {
+              type: "image/png",
+            });
+            const placeholder = `{img_${imgIndex}}`;
+            paragraphText += ` ${placeholder} `;
+            images.push({ name: placeholder, blob });
+            imgIndex++;
+          }
+        }
+      }
 
-        return { text: cleanedText, images }
+      rawText += `${paragraphText.trim()}\n`;
     }
 
-    const parseMetadataFromTitle = (text: string) => {
-        // Ví dụ tiêu đề:  "Câu 1: K13_B1_ESSAY_D3"
-        const match = text.match(
-            /(ESSAY|ORAL|SINGLE_CHOICE|MULTIPLE_CHOICE|FILL_IN_BLANK|ORDERING)_(D1|D2|D3|D4)/
-        )
+    const cleanedText = rawText.replace(/[ \t]{2,}/g, " ").trim();
 
-        if (!match) {
-            return {
-                type: '',
-                difficult: '',
-            }
-        }
+    return { text: cleanedText, images };
+  };
 
   const parseMetadataFromTitle = (text: string) => {
     // Ví dụ tiêu đề:  "Câu 1: K13_B1_ESSAY_D3"
     const match = text.match(
-      /(ESSAY|ORAL|SINGLE_CHOICE|MULTIPLE_CHOICE|FILL_IN_BLANK|ORDERING)_(D1|D2|D3|D4)/,
+      /(ESSAY|ORAL|SINGLE_CHOICE|MULTIPLE_CHOICE|FILL_IN_BLANK|ORDERING)_(D1|D2|D3|D4)/
     );
 
-        return {
-            type,
-            difficult,
-        }
+    if (!match) {
+      return {
+        type: "",
+        difficult: "",
+      };
     }
 
     const [, type, difficult] = match;
@@ -427,7 +341,7 @@ const WordImportModal: React.FC = () => {
   const extractPointFromCell = (
     cell: any,
     zip: PizZip,
-    relMap: Map<string, string>,
+    relMap: Map<string, string>
   ) => {
     const { text } = extractTextAndImagesFromCell(cell, zip, relMap);
     const match = text.match(/(\d+(?:[.,]\d+)?)\s*(đ|điểm)?/i);
@@ -439,7 +353,7 @@ const WordImportModal: React.FC = () => {
 
   const uploadImagesAndReplacePlaceholders = async (
     rawText: string,
-    images: { name: string; blob: Blob }[],
+    images: { name: string; blob: Blob }[]
   ): Promise<string> => {
     let result = rawText;
 
@@ -452,53 +366,46 @@ const WordImportModal: React.FC = () => {
         const randomSuffix = Math.random().toString(36).substring(2, 8);
         const fileName = `question_image_${timestamp}_${randomSuffix}.png`;
 
-        // const uploadResult = await window.electronAPI.saveImageLocal({
-        //   buffer,
-        //   fileName,
-        // });
+        const uploadResult = await window.electronAPI.saveImageLocal({
+          buffer,
+          fileName,
+        });
 
-        // if (!uploadResult.success) {
-        //   throw new Error(uploadResult.error || "Upload failed");
-        // }
+        if (!uploadResult.success) {
+          throw new Error(uploadResult.error || "Upload failed");
+        }
 
-        // const imageUrl = uploadResult.imageUrl;
-        // result = result.replace(
-        //   img.name,
-        //   `<img src="${imageUrl}" style="max-width: 100%;" />`
-        // );
+        const imageUrl = uploadResult.imageUrl;
+        result = result.replace(
+          img.name,
+          `<img src="${imageUrl}" style="max-width: 100%;" />`
+        );
       } catch (error) {
         console.error(`Failed to upload image ${img.name}:`, error);
         // Giữ nguyên placeholder nếu upload thất bại
       }
     }
 
-    const handleImport = async (file: File) => {
-        setLoading(true)
-        try {
-            const arrayBuffer = await file.arrayBuffer()
-            const zip = new PizZip(arrayBuffer)
+    result = result.replace(/\n/g, "<br />");
 
-            const documentXml = zip.file('word/document.xml')?.asText()
-            const relsXml = zip.file('word/_rels/document.xml.rels')?.asText()
+    return result;
+  };
 
-            const doc = parser.parse(documentXml || '')
-            const rels = relsXml ? parser.parse(relsXml)?.Relationships?.Relationship || [] : []
-            const plainRaw = parseQuestionsFromPlainText(doc)
-            const plainQuestions = parsePlainTextToQuestions(plainRaw)
+  const handleImport = async (file: File) => {
+    setLoading(true);
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const zip = new PizZip(arrayBuffer);
 
-            const relMap = new Map()
-            ;(Array.isArray(rels) ? rels : [rels]).forEach((rel) => {
-                if (rel['@_Type']?.includes('image')) {
-                    relMap.set(rel['@_Id'], rel['@_Target'])
-                }
-            })
+      const documentXml = zip.file("word/document.xml")?.asText();
+      const relsXml = zip.file("word/_rels/document.xml.rels")?.asText();
 
-            const body = doc['w:document']['w:body']
-            const tables = Array.isArray(body['w:tbl'])
-                ? body['w:tbl']
-                : body['w:tbl']
-                  ? [body['w:tbl']]
-                  : []
+      const doc = parser.parse(documentXml || "");
+      const rels = relsXml
+        ? parser.parse(relsXml)?.Relationships?.Relationship || []
+        : [];
+      const plainRaw = parseQuestionsFromPlainText(doc);
+      const plainQuestions = parsePlainTextToQuestions(plainRaw);
 
       const relMap = new Map();
       (Array.isArray(rels) ? rels : [rels]).forEach((rel) => {
@@ -541,7 +448,7 @@ const WordImportModal: React.FC = () => {
           const contentResult = extractTextAndImagesFromCell(
             contentCells[0],
             zip,
-            relMap,
+            relMap
           );
 
           const processedContent = contentResult.text;
@@ -576,7 +483,7 @@ const WordImportModal: React.FC = () => {
             for (const part of optionParts) {
               // Không dùng flag 's' - thay vào đó dùng [\s\S]* để match bất kỳ ký tự nào kể cả newline
               const optionMatch = part.match(
-                /^([A-D])\.\s*([\s\S]+?)(?=\s*[A-D]\.\s|$)/i,
+                /^([A-D])\.\s*([\s\S]+?)(?=\s*[A-D]\.\s|$)/i
               );
               if (optionMatch) {
                 const label = optionMatch[1].toUpperCase();
@@ -601,7 +508,7 @@ const WordImportModal: React.FC = () => {
           }
 
           const cleanedContent = cleanQuestionText(
-            questionContent || processedContent,
+            questionContent || processedContent
           );
 
           question.type = meta.type || question.type;
@@ -611,7 +518,7 @@ const WordImportModal: React.FC = () => {
           question.point = extractPointFromCell(
             contentCells[contentCells.length - 1],
             zip,
-            relMap,
+            relMap
           );
 
           if (
@@ -627,7 +534,7 @@ const WordImportModal: React.FC = () => {
 
             if (question.optionsRaw?.length > 0) {
               const correct = question.optionsRaw.filter(
-                (o: any) => o.isCorrect,
+                (o: any) => o.isCorrect
               );
 
               question.answer = correct.length
@@ -646,7 +553,7 @@ const WordImportModal: React.FC = () => {
           const explanationResult = await extractTextAndImagesFromCell(
             explanationCells[0],
             zip,
-            relMap,
+            relMap
           );
 
           let explanationText = explanationResult.text;
@@ -666,7 +573,7 @@ const WordImportModal: React.FC = () => {
                   return opt.isCorrect
                     ? `<span style="color: green; font-weight: bold">${base}</span>`
                     : base;
-                },
+                }
               )
               .join("<br />");
 
@@ -699,7 +606,7 @@ const WordImportModal: React.FC = () => {
       setSelectedRowKeys(cleaned.map((_, index: number) => index.toString()));
 
       message.success(
-        `Đã import thành công ${extractedQuestions.length} câu hỏi`,
+        `Đã import thành công ${extractedQuestions.length} câu hỏi`
       );
     } catch (error) {
       message.error("Có lỗi xảy ra khi đọc file Word");
@@ -717,7 +624,7 @@ const WordImportModal: React.FC = () => {
       const blobUrl = URL.createObjectURL(img.blob);
       result = result.replace(
         img.name,
-        `<img src="${blobUrl}" style="max-width: 100%;" />`,
+        `<img src="${blobUrl}" style="max-width: 100%;" />`
       );
     });
     return result;
@@ -738,182 +645,81 @@ const WordImportModal: React.FC = () => {
         if (record.optionsRaw?.length > 0) {
           const cleanedOptions = record.optionsRaw.map(
             (opt: { label: string; content: string }) =>
-              `${opt.label}. ${opt.content.replace("(đáp án đúng)", "").trim()}`,
+              `${opt.label}. ${opt.content.replace("(đáp án đúng)", "").trim()}`
           );
 
-        let result = text
-        images.forEach((img) => {
-            const blobUrl = URL.createObjectURL(img.blob)
-            result = result.replace(img.name, `<img src="${blobUrl}" style="max-width: 100%;" />`)
-        })
-        return result
-    }
+          html += `<br/><br/>${cleanedOptions.join("<br/>")}`;
+        }
 
-    const columns = [
-        {
-            title: 'Câu hỏi',
-            dataIndex: 'content',
-            width: 350,
-            render: (text: string, record: any) => {
-                let html = text
+        return (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: html,
+            }}
+          />
+        );
+      },
+    },
 
-                if (record.point !== undefined) {
-                    html += ` <span style="color:#1890ff;font-weight:600">(${record.point}đ)</span>`
-                }
+    {
+      title: "Loại câu hỏi",
+      dataIndex: "type",
+      width: 120,
+      key: "type",
+      render: (value: string) => {
+        const key = value as QuestionType;
+        return QUESTION_TYPE_LABELS[key] ?? value;
+      },
+      align: "center" as const,
+    },
+    {
+      title: "Độ khó",
+      dataIndex: "difficult",
+      width: 120,
+      key: "difficult",
+      render: (value: Difficult) => DIFFICULT_LABELS[value] ?? value,
+      align: "center" as const,
+    },
+    // {
+    //   title: "Chuẩn đầu ra",
+    //   dataIndex: "chapter",
+    //   width: 150,
+    //   key: "chapter",
+    //   render: (value: string) => value || "-",
+    //   align: "center" as const,
+    // },
+    {
+      title: "Đáp án",
+      dataIndex: "explanation",
+      width: 320,
+      render: (_: any, record: any) => {
+        let html = "";
 
-                if (record.optionsRaw?.length > 0) {
-                    const cleanedOptions = record.optionsRaw.map(
-                        (opt: { label: string; content: string }) =>
-                            `${opt.label}. ${opt.content.replace('(đáp án đúng)', '').trim()}`
-                    )
+        switch (record.type) {
+          case QuestionType.SINGLE_CHOICE: {
+            const correct =
+              record.optionsRaw?.filter((o: any) => o.isCorrect) || [];
 
-                    html += `<br/><br/>${cleanedOptions.join('<br/>')}`
-                }
+            if (correct.length > 0) {
+              const c = correct[0];
+              html = `${c.label}. ${c.content}`;
+            } else {
+              html = "—";
+            }
+            break;
+          }
 
-                return (
-                    <div
-                        dangerouslySetInnerHTML={{
-                            __html: html,
-                        }}
-                    />
-                )
-            },
-        },
+          case QuestionType.MULTIPLE_CHOICE: {
+            const correct =
+              record.optionsRaw?.filter((o: any) => o.isCorrect) || [];
 
-        {
-            title: 'Loại câu hỏi',
-            dataIndex: 'type',
-            width: 120,
-            key: 'type',
-            render: (value: string) => {
-                const key = value as QuestionType
-                return QUESTION_TYPE_LABELS[key] ?? value
-            },
-            align: 'center' as const,
-        },
-        {
-            title: 'Độ khó',
-            dataIndex: 'difficult',
-            width: 120,
-            key: 'difficult',
-            render: (value: Difficult) => DIFFICULT_LABELS[value] ?? value,
-            align: 'center' as const,
-        },
-        // {
-        //   title: "Chuẩn đầu ra",
-        //   dataIndex: "chapter",
-        //   width: 150,
-        //   key: "chapter",
-        //   render: (value: string) => value || "-",
-        //   align: "center" as const,
-        // },
-        {
-            title: 'Đáp án',
-            dataIndex: 'explanation',
-            width: 320,
-            render: (_: any, record: any) => {
-                let html = ''
-
-                switch (record.type) {
-                    case QuestionType.SINGLE_CHOICE: {
-                        const correct = record.optionsRaw?.filter((o: any) => o.isCorrect) || []
-
-                        if (correct.length > 0) {
-                            const c = correct[0]
-                            html = `${c.label}. ${c.content}`
-                        } else {
-                            html = '—'
-                        }
-                        break
-                    }
-
-                    case QuestionType.MULTIPLE_CHOICE: {
-                        const correct = record.optionsRaw?.filter((o: any) => o.isCorrect) || []
-
-                        if (correct.length === 0) {
-                            html = '—'
-                        }
-                        // Một đáp án đúng
-                        else if (correct.length === 1) {
-                            const c = correct[0]
-                            html = `${c.label}. ${c.content}`
-                        }
-                        // Nhiều đáp án đúng
-                        else {
-                            html =
-                                '' +
-                                correct
-                                    .map(
-                                        (c: { label: string; content: string }) =>
-                                            `${c.label}. ${c.content}`
-                                    )
-                                    .join('<br/>')
-                        }
-                        break
-                    }
-
-                    case 'FILL_IN_BLANK': {
-                        html = record.answer || '—'
-                        break
-                    }
-
-                    case 'ORDERING':
-                        html = record.answer ? `${record.answer}` : '—'
-                        break
-
-                    case 'ESSAY':
-                    case 'ORAL': {
-                        html = record.explanation || '—'
-                        break
-                    }
-
-                    default: {
-                        html = renderContentWithImagePlaceholders(
-                            html,
-                            record.explanationImagesRaw || []
-                        )
-                        break
-                    }
-                }
-                html = renderContentWithImagePlaceholders(html, record.explanationImagesRaw || [])
-                return (
-                    <div
-                        style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
-                        dangerouslySetInnerHTML={{
-                            __html: html,
-                        }}
-                    />
-                )
-            },
-        },
-
-        {
-            title: 'Điểm',
-            dataIndex: 'point',
-            width: 80,
-            key: 'point',
-            align: 'center' as const,
-            render: (point: number) => `${point} đ`,
-        },
-    ]
-
-    const { mutateAsync: createQuestion } = useCreateQuestion()
-    const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
-        where: {
-            deletedAt: null,
-            examMatrix: {
-                examFramework: {
-                    subjectVersionId: input?.subjectVersionId,
-                },
-            },
-        },
-    })
-
-    const onOk = async () => {
-        try {
-            if (storageType === 'khung' && !knowledgeBlockId) {
-                message.error('Bạn phải chọn Chuẩn đầu ra khi lưu tại khung')
-                return
+            if (correct.length === 0) {
+              html = "—";
+            }
+            // Một đáp án đúng
+            else if (correct.length === 1) {
+              const c = correct[0];
+              html = `${c.label}. ${c.content}`;
             }
             // Nhiều đáp án đúng
             else {
@@ -922,7 +728,7 @@ const WordImportModal: React.FC = () => {
                 correct
                   .map(
                     (c: { label: string; content: string }) =>
-                      `${c.label}. ${c.content}`,
+                      `${c.label}. ${c.content}`
                   )
                   .join("<br/>");
             }
@@ -947,14 +753,14 @@ const WordImportModal: React.FC = () => {
           default: {
             html = renderContentWithImagePlaceholders(
               html,
-              record.explanationImagesRaw || [],
+              record.explanationImagesRaw || []
             );
             break;
           }
         }
         html = renderContentWithImagePlaceholders(
           html,
-          record.explanationImagesRaw || [],
+          record.explanationImagesRaw || []
         );
         return (
           <div
@@ -989,12 +795,6 @@ const WordImportModal: React.FC = () => {
     },
   });
 
-  useEffect(() => {
-    if (storageType === "kho") {
-      form.setFieldsValue({ knowledgeBlockId: undefined });
-    }
-  }, [storageType, form]);
-
   const onOk = async () => {
     try {
       if (storageType === "khung" && !knowledgeBlockId) {
@@ -1009,17 +809,17 @@ const WordImportModal: React.FC = () => {
 
       showSpinner();
       const selectedQuestions = questions.filter((_, index) =>
-        selectedRowKeys.includes(index.toString()),
+        selectedRowKeys.includes(index.toString())
       );
 
       for (const q of selectedQuestions) {
         const content = await uploadImagesAndReplacePlaceholders(
           q.content,
-          q.contentImagesRaw || [],
+          q.contentImagesRaw || []
         );
         const explanation = await uploadImagesAndReplacePlaceholders(
           q.explanation,
-          q.explanationImagesRaw || [],
+          q.explanationImagesRaw || []
         );
 
         const payload: any = {
@@ -1050,7 +850,7 @@ const WordImportModal: React.FC = () => {
         if (q.type === QuestionType.ORDERING && q.optionsRaw?.length > 0) {
           // Parse thứ tự đúng từ answer (VD: "Thứ tự đúng là A → B → C" hoặc "A → B → C")
           const orderMatch = q.answer?.match(
-            /([A-D])\s*(?:→|->)\s*([A-D])(?:\s*(?:→|->)\s*([A-D]))?(?:\s*(?:→|->)\s*([A-D]))?/,
+            /([A-D])\s*(?:→|->)\s*([A-D])(?:\s*(?:→|->)\s*([A-D]))?(?:\s*(?:→|->)\s*([A-D]))?/
           );
 
           if (orderMatch) {
@@ -1101,146 +901,163 @@ const WordImportModal: React.FC = () => {
                 })),
               };
             }
+          }
 
-            message.success('Import câu hỏi thành công')
-            onClose()
-            setQuestions([])
-            setSelectedRowKeys([])
-        } catch (error) {
-            console.error(error)
-            message.error('Lỗi khi lưu câu hỏi')
-        } finally {
-            hideSpinner()
+          if (q.type === QuestionType.ESSAY || q.type === QuestionType.ORAL) {
+          }
+
+          // if (q.type === QuestionType.TRUE_FALSE) {
+          //   payload.multipleChoiceOptions = {
+          //     create: [
+          //       {
+          //         content: "A. Đúng",
+          //         isCorrect: q.answer === "TRUE",
+          //         order: 1,
+          //       },
+          //       {
+          //         content: "B. Sai",
+          //         isCorrect: q.answer === "FALSE",
+          //         order: 2,
+          //       },
+          //     ],
+          //   };
+          // }
         }
+
+        await createQuestion({ data: payload });
+      }
+
+      message.success("Import câu hỏi thành công");
+      onClose();
+      setQuestions([]);
+      setSelectedRowKeys([]);
+    } catch (error) {
+      console.error(error);
+      message.error("Lỗi khi lưu câu hỏi");
+    } finally {
+      hideSpinner();
     }
+  };
 
-    return (
-        <Modal
-            title="Import câu hỏi từ Word"
-            open={isOpen}
-            width="90vw"
-            onCancel={onClose}
-            style={{ top: 20, maxHeight: '90vh', overflowY: 'auto' }}
-            footer={[
-                <Button key="cancel" onClick={onClose}>
-                    Đóng
-                </Button>,
+  return (
+    <Modal
+      title="Import câu hỏi từ Word"
+      open={isOpen}
+      width="90vw"
+      onCancel={onClose}
+      style={{ top: 20, maxHeight: "90vh", overflowY: "auto" }}
+      footer={[
+        <Button key="cancel" onClick={onClose}>
+          Đóng
+        </Button>,
 
-                <Button
-                    key="submit"
-                    type="primary"
-                    disabled={selectedRowKeys.length === 0}
-                    onClick={onOk}
-                >
-                    Lưu Câu Hỏi
-                </Button>,
-            ]}
+        <Button
+          key="submit"
+          type="primary"
+          disabled={selectedRowKeys.length === 0}
+          onClick={onOk}
         >
           Lưu Câu Hỏi
         </Button>,
       ]}
     >
-      <Form form={form} layout="vertical">
-        <Row gutter={16} align="middle" style={{ marginBottom: 16 }}>
-          <input
-            type="file"
-            accept=".docx"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                handleImport(file);
-              }
-              e.target.value = "";
-            }}
-            style={{ display: "none" }}
-            id="word-import-input"
-          />
-          <Col>
-            <Button
-              icon={<UploadOutlined />}
-              onClick={() =>
-                document.getElementById("word-import-input")?.click()
-              }
+      <Row gutter={16} align="middle" style={{ marginBottom: 16 }}>
+        <input
+          type="file"
+          accept=".docx"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              handleImport(file);
+            }
+            e.target.value = "";
+          }}
+          style={{ display: "none" }}
+          id="word-import-input"
+        />
+        <Col>
+          <Button
+            icon={<UploadOutlined />}
+            onClick={() =>
+              document.getElementById("word-import-input")?.click()
+            }
+          >
+            Chọn File Word
+          </Button>
+        </Col>
+        <Col span={12}>
+          <div>
+            <div className="text-sm font-medium ">Vị trí lưu trữ</div>
+            <Radio.Group
+              value={storageType}
+              onChange={(e) => setStorageType(e.target.value)}
             >
-              Chọn File Word
-            </Button>
-          </Col>
-          <Col span={12}>
-            <div>
-              <div className="text-sm font-medium ">Vị trí lưu trữ</div>
-              <Radio.Group
-                value={storageType}
-                onChange={(e) => setStorageType(e.target.value)}
-              >
-                <Radio value="khung">Lưu tại khung</Radio>
-                <Radio value="kho">Lưu tại kho</Radio>
-              </Radio.Group>
-            </div>
-          </Col>
-
-          {storageType === "khung" && (
-            <Col span={12}>
-              <FormItem
-                form={form}
-                name="knowledgeBlockId"
-                label="Chuẩn đầu ra"
-                layout="vertical"
-                rules={[
-                  { required: true, message: "Vui lòng chọn chuẩn đầu ra" },
-                ]}
-              >
-                <Select
-                  maxTagCount={"responsive"}
-                  placeholder="Chọn chuẩn đầu ra"
-                  options={knowledgeBlockData?.map(({ id, name }) => ({
-                    value: id,
-                    label: name,
-                  }))}
-                />
-              </FormItem>
-            </Col>
-          )}
-        </Row>
-
-        {loading && <div style={{ margin: "16px 0" }}>Đang đọc file...</div>}
-
-        {questions.length > 0 && (
-          <div style={{ marginTop: 16 }}>
-            <Table
-              columns={columns}
-              dataSource={questions}
-              rowKey={(record, index) => index?.toString() || ""}
-              rowSelection={{
-                type: "checkbox",
-                selectedRowKeys,
-                onChange: (keys) => {
-                  setSelectedRowKeys(keys);
-                },
-              }}
-              scroll={{
-                x: "100%",
-                y: "calc(70vh - 130px)",
-              }}
-              sticky={{
-                offsetHeader: 0,
-              }}
-              style={{
-                maxHeight: "70vh",
-              }}
-              pagination={{
-                position: ["bottomRight"],
-                defaultPageSize: 10,
-                showSizeChanger: {
-                  labelRender: ({ value }) => `${value} / trang`,
-                  optionRender: (oriOption) => `${oriOption.value} / trang`,
-                },
-                showTotal: (total, range) =>
-                  `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-              }}
-            />
+              <Radio value="khung">Lưu tại khung</Radio>
+              <Radio value="kho">Lưu tại kho</Radio>
+            </Radio.Group>
           </div>
+        </Col>
+
+        {storageType === "khung" && (
+          <Col span={12}>
+            <FormItem
+              form={form}
+              name="knowledgeBlockId"
+              label="Chuẩn đầu ra"
+              layout="vertical"
+              required
+            >
+              <Select
+                maxTagCount={"responsive"}
+                placeholder="Chọn chuẩn đầu ra"
+                options={knowledgeBlockData?.map(({ id, name }) => ({
+                  value: id,
+                  label: name,
+                }))}
+              />
+            </FormItem>
+          </Col>
         )}
-      </Form>
+      </Row>
+
+      {loading && <div style={{ margin: "16px 0" }}>Đang đọc file...</div>}
+
+      {questions.length > 0 && (
+        <div style={{ marginTop: 16 }}>
+          <Table
+            columns={columns}
+            dataSource={questions}
+            rowKey={(record, index) => index?.toString() || ""}
+            rowSelection={{
+              type: "checkbox",
+              selectedRowKeys,
+              onChange: (keys) => {
+                setSelectedRowKeys(keys);
+              },
+            }}
+            scroll={{
+              x: "100%",
+              y: "calc(70vh - 130px)",
+            }}
+            sticky={{
+              offsetHeader: 0,
+            }}
+            style={{
+              maxHeight: "70vh",
+            }}
+            pagination={{
+              position: ["bottomRight"],
+              defaultPageSize: 10,
+              showSizeChanger: {
+                labelRender: ({ value }) => `${value} / trang`,
+                optionRender: (oriOption) => `${oriOption.value} / trang`,
+              },
+              showTotal: (total, range) =>
+                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+            }}
+          />
+        </div>
+      )}
     </Modal>
   );
 };
