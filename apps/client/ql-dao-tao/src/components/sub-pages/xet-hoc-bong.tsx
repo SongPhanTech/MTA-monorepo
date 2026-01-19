@@ -391,26 +391,17 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     }
 
     const rowSelection = {
-        selectedRowKeys,
-        onSelect: (record: any, selected: boolean) => {
-            if (record.id) {
-                onSelectChange(record.id, selected)
-            }
-        },
-        hideSelectAll: true,
-        columnWidth: 0,
-        renderCell: (_: any, record: any, index: number) => {
-            if (record.id) {
-                return (
-                    <Checkbox
-                        checked={selectedRowKeys.includes(record.id)}
-                        onChange={(e) => onSelectChange(record.id, e.target.checked)}
-                    />
-                )
-            }
-            return null
-        },
-    }
+  selectedRowKeys,
+  hideSelectAll: true,
+  columnWidth: 48,
+  renderCell: (_: any, record: any) =>
+    record.id ? (
+      <Checkbox
+        checked={selectedRowKeys.includes(record.id)}
+        onChange={(e) => onSelectChange(record.id, e.target.checked)}
+      />
+    ) : null,
+}
 
     const { mutateAsync: deleteScholarshipAward } = useDeleteScholarshipAward()
     async function handleDeleteScholarshipAward(id: string) {
