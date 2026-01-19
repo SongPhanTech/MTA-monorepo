@@ -159,6 +159,8 @@ import type {
     PostApiStatsInnovationsStatisticsByYearBody,
     PostApiStatsKpiCards200,
     PostApiStatsKpiCardsBody,
+    PostApiStatsLateGradeSubjects200,
+    PostApiStatsLateGradeSubjectsBody,
     PostApiStatsLecturerWorkload200,
     PostApiStatsLecturerWorkloadBody,
     PostApiStatsMostUsedQuestions200,
@@ -169,6 +171,8 @@ import type {
     PostApiStatsQuestionStatisticsBody,
     PostApiStatsScienceTechnologyOverview200,
     PostApiStatsScienceTechnologyOverviewBody,
+    PostApiStatsStatisticsExamBankNotYet200,
+    PostApiStatsStatisticsExamBankNotYetBody,
     PostApiStatsStatisticsOfRecordsByDate200,
     PostApiStatsStatisticsOfRecordsByDateBody,
     PostApiStatsStudentCountByAcademicResults200,
@@ -199,6 +203,8 @@ import type {
     PostApiStatsSubjectPassFailRateBody,
     PostApiStatsSubjectPassFailRates200,
     PostApiStatsSubjectPassFailRatesBody,
+    PostApiStatsSubjectsHighAbsentStudents200,
+    PostApiStatsSubjectsHighAbsentStudentsBody,
     PostApiStatsSubjectsHighFailRates200,
     PostApiStatsSubjectsHighFailRatesBody,
     PostApiStatsTrendsInAcademicResultsByYear200,
@@ -9414,6 +9420,301 @@ export const usePostApiStatsSubjectsHighFailRates = <TError = unknown, TContext 
     TContext
 > => {
     const mutationOptions = getPostApiStatsSubjectsHighFailRatesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsSubjectsHighAbsentStudentsResponse200 = {
+    data: PostApiStatsSubjectsHighAbsentStudents200
+    status: 200
+}
+
+export type postApiStatsSubjectsHighAbsentStudentsResponseSuccess =
+    postApiStatsSubjectsHighAbsentStudentsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsSubjectsHighAbsentStudentsResponse =
+    postApiStatsSubjectsHighAbsentStudentsResponseSuccess
+
+export const getPostApiStatsSubjectsHighAbsentStudentsUrl = () => {
+    return `/api/stats/subjects-high-absent-students`
+}
+
+export const postApiStatsSubjectsHighAbsentStudents = async (
+    postApiStatsSubjectsHighAbsentStudentsBody: PostApiStatsSubjectsHighAbsentStudentsBody,
+    options?: RequestInit
+): Promise<postApiStatsSubjectsHighAbsentStudentsResponse> => {
+    return customTrainingFetch<postApiStatsSubjectsHighAbsentStudentsResponse>(
+        getPostApiStatsSubjectsHighAbsentStudentsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSubjectsHighAbsentStudentsBody),
+        }
+    )
+}
+
+export const getPostApiStatsSubjectsHighAbsentStudentsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+        TError,
+        { data: PostApiStatsSubjectsHighAbsentStudentsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+    TError,
+    { data: PostApiStatsSubjectsHighAbsentStudentsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsSubjectsHighAbsentStudents']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+        { data: PostApiStatsSubjectsHighAbsentStudentsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsSubjectsHighAbsentStudents(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsSubjectsHighAbsentStudentsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>
+>
+export type PostApiStatsSubjectsHighAbsentStudentsMutationBody =
+    PostApiStatsSubjectsHighAbsentStudentsBody
+export type PostApiStatsSubjectsHighAbsentStudentsMutationError = unknown
+
+export const usePostApiStatsSubjectsHighAbsentStudents = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+            TError,
+            { data: PostApiStatsSubjectsHighAbsentStudentsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+    TError,
+    { data: PostApiStatsSubjectsHighAbsentStudentsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsSubjectsHighAbsentStudentsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Thống kê số lượng ngân hàng đề chưa có
+ */
+export type postApiStatsStatisticsExamBankNotYetResponse200 = {
+    data: PostApiStatsStatisticsExamBankNotYet200
+    status: 200
+}
+
+export type postApiStatsStatisticsExamBankNotYetResponseSuccess =
+    postApiStatsStatisticsExamBankNotYetResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStatisticsExamBankNotYetResponse =
+    postApiStatsStatisticsExamBankNotYetResponseSuccess
+
+export const getPostApiStatsStatisticsExamBankNotYetUrl = () => {
+    return `/api/stats/statistics-exam-bank-not-yet`
+}
+
+export const postApiStatsStatisticsExamBankNotYet = async (
+    postApiStatsStatisticsExamBankNotYetBody: PostApiStatsStatisticsExamBankNotYetBody,
+    options?: RequestInit
+): Promise<postApiStatsStatisticsExamBankNotYetResponse> => {
+    return customTrainingFetch<postApiStatsStatisticsExamBankNotYetResponse>(
+        getPostApiStatsStatisticsExamBankNotYetUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStatisticsExamBankNotYetBody),
+        }
+    )
+}
+
+export const getPostApiStatsStatisticsExamBankNotYetMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+        TError,
+        { data: PostApiStatsStatisticsExamBankNotYetBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+    TError,
+    { data: PostApiStatsStatisticsExamBankNotYetBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStatisticsExamBankNotYet']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+        { data: PostApiStatsStatisticsExamBankNotYetBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStatisticsExamBankNotYet(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStatisticsExamBankNotYetMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>
+>
+export type PostApiStatsStatisticsExamBankNotYetMutationBody =
+    PostApiStatsStatisticsExamBankNotYetBody
+export type PostApiStatsStatisticsExamBankNotYetMutationError = unknown
+
+/**
+ * @summary Thống kê số lượng ngân hàng đề chưa có
+ */
+export const usePostApiStatsStatisticsExamBankNotYet = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+            TError,
+            { data: PostApiStatsStatisticsExamBankNotYetBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+    TError,
+    { data: PostApiStatsStatisticsExamBankNotYetBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsStatisticsExamBankNotYetMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsLateGradeSubjectsResponse200 = {
+    data: PostApiStatsLateGradeSubjects200
+    status: 200
+}
+
+export type postApiStatsLateGradeSubjectsResponseSuccess =
+    postApiStatsLateGradeSubjectsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsLateGradeSubjectsResponse = postApiStatsLateGradeSubjectsResponseSuccess
+
+export const getPostApiStatsLateGradeSubjectsUrl = () => {
+    return `/api/stats/late-grade-subjects`
+}
+
+export const postApiStatsLateGradeSubjects = async (
+    postApiStatsLateGradeSubjectsBody: PostApiStatsLateGradeSubjectsBody,
+    options?: RequestInit
+): Promise<postApiStatsLateGradeSubjectsResponse> => {
+    return customTrainingFetch<postApiStatsLateGradeSubjectsResponse>(
+        getPostApiStatsLateGradeSubjectsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsLateGradeSubjectsBody),
+        }
+    )
+}
+
+export const getPostApiStatsLateGradeSubjectsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+        TError,
+        { data: PostApiStatsLateGradeSubjectsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+    TError,
+    { data: PostApiStatsLateGradeSubjectsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsLateGradeSubjects']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+        { data: PostApiStatsLateGradeSubjectsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsLateGradeSubjects(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsLateGradeSubjectsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>
+>
+export type PostApiStatsLateGradeSubjectsMutationBody = PostApiStatsLateGradeSubjectsBody
+export type PostApiStatsLateGradeSubjectsMutationError = unknown
+
+export const usePostApiStatsLateGradeSubjects = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+            TError,
+            { data: PostApiStatsLateGradeSubjectsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+    TError,
+    { data: PostApiStatsLateGradeSubjectsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsLateGradeSubjectsMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

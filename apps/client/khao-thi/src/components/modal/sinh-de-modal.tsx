@@ -90,7 +90,7 @@ const SinhDeModal = () => {
     const onOk = async (values: PutMaTranDeInputType) => {
         try {
             if (!values) return
-            
+
             // const matrixData = await fetch('http://localhost:3030/sinh-de', {
             //     method: 'POST',
             //     headers: {

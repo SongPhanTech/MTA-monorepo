@@ -28,7 +28,19 @@ import {
 } from '@workspace/db/hooks'
 
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, DatePicker, Flex, Form, Input, InputNumber, message, Popconfirm, Row, Tag } from 'antd'
+import {
+    Button,
+    Col,
+    DatePicker,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    message,
+    Popconfirm,
+    Row,
+    Tag,
+} from 'antd'
 import { SquarePen } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -373,10 +385,12 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                     { role: CouncilRole.REVIEWER_1, expertId: rowData.reviewer1 },
                     { role: CouncilRole.REVIEWER_2, expertId: rowData.reviewer2 },
                     { role: CouncilRole.MEMBER, expertId: rowData.councilMember },
-                ].filter(m => m.expertId).map(m => ({
-                    role: m.role,
-                    expert: { connect: { id: m.expertId } }
-                }))
+                ]
+                    .filter((m) => m.expertId)
+                    .map((m) => ({
+                        role: m.role,
+                        expert: { connect: { id: m.expertId } },
+                    }))
                 const payload: any = {
                     title: rowData.title,
                     description: description,
@@ -384,44 +398,52 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                     type: rowData.type,
                     language: rowData.language,
                     defenseDate: rowData.defenseDate ? new Date(rowData.defenseDate) : null,
-                    
-                    supervisor: rowData.supervisor ? { connect: { id: rowData.supervisor } } : { disconnect: true },
-                    coSupervisor: rowData.coSupervisor ? { connect: { id: rowData.coSupervisor } } : { disconnect: true },
-                    organization: rowData.organization ? { connect: { Id: rowData.organization } } : { disconnect: true },
+
+                    supervisor: rowData.supervisor
+                        ? { connect: { id: rowData.supervisor } }
+                        : { disconnect: true },
+                    coSupervisor: rowData.coSupervisor
+                        ? { connect: { id: rowData.coSupervisor } }
+                        : { disconnect: true },
+                    organization: rowData.organization
+                        ? { connect: { Id: rowData.organization } }
+                        : { disconnect: true },
                     room: rowData.room ? { connect: { id: rowData.room } } : { disconnect: true },
-                    defenseSession: rowData.defenseSession ? { connect: { id: rowData.defenseSession } } : { disconnect: true },
-    
+                    defenseSession: rowData.defenseSession
+                        ? { connect: { id: rowData.defenseSession } }
+                        : { disconnect: true },
+
                     council: {
                         upsert: {
                             create: {
                                 proposedDate: new Date(),
                                 status: CouncilProposalStatus.PENDING,
-                                members: { create: councilMembersData }
+                                members: { create: councilMembersData },
                             },
                             update: {
                                 members: {
                                     deleteMany: {},
-                                    create: councilMembersData
-                                }
-                            }
-                        }
+                                    create: councilMembersData,
+                                },
+                            },
+                        },
                     },
-    
+
                     defenseRecord: {
                         upsert: {
                             create: {
                                 finalScore: rowData.score ? Number.parseFloat(rowData.score) : null,
                                 comments: rowData.comments || '',
-                                isProfileComplete: false
+                                isProfileComplete: false,
                             },
                             update: {
                                 finalScore: rowData.score ? Number.parseFloat(rowData.score) : null,
-                                comments: rowData.comments || ''
-                            }
-                        }
-                    }
+                                comments: rowData.comments || '',
+                            },
+                        },
+                    },
                 }
-    
+
                 return await updateThesisProject({
                     data: payload,
                     where: { id: thesisProjectId },
@@ -455,41 +477,39 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
             const thesisProject = record?.thesisRegistrations?.[0]?.thesisProject
             if (thesisProject) {
                 initialEditingValues[record.id] = {
-                  title: thesisProject.title || "",
-                  supervisor: thesisProject.supervisor?.id || "",
-                  coSupervisor: thesisProject.coSupervisor?.id || "",
-                  language: thesisProject.language || "",
-                  type: thesisProject.type || "",
-                  status: thesisProject.status || "",
-                  defenseDate: thesisProject.defenseDate || "",
-                  defenseSession: thesisProject.defenseSession?.id || "",
-                  room: thesisProject.room?.id || "",
-                  chairman:
-                    thesisProject.council?.members.find(
-                      (member) => member.role === CouncilRole.CHAIRMAN
-                    )?.expert?.id || "",
-                  secretary:
-                    thesisProject.council?.members.find(
-                      (member) => member.role === CouncilRole.SECRETARY
-                    )?.expert?.id || "",
-                  reviewer1:
-                    thesisProject.council?.members.find(
-                      (member) => member.role === CouncilRole.REVIEWER_1
-                    )?.expert?.id || "",
-                  reviewer2:
-                    thesisProject.council?.members.find(
-                      (member) => member.role === CouncilRole.REVIEWER_2
-                    )?.expert?.id || "",
-                  member:
-                    thesisProject.council?.members.find(
-                      (member) => member.role === CouncilRole.MEMBER
-                    )?.expert?.id || "",
-                  organization: thesisProject.organization?.Id ?? "",
-                  score:
-                    thesisProject.defenseRecord?.finalScore?.toString() || "",
-                  comments: thesisProject.defenseRecord?.comments || "",
-                  
-                };
+                    title: thesisProject.title || '',
+                    supervisor: thesisProject.supervisor?.id || '',
+                    coSupervisor: thesisProject.coSupervisor?.id || '',
+                    language: thesisProject.language || '',
+                    type: thesisProject.type || '',
+                    status: thesisProject.status || '',
+                    defenseDate: thesisProject.defenseDate || '',
+                    defenseSession: thesisProject.defenseSession?.id || '',
+                    room: thesisProject.room?.id || '',
+                    chairman:
+                        thesisProject.council?.members.find(
+                            (member) => member.role === CouncilRole.CHAIRMAN
+                        )?.expert?.id || '',
+                    secretary:
+                        thesisProject.council?.members.find(
+                            (member) => member.role === CouncilRole.SECRETARY
+                        )?.expert?.id || '',
+                    reviewer1:
+                        thesisProject.council?.members.find(
+                            (member) => member.role === CouncilRole.REVIEWER_1
+                        )?.expert?.id || '',
+                    reviewer2:
+                        thesisProject.council?.members.find(
+                            (member) => member.role === CouncilRole.REVIEWER_2
+                        )?.expert?.id || '',
+                    member:
+                        thesisProject.council?.members.find(
+                            (member) => member.role === CouncilRole.MEMBER
+                        )?.expert?.id || '',
+                    organization: thesisProject.organization?.Id ?? '',
+                    score: thesisProject.defenseRecord?.finalScore?.toString() || '',
+                    comments: thesisProject.defenseRecord?.comments || '',
+                }
             }
         })
 
@@ -830,7 +850,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         ''
                                     if (
                                         editingRowKeys.includes(record?.id) &&
-                                        (isManage || role === 'P7') 
+                                        (isManage || role === 'P7')
                                     ) {
                                         return (
                                             <div onClick={(e) => e.stopPropagation()}>
@@ -911,8 +931,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         ''
                                     if (
                                         editingRowKeys.includes(record?.id) &&
-                                        (isManage  ||
-                                            role === 'P7')
+                                        (isManage || role === 'P7')
                                     ) {
                                         const currentValue =
                                             editingValues[record?.id]?.title !== undefined
@@ -1000,7 +1019,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         ''
                                     if (
                                         editingRowKeys.includes(record?.id) &&
-                                        (isManage || role === 'P7') 
+                                        (isManage || role === 'P7')
                                     ) {
                                         const currentValue =
                                             editingValues[record?.id]?.coSupervisor !== undefined
@@ -1394,8 +1413,9 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         const currentValue =
                                             editingValues[record?.id]?.score !== undefined
                                                 ? editingValues[record?.id]?.score
-                                                : record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.finalScore || '';
-                            
+                                                : record?.thesisRegistrations?.[0]?.thesisProject
+                                                      ?.defenseRecord?.finalScore || ''
+
                                         return (
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <InputNumber
@@ -1413,7 +1433,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         )
                                     }
                                     return (
-                                        record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.finalScore?.toString() || ''
+                                        record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.finalScore?.toString() ||
+                                        ''
                                     )
                                 },
                             },
@@ -1426,22 +1447,28 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         const currentValue =
                                             editingValues[record?.id]?.comments !== undefined
                                                 ? editingValues[record?.id]?.comments
-                                                : record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.comments || '';
-                            
+                                                : record?.thesisRegistrations?.[0]?.thesisProject
+                                                      ?.defenseRecord?.comments || ''
+
                                         return (
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Input
                                                     placeholder="Nhập nhận xét"
                                                     value={currentValue}
                                                     onChange={(e) =>
-                                                        handleEditChange(record?.id, 'comments', e.target.value)
+                                                        handleEditChange(
+                                                            record?.id,
+                                                            'comments',
+                                                            e.target.value
+                                                        )
                                                     }
                                                 />
                                             </div>
                                         )
                                     }
                                     return (
-                                        record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.comments || ''
+                                        record?.thesisRegistrations?.[0]?.thesisProject
+                                            ?.defenseRecord?.comments || ''
                                     )
                                 },
                             },
@@ -1457,9 +1484,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                                 : record?.thesisRegistrations?.[0]?.thesisProject
                                                       ?.language?.language || ''
                                         return (
-                                            <div
-                                                onClick={(e) => e.stopPropagation()} 
-                                            >
+                                            <div onClick={(e) => e.stopPropagation()}>
                                                 <Input
                                                     value={currentValue || ''}
                                                     onChange={(e) =>
@@ -1491,9 +1516,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                                 : record?.thesisRegistrations?.[0]?.thesisProject
                                                       ?.type || ''
                                         return (
-                                            <div
-                                                onClick={(e) => e.stopPropagation()} 
-                                            >
+                                            <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
                                                     className="w-full"
                                                     options={['Luận văn', 'Đề án'].map((item) => ({
@@ -1526,12 +1549,9 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                                 : record?.thesisRegistrations?.[0]?.thesisProject
                                                       ?.status || ''
                                         return (
-                                            <div
-                                                onClick={(e) => e.stopPropagation()} 
-                                            >
+                                            <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
                                                     className="w-full"
-                                                 
                                                     options={useThesisProjectStatusOptions()
                                                         .ignoreProjectStatus([
                                                             ThesisProjectStatus.ASSIGNED,

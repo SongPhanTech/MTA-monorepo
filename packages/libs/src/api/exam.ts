@@ -21,6 +21,10 @@ import type {
 } from '@tanstack/react-query'
 
 import type {
+    AutomaticTopicGeneration200,
+    AutomaticTopicGeneration400,
+    AutomaticTopicGeneration404,
+    AutomaticTopicGenerationBody,
     CreateClusterSurvey200,
     CreateClusterSurvey400,
     CreateClusterSurvey404,
@@ -1902,6 +1906,127 @@ export function useGetPrivateSurvey<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+/**
+ * Sinh đề tự động
+ * @summary Sinh đề tự động
+ */
+export type automaticTopicGenerationResponse200 = {
+    data: AutomaticTopicGeneration200
+    status: 200
+}
+
+export type automaticTopicGenerationResponse400 = {
+    data: AutomaticTopicGeneration400
+    status: 400
+}
+
+export type automaticTopicGenerationResponse404 = {
+    data: AutomaticTopicGeneration404
+    status: 404
+}
+
+export type automaticTopicGenerationResponseSuccess = automaticTopicGenerationResponse200 & {
+    headers: Headers
+}
+export type automaticTopicGenerationResponseError = (
+    | automaticTopicGenerationResponse400
+    | automaticTopicGenerationResponse404
+) & {
+    headers: Headers
+}
+
+export type automaticTopicGenerationResponse =
+    | automaticTopicGenerationResponseSuccess
+    | automaticTopicGenerationResponseError
+
+export const getAutomaticTopicGenerationUrl = () => {
+    return `/api/survey/automatic-topic-generation`
+}
+
+export const automaticTopicGeneration = async (
+    automaticTopicGenerationBody: AutomaticTopicGenerationBody,
+    options?: RequestInit
+): Promise<automaticTopicGenerationResponse> => {
+    return customExamFetch<automaticTopicGenerationResponse>(getAutomaticTopicGenerationUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(automaticTopicGenerationBody),
+    })
+}
+
+export const getAutomaticTopicGenerationMutationOptions = <
+    TError = AutomaticTopicGeneration400 | AutomaticTopicGeneration404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof automaticTopicGeneration>>,
+        TError,
+        { data: AutomaticTopicGenerationBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof automaticTopicGeneration>>,
+    TError,
+    { data: AutomaticTopicGenerationBody },
+    TContext
+> => {
+    const mutationKey = ['automaticTopicGeneration']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof automaticTopicGeneration>>,
+        { data: AutomaticTopicGenerationBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return automaticTopicGeneration(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type AutomaticTopicGenerationMutationResult = NonNullable<
+    Awaited<ReturnType<typeof automaticTopicGeneration>>
+>
+export type AutomaticTopicGenerationMutationBody = AutomaticTopicGenerationBody
+export type AutomaticTopicGenerationMutationError =
+    | AutomaticTopicGeneration400
+    | AutomaticTopicGeneration404
+
+/**
+ * @summary Sinh đề tự động
+ */
+export const useAutomaticTopicGeneration = <
+    TError = AutomaticTopicGeneration400 | AutomaticTopicGeneration404,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof automaticTopicGeneration>>,
+            TError,
+            { data: AutomaticTopicGenerationBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof automaticTopicGeneration>>,
+    TError,
+    { data: AutomaticTopicGenerationBody },
+    TContext
+> => {
+    const mutationOptions = getAutomaticTopicGenerationMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }
 
 /**

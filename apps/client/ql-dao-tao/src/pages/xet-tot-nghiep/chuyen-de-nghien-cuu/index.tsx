@@ -21,12 +21,10 @@ import { SquarePen } from 'lucide-react'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useMemo, useState } from 'react'
-import {  useSemesterStore,
-useTrainingObjectTypeStore } from '@workspace/ui'
-import DatePicker from '@components/commons/date-picker';
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import DatePicker from '@components/commons/date-picker'
 
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -42,7 +40,7 @@ export default function ChuyenDeNghienCuu() {
     const [timeReportForm] = Form.useForm<TimeReportForm>()
     const [searchParams, setSearchParams] = useState<Partial<ChuyenDeNghienCuuForm>>({})
     const [timeReportParams, setTimeReportParams] = useState<Partial<TimeReportForm>>({})
-    
+
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [isSearched, setIsSearched] = useState(false)
@@ -75,7 +73,7 @@ export default function ChuyenDeNghienCuu() {
             subject: {
                 type: SubjectVersionType.Research,
             },
-            semesterId
+            semesterId,
         },
     })
     const where = useMemo(() => {
@@ -131,7 +129,7 @@ export default function ChuyenDeNghienCuu() {
         }
 
         return filter
-    }, [searchParams, isSearched, timeReportParams, trainingObjectTypeId,semesterId])
+    }, [searchParams, isSearched, timeReportParams, trainingObjectTypeId, semesterId])
     const { data: studentSubjectScoreData = [], refetch: refetchStudentSubjectScore } =
         useFindManyStudentSubjectScore({
             where,
@@ -660,7 +658,7 @@ export default function ChuyenDeNghienCuu() {
                                             value: item.id,
                                         })) || []
                                     }
-                                    popupMatchSelectWidth={false} 
+                                    popupMatchSelectWidth={false}
                                     placeholder="Chọn khóa học"
                                 />
                             </Form.Item>
@@ -722,7 +720,7 @@ export default function ChuyenDeNghienCuu() {
                                         label: `${item.code} - ${item.name}`,
                                         value: item.id,
                                     }))}
-                                    popupMatchSelectWidth={false} 
+                                    popupMatchSelectWidth={false}
                                     placeholder="Chọn lớp môn học"
                                 />
                             </Form.Item>
@@ -919,10 +917,16 @@ export default function ChuyenDeNghienCuu() {
                             render: (_, record) => {
                                 return (
                                     <div className="flex justify-center items-center">
-                                        <SquarePen className="text-sm cursor-pointer" onClick={() =>
-                                             openPutResearchTopicModal({
-                                                 studentResearchTopicId: record.studentResearchTopic?.id,
-                                                 studentSubjectScoreId: record.id })} />
+                                        <SquarePen
+                                            className="text-sm cursor-pointer"
+                                            onClick={() =>
+                                                openPutResearchTopicModal({
+                                                    studentResearchTopicId:
+                                                        record.studentResearchTopic?.id,
+                                                    studentSubjectScoreId: record.id,
+                                                })
+                                            }
+                                        />
                                     </div>
                                 )
                             },

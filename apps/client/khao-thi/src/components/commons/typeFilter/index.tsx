@@ -144,8 +144,8 @@ export type FilterProps = {
     isStudent?: GetSurveyObjectsIsStudent
     subjectClassName?: string
     semesterIds?: string[]
-    difficult?:Difficult[]
-    subjectVersionIdString?:string
+    difficult?: Difficult[]
+    subjectVersionIdString?: string
 }
 
 export type ColumnTypeProps = ColumnsType & {

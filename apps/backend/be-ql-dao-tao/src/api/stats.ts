@@ -3816,7 +3816,6 @@ app.openapi(
     }
 )
 
-
 app.openapi(
     createRoute({
         method: 'post',
@@ -4204,7 +4203,7 @@ const LateGradeItemSchema = z.object({
     subjectName: z.string(),
     department: z.string(),
     faculty: z.string(),
-    dueDate: z.string(), 
+    dueDate: z.string(),
     daysLate: z.number(),
     status: z.enum(['OVERDUE', 'NEAR_DUE']),
 })
@@ -4241,17 +4240,19 @@ app.openapi(
     }),
     async (c) => {
         const { preview, page = 1, pageSize = 10 } = c.req.valid('json')
-        const allData: z.infer<typeof LateGradeItemSchema>[] = Array.from({ length: 25 }).map((_, index) => {
-            const daysLate = Math.floor(Math.random() * 10) - 3
-            return {
-                subjectName: `Học phần ${index + 1}`,
-                department: 'Công nghệ phần mềm',
-                faculty: 'Khoa Công nghệ thông tin',
-                dueDate: '2026-01-10',
-                daysLate: daysLate > 0 ? daysLate : 0,
-                status: (daysLate > 0 ? 'OVERDUE' : 'NEAR_DUE') as 'OVERDUE' | 'NEAR_DUE',
+        const allData: z.infer<typeof LateGradeItemSchema>[] = Array.from({ length: 25 }).map(
+            (_, index) => {
+                const daysLate = Math.floor(Math.random() * 10) - 3
+                return {
+                    subjectName: `Học phần ${index + 1}`,
+                    department: 'Công nghệ phần mềm',
+                    faculty: 'Khoa Công nghệ thông tin',
+                    dueDate: '2026-01-10',
+                    daysLate: daysLate > 0 ? daysLate : 0,
+                    status: (daysLate > 0 ? 'OVERDUE' : 'NEAR_DUE') as 'OVERDUE' | 'NEAR_DUE',
+                }
             }
-        })
+        )
 
         const start = (page - 1) * pageSize
         const data = allData.slice(start, start + pageSize)
@@ -4495,6 +4496,5 @@ app.openapi(
         })
     }
 )
-
 
 export default app

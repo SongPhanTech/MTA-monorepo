@@ -25,7 +25,6 @@ ENV NODE_OPTIONS="--max-old-space-size=6144"
 # RUN pnpm generate
 # RUN pnpm generate:sql
 RUN pnpm build
-RUN ls -la
 
 # FROM debian:11-alpine AS backend
 # ARG PACKAGE

@@ -23,7 +23,7 @@ enum Difficult {
   D2         // Hiểu
   D3         // Vận dụng
   D4         // Vận dụng cao
-  
+
   @@schema("khao-thi")
 }
 
@@ -365,7 +365,7 @@ model KnowledgeBlock extends Base {
   configExams   ConfigExam[]
   subjectVersion SubjectVersion @relation(fields: [subjectVersionId], references: [id])
 	subjectVersionId String
-  
+
   @@schema("khao-thi")
 }
 

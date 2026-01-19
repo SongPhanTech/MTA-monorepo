@@ -1205,14 +1205,14 @@ const sinhdetudong = createRoute({
                         examFrameworkId: z.string().nonempty(),
                         examMatrixId: z.string().nonempty(),
                         sort: z.string().nonempty(),
-                        examId:z.string().nonempty(),
+                        examId: z.string().nonempty(),
                         codeFrom: z.number(),
                     }),
                 },
             },
         },
     },
-      responses: {
+    responses: {
         200: {
             description: 'Success',
             content: {
@@ -1246,79 +1246,84 @@ const sinhdetudong = createRoute({
 
 app.openapi(sinhdetudong, async (c) => {
     const body = c.req.valid('json')
-    console.log(body);
-    
+    console.log(body)
+
     function getRandomItems<T>(arr: T[], n: number): T[] {
-      const copy:any = [...arr];
-      const result: T[] = [];
+        const copy: any = [...arr]
+        const result: T[] = []
 
-      while (result.length < n) {
-        const idx = Math.floor(Math.random() * copy.length);
-        result.push(copy[idx]);
-        copy.splice(idx, 1);
-      }
+        while (result.length < n) {
+            const idx = Math.floor(Math.random() * copy.length)
+            result.push(copy[idx])
+            copy.splice(idx, 1)
+        }
 
-      return result;
+        return result
     }
     const matrixData: any = await prisma.knowledgeBlock.findMany({
-      where: {
-        examMatrixId: body?.examMatrixId,
-      },
-      include: {
-        questions: true,
-        configExams: true,
-      },
-    });
+        where: {
+            examMatrixId: body?.examMatrixId,
+        },
+        include: {
+            questions: true,
+            configExams: true,
+        },
+    })
 
     if (!matrixData.length) {
-      return c.json({
-        message: "Chưa có ma trận đề",
-      },400);
+        return c.json(
+            {
+                message: 'Chưa có ma trận đề',
+            },
+            400
+        )
     }
     if (body?.quantity > 0) {
-      for (let t = 0; t < body?.quantity; t++) {
-        let questions: any = [];
+        for (let t = 0; t < body?.quantity; t++) {
+            let questions: any = []
 
-        for (const knowledgeBlock of matrixData) {
-          if (knowledgeBlock.configExams.length) {
-            for (const configExam of knowledgeBlock.configExams) {
-              const listRamdom = knowledgeBlock.questions.filter(
-                (i: any) => i?.difficult === configExam.difficult
-              );
-              if (listRamdom.length < configExam.quantity) {
-                return c.json({
-                  message: "Không đúng số câu hỏi",
-                },400);
-              }
-              const selected = getRandomItems(listRamdom, configExam.quantity);
-              questions = [...questions, ...selected];
+            for (const knowledgeBlock of matrixData) {
+                if (knowledgeBlock.configExams.length) {
+                    for (const configExam of knowledgeBlock.configExams) {
+                        const listRamdom = knowledgeBlock.questions.filter(
+                            (i: any) => i?.difficult === configExam.difficult
+                        )
+                        if (listRamdom.length < configExam.quantity) {
+                            return c.json(
+                                {
+                                    message: 'Không đúng số câu hỏi',
+                                },
+                                400
+                            )
+                        }
+                        const selected = getRandomItems(listRamdom, configExam.quantity)
+                        questions = [...questions, ...selected]
+                    }
+                }
             }
-          }
+            await prisma.examBank.create({
+                data: {
+                    examCode: `${body?.examCode}_${body?.codeFrom + t}`,
+                    explain: body.explain,
+                    examDay: body.examDay,
+                    examMatrixId: body?.examMatrixId,
+                    examId: body?.examId,
+                    examType: body?.examType,
+                    subjectClass: body?.subjectClass,
+                    questions: {
+                        createMany: {
+                            data: questions.map((item: any) => {
+                                return {
+                                    questionId: item.id,
+                                }
+                            }),
+                        },
+                    },
+                },
+            })
         }
-        await prisma.examBank.create({
-          data: {
-            examCode: `${body?.examCode}_${body?.codeFrom + t}`,
-            explain: body.explain,
-            examDay: body.examDay,
-            examMatrixId: body?.examMatrixId,
-            examId: body?.examId,
-            examType: body?.examType,
-            subjectClass: body?.subjectClass,
-            questions: {
-              createMany: {
-                data: questions.map((item: any) => {
-                  return {
-                    questionId: item.id,
-                  };
-                }),
-              },
-            },
-          },
-        });
-      
-      }
     }
-   return c.json({ message: 'Success' })
+    return c.json({ message: 'Success' })
 })
 
 export default app
