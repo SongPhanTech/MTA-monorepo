@@ -11873,6 +11873,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, examBank: {
+                    name: "examBank",
+                    type: "ExamBank",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -21770,8 +21776,19 @@ const metadata: ModelMeta = {
                     type: "String",
                 }, subjectClass: {
                     name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'examBank',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
                     type: "String",
                     isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, explain: {
                     name: "explain",
                     type: "String",

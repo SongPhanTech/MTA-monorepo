@@ -3662,7 +3662,7 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   createdBy: 'createdBy',
   examId: 'examId',
   examCode: 'examCode',
-  subjectClass: 'subjectClass',
+  subjectClassId: 'subjectClassId',
   explain: 'explain',
   examDay: 'examDay',
   examType: 'examType',
@@ -6841,7 +6841,7 @@ exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   examId: 'examId',
   examCode: 'examCode',
-  subjectClass: 'subjectClass',
+  subjectClassId: 'subjectClassId',
   explain: 'explain',
   examMatrixId: 'examMatrixId'
 };

@@ -279,8 +279,9 @@ model ExamBank extends Base {
 
   examCode     String
 
-  subjectClass String?
-
+  subjectClass       SubjectClass? @relation(fields: [subjectClassId], references: [id])
+  subjectClassId     String?
+  
   explain      String?
   examDay      DateTime?
   examType     ExamType?

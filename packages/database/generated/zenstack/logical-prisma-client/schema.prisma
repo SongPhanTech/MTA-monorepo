@@ -3613,6 +3613,7 @@ model SubjectClass {
   subjectClassTimes           SubjectClassTime[]
   survey                      Survey[]
   subjectClassHistory         SubjectClassHistory[]
+  examBank                    ExamBank[]
 
   @@schema("ql-dao-tao")
 }
@@ -6146,25 +6147,26 @@ model ExamList {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ExamBank {
-  id           String             @id() @default(cuid())
-  code         String?            @unique()
-  active       Boolean            @default(true)
-  description  String?            @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @default(now()) @updatedAt()
-  createdBy    String?            @default("") @db.Uuid()
-  exam         Exam               @relation(fields: [examId], references: [id])
-  examId       String
-  examCode     String
-  subjectClass String?
-  explain      String?
-  examDay      DateTime?
-  examType     ExamType?
-  questions    ExamBankQuestion[]
-  examMatrix   ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
-  examMatrixId String?
-  isLock       Boolean?           @default(false)
+  id             String             @id() @default(cuid())
+  code           String?            @unique()
+  active         Boolean            @default(true)
+  description    String?            @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @default(now()) @updatedAt()
+  createdBy      String?            @default("") @db.Uuid()
+  exam           Exam               @relation(fields: [examId], references: [id])
+  examId         String
+  examCode       String
+  subjectClass   SubjectClass?      @relation(fields: [subjectClassId], references: [id])
+  subjectClassId String?
+  explain        String?
+  examDay        DateTime?
+  examType       ExamType?
+  questions      ExamBankQuestion[]
+  examMatrix     ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
+  examMatrixId   String?
+  isLock         Boolean?           @default(false)
 
   @@unique([examId, examCode])
   @@schema("khao-thi")
