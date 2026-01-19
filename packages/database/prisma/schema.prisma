@@ -5642,22 +5642,22 @@ model ExamMatrix {
 
 /// Khối kiến thức / Chuẩn đầu ra
 model KnowledgeBlock {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
+  id               String          @id() @default(cuid())
+  code             String?         @unique()
+  active           Boolean         @default(true)
+  description      String?         @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @db.Uuid()
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt()
+  createdBy        String?         @db.Uuid()
   name             String
-  examMatrix       ExamMatrix     @relation(fields: [examMatrixId], references: [id])
+  examMatrix       ExamMatrix      @relation(fields: [examMatrixId], references: [id])
   examMatrixId     String
   questions        Question[]
   documentFiles    DocumentFile[]
   configExams      ConfigExam[]
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
+  subjectVersion   SubjectVersion? @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String?
 
   @@schema("khao-thi")
 }

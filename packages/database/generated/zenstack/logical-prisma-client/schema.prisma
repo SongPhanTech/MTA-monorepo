@@ -6263,22 +6263,22 @@ model ExamMatrix {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model KnowledgeBlock {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
+  id               String          @id() @default(cuid())
+  code             String?         @unique()
+  active           Boolean         @default(true)
+  description      String?         @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @default("") @db.Uuid()
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt()
+  createdBy        String?         @default("") @db.Uuid()
   name             String
-  examMatrix       ExamMatrix     @relation(fields: [examMatrixId], references: [id])
+  examMatrix       ExamMatrix      @relation(fields: [examMatrixId], references: [id])
   examMatrixId     String
   questions        Question[]
   documentFiles    DocumentFile[]
   configExams      ConfigExam[]
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
+  subjectVersion   SubjectVersion? @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String?
 
   @@schema("khao-thi")
 }

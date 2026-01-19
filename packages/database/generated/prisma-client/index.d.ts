@@ -288953,7 +288953,7 @@ export namespace Prisma {
     createdBy: string | null
     name: string
     examMatrixId: string
-    subjectVersionId: string
+    subjectVersionId: string | null
     _count: KnowledgeBlockCountAggregateOutputType | null
     _min: KnowledgeBlockMinAggregateOutputType | null
     _max: KnowledgeBlockMaxAggregateOutputType | null
@@ -288989,7 +288989,7 @@ export namespace Prisma {
     questions?: boolean | KnowledgeBlock$questionsArgs<ExtArgs>
     documentFiles?: boolean | KnowledgeBlock$documentFilesArgs<ExtArgs>
     configExams?: boolean | KnowledgeBlock$configExamsArgs<ExtArgs>
-    subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
+    subjectVersion?: boolean | KnowledgeBlock$subjectVersionArgs<ExtArgs>
     _count?: boolean | KnowledgeBlockCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["knowledgeBlock"]>
 
@@ -289006,7 +289006,7 @@ export namespace Prisma {
     examMatrixId?: boolean
     subjectVersionId?: boolean
     examMatrix?: boolean | ExamMatrixDefaultArgs<ExtArgs>
-    subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
+    subjectVersion?: boolean | KnowledgeBlock$subjectVersionArgs<ExtArgs>
   }, ExtArgs["result"]["knowledgeBlock"]>
 
   export type KnowledgeBlockSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -289022,7 +289022,7 @@ export namespace Prisma {
     examMatrixId?: boolean
     subjectVersionId?: boolean
     examMatrix?: boolean | ExamMatrixDefaultArgs<ExtArgs>
-    subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
+    subjectVersion?: boolean | KnowledgeBlock$subjectVersionArgs<ExtArgs>
   }, ExtArgs["result"]["knowledgeBlock"]>
 
   export type KnowledgeBlockSelectScalar = {
@@ -289045,16 +289045,16 @@ export namespace Prisma {
     questions?: boolean | KnowledgeBlock$questionsArgs<ExtArgs>
     documentFiles?: boolean | KnowledgeBlock$documentFilesArgs<ExtArgs>
     configExams?: boolean | KnowledgeBlock$configExamsArgs<ExtArgs>
-    subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
+    subjectVersion?: boolean | KnowledgeBlock$subjectVersionArgs<ExtArgs>
     _count?: boolean | KnowledgeBlockCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type KnowledgeBlockIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     examMatrix?: boolean | ExamMatrixDefaultArgs<ExtArgs>
-    subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
+    subjectVersion?: boolean | KnowledgeBlock$subjectVersionArgs<ExtArgs>
   }
   export type KnowledgeBlockIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     examMatrix?: boolean | ExamMatrixDefaultArgs<ExtArgs>
-    subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
+    subjectVersion?: boolean | KnowledgeBlock$subjectVersionArgs<ExtArgs>
   }
 
   export type $KnowledgeBlockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -289064,7 +289064,7 @@ export namespace Prisma {
       questions: Prisma.$QuestionPayload<ExtArgs>[]
       documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
       configExams: Prisma.$ConfigExamPayload<ExtArgs>[]
-      subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>
+      subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -289077,7 +289077,7 @@ export namespace Prisma {
       createdBy: string | null
       name: string
       examMatrixId: string
-      subjectVersionId: string
+      subjectVersionId: string | null
     }, ExtArgs["result"]["knowledgeBlock"]>
     composites: {}
   }
@@ -289476,7 +289476,7 @@ export namespace Prisma {
     questions<T extends KnowledgeBlock$questionsArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBlock$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     documentFiles<T extends KnowledgeBlock$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBlock$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     configExams<T extends KnowledgeBlock$configExamsArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBlock$configExamsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    subjectVersion<T extends SubjectVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersionDefaultArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    subjectVersion<T extends KnowledgeBlock$subjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBlock$subjectVersionArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -289982,6 +289982,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ConfigExamScalarFieldEnum | ConfigExamScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBlock.subjectVersion
+   */
+  export type KnowledgeBlock$subjectVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersion
+     */
+    select?: SubjectVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersion
+     */
+    omit?: SubjectVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionInclude<ExtArgs> | null
+    where?: SubjectVersionWhereInput
   }
 
   /**
@@ -390779,12 +390798,12 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"KnowledgeBlock"> | string | null
     name?: StringFilter<"KnowledgeBlock"> | string
     examMatrixId?: StringFilter<"KnowledgeBlock"> | string
-    subjectVersionId?: StringFilter<"KnowledgeBlock"> | string
+    subjectVersionId?: StringNullableFilter<"KnowledgeBlock"> | string | null
     examMatrix?: XOR<ExamMatrixScalarRelationFilter, ExamMatrixWhereInput>
     questions?: QuestionListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
     configExams?: ConfigExamListRelationFilter
-    subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
+    subjectVersion?: XOR<SubjectVersionNullableScalarRelationFilter, SubjectVersionWhereInput> | null
   }
 
   export type KnowledgeBlockOrderByWithRelationInput = {
@@ -390798,7 +390817,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
     examMatrixId?: SortOrder
-    subjectVersionId?: SortOrder
+    subjectVersionId?: SortOrderInput | SortOrder
     examMatrix?: ExamMatrixOrderByWithRelationInput
     questions?: QuestionOrderByRelationAggregateInput
     documentFiles?: DocumentFileOrderByRelationAggregateInput
@@ -390821,12 +390840,12 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"KnowledgeBlock"> | string | null
     name?: StringFilter<"KnowledgeBlock"> | string
     examMatrixId?: StringFilter<"KnowledgeBlock"> | string
-    subjectVersionId?: StringFilter<"KnowledgeBlock"> | string
+    subjectVersionId?: StringNullableFilter<"KnowledgeBlock"> | string | null
     examMatrix?: XOR<ExamMatrixScalarRelationFilter, ExamMatrixWhereInput>
     questions?: QuestionListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
     configExams?: ConfigExamListRelationFilter
-    subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
+    subjectVersion?: XOR<SubjectVersionNullableScalarRelationFilter, SubjectVersionWhereInput> | null
   }, "id" | "code">
 
   export type KnowledgeBlockOrderByWithAggregationInput = {
@@ -390840,7 +390859,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
     examMatrixId?: SortOrder
-    subjectVersionId?: SortOrder
+    subjectVersionId?: SortOrderInput | SortOrder
     _count?: KnowledgeBlockCountOrderByAggregateInput
     _max?: KnowledgeBlockMaxOrderByAggregateInput
     _min?: KnowledgeBlockMinOrderByAggregateInput
@@ -390860,7 +390879,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"KnowledgeBlock"> | string | null
     name?: StringWithAggregatesFilter<"KnowledgeBlock"> | string
     examMatrixId?: StringWithAggregatesFilter<"KnowledgeBlock"> | string
-    subjectVersionId?: StringWithAggregatesFilter<"KnowledgeBlock"> | string
+    subjectVersionId?: StringNullableWithAggregatesFilter<"KnowledgeBlock"> | string | null
   }
 
   export type ConfigExamWhereInput = {
@@ -422786,7 +422805,7 @@ export namespace Prisma {
     questions?: QuestionCreateNestedManyWithoutKnowledgeBlockInput
     documentFiles?: DocumentFileCreateNestedManyWithoutKnowledgeBlockInput
     configExams?: ConfigExamCreateNestedManyWithoutKnowledgeBlockInput
-    subjectVersion: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
+    subjectVersion?: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
   }
 
   export type KnowledgeBlockUncheckedCreateInput = {
@@ -422800,7 +422819,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     examMatrixId: string
-    subjectVersionId: string
+    subjectVersionId?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutKnowledgeBlockInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutKnowledgeBlockInput
     configExams?: ConfigExamUncheckedCreateNestedManyWithoutKnowledgeBlockInput
@@ -422820,7 +422839,7 @@ export namespace Prisma {
     questions?: QuestionUpdateManyWithoutKnowledgeBlockNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutKnowledgeBlockNestedInput
     configExams?: ConfigExamUpdateManyWithoutKnowledgeBlockNestedInput
-    subjectVersion?: SubjectVersionUpdateOneRequiredWithoutKnowledgeBlocksNestedInput
+    subjectVersion?: SubjectVersionUpdateOneWithoutKnowledgeBlocksNestedInput
   }
 
   export type KnowledgeBlockUncheckedUpdateInput = {
@@ -422834,7 +422853,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     examMatrixId?: StringFieldUpdateOperationsInput | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
     configExams?: ConfigExamUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
@@ -422851,7 +422870,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     examMatrixId: string
-    subjectVersionId: string
+    subjectVersionId?: string | null
   }
 
   export type KnowledgeBlockUpdateManyMutationInput = {
@@ -422877,7 +422896,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     examMatrixId?: StringFieldUpdateOperationsInput | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ConfigExamCreateInput = {
@@ -472271,10 +472290,12 @@ export namespace Prisma {
     deleteMany?: ConfigExamScalarWhereInput | ConfigExamScalarWhereInput[]
   }
 
-  export type SubjectVersionUpdateOneRequiredWithoutKnowledgeBlocksNestedInput = {
+  export type SubjectVersionUpdateOneWithoutKnowledgeBlocksNestedInput = {
     create?: XOR<SubjectVersionCreateWithoutKnowledgeBlocksInput, SubjectVersionUncheckedCreateWithoutKnowledgeBlocksInput>
     connectOrCreate?: SubjectVersionCreateOrConnectWithoutKnowledgeBlocksInput
     upsert?: SubjectVersionUpsertWithoutKnowledgeBlocksInput
+    disconnect?: SubjectVersionWhereInput | boolean
+    delete?: SubjectVersionWhereInput | boolean
     connect?: SubjectVersionWhereUniqueInput
     update?: XOR<XOR<SubjectVersionUpdateToOneWithWhereWithoutKnowledgeBlocksInput, SubjectVersionUpdateWithoutKnowledgeBlocksInput>, SubjectVersionUncheckedUpdateWithoutKnowledgeBlocksInput>
   }
@@ -542162,7 +542183,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"KnowledgeBlock"> | string | null
     name?: StringFilter<"KnowledgeBlock"> | string
     examMatrixId?: StringFilter<"KnowledgeBlock"> | string
-    subjectVersionId?: StringFilter<"KnowledgeBlock"> | string
+    subjectVersionId?: StringNullableFilter<"KnowledgeBlock"> | string | null
   }
 
   export type SubjectClassUpsertWithWhereUniqueWithoutSubjectInput = {
@@ -563096,7 +563117,7 @@ export namespace Prisma {
     examMatrix: ExamMatrixCreateNestedOneWithoutKnowledgeBlocksInput
     questions?: QuestionCreateNestedManyWithoutKnowledgeBlockInput
     configExams?: ConfigExamCreateNestedManyWithoutKnowledgeBlockInput
-    subjectVersion: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
+    subjectVersion?: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
   }
 
   export type KnowledgeBlockUncheckedCreateWithoutDocumentFilesInput = {
@@ -563110,7 +563131,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     examMatrixId: string
-    subjectVersionId: string
+    subjectVersionId?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutKnowledgeBlockInput
     configExams?: ConfigExamUncheckedCreateNestedManyWithoutKnowledgeBlockInput
   }
@@ -564366,7 +564387,7 @@ export namespace Prisma {
     examMatrix?: ExamMatrixUpdateOneRequiredWithoutKnowledgeBlocksNestedInput
     questions?: QuestionUpdateManyWithoutKnowledgeBlockNestedInput
     configExams?: ConfigExamUpdateManyWithoutKnowledgeBlockNestedInput
-    subjectVersion?: SubjectVersionUpdateOneRequiredWithoutKnowledgeBlocksNestedInput
+    subjectVersion?: SubjectVersionUpdateOneWithoutKnowledgeBlocksNestedInput
   }
 
   export type KnowledgeBlockUncheckedUpdateWithoutDocumentFilesInput = {
@@ -564380,7 +564401,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     examMatrixId?: StringFieldUpdateOperationsInput | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
     configExams?: ConfigExamUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
   }
@@ -586392,7 +586413,7 @@ export namespace Prisma {
     examMatrix: ExamMatrixCreateNestedOneWithoutKnowledgeBlocksInput
     documentFiles?: DocumentFileCreateNestedManyWithoutKnowledgeBlockInput
     configExams?: ConfigExamCreateNestedManyWithoutKnowledgeBlockInput
-    subjectVersion: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
+    subjectVersion?: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
   }
 
   export type KnowledgeBlockUncheckedCreateWithoutQuestionsInput = {
@@ -586406,7 +586427,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     examMatrixId: string
-    subjectVersionId: string
+    subjectVersionId?: string | null
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutKnowledgeBlockInput
     configExams?: ConfigExamUncheckedCreateNestedManyWithoutKnowledgeBlockInput
   }
@@ -586613,7 +586634,7 @@ export namespace Prisma {
     examMatrix?: ExamMatrixUpdateOneRequiredWithoutKnowledgeBlocksNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutKnowledgeBlockNestedInput
     configExams?: ConfigExamUpdateManyWithoutKnowledgeBlockNestedInput
-    subjectVersion?: SubjectVersionUpdateOneRequiredWithoutKnowledgeBlocksNestedInput
+    subjectVersion?: SubjectVersionUpdateOneWithoutKnowledgeBlocksNestedInput
   }
 
   export type KnowledgeBlockUncheckedUpdateWithoutQuestionsInput = {
@@ -586627,7 +586648,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     examMatrixId?: StringFieldUpdateOperationsInput | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
     configExams?: ConfigExamUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
   }
@@ -589333,7 +589354,7 @@ export namespace Prisma {
     questions?: QuestionCreateNestedManyWithoutKnowledgeBlockInput
     documentFiles?: DocumentFileCreateNestedManyWithoutKnowledgeBlockInput
     configExams?: ConfigExamCreateNestedManyWithoutKnowledgeBlockInput
-    subjectVersion: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
+    subjectVersion?: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
   }
 
   export type KnowledgeBlockUncheckedCreateWithoutExamMatrixInput = {
@@ -589346,7 +589367,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    subjectVersionId: string
+    subjectVersionId?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutKnowledgeBlockInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutKnowledgeBlockInput
     configExams?: ConfigExamUncheckedCreateNestedManyWithoutKnowledgeBlockInput
@@ -590039,7 +590060,7 @@ export namespace Prisma {
     examMatrix: ExamMatrixCreateNestedOneWithoutKnowledgeBlocksInput
     questions?: QuestionCreateNestedManyWithoutKnowledgeBlockInput
     documentFiles?: DocumentFileCreateNestedManyWithoutKnowledgeBlockInput
-    subjectVersion: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
+    subjectVersion?: SubjectVersionCreateNestedOneWithoutKnowledgeBlocksInput
   }
 
   export type KnowledgeBlockUncheckedCreateWithoutConfigExamsInput = {
@@ -590053,7 +590074,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     examMatrixId: string
-    subjectVersionId: string
+    subjectVersionId?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutKnowledgeBlockInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutKnowledgeBlockInput
   }
@@ -590087,7 +590108,7 @@ export namespace Prisma {
     examMatrix?: ExamMatrixUpdateOneRequiredWithoutKnowledgeBlocksNestedInput
     questions?: QuestionUpdateManyWithoutKnowledgeBlockNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutKnowledgeBlockNestedInput
-    subjectVersion?: SubjectVersionUpdateOneRequiredWithoutKnowledgeBlocksNestedInput
+    subjectVersion?: SubjectVersionUpdateOneWithoutKnowledgeBlocksNestedInput
   }
 
   export type KnowledgeBlockUncheckedUpdateWithoutConfigExamsInput = {
@@ -590101,7 +590122,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     examMatrixId?: StringFieldUpdateOperationsInput | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
   }
@@ -658625,7 +658646,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    subjectVersionId: string
+    subjectVersionId?: string | null
   }
 
   export type ExamBankCreateManyExamMatrixInput = {
@@ -658659,7 +658680,7 @@ export namespace Prisma {
     questions?: QuestionUpdateManyWithoutKnowledgeBlockNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutKnowledgeBlockNestedInput
     configExams?: ConfigExamUpdateManyWithoutKnowledgeBlockNestedInput
-    subjectVersion?: SubjectVersionUpdateOneRequiredWithoutKnowledgeBlocksNestedInput
+    subjectVersion?: SubjectVersionUpdateOneWithoutKnowledgeBlocksNestedInput
   }
 
   export type KnowledgeBlockUncheckedUpdateWithoutExamMatrixInput = {
@@ -658672,7 +658693,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
     configExams?: ConfigExamUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
@@ -658688,7 +658709,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ExamBankUpdateWithoutExamMatrixInput = {
