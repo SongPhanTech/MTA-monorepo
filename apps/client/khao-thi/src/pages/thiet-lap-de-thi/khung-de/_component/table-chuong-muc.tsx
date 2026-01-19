@@ -15,35 +15,42 @@ import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 
 interface TableChuongMucProps {
-    matrixId?: string
+    matrixId: string
+    subjectVersionId: string
 }
 
-const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
+const TableChuongMuc = ({ matrixId, subjectVersionId }: TableChuongMucProps) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
 
     const { onOpen } = useDisclosure<{
         id?: string
         matrixId?: string
+        subjectVersionId?: string
     }>({
         tag: 'PutChuongMucModal',
     })
+    console.log('TableChuongMuc:', { matrixId, subjectVersionId })
+
 
     const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
+        matrixId
+            ? {
+                  where: {
+                      examMatrixId: matrixId,
+                      subjectVersionId: subjectVersionId,
+                      deletedAt: null,
+                  },
+                  include: {
+                      configExams: true,
+                      documentFiles: true,
+                  },
+                  orderBy: {
+                      createdAt: 'desc',
+                  },
+              }
+            : undefined,
         {
-            where: {
-                examMatrixId: matrixId,
-                deletedAt: null,
-            },
-            include: {
-                configExams: true,
-                documentFiles: true,
-            },
-            orderBy: {
-                createdAt: 'desc',
-            },
-        },
-        {
-            enabled: !!matrixId,
+            enabled: !!matrixId && !!subjectVersionId,
         }
     )
 
@@ -310,6 +317,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                                         onClick={() =>
                                             onOpen({
                                                 id: record.id,
+                                                matrixId,
+                                                subjectVersionId,
                                             })
                                         }
                                     />
@@ -384,6 +393,7 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                     onClick={() =>
                         onOpen({
                             matrixId,
+                            subjectVersionId,
                         })
                     }
                 >

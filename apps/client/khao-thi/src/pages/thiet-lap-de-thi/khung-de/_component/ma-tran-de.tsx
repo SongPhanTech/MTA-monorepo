@@ -9,8 +9,14 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TableChuongMuc from './table-chuong-muc'
 
-export default function MaTranDePage({ id }: { id?: string }) {
-    const [selectedMatrixId, setSelectedMatrixId] = useState<string | undefined>(undefined)
+export default function MaTranDePage({
+    id,
+    subjectVersionId,
+}: {
+    id?: string
+    subjectVersionId: string
+}) {
+    const [selectedMatrixId, setSelectedMatrixId] = useState<string>()
     const { onOpen } = useDisclosure<{
         id?: string
     }>({
@@ -23,6 +29,11 @@ export default function MaTranDePage({ id }: { id?: string }) {
                 examFrameworkId: id,
                 deletedAt: null,
             },
+            select: {
+                id: true,
+                name: true,
+                isDefault: true,
+            },
             orderBy: {
                 createdAt: 'desc',
             },
@@ -31,7 +42,7 @@ export default function MaTranDePage({ id }: { id?: string }) {
             enabled: !!id,
         }
     )
-
+    const selectedMatrix = examMatrix.find((m) => m.id === selectedMatrixId)
     const { mutateAsync: updateExamMatrix } = useUpdateExamMatrix()
 
     const handleDeleteExamMatrix = async (matrixId: string) => {
@@ -115,7 +126,12 @@ export default function MaTranDePage({ id }: { id?: string }) {
                 </div>
             </Col>
             <Col span={19}>
-                <TableChuongMuc matrixId={selectedMatrixId} />
+                {selectedMatrix && (
+                    <TableChuongMuc
+                        matrixId={selectedMatrix.id}
+                        subjectVersionId={subjectVersionId}
+                    />
+                )}
             </Col>
         </Row>
     )

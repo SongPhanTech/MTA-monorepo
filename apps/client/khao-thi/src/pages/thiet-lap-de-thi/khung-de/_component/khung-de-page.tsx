@@ -7,7 +7,7 @@ import { ClockCircleOutlined } from '@ant-design/icons'
 import { QueryClient } from '@tanstack/react-query'
 
 import { useStore } from '@tanstack/react-store'
-import { FilterProps } from '@components/commons/typeFilter'
+import type{ FilterProps } from '@components/commons/typeFilter'
 import {
     useCountExamFramework,
     useFindManyExamFramework,
@@ -177,10 +177,13 @@ export default function KhungDeList() {
                     rowSelection={{
                         type: 'radio',
                         selectedRowKeys: [examFrameworkId as Key],
-                        onChange: (selectedRowKeys) => {
+                        onChange: (selectedRowKeys, selectedRows) => {
+                            const record = selectedRows[0]
+
                             store.setState((s) => ({
                                 ...s,
-                                examFrameworkId: selectedRowKeys[0] as string,
+                                examFrameworkId: record.id,
+                                subjectVersionId: record.subjectVersion?.id,
                             }))
                         },
                     }}
@@ -190,6 +193,7 @@ export default function KhungDeList() {
                                 store.setState((s) => ({
                                     ...s,
                                     examFrameworkId: record.id,
+                                    subjectVersionId: record.subjectVersion?.id,
                                 }))
                             },
                         }

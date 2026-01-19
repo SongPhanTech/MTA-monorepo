@@ -8,13 +8,15 @@ import QuestionBankLite from './_component/ngan-hang-cau-hoi-lite'
 export const store = new Store<{
     examFrameworkId: string | undefined
     semesterId: string | undefined
+    subjectVersionId: string | undefined
 }>({
     examFrameworkId: undefined,
     semesterId: undefined,
+    subjectVersionId: undefined,
 })
 export default function KhungDePage() {
     const [activeKey, setActiveKey] = useState('1')
-    const { examFrameworkId } = useStore(store)
+    const { examFrameworkId, subjectVersionId } = useStore(store)
 
     const items: TabsProps['items'] = useMemo(() => {
         return [
@@ -26,8 +28,11 @@ export default function KhungDePage() {
             {
                 label: 'Ma trận đề',
                 key: '2',
-                children: <MaTranDePage id={examFrameworkId} />,
-                disabled: !examFrameworkId,
+                children:
+                    examFrameworkId && subjectVersionId ? (
+                        <MaTranDePage id={examFrameworkId} subjectVersionId={subjectVersionId} />
+                    ) : null,
+                disabled: !examFrameworkId || !subjectVersionId,
             },
             {
                 label: 'Câu hỏi trong ma trận',
@@ -36,7 +41,7 @@ export default function KhungDePage() {
                 disabled: !examFrameworkId,
             },
         ]
-    }, [examFrameworkId])
+    }, [examFrameworkId, subjectVersionId])
 
     return (
         <div>

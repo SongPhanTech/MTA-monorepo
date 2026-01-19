@@ -12,7 +12,7 @@ import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
-import { ConfigExam } from '@workspace/db/client'
+import type { ConfigExam } from '@workspace/db/client'
 
 export interface KnowledgeBlockFormData extends Record<string, unknown> {
     name: string
@@ -29,10 +29,12 @@ const PutChuongMucModal = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         id?: string
         matrixId?: string
+        subjectVersionId?: string
     }>({
         tag: 'PutChuongMucModal',
         onClose: form.resetFields,
     })
+
 
     const watchedValues = Form.useWatch([], form)
 
@@ -112,17 +114,28 @@ const PutChuongMucModal = () => {
                     },
                 })
             } else {
-                // await createKnowledgeBlock({
-                //   data: {
-                //     code: values.code,
-                //     name: values.name,
-                //     description: values.description,
-                //     ...(input?.matrixId && { examMatrixId: input.matrixId }),
-                //     configExams: {
-                //       create: configExams,
-                //     },
-                //   },
-                // });
+                if (!input?.matrixId) {
+                    message.error('Thiếu Ma trận đề')
+                    return
+                }
+
+                if (!input?.subjectVersionId) {
+                    message.error('Thiếu Phiên bản môn học')
+                    return
+                }
+
+                await createKnowledgeBlock({
+                    data: {
+                        code: values.code,
+                        name: values.name,
+                        description: values.description,
+                        examMatrixId: input.matrixId,
+                        subjectVersionId: input.subjectVersionId,
+                        configExams: {
+                            create: configExams,
+                        },
+                    },
+                })
             }
 
             message.success(
