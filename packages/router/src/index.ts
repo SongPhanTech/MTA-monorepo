@@ -545,15 +545,15 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh sách chuyên gia',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN,
                         label: 'Danh sách thanh toán',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN,
                         description: 'Danh sách thanh toán',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN_GVHD,
                         label: 'Danh sách thanh toán GVHD',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN_GVHD,
                         description: 'Danh sách thanh toán GVHD',
                     },
                     {
