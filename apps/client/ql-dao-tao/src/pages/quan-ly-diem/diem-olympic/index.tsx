@@ -11,6 +11,7 @@ import {
     useCountArchivedAward,
     useFindManyArchivedAward,
     useUpdateArchivedAward,
+    useUpdateManyArchivedAward,
 } from '@workspace/db/hooks'
 import { useAwardScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -50,6 +51,7 @@ export default function ArchivedAward() {
     }
 
     const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
+    const { mutateAsync: updateArchivedAwardMany } = useUpdateManyArchivedAward()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -139,7 +141,7 @@ export default function ArchivedAward() {
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                handleAprove('APPROVED')
+                handleApprove('APPROVED')
             },
         })
     }
@@ -150,34 +152,33 @@ export default function ArchivedAward() {
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                handleAprove('REJECTED')
+                handleApprove('REJECTED')
             },
         })
     }
 
     const { mutateAsync: updateAwardScore } = useAwardScore()
-    const handleAprove = async (status: string) => {
+
+    const handleApprove = async (status: 'APPROVED' | 'REJECTED') => {
         try {
             if (selectedRowKeys?.length > 0) {
-                // let listSqlTransaction: any = []
-                // listSqlTransaction = [
-                //     ...listSqlTransaction,
-                //     ...selectedRowKeys.map((item: any) => {
-                //         return {
-                //             model: 'ArchivedAward',
-                //             operation: 'update',
-                //             data: {
-                //                 where: {
-                //                     id: item,
-                //                 },
-                //                 data: {
-                //                     status,
-                //                 },
-                //             },
-                //         }
-                //     }),
-                // ]
-                // const res = await sqlTransaction(listSqlTransaction)
+                if (status === 'REJECTED') {
+                    await updateArchivedAwardMany({
+                        where: {
+                            id: {
+                                in: selectedRowKeys as string[],
+                            },
+                        },
+                        data: {
+                            status: 'REJECTED',
+                        },
+                    })
+                    message.success('Từ chối thành công')
+                    refetch()
+                    setSelectedRowKeys([])
+                    return
+                }
+
                 const res = await updateAwardScore({
                     data: { archivedAwardIds: selectedRowKeys as string[] },
                 })

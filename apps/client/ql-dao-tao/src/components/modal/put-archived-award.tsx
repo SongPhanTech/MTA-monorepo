@@ -31,6 +31,9 @@ dayjs.locale('vi')
 const PutArchivedAwardModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutArchivedAward>()
+
+    const fixedClassId = Form.useWatch('fixedClassesId', form)
+    const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
     const [filters, setFilters] = useState({
         textSearch: '',
     })
@@ -59,16 +62,16 @@ const PutArchivedAwardModal = () => {
     )
 
     // Lấy danh sách FixedClass
-    const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
-        where: {
-            trainingCourseId: {
-                in: trainingCourses.map((course) => course.id),
+    const { data: fixedClasses = [] } = useFindManyFixedClass(
+        {
+            where: {
+                trainingCourseId: trainingCoursesId || undefined,
             },
         },
-        // skip: trainingCourses.length ? 0 : 1,
-    })
-    const fixedClassId = Form.useWatch('fixedClassesId', form)
-    const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
+        {
+            enabled: !!trainingObjectTypeId,
+        }
+    )
     const { data: studentData = [] } = useFindManyStudent(
         {
             where: {
