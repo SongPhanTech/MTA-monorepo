@@ -8,6 +8,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, type AcademicActionType, Prisma } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
+import { RequestSchema } from '../dto/training-coure.dto'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -4493,6 +4494,139 @@ app.openapi(
             preview: false,
             labels: [],
             data: [],
+        })
+    }
+)
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/admission-statistics',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: RequestSchema,
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê công tác tuyển sinh',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema,
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview, labels, trainingLevelNames } = c.req.valid('json')
+        if (preview) {
+            const data = [
+                {
+                    year: '2023',
+                    trainingLevel: 'Đại học',
+                    quota: 1000,
+                    admitted: 950,
+                    enrolled: 920,
+                    rate: 92,
+                },
+            ]
+
+            return c.json({
+                data,
+                count: data.length,
+                preview: true,
+                summary: {},
+            })
+        }
+        const levelNameFilter =
+            trainingLevelNames && trainingLevelNames.length > 0
+                ? Prisma.sql`
+        AND LOWER(tl."name") IN (
+          ${Prisma.join(trainingLevelNames.map((v) => v.toLowerCase()))}
+        )
+      `
+                : Prisma.empty
+        const rows = await prisma.$queryRaw<
+            Array<{
+                year: string
+                object_type: string
+                training_level: string
+                quota: bigint | null
+                admitted: bigint | null
+                enrolled: bigint | null
+            }>
+        >`
+SELECT
+  sy."name"                 AS year,
+  tot."code"                AS object_type,
+  tl."name"                 AS training_level,      
+  SUM(tc."admissionQuota")  AS quota,
+  SUM(tc."admittedStudent") AS admitted,
+  SUM(tc."enrolledStudent") AS enrolled
+FROM "ql-dao-tao"."TrainingCourse" tc
+JOIN "ql-dao-tao"."Semester" s
+  ON s."id" = tc."semesterStartId"
+JOIN "ql-dao-tao"."SchoolYear" sy
+  ON sy."id" = s."schoolYearId"
+JOIN "ql-dao-tao"."TrainingObjectType" tot
+  ON tot."id" = tc."trainingObjectTypeId"
+JOIN "ql-dao-tao"."TrainingLevel" tl
+  ON tl."id" = tot."trainingLevelId"
+WHERE 1 = 1
+${levelNameFilter}
+GROUP BY
+  sy."name",
+  tot."code",
+  tl."name"
+ORDER BY
+  sy."name",
+  tot."code",
+  tl."name";
+
+`
+
+        const normalize = (v: bigint | null) => Number(v ?? 0)
+
+        const computed = rows.map((r) => {
+            const quota = normalize(r.quota)
+            const enrolled = normalize(r.enrolled)
+
+            return {
+                year: r.year,
+                objectType: r.object_type,
+                trainingLevel: r.training_level,
+                quota,
+                admitted: normalize(r.admitted),
+                enrolled,
+                rate: quota ? Number(((enrolled / quota) * 100).toFixed(2)) : 0,
+            }
+        })
+        const data = computed.map((row) => {
+            const base: any = {
+                year: row.year,
+                objectType: row.objectType,
+                trainingLevel: row.trainingLevel,
+            }
+
+            if (labels.includes('quota')) base.quota = row.quota
+            if (labels.includes('admitted')) base.admitted = row.admitted
+            if (labels.includes('enrolled')) base.enrolled = row.enrolled
+            if (labels.includes('rate')) base.rate = row.rate
+
+            return base
+        })
+
+        return c.json({
+            data,
+            count: data.length,
+            preview: false,
+            summary: {},
         })
     }
 )

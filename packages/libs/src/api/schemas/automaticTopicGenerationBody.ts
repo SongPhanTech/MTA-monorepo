@@ -23,8 +23,6 @@ export type AutomaticTopicGenerationBody = {
     createdBy?: string | null
     examCode: string
     /** @nullable */
-    subjectClass?: string | null
-    /** @nullable */
     explain?: string | null
     /** @nullable */
     examDay?: string | null
@@ -38,8 +36,7 @@ export type AutomaticTopicGenerationBody = {
     /** @minLength 1 */
     examMatrixId: string
     /** @minLength 1 */
-    sort: string
-    /** @minLength 1 */
     examId: string
     codeFrom: number
+    subjectClassId: string
 }

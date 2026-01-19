@@ -101,6 +101,7 @@ const relationSchema = z.object({
     subjectClassTimes: z.array(z.unknown()).optional(),
     survey: z.array(z.unknown()).optional(),
     subjectClassHistory: z.array(z.unknown()).optional(),
+    examBank: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

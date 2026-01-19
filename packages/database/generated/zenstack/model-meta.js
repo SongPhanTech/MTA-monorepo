@@ -9583,6 +9583,14 @@ const metadata = {
                     name: "admissionQuota",
                     type: "Int",
                     isOptional: true,
+                }, admittedStudent: {
+                    name: "admittedStudent",
+                    type: "Int",
+                    isOptional: true,
+                }, enrolledStudent: {
+                    name: "enrolledStudent",
+                    type: "Int",
+                    isOptional: true,
                 }, admissionStartDate: {
                     name: "admissionStartDate",
                     type: "DateTime",
@@ -11863,6 +11871,12 @@ const metadata = {
                 }, subjectClassHistory: {
                     name: "subjectClassHistory",
                     type: "SubjectClassHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
+                }, examBank: {
+                    name: "examBank",
+                    type: "ExamBank",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
@@ -21763,8 +21777,19 @@ const metadata = {
                     type: "String",
                 }, subjectClass: {
                     name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'examBank',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
                     type: "String",
                     isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, explain: {
                     name: "explain",
                     type: "String",

@@ -33,7 +33,6 @@ type ContentElement =
 
 const PrintExamBank = () => {
     const [name, setName] = useState('Nguyễn Văn A')
-    const [className, setClassName] = useState('')
     const [isExporting, setIsExporting] = useState(false)
     const { isOpen, onClose, input } = useDisclosure<{
         id: string
@@ -61,12 +60,20 @@ const PrintExamBank = () => {
                         question: true,
                     },
                 },
+                subjectClass: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
             },
         },
         {
             enabled: !!input?.id,
         }
     )
+
+    const subjectClassName = data?.subjectClass?.name || ''
 
     const { mutateAsync: updateExamBank } = useUpdateExamBank()
 
@@ -398,7 +405,7 @@ const PrintExamBank = () => {
                                                     spacing: { before: 100 },
                                                     children: [
                                                         new TextRun({
-                                                            text: `(Dùng cho lớp: ${className})`,
+                                                            text: `(Dùng cho lớp: ${subjectClassName})`,
                                                             font: 'Times New Roman',
                                                             size: 24,
                                                         }),
@@ -656,12 +663,6 @@ const PrintExamBank = () => {
                     <span>Xem trước đề thi</span>
                     <div className="flex-1 flex items-center justify-center gap-4">
                         <Input
-                            placeholder="Nhập tên lớp"
-                            value={className}
-                            onChange={(e) => setClassName(e.target.value)}
-                            className="w-56"
-                        />
-                        <Input
                             placeholder="Nhập tên"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -736,7 +737,9 @@ const PrintExamBank = () => {
                             marginLeft: '10%',
                         }}
                     >
-                        <span style={{ fontWeight: 'normal' }}>(Dùng cho lớp: {className})</span>
+                        <span style={{ fontWeight: 'normal' }}>
+                            (Dùng cho lớp: {subjectClassName})
+                        </span>
                     </div>
 
                     {/* Date */}

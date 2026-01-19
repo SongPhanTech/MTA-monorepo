@@ -37,7 +37,6 @@ type ContentElement =
 
 const PrintBatchExplanation = () => {
     const [name, setName] = useState('Nguyễn Văn A')
-    // const [className, setClassName] = useState("");
     const { isOpen, onClose, input } = useDisclosure<{
         ids: string[]
     }>({
@@ -71,6 +70,12 @@ const PrintBatchExplanation = () => {
                                 orderingItems: true,
                             },
                         },
+                    },
+                },
+                subjectClass: {
+                    select: {
+                        id: true,
+                        name: true,
                     },
                 },
             },
@@ -511,7 +516,7 @@ const PrintBatchExplanation = () => {
                                         spacing: { before: 100 },
                                         children: [
                                             new TextRun({
-                                                text: `(Dùng cho lớp: ${exam?.subjectClass})`,
+                                                text: `(Dùng cho lớp: ${exam?.subjectClass?.name || ''})`,
                                                 font: 'Times New Roman',
                                                 size: 24,
                                             }),
@@ -1020,7 +1025,7 @@ const PrintBatchExplanation = () => {
                         }}
                     >
                         <span style={{ fontWeight: 'normal' }}>
-                            (Dùng cho lớp: {exam?.subjectClass})
+                            (Dùng cho lớp: {exam?.subjectClass?.name || ''})
                         </span>
                     </div>
 
@@ -1280,12 +1285,6 @@ const PrintBatchExplanation = () => {
                 <div className="flex items-center gap-4">
                     <span>Xem trước {exams.length} đáp án</span>
                     <div className="flex-1 flex items-center justify-end gap-4 mr-6">
-                        {/* <Input
-              placeholder="Nhập tên lớp"
-              value={className}
-              onChange={(e) => setClassName(e.target.value)}
-              className="w-56"
-            /> */}
                         <Input
                             placeholder="Nhập tên"
                             value={name}

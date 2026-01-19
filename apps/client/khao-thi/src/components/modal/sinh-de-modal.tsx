@@ -21,8 +21,8 @@ type PutMaTranDeInputType = ExamBank & {
     quantity: number
     examFrameworkId: string
     examMatrixId: string
-    sort: string
     codeFrom: number
+    subjectClassId?: string
 }
 
 const SinhDeModal = () => {
@@ -102,10 +102,17 @@ const SinhDeModal = () => {
 
             // console.log(values,selectedExamId);
             // return
-            console.log(values,selectedExamId);
-            
-            
-            const res = await automaticTopicGeneration({...values, examId: selectedExamId,deletedAt:null,createdAt:new Date().toISOString(),updatedAt:null,examDay:values?.examDay?new Date(values?.examDay).toISOString():null})
+            console.log(values, selectedExamId)
+
+            const res = await automaticTopicGeneration({
+                ...values,
+                id: '',
+                examId: selectedExamId,
+                deletedAt: null,
+                createdAt: new Date().toISOString(),
+                updatedAt: null,
+                examDay: values?.examDay ? new Date(values?.examDay).toISOString() : null,
+            })
             if (res?.status === 200) {
                 message.success('Tạo đề thành cong!')
                 onClose()
@@ -217,7 +224,7 @@ const SinhDeModal = () => {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="subjectClass" label="Dùng cho lớp">
+                        <FormItem form={form} name="subjectClassId" label="Dùng cho lớp">
                             <Select options={dataOption} placeholder="Chọn lớp môn học" />
                         </FormItem>
                     </Col>

@@ -14,13 +14,13 @@ export const store = new Store({
 export default function LapDanhSachThiPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { id: semesterId } = useSemesterStore()
-    const selectedExamId = useStore(store, (state) => state['selectedExamId'])
+    const selectedExamId = useStore(store, (state) => state.selectedExamId)
     const tabItems = useMemo(() => {
         return [
             {
                 key: '1',
                 label: 'Danh sách môn thi',
-                children: <DanhSachKeHoachThi setActiveKey={setActiveKey} />,
+                children: <DanhSachKeHoachThi />,
             },
             {
                 key: '2',
@@ -29,7 +29,7 @@ export default function LapDanhSachThiPage() {
                 disabled: !selectedExamId,
             },
         ]
-    }, [semesterId, selectedExamId])
+    }, [selectedExamId])
 
     return (
         <Row gutter={[12, 0]} className="bg-white ">

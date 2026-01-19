@@ -33,6 +33,10 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse =
     /** @nullable */
     admissionQuota?: number | null
     /** @nullable */
+    admittedStudent?: number | null
+    /** @nullable */
+    enrolledStudent?: number | null
+    /** @nullable */
     admissionStartDate?: string | null
     /** @nullable */
     admissionEndDate?: string | null

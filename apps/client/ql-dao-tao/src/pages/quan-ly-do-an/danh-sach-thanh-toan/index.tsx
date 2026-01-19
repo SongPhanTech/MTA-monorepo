@@ -6,7 +6,7 @@ import type { FilterProps } from '@constants/type'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { PaymentStatus } from '@workspace/db/client'
+import { PaymentStatus, ThesisType } from '@workspace/db/client'
 import {
     useCountPaymentRecord,
     useDeletePaymentRecord,
@@ -37,52 +37,72 @@ export default function PaymentRecordPage() {
         role: undefined,
     })
 
-    const where = useMemo(
-        () => ({
-            ...(filters.transactionCode
-                ? {
-                      transactionCode: {
-                          contains: filters.transactionCode,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(filters.name
-                ? { expert: { name: { contains: filters.name, mode: 'insensitive' as const } } }
-                : {}),
-            ...(filters.paymentStatus
-                ? Array.isArray(filters.paymentStatus)
-                    ? { status: { in: filters.paymentStatus } }
-                    : { status: { equals: filters.paymentStatus } }
-                : {}),
-            ...(filters.paymentDate?.length === 2
-                ? {
-                      paymentDate: {
-                          gte: dayjs(filters.paymentDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.paymentDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(semesterId
-                ? {
-                      councilMember: {
-                          council: {
-                              thesis: {
-                                  some: { subjectClass: { semesterId } },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-        }),
-        [
-            filters.name,
-            filters.transactionCode,
-            filters.paymentStatus,
-            filters.paymentDate,
-            semesterId,
-        ]
-    )
+    const where = useMemo(() => {
+        const councilMemberFilter: any = {}
+
+        // Filter expert name
+        if (filters.name) {
+            councilMemberFilter.expert = {
+                name: {
+                    contains: filters.name,
+                    mode: 'insensitive' as const,
+                },
+            }
+        }
+
+        // Filter role
+        if (filters.role) {
+            councilMemberFilter.role = Array.isArray(filters.role)
+                ? { in: filters.role }
+                : { equals: filters.role }
+        }
+
+        councilMemberFilter.council = {
+            thesis: {
+                some: {
+                    // "Có ít nhất 1 thesis type PROJECT"
+                    thesisType: ThesisType.PROJECT,
+                    ...(semesterId && {
+                        subjectClass: { semesterId },
+                    }),
+                },
+            },
+        }
+
+        return {
+            councilMember: councilMemberFilter,
+
+            // Các filter khác
+            ...(filters.transactionCode && {
+                transactionCode: {
+                    contains: filters.transactionCode,
+                    mode: 'insensitive' as const,
+                },
+            }),
+
+            ...(filters.paymentStatus && {
+                status: Array.isArray(filters.paymentStatus)
+                    ? { in: filters.paymentStatus }
+                    : { equals: filters.paymentStatus },
+            }),
+
+            ...(filters.paymentDate?.length === 2 && {
+                paymentDate: {
+                    gte: dayjs(filters.paymentDate[0], 'DD/MM/YYYY').toDate(),
+                    lte: dayjs(filters.paymentDate[1], 'DD/MM/YYYY').toDate(),
+                },
+            }),
+
+            deletedAt: null,
+        }
+    }, [
+        filters.name,
+        filters.transactionCode,
+        filters.paymentStatus,
+        filters.paymentDate,
+        filters.role,
+        semesterId,
+    ])
 
     const { data: paymentRecordData } = useFindManyPaymentRecord({
         where: {
@@ -95,6 +115,12 @@ export default function PaymentRecordPage() {
                     council: {
                         include: {
                             thesis: {
+                                where: {
+                                    thesisType: ThesisType.PROJECT,
+                                    ...(semesterId && {
+                                        subjectClass: { semesterId },
+                                    }),
+                                },
                                 include: {
                                     subjectClass: true,
                                 },
@@ -106,17 +132,12 @@ export default function PaymentRecordPage() {
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
+        orderBy: { createdAt: 'desc' },
     })
 
     const { data: count } = useCountPaymentRecord({
         where: {
             ...where,
-            ...(filters.role
-                ? Array.isArray(filters.role)
-                    ? { councilMember: { role: { in: filters.role } } }
-                    : { councilMember: { role: { equals: filters.role } } }
-                : {}),
-            deletedAt: null,
         },
     })
 

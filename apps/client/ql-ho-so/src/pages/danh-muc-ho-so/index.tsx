@@ -277,7 +277,7 @@ export default function DanhMucHoSo() {
                     label: 'Bậc lương',
                     icon: <HandCoins style={{ fontSize: '24px' }} />,
                     path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_BAC_LUONG,
-                    description: 'Quảnh lý bậc lương',
+                    description: 'Quản lý bậc lương',
                 },
             ],
         },
