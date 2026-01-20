@@ -248,6 +248,7 @@ const PickQuestionFromBankModal = () => {
             open={isOpen}
             title="Chọn câu hỏi từ ngân hàng"
             width={1100}
+            className="top-2"
             form={form}
             onFinish={onSubmit}
             onCancel={onClose}

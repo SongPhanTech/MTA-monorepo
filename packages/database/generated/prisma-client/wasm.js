@@ -3397,7 +3397,8 @@ exports.Prisma.SurveyObjectTypeScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name',
-  type: 'type'
+  type: 'type',
+  trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
 exports.Prisma.SurveyTopicScalarFieldEnum = {
@@ -6677,7 +6678,8 @@ exports.Prisma.SurveyObjectTypeOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
 exports.Prisma.SurveyTopicOrderByRelevanceFieldEnum = {

@@ -19,7 +19,7 @@ import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from 'a
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import _ from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 dayjs.locale('vi')
 
@@ -162,6 +162,16 @@ const DiemTrungBinhKyHoc = () => {
 
     const { mutateAsync: calculateSchoolYearResult } = useCalculateStudentSchoolYearResult()
 
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+    useEffect(() => {
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current)
+            }
+        }
+    }, [])
+
     const handleSummaryClick = async () => {
         if (!semesterId) {
             message.warning('Vui lòng chọn học kỳ')
@@ -184,7 +194,14 @@ const DiemTrungBinhKyHoc = () => {
                 return
             }
 
-            message.success('Tổng kết kết quả năm học thành công')
+            message.success('Tổng kết kết quả năm học thành công, vui lòng chờ hệ thống cập nhật')
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current)
+            }
+
+            intervalRef.current = setInterval(() => {
+                refetch()
+            }, 5000)
             refetch()
         } catch (error) {
             console.error('Lỗi khi tổng kết kết quả năm học:', error)

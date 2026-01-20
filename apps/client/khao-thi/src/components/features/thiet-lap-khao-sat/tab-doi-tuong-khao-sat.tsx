@@ -27,6 +27,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -35,6 +36,7 @@ function TabDoiTuongKhaoSat() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -75,6 +77,7 @@ function TabDoiTuongKhaoSat() {
 
     const where = useMemo(
         () => ({
+            trainingObjectTypeId,
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
@@ -158,7 +161,7 @@ function TabDoiTuongKhaoSat() {
                   }
                 : {}),
         }),
-        [filters]
+        [filters,trainingObjectTypeId]
     )
 
     const { data = [], refetch } = useFindManySurveyObjectType({

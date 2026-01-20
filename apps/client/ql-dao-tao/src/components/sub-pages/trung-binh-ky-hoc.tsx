@@ -19,7 +19,7 @@ import { Button, Checkbox, Col, Flex, Form, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import _ from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 dayjs.locale('vi')
 
@@ -45,9 +45,16 @@ const DiemTrungBinhKyHoc = () => {
     const where = useMemo(() => {
         return {
             deletedAt: null,
-            studentSemesterResult: {
-                some: { semesterId },
+            subjectClassStudent: {
+                some: {
+                    subjectClass: {
+                        semesterId,
+                    },
+                },
             },
+            // studentSemesterResult: {
+            //     some: { semesterId },
+            // },
             ...(filters.code
                 ? {
                       userProfile: {
@@ -111,15 +118,18 @@ const DiemTrungBinhKyHoc = () => {
 
     const { data: count } = useCountStudent({ where }, { enabled: !!semesterId })
 
-    const { data: fixedClassData = [] } = useFindManyFixedClass({
-        orderBy: { name: 'asc' },
-        where: {
-            ...(filters.managementOrganizationId
-                ? { managementOrganizationId: filters.managementOrganizationId }
-                : {}),
-            ...(trainingCourseId ? { trainingCourseId } : {}),
+    const { data: fixedClassData = [] } = useFindManyFixedClass(
+        {
+            orderBy: { name: 'asc' },
+            where: {
+                ...(filters.managementOrganizationId
+                    ? { managementOrganizationId: filters.managementOrganizationId }
+                    : {}),
+                ...(trainingCourseId ? { trainingCourseId } : {}),
+            },
         },
-    })
+        { enabled: !!trainingCourseId }
+    )
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -138,6 +148,16 @@ const DiemTrungBinhKyHoc = () => {
 
     const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
 
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+    useEffect(() => {
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current)
+            }
+        }
+    }, [])
+
     const handleSummaryClick = async () => {
         if (!semesterId) {
             message.warning('Vui lòng chọn học kỳ')
@@ -155,8 +175,15 @@ const DiemTrungBinhKyHoc = () => {
                 return
             }
 
-            message.success('Tổng kết kết quả học kỳ thành công')
-            refetch()
+            message.success('Tổng kết kết quả học kỳ thành công, vui lòng chờ hệ thống cập nhật')
+
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current)
+            }
+
+            intervalRef.current = setInterval(() => {
+                refetch()
+            }, 5000)
         } catch (error) {
             console.error('Lỗi khi tổng kết kết quả học kỳ:', error)
             message.error('Có lỗi xảy ra khi tổng kết kết quả học kỳ')
@@ -172,7 +199,7 @@ const DiemTrungBinhKyHoc = () => {
                     <Row align="top" justify="space-between">
                         <Col span={18}>
                             <Flex gap={8}>
-                                <Col span={4}>
+                                <Col span={6}>
                                     <SelectTrainingCourse className="w-full" />
                                 </Col>
                                 <Col span={8}>

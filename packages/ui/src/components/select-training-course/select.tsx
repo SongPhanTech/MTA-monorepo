@@ -13,9 +13,7 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
 
     const { data: khoaDaoTao = [] } = useFindManyTrainingCourse(
         {
-            orderBy: {
-                createdAt: 'desc',
-            },
+            orderBy: { semesterStart: { startDate: 'desc' } },
             where: {
                 deletedAt: null,
                 active: true,
