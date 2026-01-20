@@ -31,6 +31,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 import { TreeNodeType } from './put-modal-survey'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutSurveyObjectType = SurveyObjectType & {
     Organizations: string[]
     TrainingFields: string[]
@@ -50,6 +51,7 @@ const PutSurveyObjectTypeModal = () => {
         tag: 'PutSurveyObjectTypeModal',
         onClose: form.resetFields,
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { showSpinner, hideSpinner } = useSpinner()
     const [activeKey, setActiveKey] = useState('')
     const { mutateAsync: create } = useCreateSurveyObjectType()
@@ -116,6 +118,7 @@ const PutSurveyObjectTypeModal = () => {
                                     ? output.SubjectClasses.map((item) => ({ id: item }))
                                     : [],
                         },
+                        trainingObjectTypeId:trainingObjectTypeId
                     },
                     where: {
                         id,
@@ -164,6 +167,7 @@ const PutSurveyObjectTypeModal = () => {
                                     ? output.SubjectClasses.map((item) => ({ id: item }))
                                     : [],
                         },
+                        trainingObjectTypeId:trainingObjectTypeId
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -225,21 +229,38 @@ const PutSurveyObjectTypeModal = () => {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
+        where:{
+            trainingObjectTypes:{
+                some:{
+                    trainingObjectTypeId:trainingObjectTypeId
+                }
+            }
+        },
         orderBy: { name: 'asc' },
     })
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
-        where:
-            selectedTrainingFields.length > 0
-                ? {
-                      trainingFieldId: { in: selectedTrainingFields },
-                  }
-                : {},
+        where:{
+            trainingObjectTypes:{
+                some: {
+                    trainingObjectTypeId:trainingObjectTypeId
+                }
+            },
+            ...(selectedTrainingFields.length > 0
+            ? {
+                    trainingFieldId: { in: selectedTrainingFields },
+                }
+            : {}),
+        }
+         
     })
 
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
+        where:{
+            trainingObjectTypeId
+        }
     })
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
@@ -249,7 +270,11 @@ const PutSurveyObjectTypeModal = () => {
                 ? {
                       trainingCourseId: { in: selectedTrainingCourses },
                   }
-                : {},
+                : {
+                    trainingCourse: {
+                        trainingObjectTypeId
+                    }
+                },
     })
     const { data: schoolYears } = useFindManySchoolYear({
         orderBy: { startDate: 'desc' },
@@ -288,6 +313,7 @@ const PutSurveyObjectTypeModal = () => {
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         orderBy: { name: 'asc' },
         where: {
+            trainingObjectTypeId,
             ...(selectedFixedClasses.length > 0
                 ? {
                       fixedClasses: {

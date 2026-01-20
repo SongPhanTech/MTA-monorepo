@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TableChuongMuc from './table-chuong-muc'
 import { LayoutGrid } from 'lucide-react'
+import { store } from '@pages/thiet-lap-de-thi/khung-de'
 
 export default function MaTranDePage({ id }: { id?: string }) {
     const [selectedMatrixId, setSelectedMatrixId] = useState<string | undefined>(undefined)
@@ -59,6 +60,7 @@ export default function MaTranDePage({ id }: { id?: string }) {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         setSelectedMatrixId(undefined)
+        store.setState((s) => ({ ...s, matrixId: undefined }))
     }, [id])
 
     useEffect(() => {
@@ -66,8 +68,10 @@ export default function MaTranDePage({ id }: { id?: string }) {
             const defaultMatrix = examMatrix.find((matrix) => matrix.isDefault)
             if (defaultMatrix) {
                 setSelectedMatrixId(defaultMatrix.id)
+                store.setState((s) => ({ ...s, matrixId: defaultMatrix.id }))
             } else {
                 setSelectedMatrixId(examMatrix[0].id)
+                store.setState((s) => ({ ...s, matrixId: examMatrix[0].id }))
             }
         }
     }, [examMatrix])
@@ -80,7 +84,10 @@ export default function MaTranDePage({ id }: { id?: string }) {
                         {examMatrix.map((matrix) => (
                             <div
                                 key={matrix.id}
-                                onClick={() => setSelectedMatrixId(matrix.id)}
+                                onClick={() => {
+                                    setSelectedMatrixId(matrix.id)
+                                    store.setState((s) => ({ ...s, matrixId: matrix.id }))
+                                }}
                                 className={clsx(
                                     'p-2.5 border rounded-[5px] first:mt-0 mt-2 mr-2 cursor-pointer transition-all',
                                     selectedMatrixId === matrix.id

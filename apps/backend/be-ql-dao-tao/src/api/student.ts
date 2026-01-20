@@ -370,11 +370,20 @@ app.openapi(tongKetNamHocHVSV, async (c) => {
         },
     })
 
-    await Promise.allSettled(
-        students.map((s) =>
-            calculateStudentYearResult({ studentId: s.id, schoolYearId: semester.schoolYearId })
-        )
-    )
+    setTimeout(() => {
+        const chunkSize = 10
+        for (let i = 0; i < students.length; i += chunkSize) {
+            const chunk = students.slice(i, i + chunkSize)
+            Promise.allSettled(
+                chunk.map((s) =>
+                    calculateStudentYearResult({
+                        studentId: s.id,
+                        schoolYearId: semester.schoolYearId,
+                    })
+                )
+            )
+        }
+    }, 100)
 
     return c.json({ message: 'success' }, 200)
 })

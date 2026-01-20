@@ -9,6 +9,7 @@ import QuestionBankTree from './_component/question-bank-tree'
 import QuestionList from './_component/question-list'
 import { message } from 'antd'
 import { useCallback } from 'react'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 export type PutQuestionBankInput = {
     id?: string
@@ -19,6 +20,8 @@ export default function QuestionBank() {
     const [searchName, setSearchName] = useState('')
     const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
     const [selectedQuestionBankId, setSelectedQuestionBankId] = useState<string | null>(null)
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: donViData = [] } = useFindManyDM_DonVi({
         include: {
@@ -34,6 +37,9 @@ export default function QuestionBank() {
                         },
                         where: {
                             deletedAt: null,
+                            ...(trainingObjectTypeId && {
+                                trainingObjectTypeId,
+                            }),
                         },
                     },
                 },

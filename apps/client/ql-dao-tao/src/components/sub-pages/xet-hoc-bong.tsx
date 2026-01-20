@@ -9,7 +9,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
-import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
+import { $Enums, type StudentSemesterResult } from '@workspace/db'
 import type { ScholarshipAward } from '@workspace/db/client'
 import {
     useCountTrainingCourse,
@@ -44,8 +44,6 @@ interface SelectedStudent {
 const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
-        useStudentTrainingTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
 
     const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
@@ -74,16 +72,15 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                           },
                                       }
                                     : {}),
-                                userProfile: {
-                                    ...(filters.name && filters.name !== ''
+                                userProfile:
+                                    filters.name && filters.name !== ''
                                         ? {
                                               fullname: {
                                                   contains: filters.name,
                                                   mode: 'insensitive' as const,
                                               },
                                           }
-                                        : {}),
-                                },
+                                        : {},
                             },
                             ...(filters.scholarship
                                 ? {
@@ -145,16 +142,15 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                           code: { contains: filters.code, mode: 'insensitive' },
                                       }
                                     : {}),
-                                userProfile: {
-                                    ...(filters.name && filters.name !== ''
+                                userProfile:
+                                    filters.name && filters.name !== ''
                                         ? {
                                               fullname: {
                                                   contains: filters.name,
                                                   mode: 'insensitive',
                                               },
                                           }
-                                        : {}),
-                                },
+                                        : {},
                             },
                             ...(filters.scholarship
                                 ? {
@@ -184,6 +180,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         include: {
             trainingCourse: {
                 select: {
+                    id: true,
                     name: true,
                 },
             },
@@ -392,24 +389,10 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
 
     const rowSelection = {
         selectedRowKeys,
-        onSelect: (record: any, selected: boolean) => {
-            if (record.id) {
-                onSelectChange(record.id, selected)
-            }
-        },
         hideSelectAll: true,
-        columnWidth: 0,
-        renderCell: (_: any, record: any, index: number) => {
-            if (record.id) {
-                return (
-                    <Checkbox
-                        checked={selectedRowKeys.includes(record.id)}
-                        onChange={(e) => onSelectChange(record.id, e.target.checked)}
-                    />
-                )
-            }
-            return null
-        },
+        columnWidth: 48,
+        renderCell: (_: any, record: any) =>
+            record.id ? <Checkbox checked={selectedRowKeys.includes(record.id)} /> : null,
     }
 
     const { mutateAsync: deleteScholarshipAward } = useDeleteScholarshipAward()
@@ -599,11 +582,18 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                 </Col>
                                 <Col span={24}>
                                     <TableCollapse
-                                        rowKey="id"
+                                        rowKey="courseId"
                                         headerTitleKey="courseName"
                                         childrenFieldName="students"
                                         defaultExpandAll
                                         rowSelection={rowSelection}
+                                        onRow={(record) => ({
+                                            onClick: () => {
+                                                if (!record.id) return
+                                                const selected = selectedRowKeys.includes(record.id)
+                                                onSelectChange(record.id, !selected)
+                                            },
+                                        })}
                                         columns={[
                                             {
                                                 title: 'Mã sinh viên',
@@ -673,6 +663,26 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                     </div>
                                                 ),
                                             },
+
+                                            {
+                                                title: 'TBHK',
+                                                dataIndex: ['studentSemesterResult'],
+                                                width: 50,
+                                                align: 'center',
+                                                render: (result?: StudentSemesterResult) =>
+                                                    result?.baseScore ===
+                                                    $Enums.AcademicRankingBaseType.Base10
+                                                        ? Number(result.gpaBase10)
+                                                        : Number(result?.gpaBase4 || 0),
+                                            },
+                                            {
+                                                title: 'Xếp loại rèn luyện',
+                                                dataIndex: ['reason'],
+                                                width: 200,
+                                                align: 'center',
+                                                render: (value?: string) =>
+                                                    value?.split('\n').map((r) => <p>{r}</p>),
+                                            },
                                         ]}
                                         data={studentData}
                                         pagination={{
@@ -697,7 +707,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
             </Col>
             <Modal
                 title="Danh sách sinh viên được chọn"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onOk={handleSaveScholarshipAward}
                 onCancel={() => setIsModalVisible(false)}
                 width={800}

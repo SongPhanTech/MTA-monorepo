@@ -8,6 +8,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, type AcademicActionType, Prisma } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
+import { RequestSchema } from '../dto/training-coure.dto'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -4493,6 +4494,136 @@ app.openapi(
             preview: false,
             labels: [],
             data: [],
+        })
+    }
+)
+
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/admission-statistics',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: RequestSchema,
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê công tác tuyển sinh',
+                content: {
+                    'application/json': {
+                        schema: StatBaseSchema,
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview, labels, includeEmpty } = c.req.valid('json')
+        if (preview) {
+            const data = [
+                {
+                    year: '2023',
+                    trainingLevel: 'Đại học',
+                    quota: 1000,
+                    admitted: 950,
+                    enrolled: 920,
+                    rate: 92,
+                },
+            ]
+
+            return c.json({
+                data,
+                count: data.length,
+                preview: true,
+                summary: {},
+            })
+        }
+        const rows = await prisma.$queryRaw<
+            Array<{
+                year: string
+                object_type: string
+                training_level: string
+                quota: bigint | null
+                admitted: bigint | null
+                enrolled: bigint | null
+            }>
+        >`
+SELECT
+ sy."name" AS year,
+  tot."code" AS object_type,
+  tl."code" AS training_level,
+  COALESCE(SUM(tc."admissionQuota"), 0)  AS quota,
+  COALESCE(SUM(tc."admittedStudent"), 0) AS admitted,
+  COALESCE(SUM(tc."enrolledStudent"), 0) AS enrolled
+FROM "ql-dao-tao"."TrainingCourse" tc
+JOIN "ql-dao-tao"."Semester" s
+  ON s."id" = tc."semesterStartId"
+JOIN "ql-dao-tao"."SchoolYear" sy
+  ON sy."id" = s."schoolYearId"
+JOIN "ql-dao-tao"."TrainingObjectType" tot
+  ON tot."id" = tc."trainingObjectTypeId"
+JOIN "ql-dao-tao"."TrainingLevel" tl
+  ON tl."id" = tot."trainingLevelId"
+WHERE
+  s."semesterType" = 'FIRST'
+  AND tot."code" IS NOT NULL
+  
+GROUP BY
+sy."name",
+  tot."code",
+  tl."code"
+ORDER BY
+sy."name",
+  tot."code";
+
+
+`
+
+        const normalize = (v: bigint | null) => Number(v ?? 0)
+
+        const computed = rows.map((r) => {
+            const target = normalize(r.quota)
+            const enrolled = normalize(r.enrolled)
+
+            return {
+                year: r.year,
+                objectType: r.object_type,
+                trainingLevel: r.training_level,
+                target,
+                admitted: normalize(r.admitted),
+                enrolled,
+            }
+        })
+
+        const filtered = includeEmpty
+            ? computed
+            : computed.filter((r) => r.target > 0 || r.admitted > 0 || r.enrolled > 0)
+
+        const data = filtered.map((row) => {
+            const base: any = {
+                year: row.year,
+                objectType: row.objectType,
+                trainingLevel: row.trainingLevel,
+            }
+
+            if (labels.includes('target')) base.target = row.target
+            if (labels.includes('admitted')) base.admitted = row.admitted
+            if (labels.includes('enrolled')) base.enrolled = row.enrolled
+
+            return base
+        })
+
+        return c.json({
+            data,
+            count: data.length,
+            preview: false,
+            summary: {},
         })
     }
 )

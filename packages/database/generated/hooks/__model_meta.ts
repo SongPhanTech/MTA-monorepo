@@ -11786,6 +11786,12 @@ const metadata: ModelMeta = {
                     name: "vaiTro",
                     type: "String",
                     isArray: true,
+                }, surveyObjectType: {
+                    name: "surveyObjectType",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19061,6 +19067,20 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'surveyObjectType',
                     isRelationOwner: true,
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveyObjectType',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 },
             }, uniqueConstraints: {
                 id: {

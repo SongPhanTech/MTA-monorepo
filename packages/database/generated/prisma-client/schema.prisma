@@ -3401,6 +3401,7 @@ model TrainingObjectType {
   thesisSession        ThesisSession[]
   trainingBlocks       TrainingBlock[]
   vaiTro               String[]
+  surveyObjectType     SurveyObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -5154,25 +5155,27 @@ model EvidenceFile {
 }
 
 model SurveyObjectType {
-  id              String           @id() @default(cuid())
-  code            String?          @unique()
-  active          Boolean          @default(true)
-  description     String?          @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @default(now()) @updatedAt()
-  createdBy       String?          @db.Uuid()
-  name            String
-  survey          Survey[]
-  type            SurveyObject[]
-  organizations   DM_DonVi[]
-  trainingFields  TrainingField[]
-  trainingMajors  TrainingMajor[]
-  trainingCourses TrainingCourse[]
-  fixedClasses    FixedClass[]
-  subjectClasses  SubjectClass[]
-  surveySessions  SurveySession[]
-  clusterSurvey   ClusterSurvey[]
+  id                   String              @id() @default(cuid())
+  code                 String?             @unique()
+  active               Boolean             @default(true)
+  description          String?             @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @default(now()) @updatedAt()
+  createdBy            String?             @db.Uuid()
+  name                 String
+  survey               Survey[]
+  type                 SurveyObject[]
+  organizations        DM_DonVi[]
+  trainingFields       TrainingField[]
+  trainingMajors       TrainingMajor[]
+  trainingCourses      TrainingCourse[]
+  fixedClasses         FixedClass[]
+  subjectClasses       SubjectClass[]
+  surveySessions       SurveySession[]
+  clusterSurvey        ClusterSurvey[]
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
 
   @@schema("khao-thi")
 }

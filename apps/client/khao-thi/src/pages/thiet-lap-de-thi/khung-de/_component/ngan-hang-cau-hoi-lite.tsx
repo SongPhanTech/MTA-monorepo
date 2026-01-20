@@ -2,13 +2,6 @@ import { Button, Row, Col, message, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-// import DeleteIcon from "@/components/commoms/icons/delete";
-// import EditIcon from "@/components/commoms/icons/edit";
-// import HtmlTruncate from "@/components/commoms/html-truncate";
-// import { renderWithMath } from "@/components/commoms/rick-text-editor/renderWithMath";
-
-// import type { MultipleChoiceOption } from "../../prisma/client";
-// import { QuestionType } from "../../prisma/client";
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { LEVEL_COLORS } from '@constants/constants'
@@ -20,6 +13,8 @@ import {
     useFindUniqueQuestionBank,
     useUpdateQuestion,
 } from '@workspace/db/hooks'
+import { useStore } from '@tanstack/react-store'
+import { store } from '@pages/thiet-lap-de-thi/khung-de'
 
 interface QuestionBankLiteProps {
     examFrameworkId?: string
@@ -30,25 +25,9 @@ export default function QuestionBankLite({
     examFrameworkId,
     questionBankId,
 }: QuestionBankLiteProps) {
-    // const [showAllQuestions, setShowAllQuestions] = useState(false);
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
-    // const [activeKnowledgeBlockId, setActiveKnowledgeBlockId] = useState<
-    //   string | null
-    // >(null);
-
-    // const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    //     setSelectedRowKeys(newSelectedRowKeys as string[])
-    // }
-
-    // const { onOpen: onOpenPutQuestion } = useDisclosure<{
-    //     id: string
-    //     questionBankId: string
-    //     subjectVersionId: string
-    // }>({
-    //     tag: 'PutQuestionModal',
-    // })
+    const matrixId = useStore(store, (s) => s.matrixId)
 
     const { onOpen: onOpenQuestionListModal } = useDisclosure<{
         knowledgeBlockId: string
@@ -92,16 +71,14 @@ export default function QuestionBankLite({
         { enabled: !!examFrameworkId }
     )
 
-    const matrixIds = useMemo(() => examMatrixs.map((m) => m.id), [examMatrixs])
-
     const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
         {
-            where: { examMatrixId: { in: matrixIds }, deletedAt: null },
+            where: { examMatrixId: matrixId, deletedAt: null },
             include: {
                 configExams: true,
             },
         },
-        { enabled: matrixIds.length > 0 }
+        { enabled: !!matrixId }
     )
 
     const knowledgeBlockIds = useMemo(() => knowledgeBlocks.map((k) => k.id), [knowledgeBlocks])
@@ -177,16 +154,6 @@ export default function QuestionBankLite({
         })
     }, [knowledgeBlocks, questions, matrixMap])
 
-    // const filteredQuestions = useMemo(() => {
-    //   // if (!showAllQuestions) return [];
-
-    //   if (!activeKnowledgeBlockId) return questions;
-
-    //   return questions.filter(
-    //     (q) => q.knowledgeBlockId === activeKnowledgeBlockId
-    //   );
-    // }, [questions, activeKnowledgeBlockId]);
-
     const { data: totalQuestions = 0 } = useCountQuestion(
         {
             where: {
@@ -197,23 +164,11 @@ export default function QuestionBankLite({
         { enabled: knowledgeBlockIds.length > 0 }
     )
 
-    // useEffect(() => {
-    //   setCurrentPage(1);
-    // }, [activeKnowledgeBlockId, examFrameworkId]);
-
     return (
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24} className="mt-4">
                     <Row justify="end" gutter={8} className="gap-2">
-                        {/* <Button
-              size="middle"
-              onClick={() => setActiveKnowledgeBlockId(null)}
-            >
-              <EyeOutlined size={15} />
-              Xem tất cả câu hỏi
-            </Button> */}
-
                         <Button
                             type="primary"
                             size="middle"
@@ -227,20 +182,6 @@ export default function QuestionBankLite({
                             <BookPlus size={15} />
                             Thêm câu hỏi từ ngân hàng
                         </Button>
-                        {/* <Button
-              type="primary"
-              size="middle"
-              onClick={() =>
-                onOpenPutQuestion({
-                  id: "",
-                  questionBankId,
-                  subjectVersionId: initialValue?.subjectVersionId || "",
-                })
-              }
-            >
-              <BookPlus size={15} />
-              Thêm câu hỏi mới
-            </Button> */}
                     </Row>
                 </Col>
 
@@ -248,26 +189,9 @@ export default function QuestionBankLite({
                     <Table
                         rowKey="id"
                         className="mt-2"
-                        // scroll={{ y: 'calc(100vh - 260px)' }}
                         bordered
                         data={data}
                         pagination={false}
-                        // pagination={{
-                        //   current: currentPage,
-                        //   pageSize,
-                        //   total: totalQuestions,
-                        //   onChange: (page, size) => {
-                        //     if (size === pageSize) {
-                        //       setCurrentPage(page);
-                        //     } else {
-                        //       setCurrentPage(1);
-                        //       setPageSize(size);
-                        //     }
-                        //   },
-                        //   showSizeChanger: true,
-                        //   showTotal: (total, range) =>
-                        //     `${range[0]} - ${range[1]} trong tổng số ${total} câu hỏi`,
-                        // }}
                         columns={[
                             {
                                 title: 'Ma trận',
@@ -337,164 +261,6 @@ export default function QuestionBankLite({
                         ]}
                     />
                 </Col>
-                {/* 
-        <Col span={24} className="mt-4">
-          <Table
-            rowKey="id"
-            bordered
-            rowSelection={{
-              type: "checkbox",
-              selectedRowKeys,
-              onChange: onSelectChange,
-            }}
-            scroll={{ y: "calc(100vh - 260px)" }}
-            data={questions}
-            pagination={{
-              current: currentPage,
-              pageSize,
-              total: totalQuestions,
-              onChange: (page, size) => {
-                if (size === pageSize) {
-                  setCurrentPage(page);
-                } else {
-                  setCurrentPage(1);
-                  setPageSize(size);
-                }
-              },
-              showSizeChanger: true,
-              showTotal: (total, range) =>
-                `${range[0]} - ${range[1]} trong tổng số ${total} câu hỏi`,
-            }}
-            columns={[
-              {
-                title: "STT",
-                width: 60,
-                align: "center",
-                render: (_, __, index) => index + 1,
-              },
-              {
-                title: "Nội dung câu hỏi",
-                dataIndex: "content",
-                width: 280,
-                fixed: "left",
-                render: (html: string) => (
-                  <HtmlTruncate>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: html
-                          ? renderWithMath(html)
-                          : "<i>Chưa có nội dung</i>",
-                      }}
-                    />
-                  </HtmlTruncate>
-                ),
-              },
-              {
-                title: "Loại câu hỏi",
-                dataIndex: "type",
-                width: 140,
-                align: "center",
-                render: (_, record) =>
-                  QUESTION_TYPE_LABELS[record.type as QuestionType] || "",
-              },
-              {
-                title: "Độ khó",
-                dataIndex: "difficult",
-                width: 100,
-                align: "center",
-                render: (_, record) =>
-                  LEVEL_COLUMNS.find((l) => l.difficult === record.difficult)
-                    ?.label || "",
-              },
-              {
-                title: "Chuẩn đầu ra",
-                width: 150,
-                align: "center",
-                render: (_, record) => record?.knowledgeBlock?.name || "",
-              },
-              // {
-              //   title: "Đáp án",
-              //   dataIndex: "explanation",
-              //   width: 280,
-              //   type: "input",
-              //   render: (__, record) => {
-              //     if (
-              //       record.type === QuestionType.MULTIPLE_CHOICE ||
-              //       record.type === QuestionType.SINGLE_CHOICE
-              //     ) {
-              //       return (
-              //         <div className="space-y-1">
-              //           {record?.multipleChoiceOptions
-              //             ?.sort(
-              //               (
-              //                 a: MultipleChoiceOption,
-              //                 b: MultipleChoiceOption
-              //               ) => (a.order || 0) - (b.order || 0)
-              //             )
-              //             .map((option: MultipleChoiceOption) => (
-              //               <div
-              //                 key={option.id}
-              //                 className={`text-xs ${
-              //                   option.isCorrect
-              //                     ? "text-green-600 font-semibold"
-              //                     : "text-gray-600"
-              //                 }`}
-              //               >
-              //                 {option.isCorrect && "✓ "}
-              //                 <span
-              //                   dangerouslySetInnerHTML={{
-              //                     __html: option.content
-              //                       ? renderWithMath(option.content)
-              //                       : "",
-              //                   }}
-              //                 />
-              //               </div>
-              //             ))}
-              //         </div>
-              //       );
-              //     }
-              //     return (
-              //       <HtmlTruncate>
-              //         <div
-              //           dangerouslySetInnerHTML={{
-              //             __html: record.explanation
-              //               ? renderWithMath(record.explanation)
-              //               : "<i>Chưa có nội dung</i>",
-              //           }}
-              //         />
-              //       </HtmlTruncate>
-              //     );
-              //   },
-              // },
-              {
-                title: "Thao tác",
-                width: 90,
-                align: "center",
-                fixed: "right",
-                render: (_, record) => (
-                  <Row className="justify-center gap-2">
-                    <EditIcon
-                      className="text-sm text-blue-700 cursor-pointer"
-                      onClick={() =>
-                        onOpenPutQuestion({
-                          id: record.id,
-                          questionBankId,
-                          subjectVersionId:
-                            initialValue?.subjectVersionId || "",
-                        })
-                      }
-                    />
-                    <DeleteIcon
-                      popConfirm={{
-                        onConfirm: () => handleDeleteQuestion(record.id),
-                      }}
-                    />
-                  </Row>
-                ),
-              },
-            ]}
-          />
-        </Col> */}
             </Row>
         </div>
     )

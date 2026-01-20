@@ -4,13 +4,15 @@ import {
     useCreateManyStudentSubjectScore,
     useFindManyCertificate,
     useFindManyStudent,
-    useFindManyStudentSubjectScore,
-    useFindManySubjectClass,
+    useFindUniqueCertificate,
 } from '@workspace/db/hooks'
 import { Col, Modal, message, Row, Typography } from 'antd'
 import type React from 'react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { StudentSubjectScore } from '@workspace/db/client'
+import dayjs from 'dayjs'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 const { Title } = Typography
 
@@ -28,8 +30,8 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
     })
 
     const [selectedCertificateId, setSelectedCertificateId] = useState<string | null>(null)
-    const [selectedSubjectClassIds, setSelectedSubjectClassIds] = useState<string[]>([])
-
+    // const [selectedSubjectClassIds, setSelectedSubjectClassIds] = useState<string[]>([])
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     // Lấy danh sách sinh viên
     const { data: students = [] } = useFindManyStudent(
         {
@@ -56,67 +58,36 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
         },
     })
 
-    // Lấy danh sách SubjectClass có liên quan đến chứng chỉ
-    const { data: subjectClasses = [] } = useFindManySubjectClass({
-        include: {
-            subject: {
-                include: {
-                    subject: true,
-                },
-            },
-            semester: true,
-        },
-    })
-
-    // **Lấy danh sách điểm đã có của sinh viên**
-    const { data: existingScores = [] } = useFindManyStudentSubjectScore(
+    const { data: selectedCertificate } = useFindUniqueCertificate(
         {
             where: {
-                studentId: {
-                    in: input?.studentIds || [],
+                id: selectedCertificateId ?? '',
+            },
+            include: {
+                subjects: {
+                    select: {
+                        subjectId: true,
+                        subject: {
+                            select: {
+                                subjectVersion: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                    },
+                                    where: {
+                                        trainingObjectTypeId,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
-        { enabled: !!input?.studentIds && input.studentIds.length > 0 }
+        {
+            enabled: !!selectedCertificateId && !!trainingObjectTypeId,
+        }
     )
-
-    // Lấy danh sách lớp môn học có thể phiên điểm từ chứng chỉ đã chọn
-    const availableSubjectClasses = useMemo(() => {
-        if (!selectedCertificateId) return []
-        const certificate = certificates.find((c: any) => c.id === selectedCertificateId)
-
-        if (!certificate?.subjects) return []
-
-        // Lấy danh sách subjectId từ chứng chỉ
-        const certificateSubjectIds = certificate.subjects.map((cs: any) => cs.subjectId)
-
-        // Lọc SubjectClass có subject thuộc chứng chỉ
-        const filteredClasses = subjectClasses.filter((sc: any) =>
-            certificateSubjectIds.includes(sc.subject?.subjectId)
-        )
-
-        // Map với điểm phiên từ chứng chỉ
-        return filteredClasses.map((sc: any) => {
-            const certSubject = certificate.subjects.find(
-                (cs: any) => cs.subjectId === sc.subject?.subjectId
-            )
-
-            // ** Kiểm tra môn đã được chuyển đổi chưa**
-            const convertedCount = existingScores.filter(
-                (score: any) => score.subjectClassId === sc.id
-            ).length
-
-            const totalStudents = input?.studentIds?.length || 0
-            const isConverted = convertedCount === totalStudents && totalStudents > 0
-
-            return {
-                ...sc,
-                finalScore: certSubject?.finalScore || 0,
-                isConverted, // Đánh dấu nếu tất cả sinh viên đã có điểm
-                convertedCount, // Số sinh viên đã chuyển đổi
-            }
-        })
-    }, [selectedCertificateId, certificates, subjectClasses, existingScores, input?.studentIds])
 
     const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
 
@@ -126,10 +97,12 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
             return
         }
 
-        if (selectedSubjectClassIds.length === 0) {
-            message.warning('Vui lòng chọn ít nhất một lớp môn học để phiên điểm')
-            return
-        }
+        console.log('selectedCertificate', selectedCertificate)
+
+        // if (selectedSubjectClassIds.length === 0) {
+        //     message.warning('Vui lòng chọn ít nhất một lớp môn học để phiên điểm')
+        //     return
+        // }
 
         if (!input?.studentIds || input.studentIds.length === 0) {
             message.warning('Không có học viên nào được chọn')
@@ -140,26 +113,25 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
             showSpinner()
 
             // Tạo danh sách bản ghi StudentSubjectScore
-            const records: any[] = []
 
-            input.studentIds.forEach((studentId) => {
-                selectedSubjectClassIds.forEach((subjectClassId) => {
-                    const subjectClass = availableSubjectClasses.find(
-                        (sc: any) => sc.id === subjectClassId
-                    )
+            const records: StudentSubjectScore[] = []
 
-                    if (subjectClass) {
-                        records.push({
-                            studentId,
-                            subjectClassId,
-                            subjectVersionId: subjectClass.subjectId,
-                            finalScore: subjectClass.finalScore,
-                            examScore: subjectClass.finalScore,
-                            exempted: true, // Được miễn học do chuyển điểm từ chứng chỉ
-                        })
-                    }
-                })
-            })
+            // input.studentIds.forEach((studentId) => {
+            //     selectedSubjectClassIds.forEach((subjectClassId) => {
+            //         const subjectClass = [].find((sc: any) => sc.id === subjectClassId)
+
+            //         if (subjectClass) {
+            //             records.push({
+            //                 studentId,
+            //                 subjectClassId,
+            //                 subjectVersionId: subjectClass.subjectId,
+            //                 finalScore: subjectClass.finalScore,
+            //                 examScore: subjectClass.finalScore,
+            //                 exempted: true, // Được miễn học do chuyển điểm từ chứng chỉ
+            //             })
+            //         }
+            //     })
+            // })
 
             if (records.length === 0) {
                 message.warning('Không có bản ghi nào để tạo')
@@ -176,7 +148,7 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
 
             // Reset state
             setSelectedCertificateId(null)
-            setSelectedSubjectClassIds([])
+            // setSelectedSubjectClassIds([])
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
@@ -191,28 +163,8 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
 
     const handleClose = () => {
         setSelectedCertificateId(null)
-        setSelectedSubjectClassIds([])
+        // setSelectedSubjectClassIds([])
         onClose()
-    }
-
-    const certificateRowSelection = {
-        type: 'radio' as const,
-        selectedRowKeys: selectedCertificateId ? [selectedCertificateId] : [],
-        onChange: (selectedKeys: React.Key[]) => {
-            setSelectedCertificateId(selectedKeys[0] as string)
-            setSelectedSubjectClassIds([]) // Reset lớp môn học khi đổi chứng chỉ
-        },
-    }
-
-    // **Thêm getCheckboxProps để disable checkbox**
-    const subjectClassRowSelection = {
-        selectedRowKeys: selectedSubjectClassIds,
-        onChange: (selectedKeys: React.Key[]) => {
-            setSelectedSubjectClassIds(selectedKeys as string[])
-        },
-        getCheckboxProps: (record: any) => ({
-            disabled: record.isConverted,
-        }),
     }
 
     return (
@@ -222,6 +174,7 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
             onCancel={handleClose}
             onOk={handleSubmit}
             width={1400}
+            className="top-1"
             okText="Xác nhận chuyển đổi"
             cancelText="Hủy"
             destroyOnHidden
@@ -241,7 +194,7 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'MSSV',
+                            title: 'Mã SV',
                             dataIndex: ['userProfile', 'code'],
                             width: 120,
                             align: 'center',
@@ -252,22 +205,36 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
                             render: (_, record: any) =>
                                 `${record.userProfile?.lastName || ''} ${record.userProfile?.firstName || ''}`.trim(),
                         },
+                        {
+                            title: 'Ngày sinh',
+                            render: (_, record) =>
+                                record.userProfile?.dateOfBirth
+                                    ? dayjs(record.userProfile?.dateOfBirth).format('DD/MM/YYYY')
+                                    : '',
+                        },
                     ]}
                 />
             </div>
 
             <Row gutter={16}>
-                <Col span={12}>
+                <Col span={24}>
                     <Title level={5}>1. Chọn chứng chỉ</Title>
                     <Table
                         rowKey="id"
-                        dataSource={certificates}
+                        data={certificates}
                         pagination={false}
-                        rowSelection={certificateRowSelection}
+                        rowSelection={{
+                            type: 'radio' as const,
+                            selectedRowKeys: selectedCertificateId ? [selectedCertificateId] : [],
+                            onChange: (selectedKeys: React.Key[]) => {
+                                setSelectedCertificateId(selectedKeys[0] as string)
+                                // setSelectedSubjectClassIds([]) // Reset lớp môn học khi đổi chứng chỉ
+                            },
+                        }}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 60,
+                                title: 'TT',
+                                width: 35,
                                 align: 'center',
                                 render: (_, __, index) => index + 1,
                             },
@@ -277,73 +244,18 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
                                 align: 'left',
                             },
                             {
-                                title: 'Số môn',
+                                title: 'Môn phiên điểm: điểm phiên',
                                 align: 'center',
-                                width: 100,
-                                render: (_, record: any) => record?.subjects?.length || 0,
+                                width: 250,
+                                render: (_, record) =>
+                                    record?.subjects?.map((e: any) => (
+                                        <p>
+                                            {e?.subject?.name}: {e?.finalScore} điểm
+                                        </p>
+                                    )),
                             },
                         ]}
                     />
-                </Col>
-
-                <Col span={12}>
-                    <Title level={5}>2. Chọn lớp môn học cần phiên điểm</Title>
-                    {!selectedCertificateId ? (
-                        <div className="flex items-center justify-center h-96 text-gray-400">
-                            Vui lòng chọn chứng chỉ bên trái
-                        </div>
-                    ) : availableSubjectClasses.length === 0 ? (
-                        <div className="flex items-center justify-center h-96 text-orange-500">
-                            Chứng chỉ này chưa có lớp môn học nào để phiên điểm
-                        </div>
-                    ) : (
-                        <Table
-                            rowKey="id"
-                            dataSource={availableSubjectClasses}
-                            pagination={false}
-                            rowSelection={subjectClassRowSelection}
-                            columns={[
-                                {
-                                    title: 'STT',
-                                    width: 60,
-                                    align: 'center',
-                                    render: (_, __, index) => index + 1,
-                                },
-                                {
-                                    title: 'Mã MH',
-                                    dataIndex: ['subject', 'code'],
-                                    align: 'center',
-                                    width: 100,
-                                },
-                                {
-                                    title: 'Tên môn học',
-                                    dataIndex: ['subject', 'subject', 'name'],
-                                    align: 'left',
-                                },
-                                {
-                                    title: 'Mã lớp',
-                                    dataIndex: 'name',
-                                    align: 'center',
-                                    width: 100,
-                                },
-                                {
-                                    title: 'Học kỳ',
-                                    dataIndex: ['semester', 'name'],
-                                    align: 'center',
-                                    width: 120,
-                                },
-                                {
-                                    title: 'Điểm phiên',
-                                    dataIndex: 'finalScore',
-                                    align: 'center',
-                                    width: 100,
-                                    render: (score) => (
-                                        <strong className="text-blue-600">{score}</strong>
-                                    ),
-                                },
-                            ]}
-                        />
-                    )}
                 </Col>
             </Row>
         </Modal>

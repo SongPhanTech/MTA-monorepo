@@ -10,7 +10,7 @@ import type { $Enums, Prisma, SubjectClassSchedule, SubjectClassTime } from '@wo
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Form, message, Radio, Space, Tag } from 'antd'
+import { Button, Col, Form, message, Radio, Space, Tag } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -315,22 +315,13 @@ const ModalNhapTKB = () => {
                     <p>Xem trước dữ liệu TKB</p>
                     <Table
                         data={previewData}
+                        scrollable
                         columns={[
                             {
                                 title: 'TT',
                                 width: 35,
                                 align: 'center',
                                 render: (_value, _record, index) => index + 1,
-                            },
-                            {
-                                title: 'Mã LMH',
-                                width: 80,
-                                dataIndex: 'code',
-                            },
-                            {
-                                title: 'Tên môn học',
-                                width: 150,
-                                dataIndex: 'name',
                             },
                             {
                                 title: 'Mã LMH',
@@ -344,16 +335,11 @@ const ModalNhapTKB = () => {
                                 dataIndex: 'name',
                                 align: 'center',
                                 type: 'input',
-                                render: (text) => <p className="text-left">{text}</p>,
-                            },
-                            {
-                                title: 'STC',
-                                dataIndex: 'credit',
-                                width: 70,
-                                align: 'center',
-                                type: 'order',
-                                render: (_, record) =>
-                                    record.subject?.credit ? record.subject?.credit : '',
+                                render: (_, record) => (
+                                    <p className="text-left">
+                                        {record?.name}
+                                    </p>
+                                ),
                             },
                             {
                                 title: 'Kíp học',
@@ -419,36 +405,30 @@ const ModalNhapTKB = () => {
                                 render: (__, record) =>
                                     record?.extraLecturer?.userProfile?.fullname ?? '-',
                             },
-                            {
-                                title: 'Hình thức thi',
-                                dataIndex: 'examType',
-                                align: 'center',
-                                width: 160,
-                                type: 'select',
-                                options: options,
-                                render: (__, record) =>
-                                    record.examType && getExamTypeLabel(record.examType),
-                            },
-                            {
-                                title: 'Khu vực',
-                                dataIndex: 'trainingLocationId',
-                                align: 'center',
-                                width: 150,
-                                type: 'input',
-                                render: (_, record) => record.trainingLocation?.name || '-',
-                            },
+                            // {
+                            //     title: 'Hình thức thi',
+                            //     dataIndex: 'examType',
+                            //     align: 'center',
+                            //     width: 160,
+                            //     type: 'select',
+                            //     options: options,
+                            //     render: (__, record) =>
+                            //         record.examType && getExamTypeLabel(record.examType),
+                            // },
+                            // {
+                            //     title: 'Khu vực',
+                            //     dataIndex: 'trainingLocationId',
+                            //     align: 'center',
+                            //     width: 150,
+                            //     type: 'input',
+                            //     render: (_, record) => record.trainingLocation?.name || '-',
+                            // },
                             {
                                 title: 'Phòng học',
                                 dataIndex: 'roomId',
                                 align: 'center',
                                 width: 200,
                                 render: (_, record) => record.room?.name || '-',
-                            },
-                            {
-                                title: 'Giảng viên nhập điểm',
-                                align: 'center',
-                                render: (__, record) =>
-                                    record?.enterGradeLecturer?.userProfile?.fullname ?? '-',
                             },
                             {
                                 title: 'Ngày thi',
@@ -480,15 +460,6 @@ const ModalNhapTKB = () => {
                                 align: 'center',
                                 type: 'tree_select',
                                 render: (value) => value?.managementOrganization?.sMa || '',
-                            },
-                            {
-                                title: 'Điểm bằng nhau',
-                                dataIndex: 'subject',
-                                width: 150,
-                                align: 'center',
-                                render: (value) => (
-                                    <Checkbox checked={!!value?.onePoint} disabled />
-                                ),
                             },
                         ]}
                         pagination={{

@@ -122,7 +122,7 @@ const PutCertificateOnSubjectScoreModal = () => {
                         style={{ width: '100%' }}
                         placeholder="Chọn môn học"
                         options={subjectData.map((item: Subject) => ({
-                            label: item.name,
+                            label: [item.code,item.name].filter(Boolean).join(' - '),
                             value: item.id,
                         }))}
                     />

@@ -1,13 +1,13 @@
 import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
+// import DeleteIcon from '@components/icons/delete'
+// import EditIcon from '@components/icons/edit'
 import { useArchivedCertificateStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import { useUpdateArchivedCertificate } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Modal, Row, Tag, message } from 'antd'
+// import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { Modal, Tag, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface StudentCertificatesInput {
@@ -125,46 +125,46 @@ const ModalDanhSachChungChi = () => {
                             return <Tag color={color}>{label}</Tag>
                         },
                     },
-                    {
-                        title: 'Thao tác',
-                        width: 150,
-                        align: 'center',
-                        hidden: !canSome(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-                            'SUA',
-                            'XOA'
-                        ),
-                        render: (_, cert) => {
-                            return (
-                                <Row className="justify-center gap-2">
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-                                        'SUA'
-                                    ) &&
-                                        cert.status === 'PENDING' && (
-                                            <EditIcon
-                                                onClick={() => {
-                                                    onOpenEdit(cert.id)
-                                                    onClose()
-                                                }}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        )}
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-                                        'XOA'
-                                    ) &&
-                                        cert.status === 'PENDING' && (
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: () => handleDelete(cert.id),
-                                                }}
-                                            />
-                                        )}
-                                </Row>
-                            )
-                        },
-                    },
+                    // {
+                    //     title: 'Thao tác',
+                    //     width: 150,
+                    //     align: 'center',
+                    //     hidden: !canSome(
+                    //         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                    //         'SUA',
+                    //         'XOA'
+                    //     ),
+                    //     render: (_, cert) => {
+                    //         return (
+                    //             <Row className="justify-center gap-2">
+                    //                 {can(
+                    //                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                    //                     'SUA'
+                    //                 ) &&
+                    //                     cert.status === 'PENDING' && (
+                    //                         <EditIcon
+                    //                             onClick={() => {
+                    //                                 onOpenEdit(cert.id)
+                    //                                 // onClose()
+                    //                             }}
+                    //                             className="text-sm text-blue-700 cursor-pointer"
+                    //                         />
+                    //                     )}
+                    //                 {can(
+                    //                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                    //                     'XOA'
+                    //                 ) &&
+                    //                     cert.status === 'PENDING' && (
+                    //                         <DeleteIcon
+                    //                             popConfirm={{
+                    //                                 onConfirm: () => handleDelete(cert.id),
+                    //                             }}
+                    //                         />
+                    //                     )}
+                    //             </Row>
+                    //         )
+                    //     },
+                    // },
                 ]}
             />
         </Modal>
