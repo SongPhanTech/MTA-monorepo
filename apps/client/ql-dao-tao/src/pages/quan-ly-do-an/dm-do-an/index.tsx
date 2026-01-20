@@ -33,7 +33,7 @@ import {
 } from 'antd'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import dayjs from 'dayjs'
-import { SquarePen } from 'lucide-react'
+import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { useSemesterStore } from '@workspace/ui'
@@ -86,6 +86,7 @@ export default function DanhMucDoAn() {
                     student: {
                         include: {
                             userProfile: true,
+                            fixedClass: true,
                         },
                     },
                     studentThesisRegistration: true,
@@ -125,6 +126,7 @@ export default function DanhMucDoAn() {
                         student: {
                             include: {
                                 userProfile: true,
+                                fixedClass: true,
                             },
                         },
                         studentSubjectScore: true,
@@ -296,25 +298,46 @@ export default function DanhMucDoAn() {
             setEditingRowKeys([])
             return
         }
-
+    
         try {
             const transactions: any[] = []
-
+    
             for (const thesisId of Object.keys(editingValues)) {
                 const values = editingValues[thesisId]
                 const originalRecord = thesisProjectData.find((t) => t.id === thesisId)
-
+    
+                // 1. Xử lý điểm số
                 const finalScore =
                     values.defenseRecordFinalScore === '' ||
                     values.defenseRecordFinalScore === undefined ||
                     values.defenseRecordFinalScore === null
                         ? null
                         : Number(values.defenseRecordFinalScore)
-
+    
                 const relation = (id: string | null | undefined) => {
                     return id ? { connect: { id } } : { disconnect: true }
                 }
-
+    
+                if (originalRecord?.registrations) {
+                    for (const reg of originalRecord.registrations) {
+                        if (reg.studentSubjectScoreId) {
+                            transactions.push({
+                                model: 'StudentSubjectScore' as const,
+                                operation: 'update' as const,
+                                data: {
+                                    where: { id: reg.studentSubjectScoreId },
+                                    data: {
+                                        attendanceScore: finalScore,
+                                        midtermScore: finalScore,
+                                        examScore: finalScore,
+                                        finalScore: finalScore,
+                                    },
+                                },
+                            })
+                        }
+                    }
+                }
+    
                 const expertRolesMapping = [
                     { key: 'chairman', role: CouncilRole.CHAIRMAN },
                     { key: 'secretary', role: CouncilRole.SECRETARY },
@@ -322,7 +345,7 @@ export default function DanhMucDoAn() {
                     { key: 'reviewer2', role: CouncilRole.REVIEWER_2 },
                     { key: 'councilMember', role: CouncilRole.MEMBER },
                 ]
-
+    
                 const memberUpserts = expertRolesMapping
                     .filter((m) => values[m.key])
                     .map((m) => {
@@ -335,7 +358,7 @@ export default function DanhMucDoAn() {
                             update: { expertId: values[m.key] },
                         }
                     })
-
+    
                 const updateData: any = {
                     title: values.title || '',
                     status: values.status || 'PROPOSED',
@@ -357,7 +380,7 @@ export default function DanhMucDoAn() {
                         },
                     },
                 }
-
+    
                 if (originalRecord?.councilId) {
                     if (memberUpserts.length > 0) {
                         updateData.council = {
@@ -371,7 +394,7 @@ export default function DanhMucDoAn() {
                         },
                     }
                 }
-
+    
                 transactions.push({
                     model: 'ThesisProject' as const,
                     operation: 'update' as const,
@@ -381,10 +404,10 @@ export default function DanhMucDoAn() {
                     },
                 })
             }
-
+    
             await sqlTransaction(transactions)
             await refetchThesisProjectData()
-            message.success('Đã lưu tất cả thay đổi thành công!')
+            message.success('Đã lưu thay đổi đồ án và cập nhật bảng điểm sinh viên!')
             setEditingRowKeys([])
             setEditingValues({})
             handleSearch()
@@ -491,7 +514,7 @@ export default function DanhMucDoAn() {
                         },
                         {
                             title: 'Học viên bảo vệ',
-                            width: 200,
+                            width: 500,
                             align: 'left',
                             fixed: 'left',
                             render: (_, record) => {
@@ -501,7 +524,7 @@ export default function DanhMucDoAn() {
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         {registrations.map((x: any, index: number) => (
                                             <div key={index}>
-                                                {x.student?.userProfile?.fullname}
+                                                {x.student?.userProfile?.fullname} - {x.student?.code}  - {x.student?.userProfile?.dateOfBirth ? dayjs(x.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY') : 'N/A'} - {x.student?.fixedClass?.name}
                                             </div>
                                         ))}
                                     </div>
@@ -1070,6 +1093,11 @@ const StudentManagementModal = ({
 }: any) => {
     const [activeTab, setActiveTab] = useState('1')
     const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
+    const selectedStudentsData = useMemo(() => {
+        return allStudentsInClass.filter((item: any) => 
+            selectedStudentIds.includes(item.studentId)
+        )
+    }, [selectedStudentIds, allStudentsInClass])
     const [gradeValues, setGradeValues] = useState<Record<string, any>>({})
     useEffect(() => {
         if (project && isOpen) {
@@ -1101,34 +1129,50 @@ const StudentManagementModal = ({
     const gradeColumns = useMemo(
         () => [
             {
-                title: 'Học viên',
+                title: 'STT',
+                width: 60,
+                render: (_: any, __: any, index: number) => index + 1,
+            },
+            {
+                title: 'Họ và tên',
+                
                 render: (_: any, reg: any) => (
                     <div>
                         <div className="font-bold">{reg.student?.userProfile?.fullname}</div>
-                        <div className="text-xs text-gray-400">{reg.student?.code}</div>
                     </div>
                 ),
             },
             {
-                title: 'Điểm thi',
+                title: 'Mã sinh viên',
+                width: 100,
                 render: (_: any, reg: any) => (
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        step={0.1}
-                        value={gradeValues[reg.studentId]?.examScore}
-                        onChange={(val) => handleScoreChange(reg.studentId, 'examScore', val)}
-                    />
+                    <div>{reg.student?.code}</div>
                 ),
             },
             {
-                title: 'Tổng kết',
+                title: 'Ngày sinh   ',
+                width: 100,
+                render: (_: any, reg: any) => (
+                    <div>{reg.student?.userProfile?.dateOfBirth ? dayjs(reg.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY') : 'N/A'}</div>
+                ),
+            },
+            {
+                title: 'Lớp quản lí',
+                width: 200,
+                render: (_: any, reg: any) => (
+                    <div>{reg.student?.fixedClass?.name}</div>
+                ),
+            },
+            {
+                title: 'Điểm cuối cùng',
+                width: 100,
                 render: (_: any, reg: any) => (
                     <InputNumber
                         min={0}
                         max={10}
                         step={0.1}
-                        className="font-bold text-blue-600"
+                        disabled
+                        className="font-bold text-blue-600 w-28 text-center [&_input]:text-center"
                         value={gradeValues[reg.studentId]?.finalScore}
                         onChange={(val) => handleScoreChange(reg.studentId, 'finalScore', val)}
                     />
@@ -1137,6 +1181,55 @@ const StudentManagementModal = ({
         ],
         [gradeValues]
     )
+    const memberTableColumns = [
+        {
+            title: 'STT',
+            width: 60,
+            render: (_: any, __: any, index: number) => index + 1,
+        },
+        {
+            title: 'Họ và tên',
+            dataIndex: 'fullname',
+            render: (_: any, record: any) => record.student?.userProfile?.fullname,
+        },
+        {
+            title: 'Mã sinh viên',
+            width: 100,
+            dataIndex: 'code',
+            render: (_: any, record: any) => record.student?.code,
+        },
+        {
+            title: 'Ngày sinh',
+            dataIndex: 'dateOfBirth',
+            width: 100,
+            render: (_: any, record: any) => record.student?.userProfile?.dateOfBirth ? dayjs(record.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY') : 'N/A',
+        },
+        {
+            title: 'Lớp quản lí',
+            dataIndex: 'class',
+            width: 200,
+            render: (_: any, record: any) => record.student?.fixedClass?.name,
+        },
+
+        {
+            title: 'Thao tác',
+            width: 80,
+            align: 'center' as const, 
+            render: (_: any, record: any) => (
+                <div className="flex items-center justify-center">
+                    <CircleMinus
+                        size={16}
+                        className="text-red-500 cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => {
+                            setSelectedStudentIds((prev) =>
+                                prev.filter((id) => id !== record.studentId)
+                            )
+                        }}
+                    />
+                </div>
+            ),
+        },
+    ]
     const handleSaveMembers = async () => {
         try {
             const transactions: any[] = []
@@ -1276,11 +1369,11 @@ const StudentManagementModal = ({
 
     return (
         <Modal
-            title={`Cài đặt: ${project?.title || 'Đồ án'}`}
+            title="Quản lý thành viên và điểm số"
             open={isOpen}
             onOk={handleOk}
             onCancel={onClose}
-            width={activeTab === '1' ? 600 : 950}
+            width={activeTab === '1' ? 950 : 950}
             okText="Lưu thay đổi"
             destroyOnClose
         >
@@ -1293,11 +1386,30 @@ const StudentManagementModal = ({
                             value={selectedStudentIds}
                             onChange={setSelectedStudentIds}
                             options={allStudentsInClass.map((item: any) => ({
-                                label: `${item.student?.userProfile?.fullname}`,
+                                label: `${item.student?.code} - ${item.student?.userProfile?.fullname}`,
                                 value: item.studentId,
                             }))}
                         />
                     </div>
+                    <div>
+            <div className="mb-2 font-semibold">
+                Danh sách thành viên ({selectedStudentIds.length})
+            </div>
+            <Table
+                dataSource={selectedStudentsData}
+              
+                columns={memberTableColumns}
+                rowKey="studentId"
+                size="small"
+                bordered
+                pagination={selectedStudentsData.length > 5 ? {
+                    pageSize: 5,
+                    showTotal: (total) => `Tổng số ${total} học viên`,
+                    position: ['bottomCenter'],
+                } : false}
+                locale={{ emptyText: 'Chưa có thành viên nào được chọn' }}
+            />
+        </div>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Nhập điểm" key="2">
                     <div className="py-4">
