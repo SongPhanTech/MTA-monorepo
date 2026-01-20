@@ -138,6 +138,7 @@ const PutHocBong = () => {
                         placeholder="Nhập số tiền"
                         className="w-full"
                         min={1}
+                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
                         max={1000000000}
                         step={1}
                         suffix="VNĐ"

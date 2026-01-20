@@ -915,7 +915,7 @@ export default function StudentScoreClassPage() {
                     />
                 </Col>
                 <Col span={24}>
-                    <h3 className="text-lg font-bold">Danh sách điểm thủ công</h3>
+                    <h3 className="text-lg font-bold">Danh sách điểm phiên</h3>
                     <Table
                         // filters={filters}
                         // setFilters={setFilters}
@@ -938,10 +938,16 @@ export default function StudentScoreClassPage() {
                                 render: (_, record) => record?.subjectVersion?.name,
                             },
                             {
-                                title: 'Điểm thủ công',
+                                title: 'Điểm',
                                 dataIndex: 'manualFinalScore',
                                 align: 'center',
-                                width: 200,
+                                width: 150,
+                            },
+                            {
+                                title: 'Ghi chú',
+                                dataIndex: 'description',
+                                align: 'center',
+                                width: 250,
                             },
                         ]}
                         data={manualScoreData}

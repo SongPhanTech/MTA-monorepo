@@ -19,7 +19,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { Trash2Icon } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { $Enums, type PlanTraining } from '@workspace/db/client'
+import type { $Enums, PlanTraining } from '@workspace/db/client'
 
 export type KhoiTaoMonFormType = {
     managementOrganizationIds: string[]
@@ -84,24 +84,70 @@ const KhoiTaoMon = () => {
             }
             const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
 
-            const res = await sqlTransaction(
+            const resTB = await sqlTransaction(
                 Object.entries(output.subjectVersionIds).map(
                     ([subjectVersionId, fixedClassIds]) => {
                         return {
-                            model: 'PlanTrainingSubject',
-                            operation: 'create',
+                            model: 'TrainingBlockSubject',
+                            operation: 'findFirst',
                             data: {
                                 data: {
-                                    subjectVersionId,
-                                    planTrainingId,
-                                    fixedClasses: {
-                                        connect: fixedClassIds.map((id) => ({ id })),
+                                    where: {
+                                        subjectId: subjectVersionId,
+                                        trainingBlockOnCurriculumVersion: {
+                                            curriculumVersion: {
+                                                fixedClass: {
+                                                    id: {
+                                                        in: fixedClassIds.map((id) => ({ id })),
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                    select: {
+                                        subjectId: true,
+                                        trainingBlockOnCurriculumVersion: {
+                                            select: {
+                                                curriculumVersion: {
+                                                    select: {
+                                                        fixedClass: {
+                                                            select: {
+                                                                id: true,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
                                     },
                                 },
                             },
                         }
                     }
                 )
+            )
+
+            const res = await sqlTransaction(
+                resTB?.data?.map((tbs: any) => {
+                    return {
+                        model: 'PlanTrainingSubject',
+                        operation: 'create',
+                        data: {
+                            data: {
+                                planTraining: {
+                                    connect: {
+                                        id: planTrainingId,
+                                    },
+                                },
+                                trainingBlockSubject: {
+                                    connect: {
+                                        id: tbs?.id,
+                                    },
+                                },
+                            },
+                        },
+                    }
+                })
             )
             if (res.status !== 200) {
                 message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
