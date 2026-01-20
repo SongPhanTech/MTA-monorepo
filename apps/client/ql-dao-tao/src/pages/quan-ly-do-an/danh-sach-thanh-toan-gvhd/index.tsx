@@ -37,13 +37,32 @@ export default function SupervisorPaymentRecordPage() {
         role: undefined,
     })
 
-    const where = useMemo(() => {
-        const conditions: any = {
+    const thesisCondition = {
+        some: { thesisType: ThesisType.PROJECT },
+    }
+
+    const where = useMemo(
+        () => ({
+            OR: [{ thesisProjects: thesisCondition }, { coThesisProjects: thesisCondition }],
             ...(filters.transactionCode
                 ? {
                       transactionCode: {
                           contains: filters.transactionCode,
                           mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name
+                ? {
+                      thesisProjects: {
+                          some: {
+                              supervisor: {
+                                  name: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                          },
                       },
                   }
                 : {}),
@@ -60,96 +79,26 @@ export default function SupervisorPaymentRecordPage() {
                       },
                   }
                 : {}),
-        }
-
-        // Tạo mảng AND conditions
-        const andConditions: any[] = []
-        andConditions.push({
-            OR: [
-                {
-                    thesisProjects: {
-                        some: {
-                            supervisor: { isNot: null },
-                            thesisType: ThesisType.PROJECT,
-                        },
-                    },
-                },
-                {
-                    coThesisProjects: {
-                        some: {
-                            coSupervisor: { isNot: null },
-                            thesisType: ThesisType.PROJECT,
-                        },
-                    },
-                },
-            ],
-        })
-
-        if (filters.name) {
-            andConditions.push({
-                OR: [
-                    {
-                        thesisProjects: {
-                            some: {
-                                supervisor: {
-                                    name: {
-                                        contains: filters.name,
-                                        mode: 'insensitive' as const,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    {
-                        coThesisProjects: {
-                            some: {
-                                coSupervisor: {
-                                    name: {
-                                        contains: filters.name,
-                                        mode: 'insensitive' as const,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                ],
-            })
-        }
-
-        if (semesterId) {
-            andConditions.push({
-                OR: [
-                    {
-                        thesisProjects: {
-                            some: {
-                                subjectClass: { semesterId },
-                            },
-                        },
-                    },
-                    {
-                        coThesisProjects: {
-                            some: {
-                                subjectClass: { semesterId },
-                            },
-                        },
-                    },
-                ],
-            })
-        }
-
-        // Kết hợp tất cả conditions
-        if (andConditions.length > 0) {
-            conditions.AND = andConditions
-        }
-
-        return conditions
-    }, [
-        filters.name,
-        filters.transactionCode,
-        filters.paymentStatus,
-        filters.paymentDate,
-        semesterId,
-    ])
+            ...(semesterId
+                ? {
+                      councilMember: {
+                          council: {
+                              thesis: {
+                                  some: { subjectClass: { semesterId } },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+        }),
+        [
+            filters.name,
+            filters.transactionCode,
+            filters.paymentStatus,
+            filters.paymentDate,
+            semesterId,
+        ]
+    )
 
     const { data: supervisorPaymentData } = useFindManySupervisorPaymentRecord({
         where: {
@@ -285,38 +234,16 @@ export default function SupervisorPaymentRecordPage() {
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) => {
-                                    const supervisorNames: string[] = []
-                                    const coSupervisorNames: string[] = []
+                                    const supervisorNames =
+                                        record.thesisProjects?.map((p) => p.supervisor?.name) || []
 
-                                    record.thesisProjects?.forEach((project: any) => {
-                                        if (
-                                            project.supervisor?.name &&
-                                            !supervisorNames.includes(project.supervisor.name)
-                                        ) {
-                                            supervisorNames.push(project.supervisor.name)
-                                        }
-                                    })
+                                    const coSupervisorNames =
+                                        record.coThesisProjects?.map((p) => p.coSupervisor?.name) ||
+                                        []
 
-                                    record.coThesisProjects?.forEach((project: any) => {
-                                        if (
-                                            project.coSupervisor?.name &&
-                                            !coSupervisorNames.includes(project.coSupervisor.name)
-                                        ) {
-                                            coSupervisorNames.push(project.coSupervisor.name)
-                                        }
-                                    })
+                                    const allNames = [...supervisorNames, ...coSupervisorNames]
 
-                                    const result: string[] = []
-
-                                    if (supervisorNames.length > 0) {
-                                        result.push(supervisorNames.join(', '))
-                                    }
-
-                                    if (coSupervisorNames.length > 0) {
-                                        result.push(coSupervisorNames.join(', '))
-                                    }
-
-                                    return result.length > 0 ? result.join(' - ') : '-'
+                                    return Array.from(new Set(allNames.filter(Boolean))).join(', ')
                                 },
                             },
                             {
@@ -325,25 +252,9 @@ export default function SupervisorPaymentRecordPage() {
                                 width: 250,
                                 type: 'input',
                                 align: 'center',
-                                render: (_, record) => {
-                                    const titles: string[] = []
-
-                                    // Lấy tất cả title từ thesisProjects
-                                    record.thesisProjects?.forEach((project: any) => {
-                                        if (project.title) {
-                                            titles.push(project.title)
-                                        }
-                                    })
-
-                                    // Lấy tất cả title từ coThesisProjects
-                                    record.coThesisProjects?.forEach((project: any) => {
-                                        if (project.title) {
-                                            titles.push(project.title)
-                                        }
-                                    })
-
-                                    return titles.length > 0 ? titles.join('; ') : '-'
-                                },
+                                render: (_, record) =>
+                                    record.thesisProjects?.[0]?.title ||
+                                    record.coThesisProjects?.[0]?.title,
                             },
                             {
                                 title: 'Mã giao dịch',
@@ -369,7 +280,7 @@ export default function SupervisorPaymentRecordPage() {
                                 render: (_, record) =>
                                     record?.paymentDate
                                         ? dayjs(record?.paymentDate).format('DD/MM/YYYY')
-                                        : '',
+                                        : '-',
                             },
                             {
                                 title: 'Trạng thái',

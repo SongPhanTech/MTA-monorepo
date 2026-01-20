@@ -37,72 +37,70 @@ export default function PaymentRecordPage() {
         role: undefined,
     })
 
-    const where = useMemo(() => {
-        const councilMemberFilter: any = {}
-
-        // Filter expert name
-        if (filters.name) {
-            councilMemberFilter.expert = {
-                name: {
-                    contains: filters.name,
-                    mode: 'insensitive' as const,
-                },
-            }
-        }
-
-        // Filter role
-        if (filters.role) {
-            councilMemberFilter.role = Array.isArray(filters.role)
-                ? { in: filters.role }
-                : { equals: filters.role }
-        }
-
-        councilMemberFilter.council = {
-            thesis: {
-                some: {
-                    // "Có ít nhất 1 thesis type PROJECT"
-                    thesisType: ThesisType.THESIS,
-                    ...(semesterId && {
-                        subjectClass: { semesterId },
-                    }),
+    const where = useMemo(
+        () => ({
+            councilMember: {
+                council: {
+                    thesis: {
+                        some: {
+                            thesisType: ThesisType.THESIS,
+                        },
+                    },
                 },
             },
-        }
-
-        return {
-            councilMember: councilMemberFilter,
-
-            // Các filter khác
-            ...(filters.transactionCode && {
-                transactionCode: {
-                    contains: filters.transactionCode,
-                    mode: 'insensitive' as const,
-                },
-            }),
-
-            ...(filters.paymentStatus && {
-                status: Array.isArray(filters.paymentStatus)
-                    ? { in: filters.paymentStatus }
-                    : { equals: filters.paymentStatus },
-            }),
-
-            ...(filters.paymentDate?.length === 2 && {
-                paymentDate: {
-                    gte: dayjs(filters.paymentDate[0], 'DD/MM/YYYY').toDate(),
-                    lte: dayjs(filters.paymentDate[1], 'DD/MM/YYYY').toDate(),
-                },
-            }),
-
-            deletedAt: null,
-        }
-    }, [
-        filters.name,
-        filters.transactionCode,
-        filters.paymentStatus,
-        filters.paymentDate,
-        filters.role,
-        semesterId,
-    ])
+            ...(filters.transactionCode
+                ? {
+                      transactionCode: {
+                          contains: filters.transactionCode,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name
+                ? {
+                      councilMember: {
+                          expert: {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.paymentStatus
+                ? Array.isArray(filters.paymentStatus)
+                    ? { status: { in: filters.paymentStatus } }
+                    : { status: { equals: filters.paymentStatus } }
+                : {}),
+            ...(filters.paymentDate?.length === 2
+                ? {
+                      paymentDate: {
+                          gte: dayjs(filters.paymentDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.paymentDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(semesterId
+                ? {
+                      councilMember: {
+                          council: {
+                              thesis: {
+                                  some: { subjectClass: { semesterId } },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+        }),
+        [
+            filters.name,
+            filters.transactionCode,
+            filters.paymentStatus,
+            filters.paymentDate,
+            semesterId,
+        ]
+    )
 
     const { data: paymentRecordData } = useFindManyPaymentRecord({
         where: {
