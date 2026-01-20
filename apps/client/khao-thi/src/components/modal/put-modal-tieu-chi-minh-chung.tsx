@@ -46,8 +46,14 @@ type Item = {
 
 const ItemType = 'LIST_ITEM'
 
+const draftRequirementCriterionKey = (analysisCriterionId?: string) => [
+    'draft-requirement-criterion',
+    analysisCriterionId ?? 'new',
+]
+
 const PutTieuChiMinhChungModal = () => {
     const [form] = Form.useForm<PutRequirementCriterion>()
+    const watchedValues = Form.useWatch([], form)
     const [evidenceForm] = Form.useForm<Evidence & { evidenceFile?: EvidenceFile[] }>()
     const [items, setItems] = useState<ItemProps[]>([])
     const [activeTab, setActiveTab] = useState<string>('1')
@@ -67,6 +73,9 @@ const PutTieuChiMinhChungModal = () => {
             evidenceForm.resetFields()
             setDocument([])
             setActiveTab('1')
+            queryClient.removeQueries({
+                queryKey: draftRequirementCriterionKey(input?.analysisCriterionId),
+            })
         },
     })
 
@@ -112,10 +121,40 @@ const PutTieuChiMinhChungModal = () => {
                     value: evi.evidenceId,
                 }))
             )
+            return
+        }
+        const draft = queryClient.getQueryData<PutRequirementCriterion>(
+            draftRequirementCriterionKey(input?.analysisCriterionId)
+        )
+        if (draft) {
+            form.setFieldsValue(draft)
+            if (draft.evidences) {
+                setItems(
+                    draft.evidences.map((id) => {
+                        const ev = listEvidence?.find((e) => e.id === id)
+                        return {
+                            key: id,
+                            value: id,
+                            label: ev?.name || '',
+                        }
+                    })
+                )
+            }
         } else if (input?.count !== undefined) {
             form.setFieldsValue({ order: input?.count + 1 })
         }
-    }, [initialValue, form, input?.count])
+    }, [initialValue, input?.analysisCriterionId, input?.count, listEvidence, form])
+
+    useEffect(() => {
+        if (!isOpen) return
+        if (input?.id) return
+        if (!watchedValues) return
+
+        queryClient.setQueryData(draftRequirementCriterionKey(input?.analysisCriterionId), {
+            ...watchedValues,
+            evidences: items.map((i) => i.value),
+        })
+    }, [watchedValues, items, isOpen, input?.id, input?.analysisCriterionId])
 
     const onOk = async (output: PutRequirementCriterion) => {
         if (!output) return
@@ -279,6 +318,9 @@ const PutTieuChiMinhChungModal = () => {
             queryClient.invalidateQueries({
                 queryKey: ['AnalysisCriterion'],
             })
+            queryClient.removeQueries({
+                queryKey: draftRequirementCriterionKey(input?.analysisCriterionId),
+            })
 
             // Call refetch callback if provided
             if (input?.refetch) {
@@ -296,6 +338,7 @@ const PutTieuChiMinhChungModal = () => {
             hideSpinner()
         }
     }
+
     const DraggableItem = ({
         item,
         index,
