@@ -4555,7 +4555,7 @@ app.openapi(
             }>
         >`
 SELECT
-  TRIM(SPLIT_PART(sy."name", '-', 1)) AS year,
+ sy."name" AS year,
   tot."code" AS object_type,
   tl."code" AS training_level,
   COALESCE(SUM(tc."admissionQuota"), 0)  AS quota,
@@ -4575,11 +4575,11 @@ WHERE
   AND tot."code" IS NOT NULL
   
 GROUP BY
-  TRIM(SPLIT_PART(sy."name", '-', 1)),
+sy."name",
   tot."code",
   tl."code"
 ORDER BY
-  TRIM(SPLIT_PART(sy."name", '-', 1)),
+sy."name",
   tot."code";
 
 
@@ -4615,6 +4615,7 @@ ORDER BY
             if (labels.includes('target')) base.target = row.target
             if (labels.includes('admitted')) base.admitted = row.admitted
             if (labels.includes('enrolled')) base.enrolled = row.enrolled
+
             return base
         })
 
