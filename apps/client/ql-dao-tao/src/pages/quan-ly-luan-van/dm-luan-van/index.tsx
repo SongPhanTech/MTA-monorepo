@@ -102,7 +102,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         tag: 'ModalCauHinhLuanVan',
     })
     const { onOpen: openModalChuyenDiemLopMonHoc } = useDisclosure<{
-        fixedClassId: string
+        allStudentsInClasses: any[]
     }>({
         tag: 'ModalChuyenDiemLopMonHoc',
     })
@@ -809,8 +809,9 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         <Button
                                             type="primary"
                                             className="ml-2"
-                                            onClick={() => openModalChuyenDiemLopMonHoc({ fixedClassId: fixedClasses?.[0]?.id || '' })}
-                                            disabled={!students?.length}
+                                            onClick={() => openModalChuyenDiemLopMonHoc({ 
+                                                allStudentsInClasses: allStudentsInClasses
+                                            })} 
                                         >
                                             Gán điểm sang LMH
                                         </Button>
