@@ -46,6 +46,11 @@ type Item = {
 
 const ItemType = 'LIST_ITEM'
 
+const draftRequirementCriterionKey = (analysisCriterionId?: string) => [
+    'draft-requirement-criterion',
+    analysisCriterionId ?? 'new',
+]
+
 const PutTieuChiMinhChungModal = () => {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const watchedValues = Form.useWatch([], form)
@@ -53,7 +58,6 @@ const PutTieuChiMinhChungModal = () => {
     const [items, setItems] = useState<ItemProps[]>([])
     const [activeTab, setActiveTab] = useState<string>('1')
     const [document, setDocument] = useState<EvidenceFile[]>([])
-    const DRAFT_KEY = 'put_tieu_chi_minh_chung_draft'
 
     const { data: dataUser } = useSession()
 
@@ -69,7 +73,9 @@ const PutTieuChiMinhChungModal = () => {
             evidenceForm.resetFields()
             setDocument([])
             setActiveTab('1')
-            localStorage.removeItem(DRAFT_KEY)
+            queryClient.removeQueries({
+                queryKey: draftRequirementCriterionKey(input?.analysisCriterionId),
+            })
         },
     })
 
@@ -101,35 +107,39 @@ const PutTieuChiMinhChungModal = () => {
             enabled: !!input?.id,
         }
     )
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                evidences: initialValue.evidences.map((evi) => evi.evidenceId),
+                evidences: initialValue.evidences.map((e) => e.evidenceId),
             })
             setItems(
-                initialValue.evidences.map((evi) => ({
-                    key: evi.evidenceId,
-                    label: evi.evidence.name,
-                    value: evi.evidenceId,
+                initialValue.evidences.map((e) => ({
+                    key: e.evidenceId,
+                    value: e.evidenceId,
+                    label: e.evidence.name,
                 }))
             )
             return
         }
 
-        const draft = localStorage.getItem(DRAFT_KEY)
-        if (draft) {
-            const parsed = JSON.parse(draft)
-            form.setFieldsValue(parsed)
+        const draft = queryClient.getQueryData<PutRequirementCriterion>(
+            draftRequirementCriterionKey(input?.analysisCriterionId)
+        )
 
-            if (parsed.evidences) {
+        if (draft) {
+            form.setFieldsValue(draft)
+
+            if (draft.evidences) {
                 setItems(
-                    parsed.evidences.map((id: string) => {
+                    draft.evidences.map((id) => {
                         const ev = listEvidence?.find((e) => e.id === id)
                         return {
+                            key: id,
                             value: id,
                             label: ev?.name || '',
-                            key: id,
                         }
                     })
                 )
@@ -137,13 +147,18 @@ const PutTieuChiMinhChungModal = () => {
         } else if (input?.count !== undefined) {
             form.setFieldsValue({ order: input.count + 1 })
         }
-    }, [initialValue, form, input?.count, listEvidence])
-    
+    }, [initialValue, listEvidence, input?.analysisCriterionId])
+
     useEffect(() => {
+        if (!isOpen) return
+        if (input?.id) return
         if (!watchedValues) return
 
-        localStorage.setItem(DRAFT_KEY, JSON.stringify(watchedValues))
-    }, [watchedValues])
+        queryClient.setQueryData(
+            draftRequirementCriterionKey(input?.analysisCriterionId),
+            watchedValues
+        )
+    }, [watchedValues, isOpen, input?.id, input?.analysisCriterionId])
 
     const onOk = async (output: PutRequirementCriterion) => {
         if (!output) return
@@ -308,11 +323,14 @@ const PutTieuChiMinhChungModal = () => {
                 queryKey: ['AnalysisCriterion'],
             })
 
+            queryClient.removeQueries({
+                queryKey: draftRequirementCriterionKey(input?.analysisCriterionId),
+            })
+
             // Call refetch callback if provided
             if (input?.refetch) {
                 await input.refetch()
             }
-            localStorage.removeItem(DRAFT_KEY)
 
             onClose()
         } catch (error: any) {
