@@ -48,10 +48,12 @@ const ItemType = 'LIST_ITEM'
 
 const PutTieuChiMinhChungModal = () => {
     const [form] = Form.useForm<PutRequirementCriterion>()
+    const watchedValues = Form.useWatch([], form)
     const [evidenceForm] = Form.useForm<Evidence & { evidenceFile?: EvidenceFile[] }>()
     const [items, setItems] = useState<ItemProps[]>([])
     const [activeTab, setActiveTab] = useState<string>('1')
     const [document, setDocument] = useState<EvidenceFile[]>([])
+    const DRAFT_KEY = 'put_tieu_chi_minh_chung_draft'
 
     const { data: dataUser } = useSession()
 
@@ -67,6 +69,7 @@ const PutTieuChiMinhChungModal = () => {
             evidenceForm.resetFields()
             setDocument([])
             setActiveTab('1')
+            localStorage.removeItem(DRAFT_KEY)
         },
     })
 
@@ -98,7 +101,6 @@ const PutTieuChiMinhChungModal = () => {
             enabled: !!input?.id,
         }
     )
-
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({
@@ -112,10 +114,36 @@ const PutTieuChiMinhChungModal = () => {
                     value: evi.evidenceId,
                 }))
             )
-        } else if (input?.count !== undefined) {
-            form.setFieldsValue({ order: input?.count + 1 })
+            return
         }
-    }, [initialValue, form, input?.count])
+
+        const draft = localStorage.getItem(DRAFT_KEY)
+        if (draft) {
+            const parsed = JSON.parse(draft)
+            form.setFieldsValue(parsed)
+
+            if (parsed.evidences) {
+                setItems(
+                    parsed.evidences.map((id: string) => {
+                        const ev = listEvidence?.find((e) => e.id === id)
+                        return {
+                            value: id,
+                            label: ev?.name || '',
+                            key: id,
+                        }
+                    })
+                )
+            }
+        } else if (input?.count !== undefined) {
+            form.setFieldsValue({ order: input.count + 1 })
+        }
+    }, [initialValue, form, input?.count, listEvidence])
+    
+    useEffect(() => {
+        if (!watchedValues) return
+
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(watchedValues))
+    }, [watchedValues])
 
     const onOk = async (output: PutRequirementCriterion) => {
         if (!output) return
@@ -284,6 +312,7 @@ const PutTieuChiMinhChungModal = () => {
             if (input?.refetch) {
                 await input.refetch()
             }
+            localStorage.removeItem(DRAFT_KEY)
 
             onClose()
         } catch (error: any) {
