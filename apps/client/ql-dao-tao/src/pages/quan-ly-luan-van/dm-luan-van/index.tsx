@@ -101,6 +101,11 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
     }>({
         tag: 'ModalCauHinhLuanVan',
     })
+    const { onOpen: openModalChuyenDiemLopMonHoc } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChuyenDiemLopMonHoc',
+    })
     const { data: sDm_Donvi = [] } = useFindManyDM_DonVi()
     const { data: roomData } = useFindManyRoom()
     const { data: defenseSessionData } = useFindManyDefenseSession()
@@ -375,7 +380,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                 if (!thesisProjectId || !rowData) return
 
                 const description = `Ngôn ngữ: ${rowData.language} - Luận án/Đề án: ${rowData.type}`
-                let status = rowData.status
+                const status = rowData.status
                 // if (status === ThesisProjectStatus.PROPOSED && isManage) {
                 //     status = ThesisProjectStatus.APPROVED_BY_DEPT
                 // }
@@ -804,7 +809,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         <Button
                                             type="primary"
                                             className="ml-2"
-                                            onClick={defaultButtonClick}
+                                            onClick={() => openModalChuyenDiemLopMonHoc({ fixedClassId: fixedClasses?.[0]?.id || '' })}
                                             disabled={!students?.length}
                                         >
                                             Gán điểm sang LMH
