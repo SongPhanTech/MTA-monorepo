@@ -7,7 +7,7 @@ import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 // import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
-import { Breadcrumb, Divider, Layout, theme } from 'antd'
+import {  Divider, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -15,7 +15,7 @@ import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
 import { useSession } from '@workspace/auth/react'
-import { TreeSelectSemester } from '@workspace/ui'
+import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
@@ -160,8 +160,8 @@ const DefaultLayout = ({
                                 <TreeSelectSemester />
                             </div>
                             <Divider type="vertical" className="bg-primary h-[30px]" />
-                            <Breadcrumb items={listBreadcrumb} />
-                            {/* <SelectTrainingObjectType /> */}
+                            {/* <Breadcrumb items={listBreadcrumb} /> */}
+                            <SelectTrainingObjectType />
                         </div>
                         <HeaderApp />
                     </Header>
