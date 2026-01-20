@@ -5,7 +5,7 @@ import { store } from '../index'
 import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import Table from '@components/commons/table'
 import { cn } from '@workspace/ui/lib/utils'
-import { useSemesterStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import type { SubjectClass } from '@workspace/db/client'
 
 export default function DanhSachKeHoachThi() {
@@ -13,6 +13,7 @@ export default function DanhSachKeHoachThi() {
     const selectedExamId = useStore(store, (state) => state.selectedExamId)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(10)
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const updateStateselectedExamId = (value: string, item: string) => {
         store.setState((state: any) => {
@@ -32,8 +33,11 @@ export default function DanhSachKeHoachThi() {
     const where = useMemo(
         () => ({
             semesterId,
-            ...(filters.searchText && {
-                subjectVersion: {
+            subjectVersion: {
+                ...(trainingObjectTypeId && {
+                    trainingObjectTypeId,
+                }),
+                ...(filters.searchText && {
                     OR: [
                         {
                             code: {
@@ -46,10 +50,10 @@ export default function DanhSachKeHoachThi() {
                             },
                         },
                     ],
-                },
-            }),
+                }),
+            },
         }),
-        [filters.searchText, semesterId]
+        [filters.searchText, semesterId, trainingObjectTypeId]
     )
 
     const { data: exams = [] } = useFindManyExam(

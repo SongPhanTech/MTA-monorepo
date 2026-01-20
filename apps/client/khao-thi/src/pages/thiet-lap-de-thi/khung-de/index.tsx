@@ -8,9 +8,11 @@ import QuestionBankLite from './_component/ngan-hang-cau-hoi-lite'
 export const store = new Store<{
     examFrameworkId: string | undefined
     semesterId: string | undefined
+    matrixId: string | undefined
 }>({
     examFrameworkId: undefined,
     semesterId: undefined,
+    matrixId: undefined,
 })
 export default function KhungDePage() {
     const [activeKey, setActiveKey] = useState('1')

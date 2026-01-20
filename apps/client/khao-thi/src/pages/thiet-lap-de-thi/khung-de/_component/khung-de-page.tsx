@@ -74,9 +74,6 @@ export default function KhungDeList() {
                                         },
                                     }
                                   : {}),
-
-                              // ...(filters.time ? { time: Number(filters.time) } : {}),
-
                               ...(filters.subjectVersionIdString
                                   ? { subjectVersionIdString: filters.subjectVersionIdString }
                                   : {}),
@@ -203,7 +200,7 @@ export default function KhungDeList() {
                             type: 'input',
                             align: 'center',
                             render: (name) =>
-                                examFrameworkList.length > 50 ? name.slice(0, 50) + '...' : name,
+                                examFrameworkList.length > 50 ? `${name.slice(0, 50)}...` : name,
                         },
                         {
                             title: 'Thời gian thi',

@@ -13,6 +13,8 @@ import {
     useFindUniqueQuestionBank,
     useUpdateQuestion,
 } from '@workspace/db/hooks'
+import { useStore } from '@tanstack/react-store'
+import { store } from '@pages/thiet-lap-de-thi/khung-de'
 
 interface QuestionBankLiteProps {
     examFrameworkId?: string
@@ -25,6 +27,7 @@ export default function QuestionBankLite({
 }: QuestionBankLiteProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
+    const matrixId = useStore(store, (s) => s.matrixId)
 
     const { onOpen: onOpenQuestionListModal } = useDisclosure<{
         knowledgeBlockId: string
@@ -68,16 +71,14 @@ export default function QuestionBankLite({
         { enabled: !!examFrameworkId }
     )
 
-    const matrixIds = useMemo(() => examMatrixs.map((m) => m.id), [examMatrixs])
-
     const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
         {
-            where: { examMatrixId: { in: matrixIds }, deletedAt: null },
+            where: { examMatrixId: matrixId, deletedAt: null },
             include: {
                 configExams: true,
             },
         },
-        { enabled: matrixIds.length > 0 }
+        { enabled: !!matrixId }
     )
 
     const knowledgeBlockIds = useMemo(() => knowledgeBlocks.map((k) => k.id), [knowledgeBlocks])
