@@ -4524,7 +4524,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { preview, labels, trainingLevelNames } = c.req.valid('json')
+        const { preview, labels, includeEmpty } = c.req.valid('json')
         if (preview) {
             const data = [
                 {
@@ -4544,14 +4544,6 @@ app.openapi(
                 summary: {},
             })
         }
-        const levelNameFilter =
-            trainingLevelNames && trainingLevelNames.length > 0
-                ? Prisma.sql`
-        AND LOWER(tl."name") IN (
-          ${Prisma.join(trainingLevelNames.map((v) => v.toLowerCase()))}
-        )
-      `
-                : Prisma.empty
         const rows = await prisma.$queryRaw<
             Array<{
                 year: string
@@ -4563,12 +4555,12 @@ app.openapi(
             }>
         >`
 SELECT
-  sy."name"                 AS year,
-  tot."code"                AS object_type,
-  tl."name"                 AS training_level,      
-  SUM(tc."admissionQuota")  AS quota,
-  SUM(tc."admittedStudent") AS admitted,
-  SUM(tc."enrolledStudent") AS enrolled
+  TRIM(SPLIT_PART(sy."name", '-', 1)) AS year,
+  tot."code" AS object_type,
+  tl."code" AS training_level,
+  COALESCE(SUM(tc."admissionQuota"), 0)  AS quota,
+  COALESCE(SUM(tc."admittedStudent"), 0) AS admitted,
+  COALESCE(SUM(tc."enrolledStudent"), 0) AS enrolled
 FROM "ql-dao-tao"."TrainingCourse" tc
 JOIN "ql-dao-tao"."Semester" s
   ON s."id" = tc."semesterStartId"
@@ -4578,47 +4570,51 @@ JOIN "ql-dao-tao"."TrainingObjectType" tot
   ON tot."id" = tc."trainingObjectTypeId"
 JOIN "ql-dao-tao"."TrainingLevel" tl
   ON tl."id" = tot."trainingLevelId"
-WHERE 1 = 1
-${levelNameFilter}
+WHERE
+  s."semesterType" = 'FIRST'
+  AND tot."code" IS NOT NULL
+  
 GROUP BY
-  sy."name",
+  TRIM(SPLIT_PART(sy."name", '-', 1)),
   tot."code",
-  tl."name"
+  tl."code"
 ORDER BY
-  sy."name",
-  tot."code",
-  tl."name";
+  TRIM(SPLIT_PART(sy."name", '-', 1)),
+  tot."code";
+
 
 `
 
         const normalize = (v: bigint | null) => Number(v ?? 0)
 
         const computed = rows.map((r) => {
-            const quota = normalize(r.quota)
+            const target = normalize(r.quota)
             const enrolled = normalize(r.enrolled)
 
             return {
                 year: r.year,
                 objectType: r.object_type,
                 trainingLevel: r.training_level,
-                quota,
+                target,
                 admitted: normalize(r.admitted),
                 enrolled,
-                rate: quota ? Number(((enrolled / quota) * 100).toFixed(2)) : 0,
             }
         })
-        const data = computed.map((row) => {
+
+        const filtered = includeEmpty
+            ? computed
+            : computed.filter((r) => r.target > 0 || r.admitted > 0 || r.enrolled > 0)
+
+        const data = filtered.map((row) => {
             const base: any = {
                 year: row.year,
                 objectType: row.objectType,
                 trainingLevel: row.trainingLevel,
             }
 
-            if (labels.includes('quota')) base.quota = row.quota
+            if (labels.includes('target')) base.target = row.target
             if (labels.includes('admitted')) base.admitted = row.admitted
             if (labels.includes('enrolled')) base.enrolled = row.enrolled
-            if (labels.includes('rate')) base.rate = row.rate
-
             return base
         })
 
