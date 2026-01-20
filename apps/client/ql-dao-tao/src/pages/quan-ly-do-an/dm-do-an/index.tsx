@@ -524,7 +524,7 @@ export default function DanhMucDoAn() {
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         {registrations.map((x: any, index: number) => (
                                             <div key={index}>
-                                                {x.student?.userProfile?.fullname} - {x.student?.code}  - {x.student?.userProfile?.dateOfBirth ? dayjs(x.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY') : 'N/A'} - {x.student?.fixedClass?.name}
+                                                {x.student?.userProfile?.fullname} - {x.student?.code || 'N/A'}  - {x.student?.userProfile?.dateOfBirth ? dayjs(x.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY') : 'N/A'} - {x.student?.fixedClass?.name || 'N/A'}
                                             </div>
                                         ))}
                                     </div>
