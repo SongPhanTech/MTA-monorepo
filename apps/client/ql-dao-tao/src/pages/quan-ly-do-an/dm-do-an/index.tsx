@@ -1164,7 +1164,8 @@ const StudentManagementModal = ({
                 ),
             },
             {
-                title: 'Điểm cuối cùng',
+                title: 'Điểm thi',
+                align: 'center' as const,
                 width: 100,
                 render: (_: any, reg: any) => (
                     <InputNumber
