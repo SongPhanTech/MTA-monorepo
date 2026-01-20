@@ -1,16 +1,19 @@
+import { buildOrgProfileTree } from '@/utils/buildOrgProfileTree'
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import TreeSelect from '@components/commons/tree-select'
 import { EVALUATION_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { $Enums, type EvaluationCouncilMember } from '@workspace/db'
+import type { EvaluationCouncilMember } from '@workspace/db'
 import {
     useCreateEvaluationCouncilMember,
-    useFindManyLecturer,
+    useFindManyDM_DonVi,
     useFindUniqueEvaluationCouncilMember,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, message } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -25,9 +28,9 @@ const PutEvaluationCouncilMember = () => {
         onClose: form.resetFields,
     })
 
-    const roleWatch = Form.useWatch('role', form)
-
     const { showSpinner, hideSpinner } = useSpinner()
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { mutateAsync: createEvaluationCouncilMember } = useCreateEvaluationCouncilMember()
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
@@ -71,29 +74,46 @@ const PutEvaluationCouncilMember = () => {
         }
     }
 
-    const { data: lecturerData = [] } = useFindManyLecturer({
+    const { data: organizations = [] } = useFindManyDM_DonVi({
         include: {
-            userProfile: {
+            lecturers: {
                 include: {
-                    academicDegreeType: {
+                    userProfile: {
                         select: {
-                            sTen: true,
-                        },
-                    },
-                    academicRankType: {
-                        select: {
-                            sTen: true,
+                            id: true,
+                            fullname: true,
+                            firstName: true,
+                            lastName: true,
+                            avatar: true,
+                            academicDegreeType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
+                            academicRankType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
                         },
                     },
                 },
             },
-        },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
+            subjectVersions: {
+                where: {
+                    deletedAt: null,
+                    ...(trainingObjectTypeId && {
+                        trainingObjectTypeId,
+                    }),
+                },
             },
         },
     })
+
+    const orgLecturerTree = useMemo(
+        () => buildOrgProfileTree(organizations, null, true),
+        [organizations]
+    )
 
     const { data: initialValue } = useFindUniqueEvaluationCouncilMember(
         {
@@ -103,45 +123,6 @@ const PutEvaluationCouncilMember = () => {
             enabled: !!input?.evaluationCouncilMemberId,
         }
     )
-
-    const filteredLecturers = useMemo(() => {
-        if (!roleWatch || roleWatch.length === 0) return lecturerData
-
-        return lecturerData.filter((lecturer) => {
-            const academicRank = lecturer.userProfile.academicRankType?.sTen || ''
-            const degree = lecturer.userProfile.academicDegreeType?.sTen || ''
-
-            const isChairmanQualified =
-                academicRank.includes('Giáo sư') || degree.includes('Tiến sĩ')
-            const isVicePresidentQualified =
-                academicRank.includes('Giáo sư') ||
-                degree.includes('Tiến sĩ') ||
-                degree.includes('Thạc sĩ')
-
-            const isSecretaryQualified =
-                degree.includes('Thạc sĩ') ||
-                degree.includes('Tiến sĩ') ||
-                academicRank.includes('Giáo sư') ||
-                academicRank.includes('Giảng viên')
-
-            if (roleWatch.includes($Enums.EvaluationMemberRole.CHAIRMAN) && isChairmanQualified) {
-                return true
-            }
-
-            if (
-                roleWatch.includes($Enums.EvaluationMemberRole.VICE_PRESIDENT) &&
-                isVicePresidentQualified
-            ) {
-                return true
-            }
-
-            if (roleWatch.includes($Enums.EvaluationMemberRole.SECRETARY) && isSecretaryQualified) {
-                return true
-            }
-
-            return true
-        })
-    }, [roleWatch, lecturerData])
 
     useEffect(() => {
         if (initialValue) {
@@ -187,30 +168,17 @@ const PutEvaluationCouncilMember = () => {
                         },
                     ]}
                 >
-                    <Select
+                    <TreeSelect
+                        treeData={orgLecturerTree}
                         showSearch
                         placeholder="Chọn giảng viên"
-                        optionFilterProp="label"
-                        filterOption={(input, option) =>
-                            String(option?.label ?? '')
+                        filterTreeNode={(input, option) =>
+                            (option?.title?.toString() ?? '')
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
                         }
-                        options={filteredLecturers.map((i) => {
-                            const academicRank = i.userProfile?.academicRankType?.sTen || ''
-                            const degree = i.userProfile?.academicDegreeType?.sTen || ''
-
-                            const fullName = i?.userProfile?.fullname
-                                ? i?.userProfile?.fullname
-                                : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`
-
-                            const academicTitle = [academicRank, degree].filter(Boolean).join('.')
-
-                            return {
-                                value: i?.id,
-                                label: `${i.code} - ${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
-                            }
-                        })}
+                        treeCheckable
+                        className="w-full"
                     />
                 </FormItem>
             </Col>

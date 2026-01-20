@@ -3,11 +3,9 @@ import type { Key } from 'react'
 import { store } from '../index'
 import { Button, Space, Typography, message, Flex, Input, Col, Row } from 'antd'
 import { ClockCircleOutlined } from '@ant-design/icons'
-
 import { QueryClient } from '@tanstack/react-query'
-
 import { useStore } from '@tanstack/react-store'
-import { FilterProps } from '@components/commons/typeFilter'
+import type { FilterProps } from '@components/commons/typeFilter'
 import {
     useCountExamFramework,
     useFindManyExamFramework,
@@ -47,9 +45,6 @@ export default function KhungDeList() {
                       },
                   }
                 : {}),
-
-            // ...(filters.time ? { time: Number(filters.time) } : {}),
-
             ...(filters.subjectVersionIdString
                 ? { subjectVersionIdString: filters.subjectVersionIdString }
                 : {}),
@@ -210,28 +205,6 @@ export default function KhungDeList() {
                             render: (name) =>
                                 examFrameworkList.length > 50 ? name.slice(0, 50) + '...' : name,
                         },
-                        // {
-                        //   title: "Thống kê câu hỏi",
-                        //   dataIndex: "examMatrixs",
-                        //   align: "center",
-                        //   render: (matrices) => {
-                        //     const matrixCount = matrices.length;
-                        //     const blockCount = matrices.reduce(
-                        //       (sum: number, m: any) => sum + m.knowledgeBlocks.length,
-                        //       0
-                        //     );
-
-                        //     return (
-                        //       <Space direction="vertical" size={2}>
-                        //         <Badge
-                        //           count={matrixCount}
-                        //           style={{ background: "#1677ff" }}
-                        //         />
-                        //         <Badge count={blockCount} style={{ background: "#52c41a" }} />
-                        //       </Space>
-                        //     );
-                        //   },
-                        // },
                         {
                             title: 'Thời gian thi',
                             dataIndex: 'time',
@@ -250,7 +223,7 @@ export default function KhungDeList() {
                             dataIndex: 'subjectVersion',
                             type: 'input',
                             align: 'center',
-                            render: (sv) => <strong style={{ fontSize: 15 }}>{sv.name}</strong>,
+                            render: (_, record) => record?.subjectVersion?.name || '',
                         },
                         {
                             title: 'Thao tác',

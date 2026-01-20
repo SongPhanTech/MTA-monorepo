@@ -102,7 +102,6 @@ const SinhDeModal = () => {
 
             // console.log(values,selectedExamId);
             // return
-            console.log(values, selectedExamId)
 
             const res = await automaticTopicGeneration({
                 ...values,
@@ -134,7 +133,7 @@ const SinhDeModal = () => {
             title="Thông tin tạo đề"
             onCancel={onClose}
             onFinish={onOk}
-            className="w-[1000px]"
+            className="w-[1000px] top-2"
         >
             <Col span={24}>
                 <Row gutter={[16, 0]}>
