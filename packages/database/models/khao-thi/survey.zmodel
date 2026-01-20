@@ -37,6 +37,8 @@ model SurveyObjectType extends Base {
 
   surveySessions  SurveySession[]
   clusterSurvey   ClusterSurvey[]
+  trainingObjectType TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+	trainingObjectTypeId String?
 
   @@schema("khao-thi")
 }

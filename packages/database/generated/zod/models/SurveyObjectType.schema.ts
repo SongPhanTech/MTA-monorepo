@@ -42,6 +42,11 @@ const relationSchema = z.object({
     subjectClasses: z.array(z.unknown()).optional(),
     surveySessions: z.array(z.unknown()).optional(),
     clusterSurvey: z.array(z.unknown()).optional(),
+    trainingObjectType: z.record(z.string(), z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    trainingObjectTypeId: z.string().nullish(),
 }
 );
 
@@ -54,7 +59,7 @@ export const SurveyObjectTypeScalarSchema = baseSchema;
 /**
  * `SurveyObjectType` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const SurveyObjectTypeSchema = SurveyObjectTypeScalarSchema.merge(relationSchema.partial());
+export const SurveyObjectTypeSchema = SurveyObjectTypeScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -93,9 +98,7 @@ export const SurveyObjectTypeCreateScalarSchema = baseSchemaWithoutDefaults.part
 /**
  * `SurveyObjectType` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const SurveyObjectTypeCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true
-});
+export const SurveyObjectTypeCreateSchema = SurveyObjectTypeCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -107,5 +110,5 @@ export const SurveyObjectTypeUpdateScalarSchema = baseSchemaWithoutDefaults.part
 /**
  * `SurveyObjectType` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const SurveyObjectTypeUpdateSchema = SurveyObjectTypeUpdateScalarSchema;
+export const SurveyObjectTypeUpdateSchema = SurveyObjectTypeUpdateScalarSchema.merge(fkSchema.partial());
 
