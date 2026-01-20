@@ -36,6 +36,8 @@ const PutEvaluationCouncilMember = () => {
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
     async function onOk(output?: PutEvaluationCouncilMemberType) {
         if (!output || !input) return
+        console.log(output);
+        
         try {
             showSpinner()
             const data = {
@@ -177,7 +179,6 @@ const PutEvaluationCouncilMember = () => {
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
                         }
-                        treeCheckable
                         className="w-full"
                     />
                 </FormItem>
