@@ -206,18 +206,18 @@ export default function SettingCouncil() {
         setSearchRoom(value)
         debouncedRefetch()
     }
-    const handleCreateCouncil = async() => {
+    const handleCreateCouncil = async () => {
         if (councils && councils.length > 0) {
             Modal.confirm({
                 title: 'Hội đồng đã tồn tại',
-                content: 'Phiên này đã có hội đồng được thiết lập. Việc tạo lại sẽ ghi đè lịch bảo vệ cũ.',
+                content:
+                    'Phiên này đã có hội đồng được thiết lập. Việc tạo lại sẽ ghi đè lịch bảo vệ cũ.',
                 onOk: async () => {
-                    await executeCreateCouncil(); 
-                }
-
-            });
+                    await executeCreateCouncil()
+                },
+            })
         } else {
-            await executeCreateCouncil();
+            await executeCreateCouncil()
         }
     }
     const executeCreateCouncil = async () => {
@@ -341,7 +341,7 @@ export default function SettingCouncil() {
         []
     )
     const CouncilListTable = () => {
-        const [councilPageSize, setCouncilPageSize] = useState(10);
+        const [councilPageSize, setCouncilPageSize] = useState(10)
         const mainColumns = [
             {
                 title: 'Phòng bảo vệ',
@@ -429,17 +429,17 @@ export default function SettingCouncil() {
                     columns={mainColumns}
                     dataSource={councils}
                     loading={isLoadingCouncils}
-                    pagination={{ 
-                        pageSize: councilPageSize, 
+                    pagination={{
+                        pageSize: councilPageSize,
                         showSizeChanger: true,
-                        onShowSizeChange: ( size) => {
-                            setCouncilPageSize(size);
+                        onShowSizeChange: (size) => {
+                            setCouncilPageSize(size)
                         },
                         onChange: (_, size) => {
-                            setCouncilPageSize(size);
+                            setCouncilPageSize(size)
                         },
                         pageSizeOptions: ['5', '10', '20', '50'],
-                        showTotal: (total) => `Tổng cộng ${total} hội đồng`
+                        showTotal: (total) => `Tổng cộng ${total} hội đồng`,
                     }}
                     bordered
                     scroll={{ x: 1300 }} // Đảm bảo bảng không bị vỡ khi nhiều cột

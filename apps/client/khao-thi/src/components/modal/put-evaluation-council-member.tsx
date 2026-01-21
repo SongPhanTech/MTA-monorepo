@@ -1,4 +1,3 @@
-import { buildOrgProfileTree } from '@/utils/buildOrgProfileTree'
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
@@ -17,6 +16,7 @@ import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, message } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { buildOrgProfileTree } from '@/utils/buildOrgProfileTree'
 export type PutEvaluationCouncilMemberType = EvaluationCouncilMember
 const PutEvaluationCouncilMember = () => {
     const [form] = Form.useForm<PutEvaluationCouncilMemberType>()
@@ -36,6 +36,7 @@ const PutEvaluationCouncilMember = () => {
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
     async function onOk(output?: PutEvaluationCouncilMemberType) {
         if (!output || !input) return
+
         try {
             showSpinner()
             const data = {
@@ -177,7 +178,6 @@ const PutEvaluationCouncilMember = () => {
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
                         }
-                        treeCheckable
                         className="w-full"
                     />
                 </FormItem>

@@ -206,6 +206,11 @@ const DiemTrungBinhKyHoc = () => {
                                     <Form.Item className="mb-0" name="fixedClassId">
                                         <Select
                                             placeholder="Lớp quản lý"
+                                            notFoundContent={
+                                                trainingCourseId
+                                                    ? 'Không có dữ liệu'
+                                                    : 'Vui lòng chọn khoá'
+                                            }
                                             options={fixedClassData.map((i: FixedClass) => ({
                                                 value: i.id,
                                                 label: `${i?.code} - ${i.name}`,

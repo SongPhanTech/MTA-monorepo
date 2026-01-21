@@ -249,11 +249,11 @@ app.openapi(importLecturer, async (c) => {
                     },
                 })
 
-                // @ts-expect-error
                 console.log(
                     '[LSB create User]:',
                     res.status,
                     res.data,
+                    // @ts-expect-error
                     res.data?.extra?.data.Master
                 )
                 if (res.status === 200) {

@@ -25,7 +25,7 @@ import { Button, Col, Form, Input, InputNumber, message, Radio, Row, Switch, Too
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import type { DocumentFile } from '@workspace/db/client'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { BadgeHelpIcon, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -37,6 +37,7 @@ export type PutTrainingCourse = TrainingCourse & {
 }
 dayjs.locale('vi')
 const PutTrainingCourseModal = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<PutTrainingCourse>()
     const isGeneralInfoLocked = Form.useWatch('isGeneralInfoLocked', form)
     const isRegulationLocked = Form.useWatch('isRegulationLocked', form)
@@ -58,6 +59,7 @@ const PutTrainingCourseModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
 
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
+        where: { trainingObjectTypeId },
         orderBy: { createdAt: 'desc' },
     })
 
@@ -770,7 +772,9 @@ const PutTrainingCourseModal = () => {
                             name="trainingCourseClone"
                             label={
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span className="text-primary font-bold">Sao chép quy chế</span>
+                                    <span className="text-primary font-bold">
+                                        Sao chép tham số cấu hình
+                                    </span>
                                     <Tooltip
                                         placement="topLeft"
                                         title="Sao chép tài liệu đính kèm, tham số bổ sung, bảng chuyển đổi điểm, xếp loại học tập, học bổng, cảnh cáo học tập, xử lý học tập từ khoá đã chọn sang khoá hiện tại"

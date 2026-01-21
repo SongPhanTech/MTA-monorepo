@@ -61,45 +61,41 @@ export function buildOrgProfileTree(
             value: org.Id,
             parentId: org.sParentId,
             selectable: selectOrg,
-            children: [
-                ...(org.lecturers
-                    ? org.lecturers.flatMap((lecturer) => {
-                          const profile = lecturer.userProfile
-                          if (!profile) return []
+            children: org.lecturers
+                ? org.lecturers.flatMap((lecturer) => {
+                      const profile = lecturer.userProfile
+                      if (!profile) return []
 
-                          const academicRank = profile.academicRankType?.sTen || ''
-                          const degree = profile.academicDegreeType?.sTen || ''
-                          const fullName =
-                              profile.fullname ||
-                              `${profile.firstName || ''} ${profile.lastName || ''}`.trim() ||
-                              '-'
-                          const academicTitle = [academicRank, degree]
-                              .filter(Boolean)
-                              .join('.')
-                          const title = `${lecturer.code ? `${lecturer.code} - ` : ''}${academicTitle ? `${academicTitle} ` : ''}${fullName}`
+                      const academicRank = profile.academicRankType?.sTen || ''
+                      const degree = profile.academicDegreeType?.sTen || ''
+                      const fullName =
+                          profile.fullname ||
+                          `${profile.firstName || ''} ${profile.lastName || ''}`.trim() ||
+                          '-'
+                      const academicTitle = [academicRank, degree].filter(Boolean).join('.')
+                      const title = `${lecturer.code ? `${lecturer.code} - ` : ''}${academicTitle ? `${academicTitle} ` : ''}${fullName}`
 
-                          return [
-                              {
-                                  id: lecturer.id,
-                                  title,
-                                  value: lecturer.id,
-                                  selectable: true,
-                                  icon: profile.avatar ? (
-                                      <img
-                                          src={getMinioUrl(profile.avatar)}
-                                          alt={profile.id}
-                                          className="w-6 h-6 rounded-full flex items-center justify-center"
-                                      />
-                                  ) : (
-                                      <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
-                                          <UserOutlined />
-                                      </div>
-                                  ),
-                              },
-                          ]
-                      })
-                    : []),
-            ],
+                      return [
+                          {
+                              id: lecturer.id,
+                              title,
+                              value: lecturer.id,
+                              selectable: true,
+                              icon: profile.avatar ? (
+                                  <img
+                                      src={getMinioUrl(profile.avatar)}
+                                      alt={profile.id}
+                                      className="w-6 h-6 rounded-full flex items-center justify-center"
+                                  />
+                              ) : (
+                                  <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
+                                      <UserOutlined />
+                                  </div>
+                              ),
+                          },
+                      ]
+                  })
+                : [],
         }
         map.set(item.id, item)
     }

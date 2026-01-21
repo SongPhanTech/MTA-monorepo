@@ -101,6 +101,11 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
     }>({
         tag: 'ModalCauHinhLuanVan',
     })
+    const { onOpen: openModalChuyenDiemLopMonHoc } = useDisclosure<{
+        allStudentsInClasses: any[]
+    }>({
+        tag: 'ModalChuyenDiemLopMonHoc',
+    })
     const { data: sDm_Donvi = [] } = useFindManyDM_DonVi()
     const { data: roomData } = useFindManyRoom()
     const { data: defenseSessionData } = useFindManyDefenseSession()
@@ -375,7 +380,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                 if (!thesisProjectId || !rowData) return
 
                 const description = `Ngôn ngữ: ${rowData.language} - Luận án/Đề án: ${rowData.type}`
-                let status = rowData.status
+                const status = rowData.status
                 // if (status === ThesisProjectStatus.PROPOSED && isManage) {
                 //     status = ThesisProjectStatus.APPROVED_BY_DEPT
                 // }
@@ -804,7 +809,9 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         <Button
                                             type="primary"
                                             className="ml-2"
-                                            onClick={defaultButtonClick}
+                                            onClick={() => openModalChuyenDiemLopMonHoc({ 
+                                                allStudentsInClasses: allStudentsInClasses
+                                            })} 
                                             disabled={!students?.length}
                                         >
                                             Gán điểm sang LMH
@@ -919,6 +926,15 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                               'DD/MM/YYYY'
                                           )
                                         : ''
+                                },
+                            },
+                            {
+                                title: 'Lớp quản lí ',
+                                width: 250,
+                                dataIndex: 'fixedClass',
+                                align: 'center',
+                                render: (_, record) => {
+                                    return record?.fixedClass?.name || ''
                                 },
                             },
                             {

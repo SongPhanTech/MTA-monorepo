@@ -36,7 +36,7 @@ function TabDoiTuongKhaoSat() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -161,7 +161,7 @@ function TabDoiTuongKhaoSat() {
                   }
                 : {}),
         }),
-        [filters,trainingObjectTypeId]
+        [filters, trainingObjectTypeId]
     )
 
     const { data = [], refetch } = useFindManySurveyObjectType({
