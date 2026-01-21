@@ -354,11 +354,6 @@ const PutSurveyObjectTypeModal = () => {
                                 form={form}
                                 name="TrainingFields"
                                 label="Ngành"
-                                rules={
-                                    isStudentType
-                                        ? [{ required: true, message: 'Vui lòng chọn ngành' }]
-                                        : []
-                                }
                             >
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
@@ -367,7 +362,7 @@ const PutSurveyObjectTypeModal = () => {
                                     placeholder="Chọn ngành"
                                     options={trainingFieldData.map((i: TrainingField) => ({
                                         value: i.id,
-                                        label: `${i.code} - ${i.name}`,
+                                        label: `${i?.code ||''} - ${i.name}`,
                                     }))}
                                     allowClear
                                 />
@@ -378,16 +373,6 @@ const PutSurveyObjectTypeModal = () => {
                                 form={form}
                                 name="TrainingMajors"
                                 label="Chuyên ngành"
-                                rules={
-                                    isStudentType
-                                        ? [
-                                              {
-                                                  required: true,
-                                                  message: 'Vui lòng chọn chuyên ngành',
-                                              },
-                                          ]
-                                        : []
-                                }
                             >
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
@@ -407,11 +392,6 @@ const PutSurveyObjectTypeModal = () => {
                                 form={form}
                                 name="TrainingCourses"
                                 label="Khóa"
-                                rules={
-                                    isStudentType
-                                        ? [{ required: true, message: 'Vui lòng chọn khóa' }]
-                                        : []
-                                }
                             >
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
@@ -431,16 +411,6 @@ const PutSurveyObjectTypeModal = () => {
                                 form={form}
                                 name="FixedClasses"
                                 label="Lớp niên chế"
-                                rules={
-                                    isStudentType
-                                        ? [
-                                              {
-                                                  required: true,
-                                                  message: 'Vui lòng chọn lớp niên chế',
-                                              },
-                                          ]
-                                        : []
-                                }
                             >
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
@@ -460,11 +430,6 @@ const PutSurveyObjectTypeModal = () => {
                                 form={form}
                                 name="semesterId"
                                 label="Kỳ học"
-                                rules={
-                                    isStudentType
-                                        ? [{ required: true, message: 'Vui lòng chọn kỳ học' }]
-                                        : []
-                                }
                             >
                                 <TreeSelectAnt
                                     multiple
@@ -490,11 +455,6 @@ const PutSurveyObjectTypeModal = () => {
                                 form={form}
                                 name="SubjectClasses"
                                 label="Lớp môn học"
-                                rules={
-                                    isStudentType
-                                        ? [{ required: true, message: 'Vui lòng chọn lớp môn học' }]
-                                        : []
-                                }
                             >
                                 <Select
                                     disabled={

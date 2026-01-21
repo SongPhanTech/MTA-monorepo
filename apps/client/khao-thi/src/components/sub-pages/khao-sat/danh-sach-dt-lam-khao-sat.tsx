@@ -7,6 +7,7 @@ import { Survey } from '@workspace/db'
 import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { useGetSurveyObjects } from '@workspace/libs/api/exam'
 import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Row, Tag, Tooltip } from 'antd'
 import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -199,7 +200,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                     [],
                                 render: (_, record) =>
                                     record?.educationAndTraining?.length > 0
-                                        ? `${record?.educationAndTraining[0]?.fixedClass?.code}`
+                                        ? `${record?.educationAndTraining[0]?.fixedClass?.code || ''}`
                                         : '',
                             },
                             {
@@ -246,10 +247,16 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 title: 'Thao tác',
                                 align: 'center',
                                 width: 80,
-                                hidden: profileId !== '266369db-fbaa-453e-b5fc-147ed06f959d',
+                                hidden: !can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_BAO_CAO_KHAO_SAT_GIANG_VIEN,
+                                    'XEM_CHI_TIET'
+                                ),
                                 render: (_, record) => (
                                     <Row className="justify-center gap-0">
-                                        {profileId === '266369db-fbaa-453e-b5fc-147ed06f959d' && (
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_BAO_CAO_KHAO_SAT_GIANG_VIEN,
+                                            'XEM_CHI_TIET'
+                                        ) && (
                                             <Tooltip title="Xem khảo sát" placement="top">
                                                 <Eye
                                                     className="m-0"
