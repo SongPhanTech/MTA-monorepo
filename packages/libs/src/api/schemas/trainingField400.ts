@@ -6,5 +6,5 @@
  */
 
 export type TrainingField400 = {
-    message: string
-}
+  message: string;
+};

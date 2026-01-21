@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsExamBankUpdate200DataItem = {
-    name: string
-    data: number[]
-}
+  name: string;
+  data: number[];
+};

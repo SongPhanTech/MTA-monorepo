@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { CheckExportTableBySqlDbType } from './checkExportTableBySqlDbType'
+import type { CheckExportTableBySqlDbType } from './checkExportTableBySqlDbType';
 
 export type CheckExportTableBySqlParams = {
-    url: string
-    database: string
-    sql: string
-    dbType?: CheckExportTableBySqlDbType
-}
+url: string;
+database: string;
+sql: string;
+dbType?: CheckExportTableBySqlDbType;
+};

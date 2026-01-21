@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { OpenSubjectClassReExamStudentsResponseFixedClassTrainingCourse } from './openSubjectClassReExamStudentsResponseFixedClassTrainingCourse'
+import type { OpenSubjectClassReExamStudentsResponseFixedClassTrainingCourse } from './openSubjectClassReExamStudentsResponseFixedClassTrainingCourse';
 
 export type OpenSubjectClassReExamStudentsResponseFixedClass = {
-    code: string
-    trainingCourse: OpenSubjectClassReExamStudentsResponseFixedClassTrainingCourse
-}
+  code: string;
+  trainingCourse: OpenSubjectClassReExamStudentsResponseFixedClassTrainingCourse;
+};

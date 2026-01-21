@@ -1,5 +1,9 @@
 import { z } from '@hono/zod-openapi'
-import { AcademicRankingConvertScalarSchema } from '@workspace/db/zod/models'
+import {
+    AcademicWarningRuleScalarSchema,
+    ScholarshipScalarSchema,
+    StudentSemesterResultScalarSchema,
+} from '@workspace/db/zod/models'
 
 export const ListScholarship = z.object({
     id: z.string().describe('ID của tiêu chí học bổng'),
@@ -159,9 +163,13 @@ export const StudentInfoCheck = z.object({
     lyDoXepLoai: z.string().describe('Lý do xếp loại'),
     userProfile: z.any().describe('Thông tin người dùng'),
 })
+
 export const StudentResult = z.object({
     id: z.string().describe('ID của sinh viên'),
-    studentSemesterResult: z.any().describe('Kết quả học tập của sinh viên trong học kỳ'),
+    code: z.string().nullable(),
+    studentSemesterResult: StudentSemesterResultScalarSchema.describe(
+        'Kết quả học tập của sinh viên trong học kỳ'
+    ),
     trainingMajor: z.string().describe('Chuyên ngành'),
     trainingMajorId: z.string().describe('ID Chuyên ngành'),
     trainingField: z.string().describe('Ngành'),
@@ -179,6 +187,71 @@ export const StudentResult = z.object({
     highestScholarship: z.any().describe('Học bổng cao nhất của sinh viên'),
     scholarshipRecived: z.array(z.any()).describe('Thông tin học bổng đã nhận'),
     reason: z.string().describe('Lý do'),
+})
+
+export const StudentResultBase = z.object({
+    id: z.string().describe('ID của sinh viên'),
+    code: z.string().nullable(),
+    studentSemesterResult: StudentSemesterResultScalarSchema.describe(
+        'Kết quả học tập của sinh viên trong học kỳ'
+    ),
+    trainingMajor: z.string().describe('Chuyên ngành'),
+    trainingMajorId: z.string().describe('ID Chuyên ngành'),
+    trainingField: z.string().describe('Ngành'),
+    trainingFieldId: z.string().describe('ID Ngành'),
+    userProfile: z.any().describe('Thông tin người dùng'),
+    reason: z.string().describe('Lý do'),
+})
+
+export const StudentScholarshipResult = StudentResultBase.extend({
+    hasScholarship: z.literal(true),
+    scholarship: z.array(ScholarshipScalarSchema).describe('Danh sách học bổng của sinh viên'),
+    scholarshipRecived: z.array(ScholarshipScalarSchema).describe('Thông tin học bổng đã nhận'),
+    highestScholarship: ScholarshipScalarSchema.describe('Học bổng cao nhất của sinh viên'),
+})
+
+export const StudentAcademicWarningResult = StudentResultBase.extend({
+    hasAcademicWarning: z.literal(true),
+    academicWarningRule: z
+        .array(AcademicWarningRuleScalarSchema)
+        .describe('Danh sách cảnh cáo học tập của sinh viên'),
+})
+
+export const StudentAcademicActionResult = StudentResultBase.extend({
+    hasAcademicAction: z.literal(true),
+    academicAction: z
+        .array(ListAcademicAction)
+        .describe('Danh sách hành động học vụ của sinh viên'),
+})
+
+export const StudentDecreaseAcademicWarningResult = StudentResultBase.extend({
+    decreaseAcademicWarning: z.literal(true),
+})
+
+export const CourseStudentScholarshipResult = z.object({
+    courseId: z.string().describe('ID khoá học'),
+    courseName: z.string().describe('Tên khoá học'),
+    students: z.array(StudentScholarshipResult).describe('Danh sách sinh viên trong khoá học'),
+})
+
+export const CourseStudentAcademicWarningResult = z.object({
+    courseId: z.string().describe('ID khoá học'),
+    courseName: z.string().describe('Tên khoá học'),
+    students: z.array(StudentAcademicWarningResult).describe('Danh sách sinh viên trong khoá học'),
+})
+
+export const CourseStudentAcademicActionResult = z.object({
+    courseId: z.string().describe('ID khoá học'),
+    courseName: z.string().describe('Tên khoá học'),
+    students: z.array(StudentAcademicActionResult).describe('Danh sách sinh viên trong khoá học'),
+})
+
+export const CourseStudentDecreaseAcademicWarningResult = z.object({
+    courseId: z.string().describe('ID khoá học'),
+    courseName: z.string().describe('Tên khoá học'),
+    students: z
+        .array(StudentDecreaseAcademicWarningResult)
+        .describe('Danh sách sinh viên trong khoá học'),
 })
 export const CourseStudentResult = z.object({
     courseId: z.string().describe('ID khoá học'),
@@ -230,3 +303,10 @@ export type StudentResult = z.infer<typeof StudentResult>
 export type CourseStudentResult = z.infer<typeof CourseStudentResult>
 export type ListAcademicAction = z.infer<typeof ListAcademicAction>
 export type StudentRepeatGrade = z.infer<typeof StudentRepeatGrade>
+
+export type CourseStudentScholarshipResult = z.infer<typeof CourseStudentScholarshipResult>
+export type CourseStudentAcademicWarningResult = z.infer<typeof CourseStudentAcademicWarningResult>
+export type CourseStudentAcademicActionResult = z.infer<typeof CourseStudentAcademicActionResult>
+export type CourseStudentDecreaseAcademicWarningResult = z.infer<
+    typeof CourseStudentDecreaseAcademicWarningResult
+>

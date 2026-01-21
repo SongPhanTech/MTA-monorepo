@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ImportPhanCongGiangDayImportType =
-    (typeof ImportPhanCongGiangDayImportType)[keyof typeof ImportPhanCongGiangDayImportType]
+export type ImportPhanCongGiangDayImportType = typeof ImportPhanCongGiangDayImportType[keyof typeof ImportPhanCongGiangDayImportType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ImportPhanCongGiangDayImportType = {
-    TAO_MOI: 'TAO_MOI',
-    CAP_NHAT: 'CAP_NHAT',
-    XEM_TRUOC: 'XEM_TRUOC',
-} as const
+  TAO_MOI: 'TAO_MOI',
+  CAP_NHAT: 'CAP_NHAT',
+  XEM_TRUOC: 'XEM_TRUOC',
+} as const;

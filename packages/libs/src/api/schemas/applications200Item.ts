@@ -4,28 +4,28 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { Applications200ItemCALLBACKURL } from './applications200ItemCALLBACKURL'
-import type { Applications200ItemGROUPID } from './applications200ItemGROUPID'
-import type { Applications200ItemUPDATEDBY } from './applications200ItemUPDATEDBY'
+import type { Applications200ItemCALLBACKURL } from './applications200ItemCALLBACKURL';
+import type { Applications200ItemGROUPID } from './applications200ItemGROUPID';
+import type { Applications200ItemUPDATEDBY } from './applications200ItemUPDATEDBY';
 
 export type Applications200Item = {
-    APPLICATION_ID: number
-    NAME: string
-    SUBSCRIBER_ID: number
-    APPLICATION_TIER: string
-    /** @nullable */
-    CALLBACK_URL: Applications200ItemCALLBACKURL
-    DESCRIPTION: string
-    APPLICATION_STATUS: string
-    /** @nullable */
-    GROUP_ID: Applications200ItemGROUPID
-    CREATED_BY: string
-    CREATED_TIME: string
-    /** @nullable */
-    UPDATED_BY: Applications200ItemUPDATEDBY
-    UPDATED_TIME: string
-    UUID: string
-    TOKEN_TYPE: string
-    ORGANIZATION: string
-    SHARED_ORGANIZATION: string
-}
+  APPLICATION_ID: number;
+  NAME: string;
+  SUBSCRIBER_ID: number;
+  APPLICATION_TIER: string;
+  /** @nullable */
+  CALLBACK_URL: Applications200ItemCALLBACKURL;
+  DESCRIPTION: string;
+  APPLICATION_STATUS: string;
+  /** @nullable */
+  GROUP_ID: Applications200ItemGROUPID;
+  CREATED_BY: string;
+  CREATED_TIME: string;
+  /** @nullable */
+  UPDATED_BY: Applications200ItemUPDATEDBY;
+  UPDATED_TIME: string;
+  UUID: string;
+  TOKEN_TYPE: string;
+  ORGANIZATION: string;
+  SHARED_ORGANIZATION: string;
+};

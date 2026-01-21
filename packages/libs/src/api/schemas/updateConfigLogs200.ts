@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type UpdateConfigLogs200 = unknown | null
+export type UpdateConfigLogs200 = unknown | null;

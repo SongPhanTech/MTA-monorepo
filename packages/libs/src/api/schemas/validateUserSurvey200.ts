@@ -6,6 +6,6 @@
  */
 
 export type ValidateUserSurvey200 = {
-    studentCode: string
-    exists: boolean
-}
+  studentCode: string;
+  exists: boolean;
+};

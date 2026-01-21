@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsFinalExamResult200DataItem = {
-    name: string
-    count: number
-}
+export type PostApiStatsSummaryAdmissionStatisticsBody = {
+  preview?: boolean;
+};

@@ -6,13 +6,13 @@
  */
 
 export type ErrorRateParams = {
-    service: string
-    /**
-     * @nullable
-     */
-    from?: string | null
-    /**
-     * @nullable
-     */
-    to?: string | null
-}
+service: string;
+/**
+ * @nullable
+ */
+from?: string | null;
+/**
+ * @nullable
+ */
+to?: string | null;
+};

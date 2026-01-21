@@ -14,7 +14,6 @@ import {
     type Scholarship,
     type ScholarshipCriteria,
     SemesterType,
-    type StudentAcademicDecision,
     type StudentSemesterResult,
     StudentStatus,
     StudentTrainingType,
@@ -26,11 +25,17 @@ import Decimal from 'decimal.js'
 import pMap from 'p-map'
 import { prisma } from '..'
 import {
-    CourseStudentResult,
+    type CourseStudentAcademicActionResult,
+    type CourseStudentAcademicWarningResult,
+    type CourseStudentDecreaseAcademicWarningResult,
+    type CourseStudentScholarshipResult,
     type ListAcademicAction,
+    StudentAcademicActionResult,
+    StudentAcademicWarningResult,
+    StudentDecreaseAcademicWarningResult,
     type StudentInfoCheck,
     type StudentRepeatGrade,
-    StudentResult,
+    StudentScholarshipResult,
 } from '../dto/student-info.dto'
 import type { StudentCondition, StudentDataContext } from '../types/student-context'
 
@@ -1435,7 +1440,7 @@ export async function calculateStudentYearResult({
     return result
 }
 
-export const listStudentResultInfo = async (semesterId: string) => {
+export const listStudentResultInfo = async (semesterId: string, trainingObjectTypeId: string) => {
     try {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
@@ -1445,6 +1450,11 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
                     fixedClassId: {
                         not: null, // Chỉ lấy sinh viên có lớp học cố định
+                    },
+                    fixedClass: {
+                        trainingCourse: {
+                            trainingObjectTypeId,
+                        },
                     },
                 },
                 deletedAt: null,
@@ -1897,7 +1907,7 @@ const checkAcademicWarning = async (
         return [] // Trả về false nếu có lỗi xảy ra
     }
 }
-const checkScholarshipRecived = async (
+const checkScholarshipReceived = async (
     student: StudentInfoCheck,
     semesterId: string,
     semesterScholarship: Scholarship[] = []
@@ -2091,7 +2101,6 @@ const getScholarship = async (
     // Lấy danh sách học bổng của sinh viên
     const scholarships: Scholarship[] = []
     for (const scholarship of semesterScholarshipFilter) {
-        console.log('Checking scholarship:', scholarship.id, scholarship.name)
         const isEligible = await checkScholarship(
             student,
             scholarship.id,
@@ -2101,7 +2110,6 @@ const getScholarship = async (
             scholarships.push(scholarship)
         }
     }
-    console.log('Eligible scholarships for student', student.id, scholarships)
     return scholarships
 }
 
@@ -2126,44 +2134,30 @@ const CheckDecreaseAcademicWarning = (
     return false
 }
 
-const getStudentResult = async (
-    student: StudentInfoCheck,
-    semesterId: string,
-    type: 'scholarship' | 'academicWarning' | 'academicAction' | 'decreaseAcademicWarning',
-    semesterScholarship: Scholarship[] = [],
-    scholarshipCriteriaList: ScholarshipCriteria[] = [],
-    warningCriteriaList: AcademicWarningRule[] = [],
-    academicActionConfig: AcademicActionConfig[] = [],
-    academicActionRuleSet: AcademicActionRuleSet[] = [],
-    actionCriteriaList: AcademicActionCondition[] = [],
-    studentAcademicDecision: StudentAcademicDecision[] = []
-): Promise<StudentResult> => {
-    try {
-        console.log('Fetching result for student:', student.id, 'in semester:', semesterId)
-        const studentSemesterResult = await prisma.studentSemesterResult.findFirst({
-            where: {
-                studentId: student.id,
-                semesterId,
-            },
-            include: {
-                student: {
-                    include: {
-                        userProfile: true,
-                        fixedClass: {
-                            include: {
-                                trainingCourse: {
-                                    include: {
-                                        trainingObjectType: true,
-                                    },
+const fetchStudentSemesterResult = async (studentId: string, semesterId: string) => {
+    return await prisma.studentSemesterResult.findFirst({
+        where: {
+            studentId,
+            semesterId,
+        },
+        include: {
+            student: {
+                include: {
+                    userProfile: true,
+                    fixedClass: {
+                        include: {
+                            trainingCourse: {
+                                include: {
+                                    trainingObjectType: true,
                                 },
-                                curriculumVersion: {
-                                    include: {
-                                        curriculum: {
-                                            include: {
-                                                trainingMajor: {
-                                                    include: {
-                                                        trainingField: true, // Bao gồm thông tin ngành
-                                                    },
+                            },
+                            curriculumVersion: {
+                                include: {
+                                    curriculum: {
+                                        include: {
+                                            trainingMajor: {
+                                                include: {
+                                                    trainingField: true, // Bao gồm thông tin ngành
                                                 },
                                             },
                                         },
@@ -2174,149 +2168,23 @@ const getStudentResult = async (
                     },
                 },
             },
-            orderBy: {
-                student: {
-                    userProfile: {
-                        firstName: 'asc',
-                    },
-                },
-            },
-        })
-
-        if (!studentSemesterResult)
-            throw new Error(
-                `Không tìm thấy kết quả học kỳ cho sinh viên ${student.id} trong học kỳ ${semesterId}`
-            )
-        // Lấy khoá học của sinh viên
-        const trainingCourseId = studentSemesterResult.student.fixedClass?.trainingCourseId
-        if (!trainingCourseId)
-            throw new Error(`Không tìm thấy khoá học cho sinh viên ${student.id}`)
-        // Kiểm tra loại kết quả cần lấy
-        const scholarshipInfo =
-            type === 'scholarship'
-                ? await getScholarship(
-                      student,
-                      trainingCourseId,
-                      semesterScholarship,
-                      scholarshipCriteriaList
-                  )
-                : []
-        const scholarshipRecive =
-            type === 'scholarship'
-                ? await checkScholarshipRecived(student, semesterId, semesterScholarship)
-                : []
-        const checkAcademicWarningResult =
-            type === 'academicWarning'
-                ? await checkAcademicWarning(student, trainingCourseId, warningCriteriaList)
-                : []
-
-        const checkAcademicActionExists = studentAcademicDecision.find(
-            (decision) => decision.studentId === student.id && decision.semesterId === semesterId
-        )
-        console.log('checkAcademicActionExists', checkAcademicActionExists, student.id, semesterId)
-        const academicActionInfo =
-            type === 'academicAction' && checkAcademicActionExists !== undefined
-                ? await getAcademicAction(
-                      student,
-                      trainingCourseId,
-                      academicActionConfig,
-                      academicActionRuleSet,
-                      actionCriteriaList
-                  )
-                : []
-
-        const checkDecreaseAcademicWarning =
-            type === 'decreaseAcademicWarning'
-                ? CheckDecreaseAcademicWarning(student, checkAcademicWarningResult.length > 0)
-                : false
-        const filteredResult = (({ student, ...rest }) => rest)(studentSemesterResult)
-        return StudentResult.parse({
-            id: studentSemesterResult.studentId,
-            studentSemesterResult: filteredResult,
-            userProfile: await prisma.userProfile.findUnique({
-                where: {
-                    id: studentSemesterResult.student.userProfileId,
-                    deletedAt: null,
-                    active: true,
-                },
-            }),
-            hasScholarship: !!scholarshipInfo.length,
-            hasAcademicAction: !!academicActionInfo.length,
-            hasAcademicWarning: checkAcademicWarningResult.length > 0,
-            academicWarningRule: checkAcademicWarningResult,
-            scholarship: scholarshipInfo,
-            academicAction: academicActionInfo,
-            trainingMajor:
-                studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
-                    ?.trainingMajor?.name || '',
-            trainingMajorId:
-                studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
-                    ?.trainingMajor?.id || '',
-            trainingField:
-                studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
-                    ?.trainingMajor?.trainingField?.name || '',
-            trainingFieldId:
-                studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
-                    ?.trainingMajor?.trainingField?.id || '',
-            highestScholarship: scholarshipInfo.length > 0 ? scholarshipInfo[0] : null,
-            scholarshipRecived: scholarshipRecive,
-            decreaseAcademicWarning: checkDecreaseAcademicWarning,
-            reason: student.lyDoXepLoai || '',
-        })
-    } catch (error) {
-        console.error('Error fetching student result:', error)
-        throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
-    }
-}
-
-export const sortStudentResultInfo = (
-    courseStudentResult: CourseStudentResult[]
-): CourseStudentResult[] => {
-    return courseStudentResult.map((course) => {
-        const sortedStudents = course.students.sort((a, b) => {
-            // Sắp xếp theo học bổng
-            const gpaA = a.highestScholarship?.rankOrder || 0
-            const gpaB = b.highestScholarship?.rankOrder || 0
-            if (gpaA !== gpaB) {
-                return gpaA - gpaB // Sắp xếp tăng dần (order 1 cao nhất)
-            }
-            // Nếu điểm trung bình bằng nhau, sắp xếp GPA
-            const studentGpaA = a.studentSemesterResult.gpaBase10 || 0
-            const studentGpaB = b.studentSemesterResult.gpaBase10 || 0
-            if (studentGpaA !== studentGpaB) {
-                return studentGpaB - studentGpaA // Sắp xếp giảm dần
-            }
-            return 0
-        })
-        return {
-            ...course,
-            students: sortedStudents,
-        }
+        },
     })
 }
 
-export const resultCourseStudentResult = async (
+export const resultCourseStudentScholarship = async (
     students: StudentInfoCheck[],
-    semesterId: string,
-    type: 'scholarship' | 'academicWarning' | 'academicAction' | 'decreaseAcademicWarning',
-    academicActionType?: 'REPEAT_YEAR' | 'SUSPENSION' | 'EXPULSION'
-): Promise<CourseStudentResult[]> => {
-    const courseMap: Record<string, CourseStudentResult> = {}
-
-    // DS khoá học
+    semesterId: string
+): Promise<CourseStudentScholarshipResult[]> => {
+    const courseMap: Record<string, CourseStudentScholarshipResult> = {}
     const courseIds = new Set(students.map((student) => student.khoaId))
-    console.log('courseIds', courseIds)
-
-    // Ds tiêu chí học bổng
     const semesterScholarship = await prisma.scholarship.findMany({
         where: {
-            trainingCourseId: { in: Array.from(courseIds) }, // Lấy học bổng theo khoá học
+            trainingCourseId: { in: Array.from(courseIds) },
             deletedAt: null,
             active: true,
         },
-        orderBy: {
-            rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
-        },
+        orderBy: { rankOrder: 'asc' },
     })
     const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
         where: {
@@ -2324,14 +2192,106 @@ export const resultCourseStudentResult = async (
             deletedAt: null,
             active: true,
         },
-        orderBy: {
-            scholarship: {
-                rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
-            },
-        },
+        orderBy: { scholarship: { rankOrder: 'asc' } },
     })
 
-    // Ds tiêu chỉ cảnh cáo học tập
+    await Promise.all(
+        students.map(async (student) => {
+            const courseId = student.khoaId
+            if (!courseMap[courseId]) {
+                courseMap[courseId] = {
+                    courseId,
+                    courseName: student.khoa,
+                    students: [],
+                }
+            }
+            const trainingCourseId = student.khoaId
+            const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
+
+            if (!studentSemesterResult) return
+
+            const scholarshipInfo = await getScholarship(
+                student,
+                trainingCourseId,
+                semesterScholarship,
+                scholarshipCriteriaList
+            )
+            const scholarshipReceive = await checkScholarshipReceived(
+                student,
+                semesterId,
+                semesterScholarship
+            )
+
+            if (scholarshipInfo.length === 0 || scholarshipReceive.length > 0) return
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const {
+                student: _student,
+                studentId: _studentId,
+                semesterId: _semesterId,
+                rankId: _rankId,
+                ...filteredResult
+            } = studentSemesterResult as any
+
+            const result = StudentScholarshipResult.parse({
+                id: studentSemesterResult.studentId,
+                code: studentSemesterResult.student.userProfile?.code,
+                studentSemesterResult: filteredResult,
+                userProfile: await prisma.userProfile.findUnique({
+                    where: { id: studentSemesterResult.student.userProfileId },
+                }),
+                trainingMajor:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.name || '',
+                trainingMajorId:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.id || '',
+                trainingField:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.trainingField?.name || '',
+                trainingFieldId:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.trainingField?.id || '',
+                reason: student.lyDoXepLoai || '',
+                hasScholarship: true,
+                scholarship: scholarshipInfo.map(({ trainingCourseId: _t, ...rest }) => rest),
+                scholarshipRecived: scholarshipReceive.map(
+                    ({ trainingCourseId: _t, ...rest }) => rest
+                ),
+                highestScholarship: scholarshipInfo[0]
+                    ? (({ trainingCourseId: _t, ...rest }) => rest)(scholarshipInfo[0])
+                    : null,
+            })
+            courseMap[courseId].students.push(result)
+        })
+    )
+
+    for (const courseId in courseMap) {
+        if (courseMap[courseId] && courseMap[courseId].students.length === 0) {
+            delete courseMap[courseId]
+        }
+    }
+
+    return Object.values(courseMap).map((course) => ({
+        ...course,
+        students: course.students.sort((a, b) => {
+            const rankA = a.highestScholarship?.rankOrder || 0
+            const rankB = b.highestScholarship?.rankOrder || 0
+            if (rankA !== rankB) return rankA - rankB
+
+            const gpaA = a.studentSemesterResult.gpaBase10?.toNumber() || 0
+            const gpaB = b.studentSemesterResult.gpaBase10?.toNumber() || 0
+            return gpaB - gpaA
+        }),
+    }))
+}
+
+export const resultCourseStudentAcademicWarning = async (
+    students: StudentInfoCheck[],
+    semesterId: string
+): Promise<CourseStudentAcademicWarningResult[]> => {
+    const courseMap: Record<string, CourseStudentAcademicWarningResult> = {}
+    const courseIds = new Set(students.map((student) => student.khoaId))
     const warningCriteriaList = await prisma.academicWarningRule.findMany({
         where: {
             trainingCourseId: { in: Array.from(courseIds) },
@@ -2340,11 +2300,93 @@ export const resultCourseStudentResult = async (
         },
     })
 
-    // Ds tiêu chí thôi học, lưu ban
+    await Promise.all(
+        students.map(async (student) => {
+            const courseId = student.khoaId
+            if (!courseMap[courseId]) {
+                courseMap[courseId] = {
+                    courseId,
+                    courseName: student.khoa,
+                    students: [],
+                }
+            }
+            const trainingCourseId = student.khoaId
+            const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
+
+            if (!studentSemesterResult) return
+
+            const checkAcademicWarningResult = await checkAcademicWarning(
+                student,
+                trainingCourseId,
+                warningCriteriaList
+            )
+
+            if (checkAcademicWarningResult.length === 0) return
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const {
+                student: _student,
+                studentId: _studentId,
+                semesterId: _semesterId,
+                rankId: _rankId,
+                ...filteredResult
+            } = studentSemesterResult as any
+
+            const result = StudentAcademicWarningResult.parse({
+                id: studentSemesterResult.studentId,
+                code: studentSemesterResult.student.userProfile?.code,
+                studentSemesterResult: filteredResult,
+                userProfile: await prisma.userProfile.findUnique({
+                    where: { id: studentSemesterResult.student.userProfileId },
+                }),
+                trainingMajor:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.name || '',
+                trainingMajorId:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.id || '',
+                trainingField:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.trainingField?.name || '',
+                trainingFieldId:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.trainingField?.id || '',
+                reason: student.lyDoXepLoai || '',
+                hasAcademicWarning: true,
+                academicWarningRule: checkAcademicWarningResult.map(
+                    ({ trainingCourseId: _t, ...rest }) => rest
+                ),
+            })
+            courseMap[courseId].students.push(result)
+        })
+    )
+
+    for (const courseId in courseMap) {
+        if (courseMap[courseId] && courseMap[courseId].students.length === 0) {
+            delete courseMap[courseId]
+        }
+    }
+    return Object.values(courseMap).map((course) => ({
+        ...course,
+        students: course.students.sort((a, b) => {
+            const gpaA = a.studentSemesterResult.gpaBase10?.toNumber() || 0
+            const gpaB = b.studentSemesterResult.gpaBase10?.toNumber() || 0
+            return gpaB - gpaA
+        }),
+    }))
+}
+
+export const resultCourseStudentAcademicAction = async (
+    students: StudentInfoCheck[],
+    semesterId: string,
+    academicActionType?: 'REPEAT_YEAR' | 'SUSPENSION' | 'EXPULSION'
+): Promise<CourseStudentAcademicActionResult[]> => {
+    const courseMap: Record<string, CourseStudentAcademicActionResult> = {}
+    const courseIds = new Set(students.map((student) => student.khoaId))
     const academicActionConfig = await prisma.academicActionConfig.findMany({
         where: {
             trainingCourseId: { in: Array.from(courseIds) },
-            actionType: academicActionType || undefined, // Chỉ lấy theo loại hành động học vụ nếu có
+            actionType: academicActionType || undefined,
             deletedAt: null,
             active: true,
         },
@@ -2364,15 +2406,12 @@ export const resultCourseStudentResult = async (
         },
         include: {
             ruleSet: {
-                // AcademicActionRuleSet
                 include: {
-                    config: true, // AcademicActionConditionConfig
+                    config: true,
                 },
             },
         },
     })
-
-    // Ds StudentAcademicDecision
     const studentAcademicDecision = await prisma.studentAcademicDecision.findMany({
         where: {
             studentId: { in: students.map((s) => s.id) },
@@ -2383,12 +2422,10 @@ export const resultCourseStudentResult = async (
             active: true,
         },
     })
-    // Process students in parallel
+
     await Promise.all(
         students.map(async (student) => {
-            console.log('student', student.hoTen)
             const courseId = student.khoaId
-            // Synchronize access to courseMap to avoid race conditions
             if (!courseMap[courseId]) {
                 courseMap[courseId] = {
                     courseId,
@@ -2396,160 +2433,170 @@ export const resultCourseStudentResult = async (
                     students: [],
                 }
             }
-            const studentResult = await getStudentResult(
+            const trainingCourseId = student.khoaId
+            const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
+
+            if (!studentSemesterResult) return
+
+            const checkAcademicActionExists = studentAcademicDecision.find(
+                (decision) =>
+                    decision.studentId === student.id && decision.semesterId === semesterId
+            )
+            if (!checkAcademicActionExists) return
+
+            const academicActionInfo = await getAcademicAction(
                 student,
-                semesterId,
-                type,
-                semesterScholarship,
-                scholarshipCriteriaList,
-                warningCriteriaList,
+                trainingCourseId,
                 academicActionConfig,
                 actionRuleSet,
-                actionCriteriaList,
-                studentAcademicDecision
+                actionCriteriaList
             )
-            if (!studentResult) {
-                console.warn(`No result found for student ${student.id} in semester ${semesterId}`)
-                return
-            }
-            // Filter based on type
-            console.log(
-                `Student ${student.id} - hasScholarship: ${studentResult.hasScholarship}, hasAcademicWarning: ${studentResult.hasAcademicWarning}, hasAcademicAction: ${studentResult.hasAcademicAction}, decreaseAcademicWarning: ${studentResult.decreaseAcademicWarning}`
-            )
-            // bỏ qua nếu không đủ điều kiện
-            const skip =
-                (type === 'scholarship' && !studentResult.hasScholarship) ||
-                (type === 'academicWarning' && !studentResult.hasAcademicWarning) ||
-                (type === 'academicAction' && !studentResult.hasAcademicAction) ||
-                (type === 'decreaseAcademicWarning' && !studentResult.decreaseAcademicWarning)
-            if (skip) {
-                console.log(`Skipping student ${student.id} in course ${courseId} for type ${type}`)
-                return
-            }
-            // bỏ qua nếu đã có học bổng
-            if (studentResult.scholarshipRecived.length > 0) {
-                return
-            }
-            courseMap[courseId].students.push(studentResult)
+
+            if (academicActionInfo.length === 0) return
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const {
+                student: _student,
+                studentId: _studentId,
+                semesterId: _semesterId,
+                rankId: _rankId,
+                ...filteredResult
+            } = studentSemesterResult as any
+
+            const result = StudentAcademicActionResult.parse({
+                id: studentSemesterResult.studentId,
+                code: studentSemesterResult.student.userProfile?.code,
+                studentSemesterResult: filteredResult,
+                userProfile: await prisma.userProfile.findUnique({
+                    where: { id: studentSemesterResult.student.userProfileId },
+                }),
+                trainingMajor:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.name || '',
+                trainingMajorId:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.id || '',
+                trainingField:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.trainingField?.name || '',
+                trainingFieldId:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.trainingField?.id || '',
+                reason: student.lyDoXepLoai || '',
+                hasAcademicAction: true,
+                academicAction: academicActionInfo,
+            })
+            courseMap[courseId].students.push(result)
         })
     )
-    // bỏ các khoá học không có sinh viên
+
     for (const courseId in courseMap) {
         if (courseMap[courseId] && courseMap[courseId].students.length === 0) {
             delete courseMap[courseId]
         }
     }
-    const result = sortStudentResultInfo(Object.values(courseMap))
-    console.log(`Found ${result.length} courses with students for semester ${semesterId}`)
-    return result.map((course) => CourseStudentResult.parse(course))
+    return Object.values(courseMap).map((course) => ({
+        ...course,
+        students: course.students.sort((a, b) => {
+            const gpaA = a.studentSemesterResult.gpaBase10?.toNumber() || 0
+            const gpaB = b.studentSemesterResult.gpaBase10?.toNumber() || 0
+            return gpaB - gpaA
+        }),
+    }))
 }
 
-const checkStudentResultForRepeatGrade = async (
-    studentIds: string[],
+export const resultCourseStudentDecreaseAcademicWarning = async (
+    students: StudentInfoCheck[],
     semesterId: string
-): Promise<string[]> => {
-    try {
-        const studentSemesterResult = await prisma.studentSemesterResult.findMany({
-            where: {
-                studentId: { in: studentIds },
-                semesterId,
-                deletedAt: null,
-                active: true,
-            },
-            include: {
-                student: {
-                    include: {
-                        userProfile: true,
-                        fixedClass: {
-                            include: {
-                                trainingCourse: {
-                                    include: {
-                                        trainingObjectType: true,
-                                    },
-                                },
-                                curriculumVersion: {
-                                    include: {
-                                        curriculum: {
-                                            include: {
-                                                trainingMajor: {
-                                                    include: {
-                                                        trainingField: true, // Bao gồm thông tin ngành
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-            orderBy: {
-                student: {
-                    userProfile: {
-                        firstName: 'asc',
-                    },
-                },
-            },
-        })
+): Promise<CourseStudentDecreaseAcademicWarningResult[]> => {
+    const courseMap: Record<string, CourseStudentDecreaseAcademicWarningResult> = {}
+    const courseIds = new Set(students.map((student) => student.khoaId))
+    const warningCriteriaList = await prisma.academicWarningRule.findMany({
+        where: {
+            trainingCourseId: { in: Array.from(courseIds) },
+            deletedAt: null,
+            active: true,
+        },
+    })
 
-        if (!studentSemesterResult) {
-            throw new Error(
-                `Không tìm thấy kết quả học kỳ cho sinh viên trong học kỳ ${semesterId}`
-            )
-        }
-
-        const scoreToRetainList = await prisma.trainingCourse.findMany({
-            where: {
-                id: {
-                    in: studentSemesterResult.map(
-                        (s) => s.student.fixedClass?.trainingCourseId || ''
-                    ),
-                },
-                deletedAt: null,
-                active: true,
-            },
-        })
-
-        if (!scoreToRetainList) {
-            throw new Error(
-                `Không tìm thấy khoá học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
-            )
-        }
-
-        const listStudentRepeatGrade: string[] = studentSemesterResult
-            .map((result) => {
-                const scoreToRetain = scoreToRetainList.find(
-                    (course) => course.id === result.student.fixedClass?.trainingCourseId
-                )
-
-                if (
-                    scoreToRetain &&
-                    result.baseScore === 'Base10' &&
-                    result.gpaBase10.toNumber() <= scoreToRetain.scoreToRetain
-                ) {
-                    return result.studentId
+    await Promise.all(
+        students.map(async (student) => {
+            const courseId = student.khoaId
+            if (!courseMap[courseId]) {
+                courseMap[courseId] = {
+                    courseId,
+                    courseName: student.khoa,
+                    students: [],
                 }
-                if (
-                    scoreToRetain &&
-                    result.baseScore === 'Base4' &&
-                    result.gpaBase4.toNumber() <= scoreToRetain.scoreToRetain
-                ) {
-                    return result.studentId
-                }
-                return null // Ensure a value is always returned
+            }
+            const trainingCourseId = student.khoaId
+            const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
+
+            if (!studentSemesterResult) return
+
+            const checkAcademicWarningResult = await checkAcademicWarning(
+                student,
+                trainingCourseId,
+                warningCriteriaList
+            )
+
+            const decreaseAcademicWarning = CheckDecreaseAcademicWarning(
+                student,
+                checkAcademicWarningResult.length > 0
+            )
+
+            if (!decreaseAcademicWarning) return
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const {
+                student: _student,
+                studentId: _studentId,
+                semesterId: _semesterId,
+                rankId: _rankId,
+                ...filteredResult
+            } = studentSemesterResult as any
+
+            const result = StudentDecreaseAcademicWarningResult.parse({
+                id: studentSemesterResult.studentId,
+                code: studentSemesterResult.student.userProfile?.code,
+                studentSemesterResult: filteredResult,
+                userProfile: await prisma.userProfile.findUnique({
+                    where: { id: studentSemesterResult.student.userProfileId },
+                }),
+                trainingMajor:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.name || '',
+                trainingMajorId:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.id || '',
+                trainingField:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.trainingField?.name || '',
+                trainingFieldId:
+                    studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
+                        ?.trainingMajor?.trainingField?.id || '',
+                reason: student.lyDoXepLoai || '',
+                decreaseAcademicWarning: true,
             })
-            .filter((id): id is string => id !== null)
+            courseMap[courseId].students.push(result)
+        })
+    )
 
-        console.log('listStudentRepeatGrade', listStudentRepeatGrade)
-
-        return listStudentRepeatGrade
-    } catch (error) {
-        console.error('Error fetching student result for repeat grade:', error)
-        throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
+    for (const courseId in courseMap) {
+        if (courseMap[courseId] && courseMap[courseId].students.length === 0) {
+            delete courseMap[courseId]
+        }
     }
+    return Object.values(courseMap).map((course) => ({
+        ...course,
+        students: course.students.sort((a, b) => {
+            const gpaA = a.studentSemesterResult.gpaBase10?.toNumber() || 0
+            const gpaB = b.studentSemesterResult.gpaBase10?.toNumber() || 0
+            return gpaB - gpaA
+        }),
+    }))
 }
+
 const SaveStudentRepeatGrade = async (
     studentIds: string[],
     semesterId: string

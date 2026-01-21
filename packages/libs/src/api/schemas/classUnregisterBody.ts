@@ -6,9 +6,9 @@
  */
 
 export type ClassUnregisterBody = {
-    /** ID đợt đăng ký lớp học */
-    sessionId: string
-    /** Danh sách ID lớp học */
-    subjectClassIds: string[]
-    curriculumVersionId?: string
-}
+  /** ID đợt đăng ký lớp học */
+  sessionId: string;
+  /** Danh sách ID lớp học */
+  subjectClassIds: string[];
+  curriculumVersionId?: string;
+};

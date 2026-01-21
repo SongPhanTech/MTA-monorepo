@@ -50,151 +50,151 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { NhanVienOldData } from './nhanVienOldData'
+import type { NhanVienOldData } from './nhanVienOldData';
 
 /**
  * Danh mục nhân viên
  */
 export interface NhanVien {
-    /** @nullable */
-    sNguoiTao?: string | null
-    /** @nullable */
-    sNguoiSua?: string | null
-    /** @nullable */
-    dNgayTao?: string | null
-    /** @nullable */
-    dNgaySua?: string | null
-    /** @nullable */
-    sThietBiTao?: string | null
-    /** @nullable */
-    sThietBiSua?: string | null
-    /** @nullable */
-    RowStatus?: number | null
-    /** @nullable */
-    RowIndex?: number | null
-    /** @nullable */
-    OldData?: NhanVienOldData
-    /** Id nhân viên */
-    Id?: string
-    /**
-     * Mã nhân viên
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Họ và đệm
-     * @nullable
-     */
-    sHoVaDem?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * Họ và tên
-     * @nullable
-     */
-    sTenDayDu?: string | null
-    /**
-     * Ngày sinh
-     * @nullable
-     */
-    dNgaySinh?: string | null
-    /**
-     * Id DM giới tính
-     * @nullable
-     */
-    sDM_GioiTinhId?: string | null
-    /**
-     * Id đơn vị công tác
-     * @nullable
-     */
-    sDM_DonViId?: string | null
-    /**
-     * Id vị trí công việc
-     * @nullable
-     */
-    sDM_ViTriCongViecId?: string | null
-    /**
-     * Id người quản lý trực tiếp
-     * @nullable
-     */
-    sQuanlyTrucTiepId?: string | null
-    /**
-     * ID Quốc gia
-     * @nullable
-     */
-    sDM_QuocGiaId?: string | null
-    /**
-     * Id tỉnh, TP
-     * @nullable
-     */
-    sDM_TinhId?: string | null
-    /**
-     * Id quận, huyện
-     * @nullable
-     */
-    sDM_QuanHuyenId?: string | null
-    /**
-     * Id xã, phường
-     * @nullable
-     */
-    sDM_XaPhuongId?: string | null
-    /**
-     * Số điện thoại
-     * @nullable
-     */
-    sSDTDiDong?: string | null
-    /**
-     * Email
-     * @nullable
-     */
-    sEmail?: string | null
-    /**
-     * Địa chỉ
-     * @nullable
-     */
-    sDiaChi?: string | null
-    /**
-     * Ảnh đại diện
-     * @nullable
-     */
-    sAvatarId?: string | null
-    /** Là tài khoản? */
-    bLaTaiKhoan?: boolean
-    /** Là cán bộ, nhân viên? */
-    bLaCanBoNhanVien?: boolean
-    /** Là học viên (Quân sự) */
-    bLaHocVien?: boolean
-    /** Là sinh viên (Dân sự) */
-    bLaSinhVien?: boolean
-    /** Là giảng viên */
-    bLaGiangVien?: boolean
-    /** Trạng thái */
-    bActive?: boolean
-    bDeleted?: boolean
-    bSystem?: boolean
-    /** @nullable */
-    iDictionaryKey?: number | null
-    /**
-     * Số căn cước công dân
-     * @nullable
-     */
-    sCCCD?: string | null
-    /**
-     * Id tỉnh, TP mới
-     * @nullable
-     */
-    sDM_TinhId_New?: string | null
-    /**
-     * Id xã, phường mới
-     * @nullable
-     */
-    sDM_XaPhuongId_New?: string | null
-    /**
-     * Địa chỉ mới
-     * @nullable
-     */
-    sDiaChi_New?: string | null
+  /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  dNgayTao?: string | null;
+  /** @nullable */
+  dNgaySua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
+  /** @nullable */
+  RowStatus?: number | null;
+  /** @nullable */
+  RowIndex?: number | null;
+  /** @nullable */
+  OldData?: NhanVienOldData;
+  /** Id nhân viên */
+  Id?: string;
+  /**
+   * Mã nhân viên
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Họ và đệm
+   * @nullable
+   */
+  sHoVaDem?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * Họ và tên
+   * @nullable
+   */
+  sTenDayDu?: string | null;
+  /**
+   * Ngày sinh
+   * @nullable
+   */
+  dNgaySinh?: string | null;
+  /**
+   * Id DM giới tính
+   * @nullable
+   */
+  sDM_GioiTinhId?: string | null;
+  /**
+   * Id đơn vị công tác
+   * @nullable
+   */
+  sDM_DonViId?: string | null;
+  /**
+   * Id vị trí công việc
+   * @nullable
+   */
+  sDM_ViTriCongViecId?: string | null;
+  /**
+   * Id người quản lý trực tiếp
+   * @nullable
+   */
+  sQuanlyTrucTiepId?: string | null;
+  /**
+   * ID Quốc gia
+   * @nullable
+   */
+  sDM_QuocGiaId?: string | null;
+  /**
+   * Id tỉnh, TP
+   * @nullable
+   */
+  sDM_TinhId?: string | null;
+  /**
+   * Id quận, huyện
+   * @nullable
+   */
+  sDM_QuanHuyenId?: string | null;
+  /**
+   * Id xã, phường
+   * @nullable
+   */
+  sDM_XaPhuongId?: string | null;
+  /**
+   * Số điện thoại
+   * @nullable
+   */
+  sSDTDiDong?: string | null;
+  /**
+   * Email
+   * @nullable
+   */
+  sEmail?: string | null;
+  /**
+   * Địa chỉ
+   * @nullable
+   */
+  sDiaChi?: string | null;
+  /**
+   * Ảnh đại diện
+   * @nullable
+   */
+  sAvatarId?: string | null;
+  /** Là tài khoản? */
+  bLaTaiKhoan?: boolean;
+  /** Là cán bộ, nhân viên? */
+  bLaCanBoNhanVien?: boolean;
+  /** Là học viên (Quân sự) */
+  bLaHocVien?: boolean;
+  /** Là sinh viên (Dân sự) */
+  bLaSinhVien?: boolean;
+  /** Là giảng viên */
+  bLaGiangVien?: boolean;
+  /** Trạng thái */
+  bActive?: boolean;
+  bDeleted?: boolean;
+  bSystem?: boolean;
+  /** @nullable */
+  iDictionaryKey?: number | null;
+  /**
+   * Số căn cước công dân
+   * @nullable
+   */
+  sCCCD?: string | null;
+  /**
+   * Id tỉnh, TP mới
+   * @nullable
+   */
+  sDM_TinhId_New?: string | null;
+  /**
+   * Id xã, phường mới
+   * @nullable
+   */
+  sDM_XaPhuongId_New?: string | null;
+  /**
+   * Địa chỉ mới
+   * @nullable
+   */
+  sDiaChi_New?: string | null;
 }

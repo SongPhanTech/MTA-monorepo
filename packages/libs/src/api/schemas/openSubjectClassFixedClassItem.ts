@@ -6,14 +6,14 @@
  */
 
 export type OpenSubjectClassFixedClassItem = {
-    trainingBlockSubjectId: string
-    fixedClassId: string
-    fixedClassName: string
-    fixedClassCount: number
-    fixedClassSemester: number
-    fixedClassCode: string
-    trainingCourseId: string
-    curriculumVersionId: string
-    curriculumVersionName: string
-    curriculumVersionCode: string
-}
+  trainingBlockSubjectId: string;
+  fixedClassId: string;
+  fixedClassName: string;
+  fixedClassCount: number;
+  fixedClassSemester: number;
+  fixedClassCode: string;
+  trainingCourseId: string;
+  curriculumVersionId: string;
+  curriculumVersionName: string;
+  curriculumVersionCode: string;
+};

@@ -55,29 +55,29 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Vị trí công việc
  */
 export interface PublicApiGetAllDMViTriCongViecDTO {
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /** @nullable */
-    sDM_ChucDanhId?: string | null
-    /**
-     * Nhóm vị trí
-     * @nullable
-     */
-    sTenNhomViTri?: string | null
-    /**
-     * Chức danh
-     * @nullable
-     */
-    sTenChucDanh?: string | null
-    /** @nullable */
-    sDM_NhomViTriId?: string | null
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /** @nullable */
+  sDM_ChucDanhId?: string | null;
+  /**
+   * Nhóm vị trí
+   * @nullable
+   */
+  sTenNhomViTri?: string | null;
+  /**
+   * Chức danh
+   * @nullable
+   */
+  sTenChucDanh?: string | null;
+  /** @nullable */
+  sDM_NhomViTriId?: string | null;
 }

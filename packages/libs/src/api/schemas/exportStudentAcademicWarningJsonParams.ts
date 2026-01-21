@@ -5,4 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsFinalExamResult200Summary = { [key: string]: unknown | null }
+export type ExportStudentAcademicWarningJsonParams = {
+semesterId: string;
+trainingObjectTypeId: string;
+};

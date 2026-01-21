@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsLateGradeSubjects200DataItemStatus =
-    (typeof PostApiStatsLateGradeSubjects200DataItemStatus)[keyof typeof PostApiStatsLateGradeSubjects200DataItemStatus]
+export type PostApiStatsLateGradeSubjects200DataItemStatus = typeof PostApiStatsLateGradeSubjects200DataItemStatus[keyof typeof PostApiStatsLateGradeSubjects200DataItemStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostApiStatsLateGradeSubjects200DataItemStatus = {
-    OVERDUE: 'OVERDUE',
-    NEAR_DUE: 'NEAR_DUE',
-} as const
+  OVERDUE: 'OVERDUE',
+  NEAR_DUE: 'NEAR_DUE',
+} as const;

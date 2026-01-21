@@ -6,5 +6,5 @@
  */
 
 export type OpenSubjectClassReExamStudentsResponseUserProfile = {
-    fullname: string
-}
+  fullname: string;
+};

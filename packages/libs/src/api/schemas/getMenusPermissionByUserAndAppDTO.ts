@@ -52,30 +52,30 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface GetMenusPermissionByUserAndAppDTO {
-    /** Id menu */
-    Id?: string
-    /**
-     * Ký hiệu
-     * @nullable
-     */
-    sKyHieu?: string | null
-    /**
-     * Id của menu cha
-     * @nullable
-     */
-    sParentId?: string | null
-    /**
-     * Tên menu
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * Link redirect khi click vào menu
-     * @nullable
-     */
-    sUrl?: string | null
-    /** FK_Menu thuộc về ứng dụng vào */
-    sDM_UngDungId?: string
-    /** Số thứ tự menu */
-    iSTT?: number
+  /** Id menu */
+  Id?: string;
+  /**
+   * Ký hiệu
+   * @nullable
+   */
+  sKyHieu?: string | null;
+  /**
+   * Id của menu cha
+   * @nullable
+   */
+  sParentId?: string | null;
+  /**
+   * Tên menu
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * Link redirect khi click vào menu
+   * @nullable
+   */
+  sUrl?: string | null;
+  /** FK_Menu thuộc về ứng dụng vào */
+  sDM_UngDungId?: string;
+  /** Số thứ tự menu */
+  iSTT?: number;
 }

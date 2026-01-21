@@ -92,24 +92,24 @@ export default defineConfig({
             },
         },
     },
-    storage_api: {
-        input: 'https://mta.swantech.vn/api/system/storage/swagger/v1/swagger.json',
-        output: {
-            client: 'react-query',
-            httpClient: 'fetch',
-            mode: 'single',
-            target: './src/api/storage.ts',
-            schemas: './src/api/schemas',
-            packageJson: 'fake',
-            override: {
-                query: { version: 5 },
-                mutator: {
-                    path: './src/api/custom-instance.ts',
-                    name: 'customStorageFetch',
-                },
-            },
-        },
-    },
+    // storage_api: {
+    //     input: 'https://mta.swantech.vn/api/system/storage/swagger/v1/swagger.json',
+    //     output: {
+    //         client: 'react-query',
+    //         httpClient: 'fetch',
+    //         mode: 'single',
+    //         target: './src/api/storage.ts',
+    //         schemas: './src/api/schemas',
+    //         packageJson: 'fake',
+    //         override: {
+    //             query: { version: 5 },
+    //             mutator: {
+    //                 path: './src/api/custom-instance.ts',
+    //                 name: 'customStorageFetch',
+    //             },
+    //         },
+    //     },
+    // },
     system_api: {
         input: 'https://mta.swantech.vn/api/system/public/swagger/v1/swagger.json',
         output: {

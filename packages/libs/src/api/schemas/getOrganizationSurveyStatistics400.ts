@@ -6,5 +6,5 @@
  */
 
 export type GetOrganizationSurveyStatistics400 = {
-    message: string
-}
+  message: string;
+};

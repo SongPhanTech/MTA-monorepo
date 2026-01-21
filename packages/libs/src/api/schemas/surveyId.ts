@@ -8,4 +8,4 @@
 /**
  * ID của khảo sát
  */
-export type SurveyId = string
+export type SurveyId = string;

@@ -6,5 +6,5 @@
  */
 
 export type ExportLecturerProfile400 = {
-    message: string
-}
+  message: string;
+};

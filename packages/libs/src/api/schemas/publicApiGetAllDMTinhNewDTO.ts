@@ -55,22 +55,22 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Tỉnh, TP mới
  */
 export interface PublicApiGetAllDMTinhNewDTO {
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * Quốc gia
-     * @nullable
-     */
-    sTenQuocGia?: string | null
-    /** @nullable */
-    sDM_QuocGiaId?: string | null
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * Quốc gia
+   * @nullable
+   */
+  sTenQuocGia?: string | null;
+  /** @nullable */
+  sDM_QuocGiaId?: string | null;
 }

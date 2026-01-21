@@ -5,13 +5,13 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GraduationCheckResultDiplomaTypeType =
-    (typeof GraduationCheckResultDiplomaTypeType)[keyof typeof GraduationCheckResultDiplomaTypeType]
+export type GraduationCheckResultDiplomaTypeType = typeof GraduationCheckResultDiplomaTypeType[keyof typeof GraduationCheckResultDiplomaTypeType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GraduationCheckResultDiplomaTypeType = {
-    MASTER: 'MASTER',
-    DOCTORATE: 'DOCTORATE',
-    ENGINEER: 'ENGINEER',
-    BACHELOR: 'BACHELOR',
-} as const
+  MASTER: 'MASTER',
+  DOCTORATE: 'DOCTORATE',
+  ENGINEER: 'ENGINEER',
+  BACHELOR: 'BACHELOR',
+} as const;

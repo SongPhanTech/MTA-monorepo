@@ -6,5 +6,5 @@
  */
 
 export interface CreateExamsBadResponse {
-    message: string
+  message: string;
 }

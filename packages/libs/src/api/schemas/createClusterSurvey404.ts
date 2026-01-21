@@ -6,5 +6,5 @@
  */
 
 export type CreateClusterSurvey404 = {
-    message: string
-}
+  message: string;
+};

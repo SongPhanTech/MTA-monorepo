@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsSubjectsHighFailRates200Summary = { [key: string]: unknown | null }
+export type PostApiStatsSubjectsHighFailRates200Summary = {[key: string]: unknown | null};

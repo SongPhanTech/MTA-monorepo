@@ -8,16 +8,15 @@
 /**
  * @nullable
  */
-export type GetSurveyResultSubjectClassExamType =
-    | (typeof GetSurveyResultSubjectClassExamType)[keyof typeof GetSurveyResultSubjectClassExamType]
-    | null
+export type GetSurveyResultSubjectClassExamType = typeof GetSurveyResultSubjectClassExamType[keyof typeof GetSurveyResultSubjectClassExamType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveyResultSubjectClassExamType = {
-    OfflineWritten: 'OfflineWritten',
-    OnlineWritten: 'OnlineWritten',
-    Oral: 'Oral',
-    Practice: 'Practice',
-    Project: 'Project',
-    Other: 'Other',
-} as const
+  OfflineWritten: 'OfflineWritten',
+  OnlineWritten: 'OnlineWritten',
+  Oral: 'Oral',
+  Practice: 'Practice',
+  Project: 'Project',
+  Other: 'Other',
+} as const;

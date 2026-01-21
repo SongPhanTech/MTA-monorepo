@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsLanguageStandardProgress200Summary } from './postApiStatsLanguageStandardProgress200Summary'
-import type { PostApiStatsLanguageStandardProgress200DataItem } from './postApiStatsLanguageStandardProgress200DataItem'
+import type { PostApiStatsLanguageStandardProgress200Summary } from './postApiStatsLanguageStandardProgress200Summary';
+import type { PostApiStatsLanguageStandardProgress200DataItem } from './postApiStatsLanguageStandardProgress200DataItem';
 
 export type PostApiStatsLanguageStandardProgress200 = {
-    summary: PostApiStatsLanguageStandardProgress200Summary
-    count: number
-    preview?: boolean
-    labels?: string[]
-    data: PostApiStatsLanguageStandardProgress200DataItem[]
-}
+  summary: PostApiStatsLanguageStandardProgress200Summary;
+  count: number;
+  preview?: boolean;
+  labels?: string[];
+  data: PostApiStatsLanguageStandardProgress200DataItem[];
+};

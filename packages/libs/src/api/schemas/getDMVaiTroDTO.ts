@@ -52,23 +52,23 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface GetDMVaiTroDTO {
-    /** Id của vai trò */
-    Id?: string
-    /**
-     * Mã vai trò
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên vai trò
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * Ghi chú
-     * @nullable
-     */
-    sGhiChu?: string | null
-    /** Số thứ tự */
-    iSTT?: number
+  /** Id của vai trò */
+  Id?: string;
+  /**
+   * Mã vai trò
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên vai trò
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * Ghi chú
+   * @nullable
+   */
+  sGhiChu?: string | null;
+  /** Số thứ tự */
+  iSTT?: number;
 }

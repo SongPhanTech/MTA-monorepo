@@ -4,30 +4,30 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetOrganizationSurveyStatistics200ChoicesItemClusterSurvey } from './getOrganizationSurveyStatistics200ChoicesItemClusterSurvey'
-import type { GetOrganizationSurveyStatistics200ChoicesItemSurveyItem } from './getOrganizationSurveyStatistics200ChoicesItemSurveyItem'
-import type { GetOrganizationSurveyStatistics200ChoicesItemSurveyResponsesItem } from './getOrganizationSurveyStatistics200ChoicesItemSurveyResponsesItem'
+import type { GetOrganizationSurveyStatistics200ChoicesItemClusterSurvey } from './getOrganizationSurveyStatistics200ChoicesItemClusterSurvey';
+import type { GetOrganizationSurveyStatistics200ChoicesItemSurveyItem } from './getOrganizationSurveyStatistics200ChoicesItemSurveyItem';
+import type { GetOrganizationSurveyStatistics200ChoicesItemSurveyResponsesItem } from './getOrganizationSurveyStatistics200ChoicesItemSurveyResponsesItem';
 
 export type GetOrganizationSurveyStatistics200ChoicesItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    answer: string
-    requireExplanation: boolean
-    /** @nullable */
-    clusterSurveyId?: string | null
-    clusterSurvey?: GetOrganizationSurveyStatistics200ChoicesItemClusterSurvey
-    survey?: GetOrganizationSurveyStatistics200ChoicesItemSurveyItem[]
-    surveyResponses?: GetOrganizationSurveyStatistics200ChoicesItemSurveyResponsesItem[]
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  answer: string;
+  requireExplanation: boolean;
+  /** @nullable */
+  clusterSurveyId?: string | null;
+  clusterSurvey?: GetOrganizationSurveyStatistics200ChoicesItemClusterSurvey;
+  survey?: GetOrganizationSurveyStatistics200ChoicesItemSurveyItem[];
+  surveyResponses?: GetOrganizationSurveyStatistics200ChoicesItemSurveyResponsesItem[];
+};

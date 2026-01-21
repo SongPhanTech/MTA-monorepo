@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsAverageGpaByCourseFiltered200DataItem = {
-    trainingCourseId: string
-    name: string
-    avgGpa: number
-}
+  trainingCourseId: string;
+  name: string;
+  avgGpa: number;
+};

@@ -61,18 +61,12 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
             isFiltering
                 ? {
                       student: {
-                          ...(filters.code && filters.code !== ''
-                              ? {
-                                    code: { contains: filters.code, mode: 'insensitive' },
-                                }
+                          ...(filters.code
+                              ? { code: { contains: filters.code, mode: 'insensitive' } }
                               : {}),
-                          userProfile: {
-                              ...(filters.name && filters.name !== ''
-                                  ? {
-                                        fullname: { contains: filters.name, mode: 'insensitive' },
-                                    }
-                                  : {}),
-                          },
+                          userProfile: filters.name
+                              ? { fullname: { contains: filters.name, mode: 'insensitive' } }
+                              : {},
                           ...emptyObjectIf(
                               {
                                   fixedClassId: {
@@ -87,14 +81,10 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                           ),
                           fixedClass: {
                               ...(filters.trainingCourse
-                                  ? {
-                                        trainingCourseId: { in: filters.trainingCourse },
-                                    }
+                                  ? { trainingCourseId: { in: filters.trainingCourse } }
                                   : {}),
                               ...(filters.organization
-                                  ? {
-                                        managementOrganizationId: { in: filters.organization },
-                                    }
+                                  ? { managementOrganizationId: { in: filters.organization } }
                                   : {}),
                           },
                       },
@@ -474,7 +464,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                     </Col>
                     <Col span={24}>
                         <TableCollapse
-                            rowKey="id"
+                            rowKey="courseId"
                             headerTitleKey="courseName"
                             childrenFieldName="students"
                             defaultExpandAll
