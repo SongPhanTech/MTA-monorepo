@@ -115,7 +115,7 @@ export default function EvaluationPeriodTabPage() {
                 },
                 {
                     key: '7',
-                    label: 'Xem phản biện',
+                    label: 'Báo cáo tiêu chuẩn',
                     children: <CrossReviewPeriod />,
                     disabled: !selectedEvaluationPeriodId,
                 }

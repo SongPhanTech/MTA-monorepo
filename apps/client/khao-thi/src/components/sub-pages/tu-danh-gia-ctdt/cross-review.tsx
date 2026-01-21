@@ -185,7 +185,7 @@ export default function CrossReviewSubPage({
                         id: selectedEvaluationPeriodId,
                     },
                     data: {
-                        status: $Enums.EvaluationPeriodStatus.COMPLETED,
+                        status: $Enums.EvaluationPeriodStatus.CONSOLIDATION,
                     },
                 })
             }
@@ -319,11 +319,6 @@ export default function CrossReviewSubPage({
 
             <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
                 <Form form={form} layout="vertical" className="form-evidence">
-                    {/* Phần mở đầu */}
-                    <Form.Item label="Mở đầu" name="opening">
-                        <RichTextEditor id="opening" editable={false} />
-                    </Form.Item>
-
                     <Form.List name="criteria">
                         {(fields) => (
                             <>
@@ -417,11 +412,6 @@ export default function CrossReviewSubPage({
                             </>
                         )}
                     </Form.List>
-
-                    {/* Phần kết luận */}
-                    <Form.Item label="Kết luận" name="conclusion">
-                        <RichTextEditor id="conclusion" editable={false} />
-                    </Form.Item>
                 </Form>
 
                 {showComments && (

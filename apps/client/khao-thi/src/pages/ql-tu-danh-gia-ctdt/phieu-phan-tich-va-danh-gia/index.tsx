@@ -196,18 +196,9 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             })
         }
 
-        if (isHeadSpecialized) {
-            tabs.push({
-                key: '6',
-                label: 'Báo cáo tiêu chuẩn',
-                children: <StandardReports />,
-                disabled: disabledStandardReportTab,
-            })
-        }
-
         if (isSecretary) {
             tabs.push({
-                key: '7',
+                key: '6',
                 label: 'Phân công phản biện chéo',
                 children: <CrossReviewAssignment />,
                 disabled: disabledCrossReviewAssignmentTab,
@@ -216,10 +207,19 @@ export default function CriteriaAnalysisAndEvaluationPage() {
 
         if (isCouncilMember) {
             tabs.push({
-                key: '8',
+                key: '7',
                 label: 'Phản biện chéo',
                 children: <CrossReview userRole="REVIEWER" />,
                 disabled: disabledCrossReviewTab,
+            })
+        }
+
+        if (isHeadSpecialized) {
+            tabs.push({
+                key: '8',
+                label: 'Báo cáo tiêu chuẩn',
+                children: <StandardReports />,
+                disabled: disabledStandardReportTab,
             })
         }
 

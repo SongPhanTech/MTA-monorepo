@@ -48,6 +48,7 @@ export default function CriteriaEvaluationListSubPage({
     const renderCriterionHeader = (criterion: any, index: number) => {
         const evaluationCriterion = criterion?.evaluationCriterion
         const lecturer = evaluationCriterion?.lecturer
+        const reviewer = evaluationCriterion?.reviewer
         const status = evaluationCriterion?.status
         const deadline = evaluationCriterion?.deadline
         const statusConfig = getStatusConfig(status || $Enums.EvaluationStatus.LOCK)
@@ -65,6 +66,9 @@ export default function CriteriaEvaluationListSubPage({
                 <div className="flex flex-wrap items-center gap-2 text-xs">
                     <Tag color="blue">
                         Người viết: {lecturer?.userProfile?.fullname || 'Chưa phân công'}
+                    </Tag>
+                    <Tag color="purple">
+                        Người phản biện: {reviewer?.lecturer?.userProfile?.fullname || 'Chưa phân công'}
                     </Tag>
                     {deadline && deadlineStatus && (
                         <Tag color={deadlineStatus.color}>
@@ -105,11 +109,6 @@ export default function CriteriaEvaluationListSubPage({
 
             <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
                 <Form form={form} layout="vertical" className="form-evidence">
-                    {/* Phần mở đầu */}
-                    <Form.Item label="Mở đầu" name="opening" required>
-                        <RichTextEditor id="opening" editable={false} />
-                    </Form.Item>
-
                     {/* Danh sách tiêu chí */}
                     <Form.List name="criteria">
                         {() => (
@@ -205,11 +204,6 @@ export default function CriteriaEvaluationListSubPage({
                             </>
                         )}
                     </Form.List>
-
-                    {/* Phần kết luận */}
-                    <Form.Item label="Kết luận" name="conclusion" required>
-                        <RichTextEditor id="conclusion" editable={false} />
-                    </Form.Item>
                 </Form>
             </div>
         </div>
