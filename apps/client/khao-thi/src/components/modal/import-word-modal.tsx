@@ -101,7 +101,9 @@ const WordImportModal: React.FC = () => {
             const isCorrect = correctPattern.test(content)
 
             // Remove text "(đáp án đúng)" khỏi content - hỗ trợ nhiều loại ngoặc
-            content = content.replace(/[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi, '').trim()
+            content = content
+                .replace(/[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi, '')
+                .trim()
             choices.push({ label, content, isCorrect })
         }
 
@@ -173,7 +175,9 @@ const WordImportModal: React.FC = () => {
                     const isCorrect = correctPattern.test(text)
 
                     // Remove text "(đáp án đúng)" khỏi content
-                    text = text.replace(/[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi, '').trim()
+                    text = text
+                        .replace(/[(（]?\s*(đáp án đúng|Đáp án đúng|đúng|Đúng)\s*[)）]?/gi, '')
+                        .trim()
                     options.push({ label, content: text, isCorrect })
                     continue
                 }

@@ -26,12 +26,12 @@ import {
     useFindUniqueSurveyObjectType,
     useUpdateSurveyObjectType,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, message, Row, Tabs, TreeSelect as TreeSelectAnt } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 import { TreeNodeType } from './put-modal-survey'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutSurveyObjectType = SurveyObjectType & {
     Organizations: string[]
     TrainingFields: string[]
@@ -118,7 +118,7 @@ const PutSurveyObjectTypeModal = () => {
                                     ? output.SubjectClasses.map((item) => ({ id: item }))
                                     : [],
                         },
-                        trainingObjectTypeId:trainingObjectTypeId
+                        trainingObjectTypeId: trainingObjectTypeId,
                     },
                     where: {
                         id,
@@ -167,7 +167,7 @@ const PutSurveyObjectTypeModal = () => {
                                     ? output.SubjectClasses.map((item) => ({ id: item }))
                                     : [],
                         },
-                        trainingObjectTypeId:trainingObjectTypeId
+                        trainingObjectTypeId: trainingObjectTypeId,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -229,38 +229,35 @@ const PutSurveyObjectTypeModal = () => {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
-        where:{
-            trainingObjectTypes:{
-                some:{
-                    trainingObjectTypeId:trainingObjectTypeId
-                }
-            }
+        where: {
+            trainingObjectTypes: {
+                some: {
+                    trainingObjectTypeId: trainingObjectTypeId,
+                },
+            },
         },
         orderBy: { name: 'asc' },
     })
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
-        where:{
-            trainingObjectTypes:{
+        where: {
+            trainingObjectTypes: {
                 some: {
-                    trainingObjectTypeId:trainingObjectTypeId
-                }
+                    trainingObjectTypeId: trainingObjectTypeId,
+                },
             },
             ...(selectedTrainingFields.length > 0
-            ? {
-                    trainingFieldId: { in: selectedTrainingFields },
-                }
-            : {}),
-        }
-         
+                ? {
+                      trainingFieldId: { in: selectedTrainingFields },
+                  }
+                : {}),
+        },
     })
 
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
-        where:{
-            trainingObjectTypeId
-        }
+        where: { trainingObjectTypeId },
     })
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
@@ -271,10 +268,8 @@ const PutSurveyObjectTypeModal = () => {
                       trainingCourseId: { in: selectedTrainingCourses },
                   }
                 : {
-                    trainingCourse: {
-                        trainingObjectTypeId
-                    }
-                },
+                      trainingCourse: { trainingObjectTypeId },
+                  },
     })
     const { data: schoolYears } = useFindManySchoolYear({
         orderBy: { startDate: 'desc' },

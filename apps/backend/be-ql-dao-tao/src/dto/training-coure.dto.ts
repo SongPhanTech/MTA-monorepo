@@ -9,12 +9,11 @@ export const RequestSchema = z.object({
         .default(['target', 'admitted', 'enrolled', 'rate']),
 
     trainingLevelNames: z.array(z.string()).optional(),
-     includeEmpty: z.boolean().optional().default(false),
-
+    includeEmpty: z.boolean().optional().default(false),
 })
 export const ResponseSchema = z.object({
     year: z.string(),
-      objectType: z.string(),
+    objectType: z.string(),
     trainingLevel: z.string(),
     target: z.number().optional(),
     admitted: z.number().optional(),

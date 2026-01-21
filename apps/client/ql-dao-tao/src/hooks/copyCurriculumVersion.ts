@@ -48,11 +48,15 @@ export const useCloneCurriculumVersion = () => {
                 ...(originalVersion.trainingTypeId
                     ? { trainingType: { connect: { id: originalVersion.trainingTypeId ?? '' } } }
                     : {}),
+                ...(originalVersion.trainingLanguageId
+                    ? {
+                          trainingLanguage: {
+                              connect: { id: originalVersion.trainingLanguageId },
+                          },
+                      }
+                    : {}),
                 shortName: originalVersion.shortName,
                 englishName: originalVersion.englishName,
-                trainingLanguage: {
-                    connect: { id: originalVersion.trainingLanguageId || undefined },
-                },
                 numberOfSemesters: originalVersion.numberOfSemesters,
                 yearCreation: originalVersion.yearCreation,
                 yearApplication: originalVersion.yearApplication,
