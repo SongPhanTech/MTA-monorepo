@@ -114,7 +114,11 @@ export default function TrainingProgram() {
         },
     })
 
-    const { onOpen: onOpenPutStandardCatalog } = useDisclosure<{ id: string; count: number }>({
+    const { onOpen: onOpenPutStandardCatalog } = useDisclosure<{
+        id: string
+        count: number
+        objectType?: $Enums.StandardCatalogType
+    }>({
         tag: 'PutStandardCatalog',
     })
 
@@ -176,7 +180,11 @@ export default function TrainingProgram() {
                                 type="primary"
                                 size="small"
                                 onClick={() => {
-                                    onOpenPutStandardCatalog({ id: '', count: count || 0 })
+                                    onOpenPutStandardCatalog({
+                                        id: '',
+                                        count: count || 0,
+                                        objectType: $Enums.StandardCatalogType.PROGRAM,
+                                    })
                                 }}
                             >
                                 <BookPlus />
@@ -243,10 +251,11 @@ export default function TrainingProgram() {
 
                                         return (
                                             <Tooltip
+                                                placement="top"
                                                 title={
                                                     hasCriteria
                                                         ? 'Không thể xóa vì tiêu chuẩn đã có tiêu chí'
-                                                        : 'Xóa tiêu chuẩn'
+                                                        : ''
                                                 }
                                             >
                                                 <DeleteIcon
@@ -280,19 +289,19 @@ export default function TrainingProgram() {
                                     })()}
                             </div>
                         )}
-                        onRowClick={({ id }) => {
-                            if (
-                                id &&
-                                can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'XEM'
-                                )
-                            ) {
-                                router.push(
-                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI}/${id}`
-                                )
-                            }
-                        }}
+                        // onRowClick={({ id }) => {
+                        //     if (
+                        //         id &&
+                        //         can(
+                        //             KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                        //             'XEM'
+                        //         )
+                        //     ) {
+                        //         router.push(
+                        //             `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI}/${id}`
+                        //         )
+                        //     }
+                        // }}
                         columns={[
                             {
                                 title: 'Tiêu chí',

@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { StandardCatalog } from '@workspace/db/client'
+import type { StandardCatalog, $Enums } from '@workspace/db/client'
 import {
     useCreateStandardCatalog,
     useFindUniqueStandardCatalog,
@@ -19,6 +19,7 @@ const PutStandardCatalog = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         id: string
         count: number
+        objectType?: $Enums.StandardCatalogType
     }>({
         tag: 'PutStandardCatalog',
         onClose: form.resetFields,
@@ -79,9 +80,12 @@ const PutStandardCatalog = () => {
         if (initialValue) {
             form.setFieldsValue({ ...initialValue })
         } else if (input?.count !== undefined) {
-            form.setFieldsValue({ order: input?.count + 1 })
+            form.setFieldsValue({
+                order: input?.count + 1,
+                objectType: input?.objectType,
+            })
         }
-    }, [initialValue, input?.count])
+    }, [initialValue, input?.count, input?.objectType])
 
     return (
         <PutFormModal
