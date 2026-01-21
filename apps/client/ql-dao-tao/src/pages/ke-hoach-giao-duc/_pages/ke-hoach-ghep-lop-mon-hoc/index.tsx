@@ -128,7 +128,7 @@ const SubjectClassDropItem: React.FC<{
                     size={14}
                 />
             </Tooltip>
-            {item.code} ({fixedClass.reduce((sum, fcId) => sum + (fcId.count || 0), 0)})
+            {item?.code} ({fixedClass.reduce((sum, fcId) => sum + (fcId?.count || 0), 0)})
             <div className="gap-1 w-fit">
                 {!!fixedClass?.length &&
                     fixedClass.map((fcId) => (
@@ -137,7 +137,7 @@ const SubjectClassDropItem: React.FC<{
                             className="border border-dashed border-gray-400 rounded p-1 bg-green-100 select-none hover:opacity-40"
                             key={fcId.id}
                         >
-                            {fcId.code} ({fcId.count})
+                            {fcId?.code} ({fcId?.count})
                         </div>
                     ))}
             </div>
@@ -177,7 +177,7 @@ const FixedClassDragItem: React.FC<{
                                         ?.fixedClasses || []),
                                     {
                                         id: item.id,
-                                        code: item.code,
+                                        code: item?.code,
                                         count: item?._count?.students || 0,
                                     },
                                 ],
@@ -210,7 +210,7 @@ const FixedClassDragItem: React.FC<{
             className="border border-dashed border-gray-400 rounded px-2 py-1 m-1 bg-green-100 select-none cursor-move"
             style={{ opacity }}
         >
-            {item.code} ({item?._count?.students})
+            {item?.code} ({item?._count?.students})
         </div>
     )
 }
@@ -376,15 +376,15 @@ export default function KeHoachGhepLopMonHoc() {
                                 }
                                 subAcc[subCur.id] = {
                                     id: subCur.id,
-                                    code: subCur.code,
-                                    count: subCur.fixedClasses.reduce(
+                                    code: subCur?.code,
+                                    count: subCur?.fixedClasses.reduce(
                                         (sum, fc) => sum + (fc?._count?.students ?? 0),
                                         0
                                     ),
                                     createdAt: subCur.createdAt,
                                     fixedClasses: subCur.fixedClasses.map((fc) => ({
                                         id: fc.id,
-                                        code: fc.code,
+                                        code: fc?.code,
                                         count: fc?._count?.students || 0,
                                     })),
                                 }
@@ -434,7 +434,7 @@ export default function KeHoachGhepLopMonHoc() {
                         code: `${subjectVersions[subjectVersionId]?.code ?? ''} ${
                             Number(
                                 Object.values(subjectClasses.subjectClasses || {})
-                                    .sort((a, b) => (a.code || '').localeCompare(b.code || ''))
+                                    .sort((a, b) => (a?.code || '').localeCompare(b?.code || ''))
                                     .pop()
                                     ?.code?.split(' ')
                                     .pop() ?? '0'
@@ -538,10 +538,10 @@ export default function KeHoachGhepLopMonHoc() {
                             subjectId: e.subjectVersionId,
                             semesterId: semesterId,
                             trainingObjectTypeId: trainingObjectTypeId,
-                            code: `${e.subjectVersion.code} ${String(e.index + 1)}`,
-                            name: e.subjectVersion.name,
-                            maxStudent: e.subjectVersion.maxStudent,
-                            examType: e.subjectVersion.examType,
+                            code: `${e.subjectVersion?.code} ${String(e.index + 1)}`,
+                            name: e.subjectVersion?.name,
+                            maxStudent: e.subjectVersion?.maxStudent,
+                            examType: e.subjectVersion?.examType,
                             schedule: $Enums.SubjectClassSchedule.MORNING,
                             fixedClasses: {
                                 set: e.fixedClasses?.map((fc) => ({
@@ -553,10 +553,10 @@ export default function KeHoachGhepLopMonHoc() {
                             subjectId: e.subjectVersionId,
                             semesterId: semesterId,
                             trainingObjectTypeId: trainingObjectTypeId,
-                            code: `${e.subjectVersion.code} ${String(e.index + 1)}`,
-                            name: e.subjectVersion.name,
-                            maxStudent: e.subjectVersion.maxStudent,
-                            examType: e.subjectVersion.examType,
+                            code: `${e.subjectVersion?.code} ${String(e.index + 1)}`,
+                            name: e.subjectVersion?.name,
+                            maxStudent: e.subjectVersion?.maxStudent,
+                            examType: e.subjectVersion?.examType,
                             schedule: $Enums.SubjectClassSchedule.MORNING,
                             fixedClasses: {
                                 connect: e.fixedClasses?.map((fc) => ({
