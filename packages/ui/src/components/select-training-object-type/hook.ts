@@ -60,7 +60,7 @@ export function useFindManyTrainingObjectTypePermission<
     options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions
 ) {
     const { data: permission } = useGetUserPermissionsPermissionAppCodeUserId(
-        getRuntimeEnv('NEXT_PUBLIC_APP_CODE'),
+        'lms',
         window?.contextData?.userId ?? ''
     )
 
