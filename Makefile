@@ -120,6 +120,24 @@ deploy-cdn:
 	mv cdn/* . && \
 	docker compose -f dao-tao.yml up -d"
 
+deploy-all-be:
+	@rm -rf docker-images.zip
+	@zip -r docker-images.zip docker-images
+	sshpass -p "Bancntt@2025" scp -O docker-images.zip app@192.168.3.9:~/Documents/docker-compose/
+	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/docker-compose/ && \
+	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared && \
+	unzip -u docker-images.zip && \
+	ls *.tar.gz | xargs -I {} docker load -i {} && \
+	docker compose up -d"
+
+deploy-%:
+	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app@192.168.3.9:~/Documents/docker-compose/
+	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/docker-compose/ && \
+	docker load -i $(IMG_PREFIX)$*.tar.gz && \
+	docker rm -f $(IMG_PREFIX)$* && \
+	docker compose up $(IMG_PREFIX)$* -d"
+
+
 # Pattern rule: all-<name> = build + push + deploy
 all-%: build-%
 	@if echo "$(BE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \

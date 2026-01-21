@@ -2,7 +2,7 @@
   "name": "@backend/be-khao-thi",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
+    "dev": "bun run --watch src/index.ts",
     "build": "bun build.ts",
     "postcompile": "rm -f .*.bun-build",
     "start": "bun dist/index.js"

@@ -106,9 +106,9 @@ export default function TrainingBlock() {
             ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
             ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
             ...(filters.active?.length === 1
-                ? {
-                      ...(filters.active.length === 1 ? { active: filters.active[0] } : {}),
-                  }
+                ? filters.active.length === 1
+                    ? { active: filters.active[0] }
+                    : {}
                 : {}),
             deletedAt: null,
         },
@@ -134,12 +134,8 @@ export default function TrainingBlock() {
         try {
             showSpinner()
             await updateTrainingBlock({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
+                where: { id },
+                data: { deletedAt: new Date() },
             })
             message.success('Xóa thành công')
         } catch (error: any) {

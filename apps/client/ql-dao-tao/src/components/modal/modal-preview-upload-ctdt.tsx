@@ -1,7 +1,8 @@
 import Table from '@components/commons/table'
 import type { $Enums } from '@workspace/db/client'
-import { useFindManySubject, useFindManySubjectVersion } from '@workspace/db/hooks'
+import { useFindManySubjectVersion } from '@workspace/db/hooks'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Collapse, Modal, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -40,51 +41,92 @@ type ModalPreviewUploadInput = {
     errorData: any[]
 }
 
+type SubjectData = {
+    trainingObjectTypeId: string
+    name: string
+    code?: string
+    organizationCode?: string
+    credit: number
+    examType: $Enums.ExamType
+    type: $Enums.SubjectVersionType
+    onePoint?: boolean
+    period: number
+    schedulePeriod: number
+    numberOfTheory?: number
+    numberOfPractical?: number
+    numberOfSelfStudy?: number
+    numberOfPractice?: number
+    numberOfReview?: number
+    numberOfExam?: number
+}
+
 const ModalPreviewUpload = () => {
     const { isOpen, onClose, input, updateInput } = useDisclosure<ModalPreviewUploadInput>({
         tag: 'ModalPreviewUpload',
     })
 
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const subjects =
+        input?.previewData.map((s) => ({
+            trainingObjectTypeId,
+            ...s,
+            type: s.subjectVersionType,
+        })) || []
+
+    const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
+    const uniqueSubject = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
+
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
 
-    const { data: existingSubjects = [] } = useFindManySubject({
-        select: { name: true, code: true },
-    })
-    const { data: existingSubjectVersions = [] } = useFindManySubjectVersion({
-        select: { code: true },
+    const { data: existingSubjectVersions = [], isError } = useFindManySubjectVersion({
+        select: { name: true },
+        where: {
+            OR: uniqueSubject.map((s) => ({
+                name: s.name,
+                trainingObjectTypeId: s.trainingObjectTypeId,
+                ...(s.code ? { code: s.code } : {}),
+                // TODO: check it
+                // ...(s.organizationCode
+                //     ? {
+                //           subject: {
+                //               managementOrganization: {
+                //                   sMa: s.organizationCode,
+                //               },
+                //           },
+                //       }
+                //     : {}),
+                credit: s.credit,
+                examType: s.examType,
+                type: s.type,
+                period: s.period,
+                schedulePeriod: s.schedulePeriod,
+            })),
+        },
     })
 
     const rawPreviewData = input?.previewData || []
     const errorData = input?.errorData || []
 
     const { filteredData, duplicateErrors } = useMemo(() => {
-        const existingVersionCodes = new Set(
-            existingSubjectVersions.map((sv) => sv.code?.toLowerCase())
-        )
-        const existingSubjectNames = new Set(existingSubjects.map((s) => s.name?.toLowerCase()))
+        const existingSubjectNames = new Set(existingSubjectVersions.map((s) => s.name))
 
-        const filtered: Array<SubjectResult & { status: 'new' | 'new-version' | 'duplicate' }> = []
+        const filtered: Array<SubjectResult & { status: 'new-version' | 'duplicate' }> = []
         const duplicates: any[] = []
 
         for (const subject of rawPreviewData) {
-            const codeExists = existingVersionCodes.has(subject.code?.toLowerCase())
-            const nameExists = existingSubjectNames.has(subject.name?.toLowerCase())
+            const nameExists = existingSubjectNames.has(subject.name)
 
-            if (codeExists) {
+            if (!isError && nameExists) {
                 filtered.push({
                     ...subject,
                     status: 'duplicate',
                 })
-            } else if (nameExists) {
-                filtered.push({
-                    ...subject,
-                    status: 'new-version',
-                })
             } else {
                 filtered.push({
                     ...subject,
-                    status: 'new',
+                    status: 'new-version',
                 })
             }
         }
@@ -93,7 +135,7 @@ const ModalPreviewUpload = () => {
             filteredData: filtered,
             duplicateErrors: duplicates,
         }
-    }, [rawPreviewData, existingSubjects, existingSubjectVersions])
+    }, [isError, rawPreviewData, existingSubjectVersions])
 
     const allErrors = [...errorData, ...duplicateErrors]
 
@@ -188,7 +230,7 @@ const ModalPreviewUpload = () => {
                                 // if (record.status === 'new-version') {
                                 //     return <Tag color="blue">Môn học mới</Tag>
                                 // }
-                                return <Checkbox checked={record.status.includes('new')} />
+                                return <Checkbox checked={record.status === 'new-version'} />
                                 // return <Tag color="orange">Đã có môn học</Tag>
                             },
                         },
@@ -217,13 +259,12 @@ const ModalPreviewUpload = () => {
                             width: 270,
                             render: (_, record) => record?.name,
                         },
-
                         {
                             title: 'HP điều kiện',
                             align: 'center',
                             width: 100,
                             render: (_, record) => {
-                                return <Checkbox checked={record.useForFinalScore} />
+                                return <Checkbox checked={!record.useForFinalScore} />
                             },
                         },
                         {

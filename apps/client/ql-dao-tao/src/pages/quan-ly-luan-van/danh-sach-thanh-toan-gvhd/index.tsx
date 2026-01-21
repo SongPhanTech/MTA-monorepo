@@ -236,11 +236,14 @@ export default function SupervisorPaymentRecordPage() {
                                 align: 'center',
                                 render: (_, record) => {
                                     const supervisorNames =
-                                        record.thesisProjects?.map((p) => p.supervisor?.name) || []
+                                        record.thesisProjects?.map(
+                                            (p: any) => p.supervisor?.name
+                                        ) || []
 
                                     const coSupervisorNames =
-                                        record.coThesisProjects?.map((p) => p.coSupervisor?.name) ||
-                                        []
+                                        record.coThesisProjects?.map(
+                                            (p: any) => p.coSupervisor?.name
+                                        ) || []
 
                                     const allNames = [...supervisorNames, ...coSupervisorNames]
 

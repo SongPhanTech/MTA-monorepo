@@ -1,4 +1,5 @@
 import { useFindManySchoolYear } from '@workspace/db/hooks'
+import { fuzzyMatch } from '@workspace/libs/utils'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type React from 'react'
 import { useMemo } from 'react'
@@ -52,9 +53,9 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
         onSelect(newValue)
     }
 
-    // Hàm lọc tùy chỉnh cho tìm kiếm
     const filterTreeNode = (input: string, treeNode: any) => {
-        return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
+        return fuzzyMatch(input, treeNode?.title?.toString() || '')
+        // return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
     }
 
     return (

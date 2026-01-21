@@ -1,4 +1,5 @@
-import { Select, type SelectProps, Tooltip } from 'antd'
+import { type SelectProps, Tooltip } from 'antd'
+import { Select } from '../commons'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from './hook'
 
 type AntdSelectProps = SelectProps
@@ -25,12 +26,6 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
                     label: e.name,
                     value: e.id,
                 }))}
-                showSearch
-                filterOption={(input, option) =>
-                    String(option?.label ?? '')
-                        ?.toLowerCase()
-                        ?.includes(input?.toLowerCase())
-                }
                 value={id}
                 onChange={onSelect}
                 allowClear={false}
