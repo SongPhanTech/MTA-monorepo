@@ -14,7 +14,7 @@ import { Button, Col, Form, message, Table, Upload } from 'antd'
 import { useEffect, useState } from 'react'
 import type { Key } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { UploadOutlined } from '@ant-design/icons'
 import { XMLParser } from 'fast-xml-parser'
 import { PizZip } from '@workspace/libs/docxjs'
@@ -189,18 +189,36 @@ const PutSurveyImportQuestionModal = () => {
 
         try {
             showSpinner()
+            let listTransition: any = []
+            listTransition=[...listTransition,selectedQuestions.map(i=> {return {
+                            model: 'SurveyQuestion',
+                            operation: 'create',
+                            data: {
+                                data: {
+                                     name: i.content,
+                                    surveyQuestionGroupId: output.surveyQuestionGroupId,
+                                    type: i.type,
+                                    description: null,
+                                },
+                            },
+                        }
 
-            for (const q of selectedQuestions) {
-                await create({
-                    data: {
-                        name: q.content,
-                        surveyQuestionGroupId: output.surveyQuestionGroupId,
-                        type: q.type,
-                        description: null,
-                    },
-                })
+            })]
+            const res= await sqlTransaction(listTransition);
+            if(res?.status===200){
                 message.success('Thêm mới thành công')
             }
+            // for (const q of selectedQuestions) {
+            //     await create({
+            //         data: {
+            //             name: q.content,
+            //             surveyQuestionGroupId: output.surveyQuestionGroupId,
+            //             type: q.type,
+            //             description: null,
+            //         },
+            //     })
+               
+            // }
             queryClient.invalidateQueries({ queryKey: ['SurveyQuestion'] })
             message.success(`Đã import ${selectedQuestions.length} câu hỏi`)
             onClose()
@@ -260,7 +278,7 @@ const PutSurveyImportQuestionModal = () => {
                 </Form.Item>
             </Col>
 
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="surveyQuestionGroupId"

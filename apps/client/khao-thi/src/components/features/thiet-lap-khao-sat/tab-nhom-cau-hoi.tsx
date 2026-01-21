@@ -16,7 +16,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CauHoiKhaoSat from './cau-hoi-khao-sat'
 import { SurveyTopic } from '@workspace/db'
@@ -115,6 +115,10 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
         }
         hideSpinner()
     }
+
+    useEffect(()=>{
+        setSelectedID('');
+    },[topicSlected])
 
     return (
         <div>

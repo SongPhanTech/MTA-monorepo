@@ -6,7 +6,7 @@ import {
 import DefaultLayout from '@layouts/default-layout'
 import { SurveyTopic } from '@workspace/db'
 import { Tabs, type TabsProps } from 'antd'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 function Page() {
     const [topicSlected, setTopicSelected] = useState<SurveyTopic | null>(null)
@@ -14,7 +14,8 @@ function Page() {
         console.log(key)
     }
 
-    const items: TabsProps['items'] = [
+    const items: TabsProps['items'] =useMemo(()=>{
+        return [
         {
             key: '1',
             label: 'Đối tượng làm khảo sát',
@@ -45,6 +46,7 @@ function Page() {
         //     disabled: !selectedID,
         // },
     ]
+    },[topicSlected]) 
     return <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
 }
 
