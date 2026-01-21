@@ -11,6 +11,7 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Flex, Row, Skeleton, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { Eye } from 'lucide-react'
@@ -382,8 +383,10 @@ function DanhSachHocVien({
                                         title: 'Thao tác',
                                         align: 'center',
                                         width: 70,
-                                        hidden:
-                                            profileId !== '266369db-fbaa-453e-b5fc-147ed06f959d',
+                                        hidden: !can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_BAO_CAO_KHAO_SAT_GIANG_VIEN,
+                                            'XEM_CHI_TIET'
+                                        ),
                                         render: (_, record) => {
                                             const result = checkStatus(record)
                                             return (
@@ -393,8 +396,10 @@ function DanhSachHocVien({
                                                         //     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                                                         //     'XEM_TAT_CA'
                                                         // )
-                                                        profileId ===
-                                                            '266369db-fbaa-453e-b5fc-147ed06f959d' && (
+                                                        can(
+                                                            KHAO_THI_PERMISSION.KHAO_THI_BAO_CAO_KHAO_SAT_GIANG_VIEN,
+                                                            'XEM_CHI_TIET'
+                                                        ) && (
                                                             <Tooltip
                                                                 title="Xem khảo sát"
                                                                 placement="top"
