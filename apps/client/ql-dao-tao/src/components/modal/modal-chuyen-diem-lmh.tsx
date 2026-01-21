@@ -1,7 +1,7 @@
 import PutFormModal from '@components/commons/put-modal'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import { SubjectVersionType, type Prisma } from '@workspace/db/client'
+import { SubjectVersionType, } from '@workspace/db/client'
 import {
     useFindManySubjectClass,
     useUpdateStudentSubjectScore,
@@ -10,7 +10,6 @@ import {
 import { FormItem, Select } from '@workspace/ui'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -89,7 +88,7 @@ const ModalChuyenDiemLopMonHoc = () => {
         },
         {
             title: 'Ngày sinh',
-            render: (__: any, record: any) =>
+            render: (_: any, record: any) =>
                 record.student?.userProfile?.dateOfBirth
                     ? dayjs(record.student.userProfile.dateOfBirth).format('DD/MM/YYYY')
                     : '',
