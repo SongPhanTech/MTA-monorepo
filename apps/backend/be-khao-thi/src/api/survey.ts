@@ -1262,14 +1262,13 @@ app.openapi(sinhdetudong, async (c) => {
     const matrixData: any = await prisma.knowledgeBlock.findMany({
         where: {
             examMatrixId: body?.examMatrixId,
-            deletedAt:null
+            deletedAt: null,
         },
         include: {
             questions: true,
             configExams: true,
         },
     })
-
 
     if (!matrixData.length) {
         return c.json(
@@ -1284,15 +1283,15 @@ app.openapi(sinhdetudong, async (c) => {
             let questions: any = []
 
             for (const knowledgeBlock of matrixData) {
-    console.log(knowledgeBlock)
+                console.log(knowledgeBlock)
 
                 if (knowledgeBlock.configExams.length) {
                     for (const configExam of knowledgeBlock.configExams) {
                         const listRamdom = knowledgeBlock.questions.filter(
                             (i: any) => i?.difficult === configExam.difficult
                         )
-                        console.log(listRamdom.length,configExam.quantity);
-                        
+                        console.log(listRamdom.length, configExam.quantity)
+
                         if (listRamdom.length < configExam.quantity) {
                             return c.json(
                                 {

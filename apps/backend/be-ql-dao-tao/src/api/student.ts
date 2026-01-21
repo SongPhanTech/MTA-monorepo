@@ -354,9 +354,7 @@ app.openapi(tongKetNamHocHVSV, async (c) => {
     const students = await prisma.student.findMany({
         select: { id: true },
         where: {
-            fixedClass: {
-                trainingCourseId,
-            },
+            fixedClass: { trainingCourseId },
             status: {
                 notIn: [
                     StudentStatus.GRADUATED,

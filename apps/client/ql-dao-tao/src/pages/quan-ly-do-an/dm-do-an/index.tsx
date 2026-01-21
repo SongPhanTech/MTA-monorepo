@@ -298,14 +298,14 @@ export default function DanhMucDoAn() {
             setEditingRowKeys([])
             return
         }
-    
+
         try {
             const transactions: any[] = []
-    
+
             for (const thesisId of Object.keys(editingValues)) {
                 const values = editingValues[thesisId]
                 const originalRecord = thesisProjectData.find((t) => t.id === thesisId)
-    
+
                 // 1. Xử lý điểm số
                 const finalScore =
                     values.defenseRecordFinalScore === '' ||
@@ -313,11 +313,11 @@ export default function DanhMucDoAn() {
                     values.defenseRecordFinalScore === null
                         ? null
                         : Number(values.defenseRecordFinalScore)
-    
+
                 const relation = (id: string | null | undefined) => {
                     return id ? { connect: { id } } : { disconnect: true }
                 }
-    
+
                 if (originalRecord?.registrations) {
                     for (const reg of originalRecord.registrations) {
                         if (reg.studentSubjectScoreId) {
@@ -337,7 +337,7 @@ export default function DanhMucDoAn() {
                         }
                     }
                 }
-    
+
                 const expertRolesMapping = [
                     { key: 'chairman', role: CouncilRole.CHAIRMAN },
                     { key: 'secretary', role: CouncilRole.SECRETARY },
@@ -345,7 +345,7 @@ export default function DanhMucDoAn() {
                     { key: 'reviewer2', role: CouncilRole.REVIEWER_2 },
                     { key: 'councilMember', role: CouncilRole.MEMBER },
                 ]
-    
+
                 const memberUpserts = expertRolesMapping
                     .filter((m) => values[m.key])
                     .map((m) => {
@@ -358,7 +358,7 @@ export default function DanhMucDoAn() {
                             update: { expertId: values[m.key] },
                         }
                     })
-    
+
                 const updateData: any = {
                     title: values.title || '',
                     status: values.status || 'PROPOSED',
@@ -380,7 +380,7 @@ export default function DanhMucDoAn() {
                         },
                     },
                 }
-    
+
                 if (originalRecord?.councilId) {
                     if (memberUpserts.length > 0) {
                         updateData.council = {
@@ -394,7 +394,7 @@ export default function DanhMucDoAn() {
                         },
                     }
                 }
-    
+
                 transactions.push({
                     model: 'ThesisProject' as const,
                     operation: 'update' as const,
@@ -404,7 +404,7 @@ export default function DanhMucDoAn() {
                     },
                 })
             }
-    
+
             await sqlTransaction(transactions)
             await refetchThesisProjectData()
             message.success('Đã lưu thay đổi đồ án và cập nhật bảng điểm sinh viên!')
@@ -506,10 +506,10 @@ export default function DanhMucDoAn() {
                             width: 150,
                             align: 'left',
                             render: (_, record) => {
-                                return (
-                                    `${record?.subjectClass?.code} - ${record?.subjectClass?.name}` ||
-                                    ''
-                                )
+                                return [
+                                    record?.subjectClass?.code,
+                                    record?.subjectClass?.name,
+                                ].join(' - ')
                             },
                         },
                         {
@@ -524,7 +524,14 @@ export default function DanhMucDoAn() {
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         {registrations.map((x: any, index: number) => (
                                             <div key={index}>
-                                                {x.student?.userProfile?.fullname} - {x.student?.code || 'N/A'}  - {x.student?.userProfile?.dateOfBirth ? dayjs(x.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY') : 'N/A'} - {x.student?.fixedClass?.name || 'N/A'}
+                                                {x.student?.userProfile?.fullname} -{' '}
+                                                {x.student?.code || 'N/A'} -{' '}
+                                                {x.student?.userProfile?.dateOfBirth
+                                                    ? dayjs(
+                                                          x.student?.userProfile?.dateOfBirth
+                                                      ).format('DD/MM/YYYY')
+                                                    : 'N/A'}{' '}
+                                                - {x.student?.fixedClass?.name || 'N/A'}
                                             </div>
                                         ))}
                                     </div>
@@ -1094,9 +1101,7 @@ const StudentManagementModal = ({
     const [activeTab, setActiveTab] = useState('1')
     const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
     const selectedStudentsData = useMemo(() => {
-        return allStudentsInClass.filter((item: any) => 
-            selectedStudentIds.includes(item.studentId)
-        )
+        return allStudentsInClass.filter((item: any) => selectedStudentIds.includes(item.studentId))
     }, [selectedStudentIds, allStudentsInClass])
     const [gradeValues, setGradeValues] = useState<Record<string, any>>({})
     useEffect(() => {
@@ -1135,7 +1140,7 @@ const StudentManagementModal = ({
             },
             {
                 title: 'Họ và tên',
-                
+
                 render: (_: any, reg: any) => (
                     <div>
                         <div className="font-bold">{reg.student?.userProfile?.fullname}</div>
@@ -1145,23 +1150,23 @@ const StudentManagementModal = ({
             {
                 title: 'Mã sinh viên',
                 width: 100,
-                render: (_: any, reg: any) => (
-                    <div>{reg.student?.code}</div>
-                ),
+                render: (_: any, reg: any) => <div>{reg.student?.code}</div>,
             },
             {
                 title: 'Ngày sinh   ',
                 width: 100,
                 render: (_: any, reg: any) => (
-                    <div>{reg.student?.userProfile?.dateOfBirth ? dayjs(reg.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY') : 'N/A'}</div>
+                    <div>
+                        {reg.student?.userProfile?.dateOfBirth
+                            ? dayjs(reg.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY')
+                            : 'N/A'}
+                    </div>
                 ),
             },
             {
                 title: 'Lớp quản lí',
                 width: 200,
-                render: (_: any, reg: any) => (
-                    <div>{reg.student?.fixedClass?.name}</div>
-                ),
+                render: (_: any, reg: any) => <div>{reg.student?.fixedClass?.name}</div>,
             },
             {
                 title: 'Điểm thi',
@@ -1203,7 +1208,10 @@ const StudentManagementModal = ({
             title: 'Ngày sinh',
             dataIndex: 'dateOfBirth',
             width: 100,
-            render: (_: any, record: any) => record.student?.userProfile?.dateOfBirth ? dayjs(record.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY') : 'N/A',
+            render: (_: any, record: any) =>
+                record.student?.userProfile?.dateOfBirth
+                    ? dayjs(record.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY')
+                    : 'N/A',
         },
         {
             title: 'Lớp quản lí',
@@ -1215,7 +1223,7 @@ const StudentManagementModal = ({
         {
             title: 'Thao tác',
             width: 80,
-            align: 'center' as const, 
+            align: 'center' as const,
             render: (_: any, record: any) => (
                 <div className="flex items-center justify-center">
                     <CircleMinus
@@ -1393,24 +1401,27 @@ const StudentManagementModal = ({
                         />
                     </div>
                     <div>
-            <div className="mb-2 font-semibold">
-                Danh sách thành viên ({selectedStudentIds.length})
-            </div>
-            <Table
-                dataSource={selectedStudentsData}
-              
-                columns={memberTableColumns}
-                rowKey="studentId"
-                size="small"
-                bordered
-                pagination={selectedStudentsData.length > 5 ? {
-                    pageSize: 5,
-                    showTotal: (total) => `Tổng số ${total} học viên`,
-                    position: ['bottomCenter'],
-                } : false}
-                locale={{ emptyText: 'Chưa có thành viên nào được chọn' }}
-            />
-        </div>
+                        <div className="mb-2 font-semibold">
+                            Danh sách thành viên ({selectedStudentIds.length})
+                        </div>
+                        <Table
+                            dataSource={selectedStudentsData}
+                            columns={memberTableColumns}
+                            rowKey="studentId"
+                            size="small"
+                            bordered
+                            pagination={
+                                selectedStudentsData.length > 5
+                                    ? {
+                                          pageSize: 5,
+                                          showTotal: (total) => `Tổng số ${total} học viên`,
+                                          position: ['bottomCenter'],
+                                      }
+                                    : false
+                            }
+                            locale={{ emptyText: 'Chưa có thành viên nào được chọn' }}
+                        />
+                    </div>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Nhập điểm" key="2">
                     <div className="py-4">

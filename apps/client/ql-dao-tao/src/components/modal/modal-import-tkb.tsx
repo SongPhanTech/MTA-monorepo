@@ -335,11 +335,7 @@ const ModalNhapTKB = () => {
                                 dataIndex: 'name',
                                 align: 'center',
                                 type: 'input',
-                                render: (_, record) => (
-                                    <p className="text-left">
-                                        {record?.name}
-                                    </p>
-                                ),
+                                render: (_, record) => <p className="text-left">{record?.name}</p>,
                             },
                             {
                                 title: 'Kíp học',
