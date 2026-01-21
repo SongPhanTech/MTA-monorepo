@@ -196,7 +196,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             })
         }
 
-        if (isHeadSpecialized || isSecretary) {
+        if (isHeadSpecialized) {
             tabs.push({
                 key: '6',
                 label: 'Báo cáo tiêu chuẩn',
