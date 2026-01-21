@@ -812,6 +812,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                             onClick={() => openModalChuyenDiemLopMonHoc({ 
                                                 allStudentsInClasses: allStudentsInClasses
                                             })} 
+                                            disabled={!students?.length}
                                         >
                                             Gán điểm sang LMH
                                         </Button>
@@ -925,6 +926,15 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                               'DD/MM/YYYY'
                                           )
                                         : ''
+                                },
+                            },
+                            {
+                                title: 'Lớp quản lí ',
+                                width: 250,
+                                dataIndex: 'fixedClass',
+                                align: 'center',
+                                render: (_, record) => {
+                                    return record?.fixedClass?.name || ''
                                 },
                             },
                             {
