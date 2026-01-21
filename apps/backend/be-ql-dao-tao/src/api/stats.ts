@@ -4554,36 +4554,35 @@ app.openapi(
                 enrolled: bigint | null
             }>
         >`
-SELECT
- sy."name" AS year,
-  tot."code" AS object_type,
-  tl."code" AS training_level,
-  COALESCE(SUM(tc."admissionQuota"), 0)  AS quota,
-  COALESCE(SUM(tc."admittedStudent"), 0) AS admitted,
-  COALESCE(SUM(tc."enrolledStudent"), 0) AS enrolled
-FROM "ql-dao-tao"."TrainingCourse" tc
-JOIN "ql-dao-tao"."Semester" s
-  ON s."id" = tc."semesterStartId"
-JOIN "ql-dao-tao"."SchoolYear" sy
-  ON sy."id" = s."schoolYearId"
-JOIN "ql-dao-tao"."TrainingObjectType" tot
-  ON tot."id" = tc."trainingObjectTypeId"
-JOIN "ql-dao-tao"."TrainingLevel" tl
-  ON tl."id" = tot."trainingLevelId"
-WHERE
-  s."semesterType" = 'FIRST'
-  AND tot."code" IS NOT NULL
-  
-GROUP BY
-sy."name",
-  tot."code",
-  tl."code"
-ORDER BY
-sy."name",
-  tot."code";
+                        SELECT
+                        sy."name"  AS year,
+                        tot."type" AS object_type,
+                        tl."code"  AS training_level,
+                        COALESCE(SUM(tc."admissionQuota"), 0)  AS quota,
+                        COALESCE(SUM(tc."admittedStudent"), 0) AS admitted,
+                        COALESCE(SUM(tc."enrolledStudent"), 0) AS enrolled
+                        FROM "ql-dao-tao"."TrainingCourse" tc
+                        JOIN "ql-dao-tao"."Semester" s
+                        ON s."id" = tc."semesterStartId"
+                        JOIN "ql-dao-tao"."SchoolYear" sy
+                        ON sy."id" = s."schoolYearId"
+                        JOIN "ql-dao-tao"."TrainingObjectType" tot
+                        ON tot."id" = tc."trainingObjectTypeId"
+                        JOIN "ql-dao-tao"."TrainingLevel" tl
+                        ON tl."id" = tot."trainingLevelId"
+                        WHERE
+                        s."semesterType" = 'FIRST'
+                        GROUP BY
+                        sy."name",
+                        tot."type",
+                        tl."code"
+                        ORDER BY
+                        sy."name",
+                        tot."type",
+                        tl."code";
 
 
-`
+                        `
 
         const normalize = (v: bigint | null) => Number(v ?? 0)
 
