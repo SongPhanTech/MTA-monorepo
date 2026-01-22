@@ -162,7 +162,7 @@ const CriteriaEvaluationSubPage = ({
                         id: selectedEvaluationPeriodId,
                     },
                     data: {
-                        status: $Enums.EvaluationPeriodStatus.CONSOLIDATION,
+                        status: $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT,
                     },
                 })
             }

@@ -617,6 +617,9 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
             }
 
             const doc = new Document({
+                features: {
+                    updateFields: true,
+                },
                 sections: [
                     {
                         children: [

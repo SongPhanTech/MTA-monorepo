@@ -25,6 +25,15 @@ export default function CriteriaEvaluationPeriodList() {
                                                 userProfile: true,
                                             },
                                         },
+                                        reviewer: {
+                                            include: {
+                                                lecturer: {
+                                                    include: {
+                                                        userProfile: true,
+                                                    },
+                                                },
+                                            },
+                                        },
                                         evaluationCriterionComments: {
                                             include: {
                                                 reviewer: {

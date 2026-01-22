@@ -27,6 +27,7 @@ export default function ExportReport({ id }: { id: string }) {
         SECRETARY: 'Thư ký',
         MEMBER: 'Thành viên',
         ADVISORY_BOARD: 'Ban tư vấn',
+        HEAD_SPECIALIZED: 'Trưởng nhóm chuyên trách',
         SPECIALIZED: 'nhóm chuyên trách',
     }
     const rgbToHex = (rgb: string): string | undefined => {
@@ -733,6 +734,9 @@ export default function ExportReport({ id }: { id: string }) {
                 ])
 
                 const doc = new Document({
+                    features: {
+                        updateFields: true,
+                    },
                     sections: [
                         ...listMembers,
                         {

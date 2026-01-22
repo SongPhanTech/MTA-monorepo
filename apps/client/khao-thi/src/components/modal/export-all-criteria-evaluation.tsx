@@ -652,6 +652,9 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
             }
 
             const doc = new Document({
+                features: {
+                    updateFields: true,
+                },
                 sections: [
                     {
                         children: [

@@ -18,7 +18,7 @@ export default function EvaluationPeriod() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
+    const idProfile = me?.sDM_NhanVienId || '7247c121-ab5a-4a72-a018-4a4090c7948a'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { id: semesterId } = useSemesterStore()
 
@@ -62,6 +62,7 @@ export default function EvaluationPeriod() {
                                     hasSome: [
                                         $Enums.EvaluationMemberRole.ADVISORY_BOARD,
                                         $Enums.EvaluationMemberRole.HEAD_SECRETARY,
+                                        $Enums.EvaluationMemberRole.HEAD_SPECIALIZED
                                     ],
                                 },
                             },
