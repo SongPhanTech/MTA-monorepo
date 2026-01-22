@@ -16,10 +16,10 @@ import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
-import { buildOrgTree } from '@lib/utils'
+import { buildOrgTree, limitTreeDepth } from '@lib/utils'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import _ from 'lodash'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useMemo } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
 import { normalizeVietnamese } from '@workspace/libs/utils'
 export type PutTrainingBlockSubject = TrainingBlockSubject & {
@@ -91,7 +91,8 @@ const PutTrainingBlockSubject = () => {
     )
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
-    const treeData = buildOrgTree(manageOrgData)
+    const treeData = useMemo(() => buildOrgTree(manageOrgData), [manageOrgData])
+    const treeDataLimited = useMemo(() => limitTreeDepth(treeData, 2), [treeData])
     const orgIds = filters.managementOrganizationId
         ? getAllChildOrgIds(filters.managementOrganizationId, manageOrgData)
         : undefined
@@ -234,7 +235,7 @@ const PutTrainingBlockSubject = () => {
                             allowClear
                             showSearch
                             treeDefaultExpandAll
-                            treeData={treeData}
+                            treeData={treeDataLimited}
                             filterTreeNode={(input, node) =>
                                 normalizeVietnamese(node.searchText).includes(
                                     normalizeVietnamese(input)

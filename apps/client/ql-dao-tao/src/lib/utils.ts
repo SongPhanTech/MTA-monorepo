@@ -145,6 +145,21 @@ export function buildOrgTree(
             children: buildOrgTree(list, item.Id),
         }))
 }
+export const limitTreeDepth = (
+    nodes: OrgTreeItem[],
+    maxDepth: number,
+    currentDepth = 1
+): OrgTreeItem[] => {
+    if (currentDepth > maxDepth) return []
+
+    return nodes.map((node) => ({
+        ...node,
+        children:
+            currentDepth === maxDepth
+                ? undefined
+                : limitTreeDepth(node.children || [], maxDepth, currentDepth + 1),
+    }))
+}
 
 export const buildOrgFlat = (
     list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
