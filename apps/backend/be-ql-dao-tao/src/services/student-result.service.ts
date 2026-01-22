@@ -2261,6 +2261,10 @@ export const resultCourseStudentScholarship = async (
                 highestScholarship: scholarshipInfo[0]
                     ? (({ trainingCourseId: _t, ...rest }) => rest)(scholarshipInfo[0])
                     : null,
+                fixedClass: {
+                    code: studentSemesterResult.student.fixedClass?.code || null,
+                    name: studentSemesterResult.student.fixedClass?.name || '',
+                },
             })
             courseMap[courseId].students.push(result)
         })
@@ -2356,6 +2360,10 @@ export const resultCourseStudentAcademicWarning = async (
                 academicWarningRule: checkAcademicWarningResult.map(
                     ({ trainingCourseId: _t, ...rest }) => rest
                 ),
+                fixedClass: {
+                    code: studentSemesterResult.student.fixedClass?.code || null,
+                    name: studentSemesterResult.student.fixedClass?.name || '',
+                },
             })
             courseMap[courseId].students.push(result)
         })
@@ -2485,6 +2493,10 @@ export const resultCourseStudentAcademicAction = async (
                 reason: student.lyDoXepLoai || '',
                 hasAcademicAction: true,
                 academicAction: academicActionInfo,
+                fixedClass: {
+                    code: studentSemesterResult.student.fixedClass?.code || null,
+                    name: studentSemesterResult.student.fixedClass?.name || '',
+                },
             })
             courseMap[courseId].students.push(result)
         })
@@ -2577,6 +2589,10 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
                         ?.trainingMajor?.trainingField?.id || '',
                 reason: student.lyDoXepLoai || '',
                 decreaseAcademicWarning: true,
+                fixedClass: {
+                    code: studentSemesterResult.student.fixedClass?.code || null,
+                    name: studentSemesterResult.student.fixedClass?.name || '',
+                },
             })
             courseMap[courseId].students.push(result)
         })

@@ -1,4 +1,4 @@
-import { Button, Col, Flex, Modal, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -12,12 +12,14 @@ import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type {
-    AcademicWarning,
-    FixedClass,
-    Prisma,
-    Student,
-    TrainingCourse,
+import {
+    $Enums,
+    type AcademicWarning,
+    type FixedClass,
+    type Prisma,
+    type Student,
+    type StudentSemesterResult,
+    type TrainingCourse,
 } from '@workspace/db/client'
 import {
     useDeleteAcademicWarning,
@@ -28,8 +30,7 @@ import {
     useUpdateManyAcademicWarning,
     useUpsertAcademicWarning,
 } from '@workspace/db/hooks'
-import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useExportStudentAcademicWarningJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -38,9 +39,10 @@ dayjs.locale('vi')
 
 interface XetCanhCaoHocTapProps {
     semesterId: string
+    trainingObjectTypeId: string
 }
 
-const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
+const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTapProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -96,9 +98,9 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
     const { mutateAsync: upsertAcademicWarning } = useUpsertAcademicWarning()
     const { mutateAsync: updateManyAcademicWarning } = useUpdateManyAcademicWarning()
     const { mutateAsync: deleteAcademicWarning } = useDeleteAcademicWarning()
-    const { data: students = [] } = useExportStudentResultSemesterJson<any[] | { data: any[] }>(
-        { semesterId: semesterId || '', type: 'academicWarning' },
-        { query: { enabled: !!semesterId } },
+    const { data: students = [] } = useExportStudentAcademicWarningJson<any[] | { data: any[] }>(
+        { semesterId: semesterId, trainingObjectTypeId },
+        { query: { enabled: !!semesterId && !!trainingObjectTypeId } },
         queryClient
     )
 
@@ -144,11 +146,8 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         }))
     }, [studentData, academicWarningData])
 
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: {
-            name: 'asc',
-        },
+        orderBy: { name: 'asc' },
         where: {
             trainingObjectTypeId,
             active: true,
@@ -481,6 +480,43 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                                     title: 'Tên sinh viên',
                                     dataIndex: ['userProfile', 'fullname'],
                                     width: 200,
+                                },
+
+                                {
+                                    title: 'Lớp',
+                                    width: 60,
+                                    align: 'center',
+                                    render: (_, record) => {
+                                        return (
+                                            <Tooltip title={record?.fixedClass?.name}>
+                                                {record?.fixedClass?.code || '-'}
+                                            </Tooltip>
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Học kỳ',
+                                    dataIndex: ['studentSemesterResult', 'semesterIndexInCourse'],
+                                    width: 40,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'TBHK',
+                                    dataIndex: ['studentSemesterResult'],
+                                    width: 0,
+                                    align: 'center',
+                                    render: (result?: StudentSemesterResult) =>
+                                        result?.baseScore === $Enums.AcademicRankingBaseType.Base10
+                                            ? Number(result.gpaBase10)
+                                            : Number(result?.gpaBase4 || 0),
+                                },
+                                {
+                                    title: 'Lý do',
+                                    dataIndex: ['reason'],
+                                    width: 200,
+                                    align: 'center',
+                                    render: (value?: string) =>
+                                        value?.split('\n').map((r) => <p>{r}</p>),
                                 },
                             ]}
                             pagination={{

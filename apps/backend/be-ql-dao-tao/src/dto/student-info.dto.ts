@@ -201,6 +201,12 @@ export const StudentResultBase = z.object({
     trainingFieldId: z.string().describe('ID Ngành'),
     userProfile: z.any().describe('Thông tin người dùng'),
     reason: z.string().describe('Lý do'),
+    fixedClass: z
+        .object({
+            code: z.string().nullable().describe('Mã lớp'),
+            name: z.string().describe('Tên lớp'),
+        })
+        .describe('Thông tin lớp học'),
 })
 
 export const StudentScholarshipResult = StudentResultBase.extend({

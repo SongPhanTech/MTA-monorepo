@@ -36,7 +36,7 @@ import dayjs from 'dayjs'
 import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
-import { useSemesterStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 
 interface DoAnForm {
     subjectClassId: string
@@ -46,7 +46,6 @@ const { TextArea } = Input
 export default function DanhMucDoAn() {
     const [form] = Form.useForm<DoAnForm>()
     const [searchParams, setSearchParams] = useState<Partial<DoAnForm>>({})
-    const [isSearched, setIsSearched] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [isMemberModalOpen, setIsMemberModalOpen] = useState(false)
@@ -58,6 +57,44 @@ export default function DanhMucDoAn() {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
     const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const subjectClassId = Form.useWatch('subjectClassId', form)
+
+    const { data: subjectClassData = [] } = useFindManySubjectClass(
+        {
+            where: {
+                semesterId,
+                trainingObjectTypeId,
+                subject: { type: SubjectVersionType.Project },
+            },
+            include: {
+                subjectClassStudent: {
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                                fixedClass: true,
+                            },
+                        },
+                        studentThesisRegistration: true,
+                    },
+                },
+            },
+        },
+        { enabled: !!semesterId && !!trainingObjectTypeId }
+    )
+
+    useEffect(() => {
+        if (semesterId || trainingObjectTypeId) {
+            form.resetFields()
+        }
+    }, [semesterId, trainingObjectTypeId, form.resetFields])
+
+    useEffect(() => {
+        if (semesterId || trainingObjectTypeId || subjectClassId) {
+            setCurrentPage(1)
+        }
+    }, [semesterId, trainingObjectTypeId, subjectClassId])
 
     const rowSelection = {
         selectedRowKeys,
@@ -66,22 +103,37 @@ export default function DanhMucDoAn() {
         },
     }
     const where = useMemo(() => {
-        if (!isSearched) return { id: { in: [] } }
-        const filter: any = {
+        return {
             thesisType: ThesisType.PROJECT,
+            ...(subjectClassId
+                ? { subjectClassId }
+                : {
+                      subjectClassId: {
+                          in: subjectClassData.map((c) => c.id),
+                      },
+                  }),
         }
-        if (searchParams.subjectClassId) {
-            filter.subjectClassId = searchParams.subjectClassId
-        }
-        return filter
-    }, [isSearched, searchParams])
-    const { data: subjectClassData = [] } = useFindManySubjectClass({
-        where: {
-            semesterId,
-            subject: { type: SubjectVersionType.Project },
-        },
+    }, [subjectClassId, subjectClassData])
+
+    const {
+        data: thesisProjectData = [],
+        refetch: refetchThesisProjectData,
+        isPending,
+    } = useFindManyThesisProject({
+        where,
         include: {
-            subjectClassStudent: {
+            subjectClass: { include: { subject: true } },
+            supervisor: {
+                include: {
+                    lecturer: { include: { userProfile: true } },
+                },
+            },
+            coSupervisor: {
+                include: {
+                    lecturer: { include: { userProfile: true } },
+                },
+            },
+            registrations: {
                 include: {
                     student: {
                         include: {
@@ -89,74 +141,34 @@ export default function DanhMucDoAn() {
                             fixedClass: true,
                         },
                     },
-                    studentThesisRegistration: true,
+                    studentSubjectScore: true,
                 },
             },
-        },
-    })
-    const { data: thesisProjectData = [], refetch: refetchThesisProjectData } =
-        useFindManyThesisProject({
-            where,
-            include: {
-                subjectClass: {
-                    include: {
-                        subject: true,
-                    },
-                },
-                supervisor: {
-                    include: {
-                        lecturer: {
-                            include: {
-                                userProfile: true,
-                            },
-                        },
-                    },
-                },
-                coSupervisor: {
-                    include: {
-                        lecturer: {
-                            include: {
-                                userProfile: true,
-                            },
-                        },
-                    },
-                },
-                registrations: {
-                    include: {
-                        student: {
-                            include: {
-                                userProfile: true,
-                                fixedClass: true,
-                            },
-                        },
-                        studentSubjectScore: true,
-                    },
-                },
-                room: true,
-                defenseSession: true,
-                defenseRecord: true,
-                council: {
-                    include: {
-                        members: {
-                            include: {
-                                expert: {
-                                    include: {
-                                        lecturer: {
-                                            include: {
-                                                userProfile: true,
-                                            },
+            room: true,
+            defenseSession: true,
+            defenseRecord: true,
+            council: {
+                include: {
+                    members: {
+                        include: {
+                            expert: {
+                                include: {
+                                    lecturer: {
+                                        include: {
+                                            userProfile: true,
                                         },
                                     },
                                 },
-                                payment: true,
                             },
+                            payment: true,
                         },
                     },
                 },
             },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        })
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
     const { data: defenseSessionData = [] } = useFindManyDefenseSession()
     const { data: roomsData = [] } = useFindManyRoom()
     const { data: expertProfiles = [] } = useFindManyExpertProfile({
@@ -193,7 +205,6 @@ export default function DanhMucDoAn() {
     const handleSearch = () => {
         const values = form.getFieldsValue()
         setSearchParams(values)
-        setIsSearched(true)
         setCurrentPage(1)
     }
 
@@ -206,7 +217,7 @@ export default function DanhMucDoAn() {
         }
 
         const assignedStudentIds = thesisProjectData.flatMap(
-            (project) => project.registrations?.map((reg: any) => reg.studentId) || []
+            (project) => project.registrations?.map((reg) => reg.studentId) || []
         )
 
         const currentClass = subjectClassData.find((c) => c.id === subjectClassId)
@@ -410,7 +421,6 @@ export default function DanhMucDoAn() {
             message.success('Đã lưu thay đổi đồ án và cập nhật bảng điểm sinh viên!')
             setEditingRowKeys([])
             setEditingValues({})
-            handleSearch()
         } catch (error) {
             console.error('Lỗi khi lưu:', error)
             message.error('Không thể lưu dữ liệu. Vui lòng kiểm tra lại các trường thông tin.')
@@ -446,13 +456,14 @@ export default function DanhMucDoAn() {
                                 <div className="flex gap-2">
                                     <Button
                                         type="primary"
+                                        loading={isPending}
                                         onClick={async () => await handleGenerateMockData()}
                                     >
                                         Tạo dữ liệu mẫu
                                     </Button>
-                                    <Button type="primary" onClick={handleSearch}>
+                                    {/* <Button type="primary" onClick={handleSearch}>
                                         Xem kết quả
-                                    </Button>
+                                    </Button> */}
                                     {editingRowKeys.length > 0 ? (
                                         <>
                                             <Button
