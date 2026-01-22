@@ -6,5 +6,5 @@
  */
 
 export type GetPrivateSurveyParams = {
-    profileId?: string
-}
+profileId?: string;
+};

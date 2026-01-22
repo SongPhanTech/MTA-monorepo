@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsStudentDistributionByProvinceBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

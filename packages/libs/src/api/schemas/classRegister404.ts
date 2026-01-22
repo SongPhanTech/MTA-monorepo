@@ -6,5 +6,5 @@
  */
 
 export type ClassRegister404 = {
-    message: string
-}
+  message: string;
+};

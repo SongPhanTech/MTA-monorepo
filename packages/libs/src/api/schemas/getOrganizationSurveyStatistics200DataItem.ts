@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetOrganizationSurveyStatistics200DataItemOrganization } from './getOrganizationSurveyStatistics200DataItemOrganization'
-import type { GetOrganizationSurveyStatistics200DataItemAverageItem } from './getOrganizationSurveyStatistics200DataItemAverageItem'
+import type { GetOrganizationSurveyStatistics200DataItemOrganization } from './getOrganizationSurveyStatistics200DataItemOrganization';
+import type { GetOrganizationSurveyStatistics200DataItemAverageItem } from './getOrganizationSurveyStatistics200DataItemAverageItem';
 
 export type GetOrganizationSurveyStatistics200DataItem = {
-    organization: GetOrganizationSurveyStatistics200DataItemOrganization
-    average: GetOrganizationSurveyStatistics200DataItemAverageItem[]
-}
+  organization: GetOrganizationSurveyStatistics200DataItemOrganization;
+  average: GetOrganizationSurveyStatistics200DataItemAverageItem[];
+};

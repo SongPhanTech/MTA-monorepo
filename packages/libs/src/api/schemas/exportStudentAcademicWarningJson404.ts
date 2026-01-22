@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsTrendsInAcademicResultsByYear200DataItem = {
-    name: string
-    data: number[]
-}
+export type ExportStudentAcademicWarningJson404 = {
+  message: string;
+};

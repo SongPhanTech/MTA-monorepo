@@ -50,72 +50,72 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { NhanVien } from './nhanVien'
-import type { NhanVienEditDtoState } from './nhanVienEditDtoState'
+import type { NhanVien } from './nhanVien';
+import type { NhanVienEditDtoState } from './nhanVienEditDtoState';
 
 /**
  * Danh mục nhân viên
  */
 export type NhanVienEditDto = NhanVien & {
-    /** @nullable */
-    State?: NhanVienEditDtoState
-    /**
-     * Tên đơn vị
-     * @nullable
-     */
-    sTenDonVi?: string | null
-    /**
-     * Vị trí công việc
-     * @nullable
-     */
-    sTenViTriCongViec?: string | null
-    /**
-     * Người quản lý trực tiếp
-     * @nullable
-     */
-    sTenQuanLyTrucTiep?: string | null
-    /**
-     * Tên quốc gia
-     * @nullable
-     */
-    sTenQuocGia?: string | null
-    /**
-     * Tên tỉnh
-     * @nullable
-     */
-    sTenTinh?: string | null
-    /**
-     * Tên quận, huyện
-     * @nullable
-     */
-    sTenQuanHuyen?: string | null
-    /**
-     * Tên xã, phường
-     * @nullable
-     */
-    sTenXaPhuong?: string | null
-    /**
-     * Giới tính
-     * @nullable
-     */
-    sTenGioiTinh?: string | null
-    /**
-     * Tên tỉnh mới
-     * @nullable
-     */
-    sTenTinhMoi?: string | null
-    /**
-     * Tên xã phường mới
-     * @nullable
-     */
-    sTenXaPhuongMoi?: string | null
-    /** @nullable */
-    sKeycloakId?: string | null
-    /** @nullable */
-    sUserName?: string | null
-    /** @nullable */
-    sPassword?: string | null
-    bHasAccount?: boolean
-    /** @nullable */
-    sPasswordConfirm?: string | null
-}
+  /** @nullable */
+  State?: NhanVienEditDtoState;
+  /**
+   * Tên đơn vị
+   * @nullable
+   */
+  sTenDonVi?: string | null;
+  /**
+   * Vị trí công việc
+   * @nullable
+   */
+  sTenViTriCongViec?: string | null;
+  /**
+   * Người quản lý trực tiếp
+   * @nullable
+   */
+  sTenQuanLyTrucTiep?: string | null;
+  /**
+   * Tên quốc gia
+   * @nullable
+   */
+  sTenQuocGia?: string | null;
+  /**
+   * Tên tỉnh
+   * @nullable
+   */
+  sTenTinh?: string | null;
+  /**
+   * Tên quận, huyện
+   * @nullable
+   */
+  sTenQuanHuyen?: string | null;
+  /**
+   * Tên xã, phường
+   * @nullable
+   */
+  sTenXaPhuong?: string | null;
+  /**
+   * Giới tính
+   * @nullable
+   */
+  sTenGioiTinh?: string | null;
+  /**
+   * Tên tỉnh mới
+   * @nullable
+   */
+  sTenTinhMoi?: string | null;
+  /**
+   * Tên xã phường mới
+   * @nullable
+   */
+  sTenXaPhuongMoi?: string | null;
+  /** @nullable */
+  sKeycloakId?: string | null;
+  /** @nullable */
+  sUserName?: string | null;
+  /** @nullable */
+  sPassword?: string | null;
+  bHasAccount?: boolean;
+  /** @nullable */
+  sPasswordConfirm?: string | null;
+};

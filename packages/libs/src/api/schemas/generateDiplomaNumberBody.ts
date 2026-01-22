@@ -4,19 +4,19 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GenerateDiplomaNumberBodyField } from './generateDiplomaNumberBodyField'
+import type { GenerateDiplomaNumberBodyField } from './generateDiplomaNumberBodyField';
 
 export type GenerateDiplomaNumberBody = {
-    field: GenerateDiplomaNumberBodyField
-    sessionId: string
-    /** @nullable */
-    prefix?: string | null
-    start: number
-    /** @nullable */
-    maxLength?: number | null
-    /** @nullable */
-    suffix?: string | null
-    rewrite?: boolean
-    /** @nullable */
-    skip?: string | null
-}
+  field: GenerateDiplomaNumberBodyField;
+  sessionId: string;
+  /** @nullable */
+  prefix?: string | null;
+  start: number;
+  /** @nullable */
+  maxLength?: number | null;
+  /** @nullable */
+  suffix?: string | null;
+  rewrite?: boolean;
+  /** @nullable */
+  skip?: string | null;
+};

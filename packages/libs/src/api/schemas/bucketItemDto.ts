@@ -6,9 +6,9 @@
  */
 
 export interface BucketItemDto {
-    name?: string
-    size?: number
-    etag?: string
-    prefix?: string
-    lastModified?: string
+  name?: string;
+  size?: number;
+  etag?: string;
+  prefix?: string;
+  lastModified?: string;
 }

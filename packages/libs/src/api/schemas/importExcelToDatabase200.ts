@@ -6,5 +6,5 @@
  */
 
 export type ImportExcelToDatabase200 = {
-    inserted: number
-}
+  inserted: number;
+};

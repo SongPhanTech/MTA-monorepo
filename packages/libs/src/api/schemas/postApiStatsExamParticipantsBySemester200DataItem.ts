@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsExamParticipantsBySemester200DataItem = {
-    totalParticipants: number
-}
+  totalParticipants: number;
+};

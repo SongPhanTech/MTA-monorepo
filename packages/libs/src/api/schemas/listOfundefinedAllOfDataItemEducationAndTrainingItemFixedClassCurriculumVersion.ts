@@ -4,65 +4,65 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionType } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionType'
-import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionType } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionType';
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum';
 
 /**
  * @nullable
  */
 export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion = {
-    id: string
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    /** @nullable */
-    code?: string | null
-    name: string
-    /** @nullable */
-    shortName?: string | null
-    /** @nullable */
-    englishName?: string | null
-    /** @nullable */
-    numberOfSemesters?: number | null
-    /** @nullable */
-    yearCreation?: number | null
-    /** @nullable */
-    yearApplication?: number | null
-    isLock?: boolean
-    type: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionType
-    /** @nullable */
-    requiredCredits?: number | null
-    /** @nullable */
-    electiveCredits?: number | null
-    /** @nullable */
-    jobPosition?: string | null
-    /** @nullable */
-    objectives?: string | null
-    /** @nullable */
-    learningOutcome?: string | null
-    /** @nullable */
-    inputStandard?: string | null
-    /** @nullable */
-    time?: string | null
-    /** @nullable */
-    structure?: string | null
-    /** @nullable */
-    matrixLearningOutcome?: string | null
-    /** @nullable */
-    summary?: string | null
-    /** @nullable */
-    learningDiagram?: string | null
-    /** @nullable */
-    guide?: string | null
-    /** @nullable */
-    renderPath?: string | null
-    curriculum: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum
-} | null
+  id: string;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  /** @nullable */
+  code?: string | null;
+  name: string;
+  /** @nullable */
+  shortName?: string | null;
+  /** @nullable */
+  englishName?: string | null;
+  /** @nullable */
+  numberOfSemesters?: number | null;
+  /** @nullable */
+  yearCreation?: number | null;
+  /** @nullable */
+  yearApplication?: number | null;
+  isLock?: boolean;
+  type: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionType;
+  /** @nullable */
+  requiredCredits?: number | null;
+  /** @nullable */
+  electiveCredits?: number | null;
+  /** @nullable */
+  jobPosition?: string | null;
+  /** @nullable */
+  objectives?: string | null;
+  /** @nullable */
+  learningOutcome?: string | null;
+  /** @nullable */
+  inputStandard?: string | null;
+  /** @nullable */
+  time?: string | null;
+  /** @nullable */
+  structure?: string | null;
+  /** @nullable */
+  matrixLearningOutcome?: string | null;
+  /** @nullable */
+  summary?: string | null;
+  /** @nullable */
+  learningDiagram?: string | null;
+  /** @nullable */
+  guide?: string | null;
+  /** @nullable */
+  renderPath?: string | null;
+  curriculum: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum;
+} | null;

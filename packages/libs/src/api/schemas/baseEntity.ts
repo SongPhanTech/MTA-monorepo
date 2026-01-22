@@ -50,25 +50,25 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntityOldData } from './baseEntityOldData'
+import type { BaseEntityOldData } from './baseEntityOldData';
 
 export interface BaseEntity {
-    /** @nullable */
-    sNguoiTao?: string | null
-    /** @nullable */
-    sNguoiSua?: string | null
-    /** @nullable */
-    dNgayTao?: string | null
-    /** @nullable */
-    dNgaySua?: string | null
-    /** @nullable */
-    sThietBiTao?: string | null
-    /** @nullable */
-    sThietBiSua?: string | null
-    /** @nullable */
-    RowStatus?: number | null
-    /** @nullable */
-    RowIndex?: number | null
-    /** @nullable */
-    OldData?: BaseEntityOldData
+  /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  dNgayTao?: string | null;
+  /** @nullable */
+  dNgaySua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
+  /** @nullable */
+  RowStatus?: number | null;
+  /** @nullable */
+  RowIndex?: number | null;
+  /** @nullable */
+  OldData?: BaseEntityOldData;
 }

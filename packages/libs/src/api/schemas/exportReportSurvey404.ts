@@ -6,5 +6,5 @@
  */
 
 export type ExportReportSurvey404 = {
-    message: string
-}
+  message: string;
+};

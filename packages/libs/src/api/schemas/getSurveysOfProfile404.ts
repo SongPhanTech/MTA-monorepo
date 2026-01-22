@@ -6,5 +6,5 @@
  */
 
 export type GetSurveysOfProfile404 = {
-    message: string
-}
+  message: string;
+};

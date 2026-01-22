@@ -4,63 +4,63 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyResultSubjectClassSchedule } from './getSurveyResultSubjectClassSchedule'
-import type { GetSurveyResultSubjectClassType } from './getSurveyResultSubjectClassType'
-import type { GetSurveyResultSubjectClassStatus } from './getSurveyResultSubjectClassStatus'
-import type { GetSurveyResultSubjectClassExamType } from './getSurveyResultSubjectClassExamType'
+import type { GetSurveyResultSubjectClassSchedule } from './getSurveyResultSubjectClassSchedule';
+import type { GetSurveyResultSubjectClassType } from './getSurveyResultSubjectClassType';
+import type { GetSurveyResultSubjectClassStatus } from './getSurveyResultSubjectClassStatus';
+import type { GetSurveyResultSubjectClassExamType } from './getSurveyResultSubjectClassExamType';
 
 /**
  * @nullable
  */
 export type GetSurveyResultSubjectClass = {
-    id: string
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    code: string
-    name: string
-    /** @nullable */
-    startDate?: string | null
-    /** @nullable */
-    endDate?: string | null
-    /** @nullable */
-    schedule?: GetSurveyResultSubjectClassSchedule
-    maxStudent: number
-    type: GetSurveyResultSubjectClassType
-    status: GetSurveyResultSubjectClassStatus
-    cancelled?: boolean
-    /** @nullable */
-    lecturerAssignmentDeadline?: string | null
-    /** @nullable */
-    sendLecturerAssignmentAt?: string | null
-    /** @nullable */
-    submitLecturerAssignmentAt?: string | null
-    /** @nullable */
-    approveLecturerAssignmentAt?: string | null
-    /** @nullable */
-    examDate?: string | null
-    /** @nullable */
-    examType?: GetSurveyResultSubjectClassExamType
-    /** @nullable */
-    scoreDeadLineStart?: string | null
-    /** @nullable */
-    scoreDeadline?: string | null
-    /** @nullable */
-    examScoreDeadline?: string | null
-    enteredScore?: boolean
-    enteredExamScore?: boolean
-    /** @nullable */
-    issuedScoreAt?: string | null
-    isLockScore?: boolean
-    isLockExamScore?: boolean
-    scoreSubmitted?: boolean
-    scoreChecked?: boolean
-} | null
+  id: string;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  code: string;
+  name: string;
+  /** @nullable */
+  startDate?: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  /** @nullable */
+  schedule?: GetSurveyResultSubjectClassSchedule;
+  maxStudent: number;
+  type: GetSurveyResultSubjectClassType;
+  status: GetSurveyResultSubjectClassStatus;
+  cancelled?: boolean;
+  /** @nullable */
+  lecturerAssignmentDeadline?: string | null;
+  /** @nullable */
+  sendLecturerAssignmentAt?: string | null;
+  /** @nullable */
+  submitLecturerAssignmentAt?: string | null;
+  /** @nullable */
+  approveLecturerAssignmentAt?: string | null;
+  /** @nullable */
+  examDate?: string | null;
+  /** @nullable */
+  examType?: GetSurveyResultSubjectClassExamType;
+  /** @nullable */
+  scoreDeadLineStart?: string | null;
+  /** @nullable */
+  scoreDeadline?: string | null;
+  /** @nullable */
+  examScoreDeadline?: string | null;
+  enteredScore?: boolean;
+  enteredExamScore?: boolean;
+  /** @nullable */
+  issuedScoreAt?: string | null;
+  isLockScore?: boolean;
+  isLockExamScore?: boolean;
+  scoreSubmitted?: boolean;
+  scoreChecked?: boolean;
+} | null;

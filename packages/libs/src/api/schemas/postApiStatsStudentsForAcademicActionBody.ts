@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsStudentsForAcademicActionBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

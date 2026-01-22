@@ -55,15 +55,15 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Phân loại cơ sở kỹ thuật
  */
 export interface PublicApiGetAllDMPhanLoaiCSKTDTO {
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
 }

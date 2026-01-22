@@ -55,15 +55,15 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Học hàm
  */
 export interface PublicApiGetAllDMHocHamDTO {
-    Id?: string
-    /**
-     * mã học hàm
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên học hàm
-     * @nullable
-     */
-    sTen?: string | null
+  Id?: string;
+  /**
+   * mã học hàm
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên học hàm
+   * @nullable
+   */
+  sTen?: string | null;
 }

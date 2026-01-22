@@ -1,5 +1,5 @@
 import DeleteIcon from '@components/icons/delete'
-import { Button, Checkbox, Col, Flex, message, Row, type TableProps, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, type TableProps, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -11,14 +11,20 @@ import type { FilterProps } from '@constants/type'
 import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
-import { type AcademicActionType, DecisionStatus, type Prisma } from '@workspace/db/client'
+import {
+    $Enums,
+    type AcademicActionType,
+    DecisionStatus,
+    type Prisma,
+    StudentSemesterResult,
+} from '@workspace/db/client'
 import {
     useCountStudentAcademicDecision,
     useDeleteStudentAcademicDecision,
     useFindManyStudentAcademicDecision,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
+import { useExportStudentAcademicActionJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -27,6 +33,7 @@ dayjs.locale('vi')
 
 interface XetXuLyHocTapProps {
     semesterId: string
+    trainingObjectTypeId: string
     actionTaken: AcademicActionType
 }
 
@@ -40,7 +47,7 @@ interface SelectedStudent {
     reason?: string
 }
 
-const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
+const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuLyHocTapProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
@@ -71,7 +78,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
             isFiltering
                 ? {
                       student: {
-                          ...(filters.code && filters.code !== ''
+                          ...(filters.code
                               ? {
                                     code: {
                                         contains: filters.code,
@@ -79,16 +86,14 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     },
                                 }
                               : {}),
-                          userProfile: {
-                              ...(filters.name && filters.name !== ''
-                                  ? {
-                                        fullname: {
-                                            contains: filters.name,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                          },
+                          userProfile: filters.name
+                              ? {
+                                    fullname: {
+                                        contains: filters.name,
+                                        mode: 'insensitive',
+                                    },
+                                }
+                              : {},
                           ...(filters.fixedClass
                               ? {
                                     fixedClassId: {
@@ -119,11 +124,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                   : {}),
                           },
                       },
-                      ...(filters.status
-                          ? {
-                                status: { in: filters.status },
-                            }
-                          : {}),
+                      ...(filters.status ? { status: { in: filters.status } } : {}),
                       ...(filters.decisionDate?.length === 2
                           ? {
                                 decisionDate: {
@@ -206,15 +207,15 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         tag: 'ModalChuyenLopLuuBan',
     })
 
-    const { data: students = [] } = useExportStudentResultSemesterJson<any[] | { data: any[] }>(
+    const { data: students = [] } = useExportStudentAcademicActionJson<any[] | { data: any[] }>(
         {
-            semesterId: semesterId || '',
-            type: 'academicAction',
+            semesterId: semesterId,
+            trainingObjectTypeId,
             academicActionType: actionTaken,
         },
         {
             query: {
-                enabled: !!semesterId,
+                enabled: !!semesterId && !!trainingObjectTypeId,
             },
         },
         queryClient
@@ -622,6 +623,35 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     title: 'Tên sinh viên',
                                     dataIndex: ['userProfile', 'fullname'],
                                     width: 150,
+                                },
+
+                                {
+                                    title: 'Lớp',
+                                    width: 60,
+                                    align: 'center',
+                                    render: (_, record) => {
+                                        return (
+                                            <Tooltip title={record?.fixedClass?.name}>
+                                                {record?.fixedClass?.code || '-'}
+                                            </Tooltip>
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Học kỳ',
+                                    dataIndex: ['studentSemesterResult', 'semesterIndexInCourse'],
+                                    width: 40,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'TBHK',
+                                    dataIndex: ['studentSemesterResult'],
+                                    width: 40,
+                                    align: 'center',
+                                    render: (result?: StudentSemesterResult) =>
+                                        result?.baseScore === $Enums.AcademicRankingBaseType.Base10
+                                            ? Number(result.gpaBase10)
+                                            : Number(result?.gpaBase4 || 0),
                                 },
                                 {
                                     title: 'Nguyên do',

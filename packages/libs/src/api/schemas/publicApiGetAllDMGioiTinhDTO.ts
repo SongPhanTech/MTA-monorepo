@@ -55,10 +55,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Giới tính
  */
 export interface PublicApiGetAllDMGioiTinhDTO {
-    Id?: string
-    /**
-     * Tên giới tính
-     * @nullable
-     */
-    sTen?: string | null
+  Id?: string;
+  /**
+   * Tên giới tính
+   * @nullable
+   */
+  sTen?: string | null;
 }

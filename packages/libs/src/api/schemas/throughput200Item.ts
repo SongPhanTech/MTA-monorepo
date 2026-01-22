@@ -6,6 +6,6 @@
  */
 
 export type Throughput200Item = {
-    time: string
-    request_count: number
-}
+  time: string;
+  request_count: number;
+};

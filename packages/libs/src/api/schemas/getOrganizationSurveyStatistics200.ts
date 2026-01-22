@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetOrganizationSurveyStatistics200DataItem } from './getOrganizationSurveyStatistics200DataItem'
-import type { GetOrganizationSurveyStatistics200ChoicesItem } from './getOrganizationSurveyStatistics200ChoicesItem'
+import type { GetOrganizationSurveyStatistics200DataItem } from './getOrganizationSurveyStatistics200DataItem';
+import type { GetOrganizationSurveyStatistics200ChoicesItem } from './getOrganizationSurveyStatistics200ChoicesItem';
 
 export type GetOrganizationSurveyStatistics200 = {
-    data: GetOrganizationSurveyStatistics200DataItem[]
-    choices: GetOrganizationSurveyStatistics200ChoicesItem[]
-    choicesAnswer: string[]
-}
+  data: GetOrganizationSurveyStatistics200DataItem[];
+  choices: GetOrganizationSurveyStatistics200ChoicesItem[];
+  choicesAnswer: string[];
+};

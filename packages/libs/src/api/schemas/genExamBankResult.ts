@@ -6,6 +6,6 @@
  */
 
 export interface GenExamBankResult {
-    success: boolean
-    message: string
+  success: boolean;
+  message: string;
 }

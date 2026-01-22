@@ -3314,7 +3314,7 @@ app.openapi(
 app.openapi(
     createRoute({
         method: 'post',
-        path: '/Admission-statistics',
+        path: '/summary-admission-statistics',
         tags: ['Stats'],
         request: {
             body: {

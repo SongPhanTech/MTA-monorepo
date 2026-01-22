@@ -52,61 +52,61 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface NotificationMessageRequest {
-    /**
-     * Mã Ứng dụng gửi thông báo
-     * @nullable
-     */
-    sFromAppCode?: string | null
-    /**
-     * Mã Ứng dụng nhận thông báo
-     * @nullable
-     */
-    sAppCode?: string | null
-    /**
-     * Giá trị dùng để lọc gom nhóm các thông báo giống nhau thành 1
-     * @nullable
-     */
-    sUniqueID?: string | null
-    /**
-     * Danh sách người nhận thông báo, không có hiểu là tất cả người dùng của ứng dụng
-     * @nullable
-     */
-    RecipientIds?: string[] | null
-    /**
-     * Id của người gửi
-     * @nullable
-     */
-    sUserId?: string | null
-    /**
-     * Tên đăng nhập của người gửi
-     * @nullable
-     */
-    sUserName?: string | null
-    /** @nullable */
-    dLogTime?: string | null
-    /**
-     * Mô tả nội dung thông báo
-     * @nullable
-     */
-    sMessage?: string | null
-    /**
-     * Click vào thông báo link điều hướng đến trang tương ứng
-     * @nullable
-     */
-    sLink?: string | null
-    /**
-     * Dữ liệu thông báo gửi thêm về client dạng json để client xử lý theo nghiệp vụ
-     * @nullable
-     */
-    sExtraData?: string | null
-    /**
-     * 0: Thông báo chung,1: Thông báo hệ thống,2: Thông báo riêng cho ứng dụng gửi
-     * @nullable
-     */
-    iType?: number | null
-    /**
-     * Tên thông báo. Người dùng có thể dựa vào tên thông báo để xử lý nghiệp vụ
-     * @nullable
-     */
-    sActionName?: string | null
+  /**
+   * Mã Ứng dụng gửi thông báo
+   * @nullable
+   */
+  sFromAppCode?: string | null;
+  /**
+   * Mã Ứng dụng nhận thông báo
+   * @nullable
+   */
+  sAppCode?: string | null;
+  /**
+   * Giá trị dùng để lọc gom nhóm các thông báo giống nhau thành 1
+   * @nullable
+   */
+  sUniqueID?: string | null;
+  /**
+   * Danh sách người nhận thông báo, không có hiểu là tất cả người dùng của ứng dụng
+   * @nullable
+   */
+  RecipientIds?: string[] | null;
+  /**
+   * Id của người gửi
+   * @nullable
+   */
+  sUserId?: string | null;
+  /**
+   * Tên đăng nhập của người gửi
+   * @nullable
+   */
+  sUserName?: string | null;
+  /** @nullable */
+  dLogTime?: string | null;
+  /**
+   * Mô tả nội dung thông báo
+   * @nullable
+   */
+  sMessage?: string | null;
+  /**
+   * Click vào thông báo link điều hướng đến trang tương ứng
+   * @nullable
+   */
+  sLink?: string | null;
+  /**
+   * Dữ liệu thông báo gửi thêm về client dạng json để client xử lý theo nghiệp vụ
+   * @nullable
+   */
+  sExtraData?: string | null;
+  /**
+   * 0: Thông báo chung,1: Thông báo hệ thống,2: Thông báo riêng cho ứng dụng gửi
+   * @nullable
+   */
+  iType?: number | null;
+  /**
+   * Tên thông báo. Người dùng có thể dựa vào tên thông báo để xử lý nghiệp vụ
+   * @nullable
+   */
+  sActionName?: string | null;
 }

@@ -8,12 +8,11 @@
 /**
  * @nullable
  */
-export type GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopicType =
-    | (typeof GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopicType)[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopicType]
-    | null
+export type GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopicType = typeof GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopicType[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopicType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopicType = {
-    SINGLE: 'SINGLE',
-    CLUSTER: 'CLUSTER',
-} as const
+  SINGLE: 'SINGLE',
+  CLUSTER: 'CLUSTER',
+} as const;

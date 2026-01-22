@@ -6,5 +6,5 @@
  */
 
 export interface AwardIds {
-    archivedAwardIds: string[]
+  archivedAwardIds: string[];
 }

@@ -6,18 +6,18 @@
  */
 
 export type GetColumns200Item = {
-    columnName: string
-    isNullable: boolean
-    dataType: string
-    /** @nullable */
-    characterMaximumLength: number | null
-    /** @nullable */
-    numericPrecision: number | null
-    /** @nullable */
-    numericScale: number | null
-    /** @nullable */
-    datetimePrecision: number | null
-    columnType: string
-    columnKey: string
-    columnComment: string
-}
+  columnName: string;
+  isNullable: boolean;
+  dataType: string;
+  /** @nullable */
+  characterMaximumLength: number | null;
+  /** @nullable */
+  numericPrecision: number | null;
+  /** @nullable */
+  numericScale: number | null;
+  /** @nullable */
+  datetimePrecision: number | null;
+  columnType: string;
+  columnKey: string;
+  columnComment: string;
+};

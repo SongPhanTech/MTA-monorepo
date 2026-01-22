@@ -8,4 +8,4 @@
 /**
  * Xoá đề thi cũ nếu có
  */
-export type Replace = boolean
+export type Replace = boolean;

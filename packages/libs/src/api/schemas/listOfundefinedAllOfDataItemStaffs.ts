@@ -4,27 +4,27 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefinedAllOfDataItemStaffsOrganization } from './listOfundefinedAllOfDataItemStaffsOrganization'
+import type { ListOfundefinedAllOfDataItemStaffsOrganization } from './listOfundefinedAllOfDataItemStaffsOrganization';
 
 /**
  * @nullable
  */
 export type ListOfundefinedAllOfDataItemStaffs = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    /** @nullable */
-    from?: string | null
-    organization: ListOfundefinedAllOfDataItemStaffsOrganization
-} | null
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  /** @nullable */
+  from?: string | null;
+  organization: ListOfundefinedAllOfDataItemStaffsOrganization;
+} | null;

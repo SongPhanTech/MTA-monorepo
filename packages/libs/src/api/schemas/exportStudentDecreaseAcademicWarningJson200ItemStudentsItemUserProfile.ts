@@ -6,6 +6,7 @@
  */
 
 /**
+ * Thông tin người dùng
  * @nullable
  */
-export type ExportStudentResultSemesterJson200Item = unknown | null
+export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemUserProfile = unknown | null;

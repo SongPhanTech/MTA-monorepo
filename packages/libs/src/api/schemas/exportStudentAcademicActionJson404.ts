@@ -5,6 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsExamInfoByDayBody = {
-    preview?: boolean
-}
+export type ExportStudentAcademicActionJson404 = {
+  message: string;
+};

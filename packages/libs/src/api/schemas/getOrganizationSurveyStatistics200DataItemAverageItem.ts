@@ -4,31 +4,31 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetOrganizationSurveyStatistics200DataItemAverageItemClusterSurvey } from './getOrganizationSurveyStatistics200DataItemAverageItemClusterSurvey'
-import type { GetOrganizationSurveyStatistics200DataItemAverageItemSurveyItem } from './getOrganizationSurveyStatistics200DataItemAverageItemSurveyItem'
-import type { GetOrganizationSurveyStatistics200DataItemAverageItemSurveyResponsesItem } from './getOrganizationSurveyStatistics200DataItemAverageItemSurveyResponsesItem'
+import type { GetOrganizationSurveyStatistics200DataItemAverageItemClusterSurvey } from './getOrganizationSurveyStatistics200DataItemAverageItemClusterSurvey';
+import type { GetOrganizationSurveyStatistics200DataItemAverageItemSurveyItem } from './getOrganizationSurveyStatistics200DataItemAverageItemSurveyItem';
+import type { GetOrganizationSurveyStatistics200DataItemAverageItemSurveyResponsesItem } from './getOrganizationSurveyStatistics200DataItemAverageItemSurveyResponsesItem';
 
 export type GetOrganizationSurveyStatistics200DataItemAverageItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    answer: string
-    requireExplanation: boolean
-    /** @nullable */
-    clusterSurveyId?: string | null
-    clusterSurvey?: GetOrganizationSurveyStatistics200DataItemAverageItemClusterSurvey
-    survey?: GetOrganizationSurveyStatistics200DataItemAverageItemSurveyItem[]
-    surveyResponses?: GetOrganizationSurveyStatistics200DataItemAverageItemSurveyResponsesItem[]
-    totalCount: number
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  answer: string;
+  requireExplanation: boolean;
+  /** @nullable */
+  clusterSurveyId?: string | null;
+  clusterSurvey?: GetOrganizationSurveyStatistics200DataItemAverageItemClusterSurvey;
+  survey?: GetOrganizationSurveyStatistics200DataItemAverageItemSurveyItem[];
+  surveyResponses?: GetOrganizationSurveyStatistics200DataItemAverageItemSurveyResponsesItem[];
+  totalCount: number;
+};

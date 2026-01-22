@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType =
-    (typeof GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType)[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType]
+export type GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType = typeof GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType = {
-    ESSAY: 'ESSAY',
-    SINGLE_CHOICE: 'SINGLE_CHOICE',
-} as const
+  ESSAY: 'ESSAY',
+  SINGLE_CHOICE: 'SINGLE_CHOICE',
+} as const;

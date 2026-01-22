@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Flex, Modal, message, Row } from 'antd'
+import { Button, Checkbox, Col, Flex, Modal, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -18,7 +18,7 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
+import { useExportStudentScholarshipJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -27,6 +27,7 @@ dayjs.locale('vi')
 
 interface XetHocBongProps {
     semesterId: string
+    trainingObjectTypeId: string
 }
 
 interface SelectedStudent {
@@ -41,7 +42,7 @@ interface SelectedStudent {
     isSelected: boolean
 }
 
-const XetHocBong = ({ semesterId }: XetHocBongProps) => {
+const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { showSpinner, hideSpinner } = useSpinner()
@@ -103,16 +104,18 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         tag: 'PutScholarshipAward',
     })
 
-    const { data: students = [], refetch } = useExportStudentResultSemesterJson<
-        any[] | { data: any[] }
-    >(
+    const {
+        data: students = [],
+        refetch,
+        isPending,
+    } = useExportStudentScholarshipJson<any[] | { data: any[] }>(
         {
             semesterId: semesterId || '',
-            type: 'scholarship',
+            trainingObjectTypeId,
         },
         {
             query: {
-                enabled: !!semesterId,
+                enabled: !!semesterId && !!trainingObjectTypeId,
             },
         },
         queryClient
@@ -606,6 +609,38 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                 dataIndex: ['userProfile', 'fullname'],
                                                 width: 150,
                                             },
+                                            {
+                                                title: 'Lớp',
+                                                width: 60,
+                                                align: 'center',
+                                                render: (_, record) => {
+                                                    return (
+                                                        <Tooltip title={record?.fixedClass?.name}>
+                                                            {record?.fixedClass?.code || '-'}
+                                                        </Tooltip>
+                                                    )
+                                                },
+                                            },
+                                            {
+                                                title: 'Học kỳ',
+                                                dataIndex: [
+                                                    'studentSemesterResult',
+                                                    'semesterIndexInCourse',
+                                                ],
+                                                width: 40,
+                                                align: 'center',
+                                            },
+                                            {
+                                                title: 'TBHK',
+                                                dataIndex: ['studentSemesterResult'],
+                                                width: 40,
+                                                align: 'center',
+                                                render: (result?: StudentSemesterResult) =>
+                                                    result?.baseScore ===
+                                                    $Enums.AcademicRankingBaseType.Base10
+                                                        ? Number(result.gpaBase10)
+                                                        : Number(result?.gpaBase4 || 0),
+                                            },
                                             // {
                                             //     title: 'Xếp loại rèn luyện',
                                             //     dataIndex: [
@@ -665,18 +700,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                             },
 
                                             {
-                                                title: 'TBHK',
-                                                dataIndex: ['studentSemesterResult'],
-                                                width: 50,
-                                                align: 'center',
-                                                render: (result?: StudentSemesterResult) =>
-                                                    result?.baseScore ===
-                                                    $Enums.AcademicRankingBaseType.Base10
-                                                        ? Number(result.gpaBase10)
-                                                        : Number(result?.gpaBase4 || 0),
-                                            },
-                                            {
-                                                title: 'Xếp loại rèn luyện',
+                                                title: 'Lý do',
                                                 dataIndex: ['reason'],
                                                 width: 200,
                                                 align: 'center',

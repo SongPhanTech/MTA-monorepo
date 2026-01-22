@@ -9,12 +9,12 @@
  * @nullable
  */
 export type GetSurveyResultLectureInfo = {
-    firstName: string
-    lastName: string
-    /** @nullable */
-    academicDegree?: string | null
-    /** @nullable */
-    academicRank?: string | null
-    /** @nullable */
-    organization: string | null
-} | null
+  firstName: string;
+  lastName: string;
+  /** @nullable */
+  academicDegree?: string | null;
+  /** @nullable */
+  academicRank?: string | null;
+  /** @nullable */
+  organization: string | null;
+} | null;

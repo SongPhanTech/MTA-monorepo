@@ -6,5 +6,5 @@
  */
 
 export type GetPrivateSurvey400 = {
-    message: string
-}
+  message: string;
+};

@@ -6,5 +6,5 @@
  */
 
 export type AutomaticTopicGeneration400 = {
-    message: string
-}
+  message: string;
+};

@@ -6,6 +6,6 @@
  */
 
 export type UpdateConfigLogsBody = {
-    apiId: string
-    enabled: boolean
-}
+  apiId: string;
+  enabled: boolean;
+};

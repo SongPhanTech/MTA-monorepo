@@ -8,15 +8,14 @@
 /**
  * @nullable
  */
-export type GetClassRegisterSession200ItemSemesterSemesterType =
-    | (typeof GetClassRegisterSession200ItemSemesterSemesterType)[keyof typeof GetClassRegisterSession200ItemSemesterSemesterType]
-    | null
+export type GetClassRegisterSession200ItemSemesterSemesterType = typeof GetClassRegisterSession200ItemSemesterSemesterType[keyof typeof GetClassRegisterSession200ItemSemesterSemesterType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassRegisterSession200ItemSemesterSemesterType = {
-    FIRST: 'FIRST',
-    FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
-    SECOND: 'SECOND',
-    SECOND_SUPPLEMENTARY: 'SECOND_SUPPLEMENTARY',
-    SUMMER: 'SUMMER',
-} as const
+  FIRST: 'FIRST',
+  FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
+  SECOND: 'SECOND',
+  SECOND_SUPPLEMENTARY: 'SECOND_SUPPLEMENTARY',
+  SUMMER: 'SUMMER',
+} as const;

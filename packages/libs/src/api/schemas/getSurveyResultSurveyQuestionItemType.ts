@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSurveyResultSurveyQuestionItemType =
-    (typeof GetSurveyResultSurveyQuestionItemType)[keyof typeof GetSurveyResultSurveyQuestionItemType]
+export type GetSurveyResultSurveyQuestionItemType = typeof GetSurveyResultSurveyQuestionItemType[keyof typeof GetSurveyResultSurveyQuestionItemType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveyResultSurveyQuestionItemType = {
-    ESSAY: 'ESSAY',
-    SINGLE_CHOICE: 'SINGLE_CHOICE',
-} as const
+  ESSAY: 'ESSAY',
+  SINGLE_CHOICE: 'SINGLE_CHOICE',
+} as const;

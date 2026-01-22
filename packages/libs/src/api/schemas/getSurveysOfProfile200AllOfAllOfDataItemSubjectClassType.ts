@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType =
-    (typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType)[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType]
+export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType = typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType = {
-    NORMAL: 'NORMAL',
-    RETAKE: 'RETAKE',
-    REEXAM: 'REEXAM',
-} as const
+  NORMAL: 'NORMAL',
+  RETAKE: 'RETAKE',
+  REEXAM: 'REEXAM',
+} as const;
