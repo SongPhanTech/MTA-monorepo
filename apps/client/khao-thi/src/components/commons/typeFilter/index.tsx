@@ -12,10 +12,12 @@ import type {
     SubjectClassSchedule,
     SurveyQuestionType,
 } from '@workspace/db'
-import { GetSurveyObjectsIsStudent } from '@workspace/libs/api/schemas'
+import type { GetSurveyObjectsIsStudent } from '@workspace/libs/api/schemas'
 import type { ColumnsType } from 'antd/es/table'
 
 export type FilterProps = {
+    information?: string | ''
+    issuer?: string | ''
     searchText?: string
     trainingObjectTypes?: string[]
     studentCode?: string | ''

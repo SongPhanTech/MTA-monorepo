@@ -1,4 +1,4 @@
-import DefaultLayout from '@layouts/default-layout'
+import EvaluateLayout from '@layouts/evaluate-layout'
 import Facilities from '@pages/ql-tu-danh-gia-ctdt/tieu-chuan-tieu-chi/_components/facilities'
 import TrainingProgram from '@pages/ql-tu-danh-gia-ctdt/tieu-chuan-tieu-chi/_components/training-program'
 import { Col, Row, Tabs } from 'antd'
@@ -38,5 +38,5 @@ export default function StandardCatalogPage() {
 }
 
 StandardCatalogPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <EvaluateLayout>{page}</EvaluateLayout>
 }
