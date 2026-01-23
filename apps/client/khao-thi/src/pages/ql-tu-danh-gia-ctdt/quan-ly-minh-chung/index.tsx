@@ -4,7 +4,7 @@ import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import useSpinner from '@hooks/spinner'
-import DefaultLayout from '@layouts/default-layout'
+import EvaluateLayout from '@layouts/evaluate-layout'
 import {
     useDeleteEvidence,
     useDeleteEvidenceCategory,
@@ -14,27 +14,53 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvidenceCategory() {
     const { can, canSome } = useAbility()
     const [filters, setFilters] = useState<FilterProps>({
         evidenceName: '',
+        information: '',
+        issuer: '',
     })
+
+    const where = useMemo(
+        () => ({
+            deletedAt: null,
+            ...(filters.evidenceName
+                ? {
+                      name: {
+                          contains: filters.evidenceName,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.information
+                ? {
+                      information: {
+                          contains: filters.information,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.issuer
+                ? {
+                      issuer: {
+                          contains: filters.issuer,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+        }),
+        [filters.evidenceName, filters.information, filters.issuer]
+    )
 
     const { data } = useFindManyEvidenceCategory({
         include: {
-            evidences: filters.evidenceName
-                ? {
-                      where: {
-                          name: {
-                              contains: filters.evidenceName,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                  }
-                : true,
+            evidences: {
+                where,
+            },
         },
         orderBy: [{ name: 'desc' }],
     })
@@ -181,20 +207,31 @@ export default function EvidenceCategory() {
                                 title: 'Tên minh chứng',
                                 dataIndex: 'evidenceName',
                                 width: 200,
-                                align: 'center',
+                                align: 'left',
                                 type: 'input',
                                 render: (__, record) => record?.name,
                             },
                             {
-                                title: 'Người thực hiện',
-                                dataIndex: 'issuer',
+                                title: 'Số, ngày/tháng ban hành',
                                 width: 200,
-                                align: 'center',
+                                dataIndex: 'information',
+                                align: 'left',
+                                type: 'input',
+                                render: (_, record) =>
+                                    record?.information ? record.information : '',
                             },
                             {
-                                title: 'Mô tả',
-                                width: 200,
-                                align: 'center',
+                                title: 'Nơi ban hành',
+                                type: 'input',
+                                dataIndex: 'issuer',
+                                width: 100,
+                                align: 'left',
+                                render: (_, record) => (record?.issuer ? record.issuer : ''),
+                            },
+                            {
+                                title: 'Ghi chú',
+                                width: 100,
+                                align: 'left',
                                 dataIndex: 'description',
                                 render: (value: string) => {
                                     return (
@@ -270,5 +307,5 @@ export default function EvidenceCategory() {
 }
 
 EvidenceCategory.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <EvaluateLayout>{page}</EvaluateLayout>
 }

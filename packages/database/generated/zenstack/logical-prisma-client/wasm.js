@@ -3156,7 +3156,7 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   status: 'status',
-  semesterId: 'semesterId'
+  schoolYearId: 'schoolYearId'
 };
 
 exports.Prisma.StandardCatalogScalarFieldEnum = {
@@ -6517,7 +6517,7 @@ exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name',
-  semesterId: 'semesterId'
+  schoolYearId: 'schoolYearId'
 };
 
 exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {

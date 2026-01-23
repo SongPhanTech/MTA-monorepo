@@ -45,6 +45,7 @@ export default function FixedClassPage() {
         trainingMajors: undefined,
         trainingLevel: undefined,
         startYear: undefined,
+        trainingCourseId: undefined,
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [loading, setLoading] = useState(false)
@@ -191,12 +192,14 @@ export default function FixedClassPage() {
     }
 
     const downloadStatsFile = async () => {
+        console.log('filters.trainingCourseId',filters.trainingCourseId);
         if (!trainingObjectTypeId) {
             message.error('Vui lòng chọn ĐTĐT')
             return
         }
+        
         const trainingCourseId = filters.trainingCourseId || filters.trainingCourses?.[0]
-        if (!trainingCourseId || filters.trainingCourses?.length !== 1) {
+        if (!trainingCourseId) {
             message.error('Vui lòng chọn một khoá đào tạo')
             return
         }

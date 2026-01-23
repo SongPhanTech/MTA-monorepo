@@ -330,10 +330,10 @@ function TabDotKhaoSat({
                                 },
                             },
                             {
-                                title: 'Ngày bắt đầu',
+                                title: 'Ngày BĐ',
                                 dataIndex: 'startDate',
                                 type: 'date',
-                                width: 120,
+                                width: 100,
                                 render: (_, record) => {
                                     return (
                                         <div
@@ -348,10 +348,10 @@ function TabDotKhaoSat({
                             },
 
                             {
-                                title: 'Ngày kết thúc',
+                                title: 'Ngày KT',
                                 dataIndex: 'endDate',
                                 type: 'date',
-                                width: 120,
+                                width: 100,
                                 render: (_, record) => {
                                     return (
                                         <div

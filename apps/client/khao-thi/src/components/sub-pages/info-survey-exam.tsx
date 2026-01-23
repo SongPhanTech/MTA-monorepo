@@ -157,7 +157,7 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
                         <Select
                             mode="multiple"
                             maxTagCount={'responsive'}
-                            placeholder="Chọn minh chứng"
+                            placeholder="Chọn giảng viên"
                             options={lecturerData?.map((i) => {
                                 return {
                                     label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim(),
@@ -170,7 +170,7 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
                 ) : (
                     <FormItem form={form} name="lecturerId" label="Giảng viên">
                         <Select
-                            placeholder="Chọn minh chứng"
+                            placeholder="Chọn giảng viên"
                             options={lecturerData?.map((i) => {
                                 return {
                                     label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim(),

@@ -348,28 +348,29 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         admissionCombination: 'M', // Khối xét tuyển
         entryScore: 'N', // Điểm xét tuyển
         competencyScore: 'O', // Điểm đánh giá năng lực
-        fixedClass: 'P', // Lớp quản lý
-        trainingField: 'Q', // Ngành đào tạo
-        trainingMajor: 'R', // Chuyên ngành đào tạo
-        curriculum: 'S', // Chương trình đào tạo
-        objectType: 'T', // Quân sự/Dân sự
-        officerNumber: 'U', // Số hiệu SQ/QNCN
-        rank: 'V', // Cấp bậc
-        position: 'W', // Chức vụ
-        department: 'X', // Cơ quan, đơn vị
-        departmentAddress: 'Y', // Địa chỉ cơ quan, đơn vị
-        careerYear: 'Z', // Năm bắt đầu vào nghề/Năm nghiệp vụ
+        fixedClassCode: 'P', // Mã lớp quản lý
+        fixedClass: 'Q', // Lớp quản lý
+        trainingField: 'R', // Ngành đào tạo
+        trainingMajor: 'S', // Chuyên ngành đào tạo
+        curriculum: 'T', // Chương trình đào tạo
+        objectType: 'U', // Quân sự/Dân sự
+        officerNumber: 'V', // Số hiệu SQ/QNCN
+        rank: 'W', // Cấp bậc
+        position: 'X', // Chức vụ
+        department: 'Y', // Cơ quan, đơn vị
+        departmentAddress: 'Z', // Địa chỉ cơ quan, đơn vị
+        careerYear: 'AA', // Năm bắt đầu vào nghề/Năm nghiệp vụ
         // Thông tin tốt nghiệp đại học (Phục vụ cao học)
-        universitySchool: 'AA', // Trường ĐH
-        universityTrainingType: 'AB', // Hệ đào tạo
-        universityGraduationYear: 'AC', // Năm tốt nghiệp
-        universityMajor: 'AD', // Ngành, Chuyên ngành tốt nghiệp
-        universityRank: 'AE', // Loại/Bậc tốt nghiệp
-        basic: 'AF', // Cơ bản
-        facility: 'AG', // Cơ sở
-        foreignLanguage: 'AH', // Ngoại ngữ
-        priorityReason: 'AI', // Lý do ưu tiên
-        description: 'AJ', // Mô tả (Ghi chú)
+        universitySchool: 'AB', // Trường ĐH
+        universityTrainingType: 'AC', // Hệ đào tạo
+        universityGraduationYear: 'AD', // Năm tốt nghiệp
+        universityMajor: 'AE', // Ngành, Chuyên ngành tốt nghiệp
+        universityRank: 'AF', // Loại/Bậc tốt nghiệp
+        basic: 'AG', // Cơ bản
+        facility: 'AH', // Cơ sở
+        foreignLanguage: 'AI', // Ngoại ngữ
+        priorityReason: 'AJ', // Lý do ưu tiên
+        description: 'AK', // Mô tả (Ghi chú)
     }
     // end: Các tham chiếu ô cố định trong sheet
 
@@ -427,6 +428,14 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
                 })
             }
 
+            if (!row[cols.fixedClassCode]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.fixedClassCode}${row.__rowNum__ + 1}`,
+                    message: 'Mã lớp quản lý không được để trống',
+                })
+            }
+
             if (!row[cols.fixedClass]) {
                 errors.push({
                     sheetRef: sheetName,
@@ -468,6 +477,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
                 admissionCombination: row[cols.admissionCombination]?.trim(),
                 entryScore: row[cols.entryScore]?.trim(),
                 competencyScore: row[cols.competencyScore]?.trim(),
+                fixedClassCode: row[cols.fixedClassCode]?.trim() as string,
                 fixedClass: row[cols.fixedClass]?.trim() as string,
                 trainingField: row[cols.trainingField]?.trim(),
                 trainingMajor: row[cols.trainingMajor]?.trim(),
@@ -501,6 +511,18 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
             sheetRef: sheetName,
             cellRef: '',
             message: `Mã sinh viên bị trùng: ${duplicateCodes.join(', ')}`,
+        })
+    }
+
+    const duplicateIdCardNumbers = students
+        .map((student) => student.idCardNumber)
+        .filter((idCardNumber, index, arr) => arr.indexOf(idCardNumber) !== index)
+
+    if (duplicateIdCardNumbers.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: '',
+            message: `CCCD bị trùng: ${duplicateIdCardNumbers.join(', ')}`,
         })
     }
 

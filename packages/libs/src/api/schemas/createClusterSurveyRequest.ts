@@ -18,7 +18,7 @@ export interface CreateClusterSurveyRequest {
     surveyTopicId: string
     surveyObjectTypeIds?: string[]
     /** @minItems 1 */
-    lecturerIds: string[]
+    subjectClassIds: string[]
     /** @minItems 1 */
     surveyQuestionIds: string[]
     semesterId: string

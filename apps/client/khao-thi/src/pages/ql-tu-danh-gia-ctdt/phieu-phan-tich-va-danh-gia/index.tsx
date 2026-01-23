@@ -1,4 +1,3 @@
-import DefaultLayout from '@layouts/default-layout'
 import CriteriaAnalysisWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-analysis'
 import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period'
 import ReviewCriteriaAnalysis from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-analysis'
@@ -19,6 +18,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
+import EvaluateLayout from '@layouts/evaluate-layout'
 
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
@@ -241,5 +241,5 @@ export default function CriteriaAnalysisAndEvaluationPage() {
 }
 
 CriteriaAnalysisAndEvaluationPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <EvaluateLayout>{page}</EvaluateLayout>
 }

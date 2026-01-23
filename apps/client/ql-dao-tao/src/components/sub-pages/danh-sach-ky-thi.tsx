@@ -236,7 +236,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                             {
                                 title: 'Khóa DTS',
                                 align: 'center',
-                                width: 50,
+                                width: 80,
                                 render: (_, record) => {
                                     const lockExamSessions = record.lockExamSessions
                                     return <Checkbox checked={lockExamSessions} />
@@ -298,7 +298,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                             },
                             {
                                 title: 'Số ca thi',
-                                width: 150,
+                                width: 100,
                                 align: 'center',
                                 render: (_, record) => {
                                     return record?.session
@@ -306,7 +306,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                             },
                             {
                                 title: 'Số phòng thi',
-                                width: 150,
+                                width: 100,
                                 align: 'center',
                                 render: (_, record) => {
                                     return record?._count.examRooms

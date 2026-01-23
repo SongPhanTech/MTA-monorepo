@@ -190,22 +190,25 @@ const PutSurveyImportQuestionModal = () => {
         try {
             showSpinner()
             let listTransition: any = []
-            listTransition=[...listTransition,selectedQuestions.map(i=> {return {
-                            model: 'SurveyQuestion',
-                            operation: 'create',
+            listTransition = [
+                ...listTransition,
+                selectedQuestions.map((i) => {
+                    return {
+                        model: 'SurveyQuestion',
+                        operation: 'create',
+                        data: {
                             data: {
-                                data: {
-                                     name: i.content,
-                                    surveyQuestionGroupId: output.surveyQuestionGroupId,
-                                    type: i.type,
-                                    description: null,
-                                },
+                                name: i.content,
+                                surveyQuestionGroupId: output.surveyQuestionGroupId,
+                                type: i.type,
+                                description: null,
                             },
-                        }
-
-            })]
-            const res= await sqlTransaction(listTransition);
-            if(res?.status===200){
+                        },
+                    }
+                }),
+            ]
+            const res = await sqlTransaction(listTransition)
+            if (res?.status === 200) {
                 message.success('Thêm mới thành công')
             }
             // for (const q of selectedQuestions) {
@@ -217,7 +220,7 @@ const PutSurveyImportQuestionModal = () => {
             //             description: null,
             //         },
             //     })
-               
+
             // }
             queryClient.invalidateQueries({ queryKey: ['SurveyQuestion'] })
             message.success(`Đã import ${selectedQuestions.length} câu hỏi`)

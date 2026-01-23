@@ -68,7 +68,8 @@ export default function CriteriaEvaluationListSubPage({
                         Người viết: {lecturer?.userProfile?.fullname || 'Chưa phân công'}
                     </Tag>
                     <Tag color="purple">
-                        Người phản biện: {reviewer?.lecturer?.userProfile?.fullname || 'Chưa phân công'}
+                        Người phản biện:{' '}
+                        {reviewer?.lecturer?.userProfile?.fullname || 'Chưa phân công'}
                     </Tag>
                     {deadline && deadlineStatus && (
                         <Tag color={deadlineStatus.color}>

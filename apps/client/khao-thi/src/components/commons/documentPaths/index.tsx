@@ -29,6 +29,7 @@ interface DocumentPathsComponentProps {
 }
 
 export type UploadedFileItem = {
+    id?: string
     file: File | null
     name: string
     path: string
@@ -64,6 +65,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
         setFileList(newList)
 
         const updatedFiles = newList.map((item) => ({
+            id: item.id,
             name: item.name,
             path: item.path,
             size: item.size,
@@ -138,6 +140,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 const newList = multiple ? [...prevList, newItem] : [newItem]
 
                 const documentFiles = newList.map((item) => ({
+                    id: item.id,
                     name: item.name,
                     path: item.path,
                     size: item.size,
@@ -163,6 +166,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
 
     useEffect(() => {
         const initial: UploadedFileItem[] = data.map((file) => ({
+            id: file.id,
             file: null,
             name: file.name,
             path: file.path,
@@ -177,6 +181,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
             form.setFieldValue(
                 titleForm,
                 initial.map((item) => ({
+                    id: item.id,
                     name: item.name,
                     path: item.path,
                     size: item.size,

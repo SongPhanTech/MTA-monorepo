@@ -51,9 +51,18 @@ import type {
     ExportGraduationDecisionPptxBody,
     ExportLecturerProfile400,
     ExportLecturerProfileBody,
-    ExportStudentResultSemesterJson200Item,
-    ExportStudentResultSemesterJson404,
-    ExportStudentResultSemesterJsonParams,
+    ExportStudentAcademicActionJson200Item,
+    ExportStudentAcademicActionJson404,
+    ExportStudentAcademicActionJsonParams,
+    ExportStudentAcademicWarningJson200Item,
+    ExportStudentAcademicWarningJson404,
+    ExportStudentAcademicWarningJsonParams,
+    ExportStudentDecreaseAcademicWarningJson200Item,
+    ExportStudentDecreaseAcademicWarningJson404,
+    ExportStudentDecreaseAcademicWarningJsonParams,
+    ExportStudentScholarshipJson200Item,
+    ExportStudentScholarshipJson404,
+    ExportStudentScholarshipJsonParams,
     ExportSubjectClassScore404,
     ExportSubjectClassScoreParams,
     FixedClassStudentCount400,
@@ -207,6 +216,8 @@ import type {
     PostApiStatsSubjectsHighAbsentStudentsBody,
     PostApiStatsSubjectsHighFailRates200,
     PostApiStatsSubjectsHighFailRatesBody,
+    PostApiStatsSummaryAdmissionStatistics200,
+    PostApiStatsSummaryAdmissionStatisticsBody,
     Room200Item,
     Room400,
     SaveExamCodesResult,
@@ -2628,34 +2639,213 @@ export const useUpdateStudentStatus = <TError = UpdateStudentStatus400, TContext
 }
 
 /**
- * Xuất tất cả học viên, sinh viên đủ điều kiện JSON
- * @summary Danh sách học bổng, kỷ luật học tập, lưu ban, thôi học của học viên
+ * Xuất danh sách học viên đạt học bổng dưới dạng JSON
+ * @summary Danh sách học bổng của học viên
  */
-export type exportStudentResultSemesterJsonResponse200 = {
-    data: ExportStudentResultSemesterJson200Item[]
+export type exportStudentScholarshipJsonResponse200 = {
+    data: ExportStudentScholarshipJson200Item[]
     status: 200
 }
 
-export type exportStudentResultSemesterJsonResponse404 = {
-    data: ExportStudentResultSemesterJson404
+export type exportStudentScholarshipJsonResponse404 = {
+    data: ExportStudentScholarshipJson404
     status: 404
 }
 
-export type exportStudentResultSemesterJsonResponseSuccess =
-    exportStudentResultSemesterJsonResponse200 & {
+export type exportStudentScholarshipJsonResponseSuccess =
+    exportStudentScholarshipJsonResponse200 & {
         headers: Headers
     }
-export type exportStudentResultSemesterJsonResponseError =
-    exportStudentResultSemesterJsonResponse404 & {
+export type exportStudentScholarshipJsonResponseError = exportStudentScholarshipJsonResponse404 & {
+    headers: Headers
+}
+
+export type exportStudentScholarshipJsonResponse =
+    | exportStudentScholarshipJsonResponseSuccess
+    | exportStudentScholarshipJsonResponseError
+
+export const getExportStudentScholarshipJsonUrl = (params: ExportStudentScholarshipJsonParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-json-list-student-scholarship?${stringifiedParams}`
+        : `/api/student/export-json-list-student-scholarship`
+}
+
+export const exportStudentScholarshipJson = async (
+    params: ExportStudentScholarshipJsonParams,
+    options?: RequestInit
+): Promise<exportStudentScholarshipJsonResponse> => {
+    return customTrainingFetch<exportStudentScholarshipJsonResponse>(
+        getExportStudentScholarshipJsonUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentScholarshipJsonQueryKey = (
+    params?: ExportStudentScholarshipJsonParams
+) => {
+    return [
+        `/api/student/export-json-list-student-scholarship`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentScholarshipJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipJsonQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipJson>>> = ({
+        signal,
+    }) => exportStudentScholarshipJson(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentScholarshipJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
+>
+export type ExportStudentScholarshipJsonQueryError = ExportStudentScholarshipJson404
+
+export function useExportStudentScholarshipJson<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipJson<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipJson<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách học bổng của học viên
+ */
+
+export function useExportStudentScholarshipJson<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentScholarshipJsonQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên bị cảnh cáo học tập dưới dạng JSON
+ * @summary Danh sách cảnh cáo học tập của học viên
+ */
+export type exportStudentAcademicWarningJsonResponse200 = {
+    data: ExportStudentAcademicWarningJson200Item[]
+    status: 200
+}
+
+export type exportStudentAcademicWarningJsonResponse404 = {
+    data: ExportStudentAcademicWarningJson404
+    status: 404
+}
+
+export type exportStudentAcademicWarningJsonResponseSuccess =
+    exportStudentAcademicWarningJsonResponse200 & {
+        headers: Headers
+    }
+export type exportStudentAcademicWarningJsonResponseError =
+    exportStudentAcademicWarningJsonResponse404 & {
         headers: Headers
     }
 
-export type exportStudentResultSemesterJsonResponse =
-    | exportStudentResultSemesterJsonResponseSuccess
-    | exportStudentResultSemesterJsonResponseError
+export type exportStudentAcademicWarningJsonResponse =
+    | exportStudentAcademicWarningJsonResponseSuccess
+    | exportStudentAcademicWarningJsonResponseError
 
-export const getExportStudentResultSemesterJsonUrl = (
-    params: ExportStudentResultSemesterJsonParams
+export const getExportStudentAcademicWarningJsonUrl = (
+    params: ExportStudentAcademicWarningJsonParams
 ) => {
     const normalizedParams = new URLSearchParams()
 
@@ -2668,16 +2858,16 @@ export const getExportStudentResultSemesterJsonUrl = (
     const stringifiedParams = normalizedParams.toString()
 
     return stringifiedParams.length > 0
-        ? `/api/student/export-json-list-student-to-check-academic?${stringifiedParams}`
-        : `/api/student/export-json-list-student-to-check-academic`
+        ? `/api/student/export-json-list-student-academic-warning?${stringifiedParams}`
+        : `/api/student/export-json-list-student-academic-warning`
 }
 
-export const exportStudentResultSemesterJson = async (
-    params: ExportStudentResultSemesterJsonParams,
+export const exportStudentAcademicWarningJson = async (
+    params: ExportStudentAcademicWarningJsonParams,
     options?: RequestInit
-): Promise<exportStudentResultSemesterJsonResponse> => {
-    return customTrainingFetch<exportStudentResultSemesterJsonResponse>(
-        getExportStudentResultSemesterJsonUrl(params),
+): Promise<exportStudentAcademicWarningJsonResponse> => {
+    return customTrainingFetch<exportStudentAcademicWarningJsonResponse>(
+        getExportStudentAcademicWarningJsonUrl(params),
         {
             ...options,
             method: 'GET',
@@ -2685,24 +2875,24 @@ export const exportStudentResultSemesterJson = async (
     )
 }
 
-export const getExportStudentResultSemesterJsonQueryKey = (
-    params?: ExportStudentResultSemesterJsonParams
+export const getExportStudentAcademicWarningJsonQueryKey = (
+    params?: ExportStudentAcademicWarningJsonParams
 ) => {
     return [
-        `/api/student/export-json-list-student-to-check-academic`,
+        `/api/student/export-json-list-student-academic-warning`,
         ...(params ? [params] : []),
     ] as const
 }
 
-export const getExportStudentResultSemesterJsonQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
-    TError = ExportStudentResultSemesterJson404,
+export const getExportStudentAcademicWarningJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
 >(
-    params: ExportStudentResultSemesterJsonParams,
+    params: ExportStudentAcademicWarningJsonParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
                 TError,
                 TData
             >
@@ -2712,42 +2902,42 @@ export const getExportStudentResultSemesterJsonQueryOptions = <
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getExportStudentResultSemesterJsonQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningJsonQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>> = ({
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>> = ({
         signal,
-    }) => exportStudentResultSemesterJson(params, { signal, ...requestOptions })
+    }) => exportStudentAcademicWarningJson(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+        Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
         TError,
         TData
     > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportStudentResultSemesterJsonQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>
+export type ExportStudentAcademicWarningJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
 >
-export type ExportStudentResultSemesterJsonQueryError = ExportStudentResultSemesterJson404
+export type ExportStudentAcademicWarningJsonQueryError = ExportStudentAcademicWarningJson404
 
-export function useExportStudentResultSemesterJson<
-    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
-    TError = ExportStudentResultSemesterJson404,
+export function useExportStudentAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
 >(
-    params: ExportStudentResultSemesterJsonParams,
+    params: ExportStudentAcademicWarningJsonParams,
     options: {
         query: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
                 TError,
                 TData
             >
         > &
             Pick<
                 DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
                     TError,
-                    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
                 >,
                 'initialData'
             >
@@ -2755,24 +2945,24 @@ export function useExportStudentResultSemesterJson<
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentResultSemesterJson<
-    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
-    TError = ExportStudentResultSemesterJson404,
+export function useExportStudentAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
 >(
-    params: ExportStudentResultSemesterJsonParams,
+    params: ExportStudentAcademicWarningJsonParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
                 TError,
                 TData
             >
         > &
             Pick<
                 UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
                     TError,
-                    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
                 >,
                 'initialData'
             >
@@ -2780,15 +2970,15 @@ export function useExportStudentResultSemesterJson<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentResultSemesterJson<
-    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
-    TError = ExportStudentResultSemesterJson404,
+export function useExportStudentAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
 >(
-    params: ExportStudentResultSemesterJsonParams,
+    params: ExportStudentAcademicWarningJsonParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
                 TError,
                 TData
             >
@@ -2798,18 +2988,18 @@ export function useExportStudentResultSemesterJson<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Danh sách học bổng, kỷ luật học tập, lưu ban, thôi học của học viên
+ * @summary Danh sách cảnh cáo học tập của học viên
  */
 
-export function useExportStudentResultSemesterJson<
-    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
-    TError = ExportStudentResultSemesterJson404,
+export function useExportStudentAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
 >(
-    params: ExportStudentResultSemesterJsonParams,
+    params: ExportStudentAcademicWarningJsonParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
                 TError,
                 TData
             >
@@ -2818,7 +3008,414 @@ export function useExportStudentResultSemesterJson<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportStudentResultSemesterJsonQueryOptions(params, options)
+    const queryOptions = getExportStudentAcademicWarningJsonQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên bị xử lý học vụ dưới dạng JSON
+ * @summary Danh sách xử lý học vụ của học viên
+ */
+export type exportStudentAcademicActionJsonResponse200 = {
+    data: ExportStudentAcademicActionJson200Item[]
+    status: 200
+}
+
+export type exportStudentAcademicActionJsonResponse404 = {
+    data: ExportStudentAcademicActionJson404
+    status: 404
+}
+
+export type exportStudentAcademicActionJsonResponseSuccess =
+    exportStudentAcademicActionJsonResponse200 & {
+        headers: Headers
+    }
+export type exportStudentAcademicActionJsonResponseError =
+    exportStudentAcademicActionJsonResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentAcademicActionJsonResponse =
+    | exportStudentAcademicActionJsonResponseSuccess
+    | exportStudentAcademicActionJsonResponseError
+
+export const getExportStudentAcademicActionJsonUrl = (
+    params: ExportStudentAcademicActionJsonParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-json-list-student-academic-action?${stringifiedParams}`
+        : `/api/student/export-json-list-student-academic-action`
+}
+
+export const exportStudentAcademicActionJson = async (
+    params: ExportStudentAcademicActionJsonParams,
+    options?: RequestInit
+): Promise<exportStudentAcademicActionJsonResponse> => {
+    return customTrainingFetch<exportStudentAcademicActionJsonResponse>(
+        getExportStudentAcademicActionJsonUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentAcademicActionJsonQueryKey = (
+    params?: ExportStudentAcademicActionJsonParams
+) => {
+    return [
+        `/api/student/export-json-list-student-academic-action`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentAcademicActionJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicActionJsonQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>> = ({
+        signal,
+    }) => exportStudentAcademicActionJson(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentAcademicActionJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
+>
+export type ExportStudentAcademicActionJsonQueryError = ExportStudentAcademicActionJson404
+
+export function useExportStudentAcademicActionJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicActionJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicActionJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách xử lý học vụ của học viên
+ */
+
+export function useExportStudentAcademicActionJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentAcademicActionJsonQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên được giảm cảnh cáo học tập dưới dạng JSON
+ * @summary Danh sách giảm cảnh cáo học tập của học viên
+ */
+export type exportStudentDecreaseAcademicWarningJsonResponse200 = {
+    data: ExportStudentDecreaseAcademicWarningJson200Item[]
+    status: 200
+}
+
+export type exportStudentDecreaseAcademicWarningJsonResponse404 = {
+    data: ExportStudentDecreaseAcademicWarningJson404
+    status: 404
+}
+
+export type exportStudentDecreaseAcademicWarningJsonResponseSuccess =
+    exportStudentDecreaseAcademicWarningJsonResponse200 & {
+        headers: Headers
+    }
+export type exportStudentDecreaseAcademicWarningJsonResponseError =
+    exportStudentDecreaseAcademicWarningJsonResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentDecreaseAcademicWarningJsonResponse =
+    | exportStudentDecreaseAcademicWarningJsonResponseSuccess
+    | exportStudentDecreaseAcademicWarningJsonResponseError
+
+export const getExportStudentDecreaseAcademicWarningJsonUrl = (
+    params: ExportStudentDecreaseAcademicWarningJsonParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-json-list-student-decrease-academic-warning?${stringifiedParams}`
+        : `/api/student/export-json-list-student-decrease-academic-warning`
+}
+
+export const exportStudentDecreaseAcademicWarningJson = async (
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: RequestInit
+): Promise<exportStudentDecreaseAcademicWarningJsonResponse> => {
+    return customTrainingFetch<exportStudentDecreaseAcademicWarningJsonResponse>(
+        getExportStudentDecreaseAcademicWarningJsonUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentDecreaseAcademicWarningJsonQueryKey = (
+    params?: ExportStudentDecreaseAcademicWarningJsonParams
+) => {
+    return [
+        `/api/student/export-json-list-student-decrease-academic-warning`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentDecreaseAcademicWarningJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getExportStudentDecreaseAcademicWarningJsonQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
+    > = ({ signal }) =>
+        exportStudentDecreaseAcademicWarningJson(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentDecreaseAcademicWarningJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
+>
+export type ExportStudentDecreaseAcademicWarningJsonQueryError =
+    ExportStudentDecreaseAcademicWarningJson404
+
+export function useExportStudentDecreaseAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentDecreaseAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentDecreaseAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách giảm cảnh cáo học tập của học viên
+ */
+
+export function useExportStudentDecreaseAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentDecreaseAcademicWarningJsonQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
@@ -8174,55 +8771,56 @@ export const usePostApiStatsStatisticsOfRecordsByDate = <TError = unknown, TCont
     return useMutation(mutationOptions, queryClient)
 }
 
-export type postApiStatsAdmissionStatisticsResponse200 = {
-    data: PostApiStatsAdmissionStatistics200
+export type postApiStatsSummaryAdmissionStatisticsResponse200 = {
+    data: PostApiStatsSummaryAdmissionStatistics200
     status: 200
 }
 
-export type postApiStatsAdmissionStatisticsResponseSuccess =
-    postApiStatsAdmissionStatisticsResponse200 & {
+export type postApiStatsSummaryAdmissionStatisticsResponseSuccess =
+    postApiStatsSummaryAdmissionStatisticsResponse200 & {
         headers: Headers
     }
 
-export type postApiStatsAdmissionStatisticsResponse = postApiStatsAdmissionStatisticsResponseSuccess
+export type postApiStatsSummaryAdmissionStatisticsResponse =
+    postApiStatsSummaryAdmissionStatisticsResponseSuccess
 
-export const getPostApiStatsAdmissionStatisticsUrl = () => {
-    return `/api/stats/Admission-statistics`
+export const getPostApiStatsSummaryAdmissionStatisticsUrl = () => {
+    return `/api/stats/summary-admission-statistics`
 }
 
-export const postApiStatsAdmissionStatistics = async (
-    postApiStatsAdmissionStatisticsBody: PostApiStatsAdmissionStatisticsBody,
+export const postApiStatsSummaryAdmissionStatistics = async (
+    postApiStatsSummaryAdmissionStatisticsBody: PostApiStatsSummaryAdmissionStatisticsBody,
     options?: RequestInit
-): Promise<postApiStatsAdmissionStatisticsResponse> => {
-    return customTrainingFetch<postApiStatsAdmissionStatisticsResponse>(
-        getPostApiStatsAdmissionStatisticsUrl(),
+): Promise<postApiStatsSummaryAdmissionStatisticsResponse> => {
+    return customTrainingFetch<postApiStatsSummaryAdmissionStatisticsResponse>(
+        getPostApiStatsSummaryAdmissionStatisticsUrl(),
         {
             ...options,
             method: 'POST',
             headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAdmissionStatisticsBody),
+            body: JSON.stringify(postApiStatsSummaryAdmissionStatisticsBody),
         }
     )
 }
 
-export const getPostApiStatsAdmissionStatisticsMutationOptions = <
+export const getPostApiStatsSummaryAdmissionStatisticsMutationOptions = <
     TError = unknown,
     TContext = unknown,
 >(options?: {
     mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+        Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
         TError,
-        { data: PostApiStatsAdmissionStatisticsBody },
+        { data: PostApiStatsSummaryAdmissionStatisticsBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
     TError,
-    { data: PostApiStatsAdmissionStatisticsBody },
+    { data: PostApiStatsSummaryAdmissionStatisticsBody },
     TContext
 > => {
-    const mutationKey = ['postApiStatsAdmissionStatistics']
+    const mutationKey = ['postApiStatsSummaryAdmissionStatistics']
     const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
@@ -8230,41 +8828,42 @@ export const getPostApiStatsAdmissionStatisticsMutationOptions = <
         : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-        { data: PostApiStatsAdmissionStatisticsBody }
+        Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
+        { data: PostApiStatsSummaryAdmissionStatisticsBody }
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAdmissionStatistics(data, requestOptions)
+        return postApiStatsSummaryAdmissionStatistics(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiStatsAdmissionStatisticsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>
+export type PostApiStatsSummaryAdmissionStatisticsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>
 >
-export type PostApiStatsAdmissionStatisticsMutationBody = PostApiStatsAdmissionStatisticsBody
-export type PostApiStatsAdmissionStatisticsMutationError = unknown
+export type PostApiStatsSummaryAdmissionStatisticsMutationBody =
+    PostApiStatsSummaryAdmissionStatisticsBody
+export type PostApiStatsSummaryAdmissionStatisticsMutationError = unknown
 
-export const usePostApiStatsAdmissionStatistics = <TError = unknown, TContext = unknown>(
+export const usePostApiStatsSummaryAdmissionStatistics = <TError = unknown, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+            Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
             TError,
-            { data: PostApiStatsAdmissionStatisticsBody },
+            { data: PostApiStatsSummaryAdmissionStatisticsBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
     TError,
-    { data: PostApiStatsAdmissionStatisticsBody },
+    { data: PostApiStatsSummaryAdmissionStatisticsBody },
     TContext
 > => {
-    const mutationOptions = getPostApiStatsAdmissionStatisticsMutationOptions(options)
+    const mutationOptions = getPostApiStatsSummaryAdmissionStatisticsMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -9631,6 +10230,101 @@ export const usePostApiStatsLanguageStandardProgress = <TError = unknown, TConte
     TContext
 > => {
     const mutationOptions = getPostApiStatsLanguageStandardProgressMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAdmissionStatisticsResponse200 = {
+    data: PostApiStatsAdmissionStatistics200
+    status: 200
+}
+
+export type postApiStatsAdmissionStatisticsResponseSuccess =
+    postApiStatsAdmissionStatisticsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAdmissionStatisticsResponse = postApiStatsAdmissionStatisticsResponseSuccess
+
+export const getPostApiStatsAdmissionStatisticsUrl = () => {
+    return `/api/stats/admission-statistics`
+}
+
+export const postApiStatsAdmissionStatistics = async (
+    postApiStatsAdmissionStatisticsBody: PostApiStatsAdmissionStatisticsBody,
+    options?: RequestInit
+): Promise<postApiStatsAdmissionStatisticsResponse> => {
+    return customTrainingFetch<postApiStatsAdmissionStatisticsResponse>(
+        getPostApiStatsAdmissionStatisticsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAdmissionStatisticsBody),
+        }
+    )
+}
+
+export const getPostApiStatsAdmissionStatisticsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+        TError,
+        { data: PostApiStatsAdmissionStatisticsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+    TError,
+    { data: PostApiStatsAdmissionStatisticsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAdmissionStatistics']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+        { data: PostApiStatsAdmissionStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAdmissionStatistics(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAdmissionStatisticsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>
+>
+export type PostApiStatsAdmissionStatisticsMutationBody = PostApiStatsAdmissionStatisticsBody
+export type PostApiStatsAdmissionStatisticsMutationError = unknown
+
+export const usePostApiStatsAdmissionStatistics = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+            TError,
+            { data: PostApiStatsAdmissionStatisticsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+    TError,
+    { data: PostApiStatsAdmissionStatisticsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAdmissionStatisticsMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

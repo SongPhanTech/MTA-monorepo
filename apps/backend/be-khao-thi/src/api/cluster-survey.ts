@@ -35,7 +35,7 @@ const createClusterSurvey = createRoute({
                             anonymous: z.boolean().default(false),
                             surveyTopicId: z.string(),
                             surveyObjectTypeIds: z.array(z.string()).optional().default([]),
-                            lecturerIds: z.array(z.string()).nonempty(),
+                            subjectClassIds: z.array(z.string()).nonempty(),
                             surveyQuestionIds: z.array(z.string()).nonempty(),
                             semesterId: z.string(),
                             surveyChoices: z
@@ -90,11 +90,25 @@ app.openapi(createClusterSurvey, async (c) => {
         surveyQuestionIds,
         surveyChoices,
         surveyObjectTypeIds,
-        lecturerIds,
+        subjectClassIds,
         surveyTopicId,
         semesterId,
         ...payload
     } = c.req.valid('json')
+
+    const lecturerIds = await prisma.lecturer.findMany({
+        where: {
+            mainSubjectClasses: {
+                some: {
+                    semesterId,
+                    id: { in: subjectClassIds },
+                },
+            },
+        },
+        include: {
+            mainSubjectClasses: true,
+        },
+    })
 
     await prisma.$transaction(async (tx) => {
         const cluster = await tx.clusterSurvey.create({
@@ -113,7 +127,7 @@ app.openapi(createClusterSurvey, async (c) => {
                     connect: surveyObjectTypeIds.map((id) => ({ id })),
                 },
                 lecturers: {
-                    connect: lecturerIds.map((id) => ({ id })),
+                    connect: lecturerIds.map((i) => ({ id: i?.id })),
                 },
             },
             include: {
@@ -146,12 +160,7 @@ app.openapi(createClusterSurvey, async (c) => {
         // })
         const subjectClasses = await prisma.subjectClass.findMany({
             where: {
-                semesterId,
-                mainLecturer: {
-                    id: {
-                        in: lecturerIds,
-                    },
-                },
+                id: { in: subjectClassIds },
             },
             include: {
                 mainLecturer: true,

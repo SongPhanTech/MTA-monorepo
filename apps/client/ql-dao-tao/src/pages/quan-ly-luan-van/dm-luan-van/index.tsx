@@ -809,9 +809,11 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         <Button
                                             type="primary"
                                             className="ml-2"
-                                            onClick={() => openModalChuyenDiemLopMonHoc({ 
-                                                allStudentsInClasses: allStudentsInClasses
-                                            })} 
+                                            onClick={() =>
+                                                openModalChuyenDiemLopMonHoc({
+                                                    allStudentsInClasses: allStudentsInClasses,
+                                                })
+                                            }
                                             disabled={!students?.length}
                                         >
                                             Gán điểm sang LMH

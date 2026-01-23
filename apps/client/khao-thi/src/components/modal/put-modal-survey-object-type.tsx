@@ -350,11 +350,7 @@ const PutSurveyObjectTypeModal = () => {
                 children: (
                     <Row gutter={[16, 0]}>
                         <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="TrainingFields"
-                                label="Ngành"
-                            >
+                            <FormItem form={form} name="TrainingFields" label="Ngành">
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
@@ -362,18 +358,14 @@ const PutSurveyObjectTypeModal = () => {
                                     placeholder="Chọn ngành"
                                     options={trainingFieldData.map((i: TrainingField) => ({
                                         value: i.id,
-                                        label: `${i?.code ||''} - ${i.name}`,
+                                        label: `${i?.code || ''} - ${i.name}`,
                                     }))}
                                     allowClear
                                 />
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="TrainingMajors"
-                                label="Chuyên ngành"
-                            >
+                            <FormItem form={form} name="TrainingMajors" label="Chuyên ngành">
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
@@ -381,18 +373,14 @@ const PutSurveyObjectTypeModal = () => {
                                     placeholder={'Chọn chuyên ngành'}
                                     options={trainingMajorData.map((i: TrainingMajor) => ({
                                         value: i.id,
-                                        label: `${i.code} - ${i.name}`,
+                                        label: `${i?.code || ''} - ${i?.name || ''}`,
                                     }))}
                                     allowClear
                                 />
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="TrainingCourses"
-                                label="Khóa"
-                            >
+                            <FormItem form={form} name="TrainingCourses" label="Khóa">
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
@@ -407,11 +395,7 @@ const PutSurveyObjectTypeModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="FixedClasses"
-                                label="Lớp niên chế"
-                            >
+                            <FormItem form={form} name="FixedClasses" label="Lớp niên chế">
                                 <Select
                                     disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
@@ -419,18 +403,14 @@ const PutSurveyObjectTypeModal = () => {
                                     placeholder={'Chọn lớp niên chế'}
                                     options={fixedClasses.map((i: FixedClass) => ({
                                         value: i.id,
-                                        label: `${i.code} - ${i.name}`,
+                                        label: `${i?.code || ''} - ${i?.name || ''}`,
                                     }))}
                                     allowClear
                                 />
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="semesterId"
-                                label="Kỳ học"
-                            >
+                            <FormItem form={form} name="semesterId" label="Kỳ học">
                                 <TreeSelectAnt
                                     multiple
                                     disabled={
@@ -451,11 +431,7 @@ const PutSurveyObjectTypeModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="SubjectClasses"
-                                label="Lớp môn học"
-                            >
+                            <FormItem form={form} name="SubjectClasses" label="Lớp môn học">
                                 <Select
                                     disabled={
                                         TrainingFields?.length > 0 ||

@@ -74,6 +74,7 @@ catalog:
   chart.js: ^4.4.7
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
+  core-js: 3.48.0
   cross-env: ^7.0.3
   crypto-browserify: ^3.12.1
   dayjs: ^1.11.19

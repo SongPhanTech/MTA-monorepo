@@ -1,4 +1,5 @@
 import Table from '@components/commons/table'
+import { useSchoolYearStore } from '@components/selecter-school-year'
 import { DEFAULT_PAGINATE_SIZE, EVALUATION_PERIOD_STATUS_LABELS } from '@constants/constants'
 import { formatDate } from '@lib/utils'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -10,7 +11,6 @@ import {
     useFindManyEvaluationPeriod,
     useFindUniqueLecturer,
 } from '@workspace/db/hooks'
-import { useSemesterStore } from '@workspace/ui'
 import { Col, Row, Tag } from 'antd'
 import { type Key, useMemo, useState } from 'react'
 
@@ -20,7 +20,7 @@ export default function EvaluationPeriod() {
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '7247c121-ab5a-4a72-a018-4a4090c7948a'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
-    const { id: semesterId } = useSemesterStore()
+    const { id: schoolYearId } = useSchoolYearStore()
 
     const { data: lecturer } = useFindUniqueLecturer(
         {
@@ -62,7 +62,7 @@ export default function EvaluationPeriod() {
                                     hasSome: [
                                         $Enums.EvaluationMemberRole.ADVISORY_BOARD,
                                         $Enums.EvaluationMemberRole.HEAD_SECRETARY,
-                                        $Enums.EvaluationMemberRole.HEAD_SPECIALIZED
+                                        $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
                                     ],
                                 },
                             },
@@ -70,9 +70,10 @@ export default function EvaluationPeriod() {
                     },
                 },
             ],
-            ...(semesterId && { semesterId }),
+            ...(schoolYearId && { schoolYearId }),
+            deletedAt: null,
         }
-    }, [idProfile, lecturer?.id, semesterId])
+    }, [idProfile, lecturer?.id, schoolYearId])
 
     const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
         {
@@ -84,7 +85,7 @@ export default function EvaluationPeriod() {
                         name: true,
                     },
                 },
-                semester: {
+                schoolYear: {
                     select: {
                         name: true,
                     },
@@ -158,9 +159,9 @@ export default function EvaluationPeriod() {
                             },
                         },
                         {
-                            title: 'Kỳ học',
+                            title: 'Năm học',
                             width: 180,
-                            render: (_, record) => record.semester?.name,
+                            render: (_, record) => record.schoolYear?.name,
                         },
                         {
                             title: 'Ngày bắt đầu',

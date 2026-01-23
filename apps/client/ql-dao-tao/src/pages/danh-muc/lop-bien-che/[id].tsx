@@ -2345,11 +2345,11 @@ export default function StudentFixedClassPage() {
                                                 key: 'export-bang-diem-theo-lop-ket-qua-dao-tao-toan-khoa',
                                                 onClick: async () => await handleExportDiemLop(),
                                             },
-                                            {
-                                                label: 'Test',
-                                                key: 'test',
-                                                onClick: async () => await handleTest(),
-                                            },
+                                            // {
+                                            //     label: 'Test',
+                                            //     key: 'test',
+                                            //     onClick: async () => await handleTest(),
+                                            // },
                                         ],
                                     }}
                                 >

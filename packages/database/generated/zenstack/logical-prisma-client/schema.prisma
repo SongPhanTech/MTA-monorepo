@@ -2946,6 +2946,7 @@ model SchoolYear {
   milestone               Milestone[]
   studentYearResult       StudentYearResult[]
   studentAcademicDecision StudentAcademicDecision[]
+  evaluationPeriod        EvaluationPeriod[]
 
   @@schema("ql-dao-tao")
 }
@@ -2981,7 +2982,6 @@ model Semester {
   classRegisterSession    ClassRegisterSession[]
   planTraining            PlanTraining[]
   survey                  Survey[]
-  evaluationPeriod        EvaluationPeriod[]
   exam                    Exam[]
 
   @@schema("ql-dao-tao")
@@ -5333,8 +5333,8 @@ model EvaluationPeriod {
   startDate     DateTime               @default(now())
   endDate       DateTime?
   status        EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
-  semester      Semester?              @relation(fields: [semesterId], references: [id])
-  semesterId    String?
+  schoolYear    SchoolYear?            @relation(fields: [schoolYearId], references: [id])
+  schoolYearId  String?
   standards     StandardPeriod[]
   council       EvaluationCouncil?
   documentFiles DocumentFile[]

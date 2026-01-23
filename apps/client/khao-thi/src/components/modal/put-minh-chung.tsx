@@ -14,7 +14,6 @@ export type PutEvidenceType = Evidence & {
 }
 const PutEvidence = () => {
     const { data: dataUser } = useSession()
-    console.log(dataUser)
 
     const [form] = Form.useForm<PutEvidenceType>()
     const [document, setDocument] = useState<EvidenceFile[]>([])
@@ -38,6 +37,7 @@ const PutEvidence = () => {
                 categoryId: input?.categoryId || '',
                 information: output.information,
                 issuer: output.issuer,
+                description: output.description || '',
             }
 
             if (input?.id) {
@@ -54,7 +54,7 @@ const PutEvidence = () => {
                                         path: file.path,
                                         mimeType: file.mimeType,
                                         size: file.size,
-                                        evidence: { connect: { id: input?.id } },
+                                        evidenceId: input?.id,
                                         userProfileId: dataUser?.sDM_NhanVienId || null,
                                     },
                                     update: {
@@ -73,7 +73,7 @@ const PutEvidence = () => {
                                     size: file.size,
                                     userProfileId: dataUser?.sDM_NhanVienId || null,
                                 })),
-                            disconnect: document
+                            delete: document
                                 .filter(
                                     (existing) =>
                                         !output.evidenceFile?.some((f) => f.id === existing.id)
@@ -129,6 +129,9 @@ const PutEvidence = () => {
             enabled: !!input?.id,
         }
     )
+
+    console.log('initialValue: ', initialValue)
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
@@ -150,7 +153,7 @@ const PutEvidence = () => {
             onCancel={onClose}
             maskClosable={true}
             title={input?.id ? 'Chỉnh sửa minh chứng' : 'Thêm mới minh chứng'}
-            className="w-[700px]"
+            className="w-[700px] top-2"
         >
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên minh chứng" required>
@@ -158,13 +161,24 @@ const PutEvidence = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="information" label="Thông tin minh chứng" required>
-                    <Input.TextArea placeholder="Nhập thông tin minh chứng" />
+                <FormItem
+                    form={form}
+                    name="information"
+                    label="Số ngày tháng/tháng ban hành"
+                    required
+                >
+                    <Input.TextArea placeholder="Nhập thông tin số ngày/tháng ban hành" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="issuer" label="Người thực hiện" required>
-                    <Input placeholder="Nhập người thực hiện" />
+                <FormItem form={form} name="issuer" label="Nơi ban hành" required>
+                    <Input placeholder="Nhập nơi ban hành" />
+                </FormItem>
+            </Col>
+
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Ghi chú">
+                    <Input placeholder="Nhập ghi chú" />
                 </FormItem>
             </Col>
 
@@ -175,15 +189,10 @@ const PutEvidence = () => {
                         data={document}
                         relationId={input?.id ?? ''}
                         relationType="evidenceId"
+                        titleForm="evidenceFile"
                     />
                 </FormItem>
             </Col>
-
-            {/* <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
-                </FormItem>
-            </Col> */}
         </PutFormModal>
     )
 }

@@ -158,9 +158,9 @@ const DefaultLayout = ({
                             <SelectTrainingObjectType />
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <div className="flex items-center space-x-2">
-                               <Tooltip title="Học kỳ">
-                            <div className="mr-2 font-bold">HK</div>
-                        </Tooltip>
+                                <Tooltip title="Học kỳ">
+                                    <div className="mr-2 font-bold">HK</div>
+                                </Tooltip>
                                 <TreeSelectSemester />
                             </div>
                             {/* <Breadcrumb items={listBreadcrumb} /> */}

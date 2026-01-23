@@ -20,7 +20,7 @@ import { BookPlus } from 'lucide-react'
 import { type Key, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportReport from './export-report'
-import { useSemesterStore } from '@workspace/ui'
+import { useSchoolYearStore } from '@components/selecter-school-year'
 
 export default function EvaluationPeriod() {
     const { can, canSome } = useAbility()
@@ -31,13 +31,14 @@ export default function EvaluationPeriod() {
         startDate: undefined,
         endDate: undefined,
     })
-    const { id: semesterId } = useSemesterStore()
+    const { id: schoolYearId } = useSchoolYearStore()
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const where = useMemo(
         () => ({
-            ...(semesterId ? { semesterId } : {}),
+            deletedAt: null,
+            ...(schoolYearId ? { schoolYearId } : {}),
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -63,7 +64,7 @@ export default function EvaluationPeriod() {
                   }
                 : {}),
         }),
-        [filters.name, filters.startDate, filters.endDate, semesterId]
+        [filters.name, filters.startDate, filters.endDate, schoolYearId]
     )
 
     const { data, refetch } = useFindManyEvaluationPeriod({
@@ -76,7 +77,7 @@ export default function EvaluationPeriod() {
                     members: true,
                 },
             },
-            semester: {
+            schoolYear: {
                 select: {
                     name: true,
                 },
@@ -215,9 +216,9 @@ export default function EvaluationPeriod() {
                                 },
                             },
                             {
-                                title: 'Kỳ học',
+                                title: 'Năm học',
                                 width: 180,
-                                render: (_, record) => record?.semester?.name,
+                                render: (_, record) => record?.schoolYear?.name,
                             },
                             {
                                 title: 'Ngày bắt đầu',

@@ -5,10 +5,19 @@ import dayjs from 'dayjs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import {
+    CourseStudentAcademicActionResult,
+    CourseStudentAcademicWarningResult,
+    CourseStudentDecreaseAcademicWarningResult,
+    CourseStudentScholarshipResult,
+} from '../dto/student-info.dto'
+import {
     calculateStudentSemesterResult,
     calculateStudentYearResult,
     listStudentResultInfo,
-    resultCourseStudentResult,
+    resultCourseStudentAcademicAction,
+    resultCourseStudentAcademicWarning,
+    resultCourseStudentDecreaseAcademicWarning,
+    resultCourseStudentScholarship,
 } from '../services/student-result.service'
 
 const app = new OpenAPIHono({ strict: false })
@@ -105,28 +114,95 @@ const tongKetNamHocHVSV = createRoute({
     },
 })
 
-const dsKetQuaHocKySinhVienJson = createRoute({
-    operationId: 'exportStudentResultSemesterJson',
-    path: '/export-json-list-student-to-check-academic',
+const exportScholarshipJson = createRoute({
+    operationId: 'exportStudentScholarshipJson',
+    path: '/export-json-list-student-scholarship',
     tags: ['Student'],
-    summary: 'Danh sách học bổng, kỷ luật học tập, lưu ban, thôi học của học viên',
-    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện JSON',
+    summary: 'Danh sách học bổng của học viên',
+    description: 'Xuất danh sách học viên đạt học bổng dưới dạng JSON',
     method: 'get',
     request: {
         query: z.object({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của kỳ học',
             }),
-            type: z
-                .enum([
-                    'scholarship',
-                    'academicWarning',
-                    'academicAction',
-                    'decreaseAcademicWarning',
-                ])
-                .openapi('type', {
-                    description: 'Loại danh sách',
-                }),
+            trainingObjectTypeId: z
+                .string()
+                .openapi('trainingObjectTypeId', { description: 'ID loại đối tượng đào tạo' }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student scholarship as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(CourseStudentScholarshipResult),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+const exportAcademicWarningJson = createRoute({
+    operationId: 'exportStudentAcademicWarningJson',
+    path: '/export-json-list-student-academic-warning',
+    tags: ['Student'],
+    summary: 'Danh sách cảnh cáo học tập của học viên',
+    description: 'Xuất danh sách học viên bị cảnh cáo học tập dưới dạng JSON',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string(),
+            trainingObjectTypeId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student academic warning as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(CourseStudentAcademicWarningResult),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+const exportAcademicActionJson = createRoute({
+    operationId: 'exportStudentAcademicActionJson',
+    path: '/export-json-list-student-academic-action',
+    tags: ['Student'],
+    summary: 'Danh sách xử lý học vụ của học viên',
+    description: 'Xuất danh sách học viên bị xử lý học vụ dưới dạng JSON',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kỳ học',
+            }),
+            trainingObjectTypeId: z
+                .string()
+                .openapi('trainingObjectTypeId', { description: 'ID loại đối tượng đào tạo' }),
             academicActionType: z
                 .enum(['REPEAT_YEAR', 'SUSPENSION', 'EXPULSION'])
                 .optional()
@@ -137,10 +213,45 @@ const dsKetQuaHocKySinhVienJson = createRoute({
     },
     responses: {
         200: {
-            description: 'Export list of student action academic as JSON',
+            description: 'Export list of student academic action as JSON',
             content: {
                 'application/json': {
-                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
+                    schema: z.array(CourseStudentAcademicActionResult),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+const exportDecreaseAcademicWarningJson = createRoute({
+    operationId: 'exportStudentDecreaseAcademicWarningJson',
+    path: '/export-json-list-student-decrease-academic-warning',
+    tags: ['Student'],
+    summary: 'Danh sách giảm cảnh cáo học tập của học viên',
+    description: 'Xuất danh sách học viên được giảm cảnh cáo học tập dưới dạng JSON',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string(),
+            trainingObjectTypeId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student decrease academic warning as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(CourseStudentDecreaseAcademicWarningResult),
                 },
             },
         },
@@ -304,20 +415,47 @@ app.openapi(PheDuyetLuuBan, async (c) => {
     return c.json({ message: `Đã cập nhật ${count} trạng thái sinh viên`, count }, 200)
 })
 
-app.openapi(dsKetQuaHocKySinhVienJson, async (c) => {
-    const { semesterId, type, academicActionType } = c.req.valid('query')
-    const students = await listStudentResultInfo(semesterId)
-    console.log(`Found ${students.length} students for semester ${semesterId}`)
-    // console.log(`Students: ${JSON.stringify(students, null, 2)}`)
+app.openapi(exportScholarshipJson, async (c) => {
+    const { semesterId, trainingObjectTypeId } = c.req.valid('query')
+    const students = await listStudentResultInfo(semesterId, trainingObjectTypeId)
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
-    const filteredStudents = await resultCourseStudentResult(
+    const filteredStudents = await resultCourseStudentScholarship(students, semesterId)
+    return c.json(filteredStudents, 200)
+})
+
+app.openapi(exportAcademicWarningJson, async (c) => {
+    const { semesterId, trainingObjectTypeId } = c.req.valid('query')
+    const students = await listStudentResultInfo(semesterId, trainingObjectTypeId)
+    if (!students || students.length === 0) {
+        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+    }
+    const filteredStudents = await resultCourseStudentAcademicWarning(students, semesterId)
+    return c.json(filteredStudents, 200)
+})
+
+app.openapi(exportAcademicActionJson, async (c) => {
+    const { semesterId, academicActionType, trainingObjectTypeId } = c.req.valid('query')
+    const students = await listStudentResultInfo(semesterId, trainingObjectTypeId)
+    if (!students || students.length === 0) {
+        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+    }
+    const filteredStudents = await resultCourseStudentAcademicAction(
         students,
         semesterId,
-        type,
         academicActionType
     )
+    return c.json(filteredStudents, 200)
+})
+
+app.openapi(exportDecreaseAcademicWarningJson, async (c) => {
+    const { semesterId, trainingObjectTypeId } = c.req.valid('query')
+    const students = await listStudentResultInfo(semesterId, trainingObjectTypeId)
+    if (!students || students.length === 0) {
+        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+    }
+    const filteredStudents = await resultCourseStudentDecreaseAcademicWarning(students, semesterId)
     return c.json(filteredStudents, 200)
 })
 

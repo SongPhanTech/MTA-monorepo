@@ -4,14 +4,14 @@ import {
     useFindManyLecturer,
     useFindUniqueStudentSubjectScore,
     useUpdateStudentResearchTopic,
-    useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Row, Select, message } from 'antd'
+import { Col, Form, Input, InputNumber, message, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import { useEffect } from 'react'
+
 dayjs.locale('vi')
 const { TextArea } = Input
 interface PutResearchTopicForm {
@@ -52,32 +52,42 @@ const PutResearchTopicModal = () => {
     )
 
     const { mutateAsync: updateStudentResearchTopic } = useUpdateStudentResearchTopic()
-    const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
     async function onOk() {
         try {
             showSpinner()
             if (input?.studentResearchTopicId) {
+                const score = form.getFieldValue('score')
+                    ? Number(form.getFieldValue('score'))
+                    : null
+
                 await updateStudentResearchTopic({
                     where: { id: input?.studentResearchTopicId },
                     data: {
                         name: form.getFieldValue('name'),
                         mainContent: form.getFieldValue('mainContent'),
-                        supervisorId: form.getFieldValue('supervisorId'),
-                        coSupervisorId: form.getFieldValue('coSupervisorId'),
+                        supervisor: {
+                            connect: { id: form.getFieldValue('supervisorId') || null },
+                        },
+                        coSupervisor: {
+                            connect: { id: form.getFieldValue('coSupervisorId') || null },
+                        },
                         reportDate: form.getFieldValue('reportDate'),
                         deadline: form.getFieldValue('deadline'),
-                    },
-                })
-                await updateStudentSubjectScore({
-                    where: { id: input?.studentSubjectScoreId },
-                    data: {
-                        finalScore: form.getFieldValue('score'),
+                        studentSubjectScore: {
+                            update: {
+                                attendanceScore: score,
+                                midtermScore: score,
+                                examScore: score,
+                                finalScore: score,
+                            },
+                        },
                     },
                 })
             }
             message.success('Cập nhật thành công')
             onClose()
         } catch (error) {
+            console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
