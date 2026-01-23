@@ -37,6 +37,7 @@ import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { useSemesterStore } from '@workspace/ui'
+import useSpinner from '@hooks/spinner'
 
 interface DoAnForm {
     subjectClassId: string
@@ -48,6 +49,7 @@ export default function DanhMucDoAn() {
     const [searchParams, setSearchParams] = useState<Partial<DoAnForm>>({})
     const [isSearched, setIsSearched] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
+    const { showSpinner, hideSpinner } = useSpinner()
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [isMemberModalOpen, setIsMemberModalOpen] = useState(false)
     const [currentProject, setCurrentProject] = useState<any>(null)
@@ -222,6 +224,7 @@ export default function DanhMucDoAn() {
         }
 
         try {
+            showSpinner()
             const transactions = unassignedStudents.map((item: any) => ({
                 model: 'ThesisProject' as const,
                 operation: 'create' as const,
@@ -252,6 +255,8 @@ export default function DanhMucDoAn() {
         } catch (error) {
             console.error('Lỗi tạo dữ liệu mẫu:', error)
             message.error('Không thể tạo dữ liệu mẫu. Vui lòng kiểm tra lại dữ liệu.')
+        } finally {
+            hideSpinner()
         }
     }
 
