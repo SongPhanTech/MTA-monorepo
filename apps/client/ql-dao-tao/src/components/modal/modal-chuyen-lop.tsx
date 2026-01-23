@@ -282,6 +282,14 @@ const ModalChuyenLop = () => {
     }
 
     const updateStudentsToNewClass = async () => {
+        if (!filter.fixedClassArriveId) {
+            message.error('Vui lòng chọn lớp đến')
+            return
+        }
+        if (filter.fixedClassId === filter.fixedClassArriveId) {
+            message.error('Lớp đến không được trùng với lớp hiện tại')
+            return
+        }
         try {
             showSpinner()
             const targetClass = fixedClasses.find((fc) => fc.id === filter.fixedClassArriveId)
