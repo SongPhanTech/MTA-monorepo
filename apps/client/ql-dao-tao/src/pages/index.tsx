@@ -30,14 +30,15 @@
 import Loading from '@components/commons/loading'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { ROUTER_PATH } from '@workspace/router'
 
 const IndexPage = () => {
     const router = useRouter()
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        router.push(router?.asPath !== '/' ? router?.asPath : '/home')
-    }, [router.push])
+        router.push(router?.pathname !== ROUTER_PATH.QL_DAO_TAO.INDEX ? router?.pathname : ROUTER_PATH.QL_DAO_TAO.HOME)
+    }, [])
     return <Loading />
 }
 export default IndexPage

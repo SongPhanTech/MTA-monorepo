@@ -360,6 +360,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                                         ?.subject?.code ?? ''
                                                             )
                                                         )
+                                                            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
                                                             ?.map((e) => e?.[0])
                                                             .flatMap((e) =>
                                                                 new Array(values.count)

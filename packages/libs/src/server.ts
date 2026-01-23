@@ -1,10 +1,7 @@
 import type { PrismaClient } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
 
-export const getTemplateBuffer = async (
-    prisma: PrismaClient,
-    templateCode: string
-): Promise<Buffer<ArrayBuffer>> => {
+export const getTemplateBuffer = async (prisma: PrismaClient, templateCode: string) => {
     const templateFile = await prisma.templateFile.findUnique({
         where: { code: templateCode },
     })
@@ -15,7 +12,7 @@ export const getTemplateBuffer = async (
 
     const res = await fetch(templateFile.path)
     const buffer = await res.arrayBuffer()
-    const nodeBuffer = Buffer.from(buffer)
+    const nodeBuffer: Buffer<ArrayBuffer> = Buffer.from(buffer)
 
     return nodeBuffer
 }
