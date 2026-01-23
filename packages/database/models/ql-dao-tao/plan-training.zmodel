@@ -313,6 +313,7 @@ model SchoolYear extends Base {
 
   studentYearResult       StudentYearResult[]
   studentAcademicDecision StudentAcademicDecision[]
+  evaluationPeriod        EvaluationPeriod[]
 
   @@schema("ql-dao-tao")
 }
@@ -348,7 +349,6 @@ model Semester extends Base {
   classRegisterSession    ClassRegisterSession[]
   planTraining            PlanTraining[]
   survey                  Survey[]
-  evaluationPeriod        EvaluationPeriod[]
   exam                    Exam[]
 
   @@schema("ql-dao-tao")
