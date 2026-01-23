@@ -3,20 +3,17 @@ import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import { SelecterSchoolYear } from '@components/selecter-school-year'
 import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
 import { createId, type EvaluationPeriod } from '@workspace/db'
 import type { DocumentFile } from '@workspace/db/client'
-import {
-    useFindManySchoolYear,
-    useFindUniqueEvaluationPeriod,
-    useUpdateEvaluationPeriod,
-} from '@workspace/db/hooks'
+import { useFindUniqueEvaluationPeriod, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutEvaluationPeriod = EvaluationPeriod & {
     councilIds: string[]
@@ -50,30 +47,6 @@ const PutEvaluationPeriod = () => {
         { enabled: !!id }
     )
 
-    const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
-        orderBy: { startDate: 'desc' },
-        include: {
-            semesters: {
-                orderBy: { createdAt: 'desc' },
-            },
-        },
-    })
-
-    const treeData: TreeNodeType[] = useMemo(() => {
-        return (
-            schoolYears?.map((schoolYear) => ({
-                value: `schoolYear-${schoolYear.id}`,
-                title: schoolYear.name,
-                selectable: false,
-                children:
-                    schoolYear.semesters.map((semester) => ({
-                        value: semester.id,
-                        title: `${semester.name}`,
-                    })) || [],
-            })) || []
-        )
-    }, [schoolYears])
-
     const filterTreeNode = (input: string, treeNode: any) => {
         return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
     }
@@ -90,7 +63,7 @@ const PutEvaluationPeriod = () => {
                 startDate: output.startDate,
                 endDate: output.endDate,
                 description: output.description,
-                semesterId: output.semesterId,
+                schoolYearId: output.schoolYearId,
                 createdBy: idProfile,
             }
             if (id) {
@@ -208,8 +181,6 @@ const PutEvaluationPeriod = () => {
         }
     }, [initialData])
 
-    console.log(document)
-
     return (
         <PutFormModal
             open={isOpen}
@@ -226,18 +197,8 @@ const PutEvaluationPeriod = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem form={form} name="semesterId" label="Kỳ học" required>
-                    <TreeSelect
-                        showSearch
-                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                        placeholder={'Chọn kỳ học'}
-                        allowClear
-                        treeDefaultExpandAll
-                        treeData={treeData}
-                        filterTreeNode={filterTreeNode}
-                        treeNodeFilterProp="title"
-                        loading={schoolYearLoading}
-                    />
+                <FormItem form={form} name="schoolYearId" label="Kỳ học" required>
+                    <SelecterSchoolYear />
                 </FormItem>
             </Col>
             <Col span={12}>

@@ -1,4 +1,3 @@
-import DefaultLayout from '@layouts/default-layout'
 import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-period'
 import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
@@ -14,6 +13,7 @@ import { KHAO_THI_PERMISSION } from '@workspace/router'
 import CriteriaAnalysisPeriodList from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/criteria-analysis'
 import CriteriaEvaluationPeriodList from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/criteria-evaluation'
 import CrossReviewPeriod from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/cross-review'
+import EvaluateLayout from '@layouts/evaluate-layout'
 
 export type EvaluationPeriodStoreState = {
     selectedEvaluationPeriodId?: string
@@ -139,5 +139,5 @@ export default function EvaluationPeriodTabPage() {
 }
 
 EvaluationPeriodTabPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <EvaluateLayout>{page}</EvaluateLayout>
 }

@@ -477,7 +477,7 @@ export default function AssigmentOfAssessmentTab() {
 
                                                     return {
                                                         value: i?.lecturerId,
-                                                        label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}-${i?.lecturer?.organization?.sTen}-${i.lecturer?.organization?.sTen}`,
+                                                        label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
                                                     }
                                                 })}
                                             />
