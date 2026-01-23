@@ -161,6 +161,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 title: 'Người làm khảo sát',
                                 dataIndex: 'fullname',
                                 type: 'input',
+                                width: 250,
                                 render: (_, record) => {
                                     return `${record?.lastName || ''} ${record?.firstName || ''}`
                                 },
@@ -170,7 +171,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 dataIndex: 'idCardNumber',
                                 type: 'input',
                                 align: 'center',
-                                width: 125,
+                                width: 100,
                                 render: (_, record) => record?.idCardNumber || '',
                             },
                             {
@@ -178,21 +179,21 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 dataIndex: 'phoneNumber',
                                 type: 'input',
                                 align: 'center',
-                                width: 125,
+                                width: 100,
                                 render: (_, record) => record?.phoneNumber || '',
                             },
                             {
                                 title: 'ĐVQL',
                                 dataIndex: 'organizationId',
                                 type: 'input',
-                                width: 125,
+                                width: 100,
                                 align: 'center',
                                 render: (_, record) => record?.lecturer?.organization?.sMa || '',
                             },
                             {
                                 title: 'Lớp QL',
                                 dataIndex: 'fixedClassIds',
-                                width: 125,
+                                width: 100,
                                 type: 'select',
                                 align: 'center',
                                 options:
@@ -208,7 +209,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 dataIndex: 'trainingCourseIds',
                                 type: 'select',
                                 align: 'center',
-                                width: 125,
+                                width: 100,
                                 options:
                                     trainingCourses?.map((tc) => ({
                                         value: tc.id,

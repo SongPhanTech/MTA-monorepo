@@ -367,7 +367,7 @@ function TabDoiTuongKhaoSat() {
                                 },
                             },
                             {
-                                title: 'Lớp môn học',
+                                title: 'Lớp MH',
                                 dataIndex: 'subjectClass',
                                 type: 'select',
                                 width: 100,

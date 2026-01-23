@@ -381,7 +381,7 @@ const PutSurveyObjectTypeModal = () => {
                                     placeholder={'Chọn chuyên ngành'}
                                     options={trainingMajorData.map((i: TrainingMajor) => ({
                                         value: i.id,
-                                        label: `${i.code} - ${i.name}`,
+                                        label: `${i?.code ||''} - ${i?.name ||''}`,
                                     }))}
                                     allowClear
                                 />
@@ -419,7 +419,7 @@ const PutSurveyObjectTypeModal = () => {
                                     placeholder={'Chọn lớp niên chế'}
                                     options={fixedClasses.map((i: FixedClass) => ({
                                         value: i.id,
-                                        label: `${i.code} - ${i.name}`,
+                                        label: `${i?.code ||''} - ${i?.name ||''}`,
                                     }))}
                                     allowClear
                                 />

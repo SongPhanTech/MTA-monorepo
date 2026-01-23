@@ -924,7 +924,7 @@ const WordImportModal: React.FC = () => {
                 </Col>
 
                 {storageType === 'khung' && (
-                    <Col span={12}>
+                    <Col span={24}>
                         <FormItem
                             form={form}
                             name="knowledgeBlockId"

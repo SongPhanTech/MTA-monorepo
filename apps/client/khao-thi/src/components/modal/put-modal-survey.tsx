@@ -38,7 +38,7 @@ const { Step } = Steps
 export type PutSurveyType = Survey & {
     surveyObjectTypes: string[]
     semesterId: string
-    lecturerIds: string[]
+    subjectClassIds: string[]
     surveyQuestionIds: string[]
     surveyChoice: any[]
 }
@@ -169,7 +169,7 @@ const PutSurveyModal = () => {
                         isPublic: output.isPublic,
                         anonymous: output.anonymous,
                         additionalSuggestion: output.additionalSuggestion,
-                        lecturerIds: output.lecturerIds.length ? output.lecturerIds : [],
+                        subjectClassIds: output.subjectClassIds.length ? output.subjectClassIds : [],
                         surveyChoices: output.surveyChoice,
                         surveyQuestionIds: output.surveyQuestionIds,
                         semesterId: output.semesterId,
