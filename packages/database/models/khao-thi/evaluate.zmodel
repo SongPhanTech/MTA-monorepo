@@ -39,6 +39,11 @@ model EvaluationPeriod extends Base {
   standards     StandardPeriod[]
   council       EvaluationCouncil?
   documentFiles DocumentFile[]
+  overviewProblem String?
+  overviewGeneral String?
+  overviewResults String?
+  conclude        String?
+
   @@schema("khao-thi")
 }
 
