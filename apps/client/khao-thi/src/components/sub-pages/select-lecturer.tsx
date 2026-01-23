@@ -362,6 +362,10 @@ function SelectLecturer({
                     className="max-h-[500px] overflow-y-scroll"
                 >
                     <TableCollapse
+                        filters={filters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                        }}
                         rowKey="id"
                         id="learning-result"
                         headerTitleKey="name"
