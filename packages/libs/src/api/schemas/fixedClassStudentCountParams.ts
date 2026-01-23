@@ -6,6 +6,6 @@
  */
 
 export type FixedClassStudentCountParams = {
-trainingObjectTypeId: string;
-trainingCourseId: string;
-};
+    trainingObjectTypeId: string
+    trainingCourseId: string
+}

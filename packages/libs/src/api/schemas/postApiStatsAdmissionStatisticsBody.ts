@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsAdmissionStatisticsBodyLabelsItem } from './postApiStatsAdmissionStatisticsBodyLabelsItem';
+import type { PostApiStatsAdmissionStatisticsBodyLabelsItem } from './postApiStatsAdmissionStatisticsBodyLabelsItem'
 
 export type PostApiStatsAdmissionStatisticsBody = {
-  preview?: boolean;
-  labels?: PostApiStatsAdmissionStatisticsBodyLabelsItem[];
-  trainingLevelNames?: string[];
-  includeEmpty?: boolean;
-};
+    preview?: boolean
+    labels?: PostApiStatsAdmissionStatisticsBodyLabelsItem[]
+    trainingLevelNames?: string[]
+    includeEmpty?: boolean
+}

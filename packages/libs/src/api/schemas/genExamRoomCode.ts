@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExamListId } from './examListId';
+import type { ExamListId } from './examListId'
 
 export interface GenExamRoomCode {
-  examListId: ExamListId;
+    examListId: ExamListId
 }

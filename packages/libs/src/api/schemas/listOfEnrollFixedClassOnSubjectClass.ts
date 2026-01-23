@@ -4,7 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PaginationQuery } from './paginationQuery';
-import type { ListOfEnrollFixedClassOnSubjectClassAllOf } from './listOfEnrollFixedClassOnSubjectClassAllOf';
+import type { PaginationQuery } from './paginationQuery'
+import type { ListOfEnrollFixedClassOnSubjectClassAllOf } from './listOfEnrollFixedClassOnSubjectClassAllOf'
 
-export type ListOfEnrollFixedClassOnSubjectClass = PaginationQuery & ListOfEnrollFixedClassOnSubjectClassAllOf;
+export type ListOfEnrollFixedClassOnSubjectClass = PaginationQuery &
+    ListOfEnrollFixedClassOnSubjectClassAllOf

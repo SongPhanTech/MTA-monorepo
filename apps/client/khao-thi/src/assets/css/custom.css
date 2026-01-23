@@ -83,7 +83,7 @@
 
 .ant-table-content {
     outline: 1px solid #f0f0f0;
-    overflow: auto!important;
+    overflow: auto !important;
 }
 .ant-table-container {
     outline: 1px solid #f0f0f0;

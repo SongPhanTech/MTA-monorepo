@@ -6,5 +6,5 @@
  */
 
 export type CalculateStudentSchoolYearResult500 = {
-  message: string;
-};
+    message: string
+}

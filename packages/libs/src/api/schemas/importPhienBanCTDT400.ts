@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ParseSheetError } from './parseSheetError';
+import type { ParseSheetError } from './parseSheetError'
 
 export type ImportPhienBanCTDT400 = {
-  message: string;
-  errors?: ParseSheetError[];
-};
+    message: string
+    errors?: ParseSheetError[]
+}

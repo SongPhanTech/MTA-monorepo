@@ -6,5 +6,5 @@
  */
 
 export type CertificateScore400 = {
-  message: string;
-};
+    message: string
+}

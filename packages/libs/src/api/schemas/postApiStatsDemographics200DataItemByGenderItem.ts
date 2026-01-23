@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsDemographics200DataItemByGenderItem = {
-  name: string;
-  count: number;
-};
+    name: string
+    count: number
+}

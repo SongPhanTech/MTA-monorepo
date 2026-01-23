@@ -96,19 +96,19 @@ app.openapi(createClusterSurvey, async (c) => {
         ...payload
     } = c.req.valid('json')
 
-      const lecturerIds = await prisma.lecturer.findMany({
-            where: {
-                mainSubjectClasses: {
-                    some: {
-                         semesterId,
-                        id: {in: subjectClassIds}
-                    }
-                }
+    const lecturerIds = await prisma.lecturer.findMany({
+        where: {
+            mainSubjectClasses: {
+                some: {
+                    semesterId,
+                    id: { in: subjectClassIds },
+                },
             },
-            include: {
-                mainSubjectClasses: true,
-            },
-        })
+        },
+        include: {
+            mainSubjectClasses: true,
+        },
+    })
 
     await prisma.$transaction(async (tx) => {
         const cluster = await tx.clusterSurvey.create({
@@ -127,7 +127,7 @@ app.openapi(createClusterSurvey, async (c) => {
                     connect: surveyObjectTypeIds.map((id) => ({ id })),
                 },
                 lecturers: {
-                    connect: lecturerIds.map((i) => ({ id:i?.id })),
+                    connect: lecturerIds.map((i) => ({ id: i?.id })),
                 },
             },
             include: {
@@ -160,7 +160,7 @@ app.openapi(createClusterSurvey, async (c) => {
         // })
         const subjectClasses = await prisma.subjectClass.findMany({
             where: {
-               id:{in:subjectClassIds}
+                id: { in: subjectClassIds },
             },
             include: {
                 mainLecturer: true,

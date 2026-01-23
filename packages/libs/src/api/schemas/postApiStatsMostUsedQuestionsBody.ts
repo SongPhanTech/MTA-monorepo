@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsMostUsedQuestionsBody = {
-  preview?: boolean;
-};
+    preview?: boolean
+}

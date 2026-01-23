@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentAcademicActionJson404 = {
-  message: string;
-};
+    message: string
+}

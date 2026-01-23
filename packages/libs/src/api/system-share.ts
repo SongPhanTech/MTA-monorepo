@@ -69,731 +69,1009 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
 4. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+    DataTag,
+    DefinedInitialDataOptions,
+    DefinedUseQueryResult,
+    MutationFunction,
+    QueryClient,
+    QueryFunction,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    UseMutationOptions,
+    UseMutationResult,
+    UseQueryOptions,
+    UseQueryResult,
+} from '@tanstack/react-query'
 
 import type {
-  DeleteFilesDeleteSingleStorageTypeFileNameParams,
-  GetFilesAvatarInitialsParams,
-  GetFilesEmployeeUserIdImageParams,
-  GetFilesImageStorageTypeFileNameParams,
-  PostFilesSingleStorageTypeBody,
-  PostFilesSingleStorageTypeParams
-} from './schemas';
+    DeleteFilesDeleteSingleStorageTypeFileNameParams,
+    GetFilesAvatarInitialsParams,
+    GetFilesEmployeeUserIdImageParams,
+    GetFilesImageStorageTypeFileNameParams,
+    PostFilesSingleStorageTypeBody,
+    PostFilesSingleStorageTypeParams,
+} from './schemas'
 
-import { customSystemShareFetch } from './custom-instance';
-type AwaitedInput<T> = PromiseLike<T> | T;
+import { customSystemShareFetch } from './custom-instance'
+type AwaitedInput<T> = PromiseLike<T> | T
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 /**
  * Hiển thị ảnh
  * @summary Lấy ảnh mẫu của báo cáo
  */
 export type getFilesImageStorageTypeFileNameResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type getFilesImageStorageTypeFileNameResponseSuccess = (getFilesImageStorageTypeFileNameResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getFilesImageStorageTypeFileNameResponse = (getFilesImageStorageTypeFileNameResponseSuccess)
-
-export const getGetFilesImageStorageTypeFileNameUrl = (storageType: number,
-    fileName: string,
-    params?: GetFilesImageStorageTypeFileNameParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/Files/image/${storageType}/${fileName}?${stringifiedParams}` : `/Files/image/${storageType}/${fileName}`
+    data: void
+    status: 200
 }
 
-export const getFilesImageStorageTypeFileName = async (storageType: number,
-    fileName: string,
-    params?: GetFilesImageStorageTypeFileNameParams, options?: RequestInit): Promise<getFilesImageStorageTypeFileNameResponse> => {
-  
-  return customSystemShareFetch<getFilesImageStorageTypeFileNameResponse>(getGetFilesImageStorageTypeFileNameUrl(storageType,fileName,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
-
-export const getGetFilesImageStorageTypeFileNameQueryKey = (storageType?: number,
-    fileName?: string,
-    params?: GetFilesImageStorageTypeFileNameParams,) => {
-    return [
-    `/Files/image/${storageType}/${fileName}`, ...(params ? [params]: [])
-    ] as const;
+export type getFilesImageStorageTypeFileNameResponseSuccess =
+    getFilesImageStorageTypeFileNameResponse200 & {
+        headers: Headers
     }
 
-    
-export const getGetFilesImageStorageTypeFileNameQueryOptions = <TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(storageType: number,
+export type getFilesImageStorageTypeFileNameResponse =
+    getFilesImageStorageTypeFileNameResponseSuccess
+
+export const getGetFilesImageStorageTypeFileNameUrl = (
+    storageType: number,
     fileName: string,
-    params?: GetFilesImageStorageTypeFileNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+    params?: GetFilesImageStorageTypeFileNameParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFilesImageStorageTypeFileNameQueryKey(storageType,fileName,params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>> = ({ signal }) => getFilesImageStorageTypeFileName(storageType,fileName,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(storageType && fileName), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/Files/image/${storageType}/${fileName}?${stringifiedParams}`
+        : `/Files/image/${storageType}/${fileName}`
 }
 
-export type GetFilesImageStorageTypeFileNameQueryResult = NonNullable<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>>
+export const getFilesImageStorageTypeFileName = async (
+    storageType: number,
+    fileName: string,
+    params?: GetFilesImageStorageTypeFileNameParams,
+    options?: RequestInit
+): Promise<getFilesImageStorageTypeFileNameResponse> => {
+    return customSystemShareFetch<getFilesImageStorageTypeFileNameResponse>(
+        getGetFilesImageStorageTypeFileNameUrl(storageType, fileName, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetFilesImageStorageTypeFileNameQueryKey = (
+    storageType?: number,
+    fileName?: string,
+    params?: GetFilesImageStorageTypeFileNameParams
+) => {
+    return [`/Files/image/${storageType}/${fileName}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetFilesImageStorageTypeFileNameQueryOptions = <
+    TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+    TError = unknown,
+>(
+    storageType: number,
+    fileName: string,
+    params?: GetFilesImageStorageTypeFileNameParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetFilesImageStorageTypeFileNameQueryKey(storageType, fileName, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>> = ({
+        signal,
+    }) =>
+        getFilesImageStorageTypeFileName(storageType, fileName, params, {
+            signal,
+            ...requestOptions,
+        })
+
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!(storageType && fileName),
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFilesImageStorageTypeFileNameQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>
+>
 export type GetFilesImageStorageTypeFileNameQueryError = unknown
 
-
-export function useGetFilesImageStorageTypeFileName<TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(
- storageType: number,
+export function useGetFilesImageStorageTypeFileName<
+    TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+    TError = unknown,
+>(
+    storageType: number,
     fileName: string,
-    params: undefined |  GetFilesImageStorageTypeFileNameParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
-          TError,
-          Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesImageStorageTypeFileName<TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(
- storageType: number,
+    params: undefined | GetFilesImageStorageTypeFileNameParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+                    TError,
+                    Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesImageStorageTypeFileName<
+    TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+    TError = unknown,
+>(
+    storageType: number,
     fileName: string,
-    params?: GetFilesImageStorageTypeFileNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
-          TError,
-          Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesImageStorageTypeFileName<TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(
- storageType: number,
+    params?: GetFilesImageStorageTypeFileNameParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+                    TError,
+                    Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesImageStorageTypeFileName<
+    TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+    TError = unknown,
+>(
+    storageType: number,
     fileName: string,
-    params?: GetFilesImageStorageTypeFileNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    params?: GetFilesImageStorageTypeFileNameParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy ảnh mẫu của báo cáo
  */
 
-export function useGetFilesImageStorageTypeFileName<TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(
- storageType: number,
+export function useGetFilesImageStorageTypeFileName<
+    TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+    TError = unknown,
+>(
+    storageType: number,
     fileName: string,
-    params?: GetFilesImageStorageTypeFileNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    params?: GetFilesImageStorageTypeFileNameParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetFilesImageStorageTypeFileNameQueryOptions(
+        storageType,
+        fileName,
+        params,
+        options
+    )
 
-  const queryOptions = getGetFilesImageStorageTypeFileNameQueryOptions(storageType,fileName,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy ảnh nhân viên
  * @summary Lấy ảnh nhân viên
  */
 export type getFilesEmployeeUserIdImageResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type getFilesEmployeeUserIdImageResponseSuccess = (getFilesEmployeeUserIdImageResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getFilesEmployeeUserIdImageResponse = (getFilesEmployeeUserIdImageResponseSuccess)
-
-export const getGetFilesEmployeeUserIdImageUrl = (userId: string,
-    params?: GetFilesEmployeeUserIdImageParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/Files/employee/${userId}/image?${stringifiedParams}` : `/Files/employee/${userId}/image`
+    data: void
+    status: 200
 }
 
-export const getFilesEmployeeUserIdImage = async (userId: string,
-    params?: GetFilesEmployeeUserIdImageParams, options?: RequestInit): Promise<getFilesEmployeeUserIdImageResponse> => {
-  
-  return customSystemShareFetch<getFilesEmployeeUserIdImageResponse>(getGetFilesEmployeeUserIdImageUrl(userId,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getFilesEmployeeUserIdImageResponseSuccess = getFilesEmployeeUserIdImageResponse200 & {
+    headers: Headers
+}
 
+export type getFilesEmployeeUserIdImageResponse = getFilesEmployeeUserIdImageResponseSuccess
 
-
-
-
-export const getGetFilesEmployeeUserIdImageQueryKey = (userId?: string,
-    params?: GetFilesEmployeeUserIdImageParams,) => {
-    return [
-    `/Files/employee/${userId}/image`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetFilesEmployeeUserIdImageQueryOptions = <TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(userId: string,
-    params?: GetFilesEmployeeUserIdImageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+export const getGetFilesEmployeeUserIdImageUrl = (
+    userId: string,
+    params?: GetFilesEmployeeUserIdImageParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFilesEmployeeUserIdImageQueryKey(userId,params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>> = ({ signal }) => getFilesEmployeeUserIdImage(userId,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/Files/employee/${userId}/image?${stringifiedParams}`
+        : `/Files/employee/${userId}/image`
 }
 
-export type GetFilesEmployeeUserIdImageQueryResult = NonNullable<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>>
+export const getFilesEmployeeUserIdImage = async (
+    userId: string,
+    params?: GetFilesEmployeeUserIdImageParams,
+    options?: RequestInit
+): Promise<getFilesEmployeeUserIdImageResponse> => {
+    return customSystemShareFetch<getFilesEmployeeUserIdImageResponse>(
+        getGetFilesEmployeeUserIdImageUrl(userId, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetFilesEmployeeUserIdImageQueryKey = (
+    userId?: string,
+    params?: GetFilesEmployeeUserIdImageParams
+) => {
+    return [`/Files/employee/${userId}/image`, ...(params ? [params] : [])] as const
+}
+
+export const getGetFilesEmployeeUserIdImageQueryOptions = <
+    TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
+    TError = unknown,
+>(
+    userId: string,
+    params?: GetFilesEmployeeUserIdImageParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetFilesEmployeeUserIdImageQueryKey(userId, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>> = ({
+        signal,
+    }) => getFilesEmployeeUserIdImage(userId, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!userId, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFilesEmployeeUserIdImageQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>
+>
 export type GetFilesEmployeeUserIdImageQueryError = unknown
 
-
-export function useGetFilesEmployeeUserIdImage<TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(
- userId: string,
-    params: undefined |  GetFilesEmployeeUserIdImageParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
-          TError,
-          Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesEmployeeUserIdImage<TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(
- userId: string,
-    params?: GetFilesEmployeeUserIdImageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
-          TError,
-          Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesEmployeeUserIdImage<TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(
- userId: string,
-    params?: GetFilesEmployeeUserIdImageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesEmployeeUserIdImage<
+    TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
+    TError = unknown,
+>(
+    userId: string,
+    params: undefined | GetFilesEmployeeUserIdImageParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
+                    TError,
+                    Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesEmployeeUserIdImage<
+    TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
+    TError = unknown,
+>(
+    userId: string,
+    params?: GetFilesEmployeeUserIdImageParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
+                    TError,
+                    Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesEmployeeUserIdImage<
+    TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
+    TError = unknown,
+>(
+    userId: string,
+    params?: GetFilesEmployeeUserIdImageParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy ảnh nhân viên
  */
 
-export function useGetFilesEmployeeUserIdImage<TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(
- userId: string,
-    params?: GetFilesEmployeeUserIdImageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetFilesEmployeeUserIdImage<
+    TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
+    TError = unknown,
+>(
+    userId: string,
+    params?: GetFilesEmployeeUserIdImageParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetFilesEmployeeUserIdImageQueryOptions(userId, params, options)
 
-  const queryOptions = getGetFilesEmployeeUserIdImageQueryOptions(userId,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Hiển thị ảnh avatar theo tên viết tắt
  * @summary Lấy avatar khởi tạo
  */
 export type getFilesAvatarInitialsResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type getFilesAvatarInitialsResponseSuccess = (getFilesAvatarInitialsResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getFilesAvatarInitialsResponse = (getFilesAvatarInitialsResponseSuccess)
-
-export const getGetFilesAvatarInitialsUrl = (params?: GetFilesAvatarInitialsParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/Files/avatar-initials?${stringifiedParams}` : `/Files/avatar-initials`
+    data: void
+    status: 200
 }
 
-export const getFilesAvatarInitials = async (params?: GetFilesAvatarInitialsParams, options?: RequestInit): Promise<getFilesAvatarInitialsResponse> => {
-  
-  return customSystemShareFetch<getFilesAvatarInitialsResponse>(getGetFilesAvatarInitialsUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getFilesAvatarInitialsResponseSuccess = getFilesAvatarInitialsResponse200 & {
+    headers: Headers
+}
 
+export type getFilesAvatarInitialsResponse = getFilesAvatarInitialsResponseSuccess
 
+export const getGetFilesAvatarInitialsUrl = (params?: GetFilesAvatarInitialsParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetFilesAvatarInitialsQueryKey = (params?: GetFilesAvatarInitialsParams,) => {
-    return [
-    `/Files/avatar-initials`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/Files/avatar-initials?${stringifiedParams}`
+        : `/Files/avatar-initials`
+}
+
+export const getFilesAvatarInitials = async (
+    params?: GetFilesAvatarInitialsParams,
+    options?: RequestInit
+): Promise<getFilesAvatarInitialsResponse> => {
+    return customSystemShareFetch<getFilesAvatarInitialsResponse>(
+        getGetFilesAvatarInitialsUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetFilesAvatarInitialsQueryKey = (params?: GetFilesAvatarInitialsParams) => {
+    return [`/Files/avatar-initials`, ...(params ? [params] : [])] as const
+}
+
+export const getGetFilesAvatarInitialsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
+    TError = unknown,
+>(
+    params?: GetFilesAvatarInitialsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
     }
-
-    
-export const getGetFilesAvatarInitialsQueryOptions = <TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(params?: GetFilesAvatarInitialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetFilesAvatarInitialsQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFilesAvatarInitialsQueryKey(params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesAvatarInitials>>> = ({
+        signal,
+    }) => getFilesAvatarInitials(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesAvatarInitials>>> = ({ signal }) => getFilesAvatarInitials(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getFilesAvatarInitials>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetFilesAvatarInitialsQueryResult = NonNullable<Awaited<ReturnType<typeof getFilesAvatarInitials>>>
+export type GetFilesAvatarInitialsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getFilesAvatarInitials>>
+>
 export type GetFilesAvatarInitialsQueryError = unknown
 
-
-export function useGetFilesAvatarInitials<TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(
- params: undefined |  GetFilesAvatarInitialsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFilesAvatarInitials>>,
-          TError,
-          Awaited<ReturnType<typeof getFilesAvatarInitials>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesAvatarInitials<TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(
- params?: GetFilesAvatarInitialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFilesAvatarInitials>>,
-          TError,
-          Awaited<ReturnType<typeof getFilesAvatarInitials>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesAvatarInitials<TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(
- params?: GetFilesAvatarInitialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesAvatarInitials<
+    TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
+    TError = unknown,
+>(
+    params: undefined | GetFilesAvatarInitialsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getFilesAvatarInitials>>,
+                    TError,
+                    Awaited<ReturnType<typeof getFilesAvatarInitials>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesAvatarInitials<
+    TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
+    TError = unknown,
+>(
+    params?: GetFilesAvatarInitialsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getFilesAvatarInitials>>,
+                    TError,
+                    Awaited<ReturnType<typeof getFilesAvatarInitials>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesAvatarInitials<
+    TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
+    TError = unknown,
+>(
+    params?: GetFilesAvatarInitialsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy avatar khởi tạo
  */
 
-export function useGetFilesAvatarInitials<TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(
- params?: GetFilesAvatarInitialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetFilesAvatarInitials<
+    TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
+    TError = unknown,
+>(
+    params?: GetFilesAvatarInitialsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetFilesAvatarInitialsQueryOptions(params, options)
 
-  const queryOptions = getGetFilesAvatarInitialsQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Upload single file
  * @summary Upload single file
  */
 export type postFilesSingleStorageTypeResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type postFilesSingleStorageTypeResponseSuccess = (postFilesSingleStorageTypeResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postFilesSingleStorageTypeResponse = (postFilesSingleStorageTypeResponseSuccess)
-
-export const getPostFilesSingleStorageTypeUrl = (storageType: number,
-    params?: PostFilesSingleStorageTypeParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/Files/single/${storageType}?${stringifiedParams}` : `/Files/single/${storageType}`
+    data: void
+    status: 200
 }
 
-export const postFilesSingleStorageType = async (storageType: number,
-    postFilesSingleStorageTypeBody: PostFilesSingleStorageTypeBody,
-    params?: PostFilesSingleStorageTypeParams, options?: RequestInit): Promise<postFilesSingleStorageTypeResponse> => {
-    const formData = new FormData();
-if(postFilesSingleStorageTypeBody.file !== undefined) {
- formData.append(`file`, postFilesSingleStorageTypeBody.file)
- }
+export type postFilesSingleStorageTypeResponseSuccess = postFilesSingleStorageTypeResponse200 & {
+    headers: Headers
+}
 
-  return customSystemShareFetch<postFilesSingleStorageTypeResponse>(getPostFilesSingleStorageTypeUrl(storageType,params),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
+export type postFilesSingleStorageTypeResponse = postFilesSingleStorageTypeResponseSuccess
 
+export const getPostFilesSingleStorageTypeUrl = (
+    storageType: number,
+    params?: PostFilesSingleStorageTypeParams
+) => {
+    const normalizedParams = new URLSearchParams()
 
-
-
-export const getPostFilesSingleStorageTypeMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postFilesSingleStorageType>>, TError,{storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postFilesSingleStorageType>>, TError,{storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams}, TContext> => {
-
-const mutationKey = ['postFilesSingleStorageType'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postFilesSingleStorageType>>, {storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams}> = (props) => {
-          const {storageType,data,params} = props ?? {};
-
-          return  postFilesSingleStorageType(storageType,data,params,requestOptions)
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
+    })
 
-        
+    const stringifiedParams = normalizedParams.toString()
 
+    return stringifiedParams.length > 0
+        ? `/Files/single/${storageType}?${stringifiedParams}`
+        : `/Files/single/${storageType}`
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export const postFilesSingleStorageType = async (
+    storageType: number,
+    postFilesSingleStorageTypeBody: PostFilesSingleStorageTypeBody,
+    params?: PostFilesSingleStorageTypeParams,
+    options?: RequestInit
+): Promise<postFilesSingleStorageTypeResponse> => {
+    const formData = new FormData()
+    if (postFilesSingleStorageTypeBody.file !== undefined) {
+        formData.append(`file`, postFilesSingleStorageTypeBody.file)
+    }
 
-    export type PostFilesSingleStorageTypeMutationResult = NonNullable<Awaited<ReturnType<typeof postFilesSingleStorageType>>>
-    export type PostFilesSingleStorageTypeMutationBody = PostFilesSingleStorageTypeBody
-    export type PostFilesSingleStorageTypeMutationError = unknown
+    return customSystemShareFetch<postFilesSingleStorageTypeResponse>(
+        getPostFilesSingleStorageTypeUrl(storageType, params),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
 
-    /**
- * @summary Upload single file
- */
-export const usePostFilesSingleStorageType = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postFilesSingleStorageType>>, TError,{storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostFilesSingleStorageTypeMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postFilesSingleStorageType>>,
         TError,
-        {storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams},
+        {
+            storageType: number
+            data: PostFilesSingleStorageTypeBody
+            params?: PostFilesSingleStorageTypeParams
+        },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemShareFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postFilesSingleStorageType>>,
+    TError,
+    {
+        storageType: number
+        data: PostFilesSingleStorageTypeBody
+        params?: PostFilesSingleStorageTypeParams
+    },
+    TContext
+> => {
+    const mutationKey = ['postFilesSingleStorageType']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostFilesSingleStorageTypeMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postFilesSingleStorageType>>,
+        {
+            storageType: number
+            data: PostFilesSingleStorageTypeBody
+            params?: PostFilesSingleStorageTypeParams
+        }
+    > = (props) => {
+        const { storageType, data, params } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postFilesSingleStorageType(storageType, data, params, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostFilesSingleStorageTypeMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postFilesSingleStorageType>>
+>
+export type PostFilesSingleStorageTypeMutationBody = PostFilesSingleStorageTypeBody
+export type PostFilesSingleStorageTypeMutationError = unknown
+
+/**
+ * @summary Upload single file
+ */
+export const usePostFilesSingleStorageType = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postFilesSingleStorageType>>,
+            TError,
+            {
+                storageType: number
+                data: PostFilesSingleStorageTypeBody
+                params?: PostFilesSingleStorageTypeParams
+            },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postFilesSingleStorageType>>,
+    TError,
+    {
+        storageType: number
+        data: PostFilesSingleStorageTypeBody
+        params?: PostFilesSingleStorageTypeParams
+    },
+    TContext
+> => {
+    const mutationOptions = getPostFilesSingleStorageTypeMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Xóa single file
  * @summary Xóa single file
  */
 export type deleteFilesDeleteSingleStorageTypeFileNameResponse200 = {
-  data: void
-  status: 200
+    data: void
+    status: 200
 }
-    
-export type deleteFilesDeleteSingleStorageTypeFileNameResponseSuccess = (deleteFilesDeleteSingleStorageTypeFileNameResponse200) & {
-  headers: Headers;
-};
-;
 
-export type deleteFilesDeleteSingleStorageTypeFileNameResponse = (deleteFilesDeleteSingleStorageTypeFileNameResponseSuccess)
-
-export const getDeleteFilesDeleteSingleStorageTypeFileNameUrl = (storageType: number,
-    fileName: string,
-    params?: DeleteFilesDeleteSingleStorageTypeFileNameParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+export type deleteFilesDeleteSingleStorageTypeFileNameResponseSuccess =
+    deleteFilesDeleteSingleStorageTypeFileNameResponse200 & {
+        headers: Headers
     }
-  });
 
-  const stringifiedParams = normalizedParams.toString();
+export type deleteFilesDeleteSingleStorageTypeFileNameResponse =
+    deleteFilesDeleteSingleStorageTypeFileNameResponseSuccess
 
-  return stringifiedParams.length > 0 ? `/Files/delete-single/${storageType}/${fileName}?${stringifiedParams}` : `/Files/delete-single/${storageType}/${fileName}`
+export const getDeleteFilesDeleteSingleStorageTypeFileNameUrl = (
+    storageType: number,
+    fileName: string,
+    params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/Files/delete-single/${storageType}/${fileName}?${stringifiedParams}`
+        : `/Files/delete-single/${storageType}/${fileName}`
 }
 
-export const deleteFilesDeleteSingleStorageTypeFileName = async (storageType: number,
+export const deleteFilesDeleteSingleStorageTypeFileName = async (
+    storageType: number,
     fileName: string,
-    params?: DeleteFilesDeleteSingleStorageTypeFileNameParams, options?: RequestInit): Promise<deleteFilesDeleteSingleStorageTypeFileNameResponse> => {
-  
-  return customSystemShareFetch<deleteFilesDeleteSingleStorageTypeFileNameResponse>(getDeleteFilesDeleteSingleStorageTypeFileNameUrl(storageType,fileName,params),
-  {      
-    ...options,
-    method: 'DELETE'
-    
-    
-  }
-);}
-
-
-
-
-export const getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>, TError,{storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>, TError,{storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams}, TContext> => {
-
-const mutationKey = ['deleteFilesDeleteSingleStorageTypeFileName'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>, {storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams}> = (props) => {
-          const {storageType,fileName,params} = props ?? {};
-
-          return  deleteFilesDeleteSingleStorageTypeFileName(storageType,fileName,params,requestOptions)
+    params?: DeleteFilesDeleteSingleStorageTypeFileNameParams,
+    options?: RequestInit
+): Promise<deleteFilesDeleteSingleStorageTypeFileNameResponse> => {
+    return customSystemShareFetch<deleteFilesDeleteSingleStorageTypeFileNameResponse>(
+        getDeleteFilesDeleteSingleStorageTypeFileNameUrl(storageType, fileName, params),
+        {
+            ...options,
+            method: 'DELETE',
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteFilesDeleteSingleStorageTypeFileNameMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>>
-    
-    export type DeleteFilesDeleteSingleStorageTypeFileNameMutationError = unknown
-
-    /**
- * @summary Xóa single file
- */
-export const useDeleteFilesDeleteSingleStorageTypeFileName = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>, TError,{storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
         TError,
-        {storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams},
+        {
+            storageType: number
+            fileName: string
+            params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
+        },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemShareFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
+    TError,
+    {
+        storageType: number
+        fileName: string
+        params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
+    },
+    TContext
+> => {
+    const mutationKey = ['deleteFilesDeleteSingleStorageTypeFileName']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
+        {
+            storageType: number
+            fileName: string
+            params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
+        }
+    > = (props) => {
+        const { storageType, fileName, params } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return deleteFilesDeleteSingleStorageTypeFileName(
+            storageType,
+            fileName,
+            params,
+            requestOptions
+        )
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteFilesDeleteSingleStorageTypeFileNameMutationResult = NonNullable<
+    Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>
+>
+
+export type DeleteFilesDeleteSingleStorageTypeFileNameMutationError = unknown
+
+/**
+ * @summary Xóa single file
+ */
+export const useDeleteFilesDeleteSingleStorageTypeFileName = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
+            TError,
+            {
+                storageType: number
+                fileName: string
+                params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
+            },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
+    TError,
+    {
+        storageType: number
+        fileName: string
+        params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
+    },
+    TContext
+> => {
+    const mutationOptions = getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getFilesHealthzResponse200 = {
-  data: void
-  status: 200
+    data: void
+    status: 200
 }
-    
-export type getFilesHealthzResponseSuccess = (getFilesHealthzResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getFilesHealthzResponse = (getFilesHealthzResponseSuccess)
+export type getFilesHealthzResponseSuccess = getFilesHealthzResponse200 & {
+    headers: Headers
+}
+
+export type getFilesHealthzResponse = getFilesHealthzResponseSuccess
 
 export const getGetFilesHealthzUrl = () => {
-
-
-  
-
-  return `/Files/healthz`
+    return `/Files/healthz`
 }
 
-export const getFilesHealthz = async ( options?: RequestInit): Promise<getFilesHealthzResponse> => {
-  
-  return customSystemShareFetch<getFilesHealthzResponse>(getGetFilesHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getFilesHealthz = async (options?: RequestInit): Promise<getFilesHealthzResponse> => {
+    return customSystemShareFetch<getFilesHealthzResponse>(getGetFilesHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetFilesHealthzQueryKey = () => {
-    return [
-    `/Files/healthz`
-    ] as const;
-    }
+    return [`/Files/healthz`] as const
+}
 
-    
-export const getGetFilesHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
-) => {
+export const getGetFilesHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getFilesHealthz>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemShareFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetFilesHealthzQueryKey()
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFilesHealthzQueryKey();
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesHealthz>>> = ({ signal }) =>
+        getFilesHealthz({ signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesHealthz>>> = ({ signal }) => getFilesHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getFilesHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetFilesHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getFilesHealthz>>>
 export type GetFilesHealthzQueryError = unknown
 
-
-export function useGetFilesHealthz<TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFilesHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getFilesHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesHealthz<TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFilesHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getFilesHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesHealthz<TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesHealthz<
+    TData = Awaited<ReturnType<typeof getFilesHealthz>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getFilesHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getFilesHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesHealthz<
+    TData = Awaited<ReturnType<typeof getFilesHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getFilesHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getFilesHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesHealthz<
+    TData = Awaited<ReturnType<typeof getFilesHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetFilesHealthz<TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetFilesHealthz<
+    TData = Awaited<ReturnType<typeof getFilesHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemShareFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetFilesHealthzQueryOptions(options)
 
-  const queryOptions = getGetFilesHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }

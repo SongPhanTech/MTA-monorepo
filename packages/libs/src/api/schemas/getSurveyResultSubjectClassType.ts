@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSurveyResultSubjectClassType = typeof GetSurveyResultSubjectClassType[keyof typeof GetSurveyResultSubjectClassType];
-
+export type GetSurveyResultSubjectClassType =
+    (typeof GetSurveyResultSubjectClassType)[keyof typeof GetSurveyResultSubjectClassType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveyResultSubjectClassType = {
-  NORMAL: 'NORMAL',
-  RETAKE: 'RETAKE',
-  REEXAM: 'REEXAM',
-} as const;
+    NORMAL: 'NORMAL',
+    RETAKE: 'RETAKE',
+    REEXAM: 'REEXAM',
+} as const

@@ -6,16 +6,16 @@
  */
 
 export type OpenSubjectClassRetakeStudentsParams = {
-subjectVersionId: string;
-trainingCourseId?: string;
-search?: string;
-trainingObjectTypeId: string;
-/**
- * @nullable
- */
-page?: number | null;
-/**
- * @nullable
- */
-pageSize?: number | null;
-};
+    subjectVersionId: string
+    trainingCourseId?: string
+    search?: string
+    trainingObjectTypeId: string
+    /**
+     * @nullable
+     */
+    page?: number | null
+    /**
+     * @nullable
+     */
+    pageSize?: number | null
+}

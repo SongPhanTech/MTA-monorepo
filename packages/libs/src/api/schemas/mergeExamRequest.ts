@@ -6,6 +6,6 @@
  */
 
 export interface MergeExamRequest {
-  /** @minItems 2 */
-  examIds: string[];
+    /** @minItems 2 */
+    examIds: string[]
 }

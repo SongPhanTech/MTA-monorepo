@@ -6,5 +6,5 @@
  */
 
 export type StatisticsGraduationDecisionParams = {
-trainingObjectTypeId: string;
-};
+    trainingObjectTypeId: string
+}

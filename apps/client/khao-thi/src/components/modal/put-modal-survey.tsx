@@ -169,7 +169,9 @@ const PutSurveyModal = () => {
                         isPublic: output.isPublic,
                         anonymous: output.anonymous,
                         additionalSuggestion: output.additionalSuggestion,
-                        subjectClassIds: output.subjectClassIds.length ? output.subjectClassIds : [],
+                        subjectClassIds: output.subjectClassIds.length
+                            ? output.subjectClassIds
+                            : [],
                         surveyChoices: output.surveyChoice,
                         surveyQuestionIds: output.surveyQuestionIds,
                         semesterId: output.semesterId,

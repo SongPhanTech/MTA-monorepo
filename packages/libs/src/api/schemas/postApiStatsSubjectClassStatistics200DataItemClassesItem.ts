@@ -6,8 +6,8 @@
  */
 
 export type PostApiStatsSubjectClassStatistics200DataItemClassesItem = {
-  id: string;
-  name: string;
-  fillRate: number;
-  failureRate: number;
-};
+    id: string
+    name: string
+    fillRate: number
+    failureRate: number
+}

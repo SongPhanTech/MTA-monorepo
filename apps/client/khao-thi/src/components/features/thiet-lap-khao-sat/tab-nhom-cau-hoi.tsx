@@ -116,9 +116,9 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
         hideSpinner()
     }
 
-    useEffect(()=>{
-        setSelectedID('');
-    },[topicSlected])
+    useEffect(() => {
+        setSelectedID('')
+    }, [topicSlected])
 
     return (
         <div>

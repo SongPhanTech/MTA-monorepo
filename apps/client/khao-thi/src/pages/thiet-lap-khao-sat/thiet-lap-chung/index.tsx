@@ -14,39 +14,39 @@ function Page() {
         console.log(key)
     }
 
-    const items: TabsProps['items'] =useMemo(()=>{
+    const items: TabsProps['items'] = useMemo(() => {
         return [
-        {
-            key: '1',
-            label: 'Đối tượng làm khảo sát',
-            children: <TabDoiTuongKhaoSat />,
-        },
-        {
-            key: '2',
-            label: 'Chủ đề khảo sát',
-            children: (
-                <TabChuDeKhaoSat
-                    topicSlected={topicSlected}
-                    setTopicSelected={(value) => {
-                        setTopicSelected(value)
-                    }}
-                />
-            ),
-        },
-        {
-            key: '3',
-            label: 'Nhóm câu hỏi khảo sát',
-            children: <TabNhomCauHoi topicSlected={topicSlected} />,
-            disabled: !topicSlected?.id,
-        },
-        // {
-        //     key: '4',
-        //     label: 'Câu hỏi khảo sát',
-        //     children: <CauHoiKhaoSat id={selectedID} />,
-        //     disabled: !selectedID,
-        // },
-    ]
-    },[topicSlected]) 
+            {
+                key: '1',
+                label: 'Đối tượng làm khảo sát',
+                children: <TabDoiTuongKhaoSat />,
+            },
+            {
+                key: '2',
+                label: 'Chủ đề khảo sát',
+                children: (
+                    <TabChuDeKhaoSat
+                        topicSlected={topicSlected}
+                        setTopicSelected={(value) => {
+                            setTopicSelected(value)
+                        }}
+                    />
+                ),
+            },
+            {
+                key: '3',
+                label: 'Nhóm câu hỏi khảo sát',
+                children: <TabNhomCauHoi topicSlected={topicSlected} />,
+                disabled: !topicSlected?.id,
+            },
+            // {
+            //     key: '4',
+            //     label: 'Câu hỏi khảo sát',
+            //     children: <CauHoiKhaoSat id={selectedID} />,
+            //     disabled: !selectedID,
+            // },
+        ]
+    }, [topicSlected])
     return <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
 }
 

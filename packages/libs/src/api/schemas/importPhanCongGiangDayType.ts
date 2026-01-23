@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ImportPhanCongGiangDayType = typeof ImportPhanCongGiangDayType[keyof typeof ImportPhanCongGiangDayType];
-
+export type ImportPhanCongGiangDayType =
+    (typeof ImportPhanCongGiangDayType)[keyof typeof ImportPhanCongGiangDayType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ImportPhanCongGiangDayType = {
-  NORMAL: 'NORMAL',
-  RETAKE: 'RETAKE',
-  REEXAM: 'REEXAM',
-} as const;
+    NORMAL: 'NORMAL',
+    RETAKE: 'RETAKE',
+    REEXAM: 'REEXAM',
+} as const

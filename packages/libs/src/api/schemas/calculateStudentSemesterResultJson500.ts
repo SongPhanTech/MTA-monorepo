@@ -6,5 +6,5 @@
  */
 
 export type CalculateStudentSemesterResultJson500 = {
-  message: string;
-};
+    message: string
+}

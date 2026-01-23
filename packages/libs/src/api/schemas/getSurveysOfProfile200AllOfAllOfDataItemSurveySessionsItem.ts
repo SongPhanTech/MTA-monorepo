@@ -6,25 +6,25 @@
  */
 
 export type GetSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem = {
-  id: string;
-  /** @nullable */
-  code?: string | null;
-  active?: boolean;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  deletedAt?: string | null;
-  /** @nullable */
-  createdAt?: string | null;
-  /** @nullable */
-  updatedAt?: string | null;
-  /** @nullable */
-  createdBy?: string | null;
-  /** @nullable */
-  additionalSuggestion?: string | null;
-  /** @nullable */
-  startedAt?: string | null;
-  /** @nullable */
-  completedAt?: string | null;
-  isCompleted?: boolean;
-};
+    id: string
+    /** @nullable */
+    code?: string | null
+    active?: boolean
+    /** @nullable */
+    description?: string | null
+    /** @nullable */
+    deletedAt?: string | null
+    /** @nullable */
+    createdAt?: string | null
+    /** @nullable */
+    updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
+    /** @nullable */
+    additionalSuggestion?: string | null
+    /** @nullable */
+    startedAt?: string | null
+    /** @nullable */
+    completedAt?: string | null
+    isCompleted?: boolean
+}

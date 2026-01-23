@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { Id } from './id';
+import type { Id } from './id'
 
 export type ExportSubjectClassScoreParams = {
-id: Id;
-type?: string;
-};
+    id: Id
+    type?: string
+}

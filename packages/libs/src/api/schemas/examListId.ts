@@ -8,4 +8,4 @@
 /**
  * ID danh sách thi
  */
-export type ExamListId = string;
+export type ExamListId = string

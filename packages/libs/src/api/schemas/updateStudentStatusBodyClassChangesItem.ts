@@ -6,7 +6,7 @@
  */
 
 export type UpdateStudentStatusBodyClassChangesItem = {
-  decisionId: string;
-  fixedClassId: string;
-  changeCurriculumVersion: boolean;
-};
+    decisionId: string
+    fixedClassId: string
+    changeCurriculumVersion: boolean
+}

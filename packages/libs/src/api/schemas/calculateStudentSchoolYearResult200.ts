@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type CalculateStudentSchoolYearResult200 = unknown | null;
+export type CalculateStudentSchoolYearResult200 = unknown | null

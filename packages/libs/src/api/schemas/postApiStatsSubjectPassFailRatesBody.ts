@@ -6,10 +6,10 @@
  */
 
 export type PostApiStatsSubjectPassFailRatesBody = {
-  preview?: boolean;
-  /**
-   * @minimum 1
-   * @maximum 50
-   */
-  limit?: number;
-};
+    preview?: boolean
+    /**
+     * @minimum 1
+     * @maximum 50
+     */
+    limit?: number
+}

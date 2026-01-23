@@ -4,24 +4,24 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateClusterSurveyRequestSurveyChoicesItem } from './createClusterSurveyRequestSurveyChoicesItem';
+import type { CreateClusterSurveyRequestSurveyChoicesItem } from './createClusterSurveyRequestSurveyChoicesItem'
 
 export interface CreateClusterSurveyRequest {
-  name: string;
-  additionalSuggestion: boolean;
-  /** @nullable */
-  startDate: string | null;
-  /** @nullable */
-  endDate?: string | null;
-  isPublic?: boolean;
-  anonymous?: boolean;
-  surveyTopicId: string;
-  surveyObjectTypeIds?: string[];
-  /** @minItems 1 */
-  lecturerIds: string[];
-  /** @minItems 1 */
-  surveyQuestionIds: string[];
-  semesterId: string;
-  /** @minItems 1 */
-  surveyChoices: CreateClusterSurveyRequestSurveyChoicesItem[];
+    name: string
+    additionalSuggestion: boolean
+    /** @nullable */
+    startDate: string | null
+    /** @nullable */
+    endDate?: string | null
+    isPublic?: boolean
+    anonymous?: boolean
+    surveyTopicId: string
+    surveyObjectTypeIds?: string[]
+    /** @minItems 1 */
+    subjectClassIds: string[]
+    /** @minItems 1 */
+    surveyQuestionIds: string[]
+    semesterId: string
+    /** @minItems 1 */
+    surveyChoices: CreateClusterSurveyRequestSurveyChoicesItem[]
 }
