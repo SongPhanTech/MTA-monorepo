@@ -37,7 +37,6 @@ import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { useSemesterStore } from '@workspace/ui'
 import useSpinner from '@hooks/spinner'
 
 interface DoAnForm {

@@ -183,9 +183,6 @@ catalogs:
     clsx:
       specifier: ^2.1.1
       version: 2.1.1
-    core-js:
-      specifier: 3.48.0
-      version: 3.48.0
     cross-env:
       specifier: ^7.0.3
       version: 7.0.3
@@ -1478,9 +1475,6 @@ importers:
       clsx:
         specifier: 'catalog:'
         version: 2.1.1
-      core-js:
-        specifier: 'catalog:'
-        version: 3.48.0
       dayjs:
         specifier: 'catalog:'
         version: 1.11.19
@@ -5279,9 +5273,6 @@ packages:
 
   core-js-pure@3.47.0:
     resolution: {integrity: sha512-BcxeDbzUrRnXGYIVAGFtcGQVNpFcUhVjr6W7F8XktvQW2iJP9e66GP6xdKotCRFlrxBvNIBrhwKteRXqMV86Nw==}
-
-  core-js@3.48.0:
-    resolution: {integrity: sha512-zpEHTy1fjTMZCKLHUZoVeylt9XrzaIN2rbPXEt0k+q7JE5CkCZdo6bNq55bn24a69CH7ErAVLKijxJja4fw+UQ==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -13018,8 +13009,6 @@ snapshots:
       toggle-selection: 1.0.6
 
   core-js-pure@3.47.0: {}
-
-  core-js@3.48.0: {}
 
   core-util-is@1.0.3: {}
 
