@@ -6,13 +6,23 @@ import DiemTrungBinhNamHoc from '@components/sub-pages/trung-binh-nam-hoc'
 import XetXuLyHocTap from '@components/sub-pages/xet-xu-ly-hoc-tap'
 import DefaultLayout from '@layouts/default-layout'
 import { AcademicActionType } from '@workspace/db/client'
-import { useSemesterStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import type React from 'react'
 
 export default function TongKetKyHoc() {
     const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    if (!semesterId) return null
+    if (!semesterId || !trainingObjectTypeId)
+        return (
+            <div className="flex h-full items-center justify-center">
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold">Không có dữ liệu</h1>
+                    <p className="text-gray-500">Vui lòng chọn đối tượng đào tạo và học kỳ</p>
+                </div>
+            </div>
+        )
+
     return (
         <div>
             <Tabs
@@ -53,6 +63,7 @@ export default function TongKetKyHoc() {
                         children: (
                             <XetXuLyHocTap
                                 semesterId={semesterId}
+                                trainingObjectTypeId={trainingObjectTypeId}
                                 actionTaken={AcademicActionType.REPEAT_YEAR}
                             />
                         ),

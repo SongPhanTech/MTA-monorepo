@@ -303,6 +303,7 @@ const importStudent = createRoute({
             content: {
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
+                        createCurriculumVersion: z.boolean().optional(),
                         timeout: z.coerce.number().default(30),
                     }).openapi('ImportStudentRequest'),
                 },
@@ -333,7 +334,7 @@ const importStudent = createRoute({
 })
 
 app.openapi(importStudent, async (c) => {
-    const { file, timeout } = c.req.valid('form')
+    const { file, createCurriculumVersion, timeout } = c.req.valid('form')
 
     const buf = await file.arrayBuffer()
     const data = parseSheetStudent(buf)
@@ -348,9 +349,7 @@ app.openapi(importStudent, async (c) => {
 
     if (!trainingObjectType) {
         return c.json(
-            {
-                message: `Đối tượng đào tạo không tồn tại: ${data.trainingObjectType}`,
-            },
+            { message: `Đối tượng đào tạo không tồn tại: ${data.trainingObjectType}` },
             400
         )
     }
@@ -406,7 +405,127 @@ app.openapi(importStudent, async (c) => {
         data.students.map((student) => student.position)
     )
 
-    const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
+    const classConsistencyMap = new Map<string, { className: string; curriculum: string }>()
+    const inconsistentClassCodes = new Set<string>()
+
+    for (const student of data.students) {
+        if (!student.fixedClassCode) continue
+
+        const existing = classConsistencyMap.get(student.fixedClassCode)
+        if (existing) {
+            if (
+                existing.className !== student.fixedClass ||
+                existing.curriculum !== student.curriculum
+            ) {
+                inconsistentClassCodes.add(student.fixedClassCode)
+            }
+        } else {
+            classConsistencyMap.set(student.fixedClassCode, {
+                className: student.fixedClass,
+                curriculum: student.curriculum,
+            })
+        }
+    }
+
+    if (inconsistentClassCodes.size > 0) {
+        return c.json(
+            {
+                message: `Thông tin lớp không nhất quán (Tên lớp hoặc CTĐT khác nhau cho cùng mã lớp): ${Array.from(
+                    inconsistentClassCodes
+                ).join(', ')}`,
+            },
+            400
+        )
+    }
+
+    const curriculumClassMap = new Map<string, Set<string>>()
+    for (const student of data.students) {
+        if (!curriculumClassMap.has(student.curriculum)) {
+            curriculumClassMap.set(student.curriculum, new Set())
+        }
+        curriculumClassMap.get(student.curriculum)?.add(student.fixedClass)
+    }
+
+    const invalidCurriculums: string[] = []
+    for (const [curriculum, classes] of curriculumClassMap) {
+        if (classes.size > 1) {
+            invalidCurriculums.push(`${curriculum} (Các lớp ${Array.from(classes).join(', ')})`)
+        }
+    }
+
+    if (invalidCurriculums.length > 0) {
+        return c.json(
+            {
+                message: `Một phiên bản chương trình đào tạo không thể thuộc nhiều lớp: ${invalidCurriculums.join('; ')}`,
+            },
+            400
+        )
+    }
+
+    const conflicts = await prisma.fixedClass.findMany({
+        where: {
+            OR: data.students.map((s) => ({
+                curriculumVersion: {
+                    name: s.curriculum,
+                    trainingObjectTypeId: trainingObjectType.id,
+                    curriculum: {
+                        trainingMajor: {
+                            name: s.trainingMajor,
+                        },
+                    },
+                },
+            })),
+        },
+        select: {
+            id: true,
+            code: true,
+            name: true,
+            trainingCourseId: true,
+            curriculumVersion: {
+                select: {
+                    name: true,
+                    curriculum: { select: { trainingMajor: { select: { name: true } } } },
+                },
+            },
+        },
+    })
+
+    const dbConflictErrors: string[] = []
+    for (const conflict of conflicts) {
+        const conflictCurriculumName = conflict.curriculumVersion?.name
+        const conflictMajorName = conflict.curriculumVersion?.curriculum?.trainingMajor?.name
+
+        const matchingInput = data.students.find(
+            (s) =>
+                s.curriculum === conflictCurriculumName &&
+                (!s.trainingMajor || s.trainingMajor === conflictMajorName)
+        )
+
+        if (matchingInput) {
+            const isSameClass =
+                (matchingInput.fixedClassCode && conflict.code
+                    ? matchingInput.fixedClassCode === conflict.code
+                    : matchingInput.fixedClass === conflict.name) &&
+                conflict.trainingCourseId === trainingCourse.id
+
+            if (!isSameClass) {
+                dbConflictErrors.push(
+                    `CTĐT ${matchingInput.curriculum} đã được sử dụng cho lớp ${conflict.name} (Khoá ${conflict.trainingCourseId === trainingCourse.id ? 'hiện tại' : 'khác'})`
+                )
+            }
+        }
+    }
+
+    if (dbConflictErrors.length > 0) {
+        return c.json({ message: `Xung đột dữ liệu: ${dbConflictErrors.join('; ')}` }, 400)
+    }
+
+    const curriculumVersionMap = await buildCurriculumMapOrThrow(
+        prisma,
+        data.students,
+        trainingObjectType.id,
+        createCurriculumVersion
+    )
 
     const dmTruong = await buildDMTruongMap(
         prisma,
@@ -446,8 +565,9 @@ app.openapi(importStudent, async (c) => {
     //     async (tx) => {
     await prisma.fixedClass.createMany({
         skipDuplicates: true,
-        data: data.students.map(({ fixedClass, curriculum }) => ({
+        data: data.students.map(({ fixedClass, fixedClassCode, curriculum }) => ({
             name: fixedClass,
+            code: fixedClassCode,
             trainingCourseId: trainingCourse.id,
             curriculumVersionId: curriculumVersionMap.get(curriculum),
             startYear: new Date().getFullYear(),
@@ -456,22 +576,22 @@ app.openapi(importStudent, async (c) => {
 
     const fixedClass = await prisma.fixedClass.findMany({
         where: {
-            OR: data.students.map(({ fixedClass, curriculum }) => ({
-                name: fixedClass,
+            OR: data.students.map(({ fixedClassCode, curriculum }) => ({
+                code: fixedClassCode,
                 trainingCourseId: trainingCourse.id,
                 curriculumVersionId: curriculumVersionMap.get(curriculum),
             })),
         },
-        select: { id: true, name: true },
+        select: { id: true, code: true },
     })
 
-    const fixedClassMap = new Map(fixedClass.map(({ name, id }) => [name, id]))
+    const fixedClassMap = new Map(fixedClass.map(({ code, id }) => [code, id]))
 
     for (const student of data.students) {
         const studentData: Prisma.StudentCreateInput = {
             code: student.code,
             entryScore: Number.parseFloat(student.entryScore ?? '') || null,
-            fixedClass: { connect: { id: fixedClassMap.get(student.fixedClass) } },
+            fixedClass: { connect: { id: fixedClassMap.get(student.fixedClassCode) } },
             curriculumVersion: { connect: { id: curriculumVersionMap.get(student.curriculum) } },
             userProfile: {},
             department: student.department,
@@ -734,7 +854,11 @@ app.openapi(importHeQuanSu, async (c) => {
         data.students.map((student) => student.provinceHometown)
     )
 
-    const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
+    const curriculumVersionMap = await buildCurriculumMapOrThrow(
+        prisma,
+        data.students,
+        trainingObjectType.id
+    )
 
     const existingStudent = await prisma.student.findMany({
         where: { code: { in: data.students.map((student) => student.code) } },

@@ -170,7 +170,9 @@ type CurriculumData = {
 
 export const buildCurriculumMapOrThrow = async (
     prisma: PrismaClient,
-    students: CurriculumData[]
+    students: CurriculumData[],
+    trainingObjectTypeId: string,
+    createMissing = false
 ) => {
     const categorySet = new Set<string>(
         students.map((s) =>
@@ -184,22 +186,20 @@ export const buildCurriculumMapOrThrow = async (
 
     const uniqueTuples = Array.from(categorySet).map((s) => JSON.parse(s) as CurriculumData)
 
-    console.log(uniqueTuples)
-
     const existing = await prisma.curriculumVersion.findMany({
         where: {
             OR: uniqueTuples.map(({ curriculum, trainingMajor, trainingField }) => ({
                 name: curriculum,
-                ...(trainingMajor && trainingField
-                    ? {
-                          curriculum: {
-                              trainingMajor: {
-                                  name: trainingMajor,
-                                  trainingField: { name: trainingField },
-                              },
-                          },
-                      }
-                    : {}),
+                curriculum: {
+                    trainingMajor: {
+                        name: trainingMajor,
+                        trainingObjectTypes: { some: { trainingObjectTypeId } },
+                        trainingField: {
+                            name: trainingField,
+                            trainingObjectTypes: { some: { trainingObjectTypeId } },
+                        },
+                    },
+                },
             })),
         },
         select: {
@@ -218,6 +218,8 @@ export const buildCurriculumMapOrThrow = async (
         },
     })
 
+    const createdItems: { id: string; name: string }[] = []
+
     const missing = uniqueTuples.filter(
         ({ curriculum, trainingMajor, trainingField }) =>
             !existing.some(
@@ -229,22 +231,75 @@ export const buildCurriculumMapOrThrow = async (
             )
     )
 
-    if (missing.length) {
+    if (missing.length && !createMissing) {
         throw new HTTPException(400, {
-            message: `Chương trình đào tạo không tồn tại: ${missing
-                .map(
-                    ({ curriculum, trainingMajor, trainingField }) =>
-                        `${curriculum}${
-                            trainingMajor && trainingField
-                                ? ` - ${trainingMajor} - ${trainingField}`
-                                : ''
-                        }`
-                )
-                .join('; ')}`,
+            message: `Chương trình đào tạo không tồn tại:
+${missing
+    .map(
+        ({ curriculum, trainingMajor, trainingField }) =>
+            `${curriculum}${
+                trainingMajor && trainingField ? ` - ${trainingMajor} - ${trainingField}` : ''
+            }`
+    )
+    .join('; \n')}`,
         })
     }
 
-    return new Map(existing.map(({ name, id }) => [name, id]))
+    if (missing.length && createMissing) {
+        await prisma.$transaction(async (tx) => {
+            for (const item of missing) {
+                let curriculum = await tx.curriculum.findFirst({
+                    where: {
+                        name: item.curriculum,
+                        trainingObjectTypeId,
+                        ...(item.trainingMajor
+                            ? { trainingMajor: { name: item.trainingMajor } }
+                            : {}),
+                    },
+                })
+
+                if (!curriculum) {
+                    if (!item.trainingMajor) {
+                        throw new HTTPException(400, {
+                            message: `Không thể tạo CTĐT ${item.curriculum} vì thiếu thông tin Chuyên ngành`,
+                        })
+                    }
+
+                    const major = await tx.trainingMajor.findFirst({
+                        where: { name: item.trainingMajor },
+                    })
+
+                    if (!major) {
+                        throw new HTTPException(400, {
+                            message: `Chuyên ngành không tồn tại: ${item.trainingMajor}`,
+                        })
+                    }
+
+                    curriculum = await tx.curriculum.create({
+                        data: {
+                            name: item.curriculum,
+                            trainingMajorId: major.id,
+                            trainingObjectTypeId,
+                            managementOrganizationId: major.organizationId,
+                        },
+                    })
+                }
+
+                const created = await tx.curriculumVersion.create({
+                    data: {
+                        name: item.curriculum,
+                        curriculumId: curriculum.id,
+                        trainingObjectTypeId,
+                    },
+                    select: { id: true, name: true }, // Select minimal fields
+                })
+
+                createdItems.push(created)
+            }
+        })
+    }
+
+    return new Map([...existing, ...createdItems].map(({ name, id }) => [name, id]))
 }
 
 export const buildTrainingBlockMapOrThrow = async (

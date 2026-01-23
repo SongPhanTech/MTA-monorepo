@@ -9190,6 +9190,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'schoolYear',
+                }, evaluationPeriod: {
+                    name: "evaluationPeriod",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'schoolYear',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -9334,12 +9340,6 @@ const metadata = {
                 }, survey: {
                     name: "survey",
                     type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'semester',
-                }, evaluationPeriod: {
-                    name: "evaluationPeriod",
-                    type: "EvaluationPeriod",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
@@ -18638,21 +18638,21 @@ const metadata = {
                     name: "status",
                     type: "EvaluationPeriodStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
+                }, schoolYear: {
+                    name: "schoolYear",
+                    type: "SchoolYear",
                     isDataModel: true,
                     isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evaluationPeriod',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
+                    foreignKeyMapping: { "id": "schoolYearId" },
+                }, schoolYearId: {
+                    name: "schoolYearId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
-                    relationField: 'semester',
+                    relationField: 'schoolYear',
                 }, standards: {
                     name: "standards",
                     type: "StandardPeriod",
