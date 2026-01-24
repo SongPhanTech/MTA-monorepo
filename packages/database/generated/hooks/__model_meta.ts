@@ -17694,6 +17694,22 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'evaluationPeriod',
+                }, overviewProblem: {
+                    name: "overviewProblem",
+                    type: "String",
+                    isOptional: true,
+                }, overviewGeneral: {
+                    name: "overviewGeneral",
+                    type: "String",
+                    isOptional: true,
+                }, overviewResults: {
+                    name: "overviewResults",
+                    type: "String",
+                    isOptional: true,
+                }, conclude: {
+                    name: "conclude",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {

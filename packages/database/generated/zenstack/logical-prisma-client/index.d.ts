@@ -8990,7 +8990,11 @@ export namespace Prisma {
         startDate: 'startDate',
         endDate: 'endDate',
         status: 'status',
-        schoolYearId: 'schoolYearId'
+        schoolYearId: 'schoolYearId',
+        overviewProblem: 'overviewProblem',
+        overviewGeneral: 'overviewGeneral',
+        overviewResults: 'overviewResults',
+        conclude: 'conclude'
     };
     export const StandardCatalogScalarFieldEnum: {
         id: 'id',
@@ -12089,7 +12093,11 @@ export namespace Prisma {
         description: 'description',
         createdBy: 'createdBy',
         name: 'name',
-        schoolYearId: 'schoolYearId'
+        schoolYearId: 'schoolYearId',
+        overviewProblem: 'overviewProblem',
+        overviewGeneral: 'overviewGeneral',
+        overviewResults: 'overviewResults',
+        conclude: 'conclude'
     };
     export const StandardCatalogOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -76268,6 +76276,10 @@ export namespace Prisma {
         readonly endDate: FieldRef<"EvaluationPeriod", 'DateTime'>;
         readonly status: FieldRef<"EvaluationPeriod", 'EvaluationPeriodStatus'>;
         readonly schoolYearId: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly overviewProblem: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly overviewGeneral: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly overviewResults: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly conclude: FieldRef<"EvaluationPeriod", 'String'>;
     }
 
     export interface StandardCatalogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -270273,6 +270285,10 @@ export namespace Prisma {
         endDate: Date | null
         status: $Enums.EvaluationPeriodStatus | null
         schoolYearId: string | null
+        overviewProblem: string | null
+        overviewGeneral: string | null
+        overviewResults: string | null
+        conclude: string | null
     };
     export type EvaluationPeriodMaxAggregateOutputType = {
         id: string | null
@@ -270288,6 +270304,10 @@ export namespace Prisma {
         endDate: Date | null
         status: $Enums.EvaluationPeriodStatus | null
         schoolYearId: string | null
+        overviewProblem: string | null
+        overviewGeneral: string | null
+        overviewResults: string | null
+        conclude: string | null
     };
     export type EvaluationPeriodCountAggregateOutputType = {
         id: number
@@ -270303,6 +270323,10 @@ export namespace Prisma {
         endDate: number
         status: number
         schoolYearId: number
+        overviewProblem: number
+        overviewGeneral: number
+        overviewResults: number
+        conclude: number
         _all: number
     };
     export type EvaluationPeriodMinAggregateInputType = {
@@ -270319,6 +270343,10 @@ export namespace Prisma {
         endDate?: true
         status?: true
         schoolYearId?: true
+        overviewProblem?: true
+        overviewGeneral?: true
+        overviewResults?: true
+        conclude?: true
     };
     export type EvaluationPeriodMaxAggregateInputType = {
         id?: true
@@ -270334,6 +270362,10 @@ export namespace Prisma {
         endDate?: true
         status?: true
         schoolYearId?: true
+        overviewProblem?: true
+        overviewGeneral?: true
+        overviewResults?: true
+        conclude?: true
     };
     export type EvaluationPeriodCountAggregateInputType = {
         id?: true
@@ -270349,6 +270381,10 @@ export namespace Prisma {
         endDate?: true
         status?: true
         schoolYearId?: true
+        overviewProblem?: true
+        overviewGeneral?: true
+        overviewResults?: true
+        conclude?: true
         _all?: true
     };
     export type EvaluationPeriodAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -270431,6 +270467,10 @@ export namespace Prisma {
         endDate: Date | null
         status: $Enums.EvaluationPeriodStatus
         schoolYearId: string | null
+        overviewProblem: string | null
+        overviewGeneral: string | null
+        overviewResults: string | null
+        conclude: string | null
         _count: EvaluationPeriodCountAggregateOutputType | null
         _min: EvaluationPeriodMinAggregateOutputType | null
         _max: EvaluationPeriodMaxAggregateOutputType | null
@@ -270461,6 +270501,10 @@ export namespace Prisma {
         endDate?: boolean
         status?: boolean
         schoolYearId?: boolean
+        overviewProblem?: boolean
+        overviewGeneral?: boolean
+        overviewResults?: boolean
+        conclude?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
         standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
         council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
@@ -270481,6 +270525,10 @@ export namespace Prisma {
         endDate?: boolean
         status?: boolean
         schoolYearId?: boolean
+        overviewProblem?: boolean
+        overviewGeneral?: boolean
+        overviewResults?: boolean
+        conclude?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
     }, ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -270497,6 +270545,10 @@ export namespace Prisma {
         endDate?: boolean
         status?: boolean
         schoolYearId?: boolean
+        overviewProblem?: boolean
+        overviewGeneral?: boolean
+        overviewResults?: boolean
+        conclude?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
     }, ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodSelectScalar = {
@@ -270513,8 +270565,12 @@ export namespace Prisma {
         endDate?: boolean
         status?: boolean
         schoolYearId?: boolean
+        overviewProblem?: boolean
+        overviewGeneral?: boolean
+        overviewResults?: boolean
+        conclude?: boolean
     };
-    export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status" | "schoolYearId", ExtArgs["result"]["evaluationPeriod"]>;
+    export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status" | "schoolYearId" | "overviewProblem" | "overviewGeneral" | "overviewResults" | "conclude", ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
         standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
@@ -270550,6 +270606,10 @@ export namespace Prisma {
             endDate: Date | null
             status: $Enums.EvaluationPeriodStatus
             schoolYearId: string | null
+            overviewProblem: string | null
+            overviewGeneral: string | null
+            overviewResults: string | null
+            conclude: string | null
         }, ExtArgs["result"]["evaluationPeriod"]>
         composites: {}
     };
@@ -360029,6 +360089,10 @@ export namespace Prisma {
         endDate?: DateTimeNullableFilter<"EvaluationPeriod"> | Date | string | null
         status?: EnumEvaluationPeriodStatusFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
         schoolYearId?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewProblem?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
         schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
         standards?: StandardPeriodListRelationFilter
         council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
@@ -360048,6 +360112,10 @@ export namespace Prisma {
         endDate?: SortOrderInput | SortOrder
         status?: SortOrder
         schoolYearId?: SortOrderInput | SortOrder
+        overviewProblem?: SortOrderInput | SortOrder
+        overviewGeneral?: SortOrderInput | SortOrder
+        overviewResults?: SortOrderInput | SortOrder
+        conclude?: SortOrderInput | SortOrder
         schoolYear?: SchoolYearOrderByWithRelationInput
         standards?: StandardPeriodOrderByRelationAggregateInput
         council?: EvaluationCouncilOrderByWithRelationInput
@@ -360071,6 +360139,10 @@ export namespace Prisma {
         endDate?: DateTimeNullableFilter<"EvaluationPeriod"> | Date | string | null
         status?: EnumEvaluationPeriodStatusFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
         schoolYearId?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewProblem?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
         schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
         standards?: StandardPeriodListRelationFilter
         council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
@@ -360090,6 +360162,10 @@ export namespace Prisma {
         endDate?: SortOrderInput | SortOrder
         status?: SortOrder
         schoolYearId?: SortOrderInput | SortOrder
+        overviewProblem?: SortOrderInput | SortOrder
+        overviewGeneral?: SortOrderInput | SortOrder
+        overviewResults?: SortOrderInput | SortOrder
+        conclude?: SortOrderInput | SortOrder
         _count?: EvaluationPeriodCountOrderByAggregateInput
         _max?: EvaluationPeriodMaxOrderByAggregateInput
         _min?: EvaluationPeriodMinOrderByAggregateInput
@@ -360111,6 +360187,10 @@ export namespace Prisma {
         endDate?: DateTimeNullableWithAggregatesFilter<"EvaluationPeriod"> | Date | string | null
         status?: EnumEvaluationPeriodStatusWithAggregatesFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
         schoolYearId?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        overviewProblem?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        overviewGeneral?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        overviewResults?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        conclude?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
     };
     export type StandardCatalogWhereInput = {
         AND?: StandardCatalogWhereInput | StandardCatalogWhereInput[]
@@ -390007,6 +390087,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
@@ -390026,6 +390110,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
@@ -390043,6 +390131,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
@@ -390062,6 +390154,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
@@ -390080,6 +390176,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
     };
     export type EvaluationPeriodUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390094,6 +390194,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type EvaluationPeriodUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390109,6 +390213,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StandardCatalogCreateInput = {
         id?: string
@@ -412879,6 +412987,10 @@ export namespace Prisma {
         endDate?: SortOrder
         status?: SortOrder
         schoolYearId?: SortOrder
+        overviewProblem?: SortOrder
+        overviewGeneral?: SortOrder
+        overviewResults?: SortOrder
+        conclude?: SortOrder
     };
     export type EvaluationPeriodMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -412894,6 +413006,10 @@ export namespace Prisma {
         endDate?: SortOrder
         status?: SortOrder
         schoolYearId?: SortOrder
+        overviewProblem?: SortOrder
+        overviewGeneral?: SortOrder
+        overviewResults?: SortOrder
+        conclude?: SortOrder
     };
     export type EvaluationPeriodMinOrderByAggregateInput = {
         id?: SortOrder
@@ -412909,6 +413025,10 @@ export namespace Prisma {
         endDate?: SortOrder
         status?: SortOrder
         schoolYearId?: SortOrder
+        overviewProblem?: SortOrder
+        overviewGeneral?: SortOrder
+        overviewResults?: SortOrder
+        conclude?: SortOrder
     };
     export type EnumEvaluationPeriodStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.EvaluationPeriodStatus | EnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
@@ -496188,6 +496308,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -496205,6 +496329,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
@@ -496393,6 +496521,10 @@ export namespace Prisma {
         endDate?: DateTimeNullableFilter<"EvaluationPeriod"> | Date | string | null
         status?: EnumEvaluationPeriodStatusFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
         schoolYearId?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewProblem?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
     };
     export type SchoolYearCreateWithoutSemestersInput = {
         id?: string
@@ -525463,6 +525595,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
@@ -525481,6 +525617,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
     };
@@ -526647,6 +526787,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
@@ -526665,6 +526809,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
     };
@@ -540141,6 +540289,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -540159,6 +540311,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
@@ -540224,6 +540380,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -540242,6 +540402,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
@@ -541524,6 +541688,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -541542,6 +541710,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
@@ -541605,6 +541777,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -541623,6 +541799,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
@@ -593643,6 +593823,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
     };
     export type SemesterUpdateWithoutSchoolYearInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -593917,6 +594101,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -593934,6 +594122,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
@@ -593951,6 +594143,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassCreateManySemesterInput = {
         id?: string
