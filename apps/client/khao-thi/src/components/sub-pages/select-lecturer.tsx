@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useExamTypeOptions } from '@hooks/examType'
 import { FilterProps } from '@components/commons/typeFilter'
+import { SubjectClass } from '@workspace/db';
 
 // interface MyTreeNode {
 //     title: string
@@ -56,6 +57,7 @@ function SelectLecturer({
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         code: '',
+        organizationName: '',
         subjectClassName: undefined,
         examType: undefined,
     })
@@ -66,7 +68,7 @@ function SelectLecturer({
     const [initValue, setInitValue] = useState<string[]>([])
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-
+    const [filteredData, setFilteredData] = useState<any>([])
     // const { data: lecturerData = [] } = useFindManyLecturer(
     //     {
     //         where: {
@@ -185,6 +187,18 @@ function SelectLecturer({
                                   },
                               }
                             : {}),
+                        ...(filters.organizationName && filters.organizationName !== ''
+                            ? {
+                                  mainLecturer: {
+                                      organization: {
+                                          sMa: {
+                                              contains: filters.organizationName,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  },
+                              }
+                            : {}),
                     },
                 },
             },
@@ -266,6 +280,18 @@ function SelectLecturer({
                                   },
                               }
                             : {}),
+                        ...(filters.organizationName && filters.organizationName !== ''
+                            ? {
+                                  mainLecturer: {
+                                      organization: {
+                                          sMa: {
+                                              contains: filters.organizationName,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  },
+                              }
+                            : {}),
                     },
                     include: {
                         mainLecturer: {
@@ -321,15 +347,52 @@ function SelectLecturer({
     const rowSelection = {
         selectedRowKeys,
         checkStrictly: false,
+        onSelect: (record: any, selected: boolean) => {
+            console.log(123123)
+            if (selected) {
+                let arr:any = []
+                if (record?.subjectClass?.length > 0) {
+                    const list= record?.subjectClass.map((i: SubjectClass) => i.id)
+                    arr = [...selectedRowKeys, ...list]
+                } else {
+                    arr = arr.push(record?.id)
+                }
+                
 
-        onChange: (newSelectedRowKeys: React.Key[]) => {
-            console.log(newSelectedRowKeys)
-
-            setSelectedRowKeys(newSelectedRowKeys)
-            form.setFieldsValue({
-                subjectClassIds: newSelectedRowKeys as string[],
-            })
+                setSelectedRowKeys(arr)
+                form.setFieldsValue({
+                    subjectClassIds: arr as string[],
+                })
+            } else {
+                let arr: React.Key[] = []
+                if (record?.subjectClass?.length > 0) {
+                    const list= record?.subjectClass.map((i: SubjectClass) => i.id)
+                    arr = selectedRowKeys.filter(
+                        (i: React.Key) => !list.includes(i)
+                    )
+                } else {
+                    arr = selectedRowKeys.filter((i: React.Key) => i !== record?.id)
+                }
+                setSelectedRowKeys(arr)
+                form.setFieldsValue({
+                    subjectClassIds: arr as string[],
+                })
+            }
         },
+        preserveSelectedRowKeys: true,
+        onChange: (selectedRowKeys:any, selectedRows:any, info:any) => {
+            if(info.type==='all'){
+                console.log('all');
+            }
+        }
+        // onChange: (newSelectedRowKeys: React.Key[]) => {
+        //     console.log(newSelectedRowKeys)
+
+        //     setSelectedRowKeys(newSelectedRowKeys)
+        //     form.setFieldsValue({
+        //         subjectClassIds: newSelectedRowKeys as string[],
+        //     })
+        // },
         // getCheckboxProps: (record: any) => ({
         //     disabled: !record.mainLecturer,
         // }),
@@ -345,6 +408,7 @@ function SelectLecturer({
                 })
             })
             setSelectedRowKeys(list)
+            setFilteredData(list)
             form.setFieldsValue({
                 subjectClassIds: list,
             })
@@ -393,6 +457,15 @@ function SelectLecturer({
                                 ),
                             },
                             {
+                                title: 'ĐVQL',
+                                dataIndex: 'organizationName',
+                                width: 80,
+                                type: 'input',
+                                render: (__, record: any) => (
+                                    <>{record?.mainLecturer?.organization?.sMa || ''}</>
+                                ),
+                            },
+                            {
                                 title: 'Lớp môn học',
                                 dataIndex: 'subjectClassName',
                                 width: 200,
@@ -406,7 +479,7 @@ function SelectLecturer({
                             {
                                 title: 'Hình thức thi',
                                 dataIndex: 'examType',
-                                width: 150,
+                                width: 120,
                                 type: 'select',
                                 options: options,
                                 render: (__, record: any) => (
