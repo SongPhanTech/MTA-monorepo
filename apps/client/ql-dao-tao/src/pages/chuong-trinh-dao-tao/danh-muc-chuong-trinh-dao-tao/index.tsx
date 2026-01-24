@@ -10,7 +10,7 @@ import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { CurriculumVersion, Prisma, TrainingMajor, TrainingTime } from '@workspace/db/client'
+import type { Prisma, TrainingMajor, TrainingTime } from '@workspace/db/client'
 import {
     useCountCurriculum,
     useFindManyCurriculum,
@@ -25,7 +25,6 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Select, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
-import dayjs from 'dayjs'
 import { BookPlus, Download, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -162,7 +161,12 @@ export default function TrainingProgramCatalog() {
 
     const { data = [] } = useFindManyCurriculum({
         where,
-        include: {
+        select: {
+            id: true,
+            code: true,
+            name: true,
+            managementOrganization: { select: { sTen: true } },
+            trainingMajor: { select: { name: true } },
             curriculumVersion: {
                 where: {
                     ...(filters.name
@@ -199,13 +203,24 @@ export default function TrainingProgramCatalog() {
                           }
                         : {}),
                 },
-                include: {
+                select: {
+                    id: true,
+                    curriculumId: true,
+                    code: true,
+                    name: true,
+                    isLock: true,
+                    requiredCredits: true,
+                    electiveCredits: true,
                     trainingTime: true,
+                    numberOfSemesters: true,
+                    yearCreation: true,
+                    yearApplication: true,
+                    description: true,
                     trainingBlocks: {
-                        include: {
+                        select: {
                             subjects: {
-                                include: {
-                                    subject: true,
+                                select: {
+                                    subject: { select: { credit: true } },
                                 },
                             },
                         },
@@ -218,18 +233,10 @@ export default function TrainingProgramCatalog() {
                         },
                     },
                 },
-                orderBy: [
-                    {
-                        name: 'asc',
-                    },
-                ],
+                orderBy: { name: 'asc' },
             },
-            managementOrganization: true,
-            trainingMajor: true,
         },
-        orderBy: {
-            name: 'asc',
-        },
+        orderBy: { name: 'asc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -313,12 +320,8 @@ export default function TrainingProgramCatalog() {
         try {
             showSpinner()
             await updateCurriculumVersion({
-                where: {
-                    id,
-                },
-                data: {
-                    isLock: !isLocked,
-                },
+                where: { id },
+                data: { isLock: !isLocked },
             })
             message.success(isLocked ? 'Mở khoá thành công' : 'Khoá thành công')
         } catch (error) {
@@ -672,17 +675,15 @@ export default function TrainingProgramCatalog() {
                             },
                             {
                                 title: <Tooltip title="Năm khởi tạo">Năm KT</Tooltip>,
-                                dataIndex: 'createdAt',
+                                dataIndex: 'yearCreation',
                                 align: 'center',
                                 width: 90,
-                                render: (value) => (value ? dayjs(value).year() : ''),
                             },
                             {
                                 title: <Tooltip title="Năm áp dụng">Năm AD</Tooltip>,
-                                dataIndex: 'startDate',
+                                dataIndex: 'yearApplication',
                                 align: 'center',
                                 width: 90,
-                                render: (value) => (value ? dayjs(value).year() : ''),
                             },
                             {
                                 title: 'Mô tả',
@@ -718,7 +719,7 @@ export default function TrainingProgramCatalog() {
                                 // ),
                                 render: (_, record) => {
                                     if (record?.id) {
-                                        const isLocked = (record as CurriculumVersion)?.isLock
+                                        const isLocked = record?.isLock
 
                                         return (
                                             <Row className="justify-center gap-2">
@@ -746,7 +747,7 @@ export default function TrainingProgramCatalog() {
                                                             if (isLocked) {
                                                                 return
                                                             }
-                                                            handleCloneCurriculumVersion(record)
+                                                            handleCloneCurriculumVersion(record.id)
                                                         }}
                                                     />
                                                 )}
@@ -776,8 +777,7 @@ export default function TrainingProgramCatalog() {
                                                         onConfirm: (e) => {
                                                             handleToggleLock(
                                                                 record?.id,
-                                                                (record as CurriculumVersion)
-                                                                    ?.isLock || false
+                                                                record?.isLock || false
                                                             )
                                                             e?.stopPropagation()
                                                         },

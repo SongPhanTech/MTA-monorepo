@@ -12,5 +12,7 @@ export interface ImportPhienBanCTDTSubject {
     /** @nullable */
     createNewSubjects?: boolean | null
     /** @nullable */
+    deleteOldData?: boolean | null
+    /** @nullable */
     timeout?: number | null
 }

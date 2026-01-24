@@ -187,6 +187,7 @@ export * from './SurveyQuestionGroup.schema';
 export * from './ClusterSurvey.schema';
 export * from './Survey.schema';
 export * from './SurveyQuestion.schema';
+export * from './SpecificChoice.schema';
 export * from './SurveyChoice.schema';
 export * from './SurveySession.schema';
 export * from './SurveyResponse.schema';

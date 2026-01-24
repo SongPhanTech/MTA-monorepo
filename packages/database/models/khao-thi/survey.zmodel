@@ -25,20 +25,20 @@ enum SurveyObject {
 
 // đối tượng khảo sát (Sinh viên, giảng viên, cán bộ quản lý,...)
 model SurveyObjectType extends Base {
-  name            String
-  survey          Survey[]
-  type            SurveyObject[]
-  organizations   DM_DonVi[]
-  trainingFields  TrainingField[]
-  trainingMajors  TrainingMajor[]
-  trainingCourses TrainingCourse[]
-  fixedClasses    FixedClass[]
-  subjectClasses  SubjectClass[]
+  name                 String
+  survey               Survey[]
+  type                 SurveyObject[]
+  organizations        DM_DonVi[]
+  trainingFields       TrainingField[]
+  trainingMajors       TrainingMajor[]
+  trainingCourses      TrainingCourse[]
+  fixedClasses         FixedClass[]
+  subjectClasses       SubjectClass[]
 
-  surveySessions  SurveySession[]
-  clusterSurvey   ClusterSurvey[]
-  trainingObjectType TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
-	trainingObjectTypeId String?
+  surveySessions       SurveySession[]
+  clusterSurvey        ClusterSurvey[]
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
 
   @@schema("khao-thi")
 }
@@ -146,6 +146,18 @@ model SurveyQuestion extends Base {
   survey                Survey[]
   clusterSurvey         ClusterSurvey[]
   surveyResponses       SurveyResponse[]  // Thêm relation mới
+  specificChoice        SpecificChoice[]
+
+  @@schema("khao-thi")
+}
+
+model SpecificChoice {
+  id               String         @id @default(cuid())
+  answer           String
+  description      String?        @db.Text
+
+  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
+  surveyQuestionId String
 
   @@schema("khao-thi")
 }

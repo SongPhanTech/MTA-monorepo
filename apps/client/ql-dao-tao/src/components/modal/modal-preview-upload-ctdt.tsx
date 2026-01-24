@@ -366,6 +366,7 @@ const ModalPreviewUpload = () => {
                     ]}
                     data={filteredData}
                     pagination={{
+                        hideOnSinglePage: true,
                         current: currentPage,
                         pageSize: numberOfPages,
                         total: filteredData.length,

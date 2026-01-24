@@ -1,9 +1,8 @@
-import { UploadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import ExportTemplateStudent from '@components/modal/export-template-student'
 import ImportStudentModal from '@components/modal/import-excel-student'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -27,6 +26,7 @@ import {
     useFindManyTrainingMajor,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
@@ -413,7 +413,14 @@ export default function UserProfilePageDs() {
                                                 refetchCount()
                                             }}
                                         />
-                                        <ExportTemplateStudent />
+                                        <Button
+                                            className="px-4 py-1"
+                                            href={getMinioUrl('mta/template/MauImportDSHV.xlsx')}
+                                            type="primary"
+                                        >
+                                            <DownloadOutlined />
+                                            Xuất file mẫu excel
+                                        </Button>
                                     </>
                                 )}
                                 {can(

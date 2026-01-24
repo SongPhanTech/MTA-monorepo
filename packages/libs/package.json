@@ -30,6 +30,7 @@
   "dependencies": {
     "@tanstack/react-query": "catalog:",
     "@workspace/db": "workspace:*",
+    "core-js": "catalog:",
     "dayjs": "catalog:",
     "decimal.js": "catalog:",
     "docxtemplater": "catalog:",

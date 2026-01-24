@@ -1478,9 +1478,6 @@ importers:
       clsx:
         specifier: 'catalog:'
         version: 2.1.1
-      core-js:
-        specifier: 'catalog:'
-        version: 3.48.0
       dayjs:
         specifier: 'catalog:'
         version: 1.11.19
@@ -2150,6 +2147,9 @@ importers:
       '@workspace/db':
         specifier: workspace:*
         version: link:../database
+      core-js:
+        specifier: 'catalog:'
+        version: 3.48.0
       dayjs:
         specifier: 'catalog:'
         version: 1.11.19

@@ -7,6 +7,7 @@
 
 export interface ImportStudentRequest {
     file: Blob
+    createCurriculumVersion?: boolean
     /** @nullable */
     timeout?: number | null
 }

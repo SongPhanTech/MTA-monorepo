@@ -4394,6 +4394,12 @@ export const importPhienBanCTDTSubject = async (
         formData.append(`createNewSubjects`, importPhienBanCTDTSubject.createNewSubjects.toString())
     }
     if (
+        importPhienBanCTDTSubject.deleteOldData !== undefined &&
+        importPhienBanCTDTSubject.deleteOldData !== null
+    ) {
+        formData.append(`deleteOldData`, importPhienBanCTDTSubject.deleteOldData.toString())
+    }
+    if (
         importPhienBanCTDTSubject.timeout !== undefined &&
         importPhienBanCTDTSubject.timeout !== null
     ) {
@@ -10460,6 +10466,12 @@ export const importStudent = async (
 ): Promise<importStudentResponse> => {
     const formData = new FormData()
     formData.append(`file`, importStudentRequest.file)
+    if (importStudentRequest.createCurriculumVersion !== undefined) {
+        formData.append(
+            `createCurriculumVersion`,
+            importStudentRequest.createCurriculumVersion.toString()
+        )
+    }
     if (importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
         formData.append(`timeout`, importStudentRequest.timeout.toString())
     }

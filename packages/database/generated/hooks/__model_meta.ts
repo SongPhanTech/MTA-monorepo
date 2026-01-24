@@ -19601,6 +19601,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'surveyQuestion',
+                }, specificChoice: {
+                    name: "specificChoice",
+                    type: "SpecificChoice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19609,6 +19615,40 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        specificChoice: {
+            name: 'SpecificChoice', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, answer: {
+                    name: "answer",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    backLink: 'specificChoice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyQuestionId" },
+                }, surveyQuestionId: {
+                    name: "surveyQuestionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyQuestion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
                 },
             },
         },

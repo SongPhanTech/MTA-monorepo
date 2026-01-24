@@ -20677,6 +20677,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'surveyQuestion',
+                }, specificChoice: {
+                    name: "specificChoice",
+                    type: "SpecificChoice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20688,6 +20694,43 @@ const metadata = {
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        specificChoice: {
+            name: 'SpecificChoice', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, answer: {
+                    name: "answer",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'specificChoice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyQuestionId" },
+                }, surveyQuestionId: {
+                    name: "surveyQuestionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyQuestion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            },
+            attributes: [{ "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveyChoice: {
             name: 'SurveyChoice', fields: {

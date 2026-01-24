@@ -1,4 +1,4 @@
-import "core-js/proposals/array-grouping-v2"
+import 'core-js/proposals/array-grouping-v2'
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 import { SubjectClassType } from '@workspace/db'
 import dayjs from 'dayjs'

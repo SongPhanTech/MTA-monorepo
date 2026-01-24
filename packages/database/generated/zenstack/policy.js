@@ -2384,6 +2384,19 @@ const policy = {
                 update: {},
             },
         },
+        specificChoice: {
+            modelLevel: {
+                read: { guard: SpecificChoice_read, },
+                create: { guard: SpecificChoice_create, inputChecker: SpecificChoice_create_input, },
+                update: { guard: SpecificChoice_update, },
+                postUpdate: { guard: SpecificChoice_postUpdate, },
+                delete: { guard: SpecificChoice_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         surveyChoice: {
             modelLevel: {
                 read: { guard: SurveyChoice_read, },
@@ -3531,6 +3544,7 @@ const policy = {
         clusterSurvey: { hasValidation: false },
         survey: { hasValidation: false },
         surveyQuestion: { hasValidation: false },
+        specificChoice: { hasValidation: false },
         surveyChoice: { hasValidation: false },
         surveySession: { hasValidation: false },
         surveyResponse: { hasValidation: false },
@@ -17834,6 +17848,39 @@ function $check_SurveyQuestion_delete(input, context) {
     if ((user != null)) {
         return true;
     }
+    return false;
+}
+function SpecificChoice_read(context, db) {
+    return { OR: [] };
+}
+function $check_SpecificChoice_read(input, context) {
+    return false;
+}
+function SpecificChoice_create(context, db) {
+    return { OR: [] };
+}
+function $check_SpecificChoice_create(input, context) {
+    return false;
+}
+function SpecificChoice_create_input(input, context) {
+    return false;
+}
+function SpecificChoice_update(context, db) {
+    return { OR: [] };
+}
+function $check_SpecificChoice_update(input, context) {
+    return false;
+}
+function SpecificChoice_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SpecificChoice_postUpdate(input, context) {
+    return true;
+}
+function SpecificChoice_delete(context, db) {
+    return { OR: [] };
+}
+function $check_SpecificChoice_delete(input, context) {
     return false;
 }
 function SurveyChoice_read(context, db) {

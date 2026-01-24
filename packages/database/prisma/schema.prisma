@@ -5294,6 +5294,17 @@ model SurveyQuestion {
   survey                Survey[]
   clusterSurvey         ClusterSurvey[]
   surveyResponses       SurveyResponse[]
+  specificChoice        SpecificChoice[]
+
+  @@schema("khao-thi")
+}
+
+model SpecificChoice {
+  id               String         @id() @default(cuid())
+  answer           String
+  description      String?        @db.Text()
+  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
+  surveyQuestionId String
 
   @@schema("khao-thi")
 }

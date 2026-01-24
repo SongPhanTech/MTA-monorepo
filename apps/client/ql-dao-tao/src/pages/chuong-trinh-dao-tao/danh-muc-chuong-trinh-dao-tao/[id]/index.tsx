@@ -487,7 +487,7 @@ export default function TrainingProgramSubjects() {
                                         <Button
                                             onClick={() =>
                                                 initialValue &&
-                                                handleCloneCurriculumVersion(initialValue)
+                                                handleCloneCurriculumVersion(initialValue.id)
                                             }
                                             className="text-primary border-primary mr-2"
                                             disabled={!initialValue}

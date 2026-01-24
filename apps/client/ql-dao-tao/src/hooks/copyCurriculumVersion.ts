@@ -1,5 +1,6 @@
 import type { Prisma } from '@workspace/db/client'
 import { useCreateCurriculumVersion } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { ROUTER_PATH } from '@workspace/router'
 import { message } from 'antd'
 import { useRouter } from 'next/router'
@@ -10,21 +11,58 @@ export const useCloneCurriculumVersion = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
 
-    const handleCloneCurriculumVersion = async (
-        initialValue: Prisma.CurriculumVersionGetPayload<{
-            include: {
-                documentFiles: true
-                trainingBlocks: {
-                    include: {
-                        subjects: true
-                    }
-                }
-            }
-        }>
-    ) => {
+    const handleCloneCurriculumVersion = async (id: string) => {
         try {
             showSpinner()
-            const originalVersion = initialValue
+            const res = await sqlTransaction([
+                {
+                    model: 'CurriculumVersion',
+                    operation: 'findUnique',
+                    data: {
+                        where: { id },
+                        include: {
+                            trainingTime: { select: { id: true } },
+                            trainingBlocks: {
+                                omit: {
+                                    createdAt: true,
+                                    updatedAt: true,
+                                    deletedAt: true,
+                                },
+                                include: {
+                                    omit: {
+                                        createdAt: true,
+                                        updatedAt: true,
+                                        deletedAt: true,
+                                    },
+                                    subjects: {
+                                        include: {
+                                            omit: {
+                                                createdAt: true,
+                                                updatedAt: true,
+                                                deletedAt: true,
+                                            },
+                                            subject: true,
+                                        },
+                                    },
+                                },
+                            },
+                            trainingObjectType: true,
+                            documentFiles: true,
+                        },
+                    },
+                },
+            ])
+
+            const originalVersion = res.data[0] as Prisma.CurriculumVersionGetPayload<{
+                include: {
+                    documentFiles: true
+                    trainingBlocks: {
+                        include: {
+                            subjects: true
+                        }
+                    }
+                }
+            }>
 
             if (!originalVersion) {
                 throw new Error('Không tìm thấy phiên bản')
