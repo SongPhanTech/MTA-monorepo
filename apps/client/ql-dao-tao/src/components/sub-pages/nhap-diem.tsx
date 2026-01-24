@@ -701,6 +701,9 @@ export default function NhapDiem({
                         {enteredExamScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
                     </Tag>
                 )}
+                {!!dataDetailSubjectClass?.subject?.onePoint && (
+                    <Tag color={'green'}>Ba đầu điểm bằng nhau. Chỉ nhập điểm thi.</Tag>
+                )}
             </Col>
             <Col span={16} className="flex justify-end">
                 <Flex gap={4}>

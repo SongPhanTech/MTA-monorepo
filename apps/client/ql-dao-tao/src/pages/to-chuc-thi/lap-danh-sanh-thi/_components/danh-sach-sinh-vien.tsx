@@ -14,10 +14,6 @@ import { useEffect } from 'react'
 import { keHoachThiStore } from '..'
 import ExportExamList from './export-exam-list'
 
-interface Props {
-    subjectClassId: string | null
-}
-
 interface StudentSubjectScoreFormType {
     list: Record<
         string,
@@ -354,7 +350,15 @@ export default function DanhSachSinhVien() {
                         select: {
                             subjectClass: {
                                 select: {
-                                    subjectClassStudent: true,
+                                    subjectClassStudent: {
+                                        orderBy: {
+                                            student: {
+                                                userProfile: {
+                                                    firstName: 'asc',
+                                                },
+                                            },
+                                        },
+                                    },
                                     subject: {
                                         select: {
                                             onePoint: true,
