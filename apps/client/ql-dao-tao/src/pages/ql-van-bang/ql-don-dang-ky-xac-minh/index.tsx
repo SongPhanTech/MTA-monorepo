@@ -59,8 +59,8 @@ export default function QLDONDANGKY() {
         setIsExporting(true)
         try {
             const res = await exportDiplomaVerification({
-                startDate: payload.startDate.toISOString(),
-                endDate: payload.endDate.toISOString(),
+                startDate: payload.startDate.format('YYYY-MM-DD'),
+                endDate: payload.endDate.format('YYYY-MM-DD'),
             })
             if (res?.status === 200) {
                 saveAs(res.data, 'KET_QUA.xlsx')
