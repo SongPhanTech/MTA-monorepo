@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function CauHoiKhaoSat({ id,type }: { id: string,type:string }) {
+function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
     const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
@@ -88,7 +88,7 @@ function CauHoiKhaoSat({ id,type }: { id: string,type:string }) {
     const { onOpen: openSurveyQuestionModal } = useDisclosure<{
         id: string
         surveyQuestionGroupId?: string
-        type?:string
+        type?: string
     }>({
         tag: 'PutSurveyQuestionModal',
     })
@@ -102,7 +102,7 @@ function CauHoiKhaoSat({ id,type }: { id: string,type:string }) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        openSurveyQuestionModal({ id: '', surveyQuestionGroupId: id ,type})
+        openSurveyQuestionModal({ id: '', surveyQuestionGroupId: id, type })
     }
     const handleImport = () => {
         openImportQuestionModal({
@@ -202,7 +202,7 @@ function CauHoiKhaoSat({ id,type }: { id: string,type:string }) {
                                                 onClick={openSurveyQuestionModal.bind(null, {
                                                     id,
                                                     surveyQuestionGroupId,
-                                                    type
+                                                    type,
                                                 })}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />

@@ -312,7 +312,7 @@ const CriteriaAnalysisSubPage = ({
                                     <div className="flex-1">
                                         <div className="text-base flex items-start gap-2 mb-2">
                                             <span className="font-bold whitespace-nowrap">
-                                                Tiêu chí {item.order}:
+                                                Tiêu chí {idx}.{item.order}:
                                             </span>
                                             <span className="flex-1">{item?.name}</span>
                                         </div>
