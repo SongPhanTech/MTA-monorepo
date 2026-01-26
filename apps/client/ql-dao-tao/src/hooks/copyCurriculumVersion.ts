@@ -23,24 +23,9 @@ export const useCloneCurriculumVersion = () => {
                         include: {
                             trainingTime: { select: { id: true } },
                             trainingBlocks: {
-                                omit: {
-                                    createdAt: true,
-                                    updatedAt: true,
-                                    deletedAt: true,
-                                },
                                 include: {
-                                    omit: {
-                                        createdAt: true,
-                                        updatedAt: true,
-                                        deletedAt: true,
-                                    },
                                     subjects: {
                                         include: {
-                                            omit: {
-                                                createdAt: true,
-                                                updatedAt: true,
-                                                deletedAt: true,
-                                            },
                                             subject: true,
                                         },
                                     },

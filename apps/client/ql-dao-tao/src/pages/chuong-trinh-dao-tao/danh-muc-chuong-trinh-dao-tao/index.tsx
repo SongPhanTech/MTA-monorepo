@@ -206,6 +206,7 @@ export default function TrainingProgramCatalog() {
                 },
                 select: {
                     id: true,
+                    active: true,
                     curriculumId: true,
                     code: true,
                     name: true,

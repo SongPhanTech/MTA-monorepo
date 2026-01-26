@@ -437,6 +437,14 @@ async function main() {
                 extensions: 'xlsx',
                 numberField: 0,
             },
+            {
+                name: 'Danh sách sinh viên',
+                code: 'DANH_SACH_SV',
+                path: 'https://minio.swantech.vn/mta/template/DANH_SACH_SV.xlsx',
+                fileType: 'DOWNLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
         ],
     })
 

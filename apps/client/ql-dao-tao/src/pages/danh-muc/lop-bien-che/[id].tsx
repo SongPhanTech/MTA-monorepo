@@ -255,7 +255,6 @@ export default function StudentFixedClassPage() {
                           }
                         : {}),
                 },
-
                 ...(filters.code
                     ? {
                           code: {
@@ -285,28 +284,6 @@ export default function StudentFixedClassPage() {
                           },
                       }
                     : {}),
-                fixedClass: {
-                    curriculumVersion: {
-                        curriculum: {
-                            trainingMajor: {
-                                ...(filters.trainingMajors
-                                    ? {
-                                          id: {
-                                              in: filters.trainingMajors,
-                                          },
-                                      }
-                                    : {}),
-                                ...(filters.trainingField
-                                    ? {
-                                          trainingFieldId: {
-                                              in: filters.trainingField,
-                                          },
-                                      }
-                                    : {}),
-                            },
-                        },
-                    },
-                },
             },
             include: {
                 userProfile: {
@@ -354,7 +331,20 @@ export default function StudentFixedClassPage() {
                 },
                 curriculumVersion: {
                     include: {
-                        curriculum: true,
+                        curriculum: {
+                            select: {
+                                trainingMajor: {
+                                    select: {
+                                        name: true,
+                                        trainingField: {
+                                            select: {
+                                                name: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
                         trainingTime: true,
                         trainingLanguage: true,
                     },
