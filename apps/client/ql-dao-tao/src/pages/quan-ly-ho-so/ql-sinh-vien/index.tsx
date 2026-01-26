@@ -1,4 +1,4 @@
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, FileExcelOutlined, UploadOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -26,12 +26,14 @@ import {
     useFindManyTrainingMajor,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { useExportStudentProfiles } from '@workspace/libs/api/training'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { saveAs } from 'file-saver'
 import { BookCheckIcon, InfoIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -65,6 +67,31 @@ export default function UserProfilePageDs() {
 
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { mutateAsync: exportStudentProfiles } = useExportStudentProfiles()
+
+    const handleExportStudentProfiles = async () => {
+        if (!filters.trainingCourseId) {
+            message.error('Vui lòng chọn khoá học')
+            return
+        }
+        try {
+            showSpinner()
+            const res = await exportStudentProfiles({
+                data: { trainingCourseId: filters.trainingCourseId },
+            })
+
+            if (res.status === 200) {
+                saveAs(res.data, 'DANH_SACH_SV.xlsx')
+            } else {
+                message.error(res.data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     const where: Prisma.StudentWhereInput = useMemo(
         () => ({
@@ -399,6 +426,14 @@ export default function UserProfilePageDs() {
                                 ) && (
                                     <>
                                         <Button
+                                            className="px-4 py-1"
+                                            href={getMinioUrl('mta/template/MauImportDSHV.xlsx')}
+                                            type="primary"
+                                        >
+                                            <DownloadOutlined />
+                                            Xuất file mẫu excel
+                                        </Button>
+                                        <Button
                                             type="primary"
                                             onClick={() => setImportModalVisible(true)}
                                             icon={<UploadOutlined />}
@@ -413,13 +448,14 @@ export default function UserProfilePageDs() {
                                                 refetchCount()
                                             }}
                                         />
+
                                         <Button
                                             className="px-4 py-1"
-                                            href={getMinioUrl('mta/template/MauImportDSHV.xlsx')}
+                                            onClick={handleExportStudentProfiles}
                                             type="primary"
                                         >
-                                            <DownloadOutlined />
-                                            Xuất file mẫu excel
+                                            <FileExcelOutlined />
+                                            Xuất DS sinh viên
                                         </Button>
                                     </>
                                 )}

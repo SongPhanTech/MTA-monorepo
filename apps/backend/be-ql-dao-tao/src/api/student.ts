@@ -10,6 +10,7 @@ import {
     CourseStudentDecreaseAcademicWarningResult,
     CourseStudentScholarshipResult,
 } from '../dto/student-info.dto'
+import { exportStudentProfile } from '../services/student'
 import {
     calculateStudentSemesterResult,
     calculateStudentYearResult,
@@ -787,6 +788,54 @@ app.openapi(debtStatistics, async (c) => {
     const result = await template.generate({ type: 'arraybuffer' })
 
     const fileName = `thong_ke_no_${trainingObjectType.name}_${trainingCourse.name}.xlsx`
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
+})
+
+const exportStudentProfiles = createRoute({
+    operationId: 'exportStudentProfiles',
+    tags: ['Student'],
+    path: '/export-student-profiles',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z.object({ trainingCourseId: z.string() }),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(exportStudentProfiles, async (c) => {
+    const { trainingCourseId } = c.req.valid('json')
+
+    const result = await exportStudentProfile({ trainingCourseId })
+
+    const fileName = 'DANH_SACH_SV.xlsx'
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result, 200, {
