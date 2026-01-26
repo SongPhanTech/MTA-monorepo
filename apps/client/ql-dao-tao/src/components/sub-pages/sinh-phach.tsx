@@ -108,8 +108,7 @@ export default function SinhPhach() {
 
     const examPapers = useMemo(() => {
         if (!examRooms) return []
-        return examRooms
-            .flatMap((e) => e.examList.flatMap((e) => e.examPapers))
+        return examRooms.flatMap((e) => e.examList.flatMap((e) => e.examPapers))
     }, [examRooms])
 
     const handleSave = () => {
@@ -123,12 +122,12 @@ export default function SinhPhach() {
             },
         })
     }
-    const { mutateAsync: genCode } = useGenExamListCode()
     const { mutateAsync: updateExamList } = useUpdateExamList()
+    const { mutateAsync: genCode } = useGenExamListCode()
     const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
     const handleGenCode = async () => {
         const res = await genCode({
-            data: { examListId: examId ?? '' },
+            data: { examId: examId ?? '' },
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')

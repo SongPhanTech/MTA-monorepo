@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsRelearnRates200DataItem } from './postApiStatsRelearnRates200DataItem'
+import type { PostApiStatsRelearnRates200Data } from './postApiStatsRelearnRates200Data'
 
 export type PostApiStatsRelearnRates200 = {
     success: boolean
-    data: PostApiStatsRelearnRates200DataItem[]
+    data: PostApiStatsRelearnRates200Data
 }

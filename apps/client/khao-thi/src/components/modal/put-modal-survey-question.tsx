@@ -116,9 +116,9 @@ const PutSurveyQuestionModal = () => {
                                 surveyQuestionGroupId: output.surveyQuestionGroupId,
                                 type: output.type,
                                 description: output.description,
-                                specificChoice:{
-                                    deleteMany:{}
-                                }
+                                specificChoice: {
+                                    deleteMany: {},
+                                },
                             },
                             where: {
                                 id: input?.id,

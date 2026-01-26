@@ -4990,7 +4990,7 @@ app.openapi(
 
                 `
 
-        const date = new Date() 
+        const date = new Date()
 
         const rows = await prisma.$queryRawUnsafe<StatRow[]>(sql, date)
 

@@ -61,7 +61,7 @@ import type {
     ExportStudentDecreaseAcademicWarningJson404,
     ExportStudentDecreaseAcademicWarningJsonParams,
     ExportStudentProfiles404,
-    ExportStudentProfilesParams,
+    ExportStudentProfilesBody,
     ExportStudentScholarshipJson200Item,
     ExportStudentScholarshipJson404,
     ExportStudentScholarshipJsonParams,
@@ -2388,7 +2388,7 @@ export type exportSubjectClassScoreResponse =
     | exportSubjectClassScoreResponseSuccess
     | exportSubjectClassScoreResponseError
 
-export const getExportSubjectClassScoreUrl = (params: ExportSubjectClassScoreParams) => {
+export const getExportSubjectClassScoreUrl = (params?: ExportSubjectClassScoreParams) => {
     const normalizedParams = new URLSearchParams()
 
     Object.entries(params || {}).forEach(([key, value]) => {
@@ -2405,7 +2405,7 @@ export const getExportSubjectClassScoreUrl = (params: ExportSubjectClassScorePar
 }
 
 export const exportSubjectClassScore = async (
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: RequestInit
 ): Promise<exportSubjectClassScoreResponse> => {
     return customTrainingFetch<exportSubjectClassScoreResponse>(
@@ -2425,7 +2425,7 @@ export const getExportSubjectClassScoreQueryOptions = <
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -2457,7 +2457,7 @@ export function useExportSubjectClassScore<
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params: undefined | ExportSubjectClassScoreParams,
     options: {
         query: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -2478,7 +2478,7 @@ export function useExportSubjectClassScore<
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -2499,7 +2499,7 @@ export function useExportSubjectClassScore<
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -2516,7 +2516,7 @@ export function useExportSubjectClassScore<
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -3877,146 +3877,84 @@ export type exportStudentProfilesResponse =
     | exportStudentProfilesResponseSuccess
     | exportStudentProfilesResponseError
 
-export const getExportStudentProfilesUrl = (params: ExportStudentProfilesParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/export-student-profiles?${stringifiedParams}`
-        : `/api/student/export-student-profiles`
+export const getExportStudentProfilesUrl = () => {
+    return `/api/student/export-student-profiles`
 }
 
 export const exportStudentProfiles = async (
-    params: ExportStudentProfilesParams,
+    exportStudentProfilesBody: ExportStudentProfilesBody,
     options?: RequestInit
 ): Promise<exportStudentProfilesResponse> => {
-    return customTrainingFetch<exportStudentProfilesResponse>(getExportStudentProfilesUrl(params), {
+    return customTrainingFetch<exportStudentProfilesResponse>(getExportStudentProfilesUrl(), {
         ...options,
-        method: 'GET',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportStudentProfilesBody),
     })
 }
 
-export const getExportStudentProfilesQueryKey = (params?: ExportStudentProfilesParams) => {
-    return [`/api/student/export-student-profiles`, ...(params ? [params] : [])] as const
-}
-
-export const getExportStudentProfilesQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportStudentProfiles>>,
+export const getExportStudentProfilesMutationOptions = <
     TError = ExportStudentProfiles404,
->(
-    params: ExportStudentProfilesParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentProfiles>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getExportStudentProfilesQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentProfiles>>> = ({
-        signal,
-    }) => exportStudentProfiles(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof exportStudentProfiles>>,
         TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+        { data: ExportStudentProfilesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportStudentProfiles>>,
+    TError,
+    { data: ExportStudentProfilesBody },
+    TContext
+> => {
+    const mutationKey = ['exportStudentProfiles']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-export type ExportStudentProfilesQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentProfiles>>
->
-export type ExportStudentProfilesQueryError = ExportStudentProfiles404
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportStudentProfiles>>,
+        { data: ExportStudentProfilesBody }
+    > = (props) => {
+        const { data } = props ?? {}
 
-export function useExportStudentProfiles<
-    TData = Awaited<ReturnType<typeof exportStudentProfiles>>,
-    TError = ExportStudentProfiles404,
->(
-    params: ExportStudentProfilesParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentProfiles>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentProfiles>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentProfiles>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentProfiles<
-    TData = Awaited<ReturnType<typeof exportStudentProfiles>>,
-    TError = ExportStudentProfiles404,
->(
-    params: ExportStudentProfilesParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentProfiles>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentProfiles>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentProfiles>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentProfiles<
-    TData = Awaited<ReturnType<typeof exportStudentProfiles>>,
-    TError = ExportStudentProfiles404,
->(
-    params: ExportStudentProfilesParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentProfiles>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useExportStudentProfiles<
-    TData = Awaited<ReturnType<typeof exportStudentProfiles>>,
-    TError = ExportStudentProfiles404,
->(
-    params: ExportStudentProfilesParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentProfiles>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportStudentProfilesQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
+        return exportStudentProfiles(data, requestOptions)
     }
 
-    query.queryKey = queryOptions.queryKey
+    return { mutationFn, ...mutationOptions }
+}
 
-    return query
+export type ExportStudentProfilesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentProfiles>>
+>
+export type ExportStudentProfilesMutationBody = ExportStudentProfilesBody
+export type ExportStudentProfilesMutationError = ExportStudentProfiles404
+
+export const useExportStudentProfiles = <TError = ExportStudentProfiles404, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportStudentProfiles>>,
+            TError,
+            { data: ExportStudentProfilesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportStudentProfiles>>,
+    TError,
+    { data: ExportStudentProfilesBody },
+    TContext
+> => {
+    const mutationOptions = getExportStudentProfilesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }
 
 export type exportLecturerProfileResponse200 = {
