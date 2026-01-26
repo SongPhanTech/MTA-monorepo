@@ -1582,7 +1582,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     const { id, type, examId } = c.req.valid('query')
 
     let subjectClass = await prisma.subjectClass.findUnique({
-        where: { id },
+        where: { id: id ?? '' },
         include: {
             subject: {
                 include: {

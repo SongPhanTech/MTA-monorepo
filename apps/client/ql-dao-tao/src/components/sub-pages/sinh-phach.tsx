@@ -5,7 +5,7 @@ import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { useStore } from '@tanstack/react-store'
 import {
     useFindManyExamRoom,
-    useUpdateExamList,
+    useUpdateManyExamList,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -122,7 +122,7 @@ export default function SinhPhach() {
             },
         })
     }
-    const { mutateAsync: updateExamList } = useUpdateExamList()
+    const { mutateAsync: updateManyExamList } = useUpdateManyExamList()
     const { mutateAsync: genCode } = useGenExamListCode()
     const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
     const handleGenCode = async () => {
@@ -201,8 +201,12 @@ export default function SinhPhach() {
                     <Checkbox
                         onChange={async (e) => {
                             try {
-                                await updateExamList({
-                                    where: { id: examId ?? '' },
+                                await updateManyExamList({
+                                    where: {
+                                        examRoom: {
+                                            examId,
+                                        },
+                                    },
                                     data: { lockExamCode: e.target.checked },
                                 })
                                 await updateManySubjectClass({
