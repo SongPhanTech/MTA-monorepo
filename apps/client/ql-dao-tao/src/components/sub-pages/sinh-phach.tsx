@@ -110,11 +110,6 @@ export default function SinhPhach() {
         if (!examRooms) return []
         return examRooms
             .flatMap((e) => e.examList.flatMap((e) => e.examPapers))
-            .map((ep) => ({
-                ...ep,
-                fullname: ep?.studentSubjectScore?.student?.userProfile?.fullname,
-            }))
-        // .sortVietnameseName('fullname')
     }, [examRooms])
 
     const handleSave = () => {

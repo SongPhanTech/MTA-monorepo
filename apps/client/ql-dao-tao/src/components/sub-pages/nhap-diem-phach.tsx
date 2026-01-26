@@ -1,43 +1,82 @@
 import Table from '@components/commons/table'
 import { useStore } from '@tanstack/react-store'
-import { useFindUniqueExamList } from '@workspace/db/hooks'
-import { useSaveExamScore } from '@workspace/libs/api/training'
+import { useFindManyExamRoom } from '@workspace/db/hooks'
+import { getExportSubjectClassScoreUrl, useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { validateExamScore } from '@lib/utils'
-import { diemPhongThiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
+import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
+import { Printer } from 'lucide-react'
+import { getRuntimeEnv } from '@workspace/libs/utils'
+import { getUrl } from '@workspace/libs/api/custom-instance'
+import { useDisclosure } from 'react-hook-disclosure-modal/dist/hook'
 
 export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
-    const { selectedExamListId } = useStore(diemPhongThiStore)
-    const { data: examList, refetch } = useFindUniqueExamList(
+    const { examId } = useStore(kythiStore)
+
+    const { data: examRooms = [], refetch } = useFindManyExamRoom(
         {
-            where: { id: selectedExamListId },
+            where: {
+                examId,
+            },
             include: {
-                examPapers: {
-                    include: {
-                        studentSubjectScore: {
+                examList: {
+                    select: {
+                        lockExamCode: true,
+                        examPapers: {
                             include: {
-                                student: {
+                                studentSubjectScore: {
                                     include: {
-                                        userProfile: true,
+                                        student: {
+                                            include: {
+                                                userProfile: true,
+                                                fixedClass: true,
+                                            },
+                                        },
+                                        subjectClass: {
+                                            include: {
+                                                fixedClasses: {
+                                                    include: {
+                                                        trainingCourse: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        subjectVersion: true,
                                     },
                                 },
                             },
+                            orderBy: {
+                                examCode: 'asc',
+                            },
                         },
                     },
-                    orderBy: { examCode: 'asc' },
                 },
             },
         },
-        { enabled: !!selectedExamListId }
+        { enabled: !!examId }
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <need selectedExamListId>
+    const { onOpen: openXemTaiLieu } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+        mode?: 'view' | 'edit'
+        convertTo?: string
+    }>({
+        tag: 'XemTaiLieu',
+    })
+
+    const examPapers = useMemo(() => {
+        if (!examRooms) return []
+        return examRooms.flatMap((e) => e.examList.flatMap((e) => e.examPapers))
+    }, [examRooms])
+
     useEffect(() => {
-        if (examList) {
+        if (examPapers) {
             form.setFieldsValue({
-                list: examList.examPapers.reduce(
+                list: examPapers.reduce(
                     (acc, curr) => {
                         acc[curr.id] = {
                             score: curr.studentSubjectScore?.examScore ?? null,
@@ -48,7 +87,7 @@ export default function NhapDiemPhach() {
                 ),
             })
         }
-    }, [selectedExamListId, examList, form])
+    }, [examPapers, form])
 
     const handleSave = () => {
         Modal.confirm({
@@ -93,6 +132,26 @@ export default function NhapDiemPhach() {
         <div className="max-w-screen-sm">
             <Col span={24}>
                 <Flex justify="end" align="center">
+                    <Button
+                        onClick={() => {
+                            openXemTaiLieu({
+                                uri: getUrl(
+                                    getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                        'https://api.daotao.mta.swantech.vn',
+                                    `${getExportSubjectClassScoreUrl({
+                                        examId: examId,
+                                        type: 'DIEM-KEM-PHACH',
+                                    })}`
+                                ),
+                                name: 'Danh sách phách',
+                                mimeType: 'xlsx',
+                                convertTo: 'pdf',
+                            })
+                        }}
+                    >
+                        <Printer />
+                        In phiếu điểm kèm phách
+                    </Button>
                     <Button
                         type="primary"
                         onClick={() => {
@@ -152,7 +211,7 @@ export default function NhapDiemPhach() {
                                     },
                                 },
                             ]}
-                            data={examList?.examPapers}
+                            data={examPapers}
                             pagination={false}
                         />
                     </Form.Item>
