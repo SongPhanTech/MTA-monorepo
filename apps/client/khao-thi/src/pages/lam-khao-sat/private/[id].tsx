@@ -11,7 +11,7 @@ import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResul
 import { Button, Col, Flex, Form, Input, message, Radio, Row } from 'antd'
 
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Confetti from 'react-confetti'
 
 type PutSurveySession = SurveySession & {
@@ -57,48 +57,14 @@ function TakeTestPage() {
         },
     })
 
-    const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
+    // const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
 
-    const handleChange = (questionId: string, value: any) => {
-        const choice = survey?.surveyChoice.find((i) => i.id === value)
-        if (choice?.requireExplanation) {
-            setExpandedRowKeys((prev) => (prev.includes(questionId) ? prev : [...prev, questionId]))
-        }
-    }
-
-    // const dataTest = useMemo(() => {
-    //     const groupedMap = (survey?.surveyQuestion ?? []).reduce<
-    //         Record<string, GroupedSurveyQuestion>
-    //     >((acc: any, item: any, index: number) => {
-    //         const groupId = item.surveyQuestionGroupId
-
-    //         if (!acc[groupId]) {
-    //             acc[groupId] = {
-    //                 id: item.surveyQuestionGroup.id,
-    //                 name: item.surveyQuestionGroup.name,
-    //                 children: [],
-    //             }
-    //         }
-
-    //         acc[groupId].children.push({
-    //             id: item.id,
-    //             name: item.name,
-    //             type: item.type,
-    //         })
-
-    //         return acc
-    //     }, {})
-
-    //     // Chuyển thành array
-    //     const grouped: GroupedSurveyQuestion[] = Object.values(groupedMap).map((i: any, index) => {
-    //         return { ...i, name: `${index + 1}. ${i.name}` }
-    //     })
-    //     return grouped || []
-    //     // return classGroups
-    // }, [survey?.surveyQuestion])
-    const requireExplanation = useMemo(() => {
-        return survey?.surveyChoice?.filter((i: any) => !!i?.requireExplanation).map((i) => i.id)
-    }, [survey])
+    // const handleChange = (questionId: string, value: any) => {
+    //     const choice = survey?.surveyChoice.find((i) => i.id === value)
+    //     if (choice?.requireExplanation) {
+    //         setExpandedRowKeys((prev) => (prev.includes(questionId) ? prev : [...prev, questionId]))
+    //     }
+    // }
 
     async function onOk() {
         const dataSubmit = form.getFieldsValue()
@@ -115,13 +81,13 @@ function TakeTestPage() {
             return
         }
 
-        const reason = dataSubmit?.responses.filter(
-            (i: any) => requireExplanation?.includes(i?.surveyChoiceId) && !i.explanation
-        )
-        if (reason.length) {
-            message.error('Bạn chưa nhập lý do cho những khảo sát đặc biệt')
-            return
-        }
+        // const reason = dataSubmit?.responses.filter(
+        //     (i: any) => requireExplanation?.includes(i?.surveyChoiceId) && !i.explanation
+        // )
+        // if (reason.length) {
+        //     message.error('Bạn chưa nhập lý do cho những khảo sát đặc biệt')
+        //     return
+        // }
 
         try {
             showSpinner()
@@ -288,7 +254,7 @@ function TakeTestPage() {
                             dataSource={[{ id: 'abc' }]}
                             columns={survey.surveyChoice.map((i) => {
                                 return {
-                                    title: `${i?.description} ${i?.requireExplanation === true ? '*' : ''}`,
+                                    title: `${i?.description}`,
                                     dataIndex: i?.id,
                                     key: i?.id,
                                     align: 'center',
@@ -352,9 +318,9 @@ function TakeTestPage() {
                                             >
                                                 <Radio.Group
                                                     className="w-full gap-x-2 flex"
-                                                    onChange={(e) =>
-                                                        handleChange(record.id, e.target.value)
-                                                    }
+                                                    // onChange={(e) =>
+                                                    //     handleChange(record.id, e.target.value)
+                                                    // }
                                                 >
                                                     {survey?.surveyChoice.map((i) => (
                                                         <Radio.Button key={i?.id} value={i?.id}>
@@ -379,133 +345,32 @@ function TakeTestPage() {
                                     },
                                 },
                             ]}
-                            expandable={{
-                                expandedRowKeys,
-                                showExpandColumn: false,
-                                expandedRowRender: (record, index) => (
-                                    <Form.Item
-                                        label="Lý do"
-                                        name={['responses', index, 'explanation']}
-                                        // rules={[
-                                        //     {
-                                        //     required:
-                                        //         form.getFieldValue(['responses', record.id]) === 4,
-                                        //     message: 'Vui lòng nhập lý do',
-                                        //     },
-                                        // ]}
-                                    >
-                                        <Input.TextArea
-                                            rows={3}
-                                            placeholder="Nhập lý do tại đây..."
-                                        />
-                                    </Form.Item>
-                                ),
-                            }}
+                            // expandable={{
+                            //     expandedRowKeys,
+                            //     showExpandColumn: false,
+                            //     expandedRowRender: (record, index) => (
+                            //         <Form.Item
+                            //             label="Lý do"
+                            //             name={['responses', index, 'explanation']}
+                            //             // rules={[
+                            //             //     {
+                            //             //     required:
+                            //             //         form.getFieldValue(['responses', record.id]) === 4,
+                            //             //     message: 'Vui lòng nhập lý do',
+                            //             //     },
+                            //             // ]}
+                            //         >
+                            //             <Input.TextArea
+                            //                 rows={3}
+                            //                 placeholder="Nhập lý do tại đây..."
+                            //             />
+                            //         </Form.Item>
+                            //     ),
+                            // }}
                             bordered={true}
                         />
                     </Col>
 
-                    {/* <Col span={24}>
-                        <Form.List name="responses">
-                            {(fields) => (
-                                <>
-                                    {dataTest.map((section, sectionIndex) => (
-                                        <div key={section.id} className="mb-2">
-                                            <div className="font-bold mb-1">{section.name}</div>
-
-                                            {section.children?.map((q, qIndex) => {
-                                                return (
-                                                    <div key={q.id} className="px-4">
-                                                        {q.type === 'SINGLE_CHOICE' ? (
-                                                            <>
-                                                                <div className="flex items-center w-full justify-between mb-2">
-                                                                    <div className="mb-2">
-                                                                        {sectionIndex + 1}.
-                                                                        {qIndex + 1}. {q.name}
-                                                                    </div>
-                                                                    <div className="flex items-center justify-end">
-                                                                        {survey?.surveyChoice.map(
-                                                                            (i) => {
-                                                                                return (
-                                                                                    <Button
-                                                                                        key={i.id}
-                                                                                        onClick={() =>
-                                                                                            onChange(
-                                                                                                q?.id,
-                                                                                                i.id,
-                                                                                                i.requireExplanation
-                                                                                            )
-                                                                                        }
-                                                                                        className={`flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px] mr-2  ${checkedQuestion(q?.id, i.id) ? '!bg-[#ea1212] text-white' : 'bg-white text-[#ea1212]'}`}
-                                                                                    >
-                                                                                        {i.answer}
-                                                                                    </Button>
-                                                                                )
-                                                                            }
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-
-                                                                {requireExplanation?.length > 0 &&
-                                                                    requireExplanation.includes(
-                                                                        q?.id
-                                                                    ) && (
-                                                                        <Form.Item
-                                                                            className="!mb-0 !mt-2"
-                                                                            shouldUpdate
-                                                                        >
-                                                                            {() => {
-                                                                                return (
-                                                                                    <Form.Item
-                                                                                        name={[
-                                                                                            qIndex,
-                                                                                            'explanation',
-                                                                                        ]}
-                                                                                        label="Lý do"
-                                                                                        rules={[
-                                                                                            {
-                                                                                                required: true,
-                                                                                                message:
-                                                                                                    'Nhập lý do',
-                                                                                            },
-                                                                                        ]}
-                                                                                    >
-                                                                                        <Input.TextArea placeholder="Nhập lý do" />
-                                                                                    </Form.Item>
-                                                                                )
-                                                                            }}
-                                                                        </Form.Item>
-                                                                    )}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <div className="mb-2">
-                                                                    {sectionIndex + 1}.{qIndex + 1}.{' '}
-                                                                    {q.name}
-                                                                </div>
-                                                                <Form.Item
-                                                                    name={[qIndex, 'answerText']}
-                                                                    rules={[
-                                                                        {
-                                                                            required: true,
-                                                                            message:
-                                                                                'Nhập câu trả lời',
-                                                                        },
-                                                                    ]}
-                                                                >
-                                                                    <Input.TextArea placeholder="Nhập câu trả lời" />
-                                                                </Form.Item>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                )
-                                            })}
-                                        </div>
-                                    ))}
-                                </>
-                            )}
-                        </Form.List>
-                    </Col> */}
                     {survey.additionalSuggestion && (
                         <Col span={24}>
                             <div className="mb-3 font-bold">Ý kiến khác :</div>
