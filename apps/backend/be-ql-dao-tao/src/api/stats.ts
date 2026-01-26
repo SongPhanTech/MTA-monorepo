@@ -1,5 +1,4 @@
 import { Faker, vi } from '@faker-js/faker'
-
 const faker = new Faker({
     locale: [vi],
 })
@@ -4626,5 +4625,132 @@ app.openapi(
         })
     }
 )
+app.openapi(
+  createRoute({
+    method: 'post',
+    path: '/retest-rates',
+    tags: ['Stats'],
+    request: {
+      body: { content: { 'application/json': { schema: z.object({ preview: z.boolean().optional().default(false) }) } } },
+    },
+    responses: {
+      200: {
+        description: 'Thống kê thi lại 3 mảng, mỗi mảng duyệt theo 2 kỳ',
+        content: { 'application/json': { schema: z.object({ success: z.boolean(), data: z.any() }) } },
+      },
+    },
+  }),
+  async (c) => {
+    const { preview } = c.req.valid('json');
 
+    if (preview) {
+      const periods = ['2023_HK2', '2024_HK1'];
+      const generateData = (items: any[], typeName: string) => {
+        const result: any[] = [];
+        items.forEach(item => {
+          periods.forEach(p => {
+
+            const total = item.total;
+            const count = Math.floor(item.count * (p === '2024_HK1' ? 1.1 : 0.9));
+            
+            result.push({
+              Name: item.name,
+              PeriodCode: p,
+              TotalStudents: total,
+              RetestCount: count,
+              Value: total > 0 ? Number((count / total).toFixed(4)) : 0
+            });
+          });
+        });
+        return result;
+      };
+
+      return c.json({
+        success: true,
+        data: {
+          BY_COURSE: generateData([
+            { id: 'K14', name: 'Khóa 14', total: 1200, count: 180 },
+            { id: 'K15', name: 'Khóa 15', total: 1500, count: 210 }
+          ], 'Khóa'),
+          
+          BY_DEPARTMENT: generateData([
+            { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 120 },
+            { id: 'KTE', name: 'Kinh tế', total: 500, count: 45 }
+          ], 'Ngành'),
+
+          BY_MAJOR: generateData([
+            { id: 'KTPM', name: 'Kỹ thuật phần mềm', total: 200, count: 50 },
+            { id: 'ATTT', name: 'An toàn thông tin', total: 150, count: 35 }
+          ], 'Chuyên ngành')
+        }
+      }, 200);
+    }
+
+    return c.json({ success: true, data: { BY_COURSE: [], BY_DEPARTMENT: [], BY_MAJOR: [] } });
+  }
+);
+app.openapi(
+    createRoute({
+        method: 'post',
+        path: '/relearn-rates',
+        tags: ['Stats'],
+        request: {
+            body: { content: { 'application/json': { schema: z.object({ preview: z.boolean().optional().default(false) }) } } },
+        },
+        responses: {
+            200: {
+                description: 'Dữ liệu học lại tính toán động',
+                content: { 'application/json': { schema: z.object({ success: z.boolean(), data: z.array(z.any()) }) } },
+            },
+        },
+    }),
+    async (c) => {
+    const { preview } = c.req.valid('json');
+
+    if (preview) {
+      const periods = ['2023_HK2', '2024_HK1'];
+
+      const generateData = (items: any[], typeName: string) => {
+        const result: any[] = [];
+        items.forEach(item => {
+          periods.forEach(p => {
+            const total = item.total;
+            const count = Math.floor(item.count * (p === '2024_HK1' ? 0.8 : 1.2)); 
+            
+            result.push({
+              Name: item.name,
+              PeriodCode: p,
+              TotalStudents: total,
+              RelearnCount: count,
+              Value: total > 0 ? Number((count / total).toFixed(4)) : 0
+            });
+          });
+        });
+        return result;
+      };
+
+      return c.json({
+        success: true,
+        data: {
+          BY_COURSE: generateData([
+            { id: 'K14', name: 'Khóa 14', total: 1200, count: 40 },
+            { id: 'K15', name: 'Khóa 15', total: 1500, count: 55 }
+          ], 'Khóa'),
+          
+          BY_DEPARTMENT: generateData([
+            { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 30 },
+            { id: 'XD', name: 'Xây dựng', total: 400, count: 48 }
+          ], 'Ngành'),
+
+          BY_MAJOR: generateData([
+            { id: 'KHMT', name: 'Khoa học máy tính', total: 150, count: 15 },
+            { id: 'KHDL', name: 'Khoa học dữ liệu', total: 120, count: 12 }
+          ], 'Chuyên ngành')
+        }
+      }, 200);
+    }
+
+    return c.json({ success: true, data: { BY_COURSE: [], BY_DEPARTMENT: [], BY_MAJOR: [] } });
+  }
+);
 export default app
