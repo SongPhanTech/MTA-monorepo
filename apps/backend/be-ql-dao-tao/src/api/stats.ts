@@ -17,7 +17,23 @@ const StatBaseSchema = z.object({
     preview: z.boolean().default(false),
     labels: z.array(z.string()).optional(),
 })
-
+type StatType = 'BY_COURSE' | 'BY_CURRICULUM' | 'BY_MAJOR'
+type StatRow = {
+    Type: StatType
+    Name: string
+    PeriodCode: string
+    TotalStudents: number | bigint
+    RelearnCount: number | bigint
+    Value: number
+}
+const StatRowSchema = z.object({
+    Type: z.enum(['BY_COURSE', 'BY_CURRICULUM', 'BY_MAJOR']),
+    Name: z.string(),
+    PeriodCode: z.string(),
+    TotalStudents: z.number(),
+    RelearnCount: z.number(),
+    Value: z.number(),
+})
 // Ban Giám đốc (BGĐ)
 app.openapi(
     createRoute({
@@ -4626,131 +4642,378 @@ app.openapi(
     }
 )
 app.openapi(
-  createRoute({
-    method: 'post',
-    path: '/retest-rates',
-    tags: ['Stats'],
-    request: {
-      body: { content: { 'application/json': { schema: z.object({ preview: z.boolean().optional().default(false) }) } } },
-    },
-    responses: {
-      200: {
-        description: 'Thống kê thi lại 3 mảng, mỗi mảng duyệt theo 2 kỳ',
-        content: { 'application/json': { schema: z.object({ success: z.boolean(), data: z.any() }) } },
-      },
-    },
-  }),
-  async (c) => {
-    const { preview } = c.req.valid('json');
+    createRoute({
+        method: 'post',
+        path: '/retest-rates',
+        tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({ preview: z.boolean().optional().default(false) }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Thống kê thi lại 3 mảng, mỗi mảng duyệt theo 2 kỳ',
+                content: {
+                    'application/json': {
+                        schema: z.object({ success: z.boolean(), data: z.any() }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { preview } = c.req.valid('json')
 
-    if (preview) {
-      const periods = ['2023_HK2', '2024_HK1'];
-      const generateData = (items: any[], typeName: string) => {
-        const result: any[] = [];
-        items.forEach(item => {
-          periods.forEach(p => {
+        if (preview) {
+            const periods = ['2023_HK2', '2024_HK1']
+            const generateData = (items: any[], typeName: string) => {
+                const result: any[] = []
+                items.forEach((item) => {
+                    periods.forEach((p) => {
+                        const total = item.total
+                        const count = Math.floor(item.count * (p === '2024_HK1' ? 1.1 : 0.9))
 
-            const total = item.total;
-            const count = Math.floor(item.count * (p === '2024_HK1' ? 1.1 : 0.9));
-            
-            result.push({
-              Name: item.name,
-              PeriodCode: p,
-              TotalStudents: total,
-              RetestCount: count,
-              Value: total > 0 ? Number((count / total).toFixed(4)) : 0
-            });
-          });
-        });
-        return result;
-      };
+                        result.push({
+                            Name: item.name,
+                            PeriodCode: p,
+                            TotalStudents: total,
+                            RetestCount: count,
+                            Value: total > 0 ? Number((count / total).toFixed(4)) : 0,
+                        })
+                    })
+                })
+                return result
+            }
 
-      return c.json({
-        success: true,
-        data: {
-          BY_COURSE: generateData([
-            { id: 'K14', name: 'Khóa 14', total: 1200, count: 180 },
-            { id: 'K15', name: 'Khóa 15', total: 1500, count: 210 }
-          ], 'Khóa'),
-          
-          BY_DEPARTMENT: generateData([
-            { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 120 },
-            { id: 'KTE', name: 'Kinh tế', total: 500, count: 45 }
-          ], 'Ngành'),
+            return c.json(
+                {
+                    success: true,
+                    data: {
+                        BY_COURSE: generateData(
+                            [
+                                { id: 'K14', name: 'Khóa 14', total: 1200, count: 180 },
+                                { id: 'K15', name: 'Khóa 15', total: 1500, count: 210 },
+                            ],
+                            'Khóa'
+                        ),
 
-          BY_MAJOR: generateData([
-            { id: 'KTPM', name: 'Kỹ thuật phần mềm', total: 200, count: 50 },
-            { id: 'ATTT', name: 'An toàn thông tin', total: 150, count: 35 }
-          ], 'Chuyên ngành')
+                        BY_DEPARTMENT: generateData(
+                            [
+                                { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 120 },
+                                { id: 'KTE', name: 'Kinh tế', total: 500, count: 45 },
+                            ],
+                            'Ngành'
+                        ),
+
+                        BY_MAJOR: generateData(
+                            [
+                                { id: 'KTPM', name: 'Kỹ thuật phần mềm', total: 200, count: 50 },
+                                { id: 'ATTT', name: 'An toàn thông tin', total: 150, count: 35 },
+                            ],
+                            'Chuyên ngành'
+                        ),
+                    },
+                },
+                200
+            )
         }
-      }, 200);
-    }
 
-    return c.json({ success: true, data: { BY_COURSE: [], BY_DEPARTMENT: [], BY_MAJOR: [] } });
-  }
-);
+        return c.json({ success: true, data: { BY_COURSE: [], BY_DEPARTMENT: [], BY_MAJOR: [] } })
+    }
+)
+
 app.openapi(
     createRoute({
         method: 'post',
         path: '/relearn-rates',
         tags: ['Stats'],
         request: {
-            body: { content: { 'application/json': { schema: z.object({ preview: z.boolean().optional().default(false) }) } } },
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({ preview: z.boolean().optional().default(false) }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
                 description: 'Dữ liệu học lại tính toán động',
-                content: { 'application/json': { schema: z.object({ success: z.boolean(), data: z.array(z.any()) }) } },
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            success: z.boolean(),
+                            data: z.object({
+                                BY_COURSE: z.array(StatRowSchema),
+                                BY_CURRICULUM: z.array(StatRowSchema),
+                                BY_MAJOR: z.array(StatRowSchema),
+                            }),
+                        }),
+                    },
+                },
             },
         },
     }),
     async (c) => {
-    const { preview } = c.req.valid('json');
+        const { preview } = c.req.valid('json')
 
-    if (preview) {
-      const periods = ['2023_HK2', '2024_HK1'];
+        if (preview) {
+            const periods = ['2023_HK2', '2024_HK1']
 
-      const generateData = (items: any[], typeName: string) => {
-        const result: any[] = [];
-        items.forEach(item => {
-          periods.forEach(p => {
-            const total = item.total;
-            const count = Math.floor(item.count * (p === '2024_HK1' ? 0.8 : 1.2)); 
-            
-            result.push({
-              Name: item.name,
-              PeriodCode: p,
-              TotalStudents: total,
-              RelearnCount: count,
-              Value: total > 0 ? Number((count / total).toFixed(4)) : 0
-            });
-          });
-        });
-        return result;
-      };
+            const generateData = (items: any[], typeName: string) => {
+                const result: any[] = []
+                items.forEach((item) => {
+                    periods.forEach((p) => {
+                        const total = item.total
+                        const count = Math.floor(item.count * (p === '2024_HK1' ? 0.8 : 1.2))
 
-      return c.json({
-        success: true,
-        data: {
-          BY_COURSE: generateData([
-            { id: 'K14', name: 'Khóa 14', total: 1200, count: 40 },
-            { id: 'K15', name: 'Khóa 15', total: 1500, count: 55 }
-          ], 'Khóa'),
-          
-          BY_DEPARTMENT: generateData([
-            { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 30 },
-            { id: 'XD', name: 'Xây dựng', total: 400, count: 48 }
-          ], 'Ngành'),
+                        result.push({
+                            Name: item.name,
+                            PeriodCode: p,
+                            TotalStudents: total,
+                            RelearnCount: count,
+                            Value: total > 0 ? Number((count / total).toFixed(4)) : 0,
+                        })
+                    })
+                })
+                return result
+            }
 
-          BY_MAJOR: generateData([
-            { id: 'KHMT', name: 'Khoa học máy tính', total: 150, count: 15 },
-            { id: 'KHDL', name: 'Khoa học dữ liệu', total: 120, count: 12 }
-          ], 'Chuyên ngành')
+            return c.json(
+                {
+                    success: true,
+                    data: {
+                        BY_COURSE: generateData(
+                            [
+                                { id: 'K14', name: 'Khóa 14', total: 1200, count: 40 },
+                                { id: 'K15', name: 'Khóa 15', total: 1500, count: 55 },
+                            ],
+                            'Khóa'
+                        ),
+
+                        BY_DEPARTMENT: generateData(
+                            [
+                                { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 30 },
+                                { id: 'XD', name: 'Xây dựng', total: 400, count: 48 },
+                            ],
+                            'Ngành'
+                        ),
+
+                        BY_MAJOR: generateData(
+                            [
+                                { id: 'KHMT', name: 'Khoa học máy tính', total: 150, count: 15 },
+                                { id: 'KHDL', name: 'Khoa học dữ liệu', total: 120, count: 12 },
+                            ],
+                            'Chuyên ngành'
+                        ),
+                    },
+                },
+                200
+            )
         }
-      }, 200);
-    }
+        const sql = `
+            WITH RelearnStudent AS (
+                -- Sinh viên có PHÁT SINH HỌC LẠI (1 dòng / student / kỳ / group)
+                SELECT DISTINCT
+                    S.id        AS "studentId",
+                    SEM.code    AS "periodCode",
+                    TC.id       AS "courseId",
+                    TC.name     AS "courseName",
+                    C.id        AS "curriculumId",
+                    C.name      AS "curriculumName",
+                    CV.id       AS "curriculumVersionId",
+                    CV.name     AS "curriculumVersionName"
+                FROM "ql-dao-tao"."StudentSubjectScore" SSS
+                JOIN "ql-dao-tao"."Student" S 
+                    ON S.id = SSS."studentId"
+                JOIN "ql-dao-tao"."FixedClass" FC 
+                    ON FC.id = S."fixedClassId"
+                JOIN "ql-dao-tao"."TrainingCourse" TC 
+                    ON TC.id = FC."trainingCourseId"
+                JOIN "ql-dao-tao"."SubjectClass" SC 
+                    ON SC.id = SSS."subjectClassId"
+                JOIN "ql-dao-tao"."Semester" SEM 
+                    ON SEM.id = SC."semesterId"
+                JOIN "ql-dao-tao"."SubjectVersion" sv 
+                    ON sv.id = SSS."subjectVersionId"
+                JOIN "ql-dao-tao"."CurriculumVersion" CV 
+                    ON CV.id = S."curriculumVersionId"
+                JOIN "ql-dao-tao"."Curriculum" C 
+                    ON C.id = CV."curriculumId"
+                JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV 
+                    ON CV.id = TBOCV."curriculumVersionId"
+                JOIN "ql-dao-tao"."TrainingBlockSubject" TBS 
+                    ON TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                    AND TBS."subjectId" = sv.id
+                WHERE
+                    SC.cancelled = false
+                    AND SEM."endDate" <= $1
+                    AND (
+                        SSS."finalScore" IS NULL
+                        OR (TBS.graduation = true AND SSS."finalScore" < TC."scoreToPassGraduation")
+                        OR (TBS."useForFinalScore" = true AND SSS."finalScore" < TC."scoreToPass")
+                        OR (TBS."useForFinalScore" = false AND SSS."finalScore" < TC."scoreToPassConditional")
+                        OR SSS."examBanned" = true
+                        OR SSS.suspended = true
+                    )
+                    AND SSS.withdrew = false
+                    AND SSS.exempted = false
+                    AND SSS."examPostponed" = false
 
-    return c.json({ success: true, data: { BY_COURSE: [], BY_DEPARTMENT: [], BY_MAJOR: [] } });
-  }
-);
+                    AND NOT EXISTS (
+            SELECT 1
+            FROM "ql-dao-tao"."StudentSubjectScore" SSS_pass
+            WHERE
+                SSS_pass."studentId" = SSS."studentId"
+                AND SSS_pass."subjectVersionId" = sv.id
+                AND SSS_pass.withdrew = false
+                AND SSS_pass.exempted = false
+                AND SSS_pass."examPostponed" = false
+                AND SSS_pass."examBanned" = false
+                AND SSS_pass.suspended = false
+                AND (
+                    (TBS.graduation = true AND
+                        (SSS_pass."finalScore" >= TC."scoreToPassGraduation"
+                         OR SSS_pass."manualFinalScore" >= TC."scoreToPassGraduation"))
+                    OR
+                    (TBS."useForFinalScore" = true AND
+                        (SSS_pass."finalScore" >= TC."scoreToPass"
+                         OR SSS_pass."manualFinalScore" >= TC."scoreToPass"))
+                    OR
+                    (TBS."useForFinalScore" = false AND
+                        (SSS_pass."finalScore" >= TC."scoreToPassConditional"
+                         OR SSS_pass."manualFinalScore" >= TC."scoreToPassConditional"))
+                )
+                        )
+                ),
+
+                TotalStudent AS (
+                    -- Tổng SV đang học theo kỳ + group
+                    SELECT DISTINCT
+                        S.id        AS "studentId",
+                        SEM.code    AS "periodCode",
+                        TC.id       AS "courseId",
+                        TC.name     AS "courseName",
+                        C.id        AS "curriculumId",
+                        C.name      AS "curriculumName",
+                        CV.id       AS "curriculumVersionId",
+                        CV.name     AS "curriculumVersionName"
+                    FROM "ql-dao-tao"."Student" S
+                    JOIN "ql-dao-tao"."FixedClass" FC 
+                        ON FC.id = S."fixedClassId"
+                    JOIN "ql-dao-tao"."TrainingCourse" TC 
+                        ON TC.id = FC."trainingCourseId"
+                    JOIN "ql-dao-tao"."CurriculumVersion" CV 
+                        ON CV.id = S."curriculumVersionId"
+                    JOIN "ql-dao-tao"."Curriculum" C 
+                        ON C.id = CV."curriculumId"
+                    JOIN "ql-dao-tao"."StudentSubjectScore" SSS
+                        ON SSS."studentId" = S.id
+                    JOIN "ql-dao-tao"."SubjectClass" SC
+                        ON SC.id = SSS."subjectClassId"
+                    JOIN "ql-dao-tao"."Semester" SEM
+                        ON SEM.id = SC."semesterId"
+                    WHERE
+                        SC.cancelled = false
+                        AND SEM."endDate" <= $1
+                )
+
+
+                SELECT
+                    'BY_COURSE'                     AS "Type",
+                    T."courseName"                  AS "Name",
+                    T."periodCode"                  AS "PeriodCode",
+                    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
+                    COUNT(DISTINCT R."studentId")::int AS "RelearnCount",
+                    ROUND(
+                        COUNT(DISTINCT R."studentId")::decimal
+                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+                        4
+                    )::float                         AS "Value"
+                FROM TotalStudent T
+                LEFT JOIN RelearnStudent R
+                    ON R."studentId"  = T."studentId"
+                    AND R."periodCode" = T."periodCode"
+                    AND R."courseName" = T."courseName"
+                GROUP BY
+                    T."courseName",
+                    T."periodCode"
+
+                UNION ALL
+
+                SELECT
+                    'BY_CURRICULUM'                     AS "Type",
+                    T."curriculumName"                  AS "Name",
+                    T."periodCode"                      AS "PeriodCode",
+                    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
+                    COUNT(DISTINCT R."studentId")::int AS "RelearnCount",
+                    ROUND(
+                        COUNT(DISTINCT R."studentId")::decimal
+                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+                        4
+                    )::float                             AS "Value"
+                FROM TotalStudent T
+                LEFT JOIN RelearnStudent R
+                    ON R."studentId"       = T."studentId"
+                    AND R."periodCode"     = T."periodCode"
+                    AND R."curriculumName" = T."curriculumName"
+                GROUP BY
+                    T."curriculumName",
+                    T."periodCode"
+
+
+                UNION ALL
+                SELECT
+                    'BY_MAJOR'                             AS "Type",
+                    T."curriculumVersionName"              AS "Name",
+                    T."periodCode"                         AS "PeriodCode",
+                    COUNT(DISTINCT T."studentId")::int    AS "TotalStudents",
+                    COUNT(DISTINCT R."studentId")::int    AS "RelearnCount",
+                    ROUND(
+                        COUNT(DISTINCT R."studentId")::decimal
+                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+                        4
+                    )::float                               AS "Value"
+                FROM TotalStudent T
+                LEFT JOIN RelearnStudent R
+                    ON R."studentId"               = T."studentId"
+                    AND R."periodCode"             = T."periodCode"
+                    AND R."curriculumVersionName"  = T."curriculumVersionName"
+                GROUP BY
+                    T."curriculumVersionName",
+                    T."periodCode"
+
+
+                `
+
+        const date = new Date() 
+
+        const rows = await prisma.$queryRawUnsafe<StatRow[]>(sql, date)
+
+        const result = rows.reduce(
+            (acc, r) => {
+                acc[r.Type].push(r)
+                return acc
+            },
+            {
+                BY_COURSE: [],
+                BY_CURRICULUM: [],
+                BY_MAJOR: [],
+            } as Record<StatType, StatRow[]>
+        )
+
+        return c.json(
+            {
+                success: true,
+                data: result,
+            },
+            200
+        )
+    }
+)
 export default app
