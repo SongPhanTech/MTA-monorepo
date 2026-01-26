@@ -1,6 +1,6 @@
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
-import TableCollapse from '@components/commons/tableCollapse'
+import TableIndexCollapse from '@components/commons/table-collapse-index'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -368,10 +368,11 @@ export default function AssigmentOfAssessmentTab() {
 
             <Col span={24}>
                 <Form form={form}>
-                    <TableCollapse
+                    <TableIndexCollapse
                         rowKey="id"
                         id="evaluation-asignment"
                         defaultExpandAll
+                        isTitle={true}
                         headerTitleKey="displayName"
                         childrenFieldName="criteria"
                         rowSelection={{
@@ -440,10 +441,8 @@ export default function AssigmentOfAssessmentTab() {
                         columns={[
                             {
                                 title: 'Tiêu chí',
-                                width: 700,
-                                render: (_, record) => {
-                                    return `Tiêu chí ${record.order}: ${record.name}`
-                                },
+                                width: 500,
+                                render: (_, record) => record?.name,
                             },
                             {
                                 title: 'Giảng viên phân công',

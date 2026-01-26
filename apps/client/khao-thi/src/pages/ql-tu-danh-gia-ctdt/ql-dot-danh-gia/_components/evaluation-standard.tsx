@@ -1,4 +1,4 @@
-import TableCollapse from '@components/commons/tableCollapse'
+import TableIndexCollapse from '@components/commons/table-collapse-index'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -86,7 +86,7 @@ export default function EvaluationStandardTab() {
                 </Row>
             </Col>
             <Col span={24}>
-                <TableCollapse
+                <TableIndexCollapse
                     rowKey="id"
                     headerTitleKey={({ order, name }) => {
                         const parts = [order, name].filter(Boolean)
@@ -99,6 +99,7 @@ export default function EvaluationStandardTab() {
                         setFilters(value)
                     }}
                     loading={isLoading}
+                    isTitle={true}
                     scroll={{ y: 'calc(100vh - 240px)', x: 'max-content' }}
                     className="w-full mt-2"
                     columns={[
