@@ -348,7 +348,6 @@ function SelectLecturer({
         selectedRowKeys,
         checkStrictly: false,
         onSelect: (record: any, selected: boolean) => {
-            console.log(123123)
             if (selected) {
                 let arr: any = []
                 if (record?.subjectClass?.length > 0) {
