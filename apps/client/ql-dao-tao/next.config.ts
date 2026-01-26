@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
         '@workspace/db/client',
         '@workspace/router',
         '@workspace/ui',
+        'react-hook-disclosure-modal',
     ],
     images: {
         unoptimized: true,
