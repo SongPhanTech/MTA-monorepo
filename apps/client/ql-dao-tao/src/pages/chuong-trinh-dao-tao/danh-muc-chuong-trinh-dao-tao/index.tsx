@@ -163,6 +163,7 @@ export default function TrainingProgramCatalog() {
         where,
         select: {
             id: true,
+            active: true,
             code: true,
             name: true,
             managementOrganization: { select: { sTen: true } },

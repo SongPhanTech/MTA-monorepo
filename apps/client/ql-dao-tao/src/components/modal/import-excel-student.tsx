@@ -4,7 +4,20 @@ import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import { importStudent } from '@workspace/libs/api/training'
 import { parseSheetStudent } from '@workspace/libs/parseExcel'
-import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag, Switch } from 'antd'
+import {
+    Button,
+    Col,
+    Collapse,
+    Empty,
+    Modal,
+    message,
+    Row,
+    Space,
+    Switch,
+    Table,
+    Tag,
+    Tooltip,
+} from 'antd'
 import { useState } from 'react'
 
 const { Panel } = Collapse
@@ -222,20 +235,24 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                 </Collapse>
             )}
 
-            <Row className="flex flex-row justify-between align-middle text-al mb-3">
+            <Row className="flex flex-row justify-between items-center mb-3">
                 <p className="text-xl">
                     Danh sách sinh viên{' '}
                     {previewData.length > 0 && (
                         <span className="ml-2">({previewData.length} sinh viên)</span>
                     )}
                 </p>
-                <div>
+                <Tooltip
+                    className="flex flex-row align-middle items-center gap-1"
+                    title="Khởi tạo các CTĐT nếu chưa có"
+                >
+                    <label htmlFor="createCurriculumVersion">Tạo CTĐT</label>
                     <Switch
+                        id="createCurriculumVersion"
                         checked={createCurriculumVersion}
                         onChange={(v) => setCreateCurriculumVersion(v)}
                     />
-                    Tạo CTĐT
-                </div>
+                </Tooltip>
             </Row>
             <Row className="mb-3">
                 <Col span={12}>
