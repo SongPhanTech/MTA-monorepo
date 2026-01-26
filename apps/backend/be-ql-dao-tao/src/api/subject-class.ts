@@ -470,7 +470,8 @@ const exportSubjectClassScore = createRoute({
     summary: 'Excel xuất điểm lớp môn học',
     request: {
         query: z.object({
-            id: z.string().openapi('id', { description: 'ID của lớp môn học' }),
+            id: z.string().optional().openapi('id', { description: 'ID của lớp môn học' }),
+            examId: z.string().optional().openapi('examId', { description: 'ID của kỳ thi' }),
             type: z.string().default(''),
         }),
     },
@@ -1578,9 +1579,9 @@ app.openapi(uploadExcelImportScore, async (c) => {
 })
 
 app.openapi(exportSubjectClassScore, async (c) => {
-    const { id, type } = c.req.valid('query')
+    const { id, type, examId } = c.req.valid('query')
 
-    const subjectClass = await prisma.subjectClass.findUnique({
+    let subjectClass = await prisma.subjectClass.findUnique({
         where: { id },
         include: {
             subject: {
@@ -1629,6 +1630,73 @@ app.openapi(exportSubjectClassScore, async (c) => {
             },
         },
     })
+
+    if (examId) {
+        const exam = await prisma.exam.findUnique({
+            where: {
+                id: examId,
+            },
+            include: {
+                subjectClass: {
+                    include: {
+                        subject: {
+                            include: {
+                                managementOrganization: true,
+                            },
+                        },
+                        semester: {
+                            include: {
+                                schoolYear: true,
+                            },
+                        },
+                        mainLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        extraLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        trainingObjectType: true,
+                        subjectClassStudent: {
+                            include: {
+                                student: {
+                                    include: {
+                                        fixedClass: {
+                                            include: {
+                                                trainingCourse: {
+                                                    include: {
+                                                        scoreConverts: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        userProfile: true,
+                                    },
+                                },
+                                examPaper: {
+                                    select: {
+                                        examCode: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        })
+        if (exam) {
+            if (exam?.subjectClass?.[0]) subjectClass = exam?.subjectClass?.[0]
+            if (subjectClass) {
+                subjectClass = {
+                    ...subjectClass,
+                    subjectClassStudent: exam?.subjectClass.flatMap((sc) => sc.subjectClassStudent),
+                }
+            }
+        }
+    }
 
     if (!subjectClass) {
         return c.json({ message: 'Không tìm thấy lớp học' }, 404)

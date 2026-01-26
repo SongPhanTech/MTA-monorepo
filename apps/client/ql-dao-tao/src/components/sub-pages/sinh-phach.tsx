@@ -1,19 +1,22 @@
 import Table from '@components/commons/table'
-import ExportPhach from '@components/modal/export-exam-session'
 import { examSuspendedReason } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { diemPhongThiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
+import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { useStore } from '@tanstack/react-store'
 import {
-    useFindUniqueExamList,
+    useFindManyExamRoom,
     useUpdateExamList,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas'
-import { useGenExamListCode } from '@workspace/libs/api/training'
+import { getExportSubjectClassScoreUrl, useGenExamListCode } from '@workspace/libs/api/training'
 import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Printer } from 'lucide-react'
+import { getUrl } from '@workspace/libs/api/custom-instance'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 interface StudentExamFormType {
     list: Record<
         string,
@@ -26,43 +29,94 @@ interface StudentExamFormType {
 }
 
 export default function SinhPhach() {
-    const { selectedExamListId } = useStore(diemPhongThiStore)
+    const { examId } = useStore(kythiStore)
     const [form] = Form.useForm<StudentExamFormType>()
 
     const listForm = Form.useWatch('list', form) || []
 
-    const { data: examList, refetch } = useFindUniqueExamList(
+    const { data: examRooms = [], refetch } = useFindManyExamRoom(
         {
-            where: { id: selectedExamListId },
+            where: {
+                examId,
+            },
             include: {
-                examPapers: {
-                    include: {
-                        studentSubjectScore: {
+                examList: {
+                    select: {
+                        lockExamCode: true,
+                        examPapers: {
                             include: {
-                                student: {
+                                studentSubjectScore: {
                                     include: {
-                                        userProfile: true,
-                                        fixedClass: true,
+                                        student: {
+                                            include: {
+                                                userProfile: true,
+                                                fixedClass: true,
+                                            },
+                                        },
+                                        subjectClass: {
+                                            include: {
+                                                fixedClasses: {
+                                                    include: {
+                                                        trainingCourse: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        subjectVersion: true,
                                     },
                                 },
-                                subjectClass: {
-                                    include: {
-                                        fixedClasses: {
-                                            include: {
-                                                trainingCourse: true,
+                            },
+                            orderBy: [
+                                {
+                                    studentSubjectScore: {
+                                        student: {
+                                            userProfile: {
+                                                firstName: 'asc',
                                             },
                                         },
                                     },
                                 },
-                                subjectVersion: true,
-                            },
+                                {
+                                    studentSubjectScore: {
+                                        student: {
+                                            userProfile: {
+                                                lastName: 'asc',
+                                            },
+                                        },
+                                    },
+                                },
+                            ],
                         },
                     },
                 },
             },
         },
-        { enabled: !!selectedExamListId }
+        { enabled: !!examId }
     )
+
+    const { onOpen: openXemTaiLieu } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+        mode?: 'view' | 'edit'
+        convertTo?: string
+    }>({
+        tag: 'XemTaiLieu',
+    })
+
+    const lockExamCode = examRooms.every((er) => er.examList.every((el) => el.lockExamCode))
+
+    const examPapers = useMemo(() => {
+        if (!examRooms) return []
+        return examRooms
+            .flatMap((e) => e.examList.flatMap((e) => e.examPapers))
+            .map((ep) => ({
+                ...ep,
+                fullname: ep?.studentSubjectScore?.student?.userProfile?.fullname,
+            }))
+        // .sortVietnameseName('fullname')
+    }, [examRooms])
+
     const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
@@ -79,7 +133,7 @@ export default function SinhPhach() {
     const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
     const handleGenCode = async () => {
         const res = await genCode({
-            data: { examListId: selectedExamListId ?? '' },
+            data: { examListId: examId ?? '' },
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
@@ -90,9 +144,9 @@ export default function SinhPhach() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     useEffect(() => {
-        if (selectedExamListId && examList?.examPapers && examList?.examPapers?.length > 0) {
+        if (examId) {
             form.setFieldsValue({
-                list: examList?.examPapers.reduce(
+                list: examPapers.reduce(
                     (acc, cur) => {
                         acc[cur.studentSubjectScoreId] = {
                             suspended: cur?.studentSubjectScore?.suspended ?? false,
@@ -105,7 +159,7 @@ export default function SinhPhach() {
                 ),
             })
         }
-    }, [selectedExamListId, examList, form])
+    }, [examId, examPapers, form])
 
     const handleSaveExamSuspended = async () => {
         try {
@@ -154,7 +208,7 @@ export default function SinhPhach() {
                         onChange={async (e) => {
                             try {
                                 await updateExamList({
-                                    where: { id: selectedExamListId ?? '' },
+                                    where: { id: examId ?? '' },
                                     data: { lockExamCode: e.target.checked },
                                 })
                                 await updateManySubjectClass({
@@ -164,7 +218,7 @@ export default function SinhPhach() {
                                                 some: {
                                                     examList: {
                                                         some: {
-                                                            id: selectedExamListId ?? '',
+                                                            id: examId ?? '',
                                                         },
                                                     },
                                                 },
@@ -177,7 +231,7 @@ export default function SinhPhach() {
                                 })
                             } catch (error) {}
                         }}
-                        checked={examList?.lockExamCode}
+                        checked={lockExamCode}
                     >
                         Khoá sinh phách
                     </Checkbox>
@@ -185,7 +239,7 @@ export default function SinhPhach() {
                         <Button
                             type="primary"
                             className="bg-orange-500"
-                            disabled={examList?.lockExamCode}
+                            disabled={lockExamCode}
                             onClick={handleSaveExamSuspended}
                         >
                             Lưu đình chỉ thi
@@ -195,11 +249,30 @@ export default function SinhPhach() {
                             onClick={() => {
                                 handleSave()
                             }}
-                            disabled={examList?.lockExamCode}
+                            disabled={lockExamCode}
                         >
                             Tạo phách
                         </Button>
-                        <ExportPhach data={examList?.examPapers || []} />
+                        <Button
+                            onClick={() => {
+                                openXemTaiLieu({
+                                    uri: getUrl(
+                                        getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                            'https://api.daotao.mta.swantech.vn',
+                                        `${getExportSubjectClassScoreUrl({
+                                            examId: examId,
+                                            type: 'DANH-SACH-PHACH',
+                                        })}`
+                                    ),
+                                    name: 'Danh sách phách',
+                                    mimeType: 'xlsx',
+                                    convertTo: 'pdf',
+                                })
+                            }}
+                        >
+                            <Printer />
+                            In phách
+                        </Button>
                     </Flex>
                 </Flex>
             </Col>
@@ -273,7 +346,7 @@ export default function SinhPhach() {
                                             valuePropName="checked"
                                         >
                                             <Checkbox
-                                                disabled={examList?.lockExamCode}
+                                                disabled={lockExamCode}
                                                 onChange={(e) => {
                                                     if (!e.target.checked) {
                                                         form.setFieldValue(
@@ -351,7 +424,7 @@ export default function SinhPhach() {
                                 },
                             },
                         ]}
-                        data={examList?.examPapers || []}
+                        data={examPapers}
                         pagination={false}
                     />
                 </Form>
