@@ -1,12 +1,10 @@
 import CriteriaAnalysisSubPage from '@components/sub-pages/tu-danh-gia-ctdt/criteria-analysis'
-import { getStatusEvaluation } from '@constants/constants'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import type { StandardPeriod } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
-import dayjs from 'dayjs'
 import {
     AlignmentType,
     BorderStyle,
@@ -27,7 +25,7 @@ import { useCallback, useMemo } from 'react'
 
 export default function CriteriaAnalysisWrite() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
+    const idProfile = me?.sDM_NhanVienId || '8cab103d-8159-4aa8-8e25-0edcdba5d0a1'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data, refetch } = useFindUniqueEvaluationPeriod(
@@ -349,53 +347,6 @@ export default function CriteriaAnalysisWrite() {
                                     children: [
                                         new TextRun({
                                             text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${criterion.name}`,
-                                            size: 28,
-                                            italics: true,
-                                            color: '000000',
-                                        }),
-                                    ],
-                                })
-                            )
-                            children.push(
-                                new Paragraph({
-                                    indent: { firstLine: 720 },
-                                    alignment: AlignmentType.JUSTIFIED,
-                                    children: [
-                                        new TextRun({
-                                            text: `Người thực hiện ${
-                                                criterion?.analysisCriterions?.lecturer?.userProfile
-                                                    ?.fullname || ''
-                                            }`,
-                                            size: 28,
-                                            italics: true,
-                                            color: '000000',
-                                        }),
-                                    ],
-                                })
-                            )
-
-                            children.push(
-                                new Paragraph({
-                                    indent: { firstLine: 720 },
-                                    alignment: AlignmentType.JUSTIFIED,
-                                    children: [
-                                        new TextRun({
-                                            text: `Hạn ${criterion?.analysisCriterions?.deadline ? dayjs(criterion?.analysisCriterions?.deadline).format('DD/MM/YYYY') : ''}`,
-                                            size: 28,
-                                            italics: true,
-                                            color: '000000',
-                                        }),
-                                    ],
-                                })
-                            )
-
-                            children.push(
-                                new Paragraph({
-                                    indent: { firstLine: 720 },
-                                    alignment: AlignmentType.JUSTIFIED,
-                                    children: [
-                                        new TextRun({
-                                            text: `Trạng thái: ${criterion?.analysisCriterions?.status ? getStatusEvaluation(criterion?.analysisCriterions?.status)?.label : ''}`,
                                             size: 28,
                                             italics: true,
                                             color: '000000',
