@@ -288,7 +288,7 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
                 </Col>
                 {selectedID && (
                     <Col span={12}>
-                        <CauHoiKhaoSat id={selectedID} />
+                        <CauHoiKhaoSat id={selectedID} type={topicSlected?.type || ''} />
                     </Col>
                 )}
             </Row>

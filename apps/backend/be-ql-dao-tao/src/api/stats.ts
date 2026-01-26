@@ -4726,7 +4726,6 @@ app.openapi(
         return c.json({ success: true, data: { BY_COURSE: [], BY_DEPARTMENT: [], BY_MAJOR: [] } })
     }
 )
-
 app.openapi(
     createRoute({
         method: 'post',

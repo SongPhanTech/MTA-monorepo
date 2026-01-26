@@ -262,7 +262,10 @@ app.openapi(importLecturer, async (c) => {
                             ...lecturerData,
                             userProfile: {
                                 connectOrCreate: {
-                                    where: { idCardNumber: lecturer.idCardNumber },
+                                    where: {
+                                        id: res.data as string,
+                                        // idCardNumber: lecturer.idCardNumber,
+                                    },
                                     create: { id: res.data as string, ...profileData },
                                 },
                             },
@@ -629,14 +632,14 @@ app.openapi(importStudent, async (c) => {
         const existingProfile = existingProfileMap.get(student.idCardNumber)
         const existing = existingStudentMap.get(student.code)
 
-        const createStudentFn = async () => {
+        const createStudentFn = async (id?: string) => {
             const st = await prisma.student.create({
                 data: {
                     ...studentData,
                     userProfile: {
                         connectOrCreate: {
-                            where: { idCardNumber: student.idCardNumber },
-                            create: profileData,
+                            where: id ? { id } : { idCardNumber: student.idCardNumber },
+                            create: { id, ...profileData },
                         },
                     },
                 },
@@ -666,37 +669,33 @@ app.openapi(importStudent, async (c) => {
         }
 
         if (existingProfile) {
-            // TODO: uncomment after request API update user profile
-            // const res = await putDMNhanViens(
-            //     {
-            //         Id: existingProfile.id,
-            //         sMa: existingProfile.code || crypto.randomUUID(),
-            //         bLaHocVien: true,
-            //         bLaTaiKhoan: true,
-            //         dNgaySinh: student.dateOfBirth
-            //             ? new Date(student.dateOfBirth)?.toISOString()
-            //             : null,
-            //         sCCCD: student.idCardNumber,
-            //         sHoVaDem: profileData.lastName,
-            //         sTen: profileData.firstName,
-            //         sTenDayDu: student.fullname,
-            //         sSDTDiDong: student.phoneNumber ?? '',
-            //         //! TODO: fix this
-            //         sEmail: `${student.idCardNumber}@gmail.com`,
-            //         sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-            //     },
-            //     {
-            //         headers: {
-            //             'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-            //             'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-            //         },
-            //     }
-            // )
+            const res = await putDMNhanViens(
+                {
+                    Id: existingProfile.id,
+                    sMa: existingProfile.code || crypto.randomUUID(),
+                    bLaHocVien: true,
+                    bLaTaiKhoan: true,
+                    dNgaySinh: student.dateOfBirth
+                        ? new Date(student.dateOfBirth)?.toISOString()
+                        : null,
+                    sCCCD: student.idCardNumber,
+                    sHoVaDem: profileData.lastName,
+                    sTen: profileData.firstName,
+                    sTenDayDu: student.fullname,
+                    sSDTDiDong: student.phoneNumber ?? '',
+                    //! TODO: fix this
+                    sEmail: `${student.idCardNumber}@gmail.com`,
+                    sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+                },
+                {
+                    headers: {
+                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                    },
+                }
+            )
 
-            const res = {
-                status: 200,
-                data: { extra: { data: { Id: existingProfile.id } } },
-            }
+            // @ts-expect-error
             console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
             if (existing) {
                 if (res.status === 200) {
@@ -709,7 +708,6 @@ app.openapi(importStudent, async (c) => {
                     })
                 } else {
                     const extra = res.data?.extra as unknown as ErrorExtra | undefined
-                    // const extra = res.data?.extra
                     return c.json(
                         { message: extra?.message || [extra?.code, extra?.data].join(' ') },
                         400
@@ -721,7 +719,6 @@ app.openapi(importStudent, async (c) => {
         } else {
             const res = await postDMNhanViens(
                 {
-                    // Id: profileId,
                     sMa: student.idCardNumber,
                     bLaHocVien: true,
                     bLaTaiKhoan: true,
@@ -747,7 +744,7 @@ app.openapi(importStudent, async (c) => {
             console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data?.Master)
 
             if (res.status === 200) {
-                await createStudentFn()
+                await createStudentFn(res.data as string)
             } else {
                 const extra = res.data?.extra as ErrorExtra | undefined
                 return c.json(

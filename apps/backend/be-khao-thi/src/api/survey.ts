@@ -1283,14 +1283,11 @@ app.openapi(sinhdetudong, async (c) => {
             let questions: any = []
 
             for (const knowledgeBlock of matrixData) {
-                console.log(knowledgeBlock)
-
                 if (knowledgeBlock.configExams.length) {
                     for (const configExam of knowledgeBlock.configExams) {
                         const listRamdom = knowledgeBlock.questions.filter(
                             (i: any) => i?.difficult === configExam.difficult
                         )
-                        console.log(listRamdom.length, configExam.quantity)
 
                         if (listRamdom.length < configExam.quantity) {
                             return c.json(

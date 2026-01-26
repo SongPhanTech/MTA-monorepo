@@ -7,14 +7,26 @@
 import { z } from 'zod/v3';
 const baseSchema = z.object({
     id: z.string(),
-    answer: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
+    answer: z.string(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
     id: z.string(),
-    answer: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
     description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
+    answer: z.string(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -51,8 +63,14 @@ export const SpecificChoicePrismaCreateSchema = baseSchemaWithoutDefaults.partia
  */
 export const SpecificChoicePrismaUpdateSchema = z.object({
     id: z.string(),
-    answer: z.string(),
-    description: z.string().nullish()
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
+    answer: z.string()
 }).partial().passthrough();
 
 
@@ -60,7 +78,7 @@ export const SpecificChoicePrismaUpdateSchema = z.object({
  * `SpecificChoice` schema for create operations excluding foreign keys and relations.
  */
 export const SpecificChoiceCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

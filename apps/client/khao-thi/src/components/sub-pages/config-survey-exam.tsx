@@ -70,7 +70,7 @@ function ConfigSurveyExam({
     const listForm = Form.useWatch('surveyChoice', form) ?? []
 
     const handleAddChoices = () => {
-        const newList = [...listForm, { answer: '', description: '', requireExplanation: false }]
+        const newList = [...listForm, { answer: '', description: '' }]
         setChoices(newList)
         form.setFieldsValue({ surveyChoice: newList }) // ✅ cập nhật form theo state
     }

@@ -80,7 +80,7 @@ export default function PutPhanCongHangLoatModal() {
                 children: standard.criteria
                     ?.filter((criterion) => input.selectedCriteriaIds?.includes(criterion.id))
                     .map((criterion) => ({
-                        title: `Tiêu chí ${criterion.order}: ${criterion.name}`,
+                        title: `Tiêu chí ${standard.order}.${criterion.order}: ${criterion.name}`,
                         key: criterion.id,
                     })),
             }))
