@@ -25,7 +25,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Empty, Form, message, Popconfirm, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { SquareX } from 'lucide-react'
+import { FileEdit } from 'lucide-react'
 import { useState } from 'react'
 
 type CommentType = {
@@ -623,11 +623,11 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                             'DUYET'
                                                         ) && (
                                                             <Tooltip title="Yêu cầu chỉnh sửa">
-                                                                <SquareX
+                                                                <FileEdit
                                                                     size={16}
                                                                     strokeWidth={1.5}
                                                                     className={
-                                                                        'text-red-600 cursor-pointer'
+                                                                        'text-blue-600 cursor-pointer'
                                                                     }
                                                                     onClick={() => {
                                                                         toggleCommentRow(record.id)

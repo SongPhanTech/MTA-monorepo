@@ -44,6 +44,7 @@ type TextEditorProps = {
     editorProps?: Omit<EditorContentProps, 'ref' | 'editor'>
     id?: string
     editable?: boolean
+    stickyToolbar?: boolean
 }
 
 export function RichTextEditor({
@@ -54,6 +55,7 @@ export function RichTextEditor({
     editorProps,
     id,
     editable = true,
+    stickyToolbar = false,
 }: TextEditorProps) {
     const editor = useEditor({
         immediatelyRender: false,
@@ -330,7 +332,11 @@ export function RichTextEditor({
 
     return (
         <div className="border rounded-md">
-            <TextEditorMenuBar editor={editor} id={id} editable={editable} />
+            <div
+                className={stickyToolbar ? 'sticky top-0 z-10 bg-white border-b rounded-t-md' : ''}
+            >
+                <TextEditorMenuBar editor={editor} id={id} editable={editable} />
+            </div>
             <EditorContent editor={editor} {...editorProps} />
         </div>
     )
