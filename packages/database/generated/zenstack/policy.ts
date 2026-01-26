@@ -17366,30 +17366,47 @@ function $check_SurveyQuestion_delete(input: any, context: QueryContext): any {
 }
 
 function SpecificChoice_read(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
 function $check_SpecificChoice_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
     return false;
 }
 
 function SpecificChoice_create(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
 function $check_SpecificChoice_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
     return false;
 }
 
 function SpecificChoice_create_input(input: any, context: QueryContext): boolean {
-    return false;
+    const user: any = context.user ?? null;
+    return (user != null)
 }
 
 function SpecificChoice_update(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
 function $check_SpecificChoice_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
     return false;
 }
 
@@ -17402,10 +17419,14 @@ function $check_SpecificChoice_postUpdate(input: any, context: QueryContext): an
 }
 
 function SpecificChoice_delete(context: QueryContext, db: CrudContract): any {
-    return { OR: [] };
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
 function $check_SpecificChoice_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
     return false;
 }
 

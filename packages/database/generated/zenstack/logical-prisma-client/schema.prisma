@@ -5869,10 +5869,19 @@ model SurveyQuestion {
   @@schema("khao-thi")
 }
 
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
 model SpecificChoice {
   id               String         @id() @default(cuid())
-  answer           String
+  code             String?        @unique()
+  active           Boolean        @default(true)
   description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @default("") @db.Uuid()
+  answer           String
   surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
   surveyQuestionId String
 

@@ -151,13 +151,12 @@ model SurveyQuestion extends Base {
   @@schema("khao-thi")
 }
 
-model SpecificChoice {
-  id               String         @id @default(cuid())
+model SpecificChoice extends Base {
   answer           String
-  description      String?        @db.Text
 
   surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
   surveyQuestionId String
+
 
   @@schema("khao-thi")
 }

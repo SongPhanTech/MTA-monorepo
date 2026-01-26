@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SpecificChoiceOrderByRelevanceFieldEnumSchema = z.enum(["id", "answer", "description", "surveyQuestionId"])
+export const SpecificChoiceOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "answer", "surveyQuestionId"])

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SpecificChoiceScalarFieldEnumSchema = z.enum(["id", "answer", "description", "surveyQuestionId"])
+export const SpecificChoiceScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "answer", "surveyQuestionId"])

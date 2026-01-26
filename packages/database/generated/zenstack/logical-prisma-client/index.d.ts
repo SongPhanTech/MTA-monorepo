@@ -1910,7 +1910,12 @@ export type Survey = $Result.DefaultSelection<Prisma.$SurveyPayload>;
 export type SurveyQuestion = $Result.DefaultSelection<Prisma.$SurveyQuestionPayload>;
 /**
  * Model SpecificChoice
- *
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
  */
 export type SpecificChoice = $Result.DefaultSelection<Prisma.$SpecificChoicePayload>;
 /**
@@ -9313,8 +9318,14 @@ export namespace Prisma {
     };
     export const SpecificChoiceScalarFieldEnum: {
         id: 'id',
-        answer: 'answer',
+        code: 'code',
+        active: 'active',
         description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        answer: 'answer',
         surveyQuestionId: 'surveyQuestionId'
     };
     export const SurveyChoiceScalarFieldEnum: {
@@ -12310,8 +12321,10 @@ export namespace Prisma {
     };
     export const SpecificChoiceOrderByRelevanceFieldEnum: {
         id: 'id',
-        answer: 'answer',
+        code: 'code',
         description: 'description',
+        createdBy: 'createdBy',
+        answer: 'answer',
         surveyQuestionId: 'surveyQuestionId'
     };
     export const SurveyChoiceOrderByRelevanceFieldEnum: {
@@ -84801,8 +84814,14 @@ export namespace Prisma {
      */
     interface SpecificChoiceFieldRefs {
         readonly id: FieldRef<"SpecificChoice", 'String'>;
-        readonly answer: FieldRef<"SpecificChoice", 'String'>;
+        readonly code: FieldRef<"SpecificChoice", 'String'>;
+        readonly active: FieldRef<"SpecificChoice", 'Boolean'>;
         readonly description: FieldRef<"SpecificChoice", 'String'>;
+        readonly deletedAt: FieldRef<"SpecificChoice", 'DateTime'>;
+        readonly createdAt: FieldRef<"SpecificChoice", 'DateTime'>;
+        readonly updatedAt: FieldRef<"SpecificChoice", 'DateTime'>;
+        readonly createdBy: FieldRef<"SpecificChoice", 'String'>;
+        readonly answer: FieldRef<"SpecificChoice", 'String'>;
         readonly surveyQuestionId: FieldRef<"SpecificChoice", 'String'>;
     }
 
@@ -287498,39 +287517,75 @@ export namespace Prisma {
     };
     export type SpecificChoiceMinAggregateOutputType = {
         id: string | null
-        answer: string | null
+        code: string | null
+        active: boolean | null
         description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        answer: string | null
         surveyQuestionId: string | null
     };
     export type SpecificChoiceMaxAggregateOutputType = {
         id: string | null
-        answer: string | null
+        code: string | null
+        active: boolean | null
         description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        answer: string | null
         surveyQuestionId: string | null
     };
     export type SpecificChoiceCountAggregateOutputType = {
         id: number
-        answer: number
+        code: number
+        active: number
         description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        answer: number
         surveyQuestionId: number
         _all: number
     };
     export type SpecificChoiceMinAggregateInputType = {
         id?: true
-        answer?: true
+        code?: true
+        active?: true
         description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        answer?: true
         surveyQuestionId?: true
     };
     export type SpecificChoiceMaxAggregateInputType = {
         id?: true
-        answer?: true
+        code?: true
+        active?: true
         description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        answer?: true
         surveyQuestionId?: true
     };
     export type SpecificChoiceCountAggregateInputType = {
         id?: true
-        answer?: true
+        code?: true
+        active?: true
         description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        answer?: true
         surveyQuestionId?: true
         _all?: true
     };
@@ -287602,8 +287657,14 @@ export namespace Prisma {
     };
     export type SpecificChoiceGroupByOutputType = {
         id: string
-        answer: string
+        code: string | null
+        active: boolean
         description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        answer: string
         surveyQuestionId: string
         _count: SpecificChoiceCountAggregateOutputType | null
         _min: SpecificChoiceMinAggregateOutputType | null
@@ -287623,32 +287684,56 @@ export namespace Prisma {
     >;
     export type SpecificChoiceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        answer?: boolean
+        code?: boolean
+        active?: boolean
         description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        answer?: boolean
         surveyQuestionId?: boolean
         surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["specificChoice"]>;
     export type SpecificChoiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        answer?: boolean
+        code?: boolean
+        active?: boolean
         description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        answer?: boolean
         surveyQuestionId?: boolean
         surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["specificChoice"]>;
     export type SpecificChoiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        answer?: boolean
+        code?: boolean
+        active?: boolean
         description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        answer?: boolean
         surveyQuestionId?: boolean
         surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["specificChoice"]>;
     export type SpecificChoiceSelectScalar = {
         id?: boolean
-        answer?: boolean
+        code?: boolean
+        active?: boolean
         description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        answer?: boolean
         surveyQuestionId?: boolean
     };
-    export type SpecificChoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "answer" | "description" | "surveyQuestionId", ExtArgs["result"]["specificChoice"]>;
+    export type SpecificChoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "answer" | "surveyQuestionId", ExtArgs["result"]["specificChoice"]>;
     export type SpecificChoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
     };
@@ -287665,8 +287750,14 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            answer: string
+            code: string | null
+            active: boolean
             description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            answer: string
             surveyQuestionId: string
         }, ExtArgs["result"]["specificChoice"]>
         composites: {}
@@ -363302,33 +363393,57 @@ export namespace Prisma {
         OR?: SpecificChoiceWhereInput[]
         NOT?: SpecificChoiceWhereInput | SpecificChoiceWhereInput[]
         id?: StringFilter<"SpecificChoice"> | string
-        answer?: StringFilter<"SpecificChoice"> | string
+        code?: StringNullableFilter<"SpecificChoice"> | string | null
+        active?: BoolFilter<"SpecificChoice"> | boolean
         description?: StringNullableFilter<"SpecificChoice"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SpecificChoice"> | Date | string | null
+        createdAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        updatedAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        createdBy?: UuidNullableFilter<"SpecificChoice"> | string | null
+        answer?: StringFilter<"SpecificChoice"> | string
         surveyQuestionId?: StringFilter<"SpecificChoice"> | string
         surveyQuestion?: XOR<SurveyQuestionScalarRelationFilter, SurveyQuestionWhereInput>
     };
     export type SpecificChoiceOrderByWithRelationInput = {
         id?: SortOrder
-        answer?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
         description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        answer?: SortOrder
         surveyQuestionId?: SortOrder
         surveyQuestion?: SurveyQuestionOrderByWithRelationInput
         _relevance?: SpecificChoiceOrderByRelevanceInput
     };
     export type SpecificChoiceWhereUniqueInput = Prisma.AtLeast<{
         id?: string
+        code?: string
         AND?: SpecificChoiceWhereInput | SpecificChoiceWhereInput[]
         OR?: SpecificChoiceWhereInput[]
         NOT?: SpecificChoiceWhereInput | SpecificChoiceWhereInput[]
-        answer?: StringFilter<"SpecificChoice"> | string
+        active?: BoolFilter<"SpecificChoice"> | boolean
         description?: StringNullableFilter<"SpecificChoice"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SpecificChoice"> | Date | string | null
+        createdAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        updatedAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        createdBy?: UuidNullableFilter<"SpecificChoice"> | string | null
+        answer?: StringFilter<"SpecificChoice"> | string
         surveyQuestionId?: StringFilter<"SpecificChoice"> | string
         surveyQuestion?: XOR<SurveyQuestionScalarRelationFilter, SurveyQuestionWhereInput>
-    }, "id">;
+    }, "id" | "code">;
     export type SpecificChoiceOrderByWithAggregationInput = {
         id?: SortOrder
-        answer?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
         description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        answer?: SortOrder
         surveyQuestionId?: SortOrder
         _count?: SpecificChoiceCountOrderByAggregateInput
         _max?: SpecificChoiceMaxOrderByAggregateInput
@@ -363339,8 +363454,14 @@ export namespace Prisma {
         OR?: SpecificChoiceScalarWhereWithAggregatesInput[]
         NOT?: SpecificChoiceScalarWhereWithAggregatesInput | SpecificChoiceScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"SpecificChoice"> | string
-        answer?: StringWithAggregatesFilter<"SpecificChoice"> | string
+        code?: StringNullableWithAggregatesFilter<"SpecificChoice"> | string | null
+        active?: BoolWithAggregatesFilter<"SpecificChoice"> | boolean
         description?: StringNullableWithAggregatesFilter<"SpecificChoice"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"SpecificChoice"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"SpecificChoice"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"SpecificChoice"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"SpecificChoice"> | string | null
+        answer?: StringWithAggregatesFilter<"SpecificChoice"> | string
         surveyQuestionId?: StringWithAggregatesFilter<"SpecificChoice"> | string
     };
     export type SurveyChoiceWhereInput = {
@@ -393603,43 +393724,85 @@ export namespace Prisma {
     };
     export type SpecificChoiceCreateInput = {
         id?: string
-        answer: string
+        code?: string | null
+        active?: boolean
         description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
         surveyQuestion: SurveyQuestionCreateNestedOneWithoutSpecificChoiceInput
     };
     export type SpecificChoiceUncheckedCreateInput = {
         id?: string
-        answer: string
+        code?: string | null
+        active?: boolean
         description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
         surveyQuestionId: string
     };
     export type SpecificChoiceUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        answer?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
         surveyQuestion?: SurveyQuestionUpdateOneRequiredWithoutSpecificChoiceNestedInput
     };
     export type SpecificChoiceUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        answer?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
         surveyQuestionId?: StringFieldUpdateOperationsInput | string
     };
     export type SpecificChoiceCreateManyInput = {
         id?: string
-        answer: string
+        code?: string | null
+        active?: boolean
         description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
         surveyQuestionId: string
     };
     export type SpecificChoiceUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        answer?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
     };
     export type SpecificChoiceUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        answer?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
         surveyQuestionId?: StringFieldUpdateOperationsInput | string
     };
     export type SurveyChoiceCreateInput = {
@@ -415566,20 +415729,38 @@ export namespace Prisma {
     };
     export type SpecificChoiceCountOrderByAggregateInput = {
         id?: SortOrder
-        answer?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
         description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        answer?: SortOrder
         surveyQuestionId?: SortOrder
     };
     export type SpecificChoiceMaxOrderByAggregateInput = {
         id?: SortOrder
-        answer?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
         description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        answer?: SortOrder
         surveyQuestionId?: SortOrder
     };
     export type SpecificChoiceMinOrderByAggregateInput = {
         id?: SortOrder
-        answer?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
         description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        answer?: SortOrder
         surveyQuestionId?: SortOrder
     };
     export type SurveyChoiceOrderByRelevanceInput = {
@@ -546755,13 +546936,25 @@ export namespace Prisma {
     };
     export type SpecificChoiceCreateWithoutSurveyQuestionInput = {
         id?: string
-        answer: string
+        code?: string | null
+        active?: boolean
         description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
     };
     export type SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput = {
         id?: string
-        answer: string
+        code?: string | null
+        active?: boolean
         description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
     };
     export type SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput = {
         where: SpecificChoiceWhereUniqueInput
@@ -546880,8 +547073,14 @@ export namespace Prisma {
         OR?: SpecificChoiceScalarWhereInput[]
         NOT?: SpecificChoiceScalarWhereInput | SpecificChoiceScalarWhereInput[]
         id?: StringFilter<"SpecificChoice"> | string
-        answer?: StringFilter<"SpecificChoice"> | string
+        code?: StringNullableFilter<"SpecificChoice"> | string | null
+        active?: BoolFilter<"SpecificChoice"> | boolean
         description?: StringNullableFilter<"SpecificChoice"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SpecificChoice"> | Date | string | null
+        createdAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        updatedAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        createdBy?: UuidNullableFilter<"SpecificChoice"> | string | null
+        answer?: StringFilter<"SpecificChoice"> | string
         surveyQuestionId?: StringFilter<"SpecificChoice"> | string
     };
     export type SurveyQuestionCreateWithoutSpecificChoiceInput = {
@@ -618089,8 +618288,14 @@ export namespace Prisma {
     };
     export type SpecificChoiceCreateManySurveyQuestionInput = {
         id?: string
-        answer: string
+        code?: string | null
+        active?: boolean
         description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
     };
     export type SurveyUpdateWithoutSurveyQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -618267,18 +618472,36 @@ export namespace Prisma {
     };
     export type SpecificChoiceUpdateWithoutSurveyQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        answer?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
     };
     export type SpecificChoiceUncheckedUpdateWithoutSurveyQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        answer?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
     };
     export type SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        answer?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
     };
     export type SurveyResponseCreateManySurveyChoiceInput = {
         id?: string

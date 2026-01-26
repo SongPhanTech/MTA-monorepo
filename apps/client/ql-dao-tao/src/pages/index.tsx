@@ -37,7 +37,11 @@ const IndexPage = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        router.push(router?.pathname !== ROUTER_PATH.QL_DAO_TAO.INDEX ? router?.pathname : ROUTER_PATH.QL_DAO_TAO.HOME)
+        router.push(
+            router?.pathname !== ROUTER_PATH.QL_DAO_TAO.INDEX
+                ? router?.pathname
+                : ROUTER_PATH.QL_DAO_TAO.HOME
+        )
     }, [])
     return <Loading />
 }

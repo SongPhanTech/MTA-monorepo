@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useExamTypeOptions } from '@hooks/examType'
 import { FilterProps } from '@components/commons/typeFilter'
-import { SubjectClass } from '@workspace/db';
+import { SubjectClass } from '@workspace/db'
 
 // interface MyTreeNode {
 //     title: string
@@ -350,14 +350,13 @@ function SelectLecturer({
         onSelect: (record: any, selected: boolean) => {
             console.log(123123)
             if (selected) {
-                let arr:any = []
+                let arr: any = []
                 if (record?.subjectClass?.length > 0) {
-                    const list= record?.subjectClass.map((i: SubjectClass) => i.id)
+                    const list = record?.subjectClass.map((i: SubjectClass) => i.id)
                     arr = [...selectedRowKeys, ...list]
                 } else {
                     arr = arr.push(record?.id)
                 }
-                
 
                 setSelectedRowKeys(arr)
                 form.setFieldsValue({
@@ -366,10 +365,8 @@ function SelectLecturer({
             } else {
                 let arr: React.Key[] = []
                 if (record?.subjectClass?.length > 0) {
-                    const list= record?.subjectClass.map((i: SubjectClass) => i.id)
-                    arr = selectedRowKeys.filter(
-                        (i: React.Key) => !list.includes(i)
-                    )
+                    const list = record?.subjectClass.map((i: SubjectClass) => i.id)
+                    arr = selectedRowKeys.filter((i: React.Key) => !list.includes(i))
                 } else {
                     arr = selectedRowKeys.filter((i: React.Key) => i !== record?.id)
                 }
@@ -380,11 +377,11 @@ function SelectLecturer({
             }
         },
         preserveSelectedRowKeys: true,
-        onChange: (selectedRowKeys:any, selectedRows:any, info:any) => {
-            if(info.type==='all'){
-                console.log('all');
+        onChange: (selectedRowKeys: any, selectedRows: any, info: any) => {
+            if (info.type === 'all') {
+                console.log('all')
             }
-        }
+        },
         // onChange: (newSelectedRowKeys: React.Key[]) => {
         //     console.log(newSelectedRowKeys)
 
