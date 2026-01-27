@@ -36,7 +36,18 @@ import {
     RiStrikethrough,
 } from 'react-icons/ri'
 import 'katex/dist/katex.min.css'
-import { Columns, Merge, Plus, Rows, Split, Table, TableProperties, Trash2 } from 'lucide-react'
+import {
+    Columns,
+    Merge,
+    Plus,
+    Redo,
+    Rows,
+    Split,
+    Table,
+    TableProperties,
+    Trash2,
+    Undo,
+} from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title } = Typography
@@ -541,11 +552,21 @@ export default function TextEditorMenuBar({
                       disabled: !editor.can().chain().focus().deleteTable().run(),
                       description: 'Xóa bảng',
                   },
+                  {
+                      id: 'undo',
+                      icon: <Undo className="size-5" />,
+                      onClick: () => editor.chain().focus().undo().run(),
+                      isActive: false,
+                      description: 'Hoàn tác',
+                  },
+                  {
+                      id: 'redo',
+                      icon: <Redo className="size-5" />,
+                      onClick: () => editor.chain().focus().redo().run(),
+                      isActive: false,
+                      description: 'Làm lại',
+                  },
               ],
-              // [
-              //     { icon: <AiOutlineUndo className="size-5" />, onClick: () => editor.chain().focus().undo().run(), isActive: false, disabled: !editor.can().chain().focus().undo().run() },
-              //     { icon: <AiOutlineRedo className="size-5" />, onClick: () => editor.chain().focus().redo().run(), isActive: false, disabled: !editor.can().chain().focus().redo().run() },
-              // ],
           ]
         : []
 

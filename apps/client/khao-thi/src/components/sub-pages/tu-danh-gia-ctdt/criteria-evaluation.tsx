@@ -315,6 +315,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
 
@@ -329,6 +330,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
 
@@ -343,6 +345,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
 
@@ -357,6 +360,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
                                                                 <Form.Item
@@ -370,6 +374,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
 
