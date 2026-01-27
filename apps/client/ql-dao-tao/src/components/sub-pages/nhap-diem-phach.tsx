@@ -14,7 +14,6 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
     const { examId } = useStore(kythiStore)
-
     const { data: examPapers = [], refetch } = useFindManyExamPaper(
         {
             where: {
@@ -200,6 +199,22 @@ export default function NhapDiemPhach() {
                                                     style={{ width: '100%' }}
                                                     step={0.1}
                                                     controls={false}
+                                                    parser={(value) => {
+                                                        if (!value) return ''
+                                                        const num = Number(value)
+                                                        if (Number.isNaN(num)) return ''
+                                                        return num > 10
+                                                            ? Number((num / 10).toFixedSmart(2))
+                                                            : num
+                                                    }}
+                                                    formatter={(value) => {
+                                                        if (!value) return ''
+                                                        const num = Number(value)
+                                                        if (Number.isNaN(num)) return ''
+                                                        return num > 10
+                                                            ? (num / 10).toFixedSmart(2)
+                                                            : num.toString()
+                                                    }}
                                                 />
                                             </Form.Item>
                                         )
