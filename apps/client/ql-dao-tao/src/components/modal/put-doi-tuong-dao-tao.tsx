@@ -17,8 +17,8 @@ import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { TRAINING_OBJECT_TYPE } from '@constants/constants'
-import { useGetDMVaiTros } from '@workspace/libs/api/system'
 import type { GetDMVaiTroDTO } from '@workspace/libs/api/schemas'
+import { useGetDMVaiTros } from '@workspace/libs/api/system'
 
 dayjs.locale('vi')
 const PutTrainingObjectTypeModal = () => {
@@ -58,6 +58,8 @@ const PutTrainingObjectTypeModal = () => {
                 await updateTrainingObjectType({
                     data: {
                         ...rest,
+                        trainingLevelId: rest.trainingLevelId || null,
+                        trainingFormId: rest.trainingFormId || null,
                         vaiTro: rest.vaiTro || [],
                     },
                     where: { id },

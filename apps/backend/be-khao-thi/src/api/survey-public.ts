@@ -288,6 +288,7 @@ app.openapi(savePublicSurvey, async (c) => {
         }
 
         studentId = student.id
+        profileId = student.userProfileId
     }
 
     if (survey.startDate > new Date()) {

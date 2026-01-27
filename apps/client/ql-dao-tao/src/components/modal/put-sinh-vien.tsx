@@ -11,12 +11,14 @@ import {
     useFindUniqueUserProfile,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Row } from 'antd'
+import { Button, Col, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { ExportOutlined } from '@ant-design/icons'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import { STUDENT_STATUS_OPTIONS } from '@constants/constants'
+import { ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -46,7 +48,7 @@ const PutStudentModal = () => {
             curriculumVersion: true,
         },
     })
-    const { data: studentData } = useFindUniqueStudent(
+    const { data: studentData, isPending } = useFindUniqueStudent(
         {
             where: { id },
             include: {
@@ -80,34 +82,31 @@ const PutStudentModal = () => {
     const selectedCurriculumVersionId = Form.useWatch('curriculumVersionId', form)
 
     const filteredFixedClasses = useMemo(() => {
-        if (!selectedTrainingCourseId && !selectedCurriculumVersionId) {
+        if (!selectedTrainingCourseId) {
             return fixedClassData
         }
 
         return fixedClassData.filter((cls) => {
             const matchesCourse =
                 !selectedTrainingCourseId || cls.trainingCourseId === selectedTrainingCourseId
-            const matchesCurriculum =
-                !selectedCurriculumVersionId ||
-                cls.curriculumVersionId === selectedCurriculumVersionId
-            return matchesCourse && matchesCurriculum
+            return matchesCourse
         })
-    }, [fixedClassData, selectedTrainingCourseId, selectedCurriculumVersionId])
+    }, [fixedClassData, selectedTrainingCourseId])
 
-    // Lọc khoá học dựa trên chương trình đào tạo đã chọn
-    const filteredTrainingCourses = useMemo(() => {
-        if (!selectedCurriculumVersionId) {
-            return trainingCourseData
-        }
+    // // Lọc khoá học dựa trên chương trình đào tạo đã chọn
+    // const filteredTrainingCourses = useMemo(() => {
+    //     if (!selectedCurriculumVersionId) {
+    //         return trainingCourseData
+    //     }
 
-        // Lấy danh sách khoá học có chứa chương trình đào tạo đã chọn
-        const coursesWithCurriculum = fixedClassData
-            .filter((cls) => cls.curriculumVersionId === selectedCurriculumVersionId)
-            .map((cls) => cls.trainingCourseId)
-            .filter((courseId, index, array) => array.indexOf(courseId) === index) // Remove duplicates
+    //     // Lấy danh sách khoá học có chứa chương trình đào tạo đã chọn
+    //     const coursesWithCurriculum = fixedClassData
+    //         .filter((cls) => cls.curriculumVersionId === selectedCurriculumVersionId)
+    //         .map((cls) => cls.trainingCourseId)
+    //         .filter((courseId, index, array) => array.indexOf(courseId) === index) // Remove duplicates
 
-        return trainingCourseData.filter((course) => coursesWithCurriculum.includes(course.id))
-    }, [trainingCourseData, fixedClassData, selectedCurriculumVersionId])
+    //     return trainingCourseData.filter((course) => coursesWithCurriculum.includes(course.id))
+    // }, [trainingCourseData, fixedClassData, selectedCurriculumVersionId])
 
     const filteredParallelCurriculumVersions = useMemo(() => {
         if (!selectedCurriculumVersionId) {
@@ -194,11 +193,11 @@ const PutStudentModal = () => {
                 await updateStudent({
                     data: {
                         userProfileId: cccdUserProfileData?.id,
-                        fixedClassId: output.fixedClassId,
+                        fixedClassId: output.fixedClassId || null,
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
-                        curriculumVersionId: output.curriculumVersionId,
-                        curriculumVersionParallelId: output.curriculumVersionParallelId,
+                        curriculumVersionId: output.curriculumVersionId || null,
+                        curriculumVersionParallelId: output.curriculumVersionParallelId || null,
                         note: output.note,
                         code: output.code,
                     },
@@ -328,7 +327,7 @@ const PutStudentModal = () => {
                         <FormItem form={form} name="trainingCourseId" label="Khoá">
                             <Select
                                 placeholder="Chọn khoá"
-                                options={filteredTrainingCourses.map((value) => ({
+                                options={trainingCourseData.map((value) => ({
                                     value: value.id,
                                     label: value.name,
                                 }))}
@@ -394,6 +393,18 @@ const PutStudentModal = () => {
                                 })}
                             />
                         </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <div className="h-full flex align-bottom">
+                            <Button
+                                className="mt-auto"
+                                loading={isPending || !studentData}
+                                target="_blank"
+                                href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${studentData?.userProfileId}`}
+                            >
+                                Hồ sơ <ExportOutlined />
+                            </Button>
+                        </div>
                     </Col>
                     <Col span={24}>
                         <FormItem form={form} name="note" label="Ghi chú">
