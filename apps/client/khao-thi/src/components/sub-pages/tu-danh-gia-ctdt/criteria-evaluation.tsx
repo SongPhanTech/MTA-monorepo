@@ -44,6 +44,7 @@ const CriteriaEvaluationSubPage = ({
 }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [showCommentsCriterionId, setShowCommentsCriterionId] = useState<string | null>(null)
+    const [activeCollapseKeys, setActiveCollapseKeys] = useState<string[]>([])
     const { can } = useAbility()
 
     const canEdit = can(
@@ -52,6 +53,13 @@ const CriteriaEvaluationSubPage = ({
     )
 
     const { hideSpinner, showSpinner } = useSpinner()
+
+    const statusConfig = getStatusConfig(
+        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
+    )
+
+    const currentStatus =
+        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
 
     const handleSubmit = async () => {
         const dataSubmit = form.getFieldsValue()
@@ -181,12 +189,23 @@ const CriteriaEvaluationSubPage = ({
         }
     }, [data, form])
 
-    const statusConfig = getStatusConfig(
-        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
-    )
+    // Tự động mở collapse cho các tiêu chí có comment khi ở trạng thái REJECTED
+    useEffect(() => {
+        if (data && currentStatus === $Enums.EvaluationStatus.REVISION) {
+            const criteriaWithComments = data.criteria
+                .filter((item) => {
+                    const hasComments =
+                        item.evaluationCriterion?.evaluationCriterionComments &&
+                        item.evaluationCriterion.evaluationCriterionComments.length > 0
+                    return hasComments
+                })
+                .map((item) => item.id)
 
-    const currentStatus =
-        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
+            if (criteriaWithComments.length > 0) {
+                setActiveCollapseKeys(criteriaWithComments)
+            }
+        }
+    }, [data, currentStatus])
 
     const isReadOnly =
         !canEdit ||
@@ -265,12 +284,19 @@ const CriteriaEvaluationSubPage = ({
                                     return (
                                         <div key={key} style={{ marginBottom: 24 }}>
                                             <Collapse
+                                                activeKey={activeCollapseKeys}
+                                                onChange={(keys) =>
+                                                    setActiveCollapseKeys(
+                                                        Array.isArray(keys) ? keys : [keys]
+                                                    )
+                                                }
                                                 items={[
                                                     {
                                                         label: (
                                                             <div>
                                                                 <span className="font-bold">
-                                                                    Tiêu chí {data.order}.{item.order}:{' '}
+                                                                    Tiêu chí {data.order}.
+                                                                    {item.order}:{' '}
                                                                 </span>
                                                                 {item?.name}
                                                             </div>
@@ -352,9 +378,11 @@ const CriteriaEvaluationSubPage = ({
                                                                         <div className="flex justify-end mb-4">
                                                                             <Badge
                                                                                 count={
-                                                                                    item.evaluationCriterion
+                                                                                    item
+                                                                                        .evaluationCriterion
                                                                                         ?.evaluationCriterionComments
-                                                                                        ?.length || 0
+                                                                                        ?.length ||
+                                                                                    0
                                                                                 }
                                                                                 showZero
                                                                                 offset={[-5, 5]}
@@ -366,15 +394,21 @@ const CriteriaEvaluationSubPage = ({
                                                                                     onClick={() =>
                                                                                         setShowCommentsCriterionId(
                                                                                             showCommentsCriterionId ===
-                                                                                                item.evaluationCriterion?.id
+                                                                                                item
+                                                                                                    .evaluationCriterion
+                                                                                                    ?.id
                                                                                                 ? null
-                                                                                                : item.evaluationCriterion?.id ||
+                                                                                                : item
+                                                                                                      .evaluationCriterion
+                                                                                                      ?.id ||
                                                                                                       null
                                                                                         )
                                                                                     }
                                                                                 >
                                                                                     {showCommentsCriterionId ===
-                                                                                    item.evaluationCriterion?.id
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.id
                                                                                         ? 'Đóng đánh giá'
                                                                                         : 'Xem đánh giá'}
                                                                                 </Button>
@@ -382,12 +416,15 @@ const CriteriaEvaluationSubPage = ({
                                                                         </div>
 
                                                                         {showCommentsCriterionId ===
-                                                                            item.evaluationCriterion?.id && (
+                                                                            item.evaluationCriterion
+                                                                                ?.id && (
                                                                             <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
                                                                                 <CommentList
                                                                                     comments={
-                                                                                        item.evaluationCriterion
-                                                                                            ?.evaluationCriterionComments || []
+                                                                                        item
+                                                                                            .evaluationCriterion
+                                                                                            ?.evaluationCriterionComments ||
+                                                                                        []
                                                                                     }
                                                                                 />
                                                                             </div>
@@ -400,7 +437,6 @@ const CriteriaEvaluationSubPage = ({
                                                 ]}
                                                 bordered={true}
                                                 expandIconPosition="end"
-                                                className="bg-transparent mb-6"
                                             />
                                         </div>
                                     )
