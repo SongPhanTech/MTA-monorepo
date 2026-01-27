@@ -39,7 +39,7 @@ const IndexPage = () => {
     useEffect(() => {
         router.push(
             router?.pathname !== ROUTER_PATH.QL_DAO_TAO.INDEX
-                ? router?.pathname
+                ? router?.asPath
                 : ROUTER_PATH.QL_DAO_TAO.HOME
         )
     }, [])
