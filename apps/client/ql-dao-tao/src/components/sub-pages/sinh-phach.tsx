@@ -4,6 +4,7 @@ import useSpinner from '@hooks/spinner'
 import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { useStore } from '@tanstack/react-store'
 import {
+    useFindManyExamPaper,
     useFindManyExamRoom,
     useUpdateManyExamList,
     useUpdateManySubjectClass,
@@ -12,7 +13,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas'
 import { getExportSubjectClassScoreUrl, useGenExamListCode } from '@workspace/libs/api/training'
 import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from 'antd'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { Printer } from 'lucide-react'
 import { getUrl } from '@workspace/libs/api/custom-instance'
@@ -43,53 +44,64 @@ export default function SinhPhach() {
                 examList: {
                     select: {
                         lockExamCode: true,
-                        examPapers: {
-                            include: {
-                                studentSubjectScore: {
-                                    include: {
-                                        student: {
-                                            include: {
-                                                userProfile: true,
-                                                fixedClass: true,
-                                            },
-                                        },
-                                        subjectClass: {
-                                            include: {
-                                                fixedClasses: {
-                                                    include: {
-                                                        trainingCourse: true,
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        subjectVersion: true,
-                                    },
-                                },
-                            },
-                            orderBy: [
-                                {
-                                    studentSubjectScore: {
-                                        student: {
-                                            userProfile: {
-                                                firstName: 'asc',
-                                            },
-                                        },
-                                    },
-                                },
-                                {
-                                    studentSubjectScore: {
-                                        student: {
-                                            userProfile: {
-                                                lastName: 'asc',
-                                            },
-                                        },
-                                    },
-                                },
-                            ],
-                        },
                     },
                 },
             },
+        },
+        { enabled: !!examId }
+    )
+
+    const { data: examPapers = [], refetch:refreshExamPaper } = useFindManyExamPaper(
+        {
+            where: {
+                examList: {
+                    examRoom: {
+                        examId,
+                    },
+                },
+            },
+            include: {
+                studentSubjectScore: {
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                                fixedClass: true,
+                            },
+                        },
+                        subjectClass: {
+                            include: {
+                                fixedClasses: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
+                                },
+                            },
+                        },
+                        subjectVersion: true,
+                    },
+                },
+            },
+            orderBy: [
+                {
+                    studentSubjectScore: {
+                        student: {
+                            userProfile: {
+                                firstName: 'asc',
+                            },
+                        },
+                    },
+                },
+                {
+                    studentSubjectScore: {
+                        student: {
+                            userProfile: {
+                                lastName: 'asc',
+                            },
+                        },
+                    },
+                },
+            ],
         },
         { enabled: !!examId }
     )
@@ -106,10 +118,10 @@ export default function SinhPhach() {
 
     const lockExamCode = examRooms.every((er) => er.examList.every((el) => el.lockExamCode))
 
-    const examPapers = useMemo(() => {
-        if (!examRooms) return []
-        return examRooms.flatMap((e) => e.examList.flatMap((e) => e.examPapers))
-    }, [examRooms])
+    // const examPapers = useMemo(() => {
+    //     if (!examRooms) return []
+    //     return examRooms.flatMap((e) => e.examList.flatMap((e) => e.examPapers))
+    // }, [examRooms])
 
     const handleSave = () => {
         Modal.confirm({
@@ -132,6 +144,7 @@ export default function SinhPhach() {
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
             refetch()
+            refreshExamPaper()
         }
     }
 
@@ -422,6 +435,8 @@ export default function SinhPhach() {
                                 },
                             },
                         ]}
+                        scrollable
+                        maxHeight={'calc(100vh - 390px)'}
                         data={examPapers}
                         pagination={false}
                     />

@@ -1627,6 +1627,22 @@ app.openapi(exportSubjectClassScore, async (c) => {
                         },
                     },
                 },
+                orderBy: [
+                    {
+                        student: {
+                            userProfile: {
+                                firstName: 'asc',
+                            },
+                        },
+                    },
+                    {
+                        student: {
+                            userProfile: {
+                                lastName: 'asc',
+                            },
+                        },
+                    },
+                ],
             },
         },
     })
@@ -1682,6 +1698,22 @@ app.openapi(exportSubjectClassScore, async (c) => {
                                     },
                                 },
                             },
+                            orderBy: [
+                                {
+                                    student: {
+                                        userProfile: {
+                                            firstName: 'asc',
+                                        },
+                                    },
+                                },
+                                {
+                                    student: {
+                                        userProfile: {
+                                            lastName: 'asc',
+                                        },
+                                    },
+                                },
+                            ],
                         },
                     },
                 },

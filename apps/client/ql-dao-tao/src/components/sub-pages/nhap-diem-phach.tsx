@@ -1,9 +1,9 @@
 import Table from '@components/commons/table'
 import { useStore } from '@tanstack/react-store'
-import { useFindManyExamRoom } from '@workspace/db/hooks'
+import { useFindManyExamPaper } from '@workspace/db/hooks'
 import { getExportSubjectClassScoreUrl, useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { validateExamScore } from '@lib/utils'
 import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { Printer } from 'lucide-react'
@@ -15,44 +15,39 @@ export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
     const { examId } = useStore(kythiStore)
 
-    const { data: examRooms = [], refetch } = useFindManyExamRoom(
+    const { data: examPapers = [], refetch } = useFindManyExamPaper(
         {
             where: {
-                examId,
+                examList: {
+                    examRoom: {
+                        examId,
+                    },
+                },
             },
             include: {
-                examList: {
-                    select: {
-                        lockExamCode: true,
-                        examPapers: {
+                studentSubjectScore: {
+                    include: {
+                        student: {
                             include: {
-                                studentSubjectScore: {
+                                userProfile: true,
+                                fixedClass: true,
+                            },
+                        },
+                        subjectClass: {
+                            include: {
+                                fixedClasses: {
                                     include: {
-                                        student: {
-                                            include: {
-                                                userProfile: true,
-                                                fixedClass: true,
-                                            },
-                                        },
-                                        subjectClass: {
-                                            include: {
-                                                fixedClasses: {
-                                                    include: {
-                                                        trainingCourse: true,
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        subjectVersion: true,
+                                        trainingCourse: true,
                                     },
                                 },
                             },
-                            orderBy: {
-                                examCode: 'asc',
-                            },
                         },
+                        subjectVersion: true,
                     },
                 },
+            },
+            orderBy: {
+                examCode: 'asc',
             },
         },
         { enabled: !!examId }
@@ -68,10 +63,10 @@ export default function NhapDiemPhach() {
         tag: 'XemTaiLieu',
     })
 
-    const examPapers = useMemo(() => {
-        if (!examRooms) return []
-        return examRooms.flatMap((e) => e.examList.flatMap((e) => e.examPapers))
-    }, [examRooms])
+    // const examPapers = useMemo(() => {
+    //     if (!examRooms) return []
+    //     return examRooms.flatMap((e) => e.examList.flatMap((e) => e.examPapers))
+    // }, [examRooms])
 
     useEffect(() => {
         if (examPapers) {
@@ -211,6 +206,8 @@ export default function NhapDiemPhach() {
                                     },
                                 },
                             ]}
+                            maxHeight={'calc(100vh - 390px)'}
+                            scrollable
                             data={examPapers}
                             pagination={false}
                         />
