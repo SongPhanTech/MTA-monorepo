@@ -1,4 +1,3 @@
-DROP FUNCTION IF EXISTS update_fullname();
 CREATE FUNCTION update_fullname() RETURNS TRIGGER AS $$
 BEGIN
   NEW.fullname := NEW."lastName" || ' ' || NEW."firstName";

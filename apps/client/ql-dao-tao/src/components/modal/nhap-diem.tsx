@@ -90,7 +90,7 @@ const NhapDiemThuCong = () => {
                     },
                 },
             ])
-            message.success('Thêm điểm thủ công thành công')
+            message.success('Thêm điểm thành công')
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
@@ -133,7 +133,7 @@ const NhapDiemThuCong = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={'Nhập điểm thủ công'}
+            title={'Nhập điểm trực tiếp'}
             className="w-[1000px]"
         >
             <Col span={24}>
@@ -180,7 +180,7 @@ const NhapDiemThuCong = () => {
                                 type: 'input',
                             },
                             {
-                                title: 'Điểm thủ công',
+                                title: 'Điểm',
                                 dataIndex: 'name',
                                 type: 'input',
                                 width: 200,
@@ -194,7 +194,7 @@ const NhapDiemThuCong = () => {
                                             min={1}
                                             max={10}
                                             className="w-full"
-                                            placeholder="Nhập điểm thủ công"
+                                            placeholder="Nhập điểm"
                                         />
                                     </Form.Item>
                                 ),
