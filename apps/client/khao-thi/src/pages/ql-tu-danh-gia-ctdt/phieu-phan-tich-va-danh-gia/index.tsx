@@ -15,6 +15,7 @@ import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
 import EvaluateLayout from '@layouts/evaluate-layout'
+import ReviewSecretary from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-secretary'
 
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
@@ -107,7 +108,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             tabs.push({
                 key: '4',
                 label: 'Xét duyệt phiếu (Thư ký)',
-                children: <ReviewCriteriaAnalysis />,
+                children: <ReviewSecretary />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }

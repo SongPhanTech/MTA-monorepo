@@ -32,7 +32,7 @@ export type DataTabCrossReviewType = StandardPeriod & {
 
 export default function CrossReview({ userRole = 'REVIEWER' }: { userRole: 'P13' | 'REVIEWER' }) {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '7247c121-ab5a-4a72-a018-4a4090c7948a'
+    const idProfile = me?.sDM_NhanVienId || '879df395-99ce-448c-b057-e8df891406cb'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data, refetch } = useFindUniqueEvaluationPeriod(

@@ -43,7 +43,7 @@ const CriteriaEvaluationSubPage = ({
     onRefetch?: () => void
 }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
-    const [showComments, setShowComments] = useState(false)
+    const [showCommentsCriterionId, setShowCommentsCriterionId] = useState<string | null>(null)
     const { can } = useAbility()
 
     const canEdit = can(
@@ -188,9 +188,6 @@ const CriteriaEvaluationSubPage = ({
     const currentStatus =
         data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
 
-    const commentsCount =
-        data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments?.length || 0
-
     const isReadOnly =
         !canEdit ||
         currentStatus === $Enums.EvaluationStatus.SUBMITTED ||
@@ -227,16 +224,6 @@ const CriteriaEvaluationSubPage = ({
             </div>
 
             <div className="flex gap-2 mr-2">
-                <Badge count={commentsCount} showZero offset={[-5, 5]}>
-                    <Button
-                        type="primary"
-                        className="bg-yellow-400"
-                        size="small"
-                        onClick={() => setShowComments(!showComments)}
-                    >
-                        Xem đánh giá
-                    </Button>
-                </Badge>
                 <ExportCriteriaEvaluation data={data} />
                 {currentStatus !== $Enums.EvaluationStatus.SUBMITTED &&
                     currentStatus !== $Enums.EvaluationStatus.APPROVED &&
@@ -268,18 +255,7 @@ const CriteriaEvaluationSubPage = ({
     return (
         <div className="flex flex-col h-[calc(100vh-200px)]">
             {headerSection}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden">
-                {showComments && (
-                    <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
-                        <CommentList
-                            comments={
-                                data?.criteria?.[0]?.evaluationCriterion
-                                    ?.evaluationCriterionComments || []
-                            }
-                        />
-                    </div>
-                )}
-
+            <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
                 <Form form={form} layout="vertical" className="form-evidence">
                     <Form.List name="criteria">
                         {(fields) => (
@@ -370,6 +346,54 @@ const CriteriaEvaluationSubPage = ({
                                                                         editable={!isReadOnly}
                                                                     />
                                                                 </Form.Item>
+
+                                                                {item.evaluationCriterion && (
+                                                                    <>
+                                                                        <div className="flex justify-end mb-4">
+                                                                            <Badge
+                                                                                count={
+                                                                                    item.evaluationCriterion
+                                                                                        ?.evaluationCriterionComments
+                                                                                        ?.length || 0
+                                                                                }
+                                                                                showZero
+                                                                                offset={[-5, 5]}
+                                                                            >
+                                                                                <Button
+                                                                                    type="primary"
+                                                                                    className="bg-yellow-400"
+                                                                                    size="small"
+                                                                                    onClick={() =>
+                                                                                        setShowCommentsCriterionId(
+                                                                                            showCommentsCriterionId ===
+                                                                                                item.evaluationCriterion?.id
+                                                                                                ? null
+                                                                                                : item.evaluationCriterion?.id ||
+                                                                                                      null
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    {showCommentsCriterionId ===
+                                                                                    item.evaluationCriterion?.id
+                                                                                        ? 'Đóng đánh giá'
+                                                                                        : 'Xem đánh giá'}
+                                                                                </Button>
+                                                                            </Badge>
+                                                                        </div>
+
+                                                                        {showCommentsCriterionId ===
+                                                                            item.evaluationCriterion?.id && (
+                                                                            <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
+                                                                                <CommentList
+                                                                                    comments={
+                                                                                        item.evaluationCriterion
+                                                                                            ?.evaluationCriterionComments || []
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                        )}
+                                                                    </>
+                                                                )}
                                                             </>
                                                         ),
                                                     },
