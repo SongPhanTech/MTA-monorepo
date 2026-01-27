@@ -51,7 +51,7 @@ export default function SinhPhach() {
         { enabled: !!examId }
     )
 
-    const { data: examPapers = [], refetch:refreshExamPaper } = useFindManyExamPaper(
+    const { data: examPapers = [], refetch: refreshExamPaper } = useFindManyExamPaper(
         {
             where: {
                 examList: {

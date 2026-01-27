@@ -359,7 +359,9 @@ export default function EvaluationPeriod() {
                             ),
                             expandIcon: ({ expanded, onExpand, record }) =>
                                 expanded ? (
-                                    <ChevronDown onClick={(e) => onExpand(record as any, e as any)} />
+                                    <ChevronDown
+                                        onClick={(e) => onExpand(record as any, e as any)}
+                                    />
                                 ) : (
                                     <ChevronUp onClick={(e) => onExpand(record as any, e as any)} />
                                 ),

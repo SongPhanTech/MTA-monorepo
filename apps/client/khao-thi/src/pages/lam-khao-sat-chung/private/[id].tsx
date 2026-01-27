@@ -284,7 +284,7 @@ function TakeTestPage() {
                 </Row>
             )}
 
-               {survey?.surveyChoice?.length && (
+            {survey?.surveyChoice?.length && (
                 <Row gutter={[16, 16]}>
                     <Col span={24}>
                         <Table
