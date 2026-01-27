@@ -593,6 +593,9 @@ importers:
       prom-client:
         specifier: 'catalog:'
         version: 15.1.3
+      xlsx-template:
+        specifier: 'catalog:'
+        version: 1.4.4
       zod:
         specifier: 'catalog:'
         version: 3.25.76
@@ -2110,7 +2113,7 @@ importers:
     devDependencies:
       '@paralleldrive/cuid2':
         specifier: github:paralleldrive/cuid2
-        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/0870bc8109736ae9f4c4eeab29169153b73bff35
+        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/8cbb520b8af00edaf19660796a84cd6c8aa10479
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
@@ -3594,9 +3597,9 @@ packages:
   '@paralleldrive/cuid2@2.3.1':
     resolution: {integrity: sha512-XO7cAxhnTZl0Yggq6jOgjiOHhbgcO4NqFqwSmQpjK3b6TEE6Uj/jfSk6wzYyemh3+I0sHirKSetjQwn5cZktFw==}
 
-  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/0870bc8109736ae9f4c4eeab29169153b73bff35':
-    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/0870bc8109736ae9f4c4eeab29169153b73bff35}
-    version: 3.0.6
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/8cbb520b8af00edaf19660796a84cd6c8aa10479':
+    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/8cbb520b8af00edaf19660796a84cd6c8aa10479}
+    version: 3.3.0
     hasBin: true
 
   '@popperjs/core@2.11.8':
@@ -10912,7 +10915,7 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
 
-  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/0870bc8109736ae9f4c4eeab29169153b73bff35':
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/8cbb520b8af00edaf19660796a84cd6c8aa10479':
     dependencies:
       '@noble/hashes': 2.0.1
       bignumber.js: 9.3.1

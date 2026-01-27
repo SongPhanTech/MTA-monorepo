@@ -579,7 +579,6 @@ export default function ChuyenDeNghienCuu() {
             })
 
             const res = await sqlTransaction(finalData)
-            console.log('res', res)
 
             message.success(`Cập nhật thành công ${finalData.length} bản ghi!`)
             refetchStudentSubjectScore()
@@ -783,8 +782,8 @@ export default function ChuyenDeNghienCuu() {
                     columns={[
                         {
                             title: 'Hạn nhập chuyên đề',
-                            width: 200,
-                            align: 'left',
+                            width: 140,
+                            align: 'center',
                             render: (_, record) => {
                                 return (
                                     <div>
@@ -807,8 +806,8 @@ export default function ChuyenDeNghienCuu() {
                         // },
                         {
                             title: 'Khóa học',
-                            width: 150,
-                            align: 'left',
+                            width: 100,
+                            align: 'center',
                             render: (_, record) => {
                                 return record?.student?.fixedClass?.trainingCourse?.name || ''
                             },
@@ -822,31 +821,29 @@ export default function ChuyenDeNghienCuu() {
                         //     },
                         // },
                         {
-                            title: 'Sinh viên',
+                            title: 'HV/SV',
                             width: 150,
                             align: 'left',
                             render: (_, record) => {
-                                return `${record?.student?.userProfile?.lastName || ''} ${
-                                    record?.student?.userProfile?.firstName || ''
-                                }`.trim()
+                                return record?.student?.userProfile?.fullname
                             },
                         },
-                        {
-                            title: 'Lớp môn học',
-                            width: 150,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.subjectClass?.name || ''
-                            },
-                        },
-                        {
-                            title: 'STC',
-                            width: 50,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.subjectVersion?.credit || ''
-                            },
-                        },
+                        // {
+                        //     title: 'Lớp môn học',
+                        //     width: 150,
+                        //     align: 'left',
+                        //     render: (_, record) => {
+                        //         return record?.subjectClass?.name || ''
+                        //     },
+                        // },
+                        // {
+                        //     title: 'STC',
+                        //     width: 50,
+                        //     align: 'center',
+                        //     render: (_, record) => {
+                        //         return record?.subjectVersion?.credit || ''
+                        //     },
+                        // },
                         {
                             title: 'Tên chuyên đề',
                             width: 250,
