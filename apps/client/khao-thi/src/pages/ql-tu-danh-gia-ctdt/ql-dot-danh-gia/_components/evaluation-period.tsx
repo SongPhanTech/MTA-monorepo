@@ -16,7 +16,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus } from 'lucide-react'
+import { BookPlus, ChevronDown, ChevronUp } from 'lucide-react'
 import { type Key, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportReport from './export-report'
@@ -80,6 +80,19 @@ export default function EvaluationPeriod() {
             schoolYear: {
                 select: {
                     name: true,
+                },
+            },
+            documentFiles: {
+                select: {
+                    id: true,
+                    name: true,
+                    path: true,
+                    size: true,
+                },
+            },
+            _count: {
+                select: {
+                    documentFiles: true,
                 },
             },
         },
@@ -240,14 +253,20 @@ export default function EvaluationPeriod() {
                                         ? dayjs(record?.endDate).format('DD/MM/YYYY')
                                         : '',
                             },
+                            // {
+                            //     title: 'Mô tả',
+                            //     align: 'center',
+                            //     width: 150,
+                            //     dataIndex: 'description',
+                            //     render: (value: string) => {
+                            //         return <div className="line-clamp-2">{value}</div>
+                            //     },
+                            // },
                             {
-                                title: 'Mô tả',
+                                title: 'Tài liệu hội đồng',
                                 align: 'center',
-                                width: 150,
-                                dataIndex: 'description',
-                                render: (value: string) => {
-                                    return <div className="line-clamp-2">{value}</div>
-                                },
+                                width: 120,
+                                render: (_, record) => record?._count?.documentFiles || 0,
                             },
                             {
                                 title: 'Trạng thái',
@@ -330,6 +349,20 @@ export default function EvaluationPeriod() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
+                        }}
+                        expandable={{
+                            expandedRowRender: (record) => (
+                                <div className="p-4 bg-gray-50">
+                                    <p className="mb-2 font-semibold">Tài liệu hội đồng:</p>
+                                    <p>{record.description || 'Không có mô tả'}</p>
+                                </div>
+                            ),
+                            expandIcon: ({ expanded, onExpand, record }) =>
+                                expanded ? (
+                                    <ChevronDown onClick={(e) => onExpand(record as any, e as any)} />
+                                ) : (
+                                    <ChevronUp onClick={(e) => onExpand(record as any, e as any)} />
+                                ),
                         }}
                     />
                 </Col>

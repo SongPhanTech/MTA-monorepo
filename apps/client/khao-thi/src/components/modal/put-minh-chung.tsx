@@ -26,6 +26,8 @@ const PutEvidence = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
+    console.log('input id: ', input?.id)
+
     const { mutateAsync: createEvidence } = useCreateEvidence()
     const { mutateAsync: updateEvidence } = useUpdateEvidence()
     async function onOk(output?: PutEvidenceType) {
