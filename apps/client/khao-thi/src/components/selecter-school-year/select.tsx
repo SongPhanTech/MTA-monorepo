@@ -1,8 +1,13 @@
 import Select from '@components/commons/select'
 import { useSchoolYearStore } from './hook'
 import { useFindManySchoolYear } from '@workspace/db/hooks'
+import { cn } from '@lib/utils'
 
-const SelecterSchoolYear = () => {
+interface SelecterSchoolYearProps {
+    className?: string
+}
+
+const SelecterSchoolYear = ({ className }: SelecterSchoolYearProps) => {
     const { id: schoolYearId, onSelect } = useSchoolYearStore()
 
     const { data: schoolYear = [], isLoading: schoolYearLoading } = useFindManySchoolYear({
@@ -19,7 +24,7 @@ const SelecterSchoolYear = () => {
         <Select
             placeholder="Chọn năm học"
             value={schoolYearId}
-            className="w-52"
+            className={cn('w-52', className)}
             loading={schoolYearLoading}
             onChange={handleChange}
             options={schoolYear.map((year) => ({
