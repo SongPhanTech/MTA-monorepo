@@ -20,8 +20,8 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Select } from '@workspace/ui'
-import { Button, Col, Divider, Flex, message, Popover, Row, Tag } from 'antd'
-import { Save } from 'lucide-react'
+import { Button, Col, Divider, Flex, message, Popover, Row, Tag, Popconfirm, Tooltip } from 'antd'
+import { Save, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
@@ -137,6 +137,15 @@ export default function SubjectClassScore() {
             data: { status: 'APPROVED' },
         }).then(() => {
             message.success('Đã duyệt')
+        })
+    }
+
+    const handleReject = (id: string) => {
+        updateTrainingScore({
+            where: { id: id },
+            data: { status: 'REJECTED' },
+        }).then(() => {
+            message.success('Đã từ chối')
         })
     }
 
@@ -552,6 +561,24 @@ export default function SubjectClassScore() {
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
+                                                <Tooltip title="Từ chối">
+                                                    <Popconfirm
+                                                        title="Bạn có chắc chắn muốn từ chối?"
+                                                        onConfirm={(e) => {
+                                                            if (record.scoreId) handleReject(record.scoreId)
+                                                            e?.stopPropagation()
+                                                        }}
+                                                        onCancel={(e) => e?.stopPropagation()}
+                                                    >
+                                                        <Button
+                                                            type="text"
+                                                            danger
+                                                            disabled={record.scoreStatus === 'REJECTED' || !record.scoreId}
+                                                            icon={<X size={18} />}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    </Popconfirm>
+                                                </Tooltip>
                                             </Row>
                                         ),
                                     },
