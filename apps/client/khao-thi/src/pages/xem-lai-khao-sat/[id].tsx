@@ -136,9 +136,7 @@ function TakeTestPage() {
                             pagination={false}
                         />
                     </Col>
-                    <Col span={24} className="text-base text-[#e80808]">
-                        Nếu ở mức (*), bạn phải ghi rõ lý do
-                    </Col>
+                 
 
                     <Col span={24}>
                         {dataTest.map((section, sectionIndex) => (

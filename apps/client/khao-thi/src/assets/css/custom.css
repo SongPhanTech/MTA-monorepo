@@ -140,3 +140,27 @@
 .ant-radio-button-wrapper:first-child {
     border: 1px solid #ff4d4f !important;
 }
+.answer-box {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 6px;
+}
+
+.answer-text {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  text-align: center;
+  font-size: 13px;
+}
+
+.answer-checkbox {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  text-align: center;
+}
+
+.ant-checkbox-inner {
+  width: 16px;
+  height: 16px;
+}
+

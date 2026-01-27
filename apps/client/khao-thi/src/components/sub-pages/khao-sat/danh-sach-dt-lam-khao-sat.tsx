@@ -13,6 +13,7 @@ import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useTrainingObjectTypeStore } from '@workspace/ui';
 
 function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const { can, canSome } = useAbility()
@@ -20,6 +21,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
         fullname: undefined,
         studentCode: undefined,
@@ -35,10 +37,16 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const router = useRouter()
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
+        where:{
+            
+        },
         orderBy: { name: 'asc' },
     })
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
         useFindManyTrainingCourse({
+            where:{
+                trainingObjectTypeId
+            },
             orderBy: { name: 'asc' },
         })
 
