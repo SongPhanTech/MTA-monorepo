@@ -22,15 +22,17 @@ import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from '@constants/constants'
 
 const PickQuestionFromBankModal = () => {
     const [form] = Form.useForm()
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [selectedQuestions, setSelectedQuestions] = useState<any[]>([])
     const [questionBankId, setQuestionBankId] = useState<string | undefined>(undefined)
     const [keepOld, setKeepOld] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
+    const [isAllSelected, setIsAllSelected] = useState(false)
 
     const { isOpen, onClose, input } = useDisclosure<{
         examFrameworkId?: string
+        matrixId?: string
     }>({
         tag: 'PickQuestionFromBankModal',
         onClose: () => {
@@ -57,8 +59,15 @@ const PickQuestionFromBankModal = () => {
     )
 
     const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
-        { where: { examMatrixId } },
-        { enabled: !!examMatrixId }
+        {
+            where: {
+                examMatrixId,
+                deletedAt: null,
+            },
+        },
+        {
+            enabled: !!examMatrixId,
+        }
     )
 
     const subjectVersionId = useMemo(
@@ -96,6 +105,22 @@ const PickQuestionFromBankModal = () => {
         { enabled: !!questionBankId }
     )
 
+    const { data: allQuestions = [] } = useFindManyQuestion(
+        {
+            where: {
+                questionBankId,
+                deletedAt: null,
+            },
+            include: {
+                multipleChoiceOptions: true,
+                fillInBlankSlots: true,
+                orderingItems: true,
+                knowledgeBlock: true,
+            },
+        },
+        { enabled: !!questionBankId }
+    )
+
     const { data: totalQuestions = 0 } = useCountQuestion(
         {
             where: {
@@ -110,14 +135,14 @@ const PickQuestionFromBankModal = () => {
         if (!examFrameworkId) return
 
         form.setFieldsValue({
-            examMatrixId: undefined,
+            examMatrixId: input?.matrixId,
             knowledgeBlockId: undefined,
         })
 
         setQuestionBankId(undefined)
         setSelectedRowKeys([])
         setSelectedQuestions([])
-    }, [examFrameworkId, form])
+    }, [examFrameworkId, input?.matrixId, form])
 
     useEffect(() => {
         if (!examMatrixId) return
@@ -125,29 +150,37 @@ const PickQuestionFromBankModal = () => {
         form.setFieldsValue({
             knowledgeBlockId: undefined,
         })
-        setQuestionBankId(undefined)
-        setSelectedRowKeys([])
-        setSelectedQuestions([])
     }, [examMatrixId, form])
 
     useEffect(() => {
-        if (!isOpen || !input?.examFrameworkId) return
+        if (!isOpen) return
 
         form.setFieldsValue({
-            examFrameworkId: input.examFrameworkId,
+            examFrameworkId: input?.examFrameworkId,
+            examMatrixId: input?.matrixId,
+            knowledgeBlockId: undefined,
         })
-    }, [isOpen, input?.examFrameworkId, form])
+    }, [isOpen, input?.examFrameworkId, input?.matrixId, form])
 
     useEffect(() => {
         if (!questionBankId) return
         setCurrentPage(1)
         setSelectedRowKeys([])
         setSelectedQuestions([])
+        setIsAllSelected(false)
     }, [questionBankId])
+
+    useEffect(() => {
+        if (!isOpen) return
+        if (questionBankId) return
+        if (questionBanks.length === 0) return
+
+        setQuestionBankId(questionBanks[0].id)
+    }, [isOpen, questionBanks, questionBankId])
 
     async function onSubmit() {
         try {
-            if (!selectedQuestions.length) {
+            if (!selectedRowKeys.length) {
                 message.error('Không có câu hỏi nào được chọn')
                 return
             }
@@ -219,17 +252,20 @@ const PickQuestionFromBankModal = () => {
                 )
                 message.success(`Đã sao chép ${selectedQuestions.length} câu hỏi`)
             } else {
+                const idsToUpdate: string[] = isAllSelected
+                    ? allQuestions.map((q) => q.id)
+                    : selectedRowKeys
+
                 await Promise.all(
-                    selectedQuestions.map((q) =>
+                    idsToUpdate.map((id) =>
                         updateQuestion({
-                            where: { id: q.id },
-                            data: {
-                                knowledgeBlockId,
-                            },
+                            where: { id },
+                            data: { knowledgeBlockId },
                         })
                     )
                 )
-                message.success(`Đã chuyển ${selectedQuestions.length} câu hỏi`)
+
+                message.success(`Đã chuyển ${idsToUpdate.length} câu hỏi`)
             }
 
             form.resetFields()
@@ -259,7 +295,7 @@ const PickQuestionFromBankModal = () => {
                 <Button
                     key="ok"
                     type="primary"
-                    disabled={!selectedQuestions.length}
+                    disabled={!selectedRowKeys.length}
                     onClick={onSubmit}
                 >
                     Thêm
@@ -363,16 +399,32 @@ const PickQuestionFromBankModal = () => {
                         rowSelection={{
                             preserveSelectedRowKeys: true,
                             selectedRowKeys,
-                            onChange: (keys, rows) => {
-                                setSelectedRowKeys(keys)
+
+                            onChange: (keys, rows, info) => {
+                                const stringKeys = keys.map(String)
+
+                                if (info.type === 'all') {
+                                    if (stringKeys.length === 0) {
+                                        setIsAllSelected(false)
+                                        setSelectedRowKeys([])
+                                        setSelectedQuestions([])
+                                    } else {
+                                        setIsAllSelected(true)
+                                        setSelectedRowKeys(allQuestions.map((q) => q.id))
+                                        setSelectedQuestions(allQuestions)
+                                    }
+                                    return
+                                }
+
+                                // Click từng row
+                                setIsAllSelected(false)
+                                setSelectedRowKeys(stringKeys)
 
                                 setSelectedQuestions((prev) => {
                                     const map = new Map(prev.map((q) => [q.id, q]))
-
                                     rows.forEach((q) => {
                                         map.set(q.id, q)
                                     })
-
                                     return Array.from(map.values())
                                 })
                             },

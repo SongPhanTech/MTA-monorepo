@@ -1,17 +1,15 @@
-import { Button, Row, Col, message, Tooltip } from 'antd'
+import { Button, Row, Col, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { LEVEL_COLORS } from '@constants/constants'
 import {
-    useCountQuestion,
     useFindManyExamMatrix,
     useFindManyKnowledgeBlock,
     useFindManyQuestion,
     useFindUniqueQuestionBank,
-    useUpdateQuestion,
 } from '@workspace/db/hooks'
 import { useStore } from '@tanstack/react-store'
 import { store } from '@pages/thiet-lap-de-thi/khung-de'
@@ -25,8 +23,6 @@ export default function QuestionBankLite({
     examFrameworkId,
     questionBankId,
 }: QuestionBankLiteProps) {
-    const [currentPage, setCurrentPage] = useState(1)
-    const [pageSize, setPageSize] = useState(10)
     const matrixId = useStore(store, (s) => s.matrixId)
 
     const { onOpen: onOpenQuestionListModal } = useDisclosure<{
@@ -40,35 +36,23 @@ export default function QuestionBankLite({
 
     const { onOpen: onOpenPickQuestionFromBank } = useDisclosure<{
         examFrameworkId: string
+        matrixId: string
     }>({
         tag: 'PickQuestionFromBankModal',
     })
 
-    const { mutateAsync: updateQuestion } = useUpdateQuestion()
-
-    async function handleDeleteQuestion(id: string) {
-        try {
-            await updateQuestion({
-                where: { id },
-                data: { deletedAt: new Date() },
-            })
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-    }
-
     const { data: examMatrixs = [] } = useFindManyExamMatrix(
+        examFrameworkId
+            ? {
+                  where: {
+                      examFrameworkId: examFrameworkId,
+                      deletedAt: null,
+                  },
+              }
+            : undefined,
         {
-            where: {
-                examFrameworkId,
-                deletedAt: null,
-            },
-        },
-        { enabled: !!examFrameworkId }
+            enabled: Boolean(examFrameworkId),
+        }
     )
 
     const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
@@ -83,19 +67,17 @@ export default function QuestionBankLite({
 
     const knowledgeBlockIds = useMemo(() => knowledgeBlocks.map((k) => k.id), [knowledgeBlocks])
 
-    const { data: questions = [] } = useFindManyQuestion(
+    const { data: allQuestionsForStats = [] } = useFindManyQuestion(
         {
             where: {
                 knowledgeBlockId: { in: knowledgeBlockIds },
                 deletedAt: null,
             },
-            include: {
-                knowledgeBlock: true,
-                multipleChoiceOptions: true,
+            select: {
+                id: true,
+                knowledgeBlockId: true,
+                difficult: true,
             },
-            take: pageSize,
-            skip: (currentPage - 1) * pageSize,
-            orderBy: { createdAt: 'desc' },
         },
         { enabled: knowledgeBlockIds.length > 0 }
     )
@@ -120,7 +102,7 @@ export default function QuestionBankLite({
 
     const data = useMemo(() => {
         return knowledgeBlocks.map((kb) => {
-            const qs = questions.filter((q) => q.knowledgeBlockId === kb.id)
+            const qs = allQuestionsForStats.filter((q) => q.knowledgeBlockId === kb.id)
 
             const stats: Record<
                 string,
@@ -145,24 +127,13 @@ export default function QuestionBankLite({
 
             return {
                 key: kb.id,
-                // name: kb.name,
                 examMatrixName: matrixMap.get(kb.examMatrixId) || '',
                 knowledgeBlockName: kb.name,
                 knowledgeBlockId: kb.id,
                 ...stats,
             }
         })
-    }, [knowledgeBlocks, questions, matrixMap])
-
-    const { data: totalQuestions = 0 } = useCountQuestion(
-        {
-            where: {
-                knowledgeBlockId: { in: knowledgeBlockIds },
-                deletedAt: null,
-            },
-        },
-        { enabled: knowledgeBlockIds.length > 0 }
-    )
+    }, [knowledgeBlocks, allQuestionsForStats, matrixMap])
 
     return (
         <div>
@@ -173,9 +144,10 @@ export default function QuestionBankLite({
                             type="primary"
                             size="middle"
                             onClick={() => {
-                                if (!examFrameworkId) return
+                                if (!examFrameworkId || !matrixId) return
                                 onOpenPickQuestionFromBank({
                                     examFrameworkId: examFrameworkId,
+                                    matrixId: matrixId,
                                 })
                             }}
                         >
@@ -245,15 +217,18 @@ export default function QuestionBankLite({
                                     <Tooltip title="Xem câu hỏi">
                                         <EyeOutlined
                                             className="cursor-pointer text-blue-600 hover:text-blue-800"
-                                            onClick={() =>
+                                            onClick={() => {
+                                                const subjectVersionId =
+                                                    initialValue?.subjectVersionId
+                                                if (!subjectVersionId) return
+
                                                 onOpenQuestionListModal({
                                                     knowledgeBlockId: record.knowledgeBlockId,
                                                     questionBankId,
-                                                    subjectVersionId:
-                                                        initialValue?.subjectVersionId || '',
+                                                    subjectVersionId,
                                                     matrixName: record.examMatrixName,
                                                 })
-                                            }
+                                            }}
                                         />
                                     </Tooltip>
                                 ),
