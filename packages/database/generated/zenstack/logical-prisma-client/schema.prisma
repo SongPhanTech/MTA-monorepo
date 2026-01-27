@@ -282,6 +282,7 @@ enum DecisionStatus {
 enum TrainingScoreStatus {
   PENDING
   APPROVED
+  REJECTED
 
   @@schema("ql-dao-tao")
 }

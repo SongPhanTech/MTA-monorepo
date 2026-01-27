@@ -43,7 +43,8 @@ const CriteriaEvaluationSubPage = ({
     onRefetch?: () => void
 }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
-    const [showComments, setShowComments] = useState(false)
+    const [showCommentsCriterionId, setShowCommentsCriterionId] = useState<string | null>(null)
+    const [activeCollapseKeys, setActiveCollapseKeys] = useState<string[]>([])
     const { can } = useAbility()
 
     const canEdit = can(
@@ -52,6 +53,13 @@ const CriteriaEvaluationSubPage = ({
     )
 
     const { hideSpinner, showSpinner } = useSpinner()
+
+    const statusConfig = getStatusConfig(
+        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
+    )
+
+    const currentStatus =
+        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
 
     const handleSubmit = async () => {
         const dataSubmit = form.getFieldsValue()
@@ -181,15 +189,23 @@ const CriteriaEvaluationSubPage = ({
         }
     }, [data, form])
 
-    const statusConfig = getStatusConfig(
-        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
-    )
+    // Tự động mở collapse cho các tiêu chí có comment khi ở trạng thái REJECTED
+    useEffect(() => {
+        if (data && currentStatus === $Enums.EvaluationStatus.REVISION) {
+            const criteriaWithComments = data.criteria
+                .filter((item) => {
+                    const hasComments =
+                        item.evaluationCriterion?.evaluationCriterionComments &&
+                        item.evaluationCriterion.evaluationCriterionComments.length > 0
+                    return hasComments
+                })
+                .map((item) => item.id)
 
-    const currentStatus =
-        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
-
-    const commentsCount =
-        data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments?.length || 0
+            if (criteriaWithComments.length > 0) {
+                setActiveCollapseKeys(criteriaWithComments)
+            }
+        }
+    }, [data, currentStatus])
 
     const isReadOnly =
         !canEdit ||
@@ -227,16 +243,6 @@ const CriteriaEvaluationSubPage = ({
             </div>
 
             <div className="flex gap-2 mr-2">
-                <Badge count={commentsCount} showZero offset={[-5, 5]}>
-                    <Button
-                        type="primary"
-                        className="bg-yellow-400"
-                        size="small"
-                        onClick={() => setShowComments(!showComments)}
-                    >
-                        Xem đánh giá
-                    </Button>
-                </Badge>
                 <ExportCriteriaEvaluation data={data} />
                 {currentStatus !== $Enums.EvaluationStatus.SUBMITTED &&
                     currentStatus !== $Enums.EvaluationStatus.APPROVED &&
@@ -268,18 +274,7 @@ const CriteriaEvaluationSubPage = ({
     return (
         <div className="flex flex-col h-[calc(100vh-200px)]">
             {headerSection}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden">
-                {showComments && (
-                    <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
-                        <CommentList
-                            comments={
-                                data?.criteria?.[0]?.evaluationCriterion
-                                    ?.evaluationCriterionComments || []
-                            }
-                        />
-                    </div>
-                )}
-
+            <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
                 <Form form={form} layout="vertical" className="form-evidence">
                     <Form.List name="criteria">
                         {(fields) => (
@@ -289,12 +284,19 @@ const CriteriaEvaluationSubPage = ({
                                     return (
                                         <div key={key} style={{ marginBottom: 24 }}>
                                             <Collapse
+                                                activeKey={activeCollapseKeys}
+                                                onChange={(keys) =>
+                                                    setActiveCollapseKeys(
+                                                        Array.isArray(keys) ? keys : [keys]
+                                                    )
+                                                }
                                                 items={[
                                                     {
                                                         label: (
                                                             <div>
                                                                 <span className="font-bold">
-                                                                    Tiêu chí {data.order}.{item.order}:{' '}
+                                                                    Tiêu chí {data.order}.
+                                                                    {item.order}:{' '}
                                                                 </span>
                                                                 {item?.name}
                                                             </div>
@@ -313,6 +315,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
 
@@ -327,6 +330,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
 
@@ -341,6 +345,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
 
@@ -355,6 +360,7 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
                                                                 <Form.Item
@@ -368,15 +374,74 @@ const CriteriaEvaluationSubPage = ({
                                                                     <RichTextEditor
                                                                         id={item.id}
                                                                         editable={!isReadOnly}
+                                                                        stickyToolbar={true}
                                                                     />
                                                                 </Form.Item>
+
+                                                                {item.evaluationCriterion && (
+                                                                    <>
+                                                                        <div className="flex justify-end mb-4">
+                                                                            <Badge
+                                                                                count={
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.evaluationCriterionComments
+                                                                                        ?.length ||
+                                                                                    0
+                                                                                }
+                                                                                showZero
+                                                                                offset={[-5, 5]}
+                                                                            >
+                                                                                <Button
+                                                                                    type="primary"
+                                                                                    className="bg-yellow-400"
+                                                                                    size="small"
+                                                                                    onClick={() =>
+                                                                                        setShowCommentsCriterionId(
+                                                                                            showCommentsCriterionId ===
+                                                                                                item
+                                                                                                    .evaluationCriterion
+                                                                                                    ?.id
+                                                                                                ? null
+                                                                                                : item
+                                                                                                      .evaluationCriterion
+                                                                                                      ?.id ||
+                                                                                                      null
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    {showCommentsCriterionId ===
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.id
+                                                                                        ? 'Đóng đánh giá'
+                                                                                        : 'Xem đánh giá'}
+                                                                                </Button>
+                                                                            </Badge>
+                                                                        </div>
+
+                                                                        {showCommentsCriterionId ===
+                                                                            item.evaluationCriterion
+                                                                                ?.id && (
+                                                                            <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
+                                                                                <CommentList
+                                                                                    comments={
+                                                                                        item
+                                                                                            .evaluationCriterion
+                                                                                            ?.evaluationCriterionComments ||
+                                                                                        []
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                        )}
+                                                                    </>
+                                                                )}
                                                             </>
                                                         ),
                                                     },
                                                 ]}
                                                 bordered={true}
                                                 expandIconPosition="end"
-                                                className="bg-transparent mb-6"
                                             />
                                         </div>
                                     )

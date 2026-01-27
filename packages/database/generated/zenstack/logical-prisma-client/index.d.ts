@@ -5462,7 +5462,8 @@ export namespace $Enums {
     export type DecisionStatus = (typeof DecisionStatus)[keyof typeof DecisionStatus];
     export const TrainingScoreStatus: {
         PENDING: 'PENDING',
-        APPROVED: 'APPROVED'
+        APPROVED: 'APPROVED',
+        REJECTED: 'REJECTED'
     };
     export type TrainingScoreStatus = (typeof TrainingScoreStatus)[keyof typeof TrainingScoreStatus];
     export const StudentTrainingType: {

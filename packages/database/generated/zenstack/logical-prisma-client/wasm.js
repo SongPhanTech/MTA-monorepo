@@ -7685,7 +7685,8 @@ exports.DecisionStatus = exports.$Enums.DecisionStatus = {
 
 exports.TrainingScoreStatus = exports.$Enums.TrainingScoreStatus = {
   PENDING: 'PENDING',
-  APPROVED: 'APPROVED'
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.ResearchProjectStatus = exports.$Enums.ResearchProjectStatus = {

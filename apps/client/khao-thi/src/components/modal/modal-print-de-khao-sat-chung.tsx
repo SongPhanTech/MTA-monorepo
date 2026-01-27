@@ -1,13 +1,22 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useFindUniqueSurvey } from '@workspace/db/hooks'
-import { Button, Col, Input, Modal, Row, Table } from 'antd'
+import { Button, Col, Input, Modal, Radio, Row, Table } from 'antd'
 import dayjs from 'dayjs'
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
+import { toRoman } from '@lib/utils'
 
 dayjs.locale('vi')
-
+type GroupedSurveyQuestion = {
+    id: string // group id
+    name: string // group name
+    question: {
+        id: string
+        name: string
+        type: string
+    }[]
+}
 const ModalPrintExamSurvey = () => {
     const printRef = useRef<HTMLDivElement>(null)
     const { isOpen, onClose, input } = useDisclosure<{
@@ -16,15 +25,59 @@ const ModalPrintExamSurvey = () => {
         tag: 'ModalPrintExamSurvey',
     })
 
-    const { data } = useFindUniqueSurvey({
+    const { data: survey } = useFindUniqueSurvey({
         where: {
             id: input?.id,
         },
         include: {
             surveyChoice: true,
-            surveyQuestion: true,
+            surveyQuestion: {
+                include: {
+                    surveyQuestionGroup: true,
+                    specificChoice: true,
+                },
+            },
         },
     })
+
+    const dataTest = useMemo(() => {
+        const groupedMap = (survey?.surveyQuestion ?? []).reduce<
+            Record<string, GroupedSurveyQuestion>
+        >((acc: any, item: any, index: number) => {
+            const groupId = item.surveyQuestionGroupId
+
+            if (!acc[groupId]) {
+                acc[groupId] = {
+                    ...item,
+                    id: item.surveyQuestionGroup.id,
+                    name: item.surveyQuestionGroup.name,
+                    question: [],
+                    isParent: true,
+                }
+            }
+
+            acc[groupId].question.push({
+                ...item,
+                id: item.id,
+                name: item.name,
+                type: item.type,
+                isParent: false,
+                index: index + 1,
+            })
+
+            return acc
+        }, {})
+
+        // Chuyển thành array
+
+        const grouped: GroupedSurveyQuestion[] = Object.values(groupedMap).map((i: any, index) => {
+            return { ...i, index: toRoman(index + 1) }
+        })
+        // const general=grouped.filter((i)=>i?.)
+        const flatData = grouped.map((i) => [i, ...(i.question || [])]).flat()
+        return flatData || []
+        // return classGroups
+    }, [survey])
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
@@ -77,18 +130,29 @@ const ModalPrintExamSurvey = () => {
                 className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman"
             >
                 <div className="text-xl font-bold mb-4 text-center uppercase color-black">
-                    {data?.name}
+                    {survey?.name}
                 </div>
                 <Row gutter={[0, 2]} className="mb-3 color-black">
-                    <Col span={12}>
-                        <div className="flex items-end">
-                            <div className="!w-fit whitespace-nowrap">Tên giảng viên: </div>
-                            <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
+                    <Col span={24}>
+                        <div className="italic indent-8 mt-4">
+                            Để đóng góp phần tìm ra những giải pháp nhằm nâng cao chất lượng đào tạo
+                            của Học viện đề nghị đồng chí (anh/chị) vui lòng điền đầy đủ thông tin
+                            trả lời các câu hỏi dưới dây bằng cách đánh dấu "X" vào một ô phù hợp
+                            nhất trong mục "các phương án trả lời".
                         </div>
+                    </Col>
+                    <Col span={24}>
+                        <div className="italic indent-8">
+                            Thông tin đồng chí (anh/chị) cung cấp sẽ được Học viện xử lý khách quan
+                            và bảo mật
+                        </div>
+                    </Col>
+                    <Col span={24}>
+                        <div className="indent-8 uppercase font-bold">I. Thông tin chung</div>
                     </Col>
                     <Col span={12}>
                         <div className="flex items-end">
-                            <div className="!w-fit whitespace-nowrap">Tên học phần: </div>
+                            <div className="!w-fit whitespace-nowrap">Chuyên ngành: </div>
                             <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
                         </div>
                     </Col>
@@ -98,13 +162,7 @@ const ModalPrintExamSurvey = () => {
                             <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
                         </div>
                     </Col>
-                    <Col span={6}>
-                        <div className="flex items-end">
-                            <div className="!w-fit whitespace-nowrap">Bộ môn: </div>
-                            <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
-                        </div>
-                    </Col>
-                    <Col span={6}>
+                    <Col span={12}>
                         <div className="flex items-end">
                             <div className="!w-fit whitespace-nowrap">Lớp: </div>
                             <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
@@ -112,45 +170,25 @@ const ModalPrintExamSurvey = () => {
                     </Col>
                     <Col span={12}>
                         <div className="flex items-end">
-                            <div className="!w-fit whitespace-nowrap">Ngày lấy ý kiến: </div>
-                            <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
-                        </div>
-                    </Col>
-                    <Col span={6}>
-                        <div className="flex items-end">
-                            <div className="!w-fit whitespace-nowrap">Học kỳ: </div>
-                            <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
-                        </div>
-                    </Col>
-                    <Col span={6}>
-                        <div className="flex items-end">
-                            <div className="!w-fit whitespace-nowrap">Năm học: </div>
+                            <div className="!w-fit whitespace-nowrap">Khoá: </div>
                             <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
                         </div>
                     </Col>
                     <Col span={24}>
-                        <div className="italic indent-8 mt-4">
-                            Nhằm góp phần nâng cao chất lượng giảng dạy, phục vụ lợi ích của người
-                            học, Học viện đề nghị Anh/Chị với tinh thần trách nhiệm và xây dựng ,
-                            cho ý kiến về hoạt động giảng dạy của giảng viên thông qua phiếu phản
-                            hồi này. Thông tin do Anh/Chị cung cấp sẽ được Học viên bảo mật và xử lý
-                            đảm bảo không làm ảnh hưởng đến kết quả học tập, rèn luyên của Anh/Chị
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Đối tượng đào tạo: </div>
+                            <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" />
                         </div>
                     </Col>
-                    <Col span={24}>
-                        <div className="italic indent-8">
-                            Đề nghị Anh/chị đánh xấu "X" vào các ô tương ứng với nội dung trong bảng
-                            câu hỏi theo thang phản hồi
-                        </div>
-                    </Col>
+                    <div className="indent-8 uppercase font-bold">II. Nội dung đánh giá</div>
                 </Row>
-                {data?.surveyChoice?.length && (
+                {survey?.surveyChoice?.length && (
                     <Row gutter={[16, 4]}>
                         <Col span={24}>
                             <Table
                                 rowKey="id"
                                 dataSource={[{ id: 'abc' }]}
-                                columns={data.surveyChoice.map((i) => {
+                                columns={survey.surveyChoice.map((i) => {
                                     return {
                                         title: `${i?.description} ${i?.requireExplanation === true ? '*' : ''}`,
                                         dataIndex: i?.id,
@@ -168,11 +206,124 @@ const ModalPrintExamSurvey = () => {
                                 pagination={false}
                             />
                         </Col>
-                        <Col span={24} className="text-[14px] text-[#e80808]">
-                            Nếu ở mức (*), bạn phải ghi rõ lý do
-                        </Col>
-                        <Col span={24} className="mb-3">
+
+                        <Col span={24} className="my-3">
                             <Table
+                                rowKey="id"
+                                dataSource={dataTest || []}
+                                pagination={false}
+                                columns={[
+                                    {
+                                        title: 'STT',
+                                        width: 50,
+                                        align: 'center',
+                                        render: (_, record: any) => {
+                                            return (
+                                                <div
+                                                    className={`${record.isParent ? 'font-semibold' : ''}`}
+                                                >
+                                                    {record?.index}
+                                                </div>
+                                            )
+                                        },
+                                    },
+                                    {
+                                        title: 'Nội dung phản hồi',
+                                        dataIndex: 'content',
+                                        render: (_, record) => {
+                                            return record.isParent ? (
+                                                <div className="font-semibold uppercase">
+                                                    {record?.name}
+                                                </div>
+                                            ) : record?.type === 'ESSAY' ? (
+                                                <div>
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: record?.name,
+                                                        }}
+                                                    />
+
+                                                    <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                </div>
+                                            ) : record?.specificChoice?.length > 0 ? (
+                                                <div>
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: record?.name,
+                                                        }}
+                                                    />
+
+                                                    <Radio.Group className="w-full gap-x-2 flex">
+                                                        {survey?.surveyChoice.map(
+                                                            (i, index: number) => (
+                                                                <Radio
+                                                                    key={i?.id}
+                                                                    value={i?.id}
+                                                                    className="relative"
+                                                                >
+                                                                    <div>
+                                                                        {
+                                                                            record?.specificChoice[
+                                                                                index
+                                                                            ]?.description
+                                                                        }
+                                                                    </div>
+                                                                </Radio>
+                                                            )
+                                                        )}
+                                                    </Radio.Group>
+                                                </div>
+                                            ) : (
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: record?.name,
+                                                    }}
+                                                />
+                                            )
+                                        },
+                                        onCell: (record, rowIndex) => {
+                                            return {
+                                                colSpan:
+                                                    record.isParent ||
+                                                    record?.specificChoice?.length > 0 ||
+                                                    record?.type === 'ESSAY'
+                                                        ? 2
+                                                        : 1,
+                                            }
+                                        },
+                                    },
+                                    {
+                                        title: 'Mức phản hồi',
+                                        width: 200,
+                                        align: 'center',
+                                        onCell: (record, rowIndex) => {
+                                            return {
+                                                colSpan:
+                                                    record.isParent ||
+                                                    record?.specificChoice?.length > 0 ||
+                                                    record?.type === 'ESSAY'
+                                                        ? 0
+                                                        : 1,
+                                            }
+                                        },
+                                        render: (_, record, qIndex) => {
+                                            return (
+                                                record?.type === 'SINGLE_CHOICE' && (
+                                                    <Radio.Group className="w-full gap-x-2 flex">
+                                                        {survey?.surveyChoice.map((i) => (
+                                                            <Radio.Button key={i?.id} value={i?.id}>
+                                                                {i?.answer}
+                                                            </Radio.Button>
+                                                        ))}
+                                                    </Radio.Group>
+                                                )
+                                            )
+                                        },
+                                    },
+                                ]}
+                                bordered={true}
+                            />
+                            {/* <Table
                                 rowKey="id"
                                 dataSource={data?.surveyQuestion || []}
                                 pagination={false}
@@ -221,9 +372,9 @@ const ModalPrintExamSurvey = () => {
                                     },
                                 ]}
                                 bordered={true}
-                            />
+                            /> */}
                         </Col>
-                        {data?.additionalSuggestion && (
+                        {survey?.additionalSuggestion && (
                             <Col span={24}>
                                 <div className="mb-3 font-bold">Ý kiến khác :</div>
                                 <Input.TextArea placeholder="Nhập ý kiến khác" />

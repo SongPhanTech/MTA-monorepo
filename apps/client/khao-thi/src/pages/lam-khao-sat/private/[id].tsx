@@ -11,8 +11,9 @@ import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResul
 import { Button, Col, Flex, Form, Input, message, Radio, Row } from 'antd'
 
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Confetti from 'react-confetti'
+import { toRoman } from '@lib/utils'
 
 type PutSurveySession = SurveySession & {
     responses: {
@@ -26,7 +27,7 @@ type PutSurveySession = SurveySession & {
 type GroupedSurveyQuestion = {
     id: string // group id
     name: string // group name
-    children: {
+    question: {
         id: string
         name: string
         type: string
@@ -66,9 +67,51 @@ function TakeTestPage() {
     //     }
     // }
 
+    const dataTest = useMemo(() => {
+        const groupedMap = (survey?.surveyQuestion ?? []).reduce<
+            Record<string, GroupedSurveyQuestion>
+        >((acc: any, item: any, index: number) => {
+            const groupId = item.surveyQuestionGroupId
+
+            if (!acc[groupId]) {
+                acc[groupId] = {
+                    ...item,
+                    id: item.surveyQuestionGroup.id,
+                    name: item.surveyQuestionGroup.name,
+                    question: [],
+                    isParent: true,
+                }
+            }
+
+            acc[groupId].question.push({
+                ...item,
+                id: item.id,
+                name: item.name,
+                type: item.type,
+                isParent: false,
+                index: index + 1,
+            })
+
+            return acc
+        }, {})
+
+        // Chuyển thành array
+
+        const grouped: GroupedSurveyQuestion[] = Object.values(groupedMap).map((i: any, index) => {
+            return { ...i, index: toRoman(index + 1) }
+        })
+        // const general=grouped.filter((i)=>i?.)
+        const flatData = grouped.map((i) => [i, ...(i.question || [])]).flat()
+        return flatData || []
+        // return classGroups
+    }, [survey?.surveyQuestion])
+
+    // const requireExplanation = useMemo(() => {
+    //     return survey?.surveyChoice?.filter((i: any) => !!i?.requireExplanation).map((i) => i.id)
+    // }, [survey])
+
     async function onOk() {
         const dataSubmit = form.getFieldsValue()
-
         const responsesError = dataSubmit?.responses.filter(
             (i: any) => !i?.answerText && !i.surveyChoiceId
         )
@@ -246,6 +289,79 @@ function TakeTestPage() {
                 </Row>
             )}
 
+            {!survey?.lectureInfo && (
+                <Row gutter={[0, 2]} className="mb-3 color-black">
+                    <Col span={24}>
+                        <div className="italic indent-8 mt-4">
+                            Để đóng góp phần tìm ra những giải pháp nhằm nâng cao chất lượng đào tạo
+                            của Học viện đề nghị đồng chí (anh/chị) vui lòng điền đầy đủ thông tin
+                            trả lời các câu hỏi dưới dây bằng cách đánh dấu "X" vào một ô phù hợp
+                            nhất trong mục "các phương án trả lời".
+                        </div>
+                    </Col>
+                    <Col span={24}>
+                        <div className="italic indent-8">
+                            Thông tin đồng chí (anh/chị) cung cấp sẽ được Học viện xử lý khách quan
+                            và bảo mật
+                        </div>
+                    </Col>
+                    <Col span={24}>
+                        <div className="indent-8 uppercase">I. Thông tin chung</div>
+                    </Col>
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Chuyên ngành: </div>
+                            <span>
+                                {survey?.lectureInfo?.lastName || ''}{' '}
+                                {survey?.lectureInfo?.firstName || ''}
+                            </span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Khoa (Viện): </div>
+                            <span>
+                                {survey?.lectureInfo?.lastName || ''}{' '}
+                                {survey?.lectureInfo?.firstName || ''}
+                            </span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Lớp: </div>
+                            <span>
+                                {survey?.lectureInfo?.lastName || ''}{' '}
+                                {survey?.lectureInfo?.firstName || ''}
+                            </span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Khoá: </div>
+                            <span>
+                                {survey?.lectureInfo?.lastName || ''}{' '}
+                                {survey?.lectureInfo?.firstName || ''}
+                            </span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={24}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Đối tượng đào tạo: </div>
+                            <span>
+                                {survey?.lectureInfo?.lastName || ''}{' '}
+                                {survey?.lectureInfo?.firstName || ''}
+                            </span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+
+                    <div className="indent-8 uppercase">II. Nội dung đánh giá</div>
+                </Row>
+            )}
             {survey?.surveyChoice?.length && (
                 <Row gutter={[16, 16]}>
                     <Col span={24}>
@@ -270,105 +386,323 @@ function TakeTestPage() {
                             pagination={false}
                         />
                     </Col>
-                    <Col span={24} className="text-[14px] text-[#e80808]">
-                        Nếu ở mức (*), bạn phải ghi rõ lý do
-                    </Col>
 
-                    <Col span={24} className="mb-3">
-                        <Table
-                            rowKey="id"
-                            dataSource={survey?.surveyQuestion || []}
-                            pagination={false}
-                            columns={[
-                                {
-                                    title: 'STT',
-                                    width: 50,
-                                    align: 'center',
-                                    render: (_, __, index) => index + 1,
-                                },
-                                {
-                                    title: 'Nội dung phản hồi',
-                                    dataIndex: 'content',
-                                    render: (_, record) => {
-                                        return (
-                                            <div
-                                                dangerouslySetInnerHTML={{
-                                                    __html: record?.name,
-                                                }}
-                                            />
-                                        )
+                    <Col span={24} className="my-3">
+                        {survey?.subjectClass ? (
+                            <Table
+                                rowKey="id"
+                                dataSource={survey?.surveyQuestion || []}
+                                pagination={false}
+                                columns={[
+                                    {
+                                        title: 'STT',
+                                        width: 50,
+                                        align: 'center',
+                                        render: (_, __, index) => index + 1,
                                     },
-                                },
-                                {
-                                    title: 'Mức phản hồi',
-                                    width: 200,
-                                    align: 'center',
-                                    render: (_, record, qIndex) => {
-                                        return record?.type === 'SINGLE_CHOICE' ? (
-                                            <Form.Item
-                                                name={['responses', qIndex, 'surveyChoiceId']}
-                                                rules={[
-                                                    {
-                                                        required: true,
-                                                        message: 'Vui lòng chọn mức phản hồi',
-                                                    },
-                                                ]}
-                                                style={{ marginBottom: 0 }}
-                                                className="w-full"
-                                            >
-                                                <Radio.Group
-                                                    className="w-full gap-x-2 flex"
-                                                    // onChange={(e) =>
-                                                    //     handleChange(record.id, e.target.value)
-                                                    // }
+                                    {
+                                        title: 'Nội dung phản hồi',
+                                        dataIndex: 'content',
+                                        render: (_, record) => {
+                                            return (
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: record?.name,
+                                                    }}
+                                                />
+                                            )
+                                        },
+                                    },
+                                    {
+                                        title: 'Mức phản hồi',
+                                        width: 200,
+                                        align: 'center',
+                                        render: (_, record, qIndex) => {
+                                            const order = survey?.surveyQuestion.findIndex(
+                                                (item) => item.id === record.id
+                                            )
+                                            return record?.type === 'SINGLE_CHOICE' ? (
+                                                <Form.Item
+                                                    name={['responses', order, 'surveyChoiceId']}
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            message: 'Vui lòng chọn mức phản hồi',
+                                                        },
+                                                    ]}
+                                                    style={{ marginBottom: 0 }}
+                                                    className="w-full"
                                                 >
-                                                    {survey?.surveyChoice.map((i) => (
-                                                        <Radio.Button key={i?.id} value={i?.id}>
-                                                            {i?.answer}
-                                                        </Radio.Button>
-                                                    ))}
-                                                </Radio.Group>
-                                            </Form.Item>
-                                        ) : (
-                                            <Form.Item
-                                                name={['responses', qIndex, 'answerText']}
-                                                rules={[
-                                                    {
-                                                        required: true,
-                                                        message: 'Nhập câu trả lời',
-                                                    },
-                                                ]}
-                                            >
-                                                <Input.TextArea placeholder="Nhập câu trả lời" />
-                                            </Form.Item>
-                                        )
+                                                    <Radio.Group className="w-full gap-x-2 flex">
+                                                        {survey?.surveyChoice.map((i) => (
+                                                            <Radio.Button key={i?.id} value={i?.id}>
+                                                                {i?.answer}
+                                                            </Radio.Button>
+                                                        ))}
+                                                    </Radio.Group>
+                                                </Form.Item>
+                                            ) : (
+                                                <Form.Item
+                                                    name={['responses', order, 'answerText']}
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            message: 'Nhập câu trả lời',
+                                                        },
+                                                    ]}
+                                                >
+                                                    <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                </Form.Item>
+                                            )
+                                        },
                                     },
-                                },
-                            ]}
-                            // expandable={{
-                            //     expandedRowKeys,
-                            //     showExpandColumn: false,
-                            //     expandedRowRender: (record, index) => (
-                            //         <Form.Item
-                            //             label="Lý do"
-                            //             name={['responses', index, 'explanation']}
-                            //             // rules={[
-                            //             //     {
-                            //             //     required:
-                            //             //         form.getFieldValue(['responses', record.id]) === 4,
-                            //             //     message: 'Vui lòng nhập lý do',
-                            //             //     },
-                            //             // ]}
-                            //         >
-                            //             <Input.TextArea
-                            //                 rows={3}
-                            //                 placeholder="Nhập lý do tại đây..."
-                            //             />
-                            //         </Form.Item>
-                            //     ),
-                            // }}
-                            bordered={true}
-                        />
+                                ]}
+                                bordered={true}
+                            />
+                        ) : (
+                            <Table
+                                rowKey="id"
+                                dataSource={dataTest || []}
+                                pagination={false}
+                                columns={[
+                                    {
+                                        title: 'STT',
+                                        width: 50,
+                                        align: 'center',
+                                        render: (_, record) => {
+                                            return (
+                                                <div
+                                                    className={`${record.isParent ? 'font-semibold' : ''}`}
+                                                >
+                                                    {record?.index}
+                                                </div>
+                                            )
+                                        },
+                                    },
+                                    {
+                                        title: 'Nội dung phản hồi',
+                                        dataIndex: 'content',
+                                        render: (_, record) => {
+                                            const order = survey?.surveyQuestion.findIndex(
+                                                (item) => item.id === record.id
+                                            )
+                                            return record.isParent ? (
+                                                <div className="font-semibold uppercase">
+                                                    {record?.name}
+                                                </div>
+                                            ) : record?.type === 'ESSAY' ? (
+                                                <div>
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: record?.name,
+                                                        }}
+                                                    />
+                                                    <Form.Item
+                                                        name={['responses', order, 'answerText']}
+                                                        rules={[
+                                                            {
+                                                                required: true,
+                                                                message: 'Nhập câu trả lời',
+                                                            },
+                                                        ]}
+                                                    >
+                                                        <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                    </Form.Item>
+                                                </div>
+                                            ) : record?.specificChoice?.length > 0 ? (
+                                                <div>
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: record?.name,
+                                                        }}
+                                                    />
+                                                    <Form.Item
+                                                        name={[
+                                                            'responses',
+                                                            order,
+                                                            'surveyChoiceId',
+                                                        ]}
+                                                        rules={[
+                                                            {
+                                                                required: true,
+                                                                message:
+                                                                    'Vui lòng chọn mức phản hồi',
+                                                            },
+                                                        ]}
+                                                        style={{ marginBottom: 0 }}
+                                                        className="w-full"
+                                                    >
+                                                        <Radio.Group className="w-full gap-x-2 flex">
+                                                            {survey?.surveyChoice.map(
+                                                                (i, index: number) => (
+                                                                    <Radio
+                                                                        key={i?.id}
+                                                                        value={i?.id}
+                                                                        className="relative"
+                                                                    >
+                                                                        <div>
+                                                                            {
+                                                                                record
+                                                                                    ?.specificChoice[
+                                                                                    index
+                                                                                ]?.description
+                                                                            }
+                                                                        </div>
+                                                                    </Radio>
+                                                                )
+                                                            )}
+                                                        </Radio.Group>
+                                                    </Form.Item>
+                                                </div>
+                                            ) : (
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: record?.name,
+                                                    }}
+                                                />
+                                            )
+                                        },
+                                        onCell: (record, rowIndex) => {
+                                            return {
+                                                colSpan:
+                                                    record.isParent ||
+                                                    record?.specificChoice?.length > 0 ||
+                                                    record?.type === 'ESSAY'
+                                                        ? 2
+                                                        : 1,
+                                            }
+                                        },
+                                    },
+                                    {
+                                        title: 'Mức phản hồi',
+                                        width: 200,
+                                        align: 'center',
+                                        onCell: (record, rowIndex) => {
+                                            return {
+                                                colSpan:
+                                                    record.isParent ||
+                                                    record?.specificChoice?.length > 0 ||
+                                                    record?.type === 'ESSAY'
+                                                        ? 0
+                                                        : 1,
+                                            }
+                                        },
+                                        render: (_, record, qIndex) => {
+                                            const order = survey?.surveyQuestion.findIndex(
+                                                (item) => item.id === record.id
+                                            )
+                                            return (
+                                                record?.type === 'SINGLE_CHOICE' && (
+                                                    <Form.Item
+                                                        name={[
+                                                            'responses',
+                                                            order,
+                                                            'surveyChoiceId',
+                                                        ]}
+                                                        rules={[
+                                                            {
+                                                                required: true,
+                                                                message:
+                                                                    'Vui lòng chọn mức phản hồi',
+                                                            },
+                                                        ]}
+                                                        style={{ marginBottom: 0 }}
+                                                        className="w-full"
+                                                    >
+                                                        <Radio.Group className="w-full gap-x-2 flex">
+                                                            {survey?.surveyChoice.map((i) => (
+                                                                <Radio.Button
+                                                                    key={i?.id}
+                                                                    value={i?.id}
+                                                                >
+                                                                    {i?.answer}
+                                                                </Radio.Button>
+                                                            ))}
+                                                        </Radio.Group>
+                                                    </Form.Item>
+                                                )
+                                            )
+                                        },
+                                    },
+                                ]}
+                                bordered={true}
+                            />
+
+                            // <TableCollapse
+                            //     defaultExpandAll
+                            //     headerTitleKey={({ name }) =>
+                            //         `${[name].filter(Boolean).join(' - ')}`
+                            //     }
+                            //     childrenFieldName="children"
+                            //     rowKey="id"
+                            //     columns={[
+                            //         {
+                            //             title: 'Nội dung phản hồi',
+                            //             dataIndex: 'content',
+                            //             render: (_, record) => {
+                            //                 return (
+                            //                     <div
+                            //                         dangerouslySetInnerHTML={{
+                            //                             __html: record?.name,
+                            //                         }}
+                            //                     />
+                            //                 )
+                            //             },
+
+                            //         },
+                            //         {
+                            //             title: 'Mức phản hồi',
+                            //             width: 200,
+                            //             align: 'center',
+                            //             render: (_, record, qIndex) => {
+                            //                 return record?.type === 'SINGLE_CHOICE' ? (
+                            //                     <Form.Item
+                            //                         name={[
+                            //                             'responses',
+                            //                             record?.id,
+                            //                             'surveyChoiceId',
+                            //                         ]}
+                            //                         rules={[
+                            //                             {
+                            //                                 required: true,
+                            //                                 message: 'Vui lòng chọn mức phản hồi',
+                            //                             },
+                            //                         ]}
+                            //                         style={{ marginBottom: 0 }}
+                            //                         className="w-full"
+                            //                     >
+                            //                         <Radio.Group className="w-full gap-x-2 flex">
+                            //                             {survey?.surveyChoice.map((i) => (
+                            //                                 <Radio.Button key={i?.id} value={i?.id}>
+                            //                                     {i?.answer}
+                            //                                 </Radio.Button>
+                            //                             ))}
+                            //                         </Radio.Group>
+                            //                     </Form.Item>
+                            //                 ) : (
+                            //                     <Form.Item
+                            //                         name={['responses', qIndex, 'answerText']}
+                            //                         rules={[
+                            //                             {
+                            //                                 required: true,
+                            //                                 message: 'Nhập câu trả lời',
+                            //                             },
+                            //                         ]}
+                            //                     >
+                            //                         <Input.TextArea placeholder="Nhập câu trả lời" />
+                            //                     </Form.Item>
+                            //                 )
+                            //             },
+                            //         },
+                            //     ]}
+                            //     data={dataTest}
+                            //     pagination={false}
+                            //     expandable={{
+                            //         expandRowByClick: false,
+                            //         onExpand: () => false,
+                            //     }}
+                            // />
+                        )}
                     </Col>
 
                     {survey.additionalSuggestion && (
@@ -385,7 +719,7 @@ function TakeTestPage() {
                         </Col>
                     )}
 
-                    <Col span={24} className="mt-6">
+                    <Col span={24} className="my-6">
                         <Flex justify="end">
                             <Button onClick={() => onOk()} type="primary">
                                 Lưu

@@ -136,11 +136,9 @@ const ReviewSurveyModal = () => {
                                         pagination={false}
                                     />
                                 </Col>
-                                <Col span={24} className="text-[14px] text-[#e80808]">
-                                    Nếu ở mức (*), bạn phải ghi rõ lý do
-                                </Col>
+                             
 
-                                <Col span={24} className="mb-3">
+                                <Col span={24} className="my-3">
                                     <Form
                                         form={form}
                                         className="px-6 max-w-[1100px] w-full mx-auto"

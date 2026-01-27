@@ -429,7 +429,8 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                                 (item.analysisCriterions?.status !==
                                                     $Enums.EvaluationCriterionStatus.SUBMITTED &&
                                                     item.analysisCriterions?.status !==
-                                                        $Enums.EvaluationCriterionStatus.REVISION) ||
+                                                        $Enums.EvaluationCriterionStatus
+                                                            .REVISION) ||
                                                 !can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                                                     'DUYET'

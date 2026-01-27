@@ -1,6 +1,5 @@
 import CriteriaAnalysisWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-analysis'
 import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period'
-import ReviewCriteriaAnalysis from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-analysis'
 import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review'
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-assignment'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -15,11 +14,13 @@ import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
 import EvaluateLayout from '@layouts/evaluate-layout'
+import ReviewSecretary from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-secretary'
+import ReviewCriteriaEvaluationAdvisory from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation-advisory'
 
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'f1218263-341e-40c4-b269-a711a0186c74'
+    const idProfile = me?.sDM_NhanVienId || '7247c121-ab5a-4a72-a018-4a4090c7948a'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()
@@ -107,7 +108,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             tabs.push({
                 key: '4',
                 label: 'Xét duyệt phiếu (Thư ký)',
-                children: <ReviewCriteriaAnalysis />,
+                children: <ReviewSecretary />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }
@@ -116,7 +117,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             tabs.push({
                 key: '5',
                 label: 'Xét duyệt phiếu (Ban tư vấn)',
-                children: <ReviewCriteriaAnalysis />,
+                children: <ReviewCriteriaEvaluationAdvisory />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }

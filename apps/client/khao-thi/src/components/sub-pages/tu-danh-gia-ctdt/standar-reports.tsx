@@ -4,12 +4,10 @@ import { Button, Collapse, Form, message, Tag } from 'antd'
 import { useEffect } from 'react'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
-import { useUpdateEvaluationPeriod, useUpdateStandardPeriod } from '@workspace/db/hooks'
+import { useUpdateStandardPeriod } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
 import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
-import { useStore } from '@tanstack/react-store'
-import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
 
 export type PutRequirementCriterion = {
@@ -26,11 +24,9 @@ const StandarReportsSubPage = ({
     onRefetch?: () => void
 }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
-    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { hideSpinner, showSpinner } = useSpinner()
 
-    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
     const { mutateAsync: updateStandardPeriod } = useUpdateStandardPeriod()
 
     const handleSubmit = async () => {
@@ -60,63 +56,6 @@ const StandarReportsSubPage = ({
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
-        }
-    }
-
-    const checkAndUpdateEvaluationPeriodStatus = async () => {
-        if (!selectedEvaluationPeriodId) return
-
-        try {
-            const totalCriteria = await sqlTransaction([
-                {
-                    model: 'EvaluationCriterion',
-                    operation: 'count',
-                    data: {
-                        where: {
-                            criterionPeriod: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                            deletedAt: null,
-                        },
-                    },
-                },
-            ])
-
-            const submittedEvaluationCriterion = await sqlTransaction([
-                {
-                    model: 'EvaluationCriterion',
-                    operation: 'count',
-                    data: {
-                        where: {
-                            criterionPeriod: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                            status: $Enums.EvaluationStatus.APPROVED,
-                            deletedAt: null,
-                        },
-                    },
-                },
-            ])
-
-            if (
-                (totalCriteria.data[0] as number) > 0 &&
-                totalCriteria.data[0] === submittedEvaluationCriterion.data[0]
-            ) {
-                await updateEvaluationPeriod({
-                    where: {
-                        id: selectedEvaluationPeriodId,
-                    },
-                    data: {
-                        status: $Enums.EvaluationPeriodStatus.COMPLETED,
-                    },
-                })
-            }
-        } catch (error) {
-            console.error('Error updating evaluation period status:', error)
         }
     }
 
@@ -157,8 +96,6 @@ const StandarReportsSubPage = ({
                 message.error('Có lỗi xảy ra, vui lòng thử lại')
                 return
             }
-
-            await checkAndUpdateEvaluationPeriodStatus()
 
             message.success('Nộp báo cáo tiêu chí thành công')
 
