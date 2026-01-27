@@ -7,6 +7,7 @@ import type { PutPhanCongHangLoatCrossModalInput } from '@pages/ql-tu-danh-gia-c
 
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
+import { $Enums } from '@workspace/db/client'
 import {
     useFindManyEvaluationCouncilMember,
     useUpsertEvaluationCriterion,
@@ -37,6 +38,9 @@ export default function PutPhanCongHangLoatCrossModal() {
                 deletedAt: null,
                 evaluationCouncil: {
                     periodId: selectedEvaluationPeriodId || '',
+                },
+                role: {
+                    has: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
                 },
             },
             include: {
@@ -84,7 +88,7 @@ export default function PutPhanCongHangLoatCrossModal() {
                 children: standard.criteria
                     ?.filter((criterion) => input.selectedCriteriaIds?.includes(criterion.id))
                     .map((criterion) => ({
-                        title: `Tiêu chí ${criterion.order}: ${criterion.name}`,
+                        title: `Tiêu chí ${standard.order}.${criterion.order}: ${criterion.name}`,
                         key: criterion.id,
                     })),
             }))

@@ -1,6 +1,5 @@
 import CriteriaAnalysisWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-analysis'
 import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period'
-import ReviewCriteriaAnalysis from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-analysis'
 import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review'
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-assignment'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -16,6 +15,7 @@ import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
 import EvaluateLayout from '@layouts/evaluate-layout'
 import ReviewSecretary from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-secretary'
+import ReviewCriteriaEvaluationAdvisory from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation-advisory'
 
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
@@ -117,7 +117,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             tabs.push({
                 key: '5',
                 label: 'Xét duyệt phiếu (Ban tư vấn)',
-                children: <ReviewCriteriaAnalysis />,
+                children: <ReviewCriteriaEvaluationAdvisory />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }
