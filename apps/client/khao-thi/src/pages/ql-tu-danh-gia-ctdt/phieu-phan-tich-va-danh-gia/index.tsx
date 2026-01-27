@@ -9,11 +9,7 @@ import CriteriaEvaluationWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums } from '@workspace/db/client'
-import {
-    useFindFirstEvaluationCouncilMember,
-    useFindUniqueEvaluationPeriod,
-    useFindUniqueLecturer,
-} from '@workspace/db/hooks'
+import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Row, Tabs, type TabsProps } from 'antd'
@@ -56,59 +52,6 @@ export default function CriteriaAnalysisAndEvaluationPage() {
         }
     )
 
-    const { data: evaluationPeriod } = useFindUniqueEvaluationPeriod(
-        {
-            where: {
-                id: selectedEvaluationPeriodId,
-            },
-            include: {
-                standards: {
-                    include: {
-                        criteria: {
-                            where: {
-                                OR: [
-                                    {
-                                        analysisCriterions: {
-                                            lecturer: {
-                                                userProfileId: idProfile,
-                                            },
-                                        },
-                                    },
-                                    {
-                                        evaluationCriterion: {
-                                            lecturer: {
-                                                userProfileId: idProfile,
-                                            },
-                                        },
-                                    },
-                                ],
-                            },
-                            include: {
-                                analysisCriterions: {
-                                    where: {
-                                        lecturer: {
-                                            userProfileId: idProfile,
-                                        },
-                                    },
-                                },
-                                evaluationCriterion: {
-                                    where: {
-                                        lecturer: {
-                                            userProfileId: idProfile,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        {
-            enabled: !!selectedEvaluationPeriodId && !!idProfile,
-        }
-    )
-
     const tabItems = useMemo(() => {
         const tabs: TabsProps['items'] = [
             {
@@ -117,24 +60,6 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 children: <EvaluationPeriod />,
             },
         ]
-
-        const disabledReviewAnalysisTab =
-            !selectedEvaluationPeriodId ||
-            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.DIRECTOR_REVIEW
-        const disabledAdvisoryBoardTab =
-            !selectedEvaluationPeriodId ||
-            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.SECRETARY_REVIEW
-        const disabledCrossReviewAssignmentTab =
-            !selectedEvaluationPeriodId ||
-            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT
-
-        const disabledStandardReportTab =
-            !selectedEvaluationPeriodId ||
-            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CONSOLIDATION
-
-        const disabledCrossReviewTab =
-            !selectedEvaluationPeriodId ||
-            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW
 
         const isAdvisoryBoard = councilMember?.role?.includes(
             $Enums.EvaluationMemberRole.ADVISORY_BOARD
@@ -178,21 +103,21 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             })
         }
 
-        if (isAdvisoryBoard) {
+        if (isSecretary) {
             tabs.push({
                 key: '4',
-                label: 'Xét duyệt phiếu (Ban tư vấn)',
-                children: <ReviewCriteriaAnalysis userRole="BAN_TU_VAN" />,
-                disabled: disabledAdvisoryBoardTab,
+                label: 'Xét duyệt phiếu (Thư ký)',
+                children: <ReviewCriteriaAnalysis />,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
-        if (isSecretary) {
+        if (isAdvisoryBoard) {
             tabs.push({
                 key: '5',
-                label: 'Xét duyệt phiếu (Thư ký)',
-                children: <ReviewCriteriaAnalysis userRole="THU_KY" />,
-                disabled: disabledReviewAnalysisTab,
+                label: 'Xét duyệt phiếu (Ban tư vấn)',
+                children: <ReviewCriteriaAnalysis />,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
@@ -201,7 +126,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '6',
                 label: 'Phân công phản biện chéo',
                 children: <CrossReviewAssignment />,
-                disabled: disabledCrossReviewAssignmentTab,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
@@ -210,7 +135,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '7',
                 label: 'Phản biện chéo',
                 children: <CrossReview userRole="REVIEWER" />,
-                disabled: disabledCrossReviewTab,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
@@ -219,12 +144,12 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '8',
                 label: 'Báo cáo tiêu chuẩn',
                 children: <StandardReports />,
-                disabled: disabledStandardReportTab,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
         return tabs
-    }, [can, selectedEvaluationPeriodId, councilMember, evaluationPeriod])
+    }, [can, selectedEvaluationPeriodId, councilMember])
 
     return (
         <Row gutter={[12, 0]}>

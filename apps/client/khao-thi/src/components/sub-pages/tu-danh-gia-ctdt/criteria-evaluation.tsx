@@ -10,12 +10,9 @@ import {
     type CriterionPeriod,
     type EvaluationCriterion,
 } from '@workspace/db/client'
-import { useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
 import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
-import { useStore } from '@tanstack/react-store'
-import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import CommentList from '@components/commons/comment-list'
@@ -47,7 +44,6 @@ const CriteriaEvaluationSubPage = ({
 }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [showComments, setShowComments] = useState(false)
-    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()
 
     const canEdit = can(
@@ -112,65 +108,6 @@ const CriteriaEvaluationSubPage = ({
         }
     }
 
-    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
-
-    const checkAndUpdateEvaluationPeriodStatus = async () => {
-        if (!selectedEvaluationPeriodId) return
-
-        try {
-            const totalCriteria = await sqlTransaction([
-                {
-                    model: 'EvaluationCriterion',
-                    operation: 'count',
-                    data: {
-                        where: {
-                            criterionPeriod: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                            deletedAt: null,
-                        },
-                    },
-                },
-            ])
-
-            const submittedEvaluationCriterion = await sqlTransaction([
-                {
-                    model: 'EvaluationCriterion',
-                    operation: 'count',
-                    data: {
-                        where: {
-                            criterionPeriod: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                            status: $Enums.EvaluationStatus.SUBMITTED,
-                            deletedAt: null,
-                        },
-                    },
-                },
-            ])
-
-            if (
-                (totalCriteria.data[0] as number) > 0 &&
-                totalCriteria.data[0] === submittedEvaluationCriterion.data[0]
-            ) {
-                await updateEvaluationPeriod({
-                    where: {
-                        id: selectedEvaluationPeriodId,
-                    },
-                    data: {
-                        status: $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT,
-                    },
-                })
-            }
-        } catch (error) {
-            console.error('Error updating evaluation period status:', error)
-        }
-    }
-
     const handleEvaluationForm = async () => {
         try {
             const dataSubmit = form.getFieldsValue()
@@ -208,8 +145,6 @@ const CriteriaEvaluationSubPage = ({
                 message.error('Có lỗi xảy ra, vui lòng thử lại')
                 return
             }
-
-            await checkAndUpdateEvaluationPeriodStatus()
 
             message.success('Nộp phiếu đánh giá tiêu chí thành công')
 
@@ -359,7 +294,7 @@ const CriteriaEvaluationSubPage = ({
                                                         label: (
                                                             <div>
                                                                 <span className="font-bold">
-                                                                    Tiêu chí {item.order}:{' '}
+                                                                    Tiêu chí {data.order}.{item.order}:{' '}
                                                                 </span>
                                                                 {item?.name}
                                                             </div>

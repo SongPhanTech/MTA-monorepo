@@ -441,12 +441,12 @@ export default function AssigmentOfAssessmentTab() {
                         columns={[
                             {
                                 title: 'Tiêu chí',
-                                width: 500,
+                                width: 300,
                                 render: (_, record) => record?.name,
                             },
                             {
                                 title: 'Giảng viên phân công',
-                                width: 400,
+                                width: 150,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
@@ -486,7 +486,7 @@ export default function AssigmentOfAssessmentTab() {
                             },
                             {
                                 title: 'Hạn hoàn thành',
-                                width: 170,
+                                width: 90,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
