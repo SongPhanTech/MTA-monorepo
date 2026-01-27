@@ -208,6 +208,7 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
+            ...(filters.statusStudent ? { status: { in: filters.statusStudent } } : {}),
         }),
         [filters, trainingObjectTypeId]
     )
@@ -627,7 +628,7 @@ export default function UserProfilePageDs() {
                                 title: 'CTĐT song song',
                                 align: 'center',
                                 dataIndex: 'curriculumVersionParallel',
-                                width: 180,
+                                width: 150,
                                 type: 'select',
                                 options: TrainingCurriculumVersionData.map((item) => ({
                                     label: item.name,
@@ -639,6 +640,14 @@ export default function UserProfilePageDs() {
                             },
                             {
                                 title: 'Trạng thái',
+                                dataIndex: 'statusStudent',
+                                type: 'select',
+                                options: Object.entries(FIXED_CLASS_STUDENT_STATUS).map(
+                                    ([value, info]) => ({
+                                        label: <Tag color={info.color}>{info.label}</Tag>,
+                                        value: value,
+                                    })
+                                ),
                                 align: 'center',
                                 width: 120,
                                 render: (_, record) => {

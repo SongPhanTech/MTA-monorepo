@@ -647,6 +647,7 @@ app.openapi(graduationCheck, async (c) => {
             CUMULATIVE_PASSED_CREDITS: totalPassCredit,
             CUMULATIVE_DEBT_CREDITS: totalDebtCredit,
             CUMULATIVE_PROGRESS_PERCENT: (totalPassCredit / totalPassCredit) * 100,
+            CUMULATIVE_RETAKE_PERCENT: (totalDebtCredit / totalPassCredit) * 100,
 
             ACADEMIC_WARNING_LEVEL: student.academicWarningLevel,
             DISCIPLINARY_WARNING_LEVEL: student.disciplinaryWarningLevel,
