@@ -61,6 +61,10 @@ export default function SinhPhach() {
                         examId,
                     },
                 },
+                studentSubjectScore:{
+                    examBanned: false,
+                    examPostponed: false,
+                }
             },
             include: {
                 studentSubjectScore: {
