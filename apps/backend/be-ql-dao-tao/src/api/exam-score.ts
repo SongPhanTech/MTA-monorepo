@@ -127,7 +127,13 @@ app.openapi(genExamListCode, async (c) => {
 
     await prisma.$transaction(async (tx) => {
         await tx.examPaper.updateMany({
-            where: { id: { in: ids } },
+            where: {
+                examList: {
+                    examRoom: {
+                        examId,
+                    },
+                },
+            },
             data: { examCode: null },
         })
         await tx.$executeRaw`

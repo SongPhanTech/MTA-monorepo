@@ -24,7 +24,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Link } from 'lucide-react';
+import { Link } from 'lucide-react'
 
 function TabDotKhaoSat({
     selectedId,
@@ -437,7 +437,7 @@ function TabDotKhaoSat({
                                                     placement="top"
                                                 >
                                                     <Link
-                                                    size={16}
+                                                        size={16}
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             onOpenKhaoSat({
@@ -446,7 +446,6 @@ function TabDotKhaoSat({
                                                             })
                                                             // router.push(`/lam-khao-sat/${id}`)
                                                         }}
-                                                       
                                                     />
                                                 </Tooltip>
                                             )}

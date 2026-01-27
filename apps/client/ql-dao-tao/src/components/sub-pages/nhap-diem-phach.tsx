@@ -23,6 +23,11 @@ export default function NhapDiemPhach() {
                         examId,
                     },
                 },
+                studentSubjectScore: {
+                    suspended: false,
+                    examBanned: false,
+                    examPostponed: false,
+                },
             },
             include: {
                 studentSubjectScore: {
