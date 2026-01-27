@@ -9,8 +9,6 @@ import { DEADLINE_OPTIONS, getStatusEvaluation } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import type { ReviewDataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-analysis'
-import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
-import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
 import { $Enums } from '@workspace/db/client'
@@ -18,9 +16,7 @@ import {
     useCreateEvaluationCriterionComment,
     useUpdateAnalysisCriterion,
     useUpdateEvaluationCriterion,
-    useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Empty, Form, message, Popconfirm, Tag, Tooltip } from 'antd'
@@ -41,159 +37,25 @@ type CommentType = {
 type Props = {
     data: ReviewDataTabType
     idx: number
-    role: 'BAN_TU_VAN' | 'THU_KY'
 }
 
-const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props) => {
+const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
     const [deadlineFilter, setDeadlineFilter] = useState<string | null>(null)
-    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
+    const idProfile = me?.sDM_NhanVienId || 'f1218263-341e-40c4-b269-a711a0186c74'
     const { can } = useAbility()
     const [form] = Form.useForm<CommentType>()
 
-    const filteredCriteria = data?.criteria?.filter((item) => {
-        if (!item.analysisCriterions) return false
-
-        if (deadlineFilter && item.analysisCriterions.deadline) {
-            const now = dayjs()
-            const deadlineDate = dayjs(item.analysisCriterions.deadline)
-            const daysUntilDeadline = deadlineDate.diff(now, 'day')
-
-            if (deadlineFilter === 'overdue' && daysUntilDeadline >= 0) return false
-            if (deadlineFilter === 'near' && (daysUntilDeadline < 0 || daysUntilDeadline > 3))
-                return false
-        } else if (deadlineFilter && !item.analysisCriterions.deadline) {
-            return false
-        }
-
-        return true
-    })
-
-    const shouldShowApproveAllButton = () => {
-        if (
-            !can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-                'DUYET'
-            )
-        ) {
-            return false
-        }
-
-        return filteredCriteria?.some((item) => {
-            const status = item.analysisCriterions?.status
-            if (role === 'BAN_TU_VAN') {
-                return (
-                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
-                    status !== $Enums.EvaluationCriterionStatus.COMPLETED
-                )
-            }
-            if (role === 'THU_KY') {
-                return status === $Enums.EvaluationCriterionStatus.APPROVED
-            }
-            return false
-        })
-    }
+    const { mutateAsync: updateAnalysisCriterion } = useUpdateAnalysisCriterion()
+    const { mutateAsync: createEvaluationCriterionComment } = useCreateEvaluationCriterionComment()
+    const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
 
     const toggleCommentRow = (recordId: string) => {
         setExpandedRowKeys((prev) =>
             prev.includes(recordId) ? prev.filter((id) => id !== recordId) : [...prev, recordId]
         )
-    }
-
-    const { mutateAsync: updateAnalysisCriterion } = useUpdateAnalysisCriterion()
-    const { mutateAsync: createEvaluationCriterionComment } = useCreateEvaluationCriterionComment()
-    const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
-    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
-
-    const handleCheckAndChangeStatus = async () => {
-        if (!selectedEvaluationPeriodId) return
-        try {
-            const totalCriteria = await sqlTransaction([
-                {
-                    model: 'AnalysisCriterion',
-                    operation: 'count',
-                    data: {
-                        where: {
-                            criterionPeriod: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                            deletedAt: null,
-                        },
-                    },
-                },
-            ])
-
-            const checkStatus =
-                role === 'BAN_TU_VAN'
-                    ? $Enums.EvaluationCriterionStatus.APPROVED
-                    : $Enums.EvaluationCriterionStatus.COMPLETED
-
-            const submittedCriteria = await sqlTransaction([
-                {
-                    model: 'AnalysisCriterion',
-                    operation: 'count',
-                    data: {
-                        where: {
-                            criterionPeriod: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                            status: checkStatus,
-                            deletedAt: null,
-                        },
-                    },
-                },
-            ])
-
-            if (
-                (totalCriteria.data[0] as number) > 0 &&
-                totalCriteria.data[0] === submittedCriteria.data[0]
-            ) {
-                const newStatus =
-                    role === 'BAN_TU_VAN'
-                        ? $Enums.EvaluationPeriodStatus.DIRECTOR_REVIEW
-                        : $Enums.EvaluationPeriodStatus.EVALUATION_WRITING
-
-                await updateEvaluationPeriod({
-                    where: {
-                        id: selectedEvaluationPeriodId,
-                    },
-                    data: {
-                        status: newStatus,
-                    },
-                })
-            }
-        } catch (error) {
-            console.error('Error updating evaluation period status:', error)
-        }
-    }
-
-    const handleApproveCriterionAnalysis = async (analysisCriterionId: string) => {
-        try {
-            showSpinner()
-            await updateAnalysisCriterion({
-                where: {
-                    id: analysisCriterionId,
-                },
-                data: {
-                    status: $Enums.EvaluationCriterionStatus.APPROVED,
-                },
-            })
-
-            await handleCheckAndChangeStatus()
-
-            message.success('Phê duyệt tiêu chí thành công')
-        } catch (error) {
-            message.error('Phê duyệt tiêu chí thất bại, vui lòng thử lại')
-        } finally {
-            hideSpinner()
-        }
     }
 
     const handleRejectCriterionAnalysis = async (
@@ -277,8 +139,6 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                 },
             })
 
-            await handleCheckAndChangeStatus()
-
             await updateEvaluationCriterion({
                 where: {
                     criterionPeriodId: criterionPeriodId,
@@ -296,6 +156,22 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
         }
     }
 
+    const shouldShowApproveAllButton = () => {
+        if (
+            !can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+                'DUYET'
+            )
+        ) {
+            return false
+        }
+
+        return filteredCriteria?.some((item) => {
+            const status = item.analysisCriterions?.status
+            return status === $Enums.EvaluationCriterionStatus.SUBMITTED
+        })
+    }
+
     const handleSubmitedAll = async () => {
         try {
             showSpinner()
@@ -307,19 +183,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
 
             const approvableCriteria = filteredCriteria.filter((item) => {
                 const status = item.analysisCriterions?.status
-
-                if (role === 'BAN_TU_VAN') {
-                    return (
-                        status !== $Enums.EvaluationCriterionStatus.APPROVED &&
-                        status !== $Enums.EvaluationCriterionStatus.COMPLETED
-                    )
-                }
-
-                if (role === 'THU_KY') {
-                    return status === $Enums.EvaluationCriterionStatus.APPROVED
-                }
-
-                return false
+                return status === $Enums.EvaluationCriterionStatus.SUBMITTED
             })
 
             if (approvableCriteria.length === 0) {
@@ -327,49 +191,30 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                 return
             }
 
-            if (role === 'BAN_TU_VAN') {
-                await Promise.all(
-                    approvableCriteria
-                        .filter((item) => item.analysisCriterions?.id)
-                        .map((item) =>
+            await Promise.all(
+                approvableCriteria
+                    .filter((item) => item.analysisCriterions?.id)
+                    .map((item) =>
+                        Promise.all([
                             updateAnalysisCriterion({
                                 where: {
                                     id: item.analysisCriterions?.id as string,
                                 },
                                 data: {
-                                    status: $Enums.EvaluationCriterionStatus.APPROVED,
+                                    status: $Enums.EvaluationCriterionStatus.COMPLETED,
                                 },
-                            })
-                        )
-                )
-            } else if (role === 'THU_KY') {
-                await Promise.all(
-                    approvableCriteria
-                        .filter((item) => item.analysisCriterions?.id)
-                        .map((item) =>
-                            Promise.all([
-                                updateAnalysisCriterion({
-                                    where: {
-                                        id: item.analysisCriterions?.id as string,
-                                    },
-                                    data: {
-                                        status: $Enums.EvaluationCriterionStatus.COMPLETED,
-                                    },
-                                }),
-                                updateEvaluationCriterion({
-                                    where: {
-                                        criterionPeriodId: item.id,
-                                    },
-                                    data: {
-                                        status: $Enums.EvaluationStatus.PENDING,
-                                    },
-                                }),
-                            ])
-                        )
-                )
-            }
-
-            await handleCheckAndChangeStatus()
+                            }),
+                            updateEvaluationCriterion({
+                                where: {
+                                    criterionPeriodId: item.id,
+                                },
+                                data: {
+                                    status: $Enums.EvaluationStatus.PENDING,
+                                },
+                            }),
+                        ])
+                    )
+            )
 
             message.success(`Phê duyệt thành công ${approvableCriteria.length} tiêu chí`)
         } catch (error) {
@@ -379,6 +224,24 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
             hideSpinner()
         }
     }
+
+    const filteredCriteria = data?.criteria?.filter((item) => {
+        if (!item.analysisCriterions) return false
+
+        if (deadlineFilter && item.analysisCriterions.deadline) {
+            const now = dayjs()
+            const deadlineDate = dayjs(item.analysisCriterions.deadline)
+            const daysUntilDeadline = deadlineDate.diff(now, 'day')
+
+            if (deadlineFilter === 'overdue' && daysUntilDeadline >= 0) return false
+            if (deadlineFilter === 'near' && (daysUntilDeadline < 0 || daysUntilDeadline > 3))
+                return false
+        } else if (deadlineFilter && !item.analysisCriterions.deadline) {
+            return false
+        }
+
+        return true
+    })
 
     return (
         <div className="h-[calc(100vh-200px)] overflow-y-auto p-4">
@@ -563,19 +426,20 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                             hidden:
                                                 item.analysisCriterions?.status ===
                                                     $Enums.EvaluationCriterionStatus.COMPLETED ||
-                                                (role === 'BAN_TU_VAN' &&
-                                                    item.analysisCriterions?.status ===
-                                                        $Enums.EvaluationCriterionStatus
-                                                            .APPROVED) ||
-                                                (role === 'THU_KY' &&
+                                                (item.analysisCriterions?.status !==
+                                                    $Enums.EvaluationCriterionStatus.SUBMITTED &&
                                                     item.analysisCriterions?.status !==
                                                         $Enums.EvaluationCriterionStatus
-                                                            .APPROVED) ||
+                                                            .REVISION) ||
                                                 !can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                                                     'DUYET'
                                                 ),
                                             render: (__, record) => {
+                                                const isSubmitted =
+                                                    item.analysisCriterions?.status ===
+                                                    $Enums.EvaluationCriterionStatus.SUBMITTED
+
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
                                                         {can(
@@ -583,23 +447,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                             'DUYET'
                                                         ) && (
                                                             <>
-                                                                {role === 'BAN_TU_VAN' && (
-                                                                    <ApproveIcon
-                                                                        popConfirm={{
-                                                                            onConfirm: (e) => {
-                                                                                e?.stopPropagation()
-                                                                                handleApproveCriterionAnalysis(
-                                                                                    record.analysisCriterionId
-                                                                                )
-                                                                            },
-                                                                            onCancel: (e) => {
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                        }}
-                                                                    />
-                                                                )}
-
-                                                                {role === 'THU_KY' && (
+                                                                {isSubmitted && (
                                                                     <ApproveIcon
                                                                         popConfirm={{
                                                                             onConfirm: (e) => {
@@ -615,25 +463,22 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                                         }}
                                                                     />
                                                                 )}
-                                                            </>
-                                                        )}
 
-                                                        {can(
-                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-                                                            'DUYET'
-                                                        ) && (
-                                                            <Tooltip title="Yêu cầu chỉnh sửa">
-                                                                <FileEdit
-                                                                    size={16}
-                                                                    strokeWidth={1.5}
-                                                                    className={
-                                                                        'text-blue-600 cursor-pointer'
-                                                                    }
-                                                                    onClick={() => {
-                                                                        toggleCommentRow(record.id)
-                                                                    }}
-                                                                />
-                                                            </Tooltip>
+                                                                <Tooltip title="Yêu cầu chỉnh sửa">
+                                                                    <FileEdit
+                                                                        size={16}
+                                                                        strokeWidth={1.5}
+                                                                        className={
+                                                                            'text-blue-600 cursor-pointer'
+                                                                        }
+                                                                        onClick={() => {
+                                                                            toggleCommentRow(
+                                                                                record.id
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                </Tooltip>
+                                                            </>
                                                         )}
                                                     </div>
                                                 )

@@ -17,6 +17,7 @@ enum CriteriaField {
   CUMULATIVE_PASSED_CREDITS         // Tổng số tín chỉ tích lũy từ đầu khoá học
   CUMULATIVE_DEBT_CREDITS           // Tổng số tín chỉ còn nợ tích lũy từ đầu khoá học
   CUMULATIVE_PROGRESS_PERCENT       // Tỷ lệ % tín chỉ đã tích lũy so với tổng tín chỉ yêu cầu của CTĐT
+  CUMULATIVE_RETAKE_PERCENT         // Tỷ lệ % số tín chỉ học lại + thi lại
 
   // --- Nhóm 3: Cảnh báo & Trạng thái Học vụ ---
   ACADEMIC_WARNING_LEVEL            // Mức Cảnh báo học tập hiện tại của sinh viên (0-4)

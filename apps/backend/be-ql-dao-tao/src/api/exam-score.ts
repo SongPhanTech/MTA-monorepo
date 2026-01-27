@@ -18,8 +18,8 @@ const genExamListCode = createRoute({
                 'application/json': {
                     schema: z
                         .object({
-                            examListId: z.string().openapi('examListId', {
-                                description: 'ID danh sách thi',
+                            examId: z.string().openapi('examId', {
+                                description: 'ID kỳ thi',
                             }),
                         })
                         .openapi('gen-exam-room-code'),
@@ -65,46 +65,56 @@ const genExamListCode = createRoute({
 })
 
 app.openapi(genExamListCode, async (c) => {
-    const { examListId } = c.req.valid('json')
-    const examList = await prisma.examList.findUnique({
-        where: { id: examListId },
+    const { examId } = c.req.valid('json')
+    const exam = await prisma.exam.findUnique({
+        where: { id: examId },
         include: {
-            examPapers: {
-                include: { studentSubjectScore: true },
-                where: {
-                    studentSubjectScore: {
-                        suspended: false,
-                        examBanned: false,
-                        examPostponed: false,
+            examRooms: {
+                include: {
+                    examList: {
+                        include: {
+                            examPapers: {
+                                include: { studentSubjectScore: true },
+                                where: {
+                                    studentSubjectScore: {
+                                        suspended: false,
+                                        examBanned: false,
+                                        examPostponed: false,
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },
         },
     })
-    if (!examList) {
+    if (!exam) {
         return c.json({ message: 'Kỳ thi không tồn tại' }, 404)
     }
 
-    if (examList.lockExamCode) {
+    if (exam.examRooms.some((er) => er.examList.some((el) => el.lockExamCode))) {
         return c.json({ message: 'Phách đã khoá' }, 400)
     }
 
-    if (!examList.examPapers.length) {
+    const examList = exam.examRooms.flatMap((er) => er.examList)
+    const examPapers = examList.flatMap((el) => el.examPapers)
+    if (!examPapers.length) {
         return c.json({ message: 'Không có thí sinh' }, 404)
     }
 
-    const hasScore = examList.examPapers.some((s) => s.studentSubjectScore.examScore !== null)
+    const hasScore = examPapers.some((s) => s.studentSubjectScore.examScore !== null)
 
     if (hasScore) {
         return c.json({ message: 'Phách đã được nhập điểm' }, 400)
     }
 
-    const padding = examList.examPapers.length.toString().length
-    const examCodes = Array.from({ length: examList.examPapers.length }, (_, i) =>
+    const padding = examPapers.length.toString().length
+    const examCodes = Array.from({ length: examPapers.length }, (_, i) =>
         String(i + 1).padStart(padding, '0')
-    ).sort((a, b) => Math.random() - 0.5)
+    ).sort(() => Math.random() - 0.5)
 
-    const examPaperUpdates = examList.examPapers.map((s, i) => ({
+    const examPaperUpdates = examPapers.map((s, i) => ({
         id: s.id,
         examCode: examCodes[i],
     }))
@@ -117,7 +127,13 @@ app.openapi(genExamListCode, async (c) => {
 
     await prisma.$transaction(async (tx) => {
         await tx.examPaper.updateMany({
-            where: { id: { in: ids } },
+            where: {
+                examList: {
+                    examRoom: {
+                        examId,
+                    },
+                },
+            },
             data: { examCode: null },
         })
         await tx.$executeRaw`
@@ -127,8 +143,8 @@ app.openapi(genExamListCode, async (c) => {
             WHERE
                 "id" IN (${Prisma.join(ids)})
             `
-        await tx.examList.update({
-            where: { id: examListId },
+        await tx.examList.updateMany({
+            where: { id: { in: examList.map((el) => el.id) } },
             data: { lockExamCode: true, createdExamCode: true },
         })
     })

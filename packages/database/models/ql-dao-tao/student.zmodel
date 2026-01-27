@@ -155,7 +155,7 @@ model StudentSemesterResult extends BaseNoCode {
   totalCredits             Int      // Tổng tín chỉ mở trong học kỳ cho CTĐT
 
   registeredCredits        Int      // Số tín chỉ đăng ký
-  retakingCredits          Int      // Số tín chỉ học lại + cải thiện
+  retakingCredits          Int      // Số tín chỉ học lại + thi lại
   passedCredits            Int      // Số tín đạt
   failedCredits            Int      // số tín chỉ không đạt trong học kỳ
 

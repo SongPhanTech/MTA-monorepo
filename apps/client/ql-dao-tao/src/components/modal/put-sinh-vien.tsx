@@ -395,9 +395,9 @@ const PutStudentModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <FormItem form={form} name="note" label="Ghi chú">
-                            <Input placeholder="Nhập ghi chú" />
+                            <Input.TextArea placeholder="Nhập ghi chú" />
                         </FormItem>
                     </Col>
                 </Row>

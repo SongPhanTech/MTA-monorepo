@@ -1073,6 +1073,7 @@ const getPrivateSurvey = createRoute({
                                     z.object({
                                         surveyQuestionGroup:
                                             models.SurveyQuestionGroupScalarSchema.nullable(),
+                                        specificChoice: models.SpecificChoiceScalarSchema.array(),
                                     })
                                 )
                             ),
@@ -1134,6 +1135,7 @@ app.openapi(getPrivateSurvey, async (c) => {
             surveyQuestion: {
                 include: {
                     surveyQuestionGroup: true,
+                    specificChoice: true,
                 },
             },
             surveyChoice: true,

@@ -593,7 +593,7 @@ export default function StudentScoreClassPage() {
                                         type="primary"
                                         onClick={() => onOpenModalNhapDiem(studentId)}
                                     >
-                                        Nhập điểm thủ công
+                                        Nhập điểm trực tiếp
                                     </Button>
                                 )}
                                 <Button

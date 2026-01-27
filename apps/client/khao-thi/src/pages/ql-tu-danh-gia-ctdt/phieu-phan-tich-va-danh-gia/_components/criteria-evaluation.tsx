@@ -8,7 +8,7 @@ import { Col, Empty, Row, Tabs } from 'antd'
 
 export default function CriteriaEvaluationWrite() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '7247c121-ab5a-4a72-a018-4a4090c7948a'
+    const idProfile = me?.sDM_NhanVienId || '8cab103d-8159-4aa8-8e25-0edcdba5d0a1'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 

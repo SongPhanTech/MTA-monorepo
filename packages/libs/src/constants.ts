@@ -66,6 +66,7 @@ export const criteriaFieldLabels: Record<CriteriaField, string> = {
     [CriteriaField.CUMULATIVE_PASSED_CREDITS]: 'Tín chỉ tích lũy',
     [CriteriaField.CUMULATIVE_DEBT_CREDITS]: 'Tín chỉ còn nợ tích lũy',
     [CriteriaField.CUMULATIVE_PROGRESS_PERCENT]: 'Tỷ lệ % tiến độ tích lũy',
+    [CriteriaField.CUMULATIVE_RETAKE_PERCENT]: 'Tỷ lệ % tín chỉ học lại, thi lại',
 
     // --- Nhóm 3: Cảnh báo & Trạng thái Học vụ ---
     [CriteriaField.ACADEMIC_WARNING_LEVEL]: 'Mức cảnh báo học tập',

@@ -1,6 +1,6 @@
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
-import TableCollapse from '@components/commons/tableCollapse'
+import TableIndexCollapse from '@components/commons/table-collapse-index'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -8,7 +8,6 @@ import { $Enums, type Prisma } from '@workspace/db/client'
 import {
     useFindManyEvaluationCouncilMember,
     useFindUniqueEvaluationPeriod,
-    useUpdateEvaluationPeriod,
     useUpsertEvaluationCriterion,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -79,6 +78,9 @@ export default function CrossReviewAssignment() {
                 deletedAt: null,
                 evaluationCouncil: {
                     periodId: selectedEvaluationPeriodId || '',
+                },
+                role: {
+                    has: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
                 },
             },
             include: {
@@ -256,7 +258,6 @@ export default function CrossReviewAssignment() {
     }, [data, form])
 
     const { mutateAsync: upsertEvaluationCriterion } = useUpsertEvaluationCriterion()
-    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
 
     const handleSave = async () => {
         try {
@@ -299,15 +300,6 @@ export default function CrossReviewAssignment() {
                 )
             )
 
-            await updateEvaluationPeriod({
-                where: {
-                    id: selectedEvaluationPeriodId,
-                },
-                data: {
-                    status: $Enums.EvaluationPeriodStatus.CROSS_REVIEW,
-                },
-            })
-
             message.success('Lưu phân công phản biện chéo thành công')
             refetch()
         } catch (error: any) {
@@ -345,12 +337,13 @@ export default function CrossReviewAssignment() {
 
             <Col span={24}>
                 <Form form={form}>
-                    <TableCollapse
+                    <TableIndexCollapse
                         rowKey="id"
                         id="cross-review-assignment"
                         defaultExpandAll
                         headerTitleKey="displayName"
                         childrenFieldName="criteria"
+                        isTitle={true}
                         rowSelection={{
                             type: 'checkbox',
                             selectedRowKeys,
@@ -416,14 +409,14 @@ export default function CrossReviewAssignment() {
                         columns={[
                             {
                                 title: 'Tiêu chí',
-                                width: 600,
+                                width: 200,
                                 render: (_, record) => {
                                     return `Tiêu chí ${record.order}: ${record.name}`
                                 },
                             },
                             {
                                 title: 'Người viết phiếu đánh giá',
-                                width: 200,
+                                width: 130,
                                 render: (_, record) => {
                                     return record.evaluationCriterion?.lecturer?.userProfile
                                         .fullname
@@ -431,7 +424,7 @@ export default function CrossReviewAssignment() {
                             },
                             {
                                 title: 'Người phản biện',
-                                width: 400,
+                                width: 220,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
@@ -472,7 +465,7 @@ export default function CrossReviewAssignment() {
                             },
                             {
                                 title: 'Hạn phản biện',
-                                width: 170,
+                                width: 90,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item

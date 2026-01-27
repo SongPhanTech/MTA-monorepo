@@ -7,7 +7,7 @@ const ThongTinKhaoSatModal = () => {
     const { isOpen, onClose, input } = useDisclosure<{ dataTable: any[]; id: string }>({
         tag: 'ThongTinKhaoSatModal',
     })
-    const link = `${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}/lam-khao-sat/${input?.id}`
+    const link = `${getRuntimeEnv('NEXT_PUBLIC_ASSET_PREFIX')}/lam-khao-sat/${input?.id}`
 
     // const handleCopy = async () => {
     //     try {

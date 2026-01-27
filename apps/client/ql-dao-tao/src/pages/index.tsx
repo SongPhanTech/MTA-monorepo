@@ -28,21 +28,23 @@
 //     return <DefaultLayout>{page}</DefaultLayout>
 // }
 import Loading from '@components/commons/loading'
+import { getRuntimeEnv } from '@workspace/libs/utils'
+import { ROUTER_PATH } from '@workspace/router'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { ROUTER_PATH } from '@workspace/router'
 
 const IndexPage = () => {
     const router = useRouter()
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip router?.asPath>
     useEffect(() => {
         router.push(
-            router?.pathname !== ROUTER_PATH.QL_DAO_TAO.INDEX
-                ? router?.pathname
+            window.location.pathname !== getRuntimeEnv('NEXT_PUBLIC_BASE_PATH')
+                ? router?.asPath.replace(/\?token=[^&]*/, '')
                 : ROUTER_PATH.QL_DAO_TAO.HOME
         )
-    }, [])
+    }, [router.push])
+
     return <Loading />
 }
 export default IndexPage

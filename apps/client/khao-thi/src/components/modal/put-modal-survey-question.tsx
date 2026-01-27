@@ -67,7 +67,7 @@ const PutSurveyQuestionModal = () => {
 
         try {
             showSpinner()
-            if (input?.type === 'SINGLE') {
+            if (input?.type === 'SINGLE' && output.type==='SINGLE_CHOICE') {
                 if (input?.id) {
                     if (output.specificChoice?.length > 0) {
                         const res = await sqlTransaction([
@@ -116,9 +116,9 @@ const PutSurveyQuestionModal = () => {
                                 surveyQuestionGroupId: output.surveyQuestionGroupId,
                                 type: output.type,
                                 description: output.description,
-                                specificChoice:{
-                                    deleteMany:{}
-                                }
+                                specificChoice: {
+                                    deleteMany: {},
+                                },
                             },
                             where: {
                                 id: input?.id,
@@ -200,7 +200,7 @@ const PutSurveyQuestionModal = () => {
 
     const listForm = Form.useWatch('specificChoice', form) ?? []
     const specific = Form.useWatch('specific', form) ?? false
-
+    const typeForm = Form.useWatch('type', form) ?? false
     const handleAddChoices = () => {
         const newList = [...listForm, { answer: '', description: '' }]
         setChoices(newList)
@@ -215,6 +215,7 @@ const PutSurveyQuestionModal = () => {
             specificChoice: result,
         })
     }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (input?.surveyQuestionGroupId) {
@@ -282,7 +283,7 @@ const PutSurveyQuestionModal = () => {
                     />
                 </FormItem>
             </Col>
-            {input?.type === 'SINGLE' && (
+            {input?.type === 'SINGLE' &&typeForm==='SINGLE_CHOICE' && (
                 <Col span={24}>
                     <FormItem form={form} name="specific" label="Đáp án đặc biệt">
                         <Radio.Group buttonStyle="solid">
