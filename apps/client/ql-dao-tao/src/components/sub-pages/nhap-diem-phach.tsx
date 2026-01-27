@@ -9,7 +9,7 @@ import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { Printer } from 'lucide-react'
 import { getRuntimeEnv } from '@workspace/libs/utils'
 import { getUrl } from '@workspace/libs/api/custom-instance'
-import { useDisclosure } from 'react-hook-disclosure-modal/dist/hook'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
@@ -62,11 +62,6 @@ export default function NhapDiemPhach() {
     }>({
         tag: 'XemTaiLieu',
     })
-
-    // const examPapers = useMemo(() => {
-    //     if (!examRooms) return []
-    //     return examRooms.flatMap((e) => e.examList.flatMap((e) => e.examPapers))
-    // }, [examRooms])
 
     useEffect(() => {
         if (examPapers) {
@@ -135,10 +130,10 @@ export default function NhapDiemPhach() {
                                         'https://api.daotao.mta.swantech.vn',
                                     `${getExportSubjectClassScoreUrl({
                                         examId: examId,
-                                        type: 'DIEM-KEM-PHACH',
+                                        type: 'KEM-PHACH',
                                     })}`
                                 ),
-                                name: 'Danh sách phách',
+                                name: 'Điểm kèm phách',
                                 mimeType: 'xlsx',
                                 convertTo: 'pdf',
                             })
