@@ -218,14 +218,11 @@ export default function QuestionBankLite({
                                         <EyeOutlined
                                             className="cursor-pointer text-blue-600 hover:text-blue-800"
                                             onClick={() => {
-                                                const subjectVersionId =
-                                                    initialValue?.subjectVersionId
-                                                if (!subjectVersionId) return
-
                                                 onOpenQuestionListModal({
                                                     knowledgeBlockId: record.knowledgeBlockId,
                                                     questionBankId,
-                                                    subjectVersionId,
+                                                    subjectVersionId:
+                                                        initialValue?.subjectVersionId || '',
                                                     matrixName: record.examMatrixName,
                                                 })
                                             }}

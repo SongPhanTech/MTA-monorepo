@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Col, Form, Row, Table, Button, message, Switch } from 'antd'
+import { Col, Form, Row, Button, message, Switch } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import Table from '@components/commons/table'
 import {
     useCountQuestion,
     useCreateQuestion,
@@ -19,6 +20,7 @@ import HtmlTruncate from '@components/commons/html-truncate'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { QuestionType } from '@workspace/db/client'
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from '@constants/constants'
+import type { FilterProps } from '@components/commons/typeFilter'
 
 const PickQuestionFromBankModal = () => {
     const [form] = Form.useForm()
@@ -29,7 +31,13 @@ const PickQuestionFromBankModal = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [isAllSelected, setIsAllSelected] = useState(false)
-
+    const [filters, setFilters] = useState<FilterProps>({
+        questionType: undefined,
+        content: '',
+        explanation: '',
+        difficult: undefined,
+        knowledgeBlockId: undefined,
+    })
     const { isOpen, onClose, input } = useDisclosure<{
         examFrameworkId?: string
         matrixId?: string
@@ -85,13 +93,49 @@ const PickQuestionFromBankModal = () => {
             enabled: !!subjectVersionId,
         }
     )
+    const where = useMemo(
+        () => ({
+            deletedAt: null as null,
+            questionBankId,
 
+            ...(filters.questionType && filters.questionType.length > 0
+                ? {
+                      type: { in: filters.questionType },
+                  }
+                : {}),
+
+            ...(filters.content
+                ? {
+                      content: {
+                          contains: filters.content,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+
+            ...(filters.difficult && filters.difficult.length > 0
+                ? {
+                      difficult: { in: filters.difficult },
+                  }
+                : {}),
+
+            ...(filters.knowledgeBlockId
+                ? {
+                      knowledgeBlockId: filters.knowledgeBlockId,
+                  }
+                : {}),
+        }),
+        [
+            questionBankId,
+            filters.questionType,
+            filters.content,
+            filters.difficult,
+            filters.knowledgeBlockId,
+        ]
+    )
     const { data: questions = [] } = useFindManyQuestion(
         {
-            where: {
-                questionBankId,
-                deletedAt: null,
-            },
+            where,
             include: {
                 multipleChoiceOptions: true,
                 fillInBlankSlots: true,
@@ -177,6 +221,45 @@ const PickQuestionFromBankModal = () => {
 
         setQuestionBankId(questionBanks[0].id)
     }, [isOpen, questionBanks, questionBankId])
+
+    const rowSelection = {
+        selectedRowKeys,
+        preserveSelectedRowKeys: true,
+
+        onSelect: (record: any, selected: boolean) => {
+            if (selected) {
+                setSelectedRowKeys((prev) => {
+                    if (prev.includes(record.id)) return prev
+                    return [...prev, record.id]
+                })
+
+                setSelectedQuestions((prev) => {
+                    if (prev.some((q) => q.id === record.id)) return prev
+                    return [...prev, record]
+                })
+            } else {
+                setIsAllSelected(false)
+
+                setSelectedRowKeys((prev) => prev.filter((id) => id !== record.id))
+                setSelectedQuestions((prev) => prev.filter((q) => q.id !== record.id))
+            }
+        },
+
+        onChange: (_keys: any, _rows: any, info: any) => {
+            if (info?.type !== 'all') return
+
+            if (isAllSelected) {
+                setSelectedRowKeys([])
+                setSelectedQuestions([])
+                setIsAllSelected(false)
+                return
+            }
+
+            setSelectedRowKeys(allQuestions.map((q) => q.id))
+            setSelectedQuestions(allQuestions)
+            setIsAllSelected(true)
+        },
+    }
 
     async function onSubmit() {
         try {
@@ -378,6 +461,10 @@ const PickQuestionFromBankModal = () => {
                 <Col span={18}>
                     <Table
                         rowKey={'id'}
+                        filters={filters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                        }}
                         dataSource={questions}
                         scroll={{ y: 420 }}
                         pagination={{
@@ -396,39 +483,7 @@ const PickQuestionFromBankModal = () => {
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} câu hỏi`,
                         }}
-                        rowSelection={{
-                            preserveSelectedRowKeys: true,
-                            selectedRowKeys,
-
-                            onChange: (keys, rows, info) => {
-                                const stringKeys = keys.map(String)
-
-                                if (info.type === 'all') {
-                                    if (stringKeys.length === 0) {
-                                        setIsAllSelected(false)
-                                        setSelectedRowKeys([])
-                                        setSelectedQuestions([])
-                                    } else {
-                                        setIsAllSelected(true)
-                                        setSelectedRowKeys(allQuestions.map((q) => q.id))
-                                        setSelectedQuestions(allQuestions)
-                                    }
-                                    return
-                                }
-
-                                // Click từng row
-                                setIsAllSelected(false)
-                                setSelectedRowKeys(stringKeys)
-
-                                setSelectedQuestions((prev) => {
-                                    const map = new Map(prev.map((q) => [q.id, q]))
-                                    rows.forEach((q) => {
-                                        map.set(q.id, q)
-                                    })
-                                    return Array.from(map.values())
-                                })
-                            },
-                        }}
+                        rowSelection={rowSelection}
                         columns={[
                             {
                                 title: 'STT',
@@ -443,6 +498,7 @@ const PickQuestionFromBankModal = () => {
                                 dataIndex: 'content',
                                 width: 280,
                                 fixed: 'left',
+                                type: 'input',
                                 render: (_: unknown, record: any) => (
                                     <HtmlTruncate>
                                         <div>
@@ -516,6 +572,7 @@ const PickQuestionFromBankModal = () => {
                                 dataIndex: 'type',
                                 width: 140,
                                 align: 'center',
+                                type: 'select',
                                 render: (_: unknown, record: any) =>
                                     QUESTION_TYPE_LABELS[record?.type as QuestionType] || '',
                             },
