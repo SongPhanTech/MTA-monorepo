@@ -83,6 +83,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
                 orderBy: { semester: { startDate: 'desc' } },
             },
         },
+        orderBy: [{ userProfile: { firstName: 'asc' } }, { userProfile: { lastName: 'asc' } }],
     })
 
     const TrainingObjectType = {
