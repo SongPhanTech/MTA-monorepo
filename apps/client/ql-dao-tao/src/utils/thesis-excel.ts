@@ -2,6 +2,8 @@ import { exportFromTemplate, type TableRow } from '@workspace/libs/template-exce
 import { getMinioUrl } from '@workspace/libs/utils'
 import { dayjs } from '@workspace/ui'
 import { CouncilRole } from '@workspace/db/client'
+import type { ExcelTemplateBody } from '@workspace/libs/api/schemas'
+import { excelTemplate } from '@workspace/libs/api/model'
 
 interface ExportOptions {
     allStudentsInClasses: any[]
@@ -771,4 +773,55 @@ export const exportKiemTraTienDo = async ({
     } finally {
         hideSpinner()
     }
+}
+export const exportGiayMoiChamLvPb = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
+}: ExportOptions) => {
+    if (!allStudentsInClasses?.length) {
+        message.error('Không có dữ liệu để tạo giấy mời chấm LV PB');
+        return;
+    }
+    try {
+        showSpinner?.();
+        const presentDay = dayjs().format('DD/MM/YYYY');
+        const ngay = presentDay.split('/')[0];
+        const thang = presentDay.split('/')[1];
+        const nam = presentDay.split('/')[2];
+        const payload: ExcelTemplateBody = {
+            fileName: 'GiayMoiChamLv',
+            path: 'GiayMoiChamLV.xlsx',
+            payload: [{
+                data: {
+                    ngay: ngay,
+                    thang: thang,
+                    nam: nam,
+                },
+            }],
+        };
+        const response = await excelTemplate(payload);
+        if (response.status !== 200) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+            return;
+        }
+        const blob = response.data;
+        downloadFile(blob, 'GiayMoiChamLvPb.xlsx');
+        message.success('Xuất file thành công');
+    } catch (error) {
+        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+    } finally {
+        hideSpinner?.();
+    }
+};
+const downloadFile = (blob: Blob, fileName: string) => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }

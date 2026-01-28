@@ -47,6 +47,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 import {
     exportDanhSachBaoVe,
+    exportGiayMoiChamLvPb,
     exportGiayMoiHdlv,
     exportHosobvlv,
     exportKiemTraTienDo,
@@ -55,16 +56,6 @@ import {
     exportThongKeCbHdlv,
 } from '@/utils/thesis-excel'
 
-interface ExpertStat {
-    expertId: string
-    name: string
-    sDonvi: string
-    stk: string
-    tennganhang: string
-    GVHD1Student: number
-    GVHD2Student: number
-    totalPayment: number
-}
 interface ThesisProjectForm {
     thesisSessionId: string
     fixedClassId: string[]
@@ -565,8 +556,14 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 5,
             label: 'Giấy mời chấm LV PB',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportGiayMoiChamLvPb({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
+            
         },
         {
             id: 6,
