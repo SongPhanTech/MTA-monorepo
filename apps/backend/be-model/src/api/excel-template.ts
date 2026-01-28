@@ -44,6 +44,7 @@ app.openapi(
         const res = await fetch(getMinioUrl(`/mta/template/${path}`))
         const buffer = await res.arrayBuffer()
         const nodeBuffer = Buffer.from(buffer)
+        const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
         // Generate a workbook for each payload item
         const generatedSheets: ExcelJS.Worksheet[] = []
@@ -51,12 +52,11 @@ app.openapi(
         for (const item of payload) {
             const template = new XlsxTemplate(nodeBuffer)
             template.substitute(1, item.data)
-            const sheetBuffer = await template.generate({ type: 'arraybuffer' })
-
+            const sheetBuffer = await template.generate({ type: 'nodebuffer' })
             // Load the generated sheet using exceljs
             const workbook = new ExcelJS.Workbook()
             await workbook.xlsx.load(sheetBuffer)
-            const worksheet = workbook.getWorksheet(1)
+            const worksheet = workbook.getWorksheet(1) || workbook.worksheets[0]
             if (worksheet) {
                 generatedSheets.push(worksheet)
             }
@@ -67,7 +67,7 @@ app.openapi(
         const mergedSheet = mergedWorkbook.addWorksheet('Merged')
 
         // Hide gridlines
-        mergedSheet.views = [{ showGridLines: false }]
+        // mergedSheet.views = [{ showGridLines: false }]
 
         let currentRow = 1
         for (const sheet of generatedSheets) {
@@ -124,6 +124,7 @@ app.openapi(
             }
         }
 
+
         // Copy column widths from the first sheet
         if (generatedSheets.length > 0 && generatedSheets[0]) {
             generatedSheets[0].columns.forEach((col, index) => {
@@ -134,7 +135,6 @@ app.openapi(
         }
 
         const result = await mergedWorkbook.xlsx.writeBuffer()
-        const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
         return c.body(result, 200, {
             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
