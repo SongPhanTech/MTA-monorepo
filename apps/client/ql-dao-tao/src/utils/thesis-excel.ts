@@ -11,6 +11,23 @@ interface ExportOptions {
     hideSpinner: () => void
     message: any // Antd message instance
 }
+interface GmcLvPbData {
+    dotXet:string
+    ngay:string
+    thang:string
+    nam:string
+    tenThanhVien:string
+    data: GmcLvPbTable[]
+}
+interface GmcLvPbTable {
+    stt:number
+    ngaybaove:string
+    giobaove:string
+    phongbaove:string
+    tenhocvien:string
+    chuyennganh:string
+    tenchucdanh:string
+}
 export const exportPhuLucDsLuanVan = async ({
     allStudentsInClasses,
     showSpinner,
@@ -786,29 +803,38 @@ export const exportGiayMoiChamLvPb = async ({
     }
     try {
         showSpinner?.();
-        const presentDay = dayjs().format('DD/MM/YYYY');
-        const ngay = presentDay.split('/')[0];
-        const thang = presentDay.split('/')[1];
-        const nam = presentDay.split('/')[2];
+        const dataConvert = convertToGmcLvPbData(allStudentsInClasses);
+        if (dataConvert.length === 0) {
+            message.error('Không có dữ liệu để tạo giấy mời chấm LV PB');
+            return;
+        }
         const payload: ExcelTemplateBody = {
             fileName: 'GiayMoiChamLv',
             path: 'GiayMoiChamLV.xlsx',
             payload: [{
-                data: {
-                    ngay: ngay,
-                    thang: thang,
-                    nam: nam,
-                },
+                data: dataConvert,
             }],
         };
         const response = await excelTemplate(payload);
-        if (response.status !== 200) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
-            return;
-        }
-        const blob = response.data;
-        downloadFile(blob, 'GiayMoiChamLvPb.xlsx');
-        message.success('Xuất file thành công');
+        // const payload: ExcelTemplateBody = {
+        //     fileName: 'GiayMoiChamLv',
+        //     path: 'GiayMoiChamLV.xlsx',
+        //     payload: [{
+        //         data: {
+        //             ngay: ngay,
+        //             thang: thang,
+        //             nam: nam,
+        //         },
+        //     }],
+        // };
+        // const response = await excelTemplate(payload);
+        // if (response.status !== 200) {
+        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+        //     return;
+        // }
+        // const blob = response.data;
+        // downloadFile(blob, 'GiayMoiChamLvPb.xlsx');
+        // message.success('Xuất file thành công');
     } catch (error) {
         message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
     } finally {
@@ -825,3 +851,73 @@ const downloadFile = (blob: Blob, fileName: string) => {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 }
+
+
+ const convertToGmcLvPbData = (allStudentsInClasses: any[]): GmcLvPbData[] => {
+    if (!allStudentsInClasses?.length) return [];
+
+    const expertMap = new Map<string, GmcLvPbData>();
+    
+    // Lấy thông tin ngày hiện tại cho giấy mời
+    const now = dayjs();
+    const ngay = now.format('DD');
+    const thang = now.format('MM');
+    const nam = now.format('YYYY');
+
+    allStudentsInClasses.forEach((student) => {
+        const project = student?.thesisRegistrations?.[0]?.thesisProject;
+        if (!project) return;
+
+        const dotXet = project.thesisSession?.name || '';
+        const ngaybaove = project.defenseDate ? dayjs(project.defenseDate).format('DD/MM/YYYY') : '';
+        const giobaove = project.defenseSession?.startTime ? dayjs(project.defenseSession.startTime).format('HH:mm') : '';
+        const phongbaove = project.room?.name || '';
+        const tenhocvien = student.userProfile?.fullname || '';
+        const chuyennganh = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '';
+
+        // Duyệt qua từng thành viên trong hội đồng của đề tài này
+        const members = project.council?.members || [];
+        members.forEach((member: any) => {
+            const expert = member.expert;
+            if (!expert?.id) return;
+
+            // Khởi tạo đối tượng cho thành viên hội đồng nếu chưa có trong Map
+            if (!expertMap.has(expert.id)) {
+                expertMap.set(expert.id, {
+                    dotXet,
+                    ngay,
+                    thang,
+                    nam,
+                    tenThanhVien: expert.name || '',
+                    data: []
+                });
+            }
+
+            const expertEntry = expertMap.get(expert.id)!;
+
+            // Ánh xạ vai trò sang tên chức danh tiếng Việt
+            let tenchucdanh = '';
+            switch (member.role) {
+                case CouncilRole.CHAIRMAN: tenchucdanh = 'Chủ tịch'; break;
+                case CouncilRole.SECRETARY: tenchucdanh = 'Thư ký'; break;
+                case CouncilRole.REVIEWER_1: tenchucdanh = 'Ủy viên, PB1'; break;
+                case CouncilRole.REVIEWER_2: tenchucdanh = 'Ủy viên, PB2'; break;
+                case CouncilRole.MEMBER: tenchucdanh = 'Ủy viên'; break;
+                default: tenchucdanh = member.role;
+            }
+
+            // Thêm dòng dữ liệu vào bảng của thành viên này
+            expertEntry.data.push({
+                stt: expertEntry.data.length + 1,
+                ngaybaove,
+                giobaove,
+                phongbaove,
+                tenhocvien,
+                chuyennganh,
+                tenchucdanh
+            });
+        });
+    });
+
+    return Array.from(expertMap.values());
+};
