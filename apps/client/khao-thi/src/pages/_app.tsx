@@ -7,7 +7,7 @@ import * as modals from '@components/modal'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { SessionProvider } from '@workspace/auth/react'
 import { Provider as ZenStackHooksProvider } from '@workspace/db/hooks'
-import { lightThemeCustom, WidgetChatbot } from '@workspace/ui'
+import { lightThemeCustom } from '@workspace/ui'
 import { ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
@@ -100,7 +100,7 @@ function App({ Component, pageProps }: AppProps) {
                         >
                             <ReactHookModalProvider modals={modals}>
                                 {getLayout(<Component {...pageProps} />)}
-                                <WidgetChatbot src={getRuntimeEnv('NEXT_PUBLIC_CHATBOT_SRC')} />
+                                {/* <WidgetChatbot src={getRuntimeEnv('NEXT_PUBLIC_CHATBOT_SRC')} /> */}
                                 <Spinner />
                             </ReactHookModalProvider>
                         </ZenStackHooksProvider>

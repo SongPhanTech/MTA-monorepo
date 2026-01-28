@@ -1,5 +1,5 @@
 import { CopyOutlined } from '@ant-design/icons'
-import { getRuntimeEnv } from '@workspace/libs/utils'
+// import { getRuntimeEnv } from '@workspace/libs/utils'
 import { Button, Flex, Input, Modal, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -7,7 +7,7 @@ const ThongTinKhaoSatModal = () => {
     const { isOpen, onClose, input } = useDisclosure<{ dataTable: any[]; id: string }>({
         tag: 'ThongTinKhaoSatModal',
     })
-    const link = `${getRuntimeEnv('NEXT_PUBLIC_ASSET_PREFIX')}/lam-khao-sat/${input?.id}`
+    const link = `${window.location.hostname}/ems/lam-khao-sat/${input?.id}`
 
     // const handleCopy = async () => {
     //     try {
