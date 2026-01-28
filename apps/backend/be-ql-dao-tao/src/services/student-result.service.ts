@@ -573,7 +573,6 @@ const ThongTinDiemHocKy = async (
         let diemHe10ThapNhat = 0
         let soTinChiDat = 0
         let soTinChiKhongDat = 0
-        console.log(DsDiem)
 
         DsDiem.forEach((item) => {
             for (const s of curriculumSubjects) {
@@ -626,6 +625,27 @@ const ThongTinDiemHocKy = async (
             }
         })
 
+        const reExamScores = await prisma.studentSubjectScore.findMany({
+            select: {
+                subjectVersion: {
+                    select: {
+                        credit: true,
+                    },
+                },
+            },
+            where: {
+                studentId,
+                deletedAt: null,
+                active: true,
+                subjectClass: { type: 'REEXAM' },
+            },
+        })
+
+        const reExamCredits = reExamScores.reduce(
+            (sum, score) => sum + score.subjectVersion.credit,
+            0
+        )
+
         if (TongTinChiDangKy === 0) {
             return {
                 diemTrungBinh4TrongKy: 0,
@@ -663,6 +683,7 @@ const ThongTinDiemHocKy = async (
             diemThapNhat: diemThapNhat,
             soTinChiDat: soTinChiDat, // Số tín chỉ đạt trong kỳ
             soTinChiKhongDat: soTinChiKhongDat, // Số tín chỉ không đạt trong kỳ
+            reExamCredits,
         }
     } catch (error) {
         console.error('Lỗi khi lấy thông tin điểm:', error)
@@ -864,6 +885,7 @@ export const calculateStudentSemesterResult = async (
                         expelled: student.expelled, // đuổi học
                         //TODO: Chưa có thông tin này
                         retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
+                        reExamCredits: thongTinDiemHocKy.reExamCredits,
                         isImproving: false, // Đang cải thiện (hiện tại chưa có thông tin này)
                         postponeWithReason: false, // tạm ngưng có lý do
                         code: student.code || '', // Mã sinh viên
@@ -914,6 +936,7 @@ export const calculateStudentSemesterResult = async (
 
                         //TODO: Chưa biết xác định thi lại ntn
                         retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
+                        reExamCredits: thongTinDiemHocKy.reExamCredits || 0,
                         passedCredits: thongTinDiemHocKy.soTinChiDat,
                         failedCredits: thongTinDiemHocKy.soTinChiKhongDat,
 
