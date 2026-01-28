@@ -103,34 +103,42 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...(filters.name || filters.rank || filters.phone
-                ? {
-                      userProfile: {
+            userProfile: {
+                ...(filters.name
+                    ? {
                           fullname: {
                               contains: filters.name,
                               mode: 'insensitive' as const,
                           },
-                          ...(filters.rank
-                              ? {
-                                    rank: {
-                                        sTen: {
-                                            contains: filters.rank,
-                                            mode: 'insensitive',
-                                        },
-                                    },
-                                }
-                              : {}),
-                          ...(filters.phone
-                              ? {
-                                    phoneNumber: {
-                                        contains: filters.phone,
-                                        mode: 'insensitive',
-                                    },
-                                }
-                              : {}),
-                      },
-                  }
-                : {}),
+                      }
+                    : {}),
+                ...(filters.idCardNumber
+                    ? {
+                          idCardNumber: {
+                              contains: filters.idCardNumber,
+                              mode: 'insensitive' as const,
+                          },
+                      }
+                    : {}),
+                ...(filters.rank
+                    ? {
+                          rank: {
+                              sTen: {
+                                  contains: filters.rank,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filters.phone
+                    ? {
+                          phoneNumber: {
+                              contains: filters.phone,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+            },
             ...(filters.curriculumVersion
                 ? {
                       curriculumVersionId: {
@@ -510,26 +518,22 @@ export default function UserProfilePageDs() {
                                         : `${record.userProfile?.lastName} ${record.userProfile?.firstName}`,
                             },
                             {
-                                title: 'SĐT',
+                                title: 'Ngày sinh',
                                 align: 'center',
                                 width: 120,
-                                dataIndex: 'phone',
-                                type: 'input',
                                 render: (__, record) =>
-                                    record.userProfile?.phoneNumber
-                                        ? record.userProfile?.phoneNumber
+                                    record.userProfile?.dateOfBirth
+                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
-                                title: 'Cấp bậc',
+                                title: 'CCCD',
                                 align: 'center',
-                                width: 120,
-                                dataIndex: 'rank',
+                                width: 100,
+                                dataIndex: 'idCardNumber',
                                 type: 'input',
-                                render: (__, record) =>
-                                    record.userProfile?.rank?.sTen
-                                        ? record.userProfile?.rank?.sTen
-                                        : '',
+                                render: (__, record: { userProfile?: UserProfile }) =>
+                                    record.userProfile?.idCardNumber,
                             },
                             // {
                             //     title: 'ĐTĐT',
@@ -547,6 +551,21 @@ export default function UserProfilePageDs() {
                             //             : '',
                             // },
                             {
+                                title: 'Khoá',
+                                align: 'center',
+                                width: 100,
+                                dataIndex: 'trainingCourse',
+                                type: 'select',
+                                options: TrainingCourseData.map((item: TrainingCourse) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record: any) => {
+                                    const trainingCourse = record?.fixedClass?.trainingCourse
+                                    return trainingCourse ? trainingCourse?.name : ''
+                                },
+                            },
+                            {
                                 title: 'Lớp',
                                 align: 'center',
                                 width: 120,
@@ -563,21 +582,6 @@ export default function UserProfilePageDs() {
                                             {record.fixedClass?.code}
                                         </Tooltip>
                                     )
-                                },
-                            },
-                            {
-                                title: 'Khoá',
-                                align: 'center',
-                                width: 100,
-                                dataIndex: 'trainingCourse',
-                                type: 'select',
-                                options: TrainingCourseData.map((item: TrainingCourse) => ({
-                                    label: item.name,
-                                    value: item.id,
-                                })),
-                                render: (__, record: any) => {
-                                    const trainingCourse = record?.fixedClass?.trainingCourse
-                                    return trainingCourse ? trainingCourse?.name : ''
                                 },
                             },
                             {
@@ -637,6 +641,17 @@ export default function UserProfilePageDs() {
                                 render: (__, record) => {
                                     return record?.curriculumVersionParallel?.name || ''
                                 },
+                            },
+                            {
+                                title: 'Cấp bậc',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'rank',
+                                type: 'input',
+                                render: (__, record) =>
+                                    record.userProfile?.rank?.sTen
+                                        ? record.userProfile?.rank?.sTen
+                                        : '',
                             },
                             {
                                 title: 'Trạng thái',

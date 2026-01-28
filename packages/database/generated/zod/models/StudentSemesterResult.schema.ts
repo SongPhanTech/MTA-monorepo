@@ -32,7 +32,8 @@ const baseSchema = z.object({
     lowestGraduationScore: z.number().nullish(),
     totalCredits: z.number(),
     registeredCredits: z.number(),
-    retakingCredits: z.number(),
+    retakingCredits: z.number().default(0),
+    reExamCredits: z.number().default(0),
     passedCredits: z.number(),
     failedCredits: z.number(),
     accumulatedCredits: z.number(),
@@ -74,6 +75,7 @@ const baseSchemaWithoutDefaults = z.object({
     totalCredits: z.number(),
     registeredCredits: z.number(),
     retakingCredits: z.number(),
+    reExamCredits: z.number(),
     passedCredits: z.number(),
     failedCredits: z.number(),
     accumulatedCredits: z.number(),
@@ -151,6 +153,7 @@ export const StudentSemesterResultPrismaUpdateSchema = z.object({
     totalCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     registeredCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     retakingCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    reExamCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     passedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     failedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     accumulatedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
@@ -173,7 +176,7 @@ export const StudentSemesterResultPrismaUpdateSchema = z.object({
  * `StudentSemesterResult` schema for create operations excluding foreign keys and relations.
  */
 export const StudentSemesterResultCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, postponeWithReason: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, retakingCredits: true, reExamCredits: true, postponeWithReason: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
 });
 
 

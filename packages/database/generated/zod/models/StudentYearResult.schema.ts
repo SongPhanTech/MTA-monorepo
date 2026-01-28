@@ -27,7 +27,11 @@ const baseSchema = z.object({
     cumulativeGpaBase10: DecimalSchema,
     conductScore: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema,
+    lowestFinalScore: z.number().nullish(),
+    lowestGraduationScore: z.number().nullish(),
     totalCredits: z.number(),
+    retakingCredits: z.number().default(0),
+    reExamCredits: z.number().default(0),
     failedCredits: z.number(),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
@@ -55,7 +59,11 @@ const baseSchemaWithoutDefaults = z.object({
     cumulativeGpaBase10: DecimalSchema,
     conductScore: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema,
+    lowestFinalScore: z.number().nullish(),
+    lowestGraduationScore: z.number().nullish(),
     totalCredits: z.number(),
+    retakingCredits: z.number(),
+    reExamCredits: z.number(),
     failedCredits: z.number(),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
@@ -119,7 +127,11 @@ export const StudentYearResultPrismaUpdateSchema = z.object({
     cumulativeGpaBase10: DecimalSchema,
     conductScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     studentTrainingType: StudentTrainingTypeSchema,
+    lowestFinalScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    lowestGraduationScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     totalCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    retakingCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    reExamCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     failedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
@@ -134,7 +146,7 @@ export const StudentYearResultPrismaUpdateSchema = z.object({
  * `StudentYearResult` schema for create operations excluding foreign keys and relations.
  */
 export const StudentYearResultCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, retakingCredits: true, reExamCredits: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
 });
 
 
