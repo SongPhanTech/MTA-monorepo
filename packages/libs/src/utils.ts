@@ -3,6 +3,7 @@ import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 import { SubjectClassType } from '@workspace/db'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
+import { InvalidNumberError, ReadingConfig, doReadNumber } from 'read-vietnamese-number' // or CDN URL
 
 export { fastIsEqual } from './fast-is-equal'
 
@@ -189,6 +190,7 @@ declare global {
     interface Number {
         toFixedSmart(fractionDigits: number): string
         formatVND(): string
+        toVndWord(unit?: string, firstCase?: boolean): string
     }
     interface String {
         titleCase(): string
@@ -203,6 +205,27 @@ declare global {
 }
 
 type ScoreStats = { count: number; percentage: number }
+
+Number.prototype.toVndWord = function (unit = '', firstCase = true): string {
+    const config = new ReadingConfig()
+    config.unit = [unit]
+    try {
+        // Start reading
+        const result = doReadNumber(this.toString(), config)
+        if (firstCase) {
+            return result.firstCase()
+        }
+        return result
+    } catch (err) {
+        // Handle errors
+        if (err instanceof InvalidNumberError) {
+            console.error('Số không hợp lệ')
+        } else {
+            console.error(err)
+        }
+        return ''
+    }
+}
 
 Number.prototype.toFixedSmart = function (fractionDigits: number): string {
     const fixed = this.toFixed(fractionDigits)
