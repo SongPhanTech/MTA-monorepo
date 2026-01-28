@@ -23,6 +23,8 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
+    // useFindManyTrainingField,
+    // useFindManyTrainingMajor,
     useUpdateSurveyObjectType,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -51,17 +53,39 @@ function TabDoiTuongKhaoSat() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
+        where:{
+             trainingObjectTypes:{
+                some:{
+                    trainingObjectTypeId
+                }
+            }
+        },
         orderBy: { name: 'asc' },
     })
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        where:{
+            trainingObjectTypes:{
+                some:{
+                    trainingObjectTypeId
+                }
+            }
+        },
         orderBy: { name: 'asc' },
     })
 
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
+        where:{
+            trainingObjectTypeId
+        },
         orderBy: { name: 'asc' },
     })
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
+        where:{
+            trainingCourse:{
+                trainingObjectTypeId
+            }
+        },
         orderBy: { name: 'asc' },
     })
 
@@ -72,6 +96,7 @@ function TabDoiTuongKhaoSat() {
             deletedAt: null,
             cancelled: false,
             status: 'OFFICIAL',
+            trainingObjectTypeId
         },
     })
 
@@ -289,7 +314,10 @@ function TabDoiTuongKhaoSat() {
                                 dataIndex: 'trainingField',
                                 type: 'select',
                                 width: 150,
-                                options: trainingFieldData,
+                                options: trainingFieldData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
                                 render: (_, record) => {
                                     return record?.trainingFields?.length ? (
                                         <HtmlTruncate>
@@ -309,7 +337,10 @@ function TabDoiTuongKhaoSat() {
                                 dataIndex: 'trainingMajors',
                                 type: 'select',
                                 width: 150,
-                                options: trainingMajorData,
+                                options: trainingMajorData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
                                 render: (_, record) => {
                                     return record?.trainingMajors?.length ? (
                                         <HtmlTruncate>
@@ -329,7 +360,10 @@ function TabDoiTuongKhaoSat() {
                                 dataIndex: 'trainingCourse',
                                 type: 'select',
                                 width: 150,
-                                options: trainingCourses,
+                                options: trainingCourses?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
                                 render: (_, record) => {
                                     return record?.trainingCourses?.length ? (
                                         <HtmlTruncate>
@@ -351,7 +385,10 @@ function TabDoiTuongKhaoSat() {
                                 dataIndex: 'fixedClass',
                                 type: 'select',
                                 width: 150,
-                                options: fixedClasses,
+                                options: fixedClasses?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
                                 render: (_, record) => {
                                     return record?.fixedClasses?.length ? (
                                         <HtmlTruncate>
@@ -371,7 +408,10 @@ function TabDoiTuongKhaoSat() {
                                 dataIndex: 'subjectClass',
                                 type: 'select',
                                 width: 100,
-                                options: subjectClassData,
+                                options: subjectClassData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
                                 render: (_, record) => {
                                     return record?.subjectClasses?.length ? (
                                         <HtmlTruncate>
