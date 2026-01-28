@@ -47,6 +47,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 import {
     exportDanhSachBaoVe,
+    exportDanhSachNopLuanVanThuVien,
     exportGiayMoiChamLvPb,
     exportGiayMoiHdlv,
     exportHosobvlv,
@@ -210,7 +211,10 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                             curriculum: {
                                 include: {
                                     trainingMajor: {
-                                        include: { trainingField: true },
+                                        include: { trainingField: true,
+                                            organization: true,
+
+                                        },
                                     },
                                 },
                             },
@@ -240,7 +244,15 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                             supervisorPayment: true,
                             coSupervisorPayment: true,
                             council: {
-                                include: { members: { include: { expert: true,
+                                include: { members: { include: { expert: {
+                                    include: {
+                                        lecturer: {
+                                            include: {
+                                                userProfile: true,
+                                            },
+                                        },
+                                    },
+                                },
                                     payment: true,
                                  } } },
                             },
@@ -663,8 +675,12 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 19,
             label: 'Danh sách nộp luận văn thư viện',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportDanhSachNopLuanVanThuVien({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            }),
         },
         {
             id: 11,

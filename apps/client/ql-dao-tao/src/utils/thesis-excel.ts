@@ -1,7 +1,7 @@
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { dayjs } from '@workspace/ui'
-import { CouncilRole } from '@workspace/db/client'
+import { CouncilRole, TrainingObjectTypes } from '@workspace/db/client'
 import type { ExcelTemplateBody } from '@workspace/libs/api/schemas'
 import { excelTemplate } from '@workspace/libs/api/model'
 
@@ -30,25 +30,27 @@ interface GmcLvPbTable {
     chuyennganh:string
     tenchucdanh:string
 }
-interface TthdbvData{
-    ngay:string
-    thang:string
-    nam:string
-    khoa:string
-    dotXet:number
-    chuyenNganh:string
-    khoaQuanLi:string
-    data: TthdbvTable[]
-    tongTienBangSo:number
-    tongTienBangChu:string
+interface TthdbvData {
+    data: {
+        ngay: string
+        thang: string
+        nam: string
+        khoa: string
+        dotXet: number
+        chuyenNganh: string
+        khoaQuanLi: string
+        data: TthdbvTable[]
+        tongTienBangSo: number
+        tongTienBangChu: string
+    }
 }
-interface TthdbvTable{
-    stt:number
-    thongTinBaoVe:string
-    thongTinHoiDong:string
-    thongTinThanhToan:string
-    thongTinStk:string
-    thongTinNganHang:string
+interface TthdbvTable {
+    stt: number
+    thongTinBaoVe: string
+    thongTinHoiDong: string
+    thongTinThanhToan: string
+    thongTinStk: string
+    thongTinNganHang: string
 }
 export const exportPhuLucDsLuanVan = async ({
     allStudentsInClasses,
@@ -932,7 +934,178 @@ export const exportThanhToanHoiDongBaoVe = async ({
     message,
 }: ExportOptions) => {
     if (!allStudentsInClasses?.length) {
-        message.error('Không có dữ liệu để tạo thanh toán hội đồng bảo vệ');
-        return;
+        message.error('Không có dữ liệu để tạo thanh toán hội đồng bảo vệ')
+        return
+    }
+    try {
+        showSpinner?.()
+        const dataConvert = convertToTthdbvData(allStudentsInClasses)
+        console.log('dataConvert',dataConvert);
+        if (dataConvert.length === 0) {
+            message.error('Chưa có dữ liệu để tạo thanh toán hội đồng bảo vệ')
+            return
+        }
+        const payload: ExcelTemplateBody = {
+            fileName: 'ThanhToanHoiDongBaoVe',
+            path: 'ThanhToanHoiDongBV.xlsx',
+            payload: dataConvert,
+            showGridLines: true,
+        }
+        const response = await excelTemplate(payload);
+        if (response.status !== 200) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            return
+        }
+        const blob = response.data;
+        downloadFile(blob, 'ThanhToanHoiDongBaoVe.xlsx');
+        message.success('Xuất file thành công')
+    } catch (error) {
+        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        return
+    } finally {
+        hideSpinner?.()
+    }
+    
+}
+export const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
+    if (!allStudentsInClasses?.length) return [];
+
+    const now = dayjs();
+    const tenDoiTuong = {
+        [TrainingObjectTypes.MILITARY]: 'Quân sự',
+        [TrainingObjectTypes.CIVILIAN]: 'Dân sự',
+        [TrainingObjectTypes.INTERNATIONAL_MILITARY]: 'Quân sự quốc tế',
+    };
+
+    const majorMap = new Map<string, any[]>();
+    let khoaquanli= '';
+
+    allStudentsInClasses.forEach((student) => {
+        const project = student?.thesisRegistrations?.[0]?.thesisProject;
+        const council = project?.council?.members;
+        if (!project || !council?.length) return;
+
+        const majorName = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '';
+        if(!khoaquanli){
+            khoaquanli = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.organization?.sTen || '';
+        }
+        
+        const dob = student.userProfile?.dateOfBirth ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY') : '';
+        const doiTuong = student?.fixedClass?.trainingCourse?.trainingObjectType?.type;
+        const loaiDoiTuong = tenDoiTuong[doiTuong as keyof typeof tenDoiTuong];
+        const khoaHoc = student?.fixedClass?.trainingCourse?.name || '';
+        const chuyenNganhCode = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '';
+        const ngayBV = project.defenseDate ? dayjs(project.defenseDate).format('DD/MM/YYYY') : '';
+
+        const thongTinBaoVe = `${student.userProfile?.fullname || ''}\nNgày sinh: ${dob}\nĐối tượng: ${loaiDoiTuong}, ${khoaHoc}\nChuyên ngành: ${chuyenNganhCode}\nNgày BV: ${ngayBV}`;
+
+        const members = project.council?.members || [];
+        const sortedMembers = [...members].sort((a, b) => {
+            const roleOrder = {
+                [CouncilRole.CHAIRMAN]: 1,
+                [CouncilRole.SECRETARY]: 2,
+                [CouncilRole.REVIEWER_1]: 3,
+                [CouncilRole.REVIEWER_2]: 4,
+                [CouncilRole.MEMBER]: 5,
+            };
+            return (roleOrder[a.role as keyof typeof roleOrder] || 99) - (roleOrder[b.role as keyof typeof roleOrder] || 99);
+        });
+
+        const hdLines: string[] = [];
+        const ttLines: string[] = [];
+        const stkLines: string[] = [];
+        const nhLines: string[] = [];
+        let studentTotal = 0;
+
+        sortedMembers.forEach((m: any) => {
+            const expert = m.expert;
+            let rolePrefix = 'UV';
+            let roleSuffix = '';
+
+            if (m.role === CouncilRole.CHAIRMAN) rolePrefix = 'CT';
+            else if (m.role === CouncilRole.SECRETARY) rolePrefix = 'TK';
+            else if (m.role === CouncilRole.REVIEWER_1) roleSuffix = ', PB1';
+            else if (m.role === CouncilRole.REVIEWER_2) roleSuffix = ', PB2';
+
+            const org = expert?.organization ? `, ${expert.organization}` : '';
+            const name = expert?.lecturerId ? expert?.lecturer?.userProfile?.fullname : expert?.name;
+            hdLines.push(`${rolePrefix}: ${name || ''}${org}${roleSuffix}`);
+            
+            const rawAmount =Number(m.payment?.amount || 0);
+            studentTotal += rawAmount;
+            ttLines.push(rawAmount.toLocaleString('vi-VN').replace(/\./g, ' '));
+            const bankNumber = expert?.lecturerId ? expert?.lecturer?.userProfile?.bankAccountNumber : expert?.bankAccountNumber;
+            stkLines.push(bankNumber || '');
+            const bankName = expert?.lecturerId ? expert?.lecturer?.userProfile?.bankName : expert?.bankName;
+            nhLines.push(bankName || '');
+        });
+
+        const tableRow = {
+            thongTinBaoVe,
+            thongTinHoiDong: hdLines.join('\n'),
+            thongTinThanhToan: ttLines.join('\n'),
+            thongTinStk: stkLines.join('\n'),
+            thongTinNganHang: nhLines.join('\n'),
+            rawAmount: studentTotal
+        };
+
+        if (!majorMap.has(majorName)) majorMap.set(majorName, []);
+        majorMap.get(majorName)?.push(tableRow);
+    });
+
+    return Array.from(majorMap.entries()).map(([majorName, items]) => {
+        const firstItem = allStudentsInClasses.find(s => 
+            s.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name === majorName
+        );
+        const project = firstItem?.thesisRegistrations?.[0]?.thesisProject;
+        
+        const dotXet = project?.thesisSession?.name || '';
+        
+
+        const tongTienSo = items.reduce((acc, curr) => {
+            return acc + (Number(curr.rawAmount) || 0);
+        }, 0);
+
+        return { 
+            data: {
+            ngay: now.format('DD'),
+            thang: now.format('MM'),
+            nam: now.format('YYYY'),
+            khoa: firstItem?.fixedClass?.trainingCourse?.name || '',
+            dotXet: dotXet,
+            chuyenNganh: majorName,
+            khoaQuanLi: khoaquanli,
+            tongTienBangSo: tongTienSo,
+            tongTienBangChu: Number(tongTienSo).toVndWord('đồng'),
+            data: items.map((item, index) => ({
+                stt: index + 1,
+                thongTinBaoVe: item.thongTinBaoVe,
+                thongTinHoiDong: item.thongTinHoiDong,
+                thongTinThanhToan: item.thongTinThanhToan,
+                thongTinStk: item.thongTinStk,
+                thongTinNganHang: item.thongTinNganHang
+            }))
+        }};
+    });
+};
+export const exportDanhSachNopLuanVanThuVien = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
+}: ExportOptions) => {
+    if (!allStudentsInClasses?.length) return [];
+    try {
+        showSpinner?.();
+        // const dataConvert = convertToDsnlvtvData(allStudentsInClasses)
+        // if (dataConvert.length === 0) {
+        //     message.error('Chưa có dữ liệu để xuất danh sách nộp luận văn thư viện')
+        //     return
+        // }
+    } catch (error) {
+        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        return
+    } finally {
+        hideSpinner?.();
     }
 }
