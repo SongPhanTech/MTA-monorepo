@@ -1,4 +1,4 @@
-import { TableOutlined, UploadOutlined } from '@ant-design/icons'
+import { ExportOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import ExportTemplateLecturer from '@components/modal/export-template-lecturer'
 import ImportLecturerModal from '@components/modal/import-excel-lecturer'
@@ -18,7 +18,7 @@ import {
 } from '@workspace/db/hooks'
 import { exportLecturerProfile } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
@@ -261,7 +261,7 @@ export default function UserProfilePageLecture() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1">
+                    <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1 mx-2">
                         {selectedRowKeys.length > 0 && (
                             <p>(Đang chọn {selectedRowKeys.length} GV)</p>
                         )}
@@ -467,9 +467,10 @@ export default function UserProfilePageLecture() {
                                 fixed: 'right',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
-                                    'XEM_CHI_TIET'
+                                    'XEM_CHI_TIET',
+                                    'SUA'
                                 ),
-                                render: (_, { id }) => {
+                                render: (_, { id, userProfileId }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
@@ -482,6 +483,19 @@ export default function UserProfilePageLecture() {
                                                             onClick={() => handleRowClick({ id })}
                                                             size={16}
                                                             strokeWidth={1.5}
+                                                            className="text-green-600 cursor-pointer"
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
+                                                    'SUA'
+                                                ) && (
+                                                    <Tooltip title="Sửa" placement="top">
+                                                        <ExportOutlined
+                                                            size={18}
+                                                            target="_blank"
+                                                            href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
                                                             className="text-green-600 cursor-pointer"
                                                         />
                                                     </Tooltip>

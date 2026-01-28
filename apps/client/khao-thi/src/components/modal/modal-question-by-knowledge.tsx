@@ -3,10 +3,10 @@ import { renderWithMath } from '@components/commons/rich-text-editor/renderWithM
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from '@constants/constants'
-import { QuestionType } from '@workspace/db/client'
-import { useFindManyQuestion, useUpdateQuestion } from '@workspace/db/hooks'
+import type { QuestionType } from '@workspace/db/client'
+import { useCountQuestion, useFindManyQuestion, useUpdateQuestion } from '@workspace/db/hooks'
 import { Button, Modal, Popconfirm, Row, message } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 // import type { MultipleChoiceOption } from "../../../../prisma/client";
 
@@ -38,10 +38,22 @@ export default function QuestionListByKnowledgeBlockModal() {
             include: {
                 knowledgeBlock: true,
                 multipleChoiceOptions: true,
+                fillInBlankSlots: true,
+                orderingItems: true,
             },
             take: pageSize,
             skip: (currentPage - 1) * pageSize,
             orderBy: { createdAt: 'desc' },
+        },
+        { enabled: !!knowledgeBlockId }
+    )
+
+    const { data: totalQuestions = 0 } = useCountQuestion(
+        {
+            where: {
+                knowledgeBlockId,
+                deletedAt: null,
+            },
         },
         { enabled: !!knowledgeBlockId }
     )
@@ -81,6 +93,12 @@ export default function QuestionListByKnowledgeBlockModal() {
             message.error('Không thể xoá nhiều câu hỏi')
         }
     }
+    
+    useEffect(() => {   
+        if (!knowledgeBlockId) return
+        setCurrentPage(1)
+        setSelectedRowKeys([])
+    }, [knowledgeBlockId])
 
     return (
         <Modal
@@ -104,6 +122,8 @@ export default function QuestionListByKnowledgeBlockModal() {
                 pagination={{
                     current: currentPage,
                     pageSize,
+                    total: totalQuestions,
+                    showSizeChanger: true,
                     onChange: (page, size) => {
                         if (size === pageSize) setCurrentPage(page)
                         else {
@@ -111,14 +131,15 @@ export default function QuestionListByKnowledgeBlockModal() {
                             setPageSize(size)
                         }
                     },
-                    showSizeChanger: true,
+                    showTotal: (total, range) =>
+                        `${range[0]} - ${range[1]} trong tổng số ${total} câu hỏi`,
                 }}
                 columns={[
                     {
                         title: 'STT',
                         width: 60,
                         align: 'center',
-                        render: (_, __, index) => index + 1,
+                        render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
                     },
                     {
                         title: 'Nội dung câu hỏi',

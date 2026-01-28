@@ -1546,13 +1546,13 @@ const ModalChiTietSinhVien = () => {
                             dataIndex: ['trainingScoreSession', 'name'],
                             width: 180,
                         },
-                        {
-                            title: 'Điểm rèn luyện',
-                            dataIndex: 'score',
-                            width: 120,
-                            align: 'center',
-                            render: (score) => (score ? Number(score).toFixed(1) : ''),
-                        },
+                        // {
+                        //     title: 'Điểm rèn luyện',
+                        //     dataIndex: 'score',
+                        //     width: 120,
+                        //     align: 'center',
+                        //     render: (score) => (score ? Number(score).toFixed(1) : ''),
+                        // },
                         {
                             title: 'Xếp loại',
                             dataIndex: 'studentTrainingType',
