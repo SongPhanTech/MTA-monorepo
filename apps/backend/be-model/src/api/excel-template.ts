@@ -23,6 +23,10 @@ app.openapi(
                                 .openapi({ description: 'Dữ liệu để điền vào template' }),
                             fileName: z.string(),
                             path: z.string(),
+                            showGridLines: z.boolean().optional().openapi({
+                                description: 'Có hiển thị lưới trong Excel hay không',
+                                default: false,
+                            }),
                         }),
                     },
                 },
@@ -40,10 +44,11 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { fileName, path, payload } = c.req.valid('json')
+        const { fileName, path, payload, showGridLines = false } = c.req.valid('json')
         const res = await fetch(getMinioUrl(`/mta/template/${path}`))
         const buffer = await res.arrayBuffer()
         const nodeBuffer = Buffer.from(buffer)
+        const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
         // Generate a workbook for each payload item
         const generatedSheets: ExcelJS.Worksheet[] = []
@@ -51,12 +56,11 @@ app.openapi(
         for (const item of payload) {
             const template = new XlsxTemplate(nodeBuffer)
             template.substitute(1, item.data)
-            const sheetBuffer = await template.generate({ type: 'arraybuffer' })
-
+            const sheetBuffer = await template.generate({ type: 'nodebuffer' })
             // Load the generated sheet using exceljs
             const workbook = new ExcelJS.Workbook()
             await workbook.xlsx.load(sheetBuffer)
-            const worksheet = workbook.getWorksheet(1)
+            const worksheet = workbook.getWorksheet(1) || workbook.worksheets[0]
             if (worksheet) {
                 generatedSheets.push(worksheet)
             }
@@ -67,14 +71,14 @@ app.openapi(
         const mergedSheet = mergedWorkbook.addWorksheet('Merged')
 
         // Hide gridlines
-        mergedSheet.views = [{ showGridLines: false }]
+        mergedSheet.views = [{ showGridLines: showGridLines }]
 
         let currentRow = 1
         for (const sheet of generatedSheets) {
             const rowOffset = currentRow - 1
 
             // Copy all rows with full formatting
-            sheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            sheet.eachRow({ includeEmpty: true }, (row) => {
                 const newRow = mergedSheet.getRow(currentRow)
 
                 // Copy row height
@@ -134,7 +138,6 @@ app.openapi(
         }
 
         const result = await mergedWorkbook.xlsx.writeBuffer()
-        const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
         return c.body(result, 200, {
             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

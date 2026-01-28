@@ -25,12 +25,10 @@ import {
     RiAlignRight,
     RiAtLine,
     RiBold,
-    RiCodeSSlashLine,
     RiFunctions,
     RiImage2Line,
     RiItalic,
     RiListOrdered2,
-    RiMarkPenFill,
     RiMoneyDollarBoxLine,
     RiMoneyDollarCircleLine,
     RiStrikethrough,
@@ -361,22 +359,22 @@ export default function TextEditorMenuBar({
                       disabled: !editor.can().chain().focus().toggleStrike().run(),
                   },
               ],
-              [
-                  {
-                      id: 'RiMarkPenFill',
-                      icon: <RiMarkPenFill className="size-5" />,
-                      onClick: () => editor.chain().focus().toggleHighlight().run(),
-                      isActive: editor.isActive('highlight'),
-                      disabled: !editor.can().chain().focus().toggleHighlight().run(),
-                  },
-                  {
-                      id: 'RiCodeSSlashLine',
-                      icon: <RiCodeSSlashLine className="size-5" />,
-                      onClick: () => editor.chain().focus().toggleCode().run(),
-                      isActive: editor.isActive('code'),
-                      disabled: !editor.can().chain().focus().toggleCode().run(),
-                  },
-              ],
+              //   [
+              //       {
+              //           id: 'RiMarkPenFill',
+              //           icon: <RiMarkPenFill className="size-5" />,
+              //           onClick: () => editor.chain().focus().toggleHighlight().run(),
+              //           isActive: editor.isActive('highlight'),
+              //           disabled: !editor.can().chain().focus().toggleHighlight().run(),
+              //       },
+              //       {
+              //           id: 'RiCodeSSlashLine',
+              //           icon: <RiCodeSSlashLine className="size-5" />,
+              //           onClick: () => editor.chain().focus().toggleCode().run(),
+              //           isActive: editor.isActive('code'),
+              //           disabled: !editor.can().chain().focus().toggleCode().run(),
+              //       },
+              //   ],
               [
                   {
                       id: 'RiAlignLeft',

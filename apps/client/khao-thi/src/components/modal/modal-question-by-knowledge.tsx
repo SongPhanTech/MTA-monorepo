@@ -93,8 +93,8 @@ export default function QuestionListByKnowledgeBlockModal() {
             message.error('Không thể xoá nhiều câu hỏi')
         }
     }
-    
-    useEffect(() => {   
+
+    useEffect(() => {
         if (!knowledgeBlockId) return
         setCurrentPage(1)
         setSelectedRowKeys([])
