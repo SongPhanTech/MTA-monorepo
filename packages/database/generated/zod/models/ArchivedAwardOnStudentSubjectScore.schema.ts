@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { ArchivedCertificateStatus } from '../../zenstack/models';
+import { ArchivedCertificateStatusSchema } from '../enums/ArchivedCertificateStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -14,6 +16,7 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    status: ArchivedCertificateStatusSchema,
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -25,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    status: ArchivedCertificateStatusSchema,
 }
 ).strict();
 const relationSchema = z.object({
@@ -69,7 +73,8 @@ export const ArchivedAwardOnStudentSubjectScorePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    createdBy: z.string().uuid().nullish()
+    createdBy: z.string().uuid().nullish(),
+    status: ArchivedCertificateStatusSchema
 }).partial().passthrough();
 
 
@@ -77,7 +82,7 @@ export const ArchivedAwardOnStudentSubjectScorePrismaUpdateSchema = z.object({
  * `ArchivedAwardOnStudentSubjectScore` schema for create operations excluding foreign keys and relations.
  */
 export const ArchivedAwardOnStudentSubjectScoreCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
 });
 
 

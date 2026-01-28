@@ -1,3 +1,4 @@
+import { ArchivedCertificateStatus } from '@workspace/db'
 import type {
     AcademicActionType,
     ApplicationStatus,
@@ -171,6 +172,9 @@ export type FilterProps = {
     formStatus?: ScoreConvertStatus
     subjects?: string
     certificateId?: string
+    awardName?: string
+    archivedAwardStatus?: ArchivedCertificateStatus[]
+    bonusScoreStatus?: ArchivedCertificateStatus[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

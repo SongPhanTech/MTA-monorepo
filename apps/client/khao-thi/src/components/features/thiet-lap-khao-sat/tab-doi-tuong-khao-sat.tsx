@@ -53,38 +53,38 @@ function TabDoiTuongKhaoSat() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
-        where:{
-             trainingObjectTypes:{
-                some:{
-                    trainingObjectTypeId
-                }
-            }
+        where: {
+            trainingObjectTypes: {
+                some: {
+                    trainingObjectTypeId,
+                },
+            },
         },
         orderBy: { name: 'asc' },
     })
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        where:{
-            trainingObjectTypes:{
-                some:{
-                    trainingObjectTypeId
-                }
-            }
+        where: {
+            trainingObjectTypes: {
+                some: {
+                    trainingObjectTypeId,
+                },
+            },
         },
         orderBy: { name: 'asc' },
     })
 
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
-        where:{
-            trainingObjectTypeId
+        where: {
+            trainingObjectTypeId,
         },
         orderBy: { name: 'asc' },
     })
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
-        where:{
-            trainingCourse:{
-                trainingObjectTypeId
-            }
+        where: {
+            trainingCourse: {
+                trainingObjectTypeId,
+            },
         },
         orderBy: { name: 'asc' },
     })
@@ -96,7 +96,7 @@ function TabDoiTuongKhaoSat() {
             deletedAt: null,
             cancelled: false,
             status: 'OFFICIAL',
-            trainingObjectTypeId
+            trainingObjectTypeId,
         },
     })
 

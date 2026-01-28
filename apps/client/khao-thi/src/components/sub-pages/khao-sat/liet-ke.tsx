@@ -42,9 +42,9 @@ function SurveyEssay({ selectedId }: { selectedId: string }) {
         {
             where: {
                 surveyQuestionId: surveyQuestionId || '',
-                surveySession:{
-                    surveyId:selectedId
-                }
+                surveySession: {
+                    surveyId: selectedId,
+                },
             },
             include: {
                 surveySession: {

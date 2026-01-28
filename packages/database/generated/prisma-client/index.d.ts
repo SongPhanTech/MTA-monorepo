@@ -135537,6 +135537,7 @@ export namespace Prisma {
     createdBy: string | null
     studentSubjectScoreId: string | null
     archivedAwardId: string | null
+    status: $Enums.ArchivedCertificateStatus | null
   }
 
   export type ArchivedAwardOnStudentSubjectScoreMaxAggregateOutputType = {
@@ -135550,6 +135551,7 @@ export namespace Prisma {
     createdBy: string | null
     studentSubjectScoreId: string | null
     archivedAwardId: string | null
+    status: $Enums.ArchivedCertificateStatus | null
   }
 
   export type ArchivedAwardOnStudentSubjectScoreCountAggregateOutputType = {
@@ -135563,6 +135565,7 @@ export namespace Prisma {
     createdBy: number
     studentSubjectScoreId: number
     archivedAwardId: number
+    status: number
     _all: number
   }
 
@@ -135578,6 +135581,7 @@ export namespace Prisma {
     createdBy?: true
     studentSubjectScoreId?: true
     archivedAwardId?: true
+    status?: true
   }
 
   export type ArchivedAwardOnStudentSubjectScoreMaxAggregateInputType = {
@@ -135591,6 +135595,7 @@ export namespace Prisma {
     createdBy?: true
     studentSubjectScoreId?: true
     archivedAwardId?: true
+    status?: true
   }
 
   export type ArchivedAwardOnStudentSubjectScoreCountAggregateInputType = {
@@ -135604,6 +135609,7 @@ export namespace Prisma {
     createdBy?: true
     studentSubjectScoreId?: true
     archivedAwardId?: true
+    status?: true
     _all?: true
   }
 
@@ -135690,6 +135696,7 @@ export namespace Prisma {
     createdBy: string | null
     studentSubjectScoreId: string
     archivedAwardId: string
+    status: $Enums.ArchivedCertificateStatus
     _count: ArchivedAwardOnStudentSubjectScoreCountAggregateOutputType | null
     _min: ArchivedAwardOnStudentSubjectScoreMinAggregateOutputType | null
     _max: ArchivedAwardOnStudentSubjectScoreMaxAggregateOutputType | null
@@ -135720,6 +135727,7 @@ export namespace Prisma {
     createdBy?: boolean
     studentSubjectScoreId?: boolean
     archivedAwardId?: boolean
+    status?: boolean
     studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     archivedAward?: boolean | ArchivedAwardDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["archivedAwardOnStudentSubjectScore"]>
@@ -135735,6 +135743,7 @@ export namespace Prisma {
     createdBy?: boolean
     studentSubjectScoreId?: boolean
     archivedAwardId?: boolean
+    status?: boolean
     studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     archivedAward?: boolean | ArchivedAwardDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["archivedAwardOnStudentSubjectScore"]>
@@ -135750,6 +135759,7 @@ export namespace Prisma {
     createdBy?: boolean
     studentSubjectScoreId?: boolean
     archivedAwardId?: boolean
+    status?: boolean
     studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     archivedAward?: boolean | ArchivedAwardDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["archivedAwardOnStudentSubjectScore"]>
@@ -135765,9 +135775,10 @@ export namespace Prisma {
     createdBy?: boolean
     studentSubjectScoreId?: boolean
     archivedAwardId?: boolean
+    status?: boolean
   }
 
-  export type ArchivedAwardOnStudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentSubjectScoreId" | "archivedAwardId", ExtArgs["result"]["archivedAwardOnStudentSubjectScore"]>
+  export type ArchivedAwardOnStudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentSubjectScoreId" | "archivedAwardId" | "status", ExtArgs["result"]["archivedAwardOnStudentSubjectScore"]>
   export type ArchivedAwardOnStudentSubjectScoreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     archivedAward?: boolean | ArchivedAwardDefaultArgs<ExtArgs>
@@ -135798,6 +135809,7 @@ export namespace Prisma {
       createdBy: string | null
       studentSubjectScoreId: string
       archivedAwardId: string
+      status: $Enums.ArchivedCertificateStatus
     }, ExtArgs["result"]["archivedAwardOnStudentSubjectScore"]>
     composites: {}
   }
@@ -136233,6 +136245,7 @@ export namespace Prisma {
     readonly createdBy: FieldRef<"ArchivedAwardOnStudentSubjectScore", 'String'>
     readonly studentSubjectScoreId: FieldRef<"ArchivedAwardOnStudentSubjectScore", 'String'>
     readonly archivedAwardId: FieldRef<"ArchivedAwardOnStudentSubjectScore", 'String'>
+    readonly status: FieldRef<"ArchivedAwardOnStudentSubjectScore", 'ArchivedCertificateStatus'>
   }
     
 
@@ -361231,7 +361244,8 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
     studentSubjectScoreId: 'studentSubjectScoreId',
-    archivedAwardId: 'archivedAwardId'
+    archivedAwardId: 'archivedAwardId',
+    status: 'status'
   };
 
   export type ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = (typeof ArchivedAwardOnStudentSubjectScoreScalarFieldEnum)[keyof typeof ArchivedAwardOnStudentSubjectScoreScalarFieldEnum]
@@ -378823,6 +378837,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"ArchivedAwardOnStudentSubjectScore"> | string | null
     studentSubjectScoreId?: StringFilter<"ArchivedAwardOnStudentSubjectScore"> | string
     archivedAwardId?: StringFilter<"ArchivedAwardOnStudentSubjectScore"> | string
+    status?: EnumArchivedCertificateStatusFilter<"ArchivedAwardOnStudentSubjectScore"> | $Enums.ArchivedCertificateStatus
     studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
     archivedAward?: XOR<ArchivedAwardScalarRelationFilter, ArchivedAwardWhereInput>
   }
@@ -378838,6 +378853,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     studentSubjectScoreId?: SortOrder
     archivedAwardId?: SortOrder
+    status?: SortOrder
     studentSubjectScore?: StudentSubjectScoreOrderByWithRelationInput
     archivedAward?: ArchivedAwardOrderByWithRelationInput
     _relevance?: ArchivedAwardOnStudentSubjectScoreOrderByRelevanceInput
@@ -378858,6 +378874,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"ArchivedAwardOnStudentSubjectScore"> | string | null
     studentSubjectScoreId?: StringFilter<"ArchivedAwardOnStudentSubjectScore"> | string
     archivedAwardId?: StringFilter<"ArchivedAwardOnStudentSubjectScore"> | string
+    status?: EnumArchivedCertificateStatusFilter<"ArchivedAwardOnStudentSubjectScore"> | $Enums.ArchivedCertificateStatus
     studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
     archivedAward?: XOR<ArchivedAwardScalarRelationFilter, ArchivedAwardWhereInput>
   }, "id" | "code" | "studentSubjectScoreId_archivedAwardId">
@@ -378873,6 +378890,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     studentSubjectScoreId?: SortOrder
     archivedAwardId?: SortOrder
+    status?: SortOrder
     _count?: ArchivedAwardOnStudentSubjectScoreCountOrderByAggregateInput
     _max?: ArchivedAwardOnStudentSubjectScoreMaxOrderByAggregateInput
     _min?: ArchivedAwardOnStudentSubjectScoreMinOrderByAggregateInput
@@ -378892,6 +378910,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"ArchivedAwardOnStudentSubjectScore"> | string | null
     studentSubjectScoreId?: StringWithAggregatesFilter<"ArchivedAwardOnStudentSubjectScore"> | string
     archivedAwardId?: StringWithAggregatesFilter<"ArchivedAwardOnStudentSubjectScore"> | string
+    status?: EnumArchivedCertificateStatusWithAggregatesFilter<"ArchivedAwardOnStudentSubjectScore"> | $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardWhereInput = {
@@ -409122,6 +409141,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    status?: $Enums.ArchivedCertificateStatus
     studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutAwardsInput
     archivedAward: ArchivedAwardCreateNestedOneWithoutStudentSubjectScoreInput
   }
@@ -409137,6 +409157,7 @@ export namespace Prisma {
     createdBy?: string | null
     studentSubjectScoreId: string
     archivedAwardId: string
+    status?: $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardOnStudentSubjectScoreUpdateInput = {
@@ -409148,6 +409169,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
     studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutAwardsNestedInput
     archivedAward?: ArchivedAwardUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
   }
@@ -409163,6 +409185,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
     archivedAwardId?: StringFieldUpdateOperationsInput | string
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardOnStudentSubjectScoreCreateManyInput = {
@@ -409176,6 +409199,7 @@ export namespace Prisma {
     createdBy?: string | null
     studentSubjectScoreId: string
     archivedAwardId: string
+    status?: $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardOnStudentSubjectScoreUpdateManyMutationInput = {
@@ -409187,6 +409211,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyInput = {
@@ -409200,6 +409225,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
     archivedAwardId?: StringFieldUpdateOperationsInput | string
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardCreateInput = {
@@ -438162,6 +438188,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     studentSubjectScoreId?: SortOrder
     archivedAwardId?: SortOrder
+    status?: SortOrder
   }
 
   export type ArchivedAwardOnStudentSubjectScoreMaxOrderByAggregateInput = {
@@ -438175,6 +438202,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     studentSubjectScoreId?: SortOrder
     archivedAwardId?: SortOrder
+    status?: SortOrder
   }
 
   export type ArchivedAwardOnStudentSubjectScoreMinOrderByAggregateInput = {
@@ -438188,6 +438216,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     studentSubjectScoreId?: SortOrder
     archivedAwardId?: SortOrder
+    status?: SortOrder
   }
 
   export type AwardScalarRelationFilter = {
@@ -530541,6 +530570,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    status?: $Enums.ArchivedCertificateStatus
     archivedAward: ArchivedAwardCreateNestedOneWithoutStudentSubjectScoreInput
   }
 
@@ -530554,6 +530584,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     archivedAwardId: string
+    status?: $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardOnStudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreInput = {
@@ -531284,6 +531315,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"ArchivedAwardOnStudentSubjectScore"> | string | null
     studentSubjectScoreId?: StringFilter<"ArchivedAwardOnStudentSubjectScore"> | string
     archivedAwardId?: StringFilter<"ArchivedAwardOnStudentSubjectScore"> | string
+    status?: EnumArchivedCertificateStatusFilter<"ArchivedAwardOnStudentSubjectScore"> | $Enums.ArchivedCertificateStatus
   }
 
   export type StudentThesisRegistrationUpsertWithWhereUniqueWithoutStudentSubjectScoreInput = {
@@ -533986,6 +534018,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    status?: $Enums.ArchivedCertificateStatus
     studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutAwardsInput
   }
 
@@ -533999,6 +534032,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     studentSubjectScoreId: string
+    status?: $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardOnStudentSubjectScoreCreateOrConnectWithoutArchivedAwardInput = {
@@ -636074,6 +636108,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     archivedAwardId: string
+    status?: $Enums.ArchivedCertificateStatus
   }
 
   export type StudentThesisRegistrationCreateManyStudentSubjectScoreInput = {
@@ -636421,6 +636456,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
     archivedAward?: ArchivedAwardUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
   }
 
@@ -636434,6 +636470,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     archivedAwardId?: StringFieldUpdateOperationsInput | string
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreInput = {
@@ -636446,6 +636483,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     archivedAwardId?: StringFieldUpdateOperationsInput | string
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
   }
 
   export type StudentThesisRegistrationUpdateWithoutStudentSubjectScoreInput = {
@@ -636815,6 +636853,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     studentSubjectScoreId: string
+    status?: $Enums.ArchivedCertificateStatus
   }
 
   export type DocumentFileUpdateWithoutArchivedAwardInput = {
@@ -636931,6 +636970,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
     studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutAwardsNestedInput
   }
 
@@ -636944,6 +636984,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
   }
 
   export type ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedAwardInput = {
@@ -636956,6 +636997,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+    status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
   }
 
   export type SemesterCreateManySchoolYearInput = {

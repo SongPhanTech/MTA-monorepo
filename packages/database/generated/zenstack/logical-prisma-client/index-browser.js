@@ -1652,7 +1652,8 @@ exports.Prisma.ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   studentSubjectScoreId: 'studentSubjectScoreId',
-  archivedAwardId: 'archivedAwardId'
+  archivedAwardId: 'archivedAwardId',
+  status: 'status'
 };
 
 exports.Prisma.ArchivedAwardScalarFieldEnum = {

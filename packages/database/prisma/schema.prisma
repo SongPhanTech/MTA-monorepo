@@ -2622,18 +2622,19 @@ model ArchivedCertificate {
 }
 
 model ArchivedAwardOnStudentSubjectScore {
-  id                    String              @id() @default(cuid())
-  code                  String?             @unique()
-  active                Boolean             @default(true)
-  description           String?             @db.Text()
+  id                    String                    @id() @default(cuid())
+  code                  String?                   @unique()
+  active                Boolean                   @default(true)
+  description           String?                   @db.Text()
   deletedAt             DateTime?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @default(now()) @updatedAt()
-  createdBy             String?             @db.Uuid()
-  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @default(now()) @updatedAt()
+  createdBy             String?                   @db.Uuid()
+  studentSubjectScore   StudentSubjectScore       @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
-  archivedAward         ArchivedAward       @relation(fields: [archivedAwardId], references: [id])
+  archivedAward         ArchivedAward             @relation(fields: [archivedAwardId], references: [id])
   archivedAwardId       String
+  status                ArchivedCertificateStatus @default(PENDING)
 
   @@unique([studentSubjectScoreId, archivedAwardId])
   @@schema("ql-dao-tao")
@@ -3073,6 +3074,7 @@ model SubjectVersion {
   exams                    Exam[]
   examFramework            ExamFramework[]
 
+  @@index([name, trainingObjectTypeId])
   @@schema("ql-dao-tao")
 }
 

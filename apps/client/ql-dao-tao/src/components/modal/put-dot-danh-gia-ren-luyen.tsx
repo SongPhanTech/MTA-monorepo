@@ -37,7 +37,8 @@ const PutDotRenLuyen = () => {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     // Fetch semester list for select
-    const { data: semesterList = [] } = useFindManySemester({
+    const { data: semesterList = [] } = useFindManySemester(
+        {
             include: {
                 schoolYear: true,
             },
@@ -45,16 +46,17 @@ const PutDotRenLuyen = () => {
                 createdAt: 'desc',
             },
         },
-        { enabled: isOpen },
+        { enabled: isOpen }
     )
 
     // Fetch training object type list for select
-    const { data: trainingObjectTypeList = [] } = useFindManyTrainingObjectType({
+    const { data: trainingObjectTypeList = [] } = useFindManyTrainingObjectType(
+        {
             orderBy: {
                 name: 'asc',
             },
         },
-        { enabled: isOpen },
+        { enabled: isOpen }
     )
 
     const { mutateAsync: createTrainingScoreSession } = useCreateTrainingScoreSession()
