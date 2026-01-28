@@ -23,6 +23,10 @@ app.openapi(
                                 .openapi({ description: 'Dữ liệu để điền vào template' }),
                             fileName: z.string(),
                             path: z.string(),
+                            showGridLines: z.boolean().optional().openapi({
+                                description: 'Có hiển thị lưới trong Excel hay không',
+                                default: false,
+                            }),
                         }),
                     },
                 },
@@ -40,7 +44,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { fileName, path, payload } = c.req.valid('json')
+        const { fileName, path, payload, showGridLines = false } = c.req.valid('json')
         const res = await fetch(getMinioUrl(`/mta/template/${path}`))
         const buffer = await res.arrayBuffer()
         const nodeBuffer = Buffer.from(buffer)
@@ -67,7 +71,7 @@ app.openapi(
         const mergedSheet = mergedWorkbook.addWorksheet('Merged')
 
         // Hide gridlines
-        // mergedSheet.views = [{ showGridLines: false }]
+        mergedSheet.views = [{ showGridLines: showGridLines }]
 
         let currentRow = 1
         for (const sheet of generatedSheets) {
@@ -123,7 +127,6 @@ app.openapi(
                 }
             }
         }
-
 
         // Copy column widths from the first sheet
         if (generatedSheets.length > 0 && generatedSheets[0]) {
