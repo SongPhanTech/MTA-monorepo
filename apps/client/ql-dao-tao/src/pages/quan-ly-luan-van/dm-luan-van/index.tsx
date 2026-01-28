@@ -222,7 +222,15 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                     thesisProject: {
                         include: {
                             defenseSession: true,
-                            thesisSession: true,
+                            thesisSession: {
+                                include: {
+                                    trainingCourse: {
+                                        include: {
+                                            trainingObjectType: true,
+                                        },
+                                    },
+                                },
+                            },
                             organization: true,
                             supervisor: true,
                             coSupervisor: true,
