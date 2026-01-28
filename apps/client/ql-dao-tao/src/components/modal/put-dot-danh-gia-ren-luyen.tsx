@@ -38,20 +38,24 @@ const PutDotRenLuyen = () => {
 
     // Fetch semester list for select
     const { data: semesterList = [] } = useFindManySemester({
-        include: {
-            schoolYear: true,
+            include: {
+                schoolYear: true,
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
         },
-        orderBy: {
-            createdAt: 'desc',
-        },
-    })
+        { enabled: isOpen },
+    )
 
     // Fetch training object type list for select
     const { data: trainingObjectTypeList = [] } = useFindManyTrainingObjectType({
-        orderBy: {
-            name: 'asc',
+            orderBy: {
+                name: 'asc',
+            },
         },
-    })
+        { enabled: isOpen },
+    )
 
     const { mutateAsync: createTrainingScoreSession } = useCreateTrainingScoreSession()
     const { mutateAsync: updateTrainingScoreSession } = useUpdateTrainingScoreSession()
@@ -115,23 +119,23 @@ const PutDotRenLuyen = () => {
         { enabled: !!id }
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (initialValue) {
+        if (!isOpen) return
+        if (id && initialValue) {
             form.setFieldsValue({
                 ...initialValue,
                 time: initialValue.time ? dayjs(initialValue.time) : undefined,
                 semesterId: initialValue.semesterId || undefined,
                 trainingObjectTypeId: initialValue.trainingObjectTypeId || undefined,
             })
-        } else {
+        } else if (!id) {
             form.setFieldsValue({
                 time: dayjs(),
                 semesterId: semesterId || undefined,
                 trainingObjectTypeId: trainingObjectTypeId || undefined,
             })
         }
-    }, [initialValue, semesterId, trainingObjectTypeId])
+    }, [id, isOpen, initialValue, form, semesterId, trainingObjectTypeId])
 
     return (
         <PutFormModal
