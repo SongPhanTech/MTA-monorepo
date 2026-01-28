@@ -37,7 +37,11 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const router = useRouter()
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
-        where: {},
+        where: {
+            trainingCourse:{
+                trainingObjectTypeId
+            }
+        },
         orderBy: { name: 'asc' },
     })
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
@@ -154,15 +158,15 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 render: (_, record) =>
                                     record?.educationAndTraining?.length > 0
                                         ? record?.educationAndTraining[0]?.code
-                                        : '',
+                                        : record?.lecturer?.code?record?.lecturer?.code: '',
                             },
-                            {
-                                title: 'Mã GV',
-                                dataIndex: 'lecturerCode',
-                                type: 'input',
-                                width: 125,
-                                render: (_, record) => record?.lecturer?.code || '',
-                            },
+                            // {
+                            //     title: 'Mã GV',
+                            //     dataIndex: 'lecturerCode',
+                            //     type: 'input',
+                            //     width: 125,
+                            //     render: (_, record) => record?.lecturer?.code || '',
+                            // },
                             {
                                 title: 'Người làm khảo sát',
                                 dataIndex: 'fullname',
