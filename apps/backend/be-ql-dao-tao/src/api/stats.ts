@@ -23,7 +23,7 @@ type StatRow = {
     Name: string
     PeriodCode: string
     TotalStudents: number | bigint
-    RelearnCount: number | bigint
+    Count: number | bigint
     Value: number
 }
 const StatRowSchema = z.object({
@@ -31,7 +31,7 @@ const StatRowSchema = z.object({
     Name: z.string(),
     PeriodCode: z.string(),
     TotalStudents: z.number(),
-    RelearnCount: z.number(),
+    Count: z.number(),
     Value: z.number(),
 })
 // Ban Giám đốc (BGĐ)
@@ -4657,10 +4657,17 @@ app.openapi(
         },
         responses: {
             200: {
-                description: 'Thống kê thi lại 3 mảng, mỗi mảng duyệt theo 2 kỳ',
+                description: 'Dữ liệu thi lại tính toán động',
                 content: {
                     'application/json': {
-                        schema: z.object({ success: z.boolean(), data: z.any() }),
+                        schema: z.object({
+                            success: z.boolean(),
+                            data: z.object({
+                                BY_COURSE: z.array(StatRowSchema),
+                                BY_CURRICULUM: z.array(StatRowSchema),
+                                BY_MAJOR: z.array(StatRowSchema),
+                            }),
+                        }),
                     },
                 },
             },
@@ -4671,18 +4678,19 @@ app.openapi(
 
         if (preview) {
             const periods = ['2023_HK2', '2024_HK1']
+
             const generateData = (items: any[], typeName: string) => {
                 const result: any[] = []
                 items.forEach((item) => {
                     periods.forEach((p) => {
                         const total = item.total
-                        const count = Math.floor(item.count * (p === '2024_HK1' ? 1.1 : 0.9))
+                        const count = Math.floor(item.count * (p === '2024_HK1' ? 0.8 : 1.2))
 
                         result.push({
                             Name: item.name,
                             PeriodCode: p,
                             TotalStudents: total,
-                            RetestCount: count,
+                            Count: count,
                             Value: total > 0 ? Number((count / total).toFixed(4)) : 0,
                         })
                     })
@@ -4696,24 +4704,24 @@ app.openapi(
                     data: {
                         BY_COURSE: generateData(
                             [
-                                { id: 'K14', name: 'Khóa 14', total: 1200, count: 180 },
-                                { id: 'K15', name: 'Khóa 15', total: 1500, count: 210 },
+                                { id: 'K14', name: 'Khóa 14', total: 1200, count: 40 },
+                                { id: 'K15', name: 'Khóa 15', total: 1500, count: 55 },
                             ],
                             'Khóa'
                         ),
 
                         BY_DEPARTMENT: generateData(
                             [
-                                { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 120 },
-                                { id: 'KTE', name: 'Kinh tế', total: 500, count: 45 },
+                                { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 30 },
+                                { id: 'XD', name: 'Xây dựng', total: 400, count: 48 },
                             ],
                             'Ngành'
                         ),
 
                         BY_MAJOR: generateData(
                             [
-                                { id: 'KTPM', name: 'Kỹ thuật phần mềm', total: 200, count: 50 },
-                                { id: 'ATTT', name: 'An toàn thông tin', total: 150, count: 35 },
+                                { id: 'KHMT', name: 'Khoa học máy tính', total: 150, count: 15 },
+                                { id: 'KHDL', name: 'Khoa học dữ liệu', total: 120, count: 12 },
                             ],
                             'Chuyên ngành'
                         ),
@@ -4722,8 +4730,159 @@ app.openapi(
                 200
             )
         }
+        const sql = `
+            WITH RetestStudent AS (
+                SELECT DISTINCT
+                    S.id        AS "studentId",
+                    SEM.code    AS "periodCode",
+                    TC.id       AS "courseId",
+                    TC.name     AS "courseName",
+                    C.id        AS "curriculumId",
+                    C.name      AS "curriculumName",
+                    CV.id       AS "curriculumVersionId",
+                    CV.name     AS "curriculumVersionName"
+                FROM "ql-dao-tao"."StudentSubjectScore" SSS
+                JOIN "ql-dao-tao"."SubjectClass" SC 
+                    ON SC.id = SSS."subjectClassId"
+                JOIN "ql-dao-tao"."Student" S 
+                    ON S.id = SSS."studentId"
+                JOIN "ql-dao-tao"."FixedClass" FC 
+                    ON FC.id = S."fixedClassId"
+                JOIN "ql-dao-tao"."TrainingCourse" TC 
+                    ON TC.id = FC."trainingCourseId"
+                JOIN "ql-dao-tao"."Semester" SEM 
+                    ON SEM.id = SC."semesterId"
+                JOIN "ql-dao-tao"."CurriculumVersion" CV 
+                    ON CV.id = S."curriculumVersionId"
+                JOIN "ql-dao-tao"."Curriculum" C 
+                    ON C.id = CV."curriculumId"
+                WHERE
+                    SC.cancelled = false
+                    AND SC.type = 'REEXAM'
+                    AND SEM."endDate" <= $1
+            ),
 
-        return c.json({ success: true, data: { BY_COURSE: [], BY_DEPARTMENT: [], BY_MAJOR: [] } })
+                TotalStudent AS (
+                    SELECT DISTINCT
+                        S.id        AS "studentId",
+                        SEM.code    AS "periodCode",
+                        TC.id       AS "courseId",
+                        TC.name     AS "courseName",
+                        C.id        AS "curriculumId",
+                        C.name      AS "curriculumName",
+                        CV.id       AS "curriculumVersionId",
+                        CV.name     AS "curriculumVersionName"
+                    FROM "ql-dao-tao"."Student" S
+                    JOIN "ql-dao-tao"."FixedClass" FC 
+                        ON FC.id = S."fixedClassId"
+                    JOIN "ql-dao-tao"."TrainingCourse" TC 
+                        ON TC.id = FC."trainingCourseId"
+                    JOIN "ql-dao-tao"."CurriculumVersion" CV 
+                        ON CV.id = S."curriculumVersionId"
+                    JOIN "ql-dao-tao"."Curriculum" C 
+                        ON C.id = CV."curriculumId"
+                    JOIN "ql-dao-tao"."StudentSubjectScore" SSS
+                        ON SSS."studentId" = S.id
+                    JOIN "ql-dao-tao"."SubjectClass" SC
+                        ON SC.id = SSS."subjectClassId"
+                    JOIN "ql-dao-tao"."Semester" SEM
+                        ON SEM.id = SC."semesterId"
+                    WHERE
+                        SC.cancelled = false
+                        AND SEM."endDate" <= $1
+                )
+
+
+                SELECT
+                    'BY_COURSE'                     AS "Type",
+                    T."courseName"                  AS "Name",
+                    T."periodCode"                  AS "PeriodCode",
+                    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
+                    COUNT(DISTINCT R."studentId")::int AS "RetestCount",
+                    ROUND(
+                        COUNT(DISTINCT R."studentId")::decimal
+                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+                        4
+                    )::float                         AS "Value"
+                FROM TotalStudent T
+                LEFT JOIN RetestStudent R
+                    ON R."studentId"  = T."studentId"
+                    AND R."periodCode" = T."periodCode"
+                    AND R."courseName" = T."courseName"
+                GROUP BY
+                    T."courseName",
+                    T."periodCode"
+
+                UNION ALL
+
+                SELECT
+                    'BY_CURRICULUM'                     AS "Type",
+                    T."curriculumName"                  AS "Name",
+                    T."periodCode"                      AS "PeriodCode",
+                    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
+                    COUNT(DISTINCT R."studentId")::int AS "RetestCount",
+                    ROUND(
+                        COUNT(DISTINCT R."studentId")::decimal
+                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+                        4
+                    )::float                             AS "Value"
+                FROM TotalStudent T
+                LEFT JOIN RetestStudent R
+                    ON R."studentId"       = T."studentId"
+                    AND R."periodCode"     = T."periodCode"
+                    AND R."curriculumName" = T."curriculumName"
+                GROUP BY
+                    T."curriculumName",
+                    T."periodCode"
+
+
+                UNION ALL
+                SELECT
+                    'BY_MAJOR'                             AS "Type",
+                    T."curriculumVersionName"              AS "Name",
+                    T."periodCode"                         AS "PeriodCode",
+                    COUNT(DISTINCT T."studentId")::int    AS "TotalStudents",
+                    COUNT(DISTINCT R."studentId")::int    AS "RetestCount",
+                    ROUND(
+                        COUNT(DISTINCT R."studentId")::decimal
+                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+                        4
+                    )::float                               AS "Value"
+                FROM TotalStudent T
+                LEFT JOIN RetestStudent R
+                    ON R."studentId"               = T."studentId"
+                    AND R."periodCode"             = T."periodCode"
+                    AND R."curriculumVersionName"  = T."curriculumVersionName"
+                GROUP BY
+                    T."curriculumVersionName",
+                    T."periodCode"
+
+
+                `
+
+        const date = new Date()
+
+        const rows = await prisma.$queryRawUnsafe<StatRow[]>(sql, date)
+
+        const result = rows.reduce(
+            (acc, r) => {
+                acc[r.Type].push(r)
+                return acc
+            },
+            {
+                BY_COURSE: [],
+                BY_CURRICULUM: [],
+                BY_MAJOR: [],
+            } as Record<StatType, StatRow[]>
+        )
+
+        return c.json(
+            {
+                success: true,
+                data: result,
+            },
+            200
+        )
     }
 )
 app.openapi(
@@ -4775,7 +4934,7 @@ app.openapi(
                             Name: item.name,
                             PeriodCode: p,
                             TotalStudents: total,
-                            RelearnCount: count,
+                            Count: count,
                             Value: total > 0 ? Number((count / total).toFixed(4)) : 0,
                         })
                     })
@@ -4817,7 +4976,6 @@ app.openapi(
         }
         const sql = `
             WITH RelearnStudent AS (
-                -- Sinh viên có PHÁT SINH HỌC LẠI (1 dòng / student / kỳ / group)
                 SELECT DISTINCT
                     S.id        AS "studentId",
                     SEM.code    AS "periodCode",
@@ -4892,7 +5050,6 @@ app.openapi(
                 ),
 
                 TotalStudent AS (
-                    -- Tổng SV đang học theo kỳ + group
                     SELECT DISTINCT
                         S.id        AS "studentId",
                         SEM.code    AS "periodCode",
