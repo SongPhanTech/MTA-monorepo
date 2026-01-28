@@ -31,7 +31,6 @@ function SurveyEssay({ selectedId }: { selectedId: string }) {
                     where: {
                         id: selectedId,
                     },
-                    
                 },
             },
         },
@@ -44,18 +43,18 @@ function SurveyEssay({ selectedId }: { selectedId: string }) {
             where: {
                 surveyQuestionId: surveyQuestionId || '',
             },
-            include:{
-                surveySession:{
-                    include:{
-                        profile:true,
-                        student:{
-                            include:{
-                                userProfile:true
-                            }
-                        }
-                    }
-                }
-            }
+            include: {
+                surveySession: {
+                    include: {
+                        profile: true,
+                        student: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                    },
+                },
+            },
         },
         {
             enabled: !!surveyQuestionId,

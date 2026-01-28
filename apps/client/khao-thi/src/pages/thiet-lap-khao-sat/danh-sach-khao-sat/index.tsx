@@ -240,12 +240,11 @@ export default function DetailSurveyPage() {
                                                         })
                                                         return
                                                     }
-                                                        if (!isPublic) {
-                                                    router.push(`/lam-khao-sat/private/${id}`)
+                                                    if (!isPublic) {
+                                                        router.push(`/lam-khao-sat/private/${id}`)
                                                     } else {
                                                         router.push(`/lam-khao-sat/${id}`)
                                                     }
-                                                   
                                                 }}
                                             >
                                                 <ArrowRight style={{ fontSize: '16px' }} />

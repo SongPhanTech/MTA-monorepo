@@ -136,7 +136,6 @@ const ReviewSurveyModal = () => {
                                         pagination={false}
                                     />
                                 </Col>
-                             
 
                                 <Col span={24} className="my-3">
                                     <Form

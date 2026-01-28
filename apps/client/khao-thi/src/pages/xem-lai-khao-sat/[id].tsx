@@ -136,7 +136,6 @@ function TakeTestPage() {
                             pagination={false}
                         />
                     </Col>
-                 
 
                     <Col span={24}>
                         {dataTest.map((section, sectionIndex) => (

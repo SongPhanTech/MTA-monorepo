@@ -13,7 +13,7 @@ import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useTrainingObjectTypeStore } from '@workspace/ui';
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const { can, canSome } = useAbility()
@@ -37,15 +37,13 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const router = useRouter()
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
-        where:{
-            
-        },
+        where: {},
         orderBy: { name: 'asc' },
     })
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
         useFindManyTrainingCourse({
-            where:{
-                trainingObjectTypeId
+            where: {
+                trainingObjectTypeId,
             },
             orderBy: { name: 'asc' },
         })

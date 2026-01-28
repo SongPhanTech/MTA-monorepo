@@ -5,7 +5,7 @@ import DefaultLayout from '@layouts/default-layout'
 import type { Survey } from '@workspace/db/client'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
-import SurveyEssay from '@components/sub-pages/khao-sat/liet-ke';
+import SurveyEssay from '@components/sub-pages/khao-sat/liet-ke'
 
 export default function SurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
@@ -36,7 +36,7 @@ export default function SurveyPage() {
             children: <SurveyReport selectedId={selectedId?.id || ''} />,
             disabled: !selectedId?.id,
         },
-         {
+        {
             key: '4',
             label: 'Liệt kê câu hỏi tự luận',
             children: <SurveyEssay selectedId={selectedId?.id || ''} />,

@@ -67,7 +67,7 @@ const PutSurveyQuestionModal = () => {
 
         try {
             showSpinner()
-            if (input?.type === 'SINGLE' && output.type==='SINGLE_CHOICE') {
+            if (input?.type === 'SINGLE' && output.type === 'SINGLE_CHOICE') {
                 if (input?.id) {
                     if (output.specificChoice?.length > 0) {
                         const res = await sqlTransaction([
@@ -283,7 +283,7 @@ const PutSurveyQuestionModal = () => {
                     />
                 </FormItem>
             </Col>
-            {input?.type === 'SINGLE' &&typeForm==='SINGLE_CHOICE' && (
+            {input?.type === 'SINGLE' && typeForm === 'SINGLE_CHOICE' && (
                 <Col span={24}>
                     <FormItem form={form} name="specific" label="Đáp án đặc biệt">
                         <Radio.Group buttonStyle="solid">

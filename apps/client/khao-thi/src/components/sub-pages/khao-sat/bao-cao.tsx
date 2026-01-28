@@ -77,7 +77,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
     ) {
         // Map answer -> description
-        const color=['#dd0b31','#ea8585','#ffc769','#4b50db','#028850']
+        const color = ['#dd0b31', '#ea8585', '#ffc769', '#4b50db', '#028850']
         const answerMap: Record<string, string> = {}
         answerDescriptions.forEach((a) => {
             answerMap[a.answer] = a.description as string
@@ -92,7 +92,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         const categories = data.map((item) => item.name)
 
         // Series stack bar
-        const series = answerKeys.map((answer,index:number) => ({
+        const series = answerKeys.map((answer, index: number) => ({
             name: answerMap[answer],
             type: 'bar' as const,
             stack: 'total',

@@ -35,6 +35,7 @@ import type {
     CountRequestsParams,
     ErrorRate200Item,
     ErrorRateParams,
+    ExcelTemplateBody,
     ExportTableByColumnsParams,
     ExportTableBySqlParams,
     GetColumns200Item,
@@ -2297,6 +2298,92 @@ export const useImportExcelToDatabase = <TError = unknown, TContext = unknown>(
     TContext
 > => {
     const mutationOptions = getImportExcelToDatabaseMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type excelTemplateResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type excelTemplateResponseSuccess = excelTemplateResponse200 & {
+    headers: Headers
+}
+
+export type excelTemplateResponse = excelTemplateResponseSuccess
+
+export const getExcelTemplateUrl = () => {
+    return `/api/excel-template`
+}
+
+export const excelTemplate = async (
+    excelTemplateBody: ExcelTemplateBody,
+    options?: RequestInit
+): Promise<excelTemplateResponse> => {
+    return customModelFetch<excelTemplateResponse>(getExcelTemplateUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(excelTemplateBody),
+    })
+}
+
+export const getExcelTemplateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof excelTemplate>>,
+        TError,
+        { data: ExcelTemplateBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof excelTemplate>>,
+    TError,
+    { data: ExcelTemplateBody },
+    TContext
+> => {
+    const mutationKey = ['excelTemplate']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof excelTemplate>>,
+        { data: ExcelTemplateBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return excelTemplate(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExcelTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof excelTemplate>>>
+export type ExcelTemplateMutationBody = ExcelTemplateBody
+export type ExcelTemplateMutationError = unknown
+
+export const useExcelTemplate = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof excelTemplate>>,
+            TError,
+            { data: ExcelTemplateBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof excelTemplate>>,
+    TError,
+    { data: ExcelTemplateBody },
+    TContext
+> => {
+    const mutationOptions = getExcelTemplateMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

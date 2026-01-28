@@ -317,10 +317,12 @@ const ReviewCriteriaEvaluationSubpage = ({
                                                                             $Enums.EvaluationStatus
                                                                                 .PENDING &&
                                                                             status !==
-                                                                                $Enums.EvaluationStatus
+                                                                                $Enums
+                                                                                    .EvaluationStatus
                                                                                     .COMPLETED &&
                                                                             status !==
-                                                                                $Enums.EvaluationStatus
+                                                                                $Enums
+                                                                                    .EvaluationStatus
                                                                                     .APPROVED && (
                                                                                 <div className="flex justify-end mb-4">
                                                                                     <Button
