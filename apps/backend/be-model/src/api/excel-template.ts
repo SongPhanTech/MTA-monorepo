@@ -78,7 +78,7 @@ app.openapi(
             const rowOffset = currentRow - 1
 
             // Copy all rows with full formatting
-            sheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            sheet.eachRow({ includeEmpty: true }, (row) => {
                 const newRow = mergedSheet.getRow(currentRow)
 
                 // Copy row height
