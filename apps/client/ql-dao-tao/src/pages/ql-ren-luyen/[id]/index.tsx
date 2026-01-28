@@ -565,7 +565,8 @@ export default function SubjectClassScore() {
                                                     <Popconfirm
                                                         title="Bạn có chắc chắn muốn từ chối?"
                                                         onConfirm={(e) => {
-                                                            if (record.scoreId) handleReject(record.scoreId)
+                                                            if (record.scoreId)
+                                                                handleReject(record.scoreId)
                                                             e?.stopPropagation()
                                                         }}
                                                         onCancel={(e) => e?.stopPropagation()}
@@ -573,7 +574,10 @@ export default function SubjectClassScore() {
                                                         <Button
                                                             type="text"
                                                             danger
-                                                            disabled={record.scoreStatus === 'REJECTED' || !record.scoreId}
+                                                            disabled={
+                                                                record.scoreStatus === 'REJECTED' ||
+                                                                !record.scoreId
+                                                            }
                                                             icon={<X size={18} />}
                                                             onClick={(e) => e.stopPropagation()}
                                                         />

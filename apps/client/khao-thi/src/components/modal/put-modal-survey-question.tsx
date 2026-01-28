@@ -67,7 +67,11 @@ const PutSurveyQuestionModal = () => {
 
         try {
             showSpinner()
-            if (input?.type === 'SINGLE' && output.type === 'SINGLE_CHOICE' && output.specificChoice?.length>0) {
+            if (
+                input?.type === 'SINGLE' &&
+                output.type === 'SINGLE_CHOICE' &&
+                output.specificChoice?.length > 0
+            ) {
                 if (input?.id) {
                     if (output.specificChoice?.length > 0) {
                         const res = await sqlTransaction([

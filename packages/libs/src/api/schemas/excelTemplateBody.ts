@@ -11,4 +11,6 @@ export type ExcelTemplateBody = {
     payload: ExcelTemplateBodyPayloadItem[]
     fileName: string
     path: string
+    /** Có hiển thị lưới trong Excel hay không */
+    showGridLines?: boolean
 }
