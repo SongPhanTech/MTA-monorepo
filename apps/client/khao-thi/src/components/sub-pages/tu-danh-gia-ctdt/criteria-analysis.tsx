@@ -10,8 +10,6 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
-import { useStore } from '@tanstack/react-store'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
 import {
     $Enums,
@@ -20,8 +18,7 @@ import {
     type EvaluationCriterionComment,
     type StandardPeriod,
 } from '@workspace/db/client'
-import { useUpdateAnalysisCriterion, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import { useUpdateAnalysisCriterion } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Badge, Button, Empty, message, Popconfirm, Tag } from 'antd'
@@ -64,7 +61,6 @@ const CriteriaAnalysisSubPage = ({
     const [statusFilter, setStatusFilter] = useState<$Enums.EvaluationCriterionStatus | null>(null)
     const [deadlineFilter, setDeadlineFilter] = useState<string | null>(null)
     const { can } = useAbility()
-    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { onOpen } = useDisclosure<{
         id?: string
@@ -84,64 +80,6 @@ const CriteriaAnalysisSubPage = ({
     }
 
     const { mutateAsync: updateCriterion } = useUpdateAnalysisCriterion()
-    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
-
-    const checkAndUpdateStatusPeriodStatus = async () => {
-        if (!selectedEvaluationPeriodId) return
-
-        try {
-            const totalCriteria = await sqlTransaction([
-                {
-                    model: 'AnalysisCriterion',
-                    operation: 'count',
-                    data: {
-                        where: {
-                            criterionPeriod: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                            deletedAt: null,
-                        },
-                    },
-                },
-            ])
-
-            const submittedCriteria = await sqlTransaction([
-                {
-                    model: 'AnalysisCriterion',
-                    operation: 'count',
-                    data: {
-                        where: {
-                            criterionPeriod: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                            status: $Enums.EvaluationCriterionStatus.SUBMITTED,
-                            deletedAt: null,
-                        },
-                    },
-                },
-            ])
-
-            if (
-                (totalCriteria.data[0] as number) > 0 &&
-                totalCriteria.data[0] === submittedCriteria.data[0]
-            ) {
-                await updateEvaluationPeriod({
-                    where: {
-                        id: selectedEvaluationPeriodId,
-                    },
-                    data: {
-                        status: $Enums.EvaluationPeriodStatus.SECRETARY_REVIEW,
-                    },
-                })
-            }
-        } catch (error) {
-            console.error('Error updating evaluation period status:', error)
-        }
-    }
 
     const handleSubmitCriterion = async (analysisCriterionId: string) => {
         try {
@@ -154,8 +92,6 @@ const CriteriaAnalysisSubPage = ({
                     status: $Enums.EvaluationCriterionStatus.SUBMITTED,
                 },
             })
-
-            await checkAndUpdateStatusPeriodStatus()
 
             message.success('Nộp tiêu chí thành công.')
         } catch (error) {
@@ -195,8 +131,6 @@ const CriteriaAnalysisSubPage = ({
                     })
                 )
             )
-
-            await checkAndUpdateStatusPeriodStatus()
 
             message.success(`Nộp thành công ${criteriaToSubmit.length} tiêu chí.`)
             refetch()
@@ -283,14 +217,10 @@ const CriteriaAnalysisSubPage = ({
                                 </Button>
                             </Popconfirm>
                         )}
-                    {can(
-                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-                        'XEM_TAT_CA'
-                    ) && (
-                        <Button type="primary" size="small" onClick={handleViewAll}>
-                            Xuất file
-                        </Button>
-                    )}
+
+                    <Button type="primary" size="small" onClick={handleViewAll}>
+                        Xuất file
+                    </Button>
                 </div>
             </div>
             {!filteredCriteria || filteredCriteria.length === 0 ? (

@@ -205,7 +205,11 @@ export default function EvaluationCouncilTab() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {tableDataCollapse.length === 0 ? (
-                        <Flex justify="center" align="center" style={{ minHeight: 800 }}>
+                        <Flex
+                            justify="center"
+                            align="center"
+                            style={{ minHeight: 'calc(100vh - 200px)' }}
+                        >
                             <Empty
                                 description="Chưa có thành viên nào"
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
