@@ -122,8 +122,8 @@ const PutSurveyQuestionGroupModal = () => {
             className="w-[600px]"
         >
             <Col span={24}>
-                <FormItem form={form} name="name" label="Tên nhóm câu hỏi khảo sát" required>
-                    <Input placeholder="Nhập tên nhóm câu hỏi khảo sát" />
+                <FormItem form={form} name="name" label="Tên nhóm câu hỏi" required>
+                    <Input placeholder="Nhập tên nhóm câu hỏi" />
                 </FormItem>
             </Col>
             <Col span={24}>

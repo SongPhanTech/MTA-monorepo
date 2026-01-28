@@ -64,7 +64,7 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
                 surveyTopic: true,
                 surveyQuestion: true,
             },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { createdAt: 'asc' },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
@@ -175,7 +175,7 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Tên nhóm câu hỏi khảo sát',
+                                title: 'Tên nhóm câu hỏi',
                                 dataIndex: 'name',
                                 type: 'input',
                             },
