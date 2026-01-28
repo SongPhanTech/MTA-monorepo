@@ -1,43 +1,76 @@
 import Table from '@components/commons/table'
 import { useStore } from '@tanstack/react-store'
-import { useFindUniqueExamList } from '@workspace/db/hooks'
-import { useSaveExamScore } from '@workspace/libs/api/training'
+import { useFindManyExamPaper } from '@workspace/db/hooks'
+import { getExportSubjectClassScoreUrl, useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { validateExamScore } from '@lib/utils'
-import { diemPhongThiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
+import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
+import { Printer } from 'lucide-react'
+import { getRuntimeEnv } from '@workspace/libs/utils'
+import { getUrl } from '@workspace/libs/api/custom-instance'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
-    const { selectedExamListId } = useStore(diemPhongThiStore)
-    const { data: examList, refetch } = useFindUniqueExamList(
+    const { examId } = useStore(kythiStore)
+    const { data: examPapers = [], refetch } = useFindManyExamPaper(
         {
-            where: { id: selectedExamListId },
+            where: {
+                examList: {
+                    examRoom: {
+                        examId,
+                    },
+                },
+                studentSubjectScore: {
+                    suspended: false,
+                    examBanned: false,
+                    examPostponed: false,
+                },
+            },
             include: {
-                examPapers: {
+                studentSubjectScore: {
                     include: {
-                        studentSubjectScore: {
+                        student: {
                             include: {
-                                student: {
+                                userProfile: true,
+                                fixedClass: true,
+                            },
+                        },
+                        subjectClass: {
+                            include: {
+                                fixedClasses: {
                                     include: {
-                                        userProfile: true,
+                                        trainingCourse: true,
                                     },
                                 },
                             },
                         },
+                        subjectVersion: true,
                     },
-                    orderBy: { examCode: 'asc' },
                 },
             },
+            orderBy: {
+                examCode: 'asc',
+            },
         },
-        { enabled: !!selectedExamListId }
+        { enabled: !!examId }
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <need selectedExamListId>
+    const { onOpen: openXemTaiLieu } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+        mode?: 'view' | 'edit'
+        convertTo?: string
+    }>({
+        tag: 'XemTaiLieu',
+    })
+
     useEffect(() => {
-        if (examList) {
+        if (examPapers) {
             form.setFieldsValue({
-                list: examList.examPapers.reduce(
+                list: examPapers.reduce(
                     (acc, curr) => {
                         acc[curr.id] = {
                             score: curr.studentSubjectScore?.examScore ?? null,
@@ -48,7 +81,7 @@ export default function NhapDiemPhach() {
                 ),
             })
         }
-    }, [selectedExamListId, examList, form])
+    }, [examPapers, form])
 
     const handleSave = () => {
         Modal.confirm({
@@ -93,6 +126,26 @@ export default function NhapDiemPhach() {
         <div className="max-w-screen-sm">
             <Col span={24}>
                 <Flex justify="end" align="center">
+                    <Button
+                        onClick={() => {
+                            openXemTaiLieu({
+                                uri: getUrl(
+                                    getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                        'https://api.daotao.mta.swantech.vn',
+                                    `${getExportSubjectClassScoreUrl({
+                                        examId: examId,
+                                        type: 'KEM-PHACH',
+                                    })}`
+                                ),
+                                name: 'Điểm kèm phách',
+                                mimeType: 'xlsx',
+                                convertTo: 'pdf',
+                            })
+                        }}
+                    >
+                        <Printer />
+                        In phiếu điểm kèm phách
+                    </Button>
                     <Button
                         type="primary"
                         onClick={() => {
@@ -146,13 +199,31 @@ export default function NhapDiemPhach() {
                                                     style={{ width: '100%' }}
                                                     step={0.1}
                                                     controls={false}
+                                                    parser={(value) => {
+                                                        if (!value) return ''
+                                                        const num = Number(value)
+                                                        if (Number.isNaN(num)) return ''
+                                                        return num > 10
+                                                            ? Number((num / 10).toFixedSmart(2))
+                                                            : num
+                                                    }}
+                                                    formatter={(value) => {
+                                                        if (!value) return ''
+                                                        const num = Number(value)
+                                                        if (Number.isNaN(num)) return ''
+                                                        return num > 10
+                                                            ? (num / 10).toFixedSmart(2)
+                                                            : num.toString()
+                                                    }}
                                                 />
                                             </Form.Item>
                                         )
                                     },
                                 },
                             ]}
-                            data={examList?.examPapers}
+                            maxHeight={'calc(100vh - 390px)'}
+                            scrollable
+                            data={examPapers}
                             pagination={false}
                         />
                     </Form.Item>

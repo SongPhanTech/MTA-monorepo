@@ -282,7 +282,7 @@ const PutTieuChiMinhChungModal = () => {
 
             // Call refetch callback if provided
             if (input?.refetch) {
-                await input.refetch()
+                input.refetch()
             }
 
             onClose()
@@ -420,7 +420,7 @@ const PutTieuChiMinhChungModal = () => {
             open={isOpen}
             onCancel={onClose}
             onFinish={onOk}
-            className="w-[50vw] top-2"
+            className="w-[70vw] top-2"
         >
             <Col span={24}>
                 <FormItem form={form} label="Yêu cầu tiêu chí" name="name" required>
@@ -479,7 +479,7 @@ const PutTieuChiMinhChungModal = () => {
                 </Form.Item>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="order" label="Thứ tự" required>
+                <FormItem form={form} name="order" label="Thứ tự" required hidden>
                     <InputNumber className="w-full" placeholder="Thứ tự" disabled={true} />
                 </FormItem>
             </Col>
@@ -576,20 +576,20 @@ const PutTieuChiMinhChungModal = () => {
                                             <FormItem
                                                 form={evidenceForm}
                                                 name="information"
-                                                label="Thông tin minh chứng"
+                                                label="Số ngày/tháng ban hành"
                                                 required
                                             >
-                                                <TextArea placeholder="Nhập thông tin minh chứng" />
+                                                <TextArea placeholder="Nhập số ngày/tháng ban hành" />
                                             </FormItem>
                                         </Col>
                                         <Col span={12}>
                                             <FormItem
                                                 form={evidenceForm}
                                                 name="issuer"
-                                                label="Người thực hiện"
+                                                label="Nơi ban hành"
                                                 required
                                             >
-                                                <Input placeholder="Nhập người thực hiện" />
+                                                <Input placeholder="Nhập nơi ban hành" />
                                             </FormItem>
                                         </Col>
                                     </Row>
@@ -598,7 +598,7 @@ const PutTieuChiMinhChungModal = () => {
                                             <FormItem
                                                 form={evidenceForm}
                                                 name="evidenceFile"
-                                                label="Tệp bằng chứng"
+                                                label="Tệp minh chứng"
                                             >
                                                 <DocumentPaths
                                                     form={evidenceForm}

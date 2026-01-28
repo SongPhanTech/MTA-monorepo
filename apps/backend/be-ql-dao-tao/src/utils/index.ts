@@ -172,6 +172,7 @@ export const buildCurriculumMapOrThrow = async (
     prisma: PrismaClient,
     students: CurriculumData[],
     trainingObjectTypeId: string,
+    trainingCourseName: string,
     createMissing = false
 ) => {
     const categorySet = new Set<string>(
@@ -248,9 +249,10 @@ ${missing
     if (missing.length && createMissing) {
         await prisma.$transaction(async (tx) => {
             for (const item of missing) {
+                const curriculumName = `${item.trainingMajor} - ${trainingCourseName}`
                 let curriculum = await tx.curriculum.findFirst({
                     where: {
-                        name: item.curriculum,
+                        name: curriculumName,
                         trainingObjectTypeId,
                         ...(item.trainingMajor
                             ? { trainingMajor: { name: item.trainingMajor } }
@@ -277,7 +279,7 @@ ${missing
 
                     curriculum = await tx.curriculum.create({
                         data: {
-                            name: item.curriculum,
+                            name: curriculumName,
                             trainingMajorId: major.id,
                             trainingObjectTypeId,
                             managementOrganizationId: major.organizationId,

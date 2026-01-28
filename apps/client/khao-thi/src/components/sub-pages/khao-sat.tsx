@@ -24,6 +24,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Link } from 'lucide-react'
 
 function TabDotKhaoSat({
     selectedId,
@@ -366,7 +367,7 @@ function TabDotKhaoSat({
                             },
                             {
                                 title: 'Thao tác',
-                                width: 120,
+                                width: 150,
                                 align: 'center',
                                 hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -435,7 +436,8 @@ function TabDotKhaoSat({
                                                     title={'Lấy đường dẫn khảo sát công khai'}
                                                     placement="top"
                                                 >
-                                                    <EyeOutlined
+                                                    <Link
+                                                        size={16}
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             onOpenKhaoSat({
@@ -444,7 +446,6 @@ function TabDotKhaoSat({
                                                             })
                                                             // router.push(`/lam-khao-sat/${id}`)
                                                         }}
-                                                        style={{ fontSize: '16px' }}
                                                     />
                                                 </Tooltip>
                                             )}

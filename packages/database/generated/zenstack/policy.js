@@ -2384,6 +2384,19 @@ const policy = {
                 update: {},
             },
         },
+        specificChoice: {
+            modelLevel: {
+                read: { guard: SpecificChoice_read, },
+                create: { guard: SpecificChoice_create, inputChecker: SpecificChoice_create_input, },
+                update: { guard: SpecificChoice_update, },
+                postUpdate: { guard: SpecificChoice_postUpdate, },
+                delete: { guard: SpecificChoice_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         surveyChoice: {
             modelLevel: {
                 read: { guard: SurveyChoice_read, },
@@ -3531,6 +3544,7 @@ const policy = {
         clusterSurvey: { hasValidation: false },
         survey: { hasValidation: false },
         surveyQuestion: { hasValidation: false },
+        specificChoice: { hasValidation: false },
         surveyChoice: { hasValidation: false },
         surveySession: { hasValidation: false },
         surveyResponse: { hasValidation: false },
@@ -17829,6 +17843,84 @@ function SurveyQuestion_delete(context, db) {
     return { OR: [] };
 }
 function $check_SurveyQuestion_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SpecificChoice_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SpecificChoice_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SpecificChoice_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SpecificChoice_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SpecificChoice_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SpecificChoice_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SpecificChoice_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SpecificChoice_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SpecificChoice_postUpdate(input, context) {
+    return true;
+}
+function SpecificChoice_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SpecificChoice_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

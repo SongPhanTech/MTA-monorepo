@@ -37,6 +37,7 @@ const relationSchema = z.object({
     survey: z.array(z.unknown()).optional(),
     clusterSurvey: z.array(z.unknown()).optional(),
     surveyResponses: z.array(z.unknown()).optional(),
+    specificChoice: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

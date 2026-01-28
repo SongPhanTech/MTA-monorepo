@@ -20,6 +20,10 @@ const baseSchema = z.object({
     startDate: z.coerce.date().default(() => new Date()),
     endDate: z.coerce.date().nullish(),
     status: EvaluationPeriodStatusSchema,
+    overviewProblem: z.string().nullish(),
+    overviewGeneral: z.string().nullish(),
+    overviewResults: z.string().nullish(),
+    conclude: z.string().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -35,6 +39,10 @@ const baseSchemaWithoutDefaults = z.object({
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
     status: EvaluationPeriodStatusSchema,
+    overviewProblem: z.string().nullish(),
+    overviewGeneral: z.string().nullish(),
+    overviewResults: z.string().nullish(),
+    conclude: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -84,7 +92,11 @@ export const EvaluationPeriodPrismaUpdateSchema = z.object({
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
-    status: EvaluationPeriodStatusSchema
+    status: EvaluationPeriodStatusSchema,
+    overviewProblem: z.string().nullish(),
+    overviewGeneral: z.string().nullish(),
+    overviewResults: z.string().nullish(),
+    conclude: z.string().nullish()
 }).partial().passthrough();
 
 

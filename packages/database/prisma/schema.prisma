@@ -282,6 +282,7 @@ enum DecisionStatus {
 enum TrainingScoreStatus {
   PENDING
   APPROVED
+  REJECTED
 
   @@schema("ql-dao-tao")
 }
@@ -508,6 +509,7 @@ enum CriteriaField {
   CUMULATIVE_PASSED_CREDITS
   CUMULATIVE_DEBT_CREDITS
   CUMULATIVE_PROGRESS_PERCENT
+  CUMULATIVE_RETAKE_PERCENT
   ACADEMIC_WARNING_LEVEL
   DISCIPLINARY_WARNING_LEVEL
   REPEAT_YEAR_COUNT
@@ -4814,23 +4816,27 @@ model SupervisorPaymentRecord {
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod {
-  id            String                 @id() @default(cuid())
-  code          String?                @unique()
-  active        Boolean                @default(true)
-  description   String?                @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime               @default(now())
-  updatedAt     DateTime               @default(now()) @updatedAt()
-  createdBy     String?                @db.Uuid()
-  name          String
-  startDate     DateTime               @default(now())
-  endDate       DateTime?
-  status        EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
-  schoolYear    SchoolYear?            @relation(fields: [schoolYearId], references: [id])
-  schoolYearId  String?
-  standards     StandardPeriod[]
-  council       EvaluationCouncil?
-  documentFiles DocumentFile[]
+  id              String                 @id() @default(cuid())
+  code            String?                @unique()
+  active          Boolean                @default(true)
+  description     String?                @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @default(now()) @updatedAt()
+  createdBy       String?                @db.Uuid()
+  name            String
+  startDate       DateTime               @default(now())
+  endDate         DateTime?
+  status          EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
+  schoolYear      SchoolYear?            @relation(fields: [schoolYearId], references: [id])
+  schoolYearId    String?
+  standards       StandardPeriod[]
+  council         EvaluationCouncil?
+  documentFiles   DocumentFile[]
+  overviewProblem String?
+  overviewGeneral String?
+  overviewResults String?
+  conclude        String?
 
   @@schema("khao-thi")
 }
@@ -5290,6 +5296,23 @@ model SurveyQuestion {
   survey                Survey[]
   clusterSurvey         ClusterSurvey[]
   surveyResponses       SurveyResponse[]
+  specificChoice        SpecificChoice[]
+
+  @@schema("khao-thi")
+}
+
+model SpecificChoice {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @db.Uuid()
+  answer           String
+  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
+  surveyQuestionId String
 
   @@schema("khao-thi")
 }

@@ -238,7 +238,7 @@ const ExportTemplateStudent = () => {
         <Flex>
             <Button
                 className="px-4 py-1"
-                href={getMinioUrl('mta/template/MauImportDSHV.xls')}
+                href={getMinioUrl('mta/template/MauImportDSHV.xlsx')}
                 type="primary"
             >
                 <DownloadOutlined />

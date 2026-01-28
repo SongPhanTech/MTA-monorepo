@@ -6,6 +6,7 @@
  */
 import type { GetSurveyResultSurveyQuestionItemType } from './getSurveyResultSurveyQuestionItemType'
 import type { GetSurveyResultSurveyQuestionItemSurveyQuestionGroup } from './getSurveyResultSurveyQuestionItemSurveyQuestionGroup'
+import type { GetSurveyResultSurveyQuestionItemSpecificChoiceItem } from './getSurveyResultSurveyQuestionItemSpecificChoiceItem'
 
 export type GetSurveyResultSurveyQuestionItem = {
     id: string
@@ -26,4 +27,5 @@ export type GetSurveyResultSurveyQuestionItem = {
     type: GetSurveyResultSurveyQuestionItemType
     /** @nullable */
     surveyQuestionGroup: GetSurveyResultSurveyQuestionItemSurveyQuestionGroup
+    specificChoice: GetSurveyResultSurveyQuestionItemSpecificChoiceItem[]
 }

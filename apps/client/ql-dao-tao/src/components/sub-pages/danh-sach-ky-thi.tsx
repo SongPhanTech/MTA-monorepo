@@ -134,11 +134,13 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                                     debouncedRefetch()
                                 },
                                 onDoubleClick: () => {
-                                    setActiveKey('11')
+                                    setActiveKey('2')
                                 },
                                 className: cn(examId === record.id ? 'bg-orange-200' : ''),
                             }
                         }}
+                        maxHeight={'calc(100vh - 390px)'}
+                        scrollable
                         columns={[
                             {
                                 title: 'TT',

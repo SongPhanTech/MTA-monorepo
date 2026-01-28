@@ -169,10 +169,8 @@ const ModalPrintExamClusterSurvey = () => {
                                 pagination={false}
                             />
                         </Col>
-                        <Col span={24} className="text-[14px] text-[#e80808] mb-4">
-                            Nếu ở mức (*), bạn phải ghi rõ lý do
-                        </Col>
-                        <Col span={24} className="mb-3">
+
+                        <Col span={24} className="my-3">
                             <Table
                                 rowKey="id"
                                 dataSource={data?.surveyQuestion || []}

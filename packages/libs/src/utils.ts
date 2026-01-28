@@ -1,4 +1,4 @@
-import "core-js/proposals/array-grouping-v2"
+import 'core-js/proposals/array-grouping-v2'
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 import { SubjectClassType } from '@workspace/db'
 import dayjs from 'dayjs'
@@ -198,6 +198,7 @@ declare global {
         compare(otherArray: T[], cb: (a: T, b: T) => boolean): boolean
         uniqueByKey<K extends keyof T>(key: K): T[]
         flatten<K extends keyof T>(key: K): T[]
+        sortVietnameseName<K extends keyof T>(key: K): T[]
     }
 }
 
@@ -267,6 +268,26 @@ Array.prototype.uniqueByKey = function <T, K extends keyof T>(this: T[], key: K)
             return true
         }
         return false
+    })
+}
+
+Array.prototype.sortVietnameseName = function <T, K extends keyof T>(this: T[], key: K) {
+    return this.sort((a, b) => {
+        const splitName = (name: string) => {
+            const parts = name.trim().split(' ')
+            return {
+                firstName: parts.pop() ?? '',
+                lastName: parts.shift() ?? '',
+                middleName: parts.join(' '),
+            }
+        }
+        const nameA = splitName(a[key] as unknown as string)
+        const nameB = splitName(b[key] as unknown as string)
+        return (
+            nameA.firstName.localeCompare(nameB.firstName, 'vi') ||
+            nameA.lastName.localeCompare(nameB.lastName, 'vi') ||
+            nameA.middleName.localeCompare(nameB.middleName, 'vi')
+        )
     })
 }
 

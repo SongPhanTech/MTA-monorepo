@@ -1,10 +1,9 @@
 import { EyeOutlined } from '@ant-design/icons'
-import TableCollapse from '@components/commons/tableCollapse'
+import TableIndexCollapse from '@components/commons/table-collapse-index'
 import type { FilterProps } from '@components/commons/typeFilter'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
 import { $Enums } from '@workspace/db/client'
@@ -15,18 +14,14 @@ import {
     useFindManyStandardCatalog,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingProgram() {
     const { can, canSome } = useAbility()
-    const router = useRouter()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         order: undefined,
         name: '',
@@ -103,8 +98,6 @@ export default function TrainingProgram() {
             },
         },
         orderBy: [{ order: 'asc' }],
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: count } = useCountStandardCatalog({
@@ -195,7 +188,7 @@ export default function TrainingProgram() {
                 </Col>
 
                 <Col span={24}>
-                    <TableCollapse
+                    <TableIndexCollapse
                         rowKey="id"
                         headerTitleKey={({ order, name }) =>
                             `${[order, name].filter(Boolean).join(' - ')}`
@@ -208,7 +201,6 @@ export default function TrainingProgram() {
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
-                            setCurrentPage(1)
                         }}
                         headerRight={(record) => (
                             <div className="flex px-3 gap-2.5 items-center justify-end">
@@ -289,19 +281,6 @@ export default function TrainingProgram() {
                                     })()}
                             </div>
                         )}
-                        // onRowClick={({ id }) => {
-                        //     if (
-                        //         id &&
-                        //         can(
-                        //             KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                        //             'XEM'
-                        //         )
-                        //     ) {
-                        //         router.push(
-                        //             `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI}/${id}`
-                        //         )
-                        //     }
-                        // }}
                         columns={[
                             {
                                 title: 'Tiêu chí',
@@ -378,19 +357,7 @@ export default function TrainingProgram() {
                             },
                         ]}
                         data={data}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>

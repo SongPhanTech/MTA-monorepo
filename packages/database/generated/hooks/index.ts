@@ -187,6 +187,7 @@ export * from './survey-question-group';
 export * from './cluster-survey';
 export * from './survey';
 export * from './survey-question';
+export * from './specific-choice';
 export * from './survey-choice';
 export * from './survey-session';
 export * from './survey-response';

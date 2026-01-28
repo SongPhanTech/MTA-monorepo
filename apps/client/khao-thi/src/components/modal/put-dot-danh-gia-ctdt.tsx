@@ -3,13 +3,19 @@ import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import { SelecterSchoolYear } from '@components/selecter-school-year'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
 import { createId, type EvaluationPeriod } from '@workspace/db'
 import type { DocumentFile } from '@workspace/db/client'
-import { useFindUniqueEvaluationPeriod, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import {
+    useCreateEvaluationCouncil,
+    useCreateEvaluationPeriod,
+    useFindManySchoolYear,
+    useFindUniqueEvaluationPeriod,
+    useUpdateEvaluationCouncil,
+    useUpdateEvaluationPeriod,
+} from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -20,18 +26,12 @@ export type PutEvaluationPeriod = EvaluationPeriod & {
     documentFiles?: DocumentFile[]
 }
 dayjs.locale('vi')
-interface TreeNodeType {
-    value: string
-    title: React.ReactNode
-    children?: TreeNodeType[]
-    selectable?: boolean
-}
 
 const PutEvaluationPeriod = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutEvaluationPeriod>()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
+    const idProfile = me?.sDM_NhanVienId
     const {
         isOpen,
         onClose,
@@ -42,16 +42,27 @@ const PutEvaluationPeriod = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
+    const { data: schoolYears = [] } = useFindManySchoolYear(
+        {
+            orderBy: {
+                startDate: 'desc',
+            },
+        },
+        {
+            enabled: isOpen,
+        }
+    )
+
     const { data: initialData } = useFindUniqueEvaluationPeriod(
         { where: { id }, include: { council: true, documentFiles: true } },
         { enabled: !!id }
     )
 
-    const filterTreeNode = (input: string, treeNode: any) => {
-        return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
-    }
-
+    const { mutateAsync: createEvaluationPeriod } = useCreateEvaluationPeriod()
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
+    const { mutateAsync: createEvaluationCouncil } = useCreateEvaluationCouncil()
+    const { mutateAsync: updateEvaluationCouncil } = useUpdateEvaluationCouncil()
+
     async function onOk(output?: PutEvaluationPeriod) {
         console.log(output)
 
@@ -67,90 +78,92 @@ const PutEvaluationPeriod = () => {
                 createdBy: idProfile,
             }
             if (id) {
-                await updateEvaluationPeriod({
-                    data: {
-                        ...data,
-                        documentFiles: {
-                            upsert: (output.documentFiles || [])
-                                .filter((file) => !!file.id)
-                                .map((file) => ({
-                                    where: {
-                                        id: file.id,
-                                    },
-                                    create: {
-                                        name: file.name,
-                                        path: file.path,
-                                        mimeType: file.mimeType,
-                                        size: file.size,
-                                        evaluationPeriod: {
-                                            connect: {
-                                                id,
+                await Promise.all([
+                    updateEvaluationPeriod({
+                        data: {
+                            ...data,
+                            documentFiles: {
+                                upsert: (output.documentFiles || [])
+                                    .filter((file) => !!file.id)
+                                    .map((file) => ({
+                                        where: {
+                                            id: file.id,
+                                        },
+                                        create: {
+                                            name: file.name,
+                                            path: file.path,
+                                            mimeType: file.mimeType,
+                                            size: file.size,
+                                            evaluationPeriod: {
+                                                connect: {
+                                                    id,
+                                                },
                                             },
                                         },
-                                    },
-                                    update: {
-                                        name: file.name,
-                                        path: file.path,
-                                        mimeType: file.mimeType,
-                                        size: file.size,
-                                    },
-                                })),
-                            create: (output.documentFiles || [])
-                                .filter((file) => !file.id)
-                                .map((file) => ({
-                                    name: file.name,
-                                    path: file.path,
-                                    mimeType: file.mimeType,
-                                    size: file.size,
-                                })),
-                            disconnect: document
-                                .filter(
-                                    (existing) =>
-                                        !output.documentFiles?.some((f) => f.id === existing.id)
-                                )
-                                .map((file) => ({ id: file.id })),
-                        },
-                    },
-                    where: { id },
-                })
-                message.success('Cập nhật thành công')
-            } else {
-                const periodId = createId()
-                const res = await sqlTransaction([
-                    {
-                        model: 'EvaluationPeriod',
-                        operation: 'create',
-                        data: {
-                            data: {
-                                id: periodId,
-                                ...data,
-                                documentFiles: {
-                                    create: (output.documentFiles || []).map((file) => ({
+                                        update: {
+                                            name: file.name,
+                                            path: file.path,
+                                            mimeType: file.mimeType,
+                                            size: file.size,
+                                        },
+                                    })),
+                                create: (output.documentFiles || [])
+                                    .filter((file) => !file.id)
+                                    .map((file) => ({
                                         name: file.name,
                                         path: file.path,
                                         mimeType: file.mimeType,
                                         size: file.size,
                                     })),
-                                },
+                                disconnect: document
+                                    .filter(
+                                        (existing) =>
+                                            !output.documentFiles?.some((f) => f.id === existing.id)
+                                    )
+                                    .map((file) => ({ id: file.id })),
                             },
                         },
-                    },
-                    {
-                        model: 'EvaluationCouncil',
-                        operation: 'create',
+                        where: { id },
+                    }),
+
+                    updateEvaluationCouncil({
                         data: {
-                            data: {
-                                name: output.name,
-                                periodId,
-                                createdBy: idProfile,
-                            },
+                            name: output.name,
+                            createdBy: idProfile,
+                        },
+                        where: {
+                            periodId: id,
+                        },
+                    }),
+                ])
+
+                message.success('Cập nhật thành công')
+            } else {
+                const periodId = createId()
+
+                await createEvaluationPeriod({
+                    data: {
+                        id: periodId,
+                        ...data,
+                        documentFiles: {
+                            create: (output.documentFiles || []).map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
                         },
                     },
-                ])
-                if (res.status !== 200) {
-                    message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-                    return
-                }
+                })
+
+                await createEvaluationCouncil({
+                    data: {
+                        name: output.name,
+                        periodId,
+                        createdBy: idProfile,
+                    },
+                })
+
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
@@ -189,7 +202,7 @@ const PutEvaluationPeriod = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa đợt đánh giá CTĐT' : 'Thêm mới đợt đánh giá CTĐT'}
-            className="w-[60vw]"
+            className="w-[60vw] top-2"
         >
             <Col span={16}>
                 <FormItem form={form} name="name" label="Tên đợt đánh giá" required>
@@ -197,24 +210,36 @@ const PutEvaluationPeriod = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem form={form} name="schoolYearId" label="Kỳ học" required>
-                    <SelecterSchoolYear />
+                <FormItem form={form} name="schoolYearId" label="Năm học" required>
+                    <Select
+                        className="w-full"
+                        placeholder="Chọn năm học"
+                        options={schoolYears.map((year) => ({
+                            label: year.name,
+                            value: year.id,
+                        }))}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
+                <FormItem
+                    form={form}
+                    name="startDate"
+                    label="Ngày bắt đầu"
+                    initialValue={dayjs()}
+                    required
+                >
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',
                             type: 'mask',
                         }}
                         className="w-full"
-                        defaultValue={dayjs()}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="endDate" label="Ngày kết thúc">
+                <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',
@@ -239,7 +264,7 @@ const PutEvaluationPeriod = () => {
                     <DocumentPaths
                         form={form}
                         data={document}
-                        relationId={id ?? ''}
+                        relationId={id || ''}
                         relationType="evaluationPeriodId"
                         titleForm="documentFiles"
                     />

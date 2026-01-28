@@ -12,6 +12,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import ApimLogsApp from './api/apim-logs'
 import AuthApp from './api/auth'
 import ExcelImportExportApp from './api/excel-import-export'
+import ExcelTemplateApp from './api/excel-template'
 import MinIOApp from './api/minio'
 import SqlTransactionApp from './api/transaction'
 import WSO2AmApp from './api/wso2am'
@@ -72,6 +73,7 @@ app.route('/api/auth', AuthApp)
 app.route('/api/apim-logs', ApimLogsApp)
 app.route('/api/wso2am', WSO2AmApp)
 app.route('/api/excel-import-export', ExcelImportExportApp)
+app.route('/api/excel-template', ExcelTemplateApp)
 // TODO!: remove `/check`
 app.use('/api/check/*', jwtAuth('lms'))
 // setupAuth(app)

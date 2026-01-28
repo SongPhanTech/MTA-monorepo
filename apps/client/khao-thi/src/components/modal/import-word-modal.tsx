@@ -10,7 +10,7 @@ import { Button, Modal, message, Table, Col, Select, Radio, Form, Row } from 'an
 import { XMLParser } from 'fast-xml-parser'
 import PizZip from 'pizzip'
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface WordImportModalInput {
@@ -26,6 +26,7 @@ const WordImportModal: React.FC = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const [storageType, setStorageType] = useState<'khung' | 'kho'>('khung')
     const [form] = Form.useForm()
+
     const { isOpen, onClose, input } = useDisclosure<WordImportModalInput>({
         tag: 'WordImportModal',
         onClose: () => {
@@ -45,7 +46,6 @@ const WordImportModal: React.FC = () => {
     })
 
     const questionBankId = input?.questionBankId
-    const knowledgeBlockId = input?.knowledgeBlockId
     const DETECT_QUESTION_TYPE = (text: string): QuestionType | '' => {
         if (text.includes('SINGLE_CHOICE')) return QuestionType.SINGLE_CHOICE
         if (text.includes('MULTIPLE_CHOICE')) return QuestionType.MULTIPLE_CHOICE
@@ -725,9 +725,15 @@ const WordImportModal: React.FC = () => {
         },
     })
 
+    useEffect(() => {
+        if (storageType !== 'khung') {
+            form.resetFields(['knowledgeBlockId'])
+        }
+    }, [storageType, form])
+    const selectedKnowledgeBlockId = form.getFieldValue('knowledgeBlockId')
     const onOk = async () => {
         try {
-            if (storageType === 'khung' && !knowledgeBlockId) {
+            if (storageType === 'khung' && !selectedKnowledgeBlockId) {
                 message.error('Bạn phải chọn Chuẩn đầu ra khi lưu tại khung')
                 return
             }
@@ -736,6 +742,8 @@ const WordImportModal: React.FC = () => {
                 message.error('Bạn phải chọn Ngân hàng câu hỏi (Question Bank)!')
                 return
             }
+            console.log('storageType:', storageType)
+            console.log('selectedKnowledgeBlockId:', selectedKnowledgeBlockId)
 
             showSpinner()
             const selectedQuestions = questions.filter((_, index) =>
@@ -760,7 +768,9 @@ const WordImportModal: React.FC = () => {
                     point: q.point ?? 1,
                     isAutoGraded: false,
                     questionBankId,
-                    ...(storageType === 'khung' ? { knowledgeBlockId } : {}),
+                    ...(storageType === 'khung'
+                        ? { knowledgeBlockId: selectedKnowledgeBlockId }
+                        : {}),
                 }
 
                 if (
@@ -888,62 +898,66 @@ const WordImportModal: React.FC = () => {
                 </Button>,
             ]}
         >
-            <Row gutter={16} align="middle" style={{ marginBottom: 16 }}>
-                <input
-                    type="file"
-                    accept=".docx"
-                    onChange={(e) => {
-                        const file = e.target.files?.[0]
-                        if (file) {
-                            handleImport(file)
-                        }
-                        e.target.value = ''
-                    }}
-                    style={{ display: 'none' }}
-                    id="word-import-input"
-                />
-                <Col>
-                    <Button
-                        icon={<UploadOutlined />}
-                        onClick={() => document.getElementById('word-import-input')?.click()}
-                    >
-                        Chọn File Word
-                    </Button>
-                </Col>
-                <Col span={12}>
-                    <div>
-                        <div className="text-sm font-medium ">Vị trí lưu trữ</div>
-                        <Radio.Group
-                            value={storageType}
-                            onChange={(e) => setStorageType(e.target.value)}
+            <Form form={form} layout="vertical">
+                <Row gutter={16} align="middle" style={{ marginBottom: 16 }}>
+                    <input
+                        type="file"
+                        accept=".docx"
+                        onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (file) {
+                                handleImport(file)
+                            }
+                            e.target.value = ''
+                        }}
+                        style={{ display: 'none' }}
+                        id="word-import-input"
+                    />
+                    <Col>
+                        <Button
+                            icon={<UploadOutlined />}
+                            onClick={() => document.getElementById('word-import-input')?.click()}
                         >
-                            <Radio value="khung">Lưu tại khung</Radio>
-                            <Radio value="kho">Lưu tại kho</Radio>
-                        </Radio.Group>
-                    </div>
-                </Col>
-
-                {storageType === 'khung' && (
-                    <Col span={24}>
-                        <FormItem
-                            form={form}
-                            name="knowledgeBlockId"
-                            label="Chuẩn đầu ra"
-                            layout="vertical"
-                            required
-                        >
-                            <Select
-                                maxTagCount={'responsive'}
-                                placeholder="Chọn chuẩn đầu ra"
-                                options={knowledgeBlockData?.map(({ id, name }) => ({
-                                    value: id,
-                                    label: name,
-                                }))}
-                            />
-                        </FormItem>
+                            Chọn File Word
+                        </Button>
                     </Col>
-                )}
-            </Row>
+                    <Col span={24}>
+                        <div className="mt-2 mb-4">
+                            <div className="text-sm font-medium mb-2">Vị trí lưu trữ</div>
+                            <Radio.Group
+                                value={storageType}
+                                onChange={(e) => setStorageType(e.target.value)}
+                            >
+                                <Radio value="khung">Lưu tại khung</Radio>
+                                <Radio value="kho">Lưu tại kho</Radio>
+                            </Radio.Group>
+                        </div>
+                    </Col>
+
+                    {storageType === 'khung' && (
+                        <Col span={24}>
+                            <Col span={8}>
+                                <FormItem
+                                    form={form}
+                                    name="knowledgeBlockId"
+                                    label="Chuẩn đầu ra"
+                                    layout="vertical"
+                                    required
+                                >
+                                    <Select
+                                        maxTagCount={'responsive'}
+                                        placeholder="Chọn chuẩn đầu ra"
+                                        options={knowledgeBlockData?.map(({ id, name }) => ({
+                                            value: id,
+                                            label: name,
+                                        }))}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </Col>
+                    )}
+                </Row>
+            </Form>
 
             {loading && <div style={{ margin: '16px 0' }}>Đang đọc file...</div>}
 

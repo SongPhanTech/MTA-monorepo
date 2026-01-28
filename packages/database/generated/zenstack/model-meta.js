@@ -18671,6 +18671,22 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'evaluationPeriod',
+                }, overviewProblem: {
+                    name: "overviewProblem",
+                    type: "String",
+                    isOptional: true,
+                }, overviewGeneral: {
+                    name: "overviewGeneral",
+                    type: "String",
+                    isOptional: true,
+                }, overviewResults: {
+                    name: "overviewResults",
+                    type: "String",
+                    isOptional: true,
+                }, conclude: {
+                    name: "conclude",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20661,6 +20677,79 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'surveyQuestion',
+                }, specificChoice: {
+                    name: "specificChoice",
+                    type: "SpecificChoice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        specificChoice: {
+            name: 'SpecificChoice', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SpecificChoice$createdBy,
+                }, answer: {
+                    name: "answer",
+                    type: "String",
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'specificChoice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyQuestionId" },
+                }, surveyQuestionId: {
+                    name: "surveyQuestionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyQuestion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -27575,6 +27664,9 @@ function $default$Survey$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$SurveyQuestion$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$SpecificChoice$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$SurveyChoice$createdBy(user) {

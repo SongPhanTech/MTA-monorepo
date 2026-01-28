@@ -1,6 +1,5 @@
 import KyThi from '@components/sub-pages/danh-sach-ky-thi'
 import NhapDiemPhach from '@components/sub-pages/nhap-diem-phach'
-import PhongThi from '@components/sub-pages/ql-phong-thi'
 import SinhPhach from '@components/sub-pages/sinh-phach'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
@@ -87,12 +86,12 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
                 key: '1',
                 children: <KyThi setActiveKey={setActiveKey} />,
             },
-            {
-                label: 'Phòng thi',
-                key: '11',
-                children: <PhongThi setActiveKey={setActiveKey} />,
-                disabled: !examId,
-            },
+            // {
+            //     label: 'Phòng thi',
+            //     key: '11',
+            //     children: <PhongThi setActiveKey={setActiveKey} />,
+            //     disabled: !examId,
+            // },
         ]
 
         if (type === 'DANH_PHACH') {
@@ -102,7 +101,7 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
                     label: 'Đánh phách',
                     key: '2',
                     children: <SinhPhach />,
-                    disabled: !selectedExamListId,
+                    disabled: !examId,
                 },
             ]
         }
@@ -114,13 +113,13 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
                     label: 'Nhập điểm theo phách',
                     key: '2',
                     children: <NhapDiemPhach />,
-                    disabled: !selectedExamListId,
+                    disabled: !examId,
                 },
             ]
         }
 
         return baseMenu
-    }, [type, examId, selectedExamListId])
+    }, [type, examId])
 
     const reasonDate = useCallback(() => {
         if (dayjs()?.isAfter(data?.examScoreDeadline) && !data?.enteredExamScore) {

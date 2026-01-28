@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const TrainingScoreStatusSchema = z.enum(["PENDING", "APPROVED"])
+export const TrainingScoreStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED"])

@@ -193,6 +193,7 @@ export const SqlTransactionBodyItemModel = {
     ClusterSurvey: 'ClusterSurvey',
     Survey: 'Survey',
     SurveyQuestion: 'SurveyQuestion',
+    SpecificChoice: 'SpecificChoice',
     SurveyChoice: 'SurveyChoice',
     SurveySession: 'SurveySession',
     SurveyResponse: 'SurveyResponse',

@@ -668,15 +668,15 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
     // hàm xử lý render component
     return (
         <div>
-            <Row gutter={[16, 0]}>
+            <Row gutter={[8, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                    <Row gutter={[8, 8]} align="top" justify="space-between">
                         <Col span={36}>
                             <Flex gap={12}>
                                 <Form
                                     form={form}
                                     layout="horizontal"
-                                    className="w-full flex flex-wrap items-end gap-4"
+                                    className="w-full flex flex-wrap items-end gap-2"
                                 >
                                     <Form.Item name="thesisSessionId" label="Đợt xét" required>
                                         <Select
@@ -823,7 +823,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                             </Flex>
                         </Col>
                     </Row>
-                    <Row gutter={[16, 16]}>
+                    <Row gutter={[8, 8]}>
                         <Col>
                             <Flex gap={4} wrap="wrap">
                                 {buttonList.map((item) => (

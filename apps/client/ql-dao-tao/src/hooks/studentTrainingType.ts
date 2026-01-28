@@ -65,6 +65,11 @@ export const useTrainingScoreStatusStatusOptions = () => {
             label: 'Đã chấp nhận',
             color: 'green',
         },
+        {
+            value: TrainingScoreStatus.REJECTED,
+            label: 'Từ chối',
+            color: 'red',
+        },
     ]
 
     const getTrainingScoreStatusLabel = (value: TrainingScoreStatus | null | undefined): string => {

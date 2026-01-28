@@ -60,6 +60,8 @@ import type {
     ExportStudentDecreaseAcademicWarningJson200Item,
     ExportStudentDecreaseAcademicWarningJson404,
     ExportStudentDecreaseAcademicWarningJsonParams,
+    ExportStudentProfiles404,
+    ExportStudentProfilesBody,
     ExportStudentScholarshipJson200Item,
     ExportStudentScholarshipJson404,
     ExportStudentScholarshipJsonParams,
@@ -178,6 +180,10 @@ import type {
     PostApiStatsProjectStatisticsByYearBody,
     PostApiStatsQuestionStatistics200,
     PostApiStatsQuestionStatisticsBody,
+    PostApiStatsRelearnRates200,
+    PostApiStatsRelearnRatesBody,
+    PostApiStatsRetestRates200,
+    PostApiStatsRetestRatesBody,
     PostApiStatsScienceTechnologyOverview200,
     PostApiStatsScienceTechnologyOverviewBody,
     PostApiStatsStatisticsExamBankNotYet200,
@@ -2382,7 +2388,7 @@ export type exportSubjectClassScoreResponse =
     | exportSubjectClassScoreResponseSuccess
     | exportSubjectClassScoreResponseError
 
-export const getExportSubjectClassScoreUrl = (params: ExportSubjectClassScoreParams) => {
+export const getExportSubjectClassScoreUrl = (params?: ExportSubjectClassScoreParams) => {
     const normalizedParams = new URLSearchParams()
 
     Object.entries(params || {}).forEach(([key, value]) => {
@@ -2399,7 +2405,7 @@ export const getExportSubjectClassScoreUrl = (params: ExportSubjectClassScorePar
 }
 
 export const exportSubjectClassScore = async (
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: RequestInit
 ): Promise<exportSubjectClassScoreResponse> => {
     return customTrainingFetch<exportSubjectClassScoreResponse>(
@@ -2419,7 +2425,7 @@ export const getExportSubjectClassScoreQueryOptions = <
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -2451,7 +2457,7 @@ export function useExportSubjectClassScore<
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params: undefined | ExportSubjectClassScoreParams,
     options: {
         query: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -2472,7 +2478,7 @@ export function useExportSubjectClassScore<
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -2493,7 +2499,7 @@ export function useExportSubjectClassScore<
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -2510,7 +2516,7 @@ export function useExportSubjectClassScore<
     TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
     TError = ExportSubjectClassScore404,
 >(
-    params: ExportSubjectClassScoreParams,
+    params?: ExportSubjectClassScoreParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
@@ -3850,6 +3856,107 @@ export function useDebtStatistics<
     return query
 }
 
+export type exportStudentProfilesResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentProfilesResponse404 = {
+    data: ExportStudentProfiles404
+    status: 404
+}
+
+export type exportStudentProfilesResponseSuccess = exportStudentProfilesResponse200 & {
+    headers: Headers
+}
+export type exportStudentProfilesResponseError = exportStudentProfilesResponse404 & {
+    headers: Headers
+}
+
+export type exportStudentProfilesResponse =
+    | exportStudentProfilesResponseSuccess
+    | exportStudentProfilesResponseError
+
+export const getExportStudentProfilesUrl = () => {
+    return `/api/student/export-student-profiles`
+}
+
+export const exportStudentProfiles = async (
+    exportStudentProfilesBody: ExportStudentProfilesBody,
+    options?: RequestInit
+): Promise<exportStudentProfilesResponse> => {
+    return customTrainingFetch<exportStudentProfilesResponse>(getExportStudentProfilesUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportStudentProfilesBody),
+    })
+}
+
+export const getExportStudentProfilesMutationOptions = <
+    TError = ExportStudentProfiles404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportStudentProfiles>>,
+        TError,
+        { data: ExportStudentProfilesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportStudentProfiles>>,
+    TError,
+    { data: ExportStudentProfilesBody },
+    TContext
+> => {
+    const mutationKey = ['exportStudentProfiles']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportStudentProfiles>>,
+        { data: ExportStudentProfilesBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportStudentProfiles(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportStudentProfilesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentProfiles>>
+>
+export type ExportStudentProfilesMutationBody = ExportStudentProfilesBody
+export type ExportStudentProfilesMutationError = ExportStudentProfiles404
+
+export const useExportStudentProfiles = <TError = ExportStudentProfiles404, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportStudentProfiles>>,
+            TError,
+            { data: ExportStudentProfilesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportStudentProfiles>>,
+    TError,
+    { data: ExportStudentProfilesBody },
+    TContext
+> => {
+    const mutationOptions = getExportStudentProfilesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 export type exportLecturerProfileResponse200 = {
     data: Blob
     status: 200
@@ -4392,6 +4499,12 @@ export const importPhienBanCTDTSubject = async (
         importPhienBanCTDTSubject.createNewSubjects !== null
     ) {
         formData.append(`createNewSubjects`, importPhienBanCTDTSubject.createNewSubjects.toString())
+    }
+    if (
+        importPhienBanCTDTSubject.deleteOldData !== undefined &&
+        importPhienBanCTDTSubject.deleteOldData !== null
+    ) {
+        formData.append(`deleteOldData`, importPhienBanCTDTSubject.deleteOldData.toString())
     }
     if (
         importPhienBanCTDTSubject.timeout !== undefined &&
@@ -10329,6 +10442,188 @@ export const usePostApiStatsAdmissionStatistics = <TError = unknown, TContext = 
     return useMutation(mutationOptions, queryClient)
 }
 
+export type postApiStatsRetestRatesResponse200 = {
+    data: PostApiStatsRetestRates200
+    status: 200
+}
+
+export type postApiStatsRetestRatesResponseSuccess = postApiStatsRetestRatesResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsRetestRatesResponse = postApiStatsRetestRatesResponseSuccess
+
+export const getPostApiStatsRetestRatesUrl = () => {
+    return `/api/stats/retest-rates`
+}
+
+export const postApiStatsRetestRates = async (
+    postApiStatsRetestRatesBody: PostApiStatsRetestRatesBody,
+    options?: RequestInit
+): Promise<postApiStatsRetestRatesResponse> => {
+    return customTrainingFetch<postApiStatsRetestRatesResponse>(getPostApiStatsRetestRatesUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(postApiStatsRetestRatesBody),
+    })
+}
+
+export const getPostApiStatsRetestRatesMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+        TError,
+        { data: PostApiStatsRetestRatesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+    TError,
+    { data: PostApiStatsRetestRatesBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsRetestRates']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+        { data: PostApiStatsRetestRatesBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsRetestRates(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsRetestRatesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsRetestRates>>
+>
+export type PostApiStatsRetestRatesMutationBody = PostApiStatsRetestRatesBody
+export type PostApiStatsRetestRatesMutationError = unknown
+
+export const usePostApiStatsRetestRates = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+            TError,
+            { data: PostApiStatsRetestRatesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+    TError,
+    { data: PostApiStatsRetestRatesBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsRetestRatesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsRelearnRatesResponse200 = {
+    data: PostApiStatsRelearnRates200
+    status: 200
+}
+
+export type postApiStatsRelearnRatesResponseSuccess = postApiStatsRelearnRatesResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsRelearnRatesResponse = postApiStatsRelearnRatesResponseSuccess
+
+export const getPostApiStatsRelearnRatesUrl = () => {
+    return `/api/stats/relearn-rates`
+}
+
+export const postApiStatsRelearnRates = async (
+    postApiStatsRelearnRatesBody: PostApiStatsRelearnRatesBody,
+    options?: RequestInit
+): Promise<postApiStatsRelearnRatesResponse> => {
+    return customTrainingFetch<postApiStatsRelearnRatesResponse>(getPostApiStatsRelearnRatesUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(postApiStatsRelearnRatesBody),
+    })
+}
+
+export const getPostApiStatsRelearnRatesMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+        TError,
+        { data: PostApiStatsRelearnRatesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+    TError,
+    { data: PostApiStatsRelearnRatesBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsRelearnRates']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+        { data: PostApiStatsRelearnRatesBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsRelearnRates(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsRelearnRatesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsRelearnRates>>
+>
+export type PostApiStatsRelearnRatesMutationBody = PostApiStatsRelearnRatesBody
+export type PostApiStatsRelearnRatesMutationError = unknown
+
+export const usePostApiStatsRelearnRates = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+            TError,
+            { data: PostApiStatsRelearnRatesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+    TError,
+    { data: PostApiStatsRelearnRatesBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsRelearnRatesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 export type importLecturerResponse200 = {
     data: ImportLecturer200
     status: 200
@@ -10460,6 +10755,15 @@ export const importStudent = async (
 ): Promise<importStudentResponse> => {
     const formData = new FormData()
     formData.append(`file`, importStudentRequest.file)
+    if (
+        importStudentRequest.createCurriculumVersion !== undefined &&
+        importStudentRequest.createCurriculumVersion !== null
+    ) {
+        formData.append(
+            `createCurriculumVersion`,
+            importStudentRequest.createCurriculumVersion.toString()
+        )
+    }
     if (importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
         formData.append(`timeout`, importStudentRequest.timeout.toString())
     }

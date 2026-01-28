@@ -77,6 +77,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
     ) {
         // Map answer -> description
+        const color = ['#dd0b31', '#ea8585', '#ffc769', '#4b50db', '#028850']
         const answerMap: Record<string, string> = {}
         answerDescriptions.forEach((a) => {
             answerMap[a.answer] = a.description as string
@@ -91,7 +92,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         const categories = data.map((item) => item.name)
 
         // Series stack bar
-        const series = answerKeys.map((answer) => ({
+        const series = answerKeys.map((answer, index: number) => ({
             name: answerMap[answer],
             type: 'bar' as const,
             stack: 'total',
@@ -103,6 +104,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                 const found = item.answers.find((a) => a.answer === answer)
                 return found ? found.count : 0
             }),
+            itemStyle: { color: color[index] },
         }))
 
         return { categories, series }
@@ -346,7 +348,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,
-                                  width: 170,
+                                  width: 130,
                                   align: 'center',
                                   render: (__: any, record: any) => {
                                       const count = calculatePercent(record?.answers).find(

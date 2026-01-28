@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE, EVALUATION_PERIOD_STATUS_LABELS } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -14,13 +14,45 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus } from 'lucide-react'
-import { type Key, useMemo, useState } from 'react'
+import { BookPlus, ChevronDown, ChevronUp } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportReport from './export-report'
 import { useSchoolYearStore } from '@components/selecter-school-year'
+import type { Prisma } from '@workspace/db/client'
+import { cn } from '@lib/utils'
+
+export type EvaluationPeriodType = Prisma.EvaluationPeriodGetPayload<{
+    include: {
+        council: {
+            select: {
+                id: true
+                name: true
+                members: true
+            }
+        }
+        schoolYear: {
+            select: {
+                name: true
+            }
+        }
+        documentFiles: {
+            select: {
+                id: true
+                name: true
+                path: true
+                size: true
+            }
+        }
+        _count: {
+            select: {
+                documentFiles: true
+            }
+        }
+    }
+}>
 
 export default function EvaluationPeriod() {
     const { can, canSome } = useAbility()
@@ -80,6 +112,19 @@ export default function EvaluationPeriod() {
             schoolYear: {
                 select: {
                     name: true,
+                },
+            },
+            documentFiles: {
+                select: {
+                    id: true,
+                    name: true,
+                    path: true,
+                    size: true,
+                },
+            },
+            _count: {
+                select: {
+                    documentFiles: true,
                 },
             },
         },
@@ -160,15 +205,6 @@ export default function EvaluationPeriod() {
                             setCurrentPage(1)
                         }}
                         className="h-[calc(100vh-200px)]"
-                        rowSelection={{
-                            type: 'radio',
-                            selectedRowKeys: [selectedEvaluationPeriodId as Key],
-                            onChange: (selectedRowKeys) => {
-                                evaluationPeriodStore.setState({
-                                    selectedEvaluationPeriodId: selectedRowKeys[0] as string,
-                                })
-                            },
-                        }}
                         onRow={(record) => {
                             return {
                                 onClick: () => {
@@ -176,6 +212,11 @@ export default function EvaluationPeriod() {
                                         selectedEvaluationPeriodId: record.id,
                                     })
                                 },
+                                className: cn(
+                                    selectedEvaluationPeriodId === record.id
+                                        ? 'bg-orange-200 hover:bg-orange-200'
+                                        : ''
+                                ),
                             }
                         }}
                         columns={[
@@ -250,19 +291,25 @@ export default function EvaluationPeriod() {
                                 },
                             },
                             {
-                                title: 'Trạng thái',
+                                title: 'Tài liệu hội đồng',
                                 align: 'center',
-                                width: 130,
-                                render: (_, record) => {
-                                    const statusInfo =
-                                        EVALUATION_PERIOD_STATUS_LABELS[record.status]
-                                    return (
-                                        <Tag color={statusInfo?.color || 'default'}>
-                                            {statusInfo?.label || record.status}
-                                        </Tag>
-                                    )
-                                },
+                                width: 120,
+                                render: (_, record) => record?._count?.documentFiles || 0,
                             },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     align: 'center',
+                            //     width: 130,
+                            //     render: (_, record) => {
+                            //         const statusInfo =
+                            //             EVALUATION_PERIOD_STATUS_LABELS[record.status]
+                            //         return (
+                            //             <Tag color={statusInfo?.color || 'default'}>
+                            //                 {statusInfo?.label || record.status}
+                            //             </Tag>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 align: 'center',
@@ -330,6 +377,28 @@ export default function EvaluationPeriod() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
+                        }}
+                        expandable={{
+                            expandedRowRender: (record) => (
+                                <div className="p-4 bg-gray-50">
+                                    <p className="mb-2 font-semibold">Tài liệu hội đồng:</p>
+                                    <p>{record.description || 'Không có mô tả'}</p>
+                                </div>
+                            ),
+                            expandIcon: ({ expanded, onExpand, record }) =>
+                                expanded ? (
+                                    <span
+                                        onClick={(e) => onExpand(record as EvaluationPeriodType, e)}
+                                    >
+                                        <ChevronDown />
+                                    </span>
+                                ) : (
+                                    <span
+                                        onClick={(e) => onExpand(record as EvaluationPeriodType, e)}
+                                    >
+                                        <ChevronUp />
+                                    </span>
+                                ),
                         }}
                     />
                 </Col>

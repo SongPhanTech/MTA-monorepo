@@ -25,6 +25,7 @@ model TrainingScoreSession extends Base {
 enum TrainingScoreStatus {
   PENDING
   APPROVED
+  REJECTED
 
   @@schema("ql-dao-tao")
 }

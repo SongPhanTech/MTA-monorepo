@@ -39,9 +39,9 @@ import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Download } from 'lucide-react'
-import { sqlTransaction } from '@workspace/libs/api/model'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -644,7 +644,7 @@ const PutCurriculumVersion = () => {
                                         <Col span={12}>
                                             <FormItem
                                                 form={form}
-                                                name={'active'}
+                                                name="active"
                                                 label="Trạng thái"
                                                 required
                                             >

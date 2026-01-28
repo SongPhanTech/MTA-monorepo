@@ -1,19 +1,24 @@
 import Table from '@components/commons/table'
-import ExportPhach from '@components/modal/export-exam-session'
 import { examSuspendedReason } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { diemPhongThiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
+import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { useStore } from '@tanstack/react-store'
 import {
-    useFindUniqueExamList,
-    useUpdateExamList,
+    useFindManyExamPaper,
+    useFindManyExamRoom,
+    useUpdateManyExamList,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas'
-import { useGenExamListCode } from '@workspace/libs/api/training'
+import { getExportSubjectClassScoreUrl, useGenExamListCode } from '@workspace/libs/api/training'
 import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Printer } from 'lucide-react'
+import { getUrl } from '@workspace/libs/api/custom-instance'
+import { getRuntimeEnv } from '@workspace/libs/utils'
+import { cn } from '@workspace/ui/lib/utils'
 interface StudentExamFormType {
     list: Record<
         string,
@@ -21,48 +26,104 @@ interface StudentExamFormType {
             suspended?: boolean
             suspendedReason?: string
             description?: string
+            isEdit: boolean
         }
     >
 }
 
 export default function SinhPhach() {
-    const { selectedExamListId } = useStore(diemPhongThiStore)
+    const { examId } = useStore(kythiStore)
     const [form] = Form.useForm<StudentExamFormType>()
 
     const listForm = Form.useWatch('list', form) || []
 
-    const { data: examList, refetch } = useFindUniqueExamList(
+    const { data: examRooms = [], refetch } = useFindManyExamRoom(
         {
-            where: { id: selectedExamListId },
+            where: {
+                examId,
+            },
             include: {
-                examPapers: {
-                    include: {
-                        studentSubjectScore: {
-                            include: {
-                                student: {
-                                    include: {
-                                        userProfile: true,
-                                        fixedClass: true,
-                                    },
-                                },
-                                subjectClass: {
-                                    include: {
-                                        fixedClasses: {
-                                            include: {
-                                                trainingCourse: true,
-                                            },
-                                        },
-                                    },
-                                },
-                                subjectVersion: true,
-                            },
-                        },
+                examList: {
+                    select: {
+                        lockExamCode: true,
                     },
                 },
             },
         },
-        { enabled: !!selectedExamListId }
+        { enabled: !!examId }
     )
+
+    const { data: examPapers = [], refetch: refreshExamPaper } = useFindManyExamPaper(
+        {
+            where: {
+                examList: {
+                    examRoom: {
+                        examId,
+                    },
+                },
+                studentSubjectScore: {
+                    examBanned: false,
+                    examPostponed: false,
+                },
+            },
+            include: {
+                studentSubjectScore: {
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                                fixedClass: true,
+                            },
+                        },
+                        subjectClass: {
+                            include: {
+                                fixedClasses: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
+                                },
+                            },
+                        },
+                        subjectVersion: true,
+                    },
+                },
+            },
+            orderBy: [
+                {
+                    studentSubjectScore: {
+                        student: {
+                            userProfile: {
+                                firstName: 'asc',
+                            },
+                        },
+                    },
+                },
+                {
+                    studentSubjectScore: {
+                        student: {
+                            userProfile: {
+                                lastName: 'asc',
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+        { enabled: !!examId }
+    )
+
+    const { onOpen: openXemTaiLieu } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+        mode?: 'view' | 'edit'
+        convertTo?: string
+    }>({
+        tag: 'XemTaiLieu',
+    })
+
+    const lockExamCode = examRooms.every((er) => er.examList.every((el) => el.lockExamCode))
+
     const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
@@ -74,30 +135,32 @@ export default function SinhPhach() {
             },
         })
     }
+    const { mutateAsync: updateManyExamList } = useUpdateManyExamList()
     const { mutateAsync: genCode } = useGenExamListCode()
-    const { mutateAsync: updateExamList } = useUpdateExamList()
     const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
     const handleGenCode = async () => {
         const res = await genCode({
-            data: { examListId: selectedExamListId ?? '' },
+            data: { examId: examId ?? '' },
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
-            refetch()
         }
+        refetch()
+        refreshExamPaper()
     }
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     useEffect(() => {
-        if (selectedExamListId && examList?.examPapers && examList?.examPapers?.length > 0) {
+        if (examId) {
             form.setFieldsValue({
-                list: examList?.examPapers.reduce(
+                list: examPapers.reduce(
                     (acc, cur) => {
                         acc[cur.studentSubjectScoreId] = {
                             suspended: cur?.studentSubjectScore?.suspended ?? false,
                             suspendedReason: cur?.studentSubjectScore?.suspendedReason ?? undefined,
                             description: cur?.studentSubjectScore?.description ?? undefined,
+                            isEdit: false,
                         }
                         return acc
                     },
@@ -105,7 +168,7 @@ export default function SinhPhach() {
                 ),
             })
         }
-    }, [selectedExamListId, examList, form])
+    }, [examId, examPapers, form])
 
     const handleSaveExamSuspended = async () => {
         try {
@@ -118,9 +181,7 @@ export default function SinhPhach() {
                 }
             })
 
-            const filteredValues = valueListObject.filter(
-                (item) => item.suspended || item.suspendedReason
-            )
+            const filteredValues = valueListObject.filter((item) => item.isEdit)
 
             const updateTransactions: SqlTransactionBodyItem[] = filteredValues.map((i) => ({
                 model: 'StudentSubjectScore',
@@ -139,6 +200,8 @@ export default function SinhPhach() {
             if (res.status === 200) {
                 message.success('Cập nhật thành công')
             }
+            refetch()
+            refreshExamPaper()
         } catch (error: any) {
             message.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại sau!')
         } finally {
@@ -153,8 +216,12 @@ export default function SinhPhach() {
                     <Checkbox
                         onChange={async (e) => {
                             try {
-                                await updateExamList({
-                                    where: { id: selectedExamListId ?? '' },
+                                await updateManyExamList({
+                                    where: {
+                                        examRoom: {
+                                            examId,
+                                        },
+                                    },
                                     data: { lockExamCode: e.target.checked },
                                 })
                                 await updateManySubjectClass({
@@ -164,7 +231,7 @@ export default function SinhPhach() {
                                                 some: {
                                                     examList: {
                                                         some: {
-                                                            id: selectedExamListId ?? '',
+                                                            id: examId ?? '',
                                                         },
                                                     },
                                                 },
@@ -177,7 +244,7 @@ export default function SinhPhach() {
                                 })
                             } catch (error) {}
                         }}
-                        checked={examList?.lockExamCode}
+                        checked={lockExamCode}
                     >
                         Khoá sinh phách
                     </Checkbox>
@@ -185,7 +252,7 @@ export default function SinhPhach() {
                         <Button
                             type="primary"
                             className="bg-orange-500"
-                            disabled={examList?.lockExamCode}
+                            disabled={lockExamCode}
                             onClick={handleSaveExamSuspended}
                         >
                             Lưu đình chỉ thi
@@ -195,18 +262,55 @@ export default function SinhPhach() {
                             onClick={() => {
                                 handleSave()
                             }}
-                            disabled={examList?.lockExamCode}
+                            disabled={lockExamCode}
                         >
                             Tạo phách
                         </Button>
-                        <ExportPhach data={examList?.examPapers || []} />
+                        <Button
+                            onClick={() => {
+                                openXemTaiLieu({
+                                    uri: getUrl(
+                                        getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                            'https://api.daotao.mta.swantech.vn',
+                                        `${getExportSubjectClassScoreUrl({
+                                            examId: examId,
+                                            type: 'DANH-SACH-PHACH',
+                                        })}`
+                                    ),
+                                    name: 'Danh sách phách',
+                                    mimeType: 'xlsx',
+                                    convertTo: 'pdf',
+                                })
+                            }}
+                        >
+                            <Printer />
+                            In phách
+                        </Button>
                     </Flex>
                 </Flex>
             </Col>
             <Col span={24}>
-                <Form form={form} initialValues={{ list: {} }}>
+                <Form
+                    form={form}
+                    initialValues={{ list: {} }}
+                    onValuesChange={(changedValue) => {
+                        const key = Object.keys(changedValue.list)?.[0]
+                        console.log('key', key)
+
+                        form.setFieldValue(['list', key, 'isEdit'], true)
+                    }}
+                >
+                    <Form.Item hidden name={'list'} />
                     <Table
-                        rowKey="id"
+                        rowKey="studentSubjectScoreId"
+                        onRow={(record) => {
+                            return {
+                                className: cn(
+                                    listForm?.[record.studentSubjectScoreId]?.isEdit &&
+                                        'bg-yellow-100'
+                                ),
+                            }
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -226,8 +330,7 @@ export default function SinhPhach() {
                                 title: 'Tên thí sinh',
                                 dataIndex: 'fullname',
                                 render: (_, record) =>
-                                    `${record?.studentSubjectScore?.student?.userProfile?.lastName} ${record?.studentSubjectScore?.student?.userProfile?.firstName}` ||
-                                    '',
+                                    `${record?.studentSubjectScore?.student?.userProfile?.fullname}`,
                             },
                             {
                                 title: 'Điểm CC',
@@ -262,32 +365,42 @@ export default function SinhPhach() {
                                 width: 100,
                                 render: (_, record) => {
                                     return (
-                                        <Form.Item
-                                            className="w-full mb-0"
-                                            name={[
-                                                'list',
-                                                record.studentSubjectScoreId,
-                                                'suspended',
-                                            ]}
-                                            label=""
-                                            valuePropName="checked"
-                                        >
-                                            <Checkbox
-                                                disabled={examList?.lockExamCode}
-                                                onChange={(e) => {
-                                                    if (!e.target.checked) {
-                                                        form.setFieldValue(
-                                                            [
-                                                                'list',
-                                                                record.studentSubjectScoreId,
-                                                                'suspendedReason',
-                                                            ],
-                                                            undefined
-                                                        )
-                                                    }
-                                                }}
+                                        <>
+                                            <Form.Item
+                                                className="w-full mb-0"
+                                                name={[
+                                                    'list',
+                                                    record.studentSubjectScoreId,
+                                                    'suspended',
+                                                ]}
+                                                label=""
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={lockExamCode}
+                                                    onChange={(e) => {
+                                                        if (!e.target.checked) {
+                                                            form.setFieldValue(
+                                                                [
+                                                                    'list',
+                                                                    record.studentSubjectScoreId,
+                                                                    'suspendedReason',
+                                                                ],
+                                                                undefined
+                                                            )
+                                                        }
+                                                    }}
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                name={[
+                                                    'list',
+                                                    record.studentSubjectScoreId,
+                                                    'isEdit',
+                                                ]}
+                                                hidden
                                             />
-                                        </Form.Item>
+                                        </>
                                     )
                                 },
                             },
@@ -338,7 +451,11 @@ export default function SinhPhach() {
                                     return (
                                         <Form.Item
                                             className="w-full mb-0"
-                                            name={['list', record.id, 'description']}
+                                            name={[
+                                                'list',
+                                                record.studentSubjectScoreId,
+                                                'description',
+                                            ]}
                                             label=""
                                         >
                                             <Input.TextArea
@@ -351,7 +468,9 @@ export default function SinhPhach() {
                                 },
                             },
                         ]}
-                        data={examList?.examPapers || []}
+                        scrollable
+                        maxHeight={'calc(100vh - 390px)'}
+                        data={examPapers}
                         pagination={false}
                     />
                 </Form>

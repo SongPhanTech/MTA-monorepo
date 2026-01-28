@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import { useSchoolYearStore } from '@components/selecter-school-year'
-import { DEFAULT_PAGINATE_SIZE, EVALUATION_PERIOD_STATUS_LABELS } from '@constants/constants'
-import { formatDate } from '@lib/utils'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { cn, formatDate } from '@lib/utils'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
@@ -11,8 +11,8 @@ import {
     useFindManyEvaluationPeriod,
     useFindUniqueLecturer,
 } from '@workspace/db/hooks'
-import { Col, Row, Tag } from 'antd'
-import { type Key, useMemo, useState } from 'react'
+import { Col, Row } from 'antd'
+import { useMemo, useState } from 'react'
 
 export default function EvaluationPeriod() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -116,15 +116,6 @@ export default function EvaluationPeriod() {
                     rowKey="id"
                     data={assignments}
                     loading={isLoading}
-                    rowSelection={{
-                        type: 'radio',
-                        selectedRowKeys: [selectedEvaluationPeriodId as Key],
-                        onChange: (selectedRowKeys) => {
-                            evaluationPeriodStore.setState({
-                                selectedEvaluationPeriodId: selectedRowKeys[0] as string,
-                            })
-                        },
-                    }}
                     className="h-[calc(100vh-200px)]"
                     onRow={(record) => {
                         return {
@@ -133,6 +124,11 @@ export default function EvaluationPeriod() {
                                     selectedEvaluationPeriodId: record.id,
                                 })
                             },
+                            className: cn(
+                                selectedEvaluationPeriodId === record.id
+                                    ? 'bg-orange-200 hover:bg-orange-200'
+                                    : ''
+                            ),
                         }
                     }}
                     columns={[
@@ -182,19 +178,19 @@ export default function EvaluationPeriod() {
                                 return <div className="line-clamp-2">{record?.description}</div>
                             },
                         },
-                        {
-                            title: 'Trạng thái',
-                            align: 'center',
-                            width: 110,
-                            render: (_, record) => {
-                                const statusInfo = EVALUATION_PERIOD_STATUS_LABELS[record.status]
-                                return (
-                                    <Tag color={statusInfo?.color || 'default'}>
-                                        {statusInfo?.label || record.status}
-                                    </Tag>
-                                )
-                            },
-                        },
+                        // {
+                        //     title: 'Trạng thái',
+                        //     align: 'center',
+                        //     width: 110,
+                        //     render: (_, record) => {
+                        //         const statusInfo = EVALUATION_PERIOD_STATUS_LABELS[record.status]
+                        //         return (
+                        //             <Tag color={statusInfo?.color || 'default'}>
+                        //                 {statusInfo?.label || record.status}
+                        //             </Tag>
+                        //         )
+                        //     },
+                        // },
                     ]}
                     pagination={{
                         current: currentPage,

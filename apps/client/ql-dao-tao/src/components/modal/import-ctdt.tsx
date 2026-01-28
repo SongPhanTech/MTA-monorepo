@@ -1,10 +1,13 @@
 import { CloseOutlined } from '@ant-design/icons'
 import useSpinner from '@hooks/spinner'
 import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
+import { parseSheetSubject } from '@workspace/libs/parseExcel'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Collapse, Modal, message, Space, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { ModalPreviewUploadInput } from './put-phien-ban-danh-muc-ctdt'
 
 const { Panel } = Collapse
 interface ImportCurriculumVersionModalProps {
@@ -25,27 +28,23 @@ const ImportCurriculumVersionModal = ({
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [fileName, setFileName] = useState<string>('')
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { onOpen: openPreviewModal } = useDisclosure<ModalPreviewUploadInput>({
+        tag: 'ModalPreviewUpload',
+    })
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (!file) return
 
         setFile(file)
         setFileName(`Dữ liệu phiên bản chương trình đào tạo.${file.name.split('.')[1]}`)
         setDisabledButton(false)
-        const reader = new FileReader()
-        // reader.onload = (e) => {
-        //     const { trainingObjectType, trainingCourse, students, errors } = parseSheetHeQuanSu(
-        //         e.target?.result as ArrayBuffer
-        //     )
-        //     setPreviewData(students)
-        //     setData({ trainingObjectType, trainingCourse })
-        //     if (errors.length === 0) {
-        //         setDisabledButton(false)
-        //     }
-        //     setErrorData(errors)
-        //     console.log(errors)
-        // }
-        reader.readAsArrayBuffer(file)
+
+        const { subjects, errors } = parseSheetSubject(await file.arrayBuffer())
+        openPreviewModal({
+            previewData: subjects,
+            errorData: errors,
+        })
     }
 
     const handleRemoveFile = () => {
@@ -63,6 +62,7 @@ const ImportCurriculumVersionModal = ({
         onCancel()
     }
     const { showSpinner, hideSpinner } = useSpinner()
+
     const handleConfirm = async () => {
         showSpinner()
 

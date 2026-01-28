@@ -75,6 +75,7 @@ const getPublicSurvey = createRoute({
                                     z.object({
                                         surveyQuestionGroup:
                                             models.SurveyQuestionGroupScalarSchema.nullable(),
+                                        specificChoice: models.SpecificChoiceScalarSchema.array(),
                                     })
                                 )
                             ),
@@ -127,6 +128,7 @@ app.openapi(getPublicSurvey, async (c) => {
             surveyQuestion: {
                 include: {
                     surveyQuestionGroup: true,
+                    specificChoice: true,
                 },
             },
             surveyChoice: true,
@@ -286,6 +288,7 @@ app.openapi(savePublicSurvey, async (c) => {
         }
 
         studentId = student.id
+        profileId = student.userProfileId
     }
 
     if (survey.startDate > new Date()) {

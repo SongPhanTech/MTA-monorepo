@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, Prisma, type ScoreConvert } from '@workspace/db'
 import { examTypeOptions } from '@workspace/libs/constants'
-import { getMinioUrl, getScoreStatistics, numberToWords } from '@workspace/libs/utils'
+import { getMinioUrl, getScoreStatistics } from '@workspace/libs/utils'
 import dayjs from 'dayjs'
 import { read, utils } from 'xlsx'
 import XlsxTemplate from 'xlsx-template'
@@ -470,7 +470,8 @@ const exportSubjectClassScore = createRoute({
     summary: 'Excel xuất điểm lớp môn học',
     request: {
         query: z.object({
-            id: z.string().openapi('id', { description: 'ID của lớp môn học' }),
+            id: z.string().optional().openapi('id', { description: 'ID của lớp môn học' }),
+            examId: z.string().optional().openapi('examId', { description: 'ID của kỳ thi' }),
             type: z.string().default(''),
         }),
     },
@@ -1578,10 +1579,10 @@ app.openapi(uploadExcelImportScore, async (c) => {
 })
 
 app.openapi(exportSubjectClassScore, async (c) => {
-    const { id, type } = c.req.valid('query')
+    const { id, type, examId } = c.req.valid('query')
 
-    const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id },
+    let subjectClass = await prisma.subjectClass.findUnique({
+        where: { id: id ?? '' },
         include: {
             subject: {
                 include: {
@@ -1620,10 +1621,114 @@ app.openapi(exportSubjectClassScore, async (c) => {
                             userProfile: true,
                         },
                     },
+                    examPaper: {
+                        select: {
+                            examCode: true,
+                        },
+                    },
                 },
+                orderBy: [
+                    {
+                        student: {
+                            userProfile: {
+                                firstName: 'asc',
+                            },
+                        },
+                    },
+                    {
+                        student: {
+                            userProfile: {
+                                lastName: 'asc',
+                            },
+                        },
+                    },
+                ],
             },
         },
     })
+
+    if (examId) {
+        const exam = await prisma.exam.findUnique({
+            where: {
+                id: examId,
+            },
+            include: {
+                subjectClass: {
+                    include: {
+                        subject: {
+                            include: {
+                                managementOrganization: true,
+                            },
+                        },
+                        semester: {
+                            include: {
+                                schoolYear: true,
+                            },
+                        },
+                        mainLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        extraLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        trainingObjectType: true,
+                        subjectClassStudent: {
+                            include: {
+                                student: {
+                                    include: {
+                                        fixedClass: {
+                                            include: {
+                                                trainingCourse: {
+                                                    include: {
+                                                        scoreConverts: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        userProfile: true,
+                                    },
+                                },
+                                examPaper: {
+                                    select: {
+                                        examCode: true,
+                                    },
+                                },
+                            },
+                            orderBy: [
+                                {
+                                    student: {
+                                        userProfile: {
+                                            firstName: 'asc',
+                                        },
+                                    },
+                                },
+                                {
+                                    student: {
+                                        userProfile: {
+                                            lastName: 'asc',
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                },
+            },
+        })
+        if (exam) {
+            if (exam?.subjectClass?.[0]) subjectClass = exam?.subjectClass?.[0]
+            if (subjectClass) {
+                subjectClass = {
+                    ...subjectClass,
+                    subjectClassStudent: exam?.subjectClass.flatMap((sc) => sc.subjectClassStudent),
+                }
+            }
+        }
+    }
 
     if (!subjectClass) {
         return c.json({ message: 'Không tìm thấy lớp học' }, 404)
@@ -1672,9 +1777,10 @@ app.openapi(exportSubjectClassScore, async (c) => {
         ].join(', '),
         NGAY_THI: subjectClass.examDate ? dayjs(subjectClass.examDate).format('DD/MM/YYYY') : '',
         QUAN_SO: subjectClass.subjectClassStudent.length,
-        VANG: subjectClass.subjectClassStudent.filter(
-            (scs) => scs.attendanceScore === null || scs.attendanceScore === undefined
-        ).length,
+        // VANG: subjectClass.subjectClassStudent.filter(
+        //     (scs) => scs.attendanceScore === null || scs.attendanceScore === undefined
+        // ).length,
+        VANG: '',
         TEN_MON_HOC: subjectClass.subject?.name || '',
         STC: subjectClass.subject?.credit || '',
         GIANG_VIEN: subjectClass.mainLecturer
@@ -1699,6 +1805,13 @@ app.openapi(exportSubjectClassScore, async (c) => {
             if (scs.withdrew) statusTexts.push('Rút khỏi')
             if (scs.examBanned) statusTexts.push('Cấm thi')
             if (scs.suspended) statusTexts.push('Đình chỉ')
+
+            const scoreConverted = scs?.finalScore
+                ? scoreConvert(
+                      scs?.finalScore?.toNumber(),
+                      scs.student.fixedClass?.trainingCourse?.scoreConverts || []
+                  )
+                : null
             return {
                 TT: index + 1,
                 MA_SV: scs.student.code,
@@ -1717,13 +1830,9 @@ app.openapi(exportSubjectClassScore, async (c) => {
                     scs.finalScore !== null && scs.finalScore !== undefined
                         ? scs.finalScore?.toNumber()?.toString?.().replace(',', '.')
                         : '',
-                TC: scs?.finalScore
-                    ? scoreConvert(
-                          scs?.finalScore?.toNumber(),
-                          scs.student.fixedClass?.trainingCourse?.scoreConverts || []
-                      ).base4
-                    : '',
-                BANG_CHU: scs?.finalScore ? numberToWords(scs?.finalScore?.toNumber()) : '',
+                TC: scoreConverted?.base4 ?? '',
+                BANG_CHU: scoreConverted?.letter ?? '',
+                PHACH: scs.examPaper?.examCode ?? '',
                 GHI_CHU: statusTexts.length > 0 ? statusTexts.join(', ') : '',
             }
         }),

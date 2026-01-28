@@ -1909,6 +1909,16 @@ export type Survey = $Result.DefaultSelection<Prisma.$SurveyPayload>;
  */
 export type SurveyQuestion = $Result.DefaultSelection<Prisma.$SurveyQuestionPayload>;
 /**
+ * Model SpecificChoice
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type SpecificChoice = $Result.DefaultSelection<Prisma.$SpecificChoicePayload>;
+/**
  * Model SurveyChoice
  * Lựa chọn của câu hỏi khảo sát
  * @
@@ -4425,6 +4435,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get surveyQuestion(): Prisma.SurveyQuestionDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.specificChoice`: Exposes CRUD operations for the **SpecificChoice** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more SpecificChoices
+     * const specificChoices = await prisma.specificChoice.findMany()
+     * ```
+     */
+    get specificChoice(): Prisma.SpecificChoiceDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.surveyChoice`: Exposes CRUD operations for the **SurveyChoice** model.
      * Example usage:
      * ```ts
@@ -5443,7 +5462,8 @@ export namespace $Enums {
     export type DecisionStatus = (typeof DecisionStatus)[keyof typeof DecisionStatus];
     export const TrainingScoreStatus: {
         PENDING: 'PENDING',
-        APPROVED: 'APPROVED'
+        APPROVED: 'APPROVED',
+        REJECTED: 'REJECTED'
     };
     export type TrainingScoreStatus = (typeof TrainingScoreStatus)[keyof typeof TrainingScoreStatus];
     export const StudentTrainingType: {
@@ -5620,6 +5640,7 @@ export namespace $Enums {
         CUMULATIVE_PASSED_CREDITS: 'CUMULATIVE_PASSED_CREDITS',
         CUMULATIVE_DEBT_CREDITS: 'CUMULATIVE_DEBT_CREDITS',
         CUMULATIVE_PROGRESS_PERCENT: 'CUMULATIVE_PROGRESS_PERCENT',
+        CUMULATIVE_RETAKE_PERCENT: 'CUMULATIVE_RETAKE_PERCENT',
         ACADEMIC_WARNING_LEVEL: 'ACADEMIC_WARNING_LEVEL',
         DISCIPLINARY_WARNING_LEVEL: 'DISCIPLINARY_WARNING_LEVEL',
         REPEAT_YEAR_COUNT: 'REPEAT_YEAR_COUNT',
@@ -6030,6 +6051,7 @@ export namespace Prisma {
         ClusterSurvey: 'ClusterSurvey',
         Survey: 'Survey',
         SurveyQuestion: 'SurveyQuestion',
+        SpecificChoice: 'SpecificChoice',
         SurveyChoice: 'SurveyChoice',
         SurveySession: 'SurveySession',
         SurveyResponse: 'SurveyResponse',
@@ -8990,7 +9012,11 @@ export namespace Prisma {
         startDate: 'startDate',
         endDate: 'endDate',
         status: 'status',
-        schoolYearId: 'schoolYearId'
+        schoolYearId: 'schoolYearId',
+        overviewProblem: 'overviewProblem',
+        overviewGeneral: 'overviewGeneral',
+        overviewResults: 'overviewResults',
+        conclude: 'conclude'
     };
     export const StandardCatalogScalarFieldEnum: {
         id: 'id',
@@ -9291,6 +9317,18 @@ export namespace Prisma {
         name: 'name',
         type: 'type',
         surveyQuestionGroupId: 'surveyQuestionGroupId'
+    };
+    export const SpecificChoiceScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        answer: 'answer',
+        surveyQuestionId: 'surveyQuestionId'
     };
     export const SurveyChoiceScalarFieldEnum: {
         id: 'id',
@@ -12089,7 +12127,11 @@ export namespace Prisma {
         description: 'description',
         createdBy: 'createdBy',
         name: 'name',
-        schoolYearId: 'schoolYearId'
+        schoolYearId: 'schoolYearId',
+        overviewProblem: 'overviewProblem',
+        overviewGeneral: 'overviewGeneral',
+        overviewResults: 'overviewResults',
+        conclude: 'conclude'
     };
     export const StandardCatalogOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -12278,6 +12320,14 @@ export namespace Prisma {
         createdBy: 'createdBy',
         name: 'name',
         surveyQuestionGroupId: 'surveyQuestionGroupId'
+    };
+    export const SpecificChoiceOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        answer: 'answer',
+        surveyQuestionId: 'surveyQuestionId'
     };
     export const SurveyChoiceOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -76268,6 +76318,10 @@ export namespace Prisma {
         readonly endDate: FieldRef<"EvaluationPeriod", 'DateTime'>;
         readonly status: FieldRef<"EvaluationPeriod", 'EvaluationPeriodStatus'>;
         readonly schoolYearId: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly overviewProblem: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly overviewGeneral: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly overviewResults: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly conclude: FieldRef<"EvaluationPeriod", 'String'>;
     }
 
     export interface StandardCatalogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -84351,6 +84405,7 @@ export namespace Prisma {
         survey<T extends SurveyQuestion$surveyArgs<ExtArgs> = {}>(args?: Subset<T, SurveyQuestion$surveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         clusterSurvey<T extends SurveyQuestion$clusterSurveyArgs<ExtArgs> = {}>(args?: Subset<T, SurveyQuestion$clusterSurveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClusterSurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveyResponses<T extends SurveyQuestion$surveyResponsesArgs<ExtArgs> = {}>(args?: Subset<T, SurveyQuestion$surveyResponsesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        specificChoice<T extends SurveyQuestion$specificChoiceArgs<ExtArgs> = {}>(args?: Subset<T, SurveyQuestion$specificChoiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -84388,6 +84443,388 @@ export namespace Prisma {
         readonly name: FieldRef<"SurveyQuestion", 'String'>;
         readonly type: FieldRef<"SurveyQuestion", 'SurveyQuestionType'>;
         readonly surveyQuestionGroupId: FieldRef<"SurveyQuestion", 'String'>;
+    }
+
+    export interface SpecificChoiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SpecificChoice'], meta: { name: 'SpecificChoice' } };
+        /**
+         * Fields of the SpecificChoice model
+         */
+        readonly fields: SpecificChoiceFieldRefs;
+        /**
+         * Find zero or one SpecificChoice that matches the filter.
+         * @param {SpecificChoiceFindUniqueArgs} args - Arguments to find a SpecificChoice
+         * @example
+         * // Get one SpecificChoice
+         * const specificChoice = await prisma.specificChoice.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends SpecificChoiceFindUniqueArgs>(args: SelectSubset<T, SpecificChoiceFindUniqueArgs<ExtArgs>>): Prisma__SpecificChoiceClient<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one SpecificChoice that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {SpecificChoiceFindUniqueOrThrowArgs} args - Arguments to find a SpecificChoice
+         * @example
+         * // Get one SpecificChoice
+         * const specificChoice = await prisma.specificChoice.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends SpecificChoiceFindUniqueOrThrowArgs>(args: SelectSubset<T, SpecificChoiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SpecificChoiceClient<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first SpecificChoice that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SpecificChoiceFindFirstArgs} args - Arguments to find a SpecificChoice
+         * @example
+         * // Get one SpecificChoice
+         * const specificChoice = await prisma.specificChoice.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends SpecificChoiceFindFirstArgs>(args?: SelectSubset<T, SpecificChoiceFindFirstArgs<ExtArgs>>): Prisma__SpecificChoiceClient<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first SpecificChoice that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SpecificChoiceFindFirstOrThrowArgs} args - Arguments to find a SpecificChoice
+         * @example
+         * // Get one SpecificChoice
+         * const specificChoice = await prisma.specificChoice.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends SpecificChoiceFindFirstOrThrowArgs>(args?: SelectSubset<T, SpecificChoiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__SpecificChoiceClient<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more SpecificChoices that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SpecificChoiceFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all SpecificChoices
+         * const specificChoices = await prisma.specificChoice.findMany()
+         *
+         * // Get first 10 SpecificChoices
+         * const specificChoices = await prisma.specificChoice.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const specificChoiceWithIdOnly = await prisma.specificChoice.findMany({ select: { id: true } })
+         */
+        findMany<T extends SpecificChoiceFindManyArgs>(args?: SelectSubset<T, SpecificChoiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a SpecificChoice.
+         * @param {SpecificChoiceCreateArgs} args - Arguments to create a SpecificChoice.
+         * @example
+         * // Create one SpecificChoice
+         * const SpecificChoice = await prisma.specificChoice.create({
+         *   data: {
+         *     // ... data to create a SpecificChoice
+         *   }
+         * })
+         */
+        create<T extends SpecificChoiceCreateArgs>(args: SelectSubset<T, SpecificChoiceCreateArgs<ExtArgs>>): Prisma__SpecificChoiceClient<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many SpecificChoices.
+         * @param {SpecificChoiceCreateManyArgs} args - Arguments to create many SpecificChoices.
+         * @example
+         * // Create many SpecificChoices
+         * const specificChoice = await prisma.specificChoice.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends SpecificChoiceCreateManyArgs>(args?: SelectSubset<T, SpecificChoiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many SpecificChoices and returns the data saved in the database.
+         * @param {SpecificChoiceCreateManyAndReturnArgs} args - Arguments to create many SpecificChoices.
+         * @example
+         * // Create many SpecificChoices
+         * const specificChoice = await prisma.specificChoice.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many SpecificChoices and only return the `id`
+         * const specificChoiceWithIdOnly = await prisma.specificChoice.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends SpecificChoiceCreateManyAndReturnArgs>(args?: SelectSubset<T, SpecificChoiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a SpecificChoice.
+         * @param {SpecificChoiceDeleteArgs} args - Arguments to delete one SpecificChoice.
+         * @example
+         * // Delete one SpecificChoice
+         * const SpecificChoice = await prisma.specificChoice.delete({
+         *   where: {
+         *     // ... filter to delete one SpecificChoice
+         *   }
+         * })
+         */
+        delete<T extends SpecificChoiceDeleteArgs>(args: SelectSubset<T, SpecificChoiceDeleteArgs<ExtArgs>>): Prisma__SpecificChoiceClient<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one SpecificChoice.
+         * @param {SpecificChoiceUpdateArgs} args - Arguments to update one SpecificChoice.
+         * @example
+         * // Update one SpecificChoice
+         * const specificChoice = await prisma.specificChoice.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends SpecificChoiceUpdateArgs>(args: SelectSubset<T, SpecificChoiceUpdateArgs<ExtArgs>>): Prisma__SpecificChoiceClient<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more SpecificChoices.
+         * @param {SpecificChoiceDeleteManyArgs} args - Arguments to filter SpecificChoices to delete.
+         * @example
+         * // Delete a few SpecificChoices
+         * const { count } = await prisma.specificChoice.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends SpecificChoiceDeleteManyArgs>(args?: SelectSubset<T, SpecificChoiceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more SpecificChoices.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SpecificChoiceUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many SpecificChoices
+         * const specificChoice = await prisma.specificChoice.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends SpecificChoiceUpdateManyArgs>(args: SelectSubset<T, SpecificChoiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more SpecificChoices and returns the data updated in the database.
+         * @param {SpecificChoiceUpdateManyAndReturnArgs} args - Arguments to update many SpecificChoices.
+         * @example
+         * // Update many SpecificChoices
+         * const specificChoice = await prisma.specificChoice.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more SpecificChoices and only return the `id`
+         * const specificChoiceWithIdOnly = await prisma.specificChoice.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends SpecificChoiceUpdateManyAndReturnArgs>(args: SelectSubset<T, SpecificChoiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one SpecificChoice.
+         * @param {SpecificChoiceUpsertArgs} args - Arguments to update or create a SpecificChoice.
+         * @example
+         * // Update or create a SpecificChoice
+         * const specificChoice = await prisma.specificChoice.upsert({
+         *   create: {
+         *     // ... data to create a SpecificChoice
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the SpecificChoice we want to update
+         *   }
+         * })
+         */
+        upsert<T extends SpecificChoiceUpsertArgs>(args: SelectSubset<T, SpecificChoiceUpsertArgs<ExtArgs>>): Prisma__SpecificChoiceClient<$Result.GetResult<Prisma.$SpecificChoicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of SpecificChoices.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SpecificChoiceCountArgs} args - Arguments to filter SpecificChoices to count.
+         * @example
+         * // Count the number of SpecificChoices
+         * const count = await prisma.specificChoice.count({
+         *   where: {
+         *     // ... the filter for the SpecificChoices we want to count
+         *   }
+         * })
+         */
+        count<T extends SpecificChoiceCountArgs>(args?: Subset<T, SpecificChoiceCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], SpecificChoiceCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a SpecificChoice.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SpecificChoiceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends SpecificChoiceAggregateArgs>(args: Subset<T, SpecificChoiceAggregateArgs>): Prisma.PrismaPromise<GetSpecificChoiceAggregateType<T>>;
+        /**
+         * Group by SpecificChoice.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SpecificChoiceGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends SpecificChoiceGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SpecificChoiceGroupByArgs['orderBy'] }
+        : { orderBy?: SpecificChoiceGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, SpecificChoiceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpecificChoiceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for SpecificChoice.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__SpecificChoiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        surveyQuestion<T extends SurveyQuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SurveyQuestionDefaultArgs<ExtArgs>>): Prisma__SurveyQuestionClient<$Result.GetResult<Prisma.$SurveyQuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the SpecificChoice model
+     */
+    interface SpecificChoiceFieldRefs {
+        readonly id: FieldRef<"SpecificChoice", 'String'>;
+        readonly code: FieldRef<"SpecificChoice", 'String'>;
+        readonly active: FieldRef<"SpecificChoice", 'Boolean'>;
+        readonly description: FieldRef<"SpecificChoice", 'String'>;
+        readonly deletedAt: FieldRef<"SpecificChoice", 'DateTime'>;
+        readonly createdAt: FieldRef<"SpecificChoice", 'DateTime'>;
+        readonly updatedAt: FieldRef<"SpecificChoice", 'DateTime'>;
+        readonly createdBy: FieldRef<"SpecificChoice", 'String'>;
+        readonly answer: FieldRef<"SpecificChoice", 'String'>;
+        readonly surveyQuestionId: FieldRef<"SpecificChoice", 'String'>;
     }
 
     export interface SurveyChoiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -113145,7 +113582,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -126691,6 +127128,80 @@ export namespace Prisma {
                     }
                 }
             }
+            SpecificChoice: {
+                payload: Prisma.$SpecificChoicePayload<ExtArgs>
+                fields: Prisma.SpecificChoiceFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.SpecificChoiceFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.SpecificChoiceFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>
+                    }
+                    findFirst: {
+                        args: Prisma.SpecificChoiceFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.SpecificChoiceFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>
+                    }
+                    findMany: {
+                        args: Prisma.SpecificChoiceFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>[]
+                    }
+                    create: {
+                        args: Prisma.SpecificChoiceCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>
+                    }
+                    createMany: {
+                        args: Prisma.SpecificChoiceCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.SpecificChoiceCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>[]
+                    }
+                    delete: {
+                        args: Prisma.SpecificChoiceDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>
+                    }
+                    update: {
+                        args: Prisma.SpecificChoiceUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.SpecificChoiceDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.SpecificChoiceUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.SpecificChoiceUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.SpecificChoiceUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SpecificChoicePayload>
+                    }
+                    aggregate: {
+                        args: Prisma.SpecificChoiceAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateSpecificChoice>
+                    }
+                    groupBy: {
+                        args: Prisma.SpecificChoiceGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<SpecificChoiceGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.SpecificChoiceCountArgs<ExtArgs>
+                        result: $Utils.Optional<SpecificChoiceCountAggregateOutputType> | number
+                    }
+                }
+            }
             SurveyChoice: {
                 payload: Prisma.$SurveyChoicePayload<ExtArgs>
                 fields: Prisma.SurveyChoiceFieldRefs
@@ -132381,6 +132892,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyOmit
         survey?: SurveyOmit
         surveyQuestion?: SurveyQuestionOmit
+        specificChoice?: SpecificChoiceOmit
         surveyChoice?: SurveyChoiceOmit
         surveySession?: SurveySessionOmit
         surveyResponse?: SurveyResponseOmit
@@ -137180,11 +137692,13 @@ export namespace Prisma {
         survey: number
         clusterSurvey: number
         surveyResponses: number
+        specificChoice: number
     };
     export type SurveyQuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         survey?: boolean | SurveyQuestionCountOutputTypeCountSurveyArgs
         clusterSurvey?: boolean | SurveyQuestionCountOutputTypeCountClusterSurveyArgs
         surveyResponses?: boolean | SurveyQuestionCountOutputTypeCountSurveyResponsesArgs
+        specificChoice?: boolean | SurveyQuestionCountOutputTypeCountSpecificChoiceArgs
     };
     /**
      * SurveyQuestionCountOutputType without action
@@ -137212,6 +137726,12 @@ export namespace Prisma {
      */
     export type SurveyQuestionCountOutputTypeCountSurveyResponsesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SurveyResponseWhereInput
+    };
+    /**
+     * SurveyQuestionCountOutputType without action
+     */
+    export type SurveyQuestionCountOutputTypeCountSpecificChoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SpecificChoiceWhereInput
     };
     /**
      * Count Type SurveyChoiceCountOutputType
@@ -270273,6 +270793,10 @@ export namespace Prisma {
         endDate: Date | null
         status: $Enums.EvaluationPeriodStatus | null
         schoolYearId: string | null
+        overviewProblem: string | null
+        overviewGeneral: string | null
+        overviewResults: string | null
+        conclude: string | null
     };
     export type EvaluationPeriodMaxAggregateOutputType = {
         id: string | null
@@ -270288,6 +270812,10 @@ export namespace Prisma {
         endDate: Date | null
         status: $Enums.EvaluationPeriodStatus | null
         schoolYearId: string | null
+        overviewProblem: string | null
+        overviewGeneral: string | null
+        overviewResults: string | null
+        conclude: string | null
     };
     export type EvaluationPeriodCountAggregateOutputType = {
         id: number
@@ -270303,6 +270831,10 @@ export namespace Prisma {
         endDate: number
         status: number
         schoolYearId: number
+        overviewProblem: number
+        overviewGeneral: number
+        overviewResults: number
+        conclude: number
         _all: number
     };
     export type EvaluationPeriodMinAggregateInputType = {
@@ -270319,6 +270851,10 @@ export namespace Prisma {
         endDate?: true
         status?: true
         schoolYearId?: true
+        overviewProblem?: true
+        overviewGeneral?: true
+        overviewResults?: true
+        conclude?: true
     };
     export type EvaluationPeriodMaxAggregateInputType = {
         id?: true
@@ -270334,6 +270870,10 @@ export namespace Prisma {
         endDate?: true
         status?: true
         schoolYearId?: true
+        overviewProblem?: true
+        overviewGeneral?: true
+        overviewResults?: true
+        conclude?: true
     };
     export type EvaluationPeriodCountAggregateInputType = {
         id?: true
@@ -270349,6 +270889,10 @@ export namespace Prisma {
         endDate?: true
         status?: true
         schoolYearId?: true
+        overviewProblem?: true
+        overviewGeneral?: true
+        overviewResults?: true
+        conclude?: true
         _all?: true
     };
     export type EvaluationPeriodAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -270431,6 +270975,10 @@ export namespace Prisma {
         endDate: Date | null
         status: $Enums.EvaluationPeriodStatus
         schoolYearId: string | null
+        overviewProblem: string | null
+        overviewGeneral: string | null
+        overviewResults: string | null
+        conclude: string | null
         _count: EvaluationPeriodCountAggregateOutputType | null
         _min: EvaluationPeriodMinAggregateOutputType | null
         _max: EvaluationPeriodMaxAggregateOutputType | null
@@ -270461,6 +271009,10 @@ export namespace Prisma {
         endDate?: boolean
         status?: boolean
         schoolYearId?: boolean
+        overviewProblem?: boolean
+        overviewGeneral?: boolean
+        overviewResults?: boolean
+        conclude?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
         standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
         council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
@@ -270481,6 +271033,10 @@ export namespace Prisma {
         endDate?: boolean
         status?: boolean
         schoolYearId?: boolean
+        overviewProblem?: boolean
+        overviewGeneral?: boolean
+        overviewResults?: boolean
+        conclude?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
     }, ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -270497,6 +271053,10 @@ export namespace Prisma {
         endDate?: boolean
         status?: boolean
         schoolYearId?: boolean
+        overviewProblem?: boolean
+        overviewGeneral?: boolean
+        overviewResults?: boolean
+        conclude?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
     }, ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodSelectScalar = {
@@ -270513,8 +271073,12 @@ export namespace Prisma {
         endDate?: boolean
         status?: boolean
         schoolYearId?: boolean
+        overviewProblem?: boolean
+        overviewGeneral?: boolean
+        overviewResults?: boolean
+        conclude?: boolean
     };
-    export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status" | "schoolYearId", ExtArgs["result"]["evaluationPeriod"]>;
+    export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status" | "schoolYearId" | "overviewProblem" | "overviewGeneral" | "overviewResults" | "conclude", ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
         standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
@@ -270550,6 +271114,10 @@ export namespace Prisma {
             endDate: Date | null
             status: $Enums.EvaluationPeriodStatus
             schoolYearId: string | null
+            overviewProblem: string | null
+            overviewGeneral: string | null
+            overviewResults: string | null
+            conclude: string | null
         }, ExtArgs["result"]["evaluationPeriod"]>
         composites: {}
     };
@@ -286350,6 +286918,7 @@ export namespace Prisma {
         survey?: boolean | SurveyQuestion$surveyArgs<ExtArgs>
         clusterSurvey?: boolean | SurveyQuestion$clusterSurveyArgs<ExtArgs>
         surveyResponses?: boolean | SurveyQuestion$surveyResponsesArgs<ExtArgs>
+        specificChoice?: boolean | SurveyQuestion$specificChoiceArgs<ExtArgs>
         _count?: boolean | SurveyQuestionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["surveyQuestion"]>;
     export type SurveyQuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -286399,6 +286968,7 @@ export namespace Prisma {
         survey?: boolean | SurveyQuestion$surveyArgs<ExtArgs>
         clusterSurvey?: boolean | SurveyQuestion$clusterSurveyArgs<ExtArgs>
         surveyResponses?: boolean | SurveyQuestion$surveyResponsesArgs<ExtArgs>
+        specificChoice?: boolean | SurveyQuestion$specificChoiceArgs<ExtArgs>
         _count?: boolean | SurveyQuestionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SurveyQuestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -286414,6 +286984,7 @@ export namespace Prisma {
             survey: Prisma.$SurveyPayload<ExtArgs>[]
             clusterSurvey: Prisma.$ClusterSurveyPayload<ExtArgs>[]
             surveyResponses: Prisma.$SurveyResponsePayload<ExtArgs>[]
+            specificChoice: Prisma.$SpecificChoicePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -286899,6 +287470,29 @@ export namespace Prisma {
         distinct?: SurveyResponseScalarFieldEnum | SurveyResponseScalarFieldEnum[]
     };
     /**
+     * SurveyQuestion.specificChoice
+     */
+    export type SurveyQuestion$specificChoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        where?: SpecificChoiceWhereInput
+        orderBy?: SpecificChoiceOrderByWithRelationInput | SpecificChoiceOrderByWithRelationInput[]
+        cursor?: SpecificChoiceWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SpecificChoiceScalarFieldEnum | SpecificChoiceScalarFieldEnum[]
+    };
+    /**
      * SurveyQuestion without action
      */
     export type SurveyQuestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -286914,6 +287508,659 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: SurveyQuestionInclude<ExtArgs> | null
+    };
+    /**
+     * Model SpecificChoice
+     */
+    export type AggregateSpecificChoice = {
+        _count: SpecificChoiceCountAggregateOutputType | null
+        _min: SpecificChoiceMinAggregateOutputType | null
+        _max: SpecificChoiceMaxAggregateOutputType | null
+    };
+    export type SpecificChoiceMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        answer: string | null
+        surveyQuestionId: string | null
+    };
+    export type SpecificChoiceMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        answer: string | null
+        surveyQuestionId: string | null
+    };
+    export type SpecificChoiceCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        answer: number
+        surveyQuestionId: number
+        _all: number
+    };
+    export type SpecificChoiceMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        answer?: true
+        surveyQuestionId?: true
+    };
+    export type SpecificChoiceMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        answer?: true
+        surveyQuestionId?: true
+    };
+    export type SpecificChoiceCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        answer?: true
+        surveyQuestionId?: true
+        _all?: true
+    };
+    export type SpecificChoiceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which SpecificChoice to aggregate.
+         */
+        where?: SpecificChoiceWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of SpecificChoices to fetch.
+         */
+        orderBy?: SpecificChoiceOrderByWithRelationInput | SpecificChoiceOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: SpecificChoiceWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` SpecificChoices from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` SpecificChoices.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned SpecificChoices
+        **/
+        _count?: true | SpecificChoiceCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: SpecificChoiceMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: SpecificChoiceMaxAggregateInputType
+    };
+    export type GetSpecificChoiceAggregateType<T extends SpecificChoiceAggregateArgs> = {
+        [P in keyof T & keyof AggregateSpecificChoice]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSpecificChoice[P]>
+        : GetScalarType<T[P], AggregateSpecificChoice[P]>
+    };
+    export type SpecificChoiceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SpecificChoiceWhereInput
+        orderBy?: SpecificChoiceOrderByWithAggregationInput | SpecificChoiceOrderByWithAggregationInput[]
+        by: SpecificChoiceScalarFieldEnum[] | SpecificChoiceScalarFieldEnum
+        having?: SpecificChoiceScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: SpecificChoiceCountAggregateInputType | true
+        _min?: SpecificChoiceMinAggregateInputType
+        _max?: SpecificChoiceMaxAggregateInputType
+    };
+    export type SpecificChoiceGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        answer: string
+        surveyQuestionId: string
+        _count: SpecificChoiceCountAggregateOutputType | null
+        _min: SpecificChoiceMinAggregateOutputType | null
+        _max: SpecificChoiceMaxAggregateOutputType | null
+    };
+    type GetSpecificChoiceGroupByPayload<T extends SpecificChoiceGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<SpecificChoiceGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof SpecificChoiceGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], SpecificChoiceGroupByOutputType[P]>
+                : GetScalarType<T[P], SpecificChoiceGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type SpecificChoiceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        answer?: boolean
+        surveyQuestionId?: boolean
+        surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["specificChoice"]>;
+    export type SpecificChoiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        answer?: boolean
+        surveyQuestionId?: boolean
+        surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["specificChoice"]>;
+    export type SpecificChoiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        answer?: boolean
+        surveyQuestionId?: boolean
+        surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["specificChoice"]>;
+    export type SpecificChoiceSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        answer?: boolean
+        surveyQuestionId?: boolean
+    };
+    export type SpecificChoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "answer" | "surveyQuestionId", ExtArgs["result"]["specificChoice"]>;
+    export type SpecificChoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
+    };
+    export type SpecificChoiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
+    };
+    export type SpecificChoiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        surveyQuestion?: boolean | SurveyQuestionDefaultArgs<ExtArgs>
+    };
+    export type $SpecificChoicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "SpecificChoice"
+        objects: {
+            surveyQuestion: Prisma.$SurveyQuestionPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            answer: string
+            surveyQuestionId: string
+        }, ExtArgs["result"]["specificChoice"]>
+        composites: {}
+    };
+    type SpecificChoiceGetPayload<S extends boolean | null | undefined | SpecificChoiceDefaultArgs> = $Result.GetResult<Prisma.$SpecificChoicePayload, S>;
+    type SpecificChoiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<SpecificChoiceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: SpecificChoiceCountAggregateInputType | true
+    };
+    /**
+     * SpecificChoice findUnique
+     */
+    export type SpecificChoiceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * Filter, which SpecificChoice to fetch.
+         */
+        where: SpecificChoiceWhereUniqueInput
+    };
+    /**
+     * SpecificChoice findUniqueOrThrow
+     */
+    export type SpecificChoiceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * Filter, which SpecificChoice to fetch.
+         */
+        where: SpecificChoiceWhereUniqueInput
+    };
+    /**
+     * SpecificChoice findFirst
+     */
+    export type SpecificChoiceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * Filter, which SpecificChoice to fetch.
+         */
+        where?: SpecificChoiceWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of SpecificChoices to fetch.
+         */
+        orderBy?: SpecificChoiceOrderByWithRelationInput | SpecificChoiceOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for SpecificChoices.
+         */
+        cursor?: SpecificChoiceWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` SpecificChoices from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` SpecificChoices.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of SpecificChoices.
+         */
+        distinct?: SpecificChoiceScalarFieldEnum | SpecificChoiceScalarFieldEnum[]
+    };
+    /**
+     * SpecificChoice findFirstOrThrow
+     */
+    export type SpecificChoiceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * Filter, which SpecificChoice to fetch.
+         */
+        where?: SpecificChoiceWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of SpecificChoices to fetch.
+         */
+        orderBy?: SpecificChoiceOrderByWithRelationInput | SpecificChoiceOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for SpecificChoices.
+         */
+        cursor?: SpecificChoiceWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` SpecificChoices from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` SpecificChoices.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of SpecificChoices.
+         */
+        distinct?: SpecificChoiceScalarFieldEnum | SpecificChoiceScalarFieldEnum[]
+    };
+    /**
+     * SpecificChoice findMany
+     */
+    export type SpecificChoiceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * Filter, which SpecificChoices to fetch.
+         */
+        where?: SpecificChoiceWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of SpecificChoices to fetch.
+         */
+        orderBy?: SpecificChoiceOrderByWithRelationInput | SpecificChoiceOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing SpecificChoices.
+         */
+        cursor?: SpecificChoiceWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` SpecificChoices from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` SpecificChoices.
+         */
+        skip?: number
+        distinct?: SpecificChoiceScalarFieldEnum | SpecificChoiceScalarFieldEnum[]
+    };
+    /**
+     * SpecificChoice create
+     */
+    export type SpecificChoiceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * The data needed to create a SpecificChoice.
+         */
+        data: XOR<SpecificChoiceCreateInput, SpecificChoiceUncheckedCreateInput>
+    };
+    /**
+     * SpecificChoice createMany
+     */
+    export type SpecificChoiceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many SpecificChoices.
+         */
+        data: SpecificChoiceCreateManyInput | SpecificChoiceCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * SpecificChoice createManyAndReturn
+     */
+    export type SpecificChoiceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * The data used to create many SpecificChoices.
+         */
+        data: SpecificChoiceCreateManyInput | SpecificChoiceCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * SpecificChoice update
+     */
+    export type SpecificChoiceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * The data needed to update a SpecificChoice.
+         */
+        data: XOR<SpecificChoiceUpdateInput, SpecificChoiceUncheckedUpdateInput>
+        /**
+         * Choose, which SpecificChoice to update.
+         */
+        where: SpecificChoiceWhereUniqueInput
+    };
+    /**
+     * SpecificChoice updateMany
+     */
+    export type SpecificChoiceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update SpecificChoices.
+         */
+        data: XOR<SpecificChoiceUpdateManyMutationInput, SpecificChoiceUncheckedUpdateManyInput>
+        /**
+         * Filter which SpecificChoices to update
+         */
+        where?: SpecificChoiceWhereInput
+        /**
+         * Limit how many SpecificChoices to update.
+         */
+        limit?: number
+    };
+    /**
+     * SpecificChoice updateManyAndReturn
+     */
+    export type SpecificChoiceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * The data used to update SpecificChoices.
+         */
+        data: XOR<SpecificChoiceUpdateManyMutationInput, SpecificChoiceUncheckedUpdateManyInput>
+        /**
+         * Filter which SpecificChoices to update
+         */
+        where?: SpecificChoiceWhereInput
+        /**
+         * Limit how many SpecificChoices to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * SpecificChoice upsert
+     */
+    export type SpecificChoiceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * The filter to search for the SpecificChoice to update in case it exists.
+         */
+        where: SpecificChoiceWhereUniqueInput
+        /**
+         * In case the SpecificChoice found by the `where` argument doesn't exist, create a new SpecificChoice with this data.
+         */
+        create: XOR<SpecificChoiceCreateInput, SpecificChoiceUncheckedCreateInput>
+        /**
+         * In case the SpecificChoice was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<SpecificChoiceUpdateInput, SpecificChoiceUncheckedUpdateInput>
+    };
+    /**
+     * SpecificChoice delete
+     */
+    export type SpecificChoiceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
+        /**
+         * Filter which SpecificChoice to delete.
+         */
+        where: SpecificChoiceWhereUniqueInput
+    };
+    /**
+     * SpecificChoice deleteMany
+     */
+    export type SpecificChoiceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which SpecificChoices to delete
+         */
+        where?: SpecificChoiceWhereInput
+        /**
+         * Limit how many SpecificChoices to delete.
+         */
+        limit?: number
+    };
+    /**
+     * SpecificChoice without action
+     */
+    export type SpecificChoiceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SpecificChoice
+         */
+        select?: SpecificChoiceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SpecificChoice
+         */
+        omit?: SpecificChoiceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SpecificChoiceInclude<ExtArgs> | null
     };
     /**
      * Model SurveyChoice
@@ -340620,6 +341867,7 @@ export namespace Prisma {
     export type ClusterSurveyScalarFieldEnum = (typeof ClusterSurveyScalarFieldEnum)[keyof typeof ClusterSurveyScalarFieldEnum];
     export type SurveyScalarFieldEnum = (typeof SurveyScalarFieldEnum)[keyof typeof SurveyScalarFieldEnum];
     export type SurveyQuestionScalarFieldEnum = (typeof SurveyQuestionScalarFieldEnum)[keyof typeof SurveyQuestionScalarFieldEnum];
+    export type SpecificChoiceScalarFieldEnum = (typeof SpecificChoiceScalarFieldEnum)[keyof typeof SpecificChoiceScalarFieldEnum];
     export type SurveyChoiceScalarFieldEnum = (typeof SurveyChoiceScalarFieldEnum)[keyof typeof SurveyChoiceScalarFieldEnum];
     export type SurveySessionScalarFieldEnum = (typeof SurveySessionScalarFieldEnum)[keyof typeof SurveySessionScalarFieldEnum];
     export type SurveyResponseScalarFieldEnum = (typeof SurveyResponseScalarFieldEnum)[keyof typeof SurveyResponseScalarFieldEnum];
@@ -340882,6 +342130,7 @@ export namespace Prisma {
     export type ClusterSurveyOrderByRelevanceFieldEnum = (typeof ClusterSurveyOrderByRelevanceFieldEnum)[keyof typeof ClusterSurveyOrderByRelevanceFieldEnum];
     export type SurveyOrderByRelevanceFieldEnum = (typeof SurveyOrderByRelevanceFieldEnum)[keyof typeof SurveyOrderByRelevanceFieldEnum];
     export type SurveyQuestionOrderByRelevanceFieldEnum = (typeof SurveyQuestionOrderByRelevanceFieldEnum)[keyof typeof SurveyQuestionOrderByRelevanceFieldEnum];
+    export type SpecificChoiceOrderByRelevanceFieldEnum = (typeof SpecificChoiceOrderByRelevanceFieldEnum)[keyof typeof SpecificChoiceOrderByRelevanceFieldEnum];
     export type SurveyChoiceOrderByRelevanceFieldEnum = (typeof SurveyChoiceOrderByRelevanceFieldEnum)[keyof typeof SurveyChoiceOrderByRelevanceFieldEnum];
     export type SurveySessionOrderByRelevanceFieldEnum = (typeof SurveySessionOrderByRelevanceFieldEnum)[keyof typeof SurveySessionOrderByRelevanceFieldEnum];
     export type SurveyResponseOrderByRelevanceFieldEnum = (typeof SurveyResponseOrderByRelevanceFieldEnum)[keyof typeof SurveyResponseOrderByRelevanceFieldEnum];
@@ -360029,6 +361278,10 @@ export namespace Prisma {
         endDate?: DateTimeNullableFilter<"EvaluationPeriod"> | Date | string | null
         status?: EnumEvaluationPeriodStatusFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
         schoolYearId?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewProblem?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
         schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
         standards?: StandardPeriodListRelationFilter
         council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
@@ -360048,6 +361301,10 @@ export namespace Prisma {
         endDate?: SortOrderInput | SortOrder
         status?: SortOrder
         schoolYearId?: SortOrderInput | SortOrder
+        overviewProblem?: SortOrderInput | SortOrder
+        overviewGeneral?: SortOrderInput | SortOrder
+        overviewResults?: SortOrderInput | SortOrder
+        conclude?: SortOrderInput | SortOrder
         schoolYear?: SchoolYearOrderByWithRelationInput
         standards?: StandardPeriodOrderByRelationAggregateInput
         council?: EvaluationCouncilOrderByWithRelationInput
@@ -360071,6 +361328,10 @@ export namespace Prisma {
         endDate?: DateTimeNullableFilter<"EvaluationPeriod"> | Date | string | null
         status?: EnumEvaluationPeriodStatusFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
         schoolYearId?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewProblem?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
         schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
         standards?: StandardPeriodListRelationFilter
         council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
@@ -360090,6 +361351,10 @@ export namespace Prisma {
         endDate?: SortOrderInput | SortOrder
         status?: SortOrder
         schoolYearId?: SortOrderInput | SortOrder
+        overviewProblem?: SortOrderInput | SortOrder
+        overviewGeneral?: SortOrderInput | SortOrder
+        overviewResults?: SortOrderInput | SortOrder
+        conclude?: SortOrderInput | SortOrder
         _count?: EvaluationPeriodCountOrderByAggregateInput
         _max?: EvaluationPeriodMaxOrderByAggregateInput
         _min?: EvaluationPeriodMinOrderByAggregateInput
@@ -360111,6 +361376,10 @@ export namespace Prisma {
         endDate?: DateTimeNullableWithAggregatesFilter<"EvaluationPeriod"> | Date | string | null
         status?: EnumEvaluationPeriodStatusWithAggregatesFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
         schoolYearId?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        overviewProblem?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        overviewGeneral?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        overviewResults?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        conclude?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
     };
     export type StandardCatalogWhereInput = {
         AND?: StandardCatalogWhereInput | StandardCatalogWhereInput[]
@@ -362047,6 +363316,7 @@ export namespace Prisma {
         survey?: SurveyListRelationFilter
         clusterSurvey?: ClusterSurveyListRelationFilter
         surveyResponses?: SurveyResponseListRelationFilter
+        specificChoice?: SpecificChoiceListRelationFilter
     };
     export type SurveyQuestionOrderByWithRelationInput = {
         id?: SortOrder
@@ -362064,6 +363334,7 @@ export namespace Prisma {
         survey?: SurveyOrderByRelationAggregateInput
         clusterSurvey?: ClusterSurveyOrderByRelationAggregateInput
         surveyResponses?: SurveyResponseOrderByRelationAggregateInput
+        specificChoice?: SpecificChoiceOrderByRelationAggregateInput
         _relevance?: SurveyQuestionOrderByRelevanceInput
     };
     export type SurveyQuestionWhereUniqueInput = Prisma.AtLeast<{
@@ -362085,6 +363356,7 @@ export namespace Prisma {
         survey?: SurveyListRelationFilter
         clusterSurvey?: ClusterSurveyListRelationFilter
         surveyResponses?: SurveyResponseListRelationFilter
+        specificChoice?: SpecificChoiceListRelationFilter
     }, "id" | "code">;
     export type SurveyQuestionOrderByWithAggregationInput = {
         id?: SortOrder
@@ -362117,6 +363389,82 @@ export namespace Prisma {
         name?: StringWithAggregatesFilter<"SurveyQuestion"> | string
         type?: EnumSurveyQuestionTypeWithAggregatesFilter<"SurveyQuestion"> | $Enums.SurveyQuestionType
         surveyQuestionGroupId?: StringNullableWithAggregatesFilter<"SurveyQuestion"> | string | null
+    };
+    export type SpecificChoiceWhereInput = {
+        AND?: SpecificChoiceWhereInput | SpecificChoiceWhereInput[]
+        OR?: SpecificChoiceWhereInput[]
+        NOT?: SpecificChoiceWhereInput | SpecificChoiceWhereInput[]
+        id?: StringFilter<"SpecificChoice"> | string
+        code?: StringNullableFilter<"SpecificChoice"> | string | null
+        active?: BoolFilter<"SpecificChoice"> | boolean
+        description?: StringNullableFilter<"SpecificChoice"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SpecificChoice"> | Date | string | null
+        createdAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        updatedAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        createdBy?: UuidNullableFilter<"SpecificChoice"> | string | null
+        answer?: StringFilter<"SpecificChoice"> | string
+        surveyQuestionId?: StringFilter<"SpecificChoice"> | string
+        surveyQuestion?: XOR<SurveyQuestionScalarRelationFilter, SurveyQuestionWhereInput>
+    };
+    export type SpecificChoiceOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        answer?: SortOrder
+        surveyQuestionId?: SortOrder
+        surveyQuestion?: SurveyQuestionOrderByWithRelationInput
+        _relevance?: SpecificChoiceOrderByRelevanceInput
+    };
+    export type SpecificChoiceWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: SpecificChoiceWhereInput | SpecificChoiceWhereInput[]
+        OR?: SpecificChoiceWhereInput[]
+        NOT?: SpecificChoiceWhereInput | SpecificChoiceWhereInput[]
+        active?: BoolFilter<"SpecificChoice"> | boolean
+        description?: StringNullableFilter<"SpecificChoice"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SpecificChoice"> | Date | string | null
+        createdAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        updatedAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        createdBy?: UuidNullableFilter<"SpecificChoice"> | string | null
+        answer?: StringFilter<"SpecificChoice"> | string
+        surveyQuestionId?: StringFilter<"SpecificChoice"> | string
+        surveyQuestion?: XOR<SurveyQuestionScalarRelationFilter, SurveyQuestionWhereInput>
+    }, "id" | "code">;
+    export type SpecificChoiceOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        answer?: SortOrder
+        surveyQuestionId?: SortOrder
+        _count?: SpecificChoiceCountOrderByAggregateInput
+        _max?: SpecificChoiceMaxOrderByAggregateInput
+        _min?: SpecificChoiceMinOrderByAggregateInput
+    };
+    export type SpecificChoiceScalarWhereWithAggregatesInput = {
+        AND?: SpecificChoiceScalarWhereWithAggregatesInput | SpecificChoiceScalarWhereWithAggregatesInput[]
+        OR?: SpecificChoiceScalarWhereWithAggregatesInput[]
+        NOT?: SpecificChoiceScalarWhereWithAggregatesInput | SpecificChoiceScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"SpecificChoice"> | string
+        code?: StringNullableWithAggregatesFilter<"SpecificChoice"> | string | null
+        active?: BoolWithAggregatesFilter<"SpecificChoice"> | boolean
+        description?: StringNullableWithAggregatesFilter<"SpecificChoice"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"SpecificChoice"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"SpecificChoice"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"SpecificChoice"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"SpecificChoice"> | string | null
+        answer?: StringWithAggregatesFilter<"SpecificChoice"> | string
+        surveyQuestionId?: StringWithAggregatesFilter<"SpecificChoice"> | string
     };
     export type SurveyChoiceWhereInput = {
         AND?: SurveyChoiceWhereInput | SurveyChoiceWhereInput[]
@@ -390007,6 +391355,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
@@ -390026,6 +391378,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
@@ -390043,6 +391399,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
@@ -390062,6 +391422,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
@@ -390080,6 +391444,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
     };
     export type EvaluationPeriodUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390094,6 +391462,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type EvaluationPeriodUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390109,6 +391481,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StandardCatalogCreateInput = {
         id?: string
@@ -392257,6 +393633,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutSurveyQuestionInput
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyQuestionInput
         surveyResponses?: SurveyResponseCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionUncheckedCreateInput = {
         id?: string
@@ -392273,6 +393650,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
         surveyResponses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceUncheckedCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -392289,6 +393667,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutSurveyQuestionNestedInput
         clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyQuestionNestedInput
         surveyResponses?: SurveyResponseUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -392305,6 +393684,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
         surveyResponses?: SurveyResponseUncheckedUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionCreateManyInput = {
         id?: string
@@ -392343,6 +393723,89 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         type?: EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
         surveyQuestionGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type SpecificChoiceCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
+        surveyQuestion: SurveyQuestionCreateNestedOneWithoutSpecificChoiceInput
+    };
+    export type SpecificChoiceUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
+        surveyQuestionId: string
+    };
+    export type SpecificChoiceUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
+        surveyQuestion?: SurveyQuestionUpdateOneRequiredWithoutSpecificChoiceNestedInput
+    };
+    export type SpecificChoiceUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
+        surveyQuestionId?: StringFieldUpdateOperationsInput | string
+    };
+    export type SpecificChoiceCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
+        surveyQuestionId: string
+    };
+    export type SpecificChoiceUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
+    };
+    export type SpecificChoiceUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
+        surveyQuestionId?: StringFieldUpdateOperationsInput | string
     };
     export type SurveyChoiceCreateInput = {
         id?: string
@@ -412879,6 +414342,10 @@ export namespace Prisma {
         endDate?: SortOrder
         status?: SortOrder
         schoolYearId?: SortOrder
+        overviewProblem?: SortOrder
+        overviewGeneral?: SortOrder
+        overviewResults?: SortOrder
+        conclude?: SortOrder
     };
     export type EvaluationPeriodMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -412894,6 +414361,10 @@ export namespace Prisma {
         endDate?: SortOrder
         status?: SortOrder
         schoolYearId?: SortOrder
+        overviewProblem?: SortOrder
+        overviewGeneral?: SortOrder
+        overviewResults?: SortOrder
+        conclude?: SortOrder
     };
     export type EvaluationPeriodMinOrderByAggregateInput = {
         id?: SortOrder
@@ -412909,6 +414380,10 @@ export namespace Prisma {
         endDate?: SortOrder
         status?: SortOrder
         schoolYearId?: SortOrder
+        overviewProblem?: SortOrder
+        overviewGeneral?: SortOrder
+        overviewResults?: SortOrder
+        conclude?: SortOrder
     };
     export type EnumEvaluationPeriodStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.EvaluationPeriodStatus | EnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
@@ -414181,7 +415656,15 @@ export namespace Prisma {
         some?: SurveyResponseWhereInput
         none?: SurveyResponseWhereInput
     };
+    export type SpecificChoiceListRelationFilter = {
+        every?: SpecificChoiceWhereInput
+        some?: SpecificChoiceWhereInput
+        none?: SpecificChoiceWhereInput
+    };
     export type SurveyResponseOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type SpecificChoiceOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type SurveyQuestionOrderByRelevanceInput = {
@@ -414236,6 +415719,51 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumSurveyQuestionTypeFilter<$PrismaModel>
         _max?: NestedEnumSurveyQuestionTypeFilter<$PrismaModel>
+    };
+    export type SurveyQuestionScalarRelationFilter = {
+        is?: SurveyQuestionWhereInput
+        isNot?: SurveyQuestionWhereInput
+    };
+    export type SpecificChoiceOrderByRelevanceInput = {
+        fields: SpecificChoiceOrderByRelevanceFieldEnum | SpecificChoiceOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type SpecificChoiceCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        answer?: SortOrder
+        surveyQuestionId?: SortOrder
+    };
+    export type SpecificChoiceMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        answer?: SortOrder
+        surveyQuestionId?: SortOrder
+    };
+    export type SpecificChoiceMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        answer?: SortOrder
+        surveyQuestionId?: SortOrder
     };
     export type SurveyChoiceOrderByRelevanceInput = {
         fields: SurveyChoiceOrderByRelevanceFieldEnum | SurveyChoiceOrderByRelevanceFieldEnum[]
@@ -414355,10 +415883,6 @@ export namespace Prisma {
     export type SurveySessionScalarRelationFilter = {
         is?: SurveySessionWhereInput
         isNot?: SurveySessionWhereInput
-    };
-    export type SurveyQuestionScalarRelationFilter = {
-        is?: SurveyQuestionWhereInput
-        isNot?: SurveyQuestionWhereInput
     };
     export type SurveyChoiceNullableScalarRelationFilter = {
         is?: SurveyChoiceWhereInput | null
@@ -437565,6 +439089,12 @@ export namespace Prisma {
         createMany?: SurveyResponseCreateManySurveyQuestionInputEnvelope
         connect?: SurveyResponseWhereUniqueInput | SurveyResponseWhereUniqueInput[]
     };
+    export type SpecificChoiceCreateNestedManyWithoutSurveyQuestionInput = {
+        create?: XOR<SpecificChoiceCreateWithoutSurveyQuestionInput, SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput> | SpecificChoiceCreateWithoutSurveyQuestionInput[] | SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput[]
+        connectOrCreate?: SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput | SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput[]
+        createMany?: SpecificChoiceCreateManySurveyQuestionInputEnvelope
+        connect?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+    };
     export type SurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput = {
         create?: XOR<SurveyCreateWithoutSurveyQuestionInput, SurveyUncheckedCreateWithoutSurveyQuestionInput> | SurveyCreateWithoutSurveyQuestionInput[] | SurveyUncheckedCreateWithoutSurveyQuestionInput[]
         connectOrCreate?: SurveyCreateOrConnectWithoutSurveyQuestionInput | SurveyCreateOrConnectWithoutSurveyQuestionInput[]
@@ -437580,6 +439110,12 @@ export namespace Prisma {
         connectOrCreate?: SurveyResponseCreateOrConnectWithoutSurveyQuestionInput | SurveyResponseCreateOrConnectWithoutSurveyQuestionInput[]
         createMany?: SurveyResponseCreateManySurveyQuestionInputEnvelope
         connect?: SurveyResponseWhereUniqueInput | SurveyResponseWhereUniqueInput[]
+    };
+    export type SpecificChoiceUncheckedCreateNestedManyWithoutSurveyQuestionInput = {
+        create?: XOR<SpecificChoiceCreateWithoutSurveyQuestionInput, SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput> | SpecificChoiceCreateWithoutSurveyQuestionInput[] | SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput[]
+        connectOrCreate?: SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput | SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput[]
+        createMany?: SpecificChoiceCreateManySurveyQuestionInputEnvelope
+        connect?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
     };
     export type EnumSurveyQuestionTypeFieldUpdateOperationsInput = {
         set?: $Enums.SurveyQuestionType
@@ -437630,6 +439166,19 @@ export namespace Prisma {
         updateMany?: SurveyResponseUpdateManyWithWhereWithoutSurveyQuestionInput | SurveyResponseUpdateManyWithWhereWithoutSurveyQuestionInput[]
         deleteMany?: SurveyResponseScalarWhereInput | SurveyResponseScalarWhereInput[]
     };
+    export type SpecificChoiceUpdateManyWithoutSurveyQuestionNestedInput = {
+        create?: XOR<SpecificChoiceCreateWithoutSurveyQuestionInput, SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput> | SpecificChoiceCreateWithoutSurveyQuestionInput[] | SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput[]
+        connectOrCreate?: SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput | SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput[]
+        upsert?: SpecificChoiceUpsertWithWhereUniqueWithoutSurveyQuestionInput | SpecificChoiceUpsertWithWhereUniqueWithoutSurveyQuestionInput[]
+        createMany?: SpecificChoiceCreateManySurveyQuestionInputEnvelope
+        set?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+        disconnect?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+        delete?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+        connect?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+        update?: SpecificChoiceUpdateWithWhereUniqueWithoutSurveyQuestionInput | SpecificChoiceUpdateWithWhereUniqueWithoutSurveyQuestionInput[]
+        updateMany?: SpecificChoiceUpdateManyWithWhereWithoutSurveyQuestionInput | SpecificChoiceUpdateManyWithWhereWithoutSurveyQuestionInput[]
+        deleteMany?: SpecificChoiceScalarWhereInput | SpecificChoiceScalarWhereInput[]
+    };
     export type SurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput = {
         create?: XOR<SurveyCreateWithoutSurveyQuestionInput, SurveyUncheckedCreateWithoutSurveyQuestionInput> | SurveyCreateWithoutSurveyQuestionInput[] | SurveyUncheckedCreateWithoutSurveyQuestionInput[]
         connectOrCreate?: SurveyCreateOrConnectWithoutSurveyQuestionInput | SurveyCreateOrConnectWithoutSurveyQuestionInput[]
@@ -437666,6 +439215,31 @@ export namespace Prisma {
         update?: SurveyResponseUpdateWithWhereUniqueWithoutSurveyQuestionInput | SurveyResponseUpdateWithWhereUniqueWithoutSurveyQuestionInput[]
         updateMany?: SurveyResponseUpdateManyWithWhereWithoutSurveyQuestionInput | SurveyResponseUpdateManyWithWhereWithoutSurveyQuestionInput[]
         deleteMany?: SurveyResponseScalarWhereInput | SurveyResponseScalarWhereInput[]
+    };
+    export type SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionNestedInput = {
+        create?: XOR<SpecificChoiceCreateWithoutSurveyQuestionInput, SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput> | SpecificChoiceCreateWithoutSurveyQuestionInput[] | SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput[]
+        connectOrCreate?: SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput | SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput[]
+        upsert?: SpecificChoiceUpsertWithWhereUniqueWithoutSurveyQuestionInput | SpecificChoiceUpsertWithWhereUniqueWithoutSurveyQuestionInput[]
+        createMany?: SpecificChoiceCreateManySurveyQuestionInputEnvelope
+        set?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+        disconnect?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+        delete?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+        connect?: SpecificChoiceWhereUniqueInput | SpecificChoiceWhereUniqueInput[]
+        update?: SpecificChoiceUpdateWithWhereUniqueWithoutSurveyQuestionInput | SpecificChoiceUpdateWithWhereUniqueWithoutSurveyQuestionInput[]
+        updateMany?: SpecificChoiceUpdateManyWithWhereWithoutSurveyQuestionInput | SpecificChoiceUpdateManyWithWhereWithoutSurveyQuestionInput[]
+        deleteMany?: SpecificChoiceScalarWhereInput | SpecificChoiceScalarWhereInput[]
+    };
+    export type SurveyQuestionCreateNestedOneWithoutSpecificChoiceInput = {
+        create?: XOR<SurveyQuestionCreateWithoutSpecificChoiceInput, SurveyQuestionUncheckedCreateWithoutSpecificChoiceInput>
+        connectOrCreate?: SurveyQuestionCreateOrConnectWithoutSpecificChoiceInput
+        connect?: SurveyQuestionWhereUniqueInput
+    };
+    export type SurveyQuestionUpdateOneRequiredWithoutSpecificChoiceNestedInput = {
+        create?: XOR<SurveyQuestionCreateWithoutSpecificChoiceInput, SurveyQuestionUncheckedCreateWithoutSpecificChoiceInput>
+        connectOrCreate?: SurveyQuestionCreateOrConnectWithoutSpecificChoiceInput
+        upsert?: SurveyQuestionUpsertWithoutSpecificChoiceInput
+        connect?: SurveyQuestionWhereUniqueInput
+        update?: XOR<XOR<SurveyQuestionUpdateToOneWithWhereWithoutSpecificChoiceInput, SurveyQuestionUpdateWithoutSpecificChoiceInput>, SurveyQuestionUncheckedUpdateWithoutSpecificChoiceInput>
     };
     export type ClusterSurveyCreateNestedOneWithoutSurveyChoiceInput = {
         create?: XOR<ClusterSurveyCreateWithoutSurveyChoiceInput, ClusterSurveyUncheckedCreateWithoutSurveyChoiceInput>
@@ -496188,6 +497762,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -496205,6 +497783,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
@@ -496393,6 +497975,10 @@ export namespace Prisma {
         endDate?: DateTimeNullableFilter<"EvaluationPeriod"> | Date | string | null
         status?: EnumEvaluationPeriodStatusFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
         schoolYearId?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewProblem?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
     };
     export type SchoolYearCreateWithoutSemestersInput = {
         id?: string
@@ -525463,6 +527049,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
@@ -525481,6 +527071,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
     };
@@ -526647,6 +528241,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
@@ -526665,6 +528263,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
     };
@@ -540141,6 +541743,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -540159,6 +541765,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
@@ -540224,6 +541834,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -540242,6 +541856,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
@@ -541524,6 +543142,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -541542,6 +543164,10 @@ export namespace Prisma {
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
         schoolYearId?: string | null
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
@@ -541605,6 +543231,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -541623,6 +543253,10 @@ export namespace Prisma {
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
@@ -543752,6 +545386,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutSurveyQuestionInput
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyQuestionInput
         surveyResponses?: SurveyResponseCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionUncheckedCreateWithoutSurveyQuestionGroupInput = {
         id?: string
@@ -543767,6 +545402,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
         surveyResponses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceUncheckedCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionCreateOrConnectWithoutSurveyQuestionGroupInput = {
         where: SurveyQuestionWhereUniqueInput
@@ -544065,6 +545701,7 @@ export namespace Prisma {
         surveyQuestionGroup?: SurveyQuestionGroupCreateNestedOneWithoutSurveyQuestionInput
         survey?: SurveyCreateNestedManyWithoutSurveyQuestionInput
         surveyResponses?: SurveyResponseCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionUncheckedCreateWithoutClusterSurveyInput = {
         id?: string
@@ -544080,6 +545717,7 @@ export namespace Prisma {
         surveyQuestionGroupId?: string | null
         survey?: SurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
         surveyResponses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceUncheckedCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionCreateOrConnectWithoutClusterSurveyInput = {
         where: SurveyQuestionWhereUniqueInput
@@ -544625,6 +546263,7 @@ export namespace Prisma {
         surveyQuestionGroup?: SurveyQuestionGroupCreateNestedOneWithoutSurveyQuestionInput
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyQuestionInput
         surveyResponses?: SurveyResponseCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionUncheckedCreateWithoutSurveyInput = {
         id?: string
@@ -544640,6 +546279,7 @@ export namespace Prisma {
         surveyQuestionGroupId?: string | null
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
         surveyResponses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceUncheckedCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionCreateOrConnectWithoutSurveyInput = {
         where: SurveyQuestionWhereUniqueInput
@@ -545296,6 +546936,36 @@ export namespace Prisma {
         data: SurveyResponseCreateManySurveyQuestionInput | SurveyResponseCreateManySurveyQuestionInput[]
         skipDuplicates?: boolean
     };
+    export type SpecificChoiceCreateWithoutSurveyQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
+    };
+    export type SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
+    };
+    export type SpecificChoiceCreateOrConnectWithoutSurveyQuestionInput = {
+        where: SpecificChoiceWhereUniqueInput
+        create: XOR<SpecificChoiceCreateWithoutSurveyQuestionInput, SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput>
+    };
+    export type SpecificChoiceCreateManySurveyQuestionInputEnvelope = {
+        data: SpecificChoiceCreateManySurveyQuestionInput | SpecificChoiceCreateManySurveyQuestionInput[]
+        skipDuplicates?: boolean
+    };
     export type SurveyQuestionGroupUpsertWithoutSurveyQuestionInput = {
         update: XOR<SurveyQuestionGroupUpdateWithoutSurveyQuestionInput, SurveyQuestionGroupUncheckedUpdateWithoutSurveyQuestionInput>
         create: XOR<SurveyQuestionGroupCreateWithoutSurveyQuestionInput, SurveyQuestionGroupUncheckedCreateWithoutSurveyQuestionInput>
@@ -545386,6 +547056,111 @@ export namespace Prisma {
         explanation?: StringNullableFilter<"SurveyResponse"> | string | null
         surveyChoiceId?: StringNullableFilter<"SurveyResponse"> | string | null
         answeredAt?: DateTimeFilter<"SurveyResponse"> | Date | string
+    };
+    export type SpecificChoiceUpsertWithWhereUniqueWithoutSurveyQuestionInput = {
+        where: SpecificChoiceWhereUniqueInput
+        update: XOR<SpecificChoiceUpdateWithoutSurveyQuestionInput, SpecificChoiceUncheckedUpdateWithoutSurveyQuestionInput>
+        create: XOR<SpecificChoiceCreateWithoutSurveyQuestionInput, SpecificChoiceUncheckedCreateWithoutSurveyQuestionInput>
+    };
+    export type SpecificChoiceUpdateWithWhereUniqueWithoutSurveyQuestionInput = {
+        where: SpecificChoiceWhereUniqueInput
+        data: XOR<SpecificChoiceUpdateWithoutSurveyQuestionInput, SpecificChoiceUncheckedUpdateWithoutSurveyQuestionInput>
+    };
+    export type SpecificChoiceUpdateManyWithWhereWithoutSurveyQuestionInput = {
+        where: SpecificChoiceScalarWhereInput
+        data: XOR<SpecificChoiceUpdateManyMutationInput, SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionInput>
+    };
+    export type SpecificChoiceScalarWhereInput = {
+        AND?: SpecificChoiceScalarWhereInput | SpecificChoiceScalarWhereInput[]
+        OR?: SpecificChoiceScalarWhereInput[]
+        NOT?: SpecificChoiceScalarWhereInput | SpecificChoiceScalarWhereInput[]
+        id?: StringFilter<"SpecificChoice"> | string
+        code?: StringNullableFilter<"SpecificChoice"> | string | null
+        active?: BoolFilter<"SpecificChoice"> | boolean
+        description?: StringNullableFilter<"SpecificChoice"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SpecificChoice"> | Date | string | null
+        createdAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        updatedAt?: DateTimeFilter<"SpecificChoice"> | Date | string
+        createdBy?: UuidNullableFilter<"SpecificChoice"> | string | null
+        answer?: StringFilter<"SpecificChoice"> | string
+        surveyQuestionId?: StringFilter<"SpecificChoice"> | string
+    };
+    export type SurveyQuestionCreateWithoutSpecificChoiceInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        type: $Enums.SurveyQuestionType
+        surveyQuestionGroup?: SurveyQuestionGroupCreateNestedOneWithoutSurveyQuestionInput
+        survey?: SurveyCreateNestedManyWithoutSurveyQuestionInput
+        clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyQuestionInput
+        surveyResponses?: SurveyResponseCreateNestedManyWithoutSurveyQuestionInput
+    };
+    export type SurveyQuestionUncheckedCreateWithoutSpecificChoiceInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        type: $Enums.SurveyQuestionType
+        surveyQuestionGroupId?: string | null
+        survey?: SurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
+        clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
+        surveyResponses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveyQuestionInput
+    };
+    export type SurveyQuestionCreateOrConnectWithoutSpecificChoiceInput = {
+        where: SurveyQuestionWhereUniqueInput
+        create: XOR<SurveyQuestionCreateWithoutSpecificChoiceInput, SurveyQuestionUncheckedCreateWithoutSpecificChoiceInput>
+    };
+    export type SurveyQuestionUpsertWithoutSpecificChoiceInput = {
+        update: XOR<SurveyQuestionUpdateWithoutSpecificChoiceInput, SurveyQuestionUncheckedUpdateWithoutSpecificChoiceInput>
+        create: XOR<SurveyQuestionCreateWithoutSpecificChoiceInput, SurveyQuestionUncheckedCreateWithoutSpecificChoiceInput>
+        where?: SurveyQuestionWhereInput
+    };
+    export type SurveyQuestionUpdateToOneWithWhereWithoutSpecificChoiceInput = {
+        where?: SurveyQuestionWhereInput
+        data: XOR<SurveyQuestionUpdateWithoutSpecificChoiceInput, SurveyQuestionUncheckedUpdateWithoutSpecificChoiceInput>
+    };
+    export type SurveyQuestionUpdateWithoutSpecificChoiceInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        type?: EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
+        surveyQuestionGroup?: SurveyQuestionGroupUpdateOneWithoutSurveyQuestionNestedInput
+        survey?: SurveyUpdateManyWithoutSurveyQuestionNestedInput
+        clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyQuestionNestedInput
+        surveyResponses?: SurveyResponseUpdateManyWithoutSurveyQuestionNestedInput
+    };
+    export type SurveyQuestionUncheckedUpdateWithoutSpecificChoiceInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        type?: EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
+        surveyQuestionGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+        survey?: SurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
+        clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
+        surveyResponses?: SurveyResponseUncheckedUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type ClusterSurveyCreateWithoutSurveyChoiceInput = {
         id?: string
@@ -546901,6 +548676,7 @@ export namespace Prisma {
         surveyQuestionGroup?: SurveyQuestionGroupCreateNestedOneWithoutSurveyQuestionInput
         survey?: SurveyCreateNestedManyWithoutSurveyQuestionInput
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionUncheckedCreateWithoutSurveyResponsesInput = {
         id?: string
@@ -546916,6 +548692,7 @@ export namespace Prisma {
         surveyQuestionGroupId?: string | null
         survey?: SurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyQuestionInput
+        specificChoice?: SpecificChoiceUncheckedCreateNestedManyWithoutSurveyQuestionInput
     };
     export type SurveyQuestionCreateOrConnectWithoutSurveyResponsesInput = {
         where: SurveyQuestionWhereUniqueInput
@@ -547021,6 +548798,7 @@ export namespace Prisma {
         surveyQuestionGroup?: SurveyQuestionGroupUpdateOneWithoutSurveyQuestionNestedInput
         survey?: SurveyUpdateManyWithoutSurveyQuestionNestedInput
         clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionUncheckedUpdateWithoutSurveyResponsesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547036,6 +548814,7 @@ export namespace Prisma {
         surveyQuestionGroupId?: NullableStringFieldUpdateOperationsInput | string | null
         survey?: SurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyChoiceUpsertWithoutSurveyResponsesInput = {
         update: XOR<SurveyChoiceUpdateWithoutSurveyResponsesInput, SurveyChoiceUncheckedUpdateWithoutSurveyResponsesInput>
@@ -593643,6 +595422,10 @@ export namespace Prisma {
         startDate?: Date | string
         endDate?: Date | string | null
         status?: $Enums.EvaluationPeriodStatus
+        overviewProblem?: string | null
+        overviewGeneral?: string | null
+        overviewResults?: string | null
+        conclude?: string | null
     };
     export type SemesterUpdateWithoutSchoolYearInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -593917,6 +595700,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -593934,6 +595721,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
@@ -593951,6 +595742,10 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+        overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+        conclude?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassCreateManySemesterInput = {
         id?: string
@@ -615873,6 +617668,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutSurveyQuestionNestedInput
         clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyQuestionNestedInput
         surveyResponses?: SurveyResponseUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionUncheckedUpdateWithoutSurveyQuestionGroupInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -615888,6 +617684,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
         surveyResponses?: SurveyResponseUncheckedUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionUncheckedUpdateManyWithoutSurveyQuestionGroupInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -616166,6 +617963,7 @@ export namespace Prisma {
         surveyQuestionGroup?: SurveyQuestionGroupUpdateOneWithoutSurveyQuestionNestedInput
         survey?: SurveyUpdateManyWithoutSurveyQuestionNestedInput
         surveyResponses?: SurveyResponseUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionUncheckedUpdateWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -616181,6 +617979,7 @@ export namespace Prisma {
         surveyQuestionGroupId?: NullableStringFieldUpdateOperationsInput | string | null
         survey?: SurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
         surveyResponses?: SurveyResponseUncheckedUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionUncheckedUpdateManyWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -616390,6 +618189,7 @@ export namespace Prisma {
         surveyQuestionGroup?: SurveyQuestionGroupUpdateOneWithoutSurveyQuestionNestedInput
         clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyQuestionNestedInput
         surveyResponses?: SurveyResponseUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionUncheckedUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -616405,6 +618205,7 @@ export namespace Prisma {
         surveyQuestionGroupId?: NullableStringFieldUpdateOperationsInput | string | null
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyQuestionNestedInput
         surveyResponses?: SurveyResponseUncheckedUpdateManyWithoutSurveyQuestionNestedInput
+        specificChoice?: SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionNestedInput
     };
     export type SurveyQuestionUncheckedUpdateManyWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -616486,6 +618287,17 @@ export namespace Prisma {
         explanation?: string | null
         surveyChoiceId?: string | null
         answeredAt?: Date | string
+    };
+    export type SpecificChoiceCreateManySurveyQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        answer: string
     };
     export type SurveyUpdateWithoutSurveyQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -616659,6 +618471,39 @@ export namespace Prisma {
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         surveyChoiceId?: NullableStringFieldUpdateOperationsInput | string | null
         answeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type SpecificChoiceUpdateWithoutSurveyQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
+    };
+    export type SpecificChoiceUncheckedUpdateWithoutSurveyQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
+    };
+    export type SpecificChoiceUncheckedUpdateManyWithoutSurveyQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: StringFieldUpdateOperationsInput | string
     };
     export type SurveyResponseCreateManySurveyChoiceInput = {
         id?: string

@@ -71,6 +71,7 @@ const importLecturer = createRoute({
 
 app.openapi(importLecturer, async (c) => {
     const { file, timeout } = c.req.valid('form')
+    const start = Date.now()
 
     const buf = await file.arrayBuffer()
     const data = parseSheetLecturer(buf)
@@ -126,7 +127,6 @@ app.openapi(importLecturer, async (c) => {
         existingLecturer.map(({ code, id, userProfileId }) => [code, { id, userProfileId }])
     )
 
-    const start = Date.now()
     // await prisma.$transaction(
     //     async (tx) => {
     for (const lecturer of data.lecturers) {
@@ -254,7 +254,7 @@ app.openapi(importLecturer, async (c) => {
                     res.status,
                     res.data,
                     // @ts-expect-error
-                    res.data?.extra?.data.Master
+                    res.data?.extra?.data?.Master
                 )
                 if (res.status === 200) {
                     await prisma.lecturer.create({
@@ -262,7 +262,10 @@ app.openapi(importLecturer, async (c) => {
                             ...lecturerData,
                             userProfile: {
                                 connectOrCreate: {
-                                    where: { idCardNumber: lecturer.idCardNumber },
+                                    where: {
+                                        id: res.data as string,
+                                        // idCardNumber: lecturer.idCardNumber,
+                                    },
                                     create: { id: res.data as string, ...profileData },
                                 },
                             },
@@ -303,7 +306,7 @@ const importStudent = createRoute({
             content: {
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
-                        createCurriculumVersion: z.boolean().optional(),
+                        createCurriculumVersion: z.coerce.boolean().default(false).optional(),
                         timeout: z.coerce.number().default(30),
                     }).openapi('ImportStudentRequest'),
                 },
@@ -524,6 +527,7 @@ app.openapi(importStudent, async (c) => {
         prisma,
         data.students,
         trainingObjectType.id,
+        trainingCourse.name,
         createCurriculumVersion
     )
 
@@ -553,11 +557,11 @@ app.openapi(importStudent, async (c) => {
 
     const existingProfile = await prisma.userProfile.findMany({
         where: { idCardNumber: { in: data.students.map((student) => student.idCardNumber) } },
-        select: { id: true, idCardNumber: true },
+        select: { id: true, code: true, idCardNumber: true },
     })
 
     const existingProfileMap = new Map(
-        existingProfile.map(({ idCardNumber, id }) => [idCardNumber, id])
+        existingProfile.map(({ idCardNumber, id, code }) => [idCardNumber, { id, code }])
     )
 
     const start = Date.now()
@@ -576,10 +580,8 @@ app.openapi(importStudent, async (c) => {
 
     const fixedClass = await prisma.fixedClass.findMany({
         where: {
-            OR: data.students.map(({ fixedClassCode, curriculum }) => ({
+            OR: data.students.map(({ fixedClassCode }) => ({
                 code: fixedClassCode,
-                trainingCourseId: trainingCourse.id,
-                curriculumVersionId: curriculumVersionMap.get(curriculum),
             })),
         },
         select: { id: true, code: true },
@@ -610,6 +612,9 @@ app.openapi(importStudent, async (c) => {
         }
         const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(student.fullname),
+            code: student.idCardNumber,
+            fullname: student.fullname,
+            email: `${student.idCardNumber}@gmail.com`,
             bLaGiangVien: false,
             bLaHocVien: true,
             dateOfBirth: student.dateOfBirth,
@@ -627,14 +632,14 @@ app.openapi(importStudent, async (c) => {
         const existingProfile = existingProfileMap.get(student.idCardNumber)
         const existing = existingStudentMap.get(student.code)
 
-        const createStudentFn = async () => {
+        const createStudentFn = async (id?: string) => {
             const st = await prisma.student.create({
                 data: {
                     ...studentData,
                     userProfile: {
                         connectOrCreate: {
-                            where: { idCardNumber: student.idCardNumber },
-                            create: profileData,
+                            where: id ? { id } : { idCardNumber: student.idCardNumber },
+                            create: { id, ...profileData },
                         },
                     },
                 },
@@ -666,8 +671,8 @@ app.openapi(importStudent, async (c) => {
         if (existingProfile) {
             const res = await putDMNhanViens(
                 {
-                    Id: existingProfile,
-                    sMa: student.idCardNumber,
+                    Id: existingProfile.id,
+                    sMa: existingProfile.code || crypto.randomUUID(),
                     bLaHocVien: true,
                     bLaTaiKhoan: true,
                     dNgaySinh: student.dateOfBirth
@@ -689,6 +694,7 @@ app.openapi(importStudent, async (c) => {
                     },
                 }
             )
+
             // @ts-expect-error
             console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
             if (existing) {
@@ -701,7 +707,7 @@ app.openapi(importStudent, async (c) => {
                         },
                     })
                 } else {
-                    const extra = res.data?.extra as ErrorExtra | undefined
+                    const extra = res.data?.extra as unknown as ErrorExtra | undefined
                     return c.json(
                         { message: extra?.message || [extra?.code, extra?.data].join(' ') },
                         400
@@ -711,11 +717,8 @@ app.openapi(importStudent, async (c) => {
                 await createStudentFn()
             }
         } else {
-            // const profileId = crypto.randomUUID()
-
             const res = await postDMNhanViens(
                 {
-                    // Id: profileId,
                     sMa: student.idCardNumber,
                     bLaHocVien: true,
                     bLaTaiKhoan: true,
@@ -738,10 +741,10 @@ app.openapi(importStudent, async (c) => {
                 }
             )
             // @ts-expect-error
-            console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data.Master)
+            console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data?.Master)
 
             if (res.status === 200) {
-                await createStudentFn()
+                await createStudentFn(res.data as string)
             } else {
                 const extra = res.data?.extra as ErrorExtra | undefined
                 return c.json(
@@ -857,7 +860,8 @@ app.openapi(importHeQuanSu, async (c) => {
     const curriculumVersionMap = await buildCurriculumMapOrThrow(
         prisma,
         data.students,
-        trainingObjectType.id
+        trainingObjectType.id,
+        trainingCourse.name
     )
 
     const existingStudent = await prisma.student.findMany({

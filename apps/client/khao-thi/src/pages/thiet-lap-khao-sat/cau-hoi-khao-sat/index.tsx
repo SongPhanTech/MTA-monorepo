@@ -83,6 +83,7 @@ function Page() {
     const { onOpen } = useDisclosure<{
         id: string
         surveyQuestionGroupId?: string
+        type?: string
     }>({
         tag: 'PutSurveyQuestionModal',
     })

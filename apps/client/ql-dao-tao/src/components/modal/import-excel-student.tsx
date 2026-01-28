@@ -4,7 +4,20 @@ import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import { importStudent } from '@workspace/libs/api/training'
 import { parseSheetStudent } from '@workspace/libs/parseExcel'
-import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
+import {
+    Button,
+    Col,
+    Collapse,
+    Empty,
+    Modal,
+    message,
+    Row,
+    Space,
+    Switch,
+    Table,
+    Tag,
+    Tooltip,
+} from 'antd'
 import { useState } from 'react'
 
 const { Panel } = Collapse
@@ -19,6 +32,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
     const [previewData, setPreviewData] = useState<any[]>([])
     const [errorData, setErrorData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
+    const [createCurriculumVersion, setCreateCurriculumVersion] = useState(false)
     const [disabledButton, setDisabledButton] = useState<boolean>(true)
     const [data, setData] = useState<{
         trainingObjectType: string | undefined
@@ -100,7 +114,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
 
         try {
             if (!file) return
-            const res = await importStudent({ file: file, timeout: 30 })
+            const res = await importStudent({ file, createCurriculumVersion, timeout: 30 })
             if (res?.status === 200) {
                 message.success(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thành công')
                 onCancel()
@@ -221,11 +235,24 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                 </Collapse>
             )}
 
-            <Row className="text-xl font-[500] mb-3">
-                Danh sách sinh viên{' '}
-                {previewData.length > 0 && (
-                    <span className="ml-2">({previewData.length} sinh viên)</span>
-                )}
+            <Row className="flex flex-row justify-between items-center mb-3">
+                <p className="text-xl">
+                    Danh sách sinh viên{' '}
+                    {previewData.length > 0 && (
+                        <span className="ml-2">({previewData.length} sinh viên)</span>
+                    )}
+                </p>
+                <Tooltip
+                    className="flex flex-row align-middle items-center gap-1"
+                    title="Khởi tạo các CTĐT nếu chưa có"
+                >
+                    <label htmlFor="createCurriculumVersion">Tạo CTĐT</label>
+                    <Switch
+                        id="createCurriculumVersion"
+                        checked={createCurriculumVersion}
+                        onChange={(v) => setCreateCurriculumVersion(v)}
+                    />
+                </Tooltip>
             </Row>
             <Row className="mb-3">
                 <Col span={12}>
@@ -368,21 +395,28 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                         dataIndex: 'competencyScore',
                         key: 'competencyScore',
                         align: 'center',
-                        width: 150,
+                        width: 100,
+                    },
+                    {
+                        title: 'Mã lớp',
+                        dataIndex: 'fixedClassCode',
+                        key: 'fixedClassCode',
+                        align: 'center',
+                        width: 100,
                     },
                     {
                         title: 'Lớp quản lý',
                         dataIndex: 'fixedClass',
                         key: 'fixedClass',
                         align: 'center',
-                        width: 150,
+                        width: 200,
                     },
                     {
                         title: 'Ngành',
                         dataIndex: 'trainingField',
                         key: 'trainingField',
                         align: 'center',
-                        width: 150,
+                        width: 200,
                     },
 
                     {
@@ -390,7 +424,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                         dataIndex: 'trainingMajor',
                         key: 'trainingMajor',
                         align: 'center',
-                        width: 150,
+                        width: 200,
                     },
                     {
                         title: 'Chương trình đào tạo',

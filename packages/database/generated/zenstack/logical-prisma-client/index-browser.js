@@ -3156,7 +3156,11 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   status: 'status',
-  schoolYearId: 'schoolYearId'
+  schoolYearId: 'schoolYearId',
+  overviewProblem: 'overviewProblem',
+  overviewGeneral: 'overviewGeneral',
+  overviewResults: 'overviewResults',
+  conclude: 'conclude'
 };
 
 exports.Prisma.StandardCatalogScalarFieldEnum = {
@@ -3478,6 +3482,19 @@ exports.Prisma.SurveyQuestionScalarFieldEnum = {
   name: 'name',
   type: 'type',
   surveyQuestionGroupId: 'surveyQuestionGroupId'
+};
+
+exports.Prisma.SpecificChoiceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  answer: 'answer',
+  surveyQuestionId: 'surveyQuestionId'
 };
 
 exports.Prisma.SurveyChoiceScalarFieldEnum = {
@@ -6517,7 +6534,11 @@ exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name',
-  schoolYearId: 'schoolYearId'
+  schoolYearId: 'schoolYearId',
+  overviewProblem: 'overviewProblem',
+  overviewGeneral: 'overviewGeneral',
+  overviewResults: 'overviewResults',
+  conclude: 'conclude'
 };
 
 exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {
@@ -6727,6 +6748,15 @@ exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   surveyQuestionGroupId: 'surveyQuestionGroupId'
+};
+
+exports.Prisma.SpecificChoiceOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  answer: 'answer',
+  surveyQuestionId: 'surveyQuestionId'
 };
 
 exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
@@ -7622,6 +7652,7 @@ exports.CriteriaField = exports.$Enums.CriteriaField = {
   CUMULATIVE_PASSED_CREDITS: 'CUMULATIVE_PASSED_CREDITS',
   CUMULATIVE_DEBT_CREDITS: 'CUMULATIVE_DEBT_CREDITS',
   CUMULATIVE_PROGRESS_PERCENT: 'CUMULATIVE_PROGRESS_PERCENT',
+  CUMULATIVE_RETAKE_PERCENT: 'CUMULATIVE_RETAKE_PERCENT',
   ACADEMIC_WARNING_LEVEL: 'ACADEMIC_WARNING_LEVEL',
   DISCIPLINARY_WARNING_LEVEL: 'DISCIPLINARY_WARNING_LEVEL',
   REPEAT_YEAR_COUNT: 'REPEAT_YEAR_COUNT',
@@ -7654,7 +7685,8 @@ exports.DecisionStatus = exports.$Enums.DecisionStatus = {
 
 exports.TrainingScoreStatus = exports.$Enums.TrainingScoreStatus = {
   PENDING: 'PENDING',
-  APPROVED: 'APPROVED'
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.ResearchProjectStatus = exports.$Enums.ResearchProjectStatus = {
@@ -8046,6 +8078,7 @@ exports.Prisma.ModelName = {
   ClusterSurvey: 'ClusterSurvey',
   Survey: 'Survey',
   SurveyQuestion: 'SurveyQuestion',
+  SpecificChoice: 'SpecificChoice',
   SurveyChoice: 'SurveyChoice',
   SurveySession: 'SurveySession',
   SurveyResponse: 'SurveyResponse',
