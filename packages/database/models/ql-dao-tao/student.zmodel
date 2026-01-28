@@ -155,7 +155,8 @@ model StudentSemesterResult extends BaseNoCode {
   totalCredits             Int      // Tổng tín chỉ mở trong học kỳ cho CTĐT
 
   registeredCredits        Int      // Số tín chỉ đăng ký
-  retakingCredits          Int      // Số tín chỉ học lại + thi lại
+  retakingCredits          Int                     @default(0) // Số tín chỉ học lại
+  reExamCredits            Int                     @default(0) // Số tín chỉ thi lại
   passedCredits            Int      // Số tín đạt
   failedCredits            Int      // số tín chỉ không đạt trong học kỳ
 
@@ -204,7 +205,12 @@ model StudentYearResult extends BaseNoCode {
   rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
   rankId                   String?
 
+  lowestFinalScore         Float?    // Điểm học phần thấp nhất
+  lowestGraduationScore    Float?
+
   totalCredits             Int      // tổng số tín chỉ tích lũy
+  retakingCredits          Int                     @default(0) // Số tín chỉ học lại
+  reExamCredits            Int                     @default(0) // Số tín chỉ thi lại
   failedCredits            Int      // tín chỉ nợ tích lũy
 
   isClassMonitor           Boolean  // Lớp trưởng

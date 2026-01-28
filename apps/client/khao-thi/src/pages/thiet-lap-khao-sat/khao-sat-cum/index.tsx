@@ -8,6 +8,7 @@ import { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
 import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
+import SurveyEssay from '@components/sub-pages/khao-sat/liet-ke';
 // import OrganizationSurveyReport from '@components/sub-pages/khao-sat/bao-cao-don-vi'
 
 export type LectuerType = Lecturer & {
@@ -104,6 +105,12 @@ export default function ClussterSurveyPage() {
             key: '6',
             label: 'Báo cáo chi tiết',
             children: <SurveyReport selectedId={sublectClass?.surveyId || ''} />,
+            disabled: !sublectClass?.surveyId,
+        },
+          {
+            key: '4',
+            label: 'Liệt kê câu hỏi tự luận',
+            children: <SurveyEssay selectedId={sublectClass?.surveyId || ''} />,
             disabled: !sublectClass?.surveyId,
         },
     ]

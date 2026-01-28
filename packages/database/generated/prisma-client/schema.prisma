@@ -3994,7 +3994,8 @@ model StudentSemesterResult {
   lowestGraduationScore    Float?
   totalCredits             Int
   registeredCredits        Int
-  retakingCredits          Int
+  retakingCredits          Int                     @default(0)
+  reExamCredits            Int                     @default(0)
   passedCredits            Int
   failedCredits            Int
   accumulatedCredits       Int
@@ -4039,7 +4040,11 @@ model StudentYearResult {
   studentTrainingType      StudentTrainingType
   rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
   rankId                   String?
+  lowestFinalScore         Float?
+  lowestGraduationScore    Float?
   totalCredits             Int
+  retakingCredits          Int                     @default(0)
+  reExamCredits            Int                     @default(0)
   failedCredits            Int
   isClassMonitor           Boolean
   isUnionLeader            Boolean

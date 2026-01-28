@@ -782,7 +782,7 @@ const Table = <T extends AnyObject>({
             pagination={
                 pagination !== false
                     ? {
-                          position: ['bottomLeft'],
+                          position: ['bottomRight'],
                           defaultPageSize: DEFAULT_PAGINATE_SIZE,
                           showSizeChanger: {
                               labelRender: ({ value }) => `${value} / trang`,

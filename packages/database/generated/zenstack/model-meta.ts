@@ -14876,6 +14876,11 @@ const metadata: ModelMeta = {
                 }, retakingCredits: {
                     name: "retakingCredits",
                     type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, reExamCredits: {
+                    name: "reExamCredits",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, passedCredits: {
                     name: "passedCredits",
                     type: "Int",
@@ -15049,9 +15054,25 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'rank',
+                }, lowestFinalScore: {
+                    name: "lowestFinalScore",
+                    type: "Float",
+                    isOptional: true,
+                }, lowestGraduationScore: {
+                    name: "lowestGraduationScore",
+                    type: "Float",
+                    isOptional: true,
                 }, totalCredits: {
                     name: "totalCredits",
                     type: "Int",
+                }, retakingCredits: {
+                    name: "retakingCredits",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, reExamCredits: {
+                    name: "reExamCredits",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, failedCredits: {
                     name: "failedCredits",
                     type: "Int",

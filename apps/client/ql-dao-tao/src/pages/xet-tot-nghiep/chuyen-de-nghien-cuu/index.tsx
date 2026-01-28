@@ -7,9 +7,11 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { SubjectVersionType } from '@workspace/db'
 import {
+    useCountStudentResearchTopic,
     useCountStudentSubjectScore,
     useFindManyDM_DonVi,
     useFindManyLecturer,
+    useFindManyStudentResearchTopic,
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
@@ -25,25 +27,22 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import DatePicker from '@components/commons/date-picker'
 
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { Prisma } from '@workspace/db/client'
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
     organizationId: string
-}
-interface TimeReportForm {
     subjectClassId: string
     reportDate: string
 }
 
 export default function ChuyenDeNghienCuu() {
     const [form] = Form.useForm<ChuyenDeNghienCuuForm>()
-    const [timeReportForm] = Form.useForm<TimeReportForm>()
-    const [searchParams, setSearchParams] = useState<Partial<ChuyenDeNghienCuuForm>>({})
-    const [timeReportParams, setTimeReportParams] = useState<Partial<TimeReportForm>>({})
-
+    const organizationId = Form.useWatch('organizationId', form)
+    const trainingCourseId = Form.useWatch('trainingCourseId', form)
+    const subjectClassId = Form.useWatch('subjectClassId', form)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [isSearched, setIsSearched] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
 
@@ -54,13 +53,10 @@ export default function ChuyenDeNghienCuu() {
         tag: 'PutResearchTopicModal',
     })
 
-    const courseWhere = useMemo(() => {
-        return {
-            trainingObjectTypeId: trainingObjectTypeId,
-        }
-    }, [trainingObjectTypeId])
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        where: courseWhere,
+        where: {
+            trainingObjectTypeId: trainingObjectTypeId,
+        },
     })
     const { data: lecturerData = [] } = useFindManyLecturer({
         include: {
@@ -74,101 +70,79 @@ export default function ChuyenDeNghienCuu() {
                 type: SubjectVersionType.Research,
             },
             semesterId,
+            trainingObjectTypeId,
         },
     })
     const where = useMemo(() => {
-        if (!isSearched) {
-            return { id: { in: [] } }
-        }
-        const filter: any = {
-            studentResearchTopic: {
-                isNot: null,
-            },
-            subjectClass: {
-                subject: {
-                    type: SubjectVersionType.Research,
-                },
-            },
-        }
-
-        if (trainingObjectTypeId) {
-            filter.subjectClass = {
-                ...filter.subjectClass,
-
-                trainingObjectTypeId: trainingObjectTypeId,
-            }
-        }
-
-        if (semesterId) {
-            filter.subjectClass = {
-                ...filter.subjectClass,
-                semesterId: semesterId,
-            }
-        }
-
-        if (searchParams.trainingCourseId) {
-            filter.student = {
-                fixedClass: {
-                    trainingCourseId: searchParams.trainingCourseId,
-                },
-            }
-        }
-
-        if (searchParams.organizationId) {
-            filter.subjectVersion = {
-                subject: {
-                    managementOrganizationId: searchParams.organizationId,
-                },
-            }
-        }
-        if (timeReportParams.subjectClassId) {
-            filter.subjectClass = {
-                ...filter.subjectClass,
-                id: timeReportParams.subjectClassId,
-            }
-        }
-
-        return filter
-    }, [searchParams, isSearched, timeReportParams, trainingObjectTypeId, semesterId])
-    const { data: studentSubjectScoreData = [], refetch: refetchStudentSubjectScore } =
-        useFindManyStudentSubjectScore({
-            where,
-            include: {
-                studentResearchTopic: {
-                    include: {
-                        supervisor: {
-                            include: {
-                                userProfile: true,
-                            },
-                        },
-                        coSupervisor: {
-                            include: {
-                                userProfile: true,
-                            },
-                        },
-                    },
-                },
+        const filter: Prisma.StudentResearchTopicWhereInput = {
+            studentSubjectScore: {
                 subjectClass: {
-                    include: {
-                        trainingObjectType: true,
-                        semester: true,
+                    subject: {
+                        type: SubjectVersionType.Research,
+                        managementOrganizationId: organizationId,
                     },
+                    trainingObjectTypeId,
+                    semesterId,
+                    cancelled: false,
+                    active: true,
+                    ...(subjectClassId ? { id: subjectClassId } : {}),
                 },
                 student: {
+                    fixedClass: {
+                        trainingCourseId: trainingCourseId || undefined,
+                    },
+                    status: 'ENROLLED',
+                    active: true,
+                    deletedAt: null,
+                },
+            },
+            deletedAt: null,
+        }
+
+        return {
+            ...filter,
+            deletedAt: null,
+        }
+    }, [organizationId, trainingCourseId, subjectClassId, trainingObjectTypeId, semesterId])
+    const { data: studentResearchTopicData = [], refetch: refetchStudentResearchTopic } =
+        useFindManyStudentResearchTopic({
+            where,
+            include: {
+                supervisor: {
                     include: {
                         userProfile: true,
-                        fixedClass: {
-                            include: {
-                                trainingCourse: true,
-                            },
-                        },
                     },
                 },
-                subjectVersion: {
+                coSupervisor: {
                     include: {
-                        subject: {
+                        userProfile: true,
+                    },
+                },
+                studentSubjectScore: {
+                    include: {
+                        subjectClass: {
                             include: {
-                                managementOrganization: true,
+                                trainingObjectType: true,
+                                semester: true,
+                            },
+                        },
+                        student: {
+                            include: {
+                                userProfile: true,
+                                fixedClass: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
+                                },
+                            },
+                        },
+                        subjectVersion: {
+                            include: {
+                                subject: {
+                                    include: {
+                                        managementOrganization: true,
+                                    },
+                                },
                             },
                         },
                     },
@@ -177,57 +151,12 @@ export default function ChuyenDeNghienCuu() {
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         })
-    const { data: studentSubjectScoreAllData = [], refetch: refetchStudentSubjectScoreAll } =
-        useFindManyStudentSubjectScore({
-            where,
-            include: {
-                studentResearchTopic: {
-                    include: {
-                        supervisor: {
-                            include: {
-                                userProfile: true,
-                            },
-                        },
-                        coSupervisor: {
-                            include: {
-                                userProfile: true,
-                            },
-                        },
-                    },
-                },
-                subjectClass: {
-                    include: {
-                        trainingObjectType: true,
-                        semester: true,
-                    },
-                },
-                student: {
-                    include: {
-                        userProfile: true,
-                        fixedClass: {
-                            include: {
-                                trainingCourse: true,
-                            },
-                        },
-                    },
-                },
-                subjectVersion: {
-                    include: {
-                        subject: {
-                            include: {
-                                managementOrganization: true,
-                            },
-                        },
-                    },
-                },
-            },
-        })
 
-    const { data: count, refetch: refetchCount } = useCountStudentSubjectScore({
-        where: isSearched ? { ...where, deletedAt: null } : { id: { in: [] } },
+    const { data: count, refetch: refetchCount } = useCountStudentResearchTopic({
+        where,
     })
     const handleAssignDate = async () => {
-        const reportDate = timeReportForm.getFieldValue('reportDate')
+        const reportDate = form.getFieldValue('reportDate')
         if (!reportDate) {
             return message.warning('Vui lòng chọn hạn nhập chuyên đề trước khi gán!')
         }
@@ -239,7 +168,7 @@ export default function ChuyenDeNghienCuu() {
                 data: {
                     where: {
                         id: {
-                            in: studentSubjectScoreAllData.map(
+                            in: studentResearchTopicAllData.map(
                                 (item: any) => item.studentResearchTopic?.id
                             ),
                         },
@@ -254,28 +183,21 @@ export default function ChuyenDeNghienCuu() {
             return message.error('Có lỗi xảy ra khi gán ngày.')
         }
         message.success('Gán ngày thành công!')
-        refetchStudentSubjectScore()
+        refetchStudentResearchTopic()
         refetchCount()
-        refetchStudentSubjectScoreAll()
     }
     const handleSearch = () => {
-        const values = form.getFieldsValue()
-        setSearchParams(values)
-        setIsSearched(true)
         setCurrentPage(1)
-        refetchStudentSubjectScore()
-        refetchStudentSubjectScoreAll()
+        refetchStudentResearchTopic()
         refetchCount()
     }
 
     const treeOrgData = buildOrgTree(organizationData ?? [], '0')
     const getData = async () => {
-        const subjectClassId = timeReportForm.getFieldValue('subjectClassId')
+        const subjectClassId = form.getFieldValue('subjectClassId')
         if (!subjectClassId) {
             return message.warning('Vui lòng chọn lớp môn học trước khi lấy dữ liệu')
         }
-
-        setTimeReportParams({ subjectClassId })
 
         try {
             const subjectStudent = await sqlTransaction([
@@ -329,14 +251,12 @@ export default function ChuyenDeNghienCuu() {
             console.error('getData Error:', error)
             message.error('Có lỗi xảy ra khi xử lý dữ liệu.')
         } finally {
-            setIsSearched(true)
-            refetchStudentSubjectScore()
-            refetchStudentSubjectScoreAll()
+            refetchStudentResearchTopic()
             refetchCount()
         }
     }
     const exportToExcel = async () => {
-        if (studentSubjectScoreData.length === 0) {
+        if (studentResearchTopicData.length === 0) {
             return message.warning('Không có dữ liệu để xuất Excel!')
         }
 
@@ -423,7 +343,7 @@ export default function ChuyenDeNghienCuu() {
         headerRow.font = { bold: true }
         headerRow.alignment = { horizontal: 'center', vertical: 'middle' }
 
-        studentSubjectScoreData.forEach((record, index) => {
+        studentResearchTopicData.forEach((record, index) => {
             const currentRowNum = headerRowNumber + index + 1
             const topic = record.studentResearchTopic
 
@@ -581,7 +501,7 @@ export default function ChuyenDeNghienCuu() {
             const res = await sqlTransaction(finalData)
 
             message.success(`Cập nhật thành công ${finalData.length} bản ghi!`)
-            refetchStudentSubjectScore()
+            refetchStudentResearchTopic()
         } catch (error) {
             console.error('Import Excel Error:', error)
             message.error(
@@ -647,7 +567,6 @@ export default function ChuyenDeNghienCuu() {
                                     placeholder="Chọn đối tượng"
                                 />
                             </Form.Item> */}
-
                             <Form.Item name="trainingCourseId" label="Khóa học" className="mb-0">
                                 <Select
                                     className="w-36"
@@ -708,7 +627,6 @@ export default function ChuyenDeNghienCuu() {
                 <Row gutter={[8, 8]} align="top" justify="space-between">
                     <Col span={24}>
                         <Form
-                            form={timeReportForm}
                             layout="horizontal"
                             className="w-full mb-2 flex flex-wrap items-end gap-4"
                         >
@@ -787,10 +705,8 @@ export default function ChuyenDeNghienCuu() {
                             render: (_, record) => {
                                 return (
                                     <div>
-                                        {record.studentResearchTopic?.deadline
-                                            ? dayjs(record.studentResearchTopic?.deadline).format(
-                                                  'DD/MM/YYYY'
-                                              )
+                                        {record?.deadline
+                                            ? dayjs(record.deadline).format('DD/MM/YYYY')
                                             : ''}
                                     </div>
                                 )
@@ -809,7 +725,10 @@ export default function ChuyenDeNghienCuu() {
                             width: 100,
                             align: 'center',
                             render: (_, record) => {
-                                return record?.student?.fixedClass?.trainingCourse?.name || ''
+                                return (
+                                    record?.studentSubjectScore?.student?.fixedClass?.trainingCourse
+                                        ?.name || ''
+                                )
                             },
                         },
                         // {
@@ -825,7 +744,7 @@ export default function ChuyenDeNghienCuu() {
                             width: 150,
                             align: 'left',
                             render: (_, record) => {
-                                return record?.student?.userProfile?.fullname
+                                return record?.studentSubjectScore?.student?.userProfile?.fullname
                             },
                         },
                         // {
@@ -849,7 +768,7 @@ export default function ChuyenDeNghienCuu() {
                             width: 250,
                             align: 'left',
                             render: (_, record) => {
-                                return record?.studentResearchTopic?.name || ''
+                                return record?.name || ''
                             },
                         },
                         {
@@ -857,7 +776,7 @@ export default function ChuyenDeNghienCuu() {
                             width: 250,
                             align: 'left',
                             render: (_, record) => {
-                                return record?.studentResearchTopic?.mainContent || ''
+                                return record?.mainContent || ''
                             },
                         },
                         {
@@ -865,11 +784,8 @@ export default function ChuyenDeNghienCuu() {
                             width: 150,
                             align: 'left',
                             render: (_, record) => {
-                                return `${
-                                    record?.studentResearchTopic?.supervisor?.userProfile
-                                        ?.lastName || ''
-                                }
-                 ${record?.studentResearchTopic?.supervisor?.userProfile?.firstName || ''}`.trim()
+                                return `${record?.supervisor?.userProfile?.lastName || ''}
+                 ${record?.supervisor?.userProfile?.firstName || ''}`.trim()
                             },
                         },
                         {
@@ -877,11 +793,8 @@ export default function ChuyenDeNghienCuu() {
                             width: 150,
                             align: 'left',
                             render: (_, record) => {
-                                return `${
-                                    record?.studentResearchTopic?.coSupervisor?.userProfile
-                                        ?.lastName || ''
-                                }
-                 ${record?.studentResearchTopic?.coSupervisor?.userProfile?.firstName || ''}`.trim()
+                                return `${record?.coSupervisor?.userProfile?.lastName || ''}
+                 ${record?.coSupervisor?.userProfile?.firstName || ''}`.trim()
                             },
                         },
                         {
@@ -889,10 +802,8 @@ export default function ChuyenDeNghienCuu() {
                             width: 150,
                             align: 'left',
                             render: (_, record) => {
-                                return record?.studentResearchTopic?.reportDate
-                                    ? dayjs(record?.studentResearchTopic?.reportDate).format(
-                                          'DD/MM/YYYY'
-                                      )
+                                return record?.reportDate
+                                    ? dayjs(record?.reportDate).format('DD/MM/YYYY')
                                     : ''
                             },
                         },
@@ -901,8 +812,10 @@ export default function ChuyenDeNghienCuu() {
                             width: 100,
                             align: 'left',
                             render: (_, record) => {
-                                return record?.finalScore
-                                    ? Number(record?.finalScore).toFixedSmart(2)
+                                return record?.studentSubjectScore?.finalScore
+                                    ? Number(record?.studentSubjectScore?.finalScore).toFixedSmart(
+                                          2
+                                      )
                                     : ''
                             },
                         },
@@ -918,8 +831,7 @@ export default function ChuyenDeNghienCuu() {
                                             className="text-sm cursor-pointer"
                                             onClick={() =>
                                                 openPutResearchTopicModal({
-                                                    studentResearchTopicId:
-                                                        record.studentResearchTopic?.id,
+                                                    studentResearchTopicId: record.id,
                                                     studentSubjectScoreId: record.id,
                                                 })
                                             }
@@ -929,7 +841,7 @@ export default function ChuyenDeNghienCuu() {
                             },
                         },
                     ]}
-                    data={studentSubjectScoreData}
+                    data={studentResearchTopicData}
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
