@@ -53,6 +53,7 @@ import {
     exportKiemTraTienDo,
     exportPhuLucDsLuanVan,
     exportSaoQDHDLV,
+    exportThanhToanHoiDongBaoVe,
     exportThongKeCbHdlv,
 } from '@/utils/thesis-excel'
 
@@ -239,7 +240,9 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                             supervisorPayment: true,
                             coSupervisorPayment: true,
                             council: {
-                                include: { members: { include: { expert: true } } },
+                                include: { members: { include: { expert: true,
+                                    payment: true,
+                                 } } },
                             },
                         },
                     },
@@ -666,8 +669,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 11,
             label: 'Thanh toán hội đồng bảo vệ',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportThanhToanHoiDongBaoVe({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            }),
+          
         },
     ]
     // hàm xử lý render component

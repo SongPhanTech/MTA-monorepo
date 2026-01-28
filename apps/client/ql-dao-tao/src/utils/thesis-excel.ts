@@ -30,6 +30,26 @@ interface GmcLvPbTable {
     chuyennganh:string
     tenchucdanh:string
 }
+interface TthdbvData{
+    ngay:string
+    thang:string
+    nam:string
+    khoa:string
+    dotXet:number
+    chuyenNganh:string
+    khoaQuanLi:string
+    data: TthdbvTable[]
+    tongTienBangSo:number
+    tongTienBangChu:string
+}
+interface TthdbvTable{
+    stt:number
+    thongTinBaoVe:string
+    thongTinHoiDong:string
+    thongTinThanhToan:string
+    thongTinStk:string
+    thongTinNganHang:string
+}
 export const exportPhuLucDsLuanVan = async ({
     allStudentsInClasses,
     showSpinner,
@@ -839,8 +859,6 @@ const downloadFile = (blob: Blob, fileName: string) => {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 }
-
-
  const convertToGmcLvPbData = (allStudentsInClasses: any[]): GmcLvPbData[] => {
     if (!allStudentsInClasses?.length) return [];
 
@@ -906,3 +924,15 @@ const downloadFile = (blob: Blob, fileName: string) => {
 
     return Array.from(expertMap.values());
 };
+
+export const exportThanhToanHoiDongBaoVe = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
+}: ExportOptions) => {
+    if (!allStudentsInClasses?.length) {
+        message.error('Không có dữ liệu để tạo thanh toán hội đồng bảo vệ');
+        return;
+    }
+}
