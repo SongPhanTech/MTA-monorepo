@@ -68,7 +68,7 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
         {
             where,
             include: { survey: true },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { createdAt: 'asc' },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
