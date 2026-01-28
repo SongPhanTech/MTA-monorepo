@@ -8,6 +8,5 @@ import type { PostApiStatsRetestRates200Data } from './postApiStatsRetestRates20
 
 export type PostApiStatsRetestRates200 = {
     success: boolean
-    /** @nullable */
-    data?: PostApiStatsRetestRates200Data
+    data: PostApiStatsRetestRates200Data
 }

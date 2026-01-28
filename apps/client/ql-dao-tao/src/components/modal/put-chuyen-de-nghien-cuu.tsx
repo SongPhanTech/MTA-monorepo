@@ -2,7 +2,7 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import {
     useFindManyLecturer,
-    useFindUniqueStudentSubjectScore,
+    useFindUniqueStudentResearchTopic,
     useUpdateStudentResearchTopic,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Row, Select } from 'antd'
@@ -11,25 +11,22 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import { useEffect } from 'react'
+import type { StudentResearchTopic } from '@workspace/db/client'
+import { FormItem } from '@workspace/ui'
 
 dayjs.locale('vi')
 const { TextArea } = Input
-interface PutResearchTopicForm {
-    name: string
-    mainContent: string
-    supervisorId: string
-    coSupervisorId: string
-    reportDate: Date
-    deadline: Date
-
+type PutResearchTopicForm = {
     score: string
-}
+    studentFullname?: string | null
+    studentCode?: string | null
+    studentDateOfBirth?: Date | null
+} & StudentResearchTopic
 
 const PutResearchTopicModal = () => {
     const [form] = Form.useForm<PutResearchTopicForm>()
     const { isOpen, onClose, input } = useDisclosure<{
         studentResearchTopicId: string
-        studentSubjectScoreId: string
     }>({
         tag: 'PutResearchTopicModal',
         onClose: form.resetFields,
@@ -41,14 +38,36 @@ const PutResearchTopicModal = () => {
             userProfile: true,
         },
     })
-    const { data: studentSubjectScore } = useFindUniqueStudentSubjectScore(
+
+    const { data: studentResearchTopic } = useFindUniqueStudentResearchTopic(
         {
-            where: { id: input?.studentSubjectScoreId },
+            where: { id: input?.studentResearchTopicId },
             include: {
-                studentResearchTopic: true,
+                supervisor: {
+                    include: {
+                        userProfile: true,
+                    },
+                },
+                coSupervisor: {
+                    include: {
+                        userProfile: true,
+                    },
+                },
+                studentSubjectScore: {
+                    include: {
+                        student: {
+                            select: {
+                                code: true,
+                                userProfile: true,
+                            },
+                        },
+                    },
+                },
             },
         },
-        { enabled: !!input?.studentSubjectScoreId }
+        {
+            enabled: !!input?.studentResearchTopicId,
+        }
     )
 
     const { mutateAsync: updateStudentResearchTopic } = useUpdateStudentResearchTopic()
@@ -94,23 +113,32 @@ const PutResearchTopicModal = () => {
         }
     }
     useEffect(() => {
-        if (input?.studentSubjectScoreId) {
+        if (input?.studentResearchTopicId) {
             form.setFieldsValue({
-                name: studentSubjectScore?.studentResearchTopic?.name ?? '',
-                mainContent: studentSubjectScore?.studentResearchTopic?.mainContent ?? '',
-                supervisorId: studentSubjectScore?.studentResearchTopic?.supervisorId ?? undefined,
-                coSupervisorId:
-                    studentSubjectScore?.studentResearchTopic?.coSupervisorId ?? undefined,
-                reportDate: studentSubjectScore?.studentResearchTopic?.reportDate
-                    ? dayjs(studentSubjectScore?.studentResearchTopic?.reportDate)
+                name: studentResearchTopic?.name ?? '',
+                mainContent: studentResearchTopic?.mainContent ?? '',
+                supervisorId: studentResearchTopic?.supervisorId ?? undefined,
+                coSupervisorId: studentResearchTopic?.coSupervisorId ?? undefined,
+                reportDate: studentResearchTopic?.reportDate
+                    ? dayjs(studentResearchTopic?.reportDate)
                     : undefined,
-                deadline: studentSubjectScore?.studentResearchTopic?.deadline
-                    ? dayjs(studentSubjectScore?.studentResearchTopic?.deadline)
+                deadline: studentResearchTopic?.deadline
+                    ? dayjs(studentResearchTopic?.deadline)
                     : undefined,
-                score: studentSubjectScore?.finalScore?.toString() ?? '',
+                score: studentResearchTopic?.studentSubjectScore?.finalScore?.toString() ?? '',
+                studentFullname:
+                    studentResearchTopic?.studentSubjectScore?.student?.userProfile?.fullname,
+                studentCode: studentResearchTopic?.studentSubjectScore?.student?.code,
+                studentDateOfBirth: studentResearchTopic?.studentSubjectScore?.student?.userProfile
+                    ?.dateOfBirth
+                    ? dayjs(
+                          studentResearchTopic?.studentSubjectScore?.student?.userProfile
+                              ?.dateOfBirth
+                      ).format('DD/MM/YYYY')
+                    : undefined,
             })
         }
-    }, [input?.studentSubjectScoreId, studentSubjectScore, form])
+    }, [input?.studentResearchTopicId, studentResearchTopic, form])
     return (
         <PutFormModal
             open={isOpen}
@@ -125,26 +153,46 @@ const PutResearchTopicModal = () => {
             }
             className="w-[60vw]"
         >
-            <Row gutter={[24, 0]}>
-                <Col span={12}>
-                    <Form.Item name="name" label="Tên chuyên đề" required>
-                        <TextArea
-                            placeholder="Nhập tên chuyên đề"
-                            autoSize={{ minRows: 2, maxRows: 4 }}
-                        />
-                    </Form.Item>
+            <Row gutter={[8, 8]}>
+                <Col span={8}>
+                    <FormItem form={form} name="studentCode" label="Mã HV/SV">
+                        <Input variant="outlined" disabled />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="studentFullname" label="Họ và tên">
+                        <Input variant="outlined" disabled />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="studentDateOfBirth" label="Ngày sinh">
+                        <Input variant="outlined" disabled />
+                    </FormItem>
                 </Col>
                 <Col span={12}>
-                    <Form.Item name="mainContent" label="Nội dung chính của chuyên đề" required>
+                    <FormItem form={form} name="name" label="Tên chuyên đề" required>
+                        <TextArea
+                            placeholder="Nhập tên chuyên đề"
+                            autoSize={{ minRows: 2, maxRows: 6 }}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={12}>
+                    <FormItem
+                        form={form}
+                        name="mainContent"
+                        label="Nội dung chính của chuyên đề"
+                        required
+                    >
                         <TextArea
                             placeholder="Nhập nội dung chính của chuyên đề"
-                            autoSize={{ minRows: 2, maxRows: 4 }}
+                            autoSize={{ minRows: 2, maxRows: 6 }}
                         />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
 
                 <Col span={12}>
-                    <Form.Item name="supervisorId" label="Giảng viên hướng dẫn" required>
+                    <FormItem form={form} name="supervisorId" label="Giảng viên hướng dẫn" required>
                         <Select
                             placeholder="Chọn giảng viên hướng dẫn"
                             options={lecturer.map((item) => ({
@@ -155,10 +203,10 @@ const PutResearchTopicModal = () => {
                             filterOption={false}
                             allowClear
                         />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
                 <Col span={12}>
-                    <Form.Item name="coSupervisorId" label="Chuyên gia hướng dẫn phụ">
+                    <FormItem form={form} name="coSupervisorId" label="Chuyên gia hướng dẫn phụ">
                         <Select
                             placeholder="Chọn chuyên gia phụ"
                             options={lecturer.map((item) => ({
@@ -169,38 +217,30 @@ const PutResearchTopicModal = () => {
                             filterOption={false}
                             allowClear
                         />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
-
-                <Col span={12}>
-                    <Form.Item name="reportDate" label="Thời gian báo cáo">
+                <Col span={8}>
+                    <FormItem form={form} name="reportDate" label="Thời gian báo cáo">
                         <DatePicker
                             format={{ format: 'DD/MM/YYYY', type: 'mask' }}
                             className="w-full"
                             placeholder="Chọn ngày báo cáo"
                         />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
-                <Col span={12}>
-                    <Form.Item name="deadline" label="Hạn nhập chuyên đề">
+                <Col span={8}>
+                    <FormItem form={form} name="deadline" label="Hạn nhập chuyên đề">
                         <DatePicker
                             format={{ format: 'DD/MM/YYYY', type: 'mask' }}
                             className="w-full"
                             placeholder="Chọn hạn nhập chuyên đề"
                         />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
-
-                <Col span={12}>
-                    <Form.Item name="score" label="Điểm số">
-                        <InputNumber
-                            min={0}
-                            max={10}
-                            step={0.1}
-                            className="w-full"
-                            placeholder="Nhập điểm (ví dụ: 8.5)"
-                        />
-                    </Form.Item>
+                <Col span={8}>
+                    <FormItem form={form} name="score" label="Điểm số">
+                        <InputNumber disabled min={0} max={10} step={0.1} className="w-full" />
+                    </FormItem>
                 </Col>
             </Row>
         </PutFormModal>
