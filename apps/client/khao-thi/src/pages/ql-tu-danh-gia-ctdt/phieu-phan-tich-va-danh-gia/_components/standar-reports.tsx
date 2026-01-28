@@ -7,6 +7,7 @@ import type {
     EvaluationCriterionComment,
     StandardPeriod,
 } from '@workspace/db'
+import { $Enums } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
 
@@ -37,6 +38,9 @@ export default function StandardReports() {
                         criteria: {
                             include: {
                                 evaluationCriterion: {
+                                    where: {
+                                        status: $Enums.EvaluationStatus.COMPLETED,
+                                    },
                                     include: {
                                         lecturer: {
                                             include: {

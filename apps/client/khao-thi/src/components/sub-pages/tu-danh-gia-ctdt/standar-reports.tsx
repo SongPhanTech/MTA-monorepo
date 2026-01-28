@@ -83,7 +83,7 @@ const StandarReportsSubPage = ({
                                 id: i.evaluationCriterion.id,
                             },
                             data: {
-                                status: $Enums.EvaluationStatus.APPROVED,
+                                status: $Enums.EvaluationStatus.COMPLETED,
                             },
                         },
                     }
@@ -138,9 +138,6 @@ const StandarReportsSubPage = ({
         data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
     )
 
-    const currentStatus =
-        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
-
     const deadline = data?.criteria?.[0]?.evaluationCriterion?.deadline
     const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
 
@@ -171,22 +168,21 @@ const StandarReportsSubPage = ({
             </div>
 
             <div className="flex gap-2 mr-2">
-                {currentStatus !== $Enums.EvaluationStatus.APPROVED &&
-                    currentStatus !== $Enums.EvaluationStatus.COMPLETED && (
-                        <>
-                            <Button
-                                type="primary"
-                                className="bg-blue-500"
-                                size="small"
-                                onClick={handleEvaluationForm}
-                            >
-                                Nộp báo cáo tiêu chuẩn
-                            </Button>
-                            <Button type="primary" size="small" onClick={handleSubmit}>
-                                Lưu báo cáo
-                            </Button>
-                        </>
-                    )}
+                {
+                    <>
+                        <Button type="primary" size="small" onClick={handleSubmit}>
+                            Lưu báo cáo
+                        </Button>
+                        <Button
+                            type="primary"
+                            className="bg-blue-500"
+                            size="small"
+                            onClick={handleEvaluationForm}
+                        >
+                            Nộp báo cáo tiêu chuẩn
+                        </Button>
+                    </>
+                }
             </div>
         </div>
     )

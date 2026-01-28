@@ -333,7 +333,9 @@ export function RichTextEditor({
     return (
         <div className="border rounded-md">
             <div
-                className={stickyToolbar ? 'sticky top-0 z-10 bg-white border-b rounded-t-md' : ''}
+                className={
+                    stickyToolbar ? 'sticky top-0 z-auto bg-white border-b rounded-t-md' : ''
+                }
             >
                 <TextEditorMenuBar editor={editor} id={id} editable={editable} />
             </div>
