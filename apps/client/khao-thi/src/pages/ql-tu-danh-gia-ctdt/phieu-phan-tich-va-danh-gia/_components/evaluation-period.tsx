@@ -5,7 +5,6 @@ import { cn, formatDate } from '@lib/utils'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
-import { $Enums } from '@workspace/db/client'
 import {
     useCountEvaluationPeriod,
     useFindManyEvaluationPeriod,
@@ -53,22 +52,20 @@ export default function EvaluationPeriod() {
                         },
                     },
                 },
-                {
-                    council: {
-                        members: {
-                            some: {
-                                lecturerId: lecturer?.id,
-                                role: {
-                                    hasSome: [
-                                        $Enums.EvaluationMemberRole.ADVISORY_BOARD,
-                                        $Enums.EvaluationMemberRole.HEAD_SECRETARY,
-                                        $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
-                                    ],
-                                },
-                            },
-                        },
-                    },
-                },
+                // {
+                //     council: {
+                //         members: {
+                //             some: {
+                //                 lecturerId: lecturer?.id,
+                //                 OR: [
+                //                     { role: $Enums.EvaluationMemberRole.ADVISORY_BOARD },
+                //                     { role: $Enums.EvaluationMemberRole.HEAD_SECRETARY },
+                //                     { role: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED },
+                //                 ],
+                //             },
+                //         },
+                //     },
+                // },
             ],
             ...(schoolYearId && { schoolYearId }),
             deletedAt: null,

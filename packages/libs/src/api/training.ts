@@ -98,9 +98,9 @@ import type {
     ImportPhienBanCTDT,
     ImportPhienBanCTDT200,
     ImportPhienBanCTDT400,
-    ImportPhienBanCTDTSubject,
     ImportPhienBanCTDTSubject200,
     ImportPhienBanCTDTSubject400,
+    ImportPhienBanCTDTSubjectBody,
     ImportStudent200,
     ImportStudent400,
     ImportStudentRequest,
@@ -236,6 +236,8 @@ import type {
     StatisticsGraduationDecision200Item,
     StatisticsGraduationDecision404,
     StatisticsGraduationDecisionParams,
+    StatsArchivedAwardInput,
+    StatsArchivedAwardResult,
     TrainingField200Item,
     TrainingField400,
     UnmergeExamBadResponse,
@@ -4488,30 +4490,33 @@ export const getImportPhienBanCTDTSubjectUrl = () => {
 }
 
 export const importPhienBanCTDTSubject = async (
-    importPhienBanCTDTSubject: ImportPhienBanCTDTSubject,
+    importPhienBanCTDTSubjectBody: ImportPhienBanCTDTSubjectBody,
     options?: RequestInit
 ): Promise<importPhienBanCTDTSubjectResponse> => {
     const formData = new FormData()
-    formData.append(`file`, importPhienBanCTDTSubject.file)
-    formData.append(`trainingObjectTypeId`, importPhienBanCTDTSubject.trainingObjectTypeId)
-    formData.append(`curriculumVersionId`, importPhienBanCTDTSubject.curriculumVersionId)
+    formData.append(`file`, importPhienBanCTDTSubjectBody.file)
+    formData.append(`trainingObjectTypeId`, importPhienBanCTDTSubjectBody.trainingObjectTypeId)
+    formData.append(`curriculumVersionId`, importPhienBanCTDTSubjectBody.curriculumVersionId)
     if (
-        importPhienBanCTDTSubject.createNewSubjects !== undefined &&
-        importPhienBanCTDTSubject.createNewSubjects !== null
+        importPhienBanCTDTSubjectBody.createNewSubjects !== undefined &&
+        importPhienBanCTDTSubjectBody.createNewSubjects !== null
     ) {
-        formData.append(`createNewSubjects`, importPhienBanCTDTSubject.createNewSubjects.toString())
+        formData.append(
+            `createNewSubjects`,
+            importPhienBanCTDTSubjectBody.createNewSubjects.toString()
+        )
     }
     if (
-        importPhienBanCTDTSubject.deleteOldData !== undefined &&
-        importPhienBanCTDTSubject.deleteOldData !== null
+        importPhienBanCTDTSubjectBody.deleteOldData !== undefined &&
+        importPhienBanCTDTSubjectBody.deleteOldData !== null
     ) {
-        formData.append(`deleteOldData`, importPhienBanCTDTSubject.deleteOldData.toString())
+        formData.append(`deleteOldData`, importPhienBanCTDTSubjectBody.deleteOldData.toString())
     }
     if (
-        importPhienBanCTDTSubject.timeout !== undefined &&
-        importPhienBanCTDTSubject.timeout !== null
+        importPhienBanCTDTSubjectBody.timeout !== undefined &&
+        importPhienBanCTDTSubjectBody.timeout !== null
     ) {
-        formData.append(`timeout`, importPhienBanCTDTSubject.timeout.toString())
+        formData.append(`timeout`, importPhienBanCTDTSubjectBody.timeout.toString())
     }
 
     return customTrainingFetch<importPhienBanCTDTSubjectResponse>(
@@ -4531,14 +4536,14 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
         TError,
-        { data: ImportPhienBanCTDTSubject },
+        { data: ImportPhienBanCTDTSubjectBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
     TError,
-    { data: ImportPhienBanCTDTSubject },
+    { data: ImportPhienBanCTDTSubjectBody },
     TContext
 > => {
     const mutationKey = ['importPhienBanCTDTSubject']
@@ -4550,7 +4555,7 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-        { data: ImportPhienBanCTDTSubject }
+        { data: ImportPhienBanCTDTSubjectBody }
     > = (props) => {
         const { data } = props ?? {}
 
@@ -4563,7 +4568,7 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
 export type ImportPhienBanCTDTSubjectMutationResult = NonNullable<
     Awaited<ReturnType<typeof importPhienBanCTDTSubject>>
 >
-export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubject
+export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubjectBody
 export type ImportPhienBanCTDTSubjectMutationError = ImportPhienBanCTDTSubject400
 
 export const useImportPhienBanCTDTSubject = <
@@ -4574,7 +4579,7 @@ export const useImportPhienBanCTDTSubject = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
             TError,
-            { data: ImportPhienBanCTDTSubject },
+            { data: ImportPhienBanCTDTSubjectBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4583,7 +4588,7 @@ export const useImportPhienBanCTDTSubject = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
     TError,
-    { data: ImportPhienBanCTDTSubject },
+    { data: ImportPhienBanCTDTSubjectBody },
     TContext
 > => {
     const mutationOptions = getImportPhienBanCTDTSubjectMutationOptions(options)
@@ -11253,6 +11258,104 @@ export const useApproveAwardScore = <TError = ApproveAwardScore400, TContext = u
     TContext
 > => {
     const mutationOptions = getApproveAwardScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Thống kê điểm thưởng từ học kỳ đến học kỳ
+ * @summary Thống kê điểm thưởng
+ */
+export type statsArchivedAwardResponse200 = {
+    data: StatsArchivedAwardResult
+    status: 200
+}
+
+export type statsArchivedAwardResponseSuccess = statsArchivedAwardResponse200 & {
+    headers: Headers
+}
+
+export type statsArchivedAwardResponse = statsArchivedAwardResponseSuccess
+
+export const getStatsArchivedAwardUrl = () => {
+    return `/api/archived-score/stats-archived-award`
+}
+
+export const statsArchivedAward = async (
+    statsArchivedAwardInput: StatsArchivedAwardInput,
+    options?: RequestInit
+): Promise<statsArchivedAwardResponse> => {
+    return customTrainingFetch<statsArchivedAwardResponse>(getStatsArchivedAwardUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(statsArchivedAwardInput),
+    })
+}
+
+export const getStatsArchivedAwardMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof statsArchivedAward>>,
+        TError,
+        { data: StatsArchivedAwardInput },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof statsArchivedAward>>,
+    TError,
+    { data: StatsArchivedAwardInput },
+    TContext
+> => {
+    const mutationKey = ['statsArchivedAward']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof statsArchivedAward>>,
+        { data: StatsArchivedAwardInput }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return statsArchivedAward(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type StatsArchivedAwardMutationResult = NonNullable<
+    Awaited<ReturnType<typeof statsArchivedAward>>
+>
+export type StatsArchivedAwardMutationBody = StatsArchivedAwardInput
+export type StatsArchivedAwardMutationError = unknown
+
+/**
+ * @summary Thống kê điểm thưởng
+ */
+export const useStatsArchivedAward = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof statsArchivedAward>>,
+            TError,
+            { data: StatsArchivedAwardInput },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof statsArchivedAward>>,
+    TError,
+    { data: StatsArchivedAwardInput },
+    TContext
+> => {
+    const mutationOptions = getStatsArchivedAwardMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

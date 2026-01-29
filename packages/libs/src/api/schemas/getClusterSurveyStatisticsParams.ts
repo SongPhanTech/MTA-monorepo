@@ -7,5 +7,5 @@
 
 export type GetClusterSurveyStatisticsParams = {
     organizations?: string[]
-    lectureId?: string
+    lectureId: string
 }
