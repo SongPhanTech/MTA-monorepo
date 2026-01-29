@@ -479,7 +479,10 @@ export default function ChuyenDeNghienCuu() {
                                                 },
                                             },
                                         ])
-                                        const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
+                                        const khoaVaKyData = khoaVaKy.data as [
+                                            { name: string },
+                                            { name: string },
+                                        ]
                                         const payload = Object.values(
                                             studentResearchTopicData.reduce(
                                                 (acc, e) => {
@@ -503,8 +506,18 @@ export default function ChuyenDeNghienCuu() {
                                                     globalIndex++
                                                     acc[ma_cn].students.push({
                                                         tt: globalIndex,
-                                                        ten: e.studentSubjectScore.student
-                                                            ?.userProfile?.fullname,
+                                                        ten: `${
+                                                            e.studentSubjectScore.student
+                                                                ?.userProfile?.fullname
+                                                        }\n${
+                                                            e.studentSubjectScore.student
+                                                                ?.userProfile?.dateOfBirth
+                                                                ? dayjs(
+                                                                      e.studentSubjectScore.student
+                                                                          ?.userProfile?.dateOfBirth
+                                                                  ).format('DD/MM/YYYY')
+                                                                : ''
+                                                        }`.trim(),
                                                         cbhd: `1.${e.supervisor?.userProfile?.fullname ?? ''}\n2.${e.coSupervisor?.userProfile?.fullname ?? ''}`.trim(),
                                                         ten_cd: e.name,
                                                         macd: e.studentSubjectScore.subjectVersion
@@ -543,7 +556,7 @@ export default function ChuyenDeNghienCuu() {
                                             },
                                             tail: {
                                                 data: {
-                                                    note:`(Danh sách gồm ${payload.flatMap(item => item.students).length} học viên ${payload.flatMap(item => item.students).length} Chuyên đề nghiên cứu)`
+                                                    note: `(Danh sách gồm ${payload.flatMap((item) => item.students).length} học viên ${payload.flatMap((item) => item.students).length} Chuyên đề nghiên cứu)`,
                                                 },
                                             },
                                             path: 'PL_ChuyenDeNghienCuu.xlsx',
@@ -551,7 +564,7 @@ export default function ChuyenDeNghienCuu() {
                                             wrapText: true,
                                             payload: payload.map((item, idx) => ({
                                                 data: {
-                                                    chuyen_nganh: `  ${(idx + 1).toRoman()}. ${item.chuyen_nganh}: ${item.students.length} học viên.`,
+                                                    chuyen_nganh: `       ${(idx + 1).toRoman()}. ${item.chuyen_nganh}: ${item.students.length} học viên.`,
                                                     data: item.students.map((student) => ({
                                                         tt: student.tt,
                                                         ten: student.ten,
@@ -566,7 +579,7 @@ export default function ChuyenDeNghienCuu() {
                                         })
                                         saveAs(
                                             res.data,
-                                            `PL_ChuyenDeNghienCuu_${dayjs().format('HHmmss')}.xlsx`
+                                            `PL_ChuyenDeNghienCuu_${dayjs().format('HH-mm-ss')}.xlsx`
                                         )
                                     }}
                                 >

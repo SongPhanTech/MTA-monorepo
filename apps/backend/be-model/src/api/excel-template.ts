@@ -14,12 +14,16 @@ app.openapi(
                 content: {
                     'application/json': {
                         schema: z.object({
-                            tail: z.object({
-                                data: z.any(),
-                            }),
-                            head: z.object({
-                                data: z.any(),
-                            }),
+                            tail: z
+                                .object({
+                                    data: z.any(),
+                                })
+                                .optional(),
+                            head: z
+                                .object({
+                                    data: z.any(),
+                                })
+                                .optional(),
                             payload: z
                                 .array(
                                     z.object({
