@@ -19,7 +19,6 @@ const baseSchema = z.object({
     endDate: z.coerce.date().nullish(),
     isPublic: z.boolean().default(false),
     anonymous: z.boolean().default(true),
-    additionalSuggestion: z.boolean(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -36,7 +35,6 @@ const baseSchemaWithoutDefaults = z.object({
     endDate: z.coerce.date().nullish(),
     isPublic: z.boolean(),
     anonymous: z.boolean(),
-    additionalSuggestion: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -45,6 +43,7 @@ const relationSchema = z.object({
     subjectClass: z.record(z.string(), z.unknown()).optional(),
     semester: z.record(z.string(), z.unknown()).optional(),
     surveyTopic: z.record(z.string(), z.unknown()),
+    trainingObjectType: z.record(z.string(), z.unknown()).optional(),
     surveyChoice: z.array(z.unknown()).optional(),
     surveyQuestion: z.array(z.unknown()).optional(),
     surveySessions: z.array(z.unknown()).optional(),
@@ -56,6 +55,7 @@ const fkSchema = z.object({
     subjectClassId: z.string().nullish(),
     semesterId: z.string().nullish(),
     surveyTopicId: z.string(),
+    trainingObjectTypeId: z.string().nullish(),
     clusterSurveyId: z.string().nullish(),
 }
 );
@@ -96,8 +96,7 @@ export const SurveyPrismaUpdateSchema = z.object({
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
     isPublic: z.boolean(),
-    anonymous: z.boolean(),
-    additionalSuggestion: z.boolean()
+    anonymous: z.boolean()
 }).partial().passthrough();
 
 

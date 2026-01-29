@@ -9002,6 +9002,10 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'archivedAward',
+                }, status: {
+                    name: "status",
+                    type: "ArchivedCertificateStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10933,7 +10937,7 @@ const metadata = {
                     fields: ["id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectVersionHistory: {
             name: 'SubjectVersionHistory', fields: {
@@ -12407,6 +12411,12 @@ const metadata = {
                 }, surveyObjectType: {
                     name: "surveyObjectType",
                     type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -20370,9 +20380,6 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "Boolean",
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
@@ -20568,9 +20575,21 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'surveyTopic',
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "Boolean",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, surveyChoice: {
                     name: "surveyChoice",
                     type: "SurveyChoice",
@@ -20920,10 +20939,6 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'survey',
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "String",
-                    isOptional: true,
                 }, profile: {
                     name: "profile",
                     type: "UserProfile",

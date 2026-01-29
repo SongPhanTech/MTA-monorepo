@@ -17,18 +17,22 @@ const StatBaseSchema = z.object({
     preview: z.boolean().default(false),
     labels: z.array(z.string()).optional(),
 })
-type StatType = 'BY_COURSE' | 'BY_CURRICULUM' | 'BY_MAJOR'
+type StatType = 'By_Course' | 'By_Curriculum' | 'By_Major'
 type StatRow = {
     Type: StatType
+    id: string
     Name: string
+    PeriodId: string
     PeriodCode: string
     TotalStudents: number | bigint
     Count: number | bigint
     Value: number
 }
 const StatRowSchema = z.object({
-    Type: z.enum(['BY_COURSE', 'BY_CURRICULUM', 'BY_MAJOR']),
+    Type: z.enum(['By_Course', 'By_Curriculum', 'By_Major']),
+    id: z.string(),
     Name: z.string(),
+    PeriodId: z.string(),
     PeriodCode: z.string(),
     TotalStudents: z.number(),
     Count: z.number(),
@@ -327,7 +331,11 @@ app.openapi(
             const data = Array.from({ length: 10 }, () => ({
                 trainingCourseId: faker.string.uuid(),
                 name: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
-                avgEntryScore: faker.number.float({ min: 20, max: 30, fractionDigits: 2 }),
+                avgEntryScore: faker.number.float({
+                    min: 20,
+                    max: 30,
+                    fractionDigits: 2,
+                }),
             }))
 
             return c.json({
@@ -1191,7 +1199,11 @@ app.openapi(
             const data = Array.from({ length: 10 }, () => ({
                 trainingCourseId: faker.string.uuid(),
                 name: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
-                avgEntryScore: faker.number.float({ min: 20, max: 30, fractionDigits: 2 }),
+                avgEntryScore: faker.number.float({
+                    min: 20,
+                    max: 30,
+                    fractionDigits: 2,
+                }),
             }))
             return c.json({
                 data,
@@ -2021,7 +2033,12 @@ app.openapi(
             })
         }
         const data = await prisma.$queryRaw<
-            Array<{ subjectVersionId: string; name: string; passed: number; failed: number }>
+            Array<{
+                subjectVersionId: string
+                name: string
+                passed: number
+                failed: number
+            }>
         >`
             SELECT
                 "SV"."id" as "subjectVersionId",
@@ -2271,7 +2288,12 @@ app.openapi(
             })
         }
         const data = await prisma.$queryRaw<
-            Array<{ lecturerId: string; name: string; classCount: number; totalPeriods: number }>
+            Array<{
+                lecturerId: string
+                name: string
+                classCount: number
+                totalPeriods: number
+            }>
         >`
             SELECT
                 "L"."id" as "lecturerId",
@@ -2335,7 +2357,10 @@ app.openapi(
                 { ranking: 'Xuất sắc', count: faker.number.int({ min: 10, max: 50 }) },
                 { ranking: 'Giỏi', count: faker.number.int({ min: 100, max: 300 }) },
                 { ranking: 'Khá', count: faker.number.int({ min: 200, max: 500 }) },
-                { ranking: 'Trung bình', count: faker.number.int({ min: 50, max: 100 }) },
+                {
+                    ranking: 'Trung bình',
+                    count: faker.number.int({ min: 50, max: 100 }),
+                },
             ]
             return c.json({
                 data,
@@ -2560,7 +2585,11 @@ app.openapi(
                 }-${new Date().getFullYear()}`,
                 subjectVersionId: faker.string.uuid(),
                 subjectName: faker.lorem.words({ min: 3, max: 7 }),
-                averageScore: faker.number.float({ min: 5, max: 10, fractionDigits: 2 }),
+                averageScore: faker.number.float({
+                    min: 5,
+                    max: 10,
+                    fractionDigits: 2,
+                }),
             }))
             return c.json({
                 data,
@@ -2681,9 +2710,21 @@ app.openapi(
                 count: faker.number.int({ min: 100, max: 400 }),
             }))
             const byDifficulty = [
-                { id: '1', name: 'Dễ', count: faker.number.int({ min: 1000, max: 2000 }) },
-                { id: '2', name: 'Trung bình', count: faker.number.int({ min: 2000, max: 5000 }) },
-                { id: '3', name: 'Khó', count: faker.number.int({ min: 500, max: 1000 }) },
+                {
+                    id: '1',
+                    name: 'Dễ',
+                    count: faker.number.int({ min: 1000, max: 2000 }),
+                },
+                {
+                    id: '2',
+                    name: 'Trung bình',
+                    count: faker.number.int({ min: 2000, max: 5000 }),
+                },
+                {
+                    id: '3',
+                    name: 'Khó',
+                    count: faker.number.int({ min: 500, max: 1000 }),
+                },
             ]
             const byKnowledgeBlock = Array.from({ length: 20 }, () => ({
                 id: faker.string.uuid(),
@@ -2812,7 +2853,11 @@ app.openapi(
             const data = Array.from({ length: 10 }, () => ({
                 questionId: faker.string.uuid(),
                 content: faker.lorem.sentence(),
-                incorrectRate: faker.number.float({ min: 50, max: 100, fractionDigits: 2 }),
+                incorrectRate: faker.number.float({
+                    min: 50,
+                    max: 100,
+                    fractionDigits: 2,
+                }),
             }))
             return c.json({
                 data,
@@ -3826,7 +3871,13 @@ app.openapi(
             })
         }
         return c.json(
-            { data, count: data.length, summary: {}, preview, labels: ['Danh mục', 'Số lượng'] },
+            {
+                data,
+                count: data.length,
+                summary: {},
+                preview,
+                labels: ['Danh mục', 'Số lượng'],
+            },
             200
         )
     }
@@ -3878,7 +3929,10 @@ app.openapi(
                 { name: 'Không đạt', data: [50, 40, 30, 25] },
             ]
             const data = rawData
-            const summary = { totalSemesters: labels.length, totalCategories: data.length }
+            const summary = {
+                totalSemesters: labels.length,
+                totalCategories: data.length,
+            }
             const count = rawData.reduce(
                 (sum, item) => sum + item.data.reduce((a, b) => a + b, 0),
                 0
@@ -4191,7 +4245,10 @@ app.openapi(
             ]
             const rawData = [{ name: 'Số học phần chưa có đề', data: [25, 18, 12, 8, 5] }]
             const data = rawData
-            const summary = { totalDepartments: labels.length, totalSubjectsWithoutBank: 68 }
+            const summary = {
+                totalDepartments: labels.length,
+                totalSubjectsWithoutBank: 68,
+            }
             const count = rawData.reduce(
                 (sum, item) => sum + item.data.reduce((a, b) => a + b, 0),
                 0
@@ -4256,19 +4313,19 @@ app.openapi(
     }),
     async (c) => {
         const { preview, page = 1, pageSize = 10 } = c.req.valid('json')
-        const allData: z.infer<typeof LateGradeItemSchema>[] = Array.from({ length: 25 }).map(
-            (_, index) => {
-                const daysLate = Math.floor(Math.random() * 10) - 3
-                return {
-                    subjectName: `Học phần ${index + 1}`,
-                    department: 'Công nghệ phần mềm',
-                    faculty: 'Khoa Công nghệ thông tin',
-                    dueDate: '2026-01-10',
-                    daysLate: daysLate > 0 ? daysLate : 0,
-                    status: (daysLate > 0 ? 'OVERDUE' : 'NEAR_DUE') as 'OVERDUE' | 'NEAR_DUE',
-                }
+        const allData: z.infer<typeof LateGradeItemSchema>[] = Array.from({
+            length: 25,
+        }).map((_, index) => {
+            const daysLate = Math.floor(Math.random() * 10) - 3
+            return {
+                subjectName: `Học phần ${index + 1}`,
+                department: 'Công nghệ phần mềm',
+                faculty: 'Khoa Công nghệ thông tin',
+                dueDate: '2026-01-10',
+                daysLate: daysLate > 0 ? daysLate : 0,
+                status: (daysLate > 0 ? 'OVERDUE' : 'NEAR_DUE') as 'OVERDUE' | 'NEAR_DUE',
             }
-        )
+        })
 
         const start = (page - 1) * pageSize
         const data = allData.slice(start, start + pageSize)
@@ -4650,7 +4707,9 @@ app.openapi(
             body: {
                 content: {
                     'application/json': {
-                        schema: z.object({ preview: z.boolean().optional().default(false) }),
+                        schema: z.object({
+                            preview: z.boolean().optional().default(false),
+                        }),
                     },
                 },
             },
@@ -4663,9 +4722,9 @@ app.openapi(
                         schema: z.object({
                             success: z.boolean(),
                             data: z.object({
-                                BY_COURSE: z.array(StatRowSchema),
-                                BY_CURRICULUM: z.array(StatRowSchema),
-                                BY_MAJOR: z.array(StatRowSchema),
+                                By_Course: z.array(StatRowSchema),
+                                By_Curriculum: z.array(StatRowSchema),
+                                By_Major: z.array(StatRowSchema),
                             }),
                         }),
                     },
@@ -4702,7 +4761,7 @@ app.openapi(
                 {
                     success: true,
                     data: {
-                        BY_COURSE: generateData(
+                        By_Course: generateData(
                             [
                                 { id: 'K14', name: 'Khóa 14', total: 1200, count: 40 },
                                 { id: 'K15', name: 'Khóa 15', total: 1500, count: 55 },
@@ -4710,17 +4769,26 @@ app.openapi(
                             'Khóa'
                         ),
 
-                        BY_DEPARTMENT: generateData(
+                        By_Curriculum: generateData(
                             [
-                                { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 30 },
+                                {
+                                    id: 'CNTT',
+                                    name: 'Công nghệ thông tin',
+                                    total: 600,
+                                    count: 30,
+                                },
                                 { id: 'XD', name: 'Xây dựng', total: 400, count: 48 },
                             ],
                             'Ngành'
                         ),
-
-                        BY_MAJOR: generateData(
+                        By_Major: generateData(
                             [
-                                { id: 'KHMT', name: 'Khoa học máy tính', total: 150, count: 15 },
+                                {
+                                    id: 'KHMT',
+                                    name: 'Khoa học máy tính',
+                                    total: 150,
+                                    count: 15,
+                                },
                                 { id: 'KHDL', name: 'Khoa học dữ liệu', total: 120, count: 12 },
                             ],
                             'Chuyên ngành'
@@ -4734,6 +4802,7 @@ app.openapi(
             WITH RetestStudent AS (
                 SELECT DISTINCT
                     S.id        AS "studentId",
+                    SEM.id     AS "periodId",
                     SEM.code    AS "periodCode",
                     TC.id       AS "courseId",
                     TC.name     AS "courseName",
@@ -4765,6 +4834,7 @@ app.openapi(
                 TotalStudent AS (
                     SELECT DISTINCT
                         S.id        AS "studentId",
+                        SEM.id     AS "periodId",
                         SEM.code    AS "periodCode",
                         TC.id       AS "courseId",
                         TC.name     AS "courseName",
@@ -4794,8 +4864,10 @@ app.openapi(
 
 
                 SELECT
-                    'BY_COURSE'                     AS "Type",
+                    'By_Course'                     AS "Type",
+                    T."courseId"                    AS "Id",
                     T."courseName"                  AS "Name",
+                    T."periodId"                   AS "PeriodId",
                     T."periodCode"                  AS "PeriodCode",
                     COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
                     COUNT(DISTINCT R."studentId")::int AS "RetestCount",
@@ -4810,14 +4882,18 @@ app.openapi(
                     AND R."periodCode" = T."periodCode"
                     AND R."courseName" = T."courseName"
                 GROUP BY
+                   T."courseId",
                     T."courseName",
                     T."periodCode"
+                    T."periodId"
 
                 UNION ALL
 
                 SELECT
-                    'BY_CURRICULUM'                     AS "Type",
+                    'By_Curriculum'                     AS "Type",
+                    T."curriculumId"                   AS "Id",
                     T."curriculumName"                  AS "Name",
+                    T."periodId"                       AS "PeriodId",
                     T."periodCode"                      AS "PeriodCode",
                     COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
                     COUNT(DISTINCT R."studentId")::int AS "RetestCount",
@@ -4832,14 +4908,18 @@ app.openapi(
                     AND R."periodCode"     = T."periodCode"
                     AND R."curriculumName" = T."curriculumName"
                 GROUP BY
+                    T."curriculumId",
                     T."curriculumName",
+                    T."periodId",
                     T."periodCode"
 
 
                 UNION ALL
                 SELECT
-                    'BY_MAJOR'                             AS "Type",
+                    'By_Major'                             AS "Type",
+                    T."curriculumVersionId"              AS "Id",
                     T."curriculumVersionName"              AS "Name",
+                    T."periodId"                         AS "PeriodId",
                     T."periodCode"                         AS "PeriodCode",
                     COUNT(DISTINCT T."studentId")::int    AS "TotalStudents",
                     COUNT(DISTINCT R."studentId")::int    AS "RetestCount",
@@ -4854,10 +4934,10 @@ app.openapi(
                     AND R."periodCode"             = T."periodCode"
                     AND R."curriculumVersionName"  = T."curriculumVersionName"
                 GROUP BY
+                    T."curriculumVersionId",
                     T."curriculumVersionName",
+                    T."periodId",
                     T."periodCode"
-
-
                 `
 
         const date = new Date()
@@ -4870,9 +4950,9 @@ app.openapi(
                 return acc
             },
             {
-                BY_COURSE: [],
-                BY_CURRICULUM: [],
-                BY_MAJOR: [],
+                By_Course: [],
+                By_Curriculum: [],
+                By_Major: [],
             } as Record<StatType, StatRow[]>
         )
 
@@ -4894,7 +4974,9 @@ app.openapi(
             body: {
                 content: {
                     'application/json': {
-                        schema: z.object({ preview: z.boolean().optional().default(false) }),
+                        schema: z.object({
+                            preview: z.boolean().optional().default(false),
+                        }),
                     },
                 },
             },
@@ -4907,9 +4989,9 @@ app.openapi(
                         schema: z.object({
                             success: z.boolean(),
                             data: z.object({
-                                BY_COURSE: z.array(StatRowSchema),
-                                BY_CURRICULUM: z.array(StatRowSchema),
-                                BY_MAJOR: z.array(StatRowSchema),
+                                By_Course: z.array(StatRowSchema),
+                                By_Curriculum: z.array(StatRowSchema),
+                                By_Major: z.array(StatRowSchema),
                             }),
                         }),
                     },
@@ -4956,7 +5038,12 @@ app.openapi(
 
                         BY_DEPARTMENT: generateData(
                             [
-                                { id: 'CNTT', name: 'Công nghệ thông tin', total: 600, count: 30 },
+                                {
+                                    id: 'CNTT',
+                                    name: 'Công nghệ thông tin',
+                                    total: 600,
+                                    count: 30,
+                                },
                                 { id: 'XD', name: 'Xây dựng', total: 400, count: 48 },
                             ],
                             'Ngành'
@@ -4964,7 +5051,12 @@ app.openapi(
 
                         BY_MAJOR: generateData(
                             [
-                                { id: 'KHMT', name: 'Khoa học máy tính', total: 150, count: 15 },
+                                {
+                                    id: 'KHMT',
+                                    name: 'Khoa học máy tính',
+                                    total: 150,
+                                    count: 15,
+                                },
                                 { id: 'KHDL', name: 'Khoa học dữ liệu', total: 120, count: 12 },
                             ],
                             'Chuyên ngành'
@@ -4978,6 +5070,7 @@ app.openapi(
             WITH RelearnStudent AS (
                 SELECT DISTINCT
                     S.id        AS "studentId",
+                    SEM.id     AS "periodId",
                     SEM.code    AS "periodCode",
                     TC.id       AS "courseId",
                     TC.name     AS "courseName",
@@ -5052,6 +5145,7 @@ app.openapi(
                 TotalStudent AS (
                     SELECT DISTINCT
                         S.id        AS "studentId",
+                        SEM.id     AS "periodId",
                         SEM.code    AS "periodCode",
                         TC.id       AS "courseId",
                         TC.name     AS "courseName",
@@ -5081,8 +5175,10 @@ app.openapi(
 
 
                 SELECT
-                    'BY_COURSE'                     AS "Type",
+                    'By_Course'                     AS "Type",
+                    T."courseId"                     AS "Id",
                     T."courseName"                  AS "Name",
+                    T."periodId"                   AS "PeriodId",
                     T."periodCode"                  AS "PeriodCode",
                     COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
                     COUNT(DISTINCT R."studentId")::int AS "RelearnCount",
@@ -5097,14 +5193,18 @@ app.openapi(
                     AND R."periodCode" = T."periodCode"
                     AND R."courseName" = T."courseName"
                 GROUP BY
+                   T."courseId",
                     T."courseName",
+                    T."periodId",
                     T."periodCode"
 
                 UNION ALL
 
                 SELECT
-                    'BY_CURRICULUM'                     AS "Type",
+                    'By_Curriculum'                     AS "Type",
+                    T."curriculumId"                   AS "Id",
                     T."curriculumName"                  AS "Name",
+                    T."periodId"                       AS "PeriodId",
                     T."periodCode"                      AS "PeriodCode",
                     COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
                     COUNT(DISTINCT R."studentId")::int AS "RelearnCount",
@@ -5119,14 +5219,18 @@ app.openapi(
                     AND R."periodCode"     = T."periodCode"
                     AND R."curriculumName" = T."curriculumName"
                 GROUP BY
+                    T."curriculumId",
                     T."curriculumName",
+                    T."periodId",
                     T."periodCode"
 
 
                 UNION ALL
                 SELECT
-                    'BY_MAJOR'                             AS "Type",
+                    'By_Major'                             AS "Type",
+                    T."curriculumVersionId"               AS "Id",
                     T."curriculumVersionName"              AS "Name",
+                    T."periodId"                            AS "periodId",
                     T."periodCode"                         AS "PeriodCode",
                     COUNT(DISTINCT T."studentId")::int    AS "TotalStudents",
                     COUNT(DISTINCT R."studentId")::int    AS "RelearnCount",
@@ -5141,7 +5245,9 @@ app.openapi(
                     AND R."periodCode"             = T."periodCode"
                     AND R."curriculumVersionName"  = T."curriculumVersionName"
                 GROUP BY
+                 T."curriculumVersionId",
                     T."curriculumVersionName",
+                    T."periodId",
                     T."periodCode"
 
 
@@ -5157,9 +5263,9 @@ app.openapi(
                 return acc
             },
             {
-                BY_COURSE: [],
-                BY_CURRICULUM: [],
-                BY_MAJOR: [],
+                By_Course: [],
+                By_Curriculum: [],
+                By_Major: [],
             } as Record<StatType, StatRow[]>
         )
 

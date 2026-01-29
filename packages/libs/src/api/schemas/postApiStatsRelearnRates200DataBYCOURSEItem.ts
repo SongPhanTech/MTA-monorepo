@@ -11,6 +11,6 @@ export type PostApiStatsRelearnRates200DataBYCOURSEItem = {
     Name: string
     PeriodCode: string
     TotalStudents: number
-    RelearnCount: number
+    Count: number
     Value: number
 }

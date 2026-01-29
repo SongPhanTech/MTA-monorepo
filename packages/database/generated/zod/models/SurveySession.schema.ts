@@ -14,7 +14,6 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
-    additionalSuggestion: z.string().nullish(),
     startedAt: z.coerce.date().default(() => new Date()),
     completedAt: z.coerce.date().nullish(),
     isCompleted: z.boolean().default(false),
@@ -29,7 +28,6 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    additionalSuggestion: z.string().nullish(),
     startedAt: z.coerce.date(),
     completedAt: z.coerce.date().nullish(),
     isCompleted: z.boolean(),
@@ -83,7 +81,6 @@ export const SurveySessionPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    additionalSuggestion: z.string().nullish(),
     startedAt: z.coerce.date(),
     completedAt: z.coerce.date().nullish(),
     isCompleted: z.boolean()

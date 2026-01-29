@@ -28,7 +28,7 @@ const createClusterSurvey = createRoute({
                     schema: z
                         .object({
                             name: z.string(),
-                            additionalSuggestion: z.boolean(),
+                            trainingObjectTypeId: z.string().nonempty(),
                             startDate: z.coerce.date(),
                             endDate: z.coerce.date().optional(),
                             isPublic: z.boolean().default(false),
@@ -93,6 +93,7 @@ app.openapi(createClusterSurvey, async (c) => {
         subjectClassIds,
         surveyTopicId,
         semesterId,
+        trainingObjectTypeId,
         ...payload
     } = c.req.valid('json')
 
@@ -175,6 +176,7 @@ app.openapi(createClusterSurvey, async (c) => {
                 surveyTopicId,
                 lectureId: cls.lecturerId,
                 semesterId,
+                trainingObjectTypeId
             })),
         })
 
@@ -193,6 +195,7 @@ app.openapi(createClusterSurvey, async (c) => {
                     surveyObjectType: {
                         connect: surveyObjectTypeIds.map((id) => ({ id })),
                     },
+                    
                 },
             })
         }

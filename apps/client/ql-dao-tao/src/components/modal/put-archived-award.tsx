@@ -8,24 +8,26 @@ import {
     useFindManyAward,
     useFindManyFixedClass,
     useFindManyStudent,
+    useFindManyStudentSubjectScore,
     useFindManyTrainingCourse,
     useFindUniqueArchivedAward,
     useUpdateArchivedAward,
 } from '@workspace/db/hooks'
-import { Col, Form, message, InputNumber } from 'antd'
+import { Col, Form, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-import Select from '@components/commons/select'
-import DocumentPaths from '@components/commons/documentPaths'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 import DatePicker from '@components/commons/date-picker'
+import DocumentPaths from '@components/commons/documentPaths'
+import Select from '@components/commons/select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutArchivedAward = ArchivedAward & {
     documentFiles?: DocumentFile[]
     bonusScore: number
     trainingCoursesId?: string
     fixedClassesId?: string
+    studentSubjectScoreId?: string
 }
 dayjs.locale('vi')
 const PutArchivedAwardModal = () => {
@@ -34,9 +36,7 @@ const PutArchivedAwardModal = () => {
 
     const fixedClassId = Form.useWatch('fixedClassesId', form)
     const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
-    const [filters, setFilters] = useState({
-        textSearch: '',
-    })
+    const studentId = Form.useWatch('studentId', form)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
         isOpen,
@@ -53,31 +53,24 @@ const PutArchivedAwardModal = () => {
     const { data: awardData = [] } = useFindManyAward()
     const { data: trainingCourses = [] } = useFindManyTrainingCourse(
         {
-            where: {
-                trainingObjectTypeId,
-            },
-            orderBy: { name: 'asc' },
+            where: { trainingObjectTypeId },
+            orderBy: { semesterStart: { startDate: 'desc' } },
         },
         { enabled: !!trainingObjectTypeId }
     )
 
     // Lấy danh sách FixedClass
     const { data: fixedClasses = [] } = useFindManyFixedClass(
-        {
-            where: {
-                trainingCourseId: trainingCoursesId || undefined,
-            },
-        },
-        {
-            enabled: !!trainingObjectTypeId,
-        }
+        { where: { trainingCourseId: trainingCoursesId || undefined } },
+        { enabled: !!trainingObjectTypeId }
     )
-    const { data: studentData = [] } = useFindManyStudent(
+    const { data: students = [] } = useFindManyStudent(
         {
             where: {
                 ...(!!trainingCoursesId || !!fixedClassId
                     ? {
                           fixedClass: {
+                              trainingCourse: { trainingObjectTypeId },
                               ...(trainingCoursesId ? { trainingCourseId: trainingCoursesId } : {}),
                               ...(fixedClassId ? { id: fixedClassId } : {}),
                           },
@@ -86,6 +79,11 @@ const PutArchivedAwardModal = () => {
             },
             include: {
                 userProfile: true,
+                fixedClass: {
+                    select: {
+                        trainingCourse: { select: { scoreToPass: true } },
+                    },
+                },
             },
             orderBy: {
                 userProfile: {
@@ -95,8 +93,35 @@ const PutArchivedAwardModal = () => {
         },
         { enabled: !!trainingObjectTypeId }
     )
-    async function onOk({ ...rest }: PutArchivedAward) {
+
+    const { data: studentSubjectScores = [] } = useFindManyStudentSubjectScore(
+        {
+            where: {
+                studentId,
+                finalScore: {
+                    gte:
+                        students.find((student) => student.id === studentId)?.fixedClass
+                            ?.trainingCourse?.scoreToPass || 0,
+                },
+            },
+            select: {
+                id: true,
+                finalScore: true,
+                subjectVersion: { select: { name: true } },
+                subjectClass: {
+                    select: { semester: { select: { code: true } } },
+                },
+            },
+        },
+        { enabled: !!studentId }
+    )
+
+    async function onOk({ studentSubjectScoreId, ...rest }: PutArchivedAward) {
         try {
+            if (rest.status === 'APPROVED') {
+                message.error('Không thể cập nhật')
+                return
+            }
             showSpinner()
             if (id) {
                 await updateArchivedAward({
@@ -139,6 +164,18 @@ const PutArchivedAwardModal = () => {
                                 )
                                 .map((file) => ({ id: file.id })),
                         },
+                        studentSubjectScore: {
+                            ...(studentSubjectScoreId
+                                ? {
+                                      deleteMany: {
+                                          studentSubjectScoreId: {
+                                              not: studentSubjectScoreId,
+                                          },
+                                      },
+                                      createMany: { data: { studentSubjectScoreId } },
+                                  }
+                                : {}),
+                        },
                     },
                     where: { id },
                 })
@@ -158,6 +195,15 @@ const PutArchivedAwardModal = () => {
                                 size: file.size,
                             })),
                         },
+                        ...(studentSubjectScoreId
+                            ? {
+                                  studentSubjectScore: {
+                                      create: {
+                                          studentSubjectScoreId,
+                                      },
+                                  },
+                              }
+                            : {}),
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -182,6 +228,7 @@ const PutArchivedAwardModal = () => {
         {
             where: { id },
             include: {
+                studentSubjectScore: true,
                 documentFiles: true,
                 student: {
                     include: {
@@ -206,6 +253,7 @@ const PutArchivedAwardModal = () => {
                 documentFiles: initialData.documentFiles,
                 trainingCoursesId: initialData?.student?.fixedClass?.trainingCourseId || '',
                 fixedClassesId: initialData?.student?.fixedClassId || '',
+                studentSubjectScoreId: initialData?.studentSubjectScore[0]?.studentSubjectScoreId,
             })
             setDocument(initialData.documentFiles)
         } else {
@@ -227,7 +275,7 @@ const PutArchivedAwardModal = () => {
             title={id ? 'Chỉnh sửa đơn cộng điểm oplympic' : 'Thêm mới đơn cộng điểm oplympic'}
             className="w-[700px]"
         >
-            <Col span={24} className="mb-4">
+            <Col span={20} className="mb-4">
                 <FormItem form={form} name="awardId" label="Giải thưởng" required>
                     <Select
                         allowClear
@@ -246,12 +294,13 @@ const PutArchivedAwardModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-4">
+            <Col span={4} className="mb-4">
                 <FormItem form={form} name="bonusScore" label="Điểm cộng" required>
-                    <InputNumber disabled min={1} className="w-full" placeholder="Nhập điểm" />
+                    <InputNumber min={1} className="w-full" placeholder="Nhập điểm" />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-4">
+
+            <Col span={12} className="mb-4">
                 <FormItem form={form} name="trainingCoursesId" label="Khoá">
                     <Select
                         showSearch
@@ -264,7 +313,7 @@ const PutArchivedAwardModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-4">
+            <Col span={12} className="mb-4">
                 <FormItem form={form} name="fixedClassesId" label="Lớp quản lý">
                     <Select
                         showSearch
@@ -283,16 +332,47 @@ const PutArchivedAwardModal = () => {
                         showSearch
                         style={{ width: '100%' }}
                         placeholder="Chọn sinh viên"
-                        options={studentData.map((item) => ({
-                            label: `${item.userProfile?.code || ''} - ${item.userProfile?.lastName} ${item.userProfile?.firstName}`,
-                            value: item.id,
-                        }))}
+                        options={students.map((item) => {
+                            const dateOfBirth = item.userProfile?.dateOfBirth
+                                ? dayjs(item.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                                : null
+                            return {
+                                label: [item.code, item.userProfile?.fullname, dateOfBirth]
+                                    .filter(Boolean)
+                                    .join(' - '),
+                                value: item.id,
+                            }
+                        })}
                     />
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">
                 <FormItem form={form} name="date" label="Thời gian nhận giải thưởng">
                     <DatePicker format="DD/MM/YYYY" className="w-full" placeholder="Chọn ngày" />
+                </FormItem>
+            </Col>
+            <Col span={24} className="mb-4">
+                <FormItem form={form} name="studentSubjectScoreId" label="Cộng điểm học phần">
+                    <Select
+                        showSearch
+                        style={{ width: '100%' }}
+                        placeholder="Chọn điểm học phần"
+                        options={studentSubjectScores.map((item) => {
+                            const score = item.finalScore
+                                ? `Điểm: ${item.finalScore}`
+                                : 'Điểm: chưa có'
+                            return {
+                                label: [
+                                    item.subjectVersion.name,
+                                    score,
+                                    item.subjectClass?.semester?.code,
+                                ]
+                                    .filter(Boolean)
+                                    .join(' - '),
+                                value: item.id,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">

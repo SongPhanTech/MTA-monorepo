@@ -9,4 +9,6 @@ import type { ExcelTemplateBodyPayloadItemData } from './excelTemplateBodyPayloa
 export type ExcelTemplateBodyPayloadItem = {
     /** @nullable */
     data?: ExcelTemplateBodyPayloadItemData
+    /** Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2 */
+    mergeCells?: string[]
 }

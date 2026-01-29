@@ -549,7 +549,10 @@ export default function SubjectClassScore() {
                                         render: (text, record) => (
                                             <Row className="justify-center gap-2">
                                                 <ApproveIcon
-                                                    disabled={record.scoreStatus === 'APPROVED'}
+                                                    disabled={
+                                                        record.scoreStatus === 'APPROVED' ||
+                                                        !record.studentTrainingType
+                                                    }
                                                     popConfirm={{
                                                         onConfirm: (e) => {
                                                             handleApprove(record.scoreId)
@@ -576,7 +579,8 @@ export default function SubjectClassScore() {
                                                             danger
                                                             disabled={
                                                                 record.scoreStatus === 'REJECTED' ||
-                                                                !record.scoreId
+                                                                !record.scoreId ||
+                                                                !record.studentTrainingType
                                                             }
                                                             icon={<X size={18} />}
                                                             onClick={(e) => e.stopPropagation()}

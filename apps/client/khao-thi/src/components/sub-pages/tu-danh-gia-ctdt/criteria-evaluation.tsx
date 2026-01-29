@@ -302,7 +302,9 @@ const CriteriaEvaluationSubPage = ({
                                                             </div>
                                                         ),
                                                         extra: (
-                                                            <div onClick={(e) => e.stopPropagation()}>
+                                                            <div
+                                                                onClick={(e) => e.stopPropagation()}
+                                                            >
                                                                 {item.evaluationCriterion && (
                                                                     <Badge
                                                                         count={
@@ -319,7 +321,8 @@ const CriteriaEvaluationSubPage = ({
                                                                             size="small"
                                                                             onClick={() => {
                                                                                 const criterionId =
-                                                                                    item.evaluationCriterion
+                                                                                    item
+                                                                                        .evaluationCriterion
                                                                                         ?.id
                                                                                 const isClosing =
                                                                                     showCommentsCriterionId ===
@@ -339,10 +342,12 @@ const CriteriaEvaluationSubPage = ({
                                                                                         item.id
                                                                                     )
                                                                                 ) {
-                                                                                    setActiveCollapseKeys([
-                                                                                        ...activeCollapseKeys,
-                                                                                        item.id,
-                                                                                    ])
+                                                                                    setActiveCollapseKeys(
+                                                                                        [
+                                                                                            ...activeCollapseKeys,
+                                                                                            item.id,
+                                                                                        ]
+                                                                                    )
                                                                                 }
                                                                             }}
                                                                         >
@@ -361,7 +366,8 @@ const CriteriaEvaluationSubPage = ({
                                                             <>
                                                                 {item.evaluationCriterion &&
                                                                     showCommentsCriterionId ===
-                                                                        item.evaluationCriterion?.id && (
+                                                                        item.evaluationCriterion
+                                                                            ?.id && (
                                                                         <div className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
                                                                             <CommentList
                                                                                 comments={

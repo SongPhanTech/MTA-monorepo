@@ -40,7 +40,8 @@ export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSe
     lowestGraduationScore?: number | null
     totalCredits: number
     registeredCredits: number
-    retakingCredits: number
+    retakingCredits?: number
+    reExamCredits?: number
     passedCredits: number
     failedCredits: number
     accumulatedCredits: number

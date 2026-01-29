@@ -16,7 +16,8 @@ import {
 import { useAwardScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Modal, Row, Tag } from 'antd'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -25,15 +26,14 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function ArchivedAward() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
-    const [open, setOpen] = useState(false)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         count: undefined,
     })
-
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
         archivedCertificateStatusOptions,
         getArchivedCertificateStatusStatusLabel,
@@ -56,12 +56,8 @@ export default function ArchivedAward() {
         try {
             showSpinner()
             await updateArchivedAward({
-                where: {
-                    id,
-                },
-                data: {
-                    status: 'CANCEL',
-                },
+                where: { id },
+                data: { status: 'CANCEL' },
             })
         } catch (error: any) {
             if (error?.info?.message) {
@@ -76,36 +72,96 @@ export default function ArchivedAward() {
 
     const where = useMemo(() => {
         return {
-            ...(filters.name && filters.name !== ''
-                ? {
-                      award: {
+            ...(filters.archivedAwardStatus ? { status: { in: filters.archivedAwardStatus } } : {}),
+            award: {
+                ...(filters.awardName
+                    ? {
                           name: {
-                              contains: filters.name,
+                              contains: filters.awardName,
                               mode: 'insensitive' as const,
+                          },
+                      }
+                    : {}),
+            },
+            ...(filters.bonusScoreStatus
+                ? {
+                      studentSubjectScore: {
+                          some: {
+                              status: { in: filters.bonusScoreStatus },
                           },
                       },
                   }
                 : {}),
+            student: {
+                fixedClass: {
+                    ...(filters.fixedClassCode
+                        ? {
+                              code: {
+                                  contains: filters.fixedClassCode,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    trainingCourse: { trainingObjectTypeId },
+                },
+                ...(filters.name
+                    ? {
+                          userProfile: {
+                              fullname: {
+                                  contains: filters.name,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                      }
+                    : {}),
+            },
         }
-    }, [filters])
+    }, [filters, trainingObjectTypeId])
 
     const { data: dataTable = [], refetch } = useFindManyArchivedAward({
-        where,
+        where: {},
         include: {
-            studentSubjectScore: true,
-            award: true,
-            _count: true,
-            student: {
+            studentSubjectScore: {
                 include: {
-                    userProfile: true,
+                    studentSubjectScore: {
+                        select: {
+                            finalScore: true,
+                            subjectVersion: {
+                                select: { name: true },
+                            },
+                            subjectClass: {
+                                select: {
+                                    code: true,
+                                    name: true,
+                                    semester: {
+                                        select: { code: true, name: true },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            award: true,
+            student: {
+                select: {
+                    code: true,
+                    userProfile: {
+                        select: {
+                            fullname: true,
+                            dateOfBirth: true,
+                        },
+                    },
+                    fixedClass: {
+                        select: {
+                            code: true,
+                            name: true,
+                        },
+                    },
                 },
             },
         },
-        orderBy: [
-            {
-                createdAt: 'desc',
-            },
-        ],
+        orderBy: [{ createdAt: 'desc' }],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -206,29 +262,8 @@ export default function ArchivedAward() {
                         <Flex justify="end">
                             {can(
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-                                'THEM'
+                                'DUYET'
                             ) && (
-                                // <Popover
-                                //         content={
-                                //             <Flex vertical align="flex-start" gap={4}>
-                                //                 <Button onClick={handleModal} type="primary" className="mr-3">
-                                //                     Từ chối
-                                //                 </Button>
-                                //                   <Button onClick={handleModal} type="primary">
-                                //                     Chấp thuận
-                                //                 </Button>
-                                //             </Flex>
-                                //         }
-                                //         trigger="click"
-                                //         open={open}
-                                //         onOpenChange={handleOpenChange}
-                                //         placement="bottomLeft"
-                                //         arrow={false}
-                                //     >
-                                //         <Button disabled={!selectedRowKeys.length}>
-                                //             Phê duyệt
-                                //         </Button>
-                                //     </Popover>
                                 <>
                                     <Button
                                         onClick={handleOpenReject}
@@ -279,8 +314,43 @@ export default function ArchivedAward() {
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
+                            title: 'Họ và tên',
+                            width: 200,
+                            dataIndex: 'studentName',
+                            align: 'left',
+                            fixed: 'left',
+                            render: (__, record) => {
+                                return record?.student?.userProfile?.fullname
+                            },
+                        },
+                        {
+                            title: 'Ngày sinh',
+                            width: 100,
+                            align: 'center',
+                            render: (__, record) => {
+                                if (!record?.student?.userProfile?.dateOfBirth) return '-'
+                                return formatDate(record?.student?.userProfile?.dateOfBirth)
+                            },
+                        },
+                        {
+                            title: 'Lớp',
+                            width: 150,
+                            dataIndex: 'fixedClassCode',
+                            type: 'input',
+                            align: 'center',
+                            render: (__, record) => {
+                                if (!record?.student?.fixedClass?.name) return '-'
+                                return (
+                                    <Tooltip title={record?.student?.fixedClass?.name}>
+                                        {record?.student?.fixedClass?.code}
+                                    </Tooltip>
+                                )
+                            },
+                        },
+                        {
                             title: 'Tên giải thưởng',
-                            dataIndex: 'name',
+                            width: 180,
+                            dataIndex: 'awardName',
                             align: 'center',
                             type: 'input',
                             render: (__, record) => {
@@ -288,28 +358,18 @@ export default function ArchivedAward() {
                             },
                         },
                         {
-                            title: 'Học viên',
-                            dataIndex: 'studentName',
-                            align: 'center',
-                            render: (__, record) => {
-                                return (
-                                    `${record?.student?.userProfile?.lastName} ${record?.student?.userProfile?.firstName}` ||
-                                    ''
-                                )
-                            },
-                        },
-                        {
                             title: 'Ngày nhận',
                             dataIndex: 'name',
                             align: 'center',
-                            width: 150,
+                            width: 100,
                             render: (__, record) => {
                                 return record?.date ? formatDate(record?.date) : ''
                             },
                         },
+
                         {
                             title: 'Trạng thái',
-                            dataIndex: 'paymentStatus',
+                            dataIndex: 'archivedAwardStatus',
                             width: 150,
                             align: 'center',
                             type: 'select',
@@ -323,8 +383,88 @@ export default function ArchivedAward() {
                             },
                         },
                         {
-                            title: 'Thao tác',
+                            title: 'Điểm cộng',
+                            align: 'center',
+                            width: 70,
+                            render: (__, record) => {
+                                return record?.bonusScore || '-'
+                            },
+                        },
+                        {
+                            title: 'Môn học cộng điểm',
                             width: 150,
+                            align: 'center',
+                            render: (__, record) => {
+                                return record?.studentSubjectScore[0]?.studentSubjectScore
+                                    ?.subjectVersion?.name
+                            },
+                        },
+                        {
+                            title: 'Học kỳ cộng điểm',
+                            width: 120,
+                            align: 'center',
+                            render: (__, record) => {
+                                return (
+                                    <Tooltip
+                                        title={
+                                            record?.studentSubjectScore[0]?.studentSubjectScore
+                                                ?.subjectClass?.semester?.name
+                                        }
+                                    >
+                                        {
+                                            record?.studentSubjectScore[0]?.studentSubjectScore
+                                                ?.subjectClass?.semester?.code
+                                        }
+                                    </Tooltip>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Lớp MH',
+                            width: 120,
+                            align: 'center',
+                            render: (__, record) => {
+                                return (
+                                    <Tooltip
+                                        title={
+                                            record?.studentSubjectScore[0]?.studentSubjectScore
+                                                ?.subjectClass?.name
+                                        }
+                                    >
+                                        {
+                                            record?.studentSubjectScore[0]?.studentSubjectScore
+                                                ?.subjectClass?.code
+                                        }
+                                    </Tooltip>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Điểm HP',
+                            width: 70,
+                            align: 'center',
+                            render: (__, record) => {
+                                return record?.studentSubjectScore[0]?.studentSubjectScore?.finalScore?.toNumber()
+                            },
+                        },
+                        {
+                            title: 'Trạng thái cộng điểm',
+                            dataIndex: 'bonusScoreStatus',
+                            width: 150,
+                            align: 'center',
+                            type: 'select',
+                            options: archivedCertificateStatusOptions,
+                            render: (_, record) => {
+                                const label = getArchivedCertificateStatusStatusLabel(
+                                    record?.studentSubjectScore[0]?.status
+                                )
+                                const color = getArchivedCertificateStatusColor(record?.status)
+                                return <Tag color={color}>{label}</Tag>
+                            },
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 100,
                             align: 'center',
                             fixed: 'right',
                             hidden: !canSome(
@@ -332,7 +472,7 @@ export default function ArchivedAward() {
                                 'SUA',
                                 'XOA'
                             ),
-                            render: (_, { id, _count, status }) => {
+                            render: (_, { id, status }) => {
                                 return (
                                     <Row className="justify-center gap-2">
                                         {can(
