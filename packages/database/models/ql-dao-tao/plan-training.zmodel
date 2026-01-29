@@ -12,6 +12,7 @@ import 'scholarship'
 import 'warning'
 import 'training-action'
 import 'ranking'
+import 'thesis'
 import '../ql-danh-muc/notification'
 import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/research'
@@ -209,11 +210,11 @@ model StudentResearchTopic extends Base {
   mainContent           String?
 
   /// GVHD 1
-  supervisor            Lecturer?           @relation("SupervisorToResearchTopic", fields: [supervisorId], references: [id])
+  supervisor            ExpertProfile?           @relation("SupervisorToResearchTopic", fields: [supervisorId], references: [id])
   supervisorId          String?
 
   /// GVHD 2
-  coSupervisor          Lecturer?           @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
+  coSupervisor          ExpertProfile?           @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
 
   /// ngày báo cáo

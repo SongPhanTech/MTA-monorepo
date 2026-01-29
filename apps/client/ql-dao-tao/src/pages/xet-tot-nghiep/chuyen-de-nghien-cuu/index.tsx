@@ -119,12 +119,20 @@ export default function ChuyenDeNghienCuu() {
             include: {
                 supervisor: {
                     include: {
-                        userProfile: true,
+                        lecturer: {
+                            select: {
+                                userProfile: true,
+                            },
+                        },
                     },
                 },
                 coSupervisor: {
                     include: {
-                        userProfile: true,
+                        lecturer: {
+                            select: {
+                                userProfile: true,
+                            },
+                        },
                     },
                 },
                 studentSubjectScore: {
@@ -609,7 +617,7 @@ export default function ChuyenDeNghienCuu() {
                                                                   ).format('DD/MM/YYYY')
                                                                 : ''
                                                         }`.trim(),
-                                                        cbhd: `1.${e.supervisor?.userProfile?.fullname ?? ''}\n2.${e.coSupervisor?.userProfile?.fullname ?? ''}`.trim(),
+                                                        cbhd: `1.${e.supervisor?.lecturer?.userProfile?.fullname ?? ''}\n2.${e.coSupervisor?.lecturer?.userProfile?.fullname ?? ''}`.trim(),
                                                         ten_cd: e.name,
                                                         macd: e.studentSubjectScore.subjectVersion
                                                             ?.code,

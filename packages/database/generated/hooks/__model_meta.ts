@@ -8254,7 +8254,7 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, supervisor: {
                     name: "supervisor",
-                    type: "Lecturer",
+                    type: "ExpertProfile",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'supervisorResearchTopic',
@@ -8268,7 +8268,7 @@ const metadata: ModelMeta = {
                     relationField: 'supervisor',
                 }, coSupervisor: {
                     name: "coSupervisor",
-                    type: "Lecturer",
+                    type: "ExpertProfile",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'coSupervisorResearchTopic',
@@ -15748,18 +15748,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
-                }, supervisorResearchTopic: {
-                    name: "supervisorResearchTopic",
-                    type: "StudentResearchTopic",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'supervisor',
-                }, coSupervisorResearchTopic: {
-                    name: "coSupervisorResearchTopic",
-                    type: "StudentResearchTopic",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'coSupervisor',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -16846,6 +16834,18 @@ const metadata: ModelMeta = {
                 }, coSupervisedTheses: {
                     name: "coSupervisedTheses",
                     type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'coSupervisor',
+                }, supervisorResearchTopic: {
+                    name: "supervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'supervisor',
+                }, coSupervisorResearchTopic: {
+                    name: "coSupervisorResearchTopic",
+                    type: "StudentResearchTopic",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'coSupervisor',

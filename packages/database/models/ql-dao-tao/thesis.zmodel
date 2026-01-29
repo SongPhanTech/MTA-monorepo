@@ -180,31 +180,33 @@ model StudentThesisRegistration extends Base {
 
 /// Model cho Chuyên gia (Giảng viên trong và ngoài trường)
 model ExpertProfile extends Base {
-  lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
-  lecturerId         String?         @unique // Null nếu là chuyên gia ngoài trường
-  name               String?   // Họ tên
-  academicRank       String?   // Học hàm
-  academicDegree     String?   // Học vị
-  organization       String?   // Đơn vị
-  position           String?   // Chức vụ
-  specialization     String?   // Chuyên ngành
-  major              TrainingMajor[]
-  workplace          String?   // Đơn vị công tác
-  phone              String?
-  email              String?         @email // Dùng email này để liên lạc nếu là chuyên gia ngoài
-  bankAccountNumber  String? // số tài khoản ngân hàng
-  bankName           String? // tên ngân hàng
+  lecturer                  Lecturer?              @relation(fields: [lecturerId], references: [id])
+  lecturerId                String?                @unique // Null nếu là chuyên gia ngoài trường
+  name                      String?   // Họ tên
+  academicRank              String?   // Học hàm
+  academicDegree            String?   // Học vị
+  organization              String?   // Đơn vị
+  position                  String?   // Chức vụ
+  specialization            String?   // Chuyên ngành
+  major                     TrainingMajor[]
+  workplace                 String?   // Đơn vị công tác
+  phone                     String?
+  email                     String?                @email // Dùng email này để liên lạc nếu là chuyên gia ngoài
+  bankAccountNumber         String? // số tài khoản ngân hàng
+  bankName                  String? // tên ngân hàng
 
-  projectExpert      Boolean         @default(true)
-  thesisExpert       Boolean         @default(true)
+  projectExpert             Boolean                @default(true)
+  thesisExpert              Boolean                @default(true)
 
-  eligiblePresident  Boolean // có thể làm chủ tịch
-  eligibleSecretary  Boolean // có thể làm thư ký
+  eligiblePresident         Boolean // có thể làm chủ tịch
+  eligibleSecretary         Boolean // có thể làm thư ký
 
-  supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
-  coSupervisedTheses ThesisProject[] @relation("CoSupervisorToThesis")
-  subjectClass       SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
-  councilMemberships CouncilMember[]
+  supervisedTheses          ThesisProject[]        @relation("SupervisorToThesis")
+  coSupervisedTheses        ThesisProject[]        @relation("CoSupervisorToThesis")
+  supervisorResearchTopic   StudentResearchTopic[] @relation("SupervisorToResearchTopic")
+  coSupervisorResearchTopic StudentResearchTopic[] @relation("CoSupervisorToResearchTopic")
+  subjectClass              SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
+  councilMemberships        CouncilMember[]
   // payments                PaymentRecord[]
   // supervisorPaymentRecord SupervisorPaymentRecord[]
 

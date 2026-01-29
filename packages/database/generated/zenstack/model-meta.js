@@ -8701,7 +8701,7 @@ const metadata = {
                     isOptional: true,
                 }, supervisor: {
                     name: "supervisor",
-                    type: "Lecturer",
+                    type: "ExpertProfile",
                     isDataModel: true,
                     isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToResearchTopic" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
@@ -8716,7 +8716,7 @@ const metadata = {
                     relationField: 'supervisor',
                 }, coSupervisor: {
                     name: "coSupervisor",
-                    type: "Lecturer",
+                    type: "ExpertProfile",
                     isDataModel: true,
                     isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToResearchTopic" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
@@ -16591,20 +16591,6 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
-                }, supervisorResearchTopic: {
-                    name: "supervisorResearchTopic",
-                    type: "StudentResearchTopic",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToResearchTopic" }] }],
-                    backLink: 'supervisor',
-                }, coSupervisorResearchTopic: {
-                    name: "coSupervisorResearchTopic",
-                    type: "StudentResearchTopic",
-                    isDataModel: true,
-                    isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToResearchTopic" }] }],
-                    backLink: 'coSupervisor',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17772,6 +17758,20 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToThesis" }] }],
+                    backLink: 'coSupervisor',
+                }, supervisorResearchTopic: {
+                    name: "supervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToResearchTopic" }] }],
+                    backLink: 'supervisor',
+                }, coSupervisorResearchTopic: {
+                    name: "coSupervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToResearchTopic" }] }],
                     backLink: 'coSupervisor',
                 }, subjectClass: {
                     name: "subjectClass",

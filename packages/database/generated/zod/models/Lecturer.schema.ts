@@ -54,8 +54,6 @@ const relationSchema = z.object({
     evaluationCriterions: z.array(z.unknown()).optional(),
     analysisCriterion: z.array(z.unknown()).optional(),
     evaluationCouncilMember: z.array(z.unknown()).optional(),
-    supervisorResearchTopic: z.array(z.unknown()).optional(),
-    coSupervisorResearchTopic: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
