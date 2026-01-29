@@ -30,15 +30,15 @@ enum StandardCatalogType {
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod extends Base {
-  name          String
-  startDate     DateTime               @default(now())
-  endDate       DateTime?
-  status        EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
-  schoolYear    SchoolYear?            @relation(fields: [schoolYearId], references: [id])
-  schoolYearId  String?
-  standards     StandardPeriod[]
-  council       EvaluationCouncil?
-  documentFiles DocumentFile[]
+  name            String
+  startDate       DateTime               @default(now())
+  endDate         DateTime?
+  status          EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
+  schoolYear      SchoolYear?            @relation(fields: [schoolYearId], references: [id])
+  schoolYearId    String?
+  standards       StandardPeriod[]
+  council         EvaluationCouncil?
+  documentFiles   DocumentFile[]
   overviewProblem String?
   overviewGeneral String?
   overviewResults String?
@@ -47,12 +47,24 @@ model EvaluationPeriod extends Base {
   @@schema("khao-thi")
 }
 
+//Bộ tiêu chuẩn và tiêu chí đánh giá theo năm
+model EvaluationStandardSet extends Base {
+  name      String            @unique
+
+  standards StandardCatalog[]
+
+  @@schema("khao-thi")
+}
+
 /// Danh mục tiêu chuẩn
 model StandardCatalog extends Base {
-  order      Int
-  name       String
-  criteria   CriterionCatalog[]
-  objectType StandardCatalogType
+  order         Int
+  name          String
+  criteria      CriterionCatalog[]
+  standardSet   EvaluationStandardSet? @relation(fields: [standardSetId], references: [id])
+  standardSetId String?
+
+  objectType    StandardCatalogType
 
   @@schema("khao-thi")
 }
@@ -260,19 +272,29 @@ model AnalysisFormEvidence extends Base {
   @@schema("khao-thi")
 }
 
-/// Vai trò của thành viên trong hội đồng đánh giá
-enum EvaluationMemberRole {
-  CHAIRMAN // Chủ tịch hội đồng
-  VICE_PRESIDENT // Phó chủ tịch
-  HEAD_SECRETARY // Truỏng ban thư ký
-  SECRETARY // Thư ký
-  MEMBER // Uỷ viên
-  ADVISORY_BOARD // Ban tư vấn
-  HEAD_SPECIALIZED // Trưởng nhóm chuyên trách
-  SPECIALIZED // nhóm chuyên trách
+// /// Vai trò của thành viên trong hội đồng đánh giá
+// enum EvaluationMemberRole {
+//   CHAIRMAN // Chủ tịch hội đồng
+//   VICE_PRESIDENT // Phó chủ tịch
+//   HEAD_SECRETARY // Truỏng ban thư ký
+//   SECRETARY // Thư ký
+//   MEMBER // Uỷ viên
+//   ADVISORY_BOARD // Ban tư vấn
+//   HEAD_SPECIALIZED // Trưởng nhóm chuyên trách
+//   SPECIALIZED // nhóm chuyên trách
+
+//   @@schema("khao-thi")
+// }
+
+// Danh mục vai trò thành viên trong hội đồng
+model EvaluationMemberRole extends Base {
+  name                    String                    @unique
+
+  evaluationCouncilMember EvaluationCouncilMember[]
 
   @@schema("khao-thi")
 }
+
 
 /// Hội đồng đánh giá
 model EvaluationCouncil extends Base {
@@ -285,17 +307,20 @@ model EvaluationCouncil extends Base {
   @@schema("khao-thi")
 }
 
+/// Thành viên hội đồng đánh giá
 model EvaluationCouncilMember extends Base {
-  evaluationCouncil    EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  evaluationCouncil    EvaluationCouncil     @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId  String
-  lecturer             Lecturer               @relation(fields: [lecturerId], references: [id])
+  lecturer             Lecturer              @relation(fields: [lecturerId], references: [id])
   lecturerId           String
-  role                 EvaluationMemberRole[]
+  role                 EvaluationMemberRole? @relation(fields: [roleId], references: [id])
+  roleId               String?
 
   evaluationCriterions EvaluationCriterion[]
 
   @@schema("khao-thi")
 }
+
 
 model EvidenceFile extends Base {
   name          String
