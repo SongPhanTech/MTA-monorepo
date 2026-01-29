@@ -36,6 +36,11 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     criteria: z.array(z.unknown()).optional(),
+    standardSet: z.record(z.string(), z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    standardSetId: z.string().nullish(),
 }
 );
 
@@ -48,7 +53,7 @@ export const StandardCatalogScalarSchema = baseSchema;
 /**
  * `StandardCatalog` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const StandardCatalogSchema = StandardCatalogScalarSchema.merge(relationSchema.partial());
+export const StandardCatalogSchema = StandardCatalogScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -88,9 +93,7 @@ export const StandardCatalogCreateScalarSchema = baseSchemaWithoutDefaults.parti
 /**
  * `StandardCatalog` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const StandardCatalogCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
-});
+export const StandardCatalogCreateSchema = StandardCatalogCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -102,5 +105,5 @@ export const StandardCatalogUpdateScalarSchema = baseSchemaWithoutDefaults.parti
 /**
  * `StandardCatalog` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const StandardCatalogUpdateSchema = StandardCatalogUpdateScalarSchema;
+export const StandardCatalogUpdateSchema = StandardCatalogUpdateScalarSchema.merge(fkSchema.partial());
 

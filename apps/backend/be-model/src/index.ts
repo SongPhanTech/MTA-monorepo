@@ -204,14 +204,12 @@ app.onError((err, c) => {
         if (err.code === 'P2003') status = 400
 
         if (status === 500) {
-            console.log(err)
             return c.json({ message: 'Internal Server Error' }, status)
         }
 
         return c.json({ message: err.meta?.cause }, status)
     }
 
-    console.log(err)
     return c.json({ message: err.message }, 500)
 })
 

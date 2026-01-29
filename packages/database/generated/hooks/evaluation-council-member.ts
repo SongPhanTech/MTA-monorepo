@@ -326,9 +326,8 @@ export function useSuspenseCountEvaluationCouncilMember<TArgs extends Prisma.Eva
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('EvaluationCouncilMember', `${endpoint}/evaluationCouncilMember/count`, args, options, fetch);
 }
-import type { EvaluationMemberRole } from '../zenstack/models';
 
-export function useCheckEvaluationCouncilMember<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; evaluationCouncilId?: string; lecturerId?: string; role?: EvaluationMemberRole }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckEvaluationCouncilMember<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; evaluationCouncilId?: string; lecturerId?: string; roleId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('EvaluationCouncilMember', `${endpoint}/evaluationCouncilMember/check`, args, options, fetch);
 }

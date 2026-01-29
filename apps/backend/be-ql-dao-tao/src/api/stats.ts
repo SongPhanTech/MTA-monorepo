@@ -5028,7 +5028,7 @@ app.openapi(
                 {
                     success: true,
                     data: {
-                        BY_COURSE: generateData(
+                        By_Course: generateData(
                             [
                                 { id: 'K14', name: 'Khóa 14', total: 1200, count: 40 },
                                 { id: 'K15', name: 'Khóa 15', total: 1500, count: 55 },
@@ -5036,7 +5036,7 @@ app.openapi(
                             'Khóa'
                         ),
 
-                        BY_DEPARTMENT: generateData(
+                        By_Curriculum: generateData(
                             [
                                 {
                                     id: 'CNTT',
@@ -5049,7 +5049,7 @@ app.openapi(
                             'Ngành'
                         ),
 
-                        BY_MAJOR: generateData(
+                        By_Major: generateData(
                             [
                                 {
                                     id: 'KHMT',
