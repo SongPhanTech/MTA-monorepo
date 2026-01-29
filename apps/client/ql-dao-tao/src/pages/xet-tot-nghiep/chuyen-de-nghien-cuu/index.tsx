@@ -24,7 +24,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import DatePicker from '@components/commons/date-picker'
 
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import type { Prisma } from '@workspace/db/client'
+import { $Enums, type Prisma } from '@workspace/db/client'
 import { saveAs } from 'file-saver'
 
 interface ChuyenDeNghienCuuForm {
@@ -1009,6 +1009,307 @@ export default function ChuyenDeNghienCuu() {
                                     }}
                                 >
                                     TK tải giảng GV
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    icon={<FileOutlined />}
+                                    onClick={async () => {
+                                        if (!trainingCourseId) {
+                                            return message.warning(
+                                                'Vui lòng chọn khóa học trước khi xuất phụ lục!'
+                                            )
+                                        }
+
+                                        if (!semesterId) {
+                                            return message.warning(
+                                                'Vui lòng chọn kỳ học trước khi xuất phụ lục!'
+                                            )
+                                        }
+
+                                        const khoaVaKy = await sqlTransaction([
+                                            {
+                                                model: 'TrainingCourse',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: trainingCourseId },
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                            {
+                                                model: 'Semester',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: semesterId },
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                        ])
+                                        const khoaVaKyData = khoaVaKy.data as [
+                                            { name: string },
+                                            { name: string },
+                                        ]
+
+                                        // useFindManyStudent({
+                                        //     where: {
+                                        //         subjectClassStudent: {
+                                        //             some: {
+                                        //                 subjectClass: {
+                                        //                     semesterId,
+                                        //                     trainingObjectTypeId,
+                                        //                     fixedClasses: {
+                                        //                         some: {
+                                        //                             trainingCourseId,
+                                        //                         },
+                                        //                     },
+                                        //                     subject: {
+                                        //                         type: $Enums.SubjectVersionType
+                                        //                             .Research,
+                                        //                     },
+                                        //                 },
+                                        //             },
+                                        //         },
+                                        //     },
+                                        //     include: {
+                                        //         subjectClassStudent: {
+                                        //             select: {
+                                        //                 subjectClass: {
+                                        //                     select: {
+                                        //                         subject: {
+                                        //                             select: {
+                                        //                                 credit: true,
+                                        //                             },
+                                        //                         },
+                                        //                     },
+                                        //                 },
+                                        //             },
+                                        //             where: {
+                                        //                 subjectClass: {
+                                        //                     semesterId,
+                                        //                     trainingObjectTypeId,
+                                        //                     fixedClasses: {
+                                        //                         some: {
+                                        //                             trainingCourseId,
+                                        //                         },
+                                        //                     },
+                                        //                     subject: {
+                                        //                         type: $Enums.SubjectVersionType
+                                        //                             .Research,
+                                        //                     },
+                                        //                 },
+                                        //             },
+                                        //         },
+                                        //         curriculumVersion: {
+                                        //             select: {
+                                        //                 curriculum: {
+                                        //                     select: {
+                                        //                         trainingMajor: {
+                                        //                             select: {
+                                        //                                 name: true,
+                                        //                                 trainingField: {
+                                        //                                     select: {
+                                        //                                         name: true,
+                                        //                                     },
+                                        //                                 },
+                                        //                             },
+                                        //                         },
+                                        //                     },
+                                        //                 },
+                                        //             },
+                                        //         },
+                                        //         userProfile: {
+                                        //             select: {
+                                        //                 dateOfBirth: true,
+                                        //                 fullname: true,
+                                        //             },
+                                        //         },
+                                        //     },
+                                        // })
+
+                                        const students = await sqlTransaction([
+                                            {
+                                                model: 'Student',
+                                                operation: 'findMany',
+                                                data: {
+                                                    where: {
+                                                        subjectClassStudent: {
+                                                            some: {
+                                                                subjectClass: {
+                                                                    semesterId,
+                                                                    trainingObjectTypeId,
+                                                                    fixedClasses: {
+                                                                        some: {
+                                                                            trainingCourseId,
+                                                                        },
+                                                                    },
+                                                                    subject: {
+                                                                        type: $Enums
+                                                                            .SubjectVersionType
+                                                                            .Research,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    include: {
+                                                        subjectClassStudent: {
+                                                            select: {
+                                                                subjectClass: {
+                                                                    select: {
+                                                                        subject: {
+                                                                            select: {
+                                                                                credit: true,
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                            where: {
+                                                                subjectClass: {
+                                                                    semesterId,
+                                                                    trainingObjectTypeId,
+                                                                    fixedClasses: {
+                                                                        some: {
+                                                                            trainingCourseId,
+                                                                        },
+                                                                    },
+                                                                    subject: {
+                                                                        type: $Enums
+                                                                            .SubjectVersionType
+                                                                            .Research,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        curriculumVersion: {
+                                                            select: {
+                                                                curriculum: {
+                                                                    select: {
+                                                                        trainingMajor: {
+                                                                            select: {
+                                                                                name: true,
+                                                                                trainingField: {
+                                                                                    select: {
+                                                                                        name: true,
+                                                                                    },
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        userProfile: {
+                                                            select: {
+                                                                dateOfBirth: true,
+                                                                fullname: true,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        ])
+
+                                        const studentsData = students
+                                            .data[0] as Prisma.StudentGetPayload<{
+                                            include: {
+                                                subjectClassStudent: {
+                                                    select: {
+                                                        subjectClass: {
+                                                            select: {
+                                                                subject: {
+                                                                    select: {
+                                                                        credit: true
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                curriculumVersion: {
+                                                    select: {
+                                                        curriculum: {
+                                                            select: {
+                                                                trainingMajor: {
+                                                                    select: {
+                                                                        name: true
+                                                                        trainingField: {
+                                                                            select: {
+                                                                                name: true
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                userProfile: {
+                                                    select: {
+                                                        dateOfBirth: true
+                                                        fullname: true
+                                                    }
+                                                }
+                                            }
+                                        }>[]
+
+                                        const res = await excelTemplate({
+                                            fileName: 'TK_SoLuongChuyenDeHocVien.xlsx',
+                                            path: 'TK_SoLuongChuyenDeHocVien.xlsx',
+                                            showGridLines: true,
+                                            wrapText: true,
+                                            payload: [
+                                                {
+                                                    data: {
+                                                        khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
+                                                        hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
+                                                        data: studentsData.map((profile, idx) => {
+                                                            return {
+                                                                tt: idx + 1,
+                                                                ten: profile?.userProfile?.fullname,
+                                                                ngay_sinh: profile?.userProfile
+                                                                    ?.dateOfBirth
+                                                                    ? dayjs(
+                                                                          profile?.userProfile
+                                                                              ?.dateOfBirth
+                                                                      ).format('DD/MM/YYYY')
+                                                                    : '',
+                                                                nganh_chuyen_nganh: `${
+                                                                    profile?.curriculumVersion
+                                                                        ?.curriculum.trainingMajor
+                                                                        ?.trainingField?.name
+                                                                } (${
+                                                                    profile?.curriculumVersion
+                                                                        ?.curriculum.trainingMajor
+                                                                        ?.name
+                                                                })`,
+                                                                so_cd: profile.subjectClassStudent
+                                                                    .length,
+                                                                tong_tc:
+                                                                    profile?.subjectClassStudent?.reduce(
+                                                                        (a, b) =>
+                                                                            a +
+                                                                            (b?.subjectClass
+                                                                                ?.subject?.credit ||
+                                                                                0),
+                                                                        0
+                                                                    ),
+                                                            }
+                                                        }),
+                                                    },
+                                                },
+                                            ],
+                                        })
+                                        saveAs(
+                                            res.data,
+                                            `TK_SoLuongChuyenDeHocVien_${dayjs().format('HH-mm-ss')}.xlsx`
+                                        )
+                                    }}
+                                >
+                                    TK Số lượng CĐ HV
                                 </Button>
                             </div>
                         </Form.Item>
