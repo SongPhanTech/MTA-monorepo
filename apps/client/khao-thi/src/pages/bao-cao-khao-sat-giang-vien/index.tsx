@@ -1,22 +1,55 @@
 import Select from '@components/commons/select'
-import TreeSelect from '@components/commons/tree-select'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
 import {
     useFindManyClusterSurvey,
     useFindManyDM_DonVi,
     useFindManyLecturer,
     useFindManySurvey,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Row } from 'antd'
+import { Button, Col, Flex, Row,Tree } from 'antd'
 import { useMemo, useState } from 'react'
-import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
-import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
-import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
-import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
-import { useSemesterStore } from '@workspace/ui'
+// import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
+// import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
+// import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
+// import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
+import { useSemesterStore,useTrainingMajorStore } from '@workspace/ui'
+import { FolderOpenOutlined } from '@ant-design/icons';
+
+interface MyTreeNode {
+    title: string
+    key: string
+    value?: string // nếu bạn muốn gán giá trị riêng
+    children?: MyTreeNode[]
+}
+
+function buildOrgAndLectureTree(
+    list: Array<any>,
+    lecturers: Array<any>,
+    parentId: string | null = null
+): Array<any> {
+    return list
+        .filter((item) => (item.parentId ?? null) === parentId)
+        .map((item) => ({
+            ...item,
+            title: item.name || 'Đơn vị không tên',
+            key: item.id,
+            icon:<FolderOpenOutlined/>,
+            selectable: false,
+            children: [
+                ...lecturers
+                    .filter((lecturer) => lecturer.organizationId === item.id)
+                    .map((lecturer) => ({
+                        ...lecturer,
+                        title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
+                        key: `${lecturer.id}`,
+                    })),
+                ...buildOrgAndLectureTree(list, lecturers, item.id),
+            ],
+        }))
+}
 
 export default function BaoCaoGiangVien() {
+   
     const [filters, setFilters] = useState<any>({
         name: '',
         surveyId: undefined,
@@ -26,16 +59,11 @@ export default function BaoCaoGiangVien() {
         clusterId: undefined,
     })
 
-    const [filtersMore, setFiltersMore] = useState<any>({
-        name: '',
-        surveyId: undefined,
-        lectureId: undefined,
-        organizationId: undefined,
-        semesterIds: undefined,
-        clusterId: undefined,
-    })
+    const [selectedKeys,setSelectedKeys]=useState<any>() 
+    const [selectedItem,setSelectedItem]=useState<any>() 
 
     const { id: semesterId } = useSemesterStore()
+    const {id: trainingObjectTypeId} =useTrainingMajorStore()
 
     const { data = [], refetch } = useFindManyClusterSurvey({
         where: {
@@ -61,28 +89,66 @@ export default function BaoCaoGiangVien() {
             },
         },
         orderBy: { createdAt: 'desc' },
+
     })
-    const { data: organizations = [] } = useFindManyDM_DonVi()
-    const treeData = buildOrgTree(organizations)
+
+  const {
+        data: organizations = [],
+        isLoading: organizationsLoading,
+        error: organizationsError,
+    } = useFindManyDM_DonVi()
 
     const { data: lecturerData = [] } = useFindManyLecturer(
         {
-            include: {
-                organization: true,
-                userProfile: true,
-            },
             where: {
-                organizationId: filters?.organizationId,
-                userProfile: {
-                    active: true,
+                mainSubjectClasses: {
+                    some: {
+                        ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
+                    },
                 },
-                active: true,
+            },
+            orderBy: {
+                userProfile: {
+                    firstName: 'asc',
+                },
+            },
+            include: {
+                userProfile:true,
+                mainSubjectClasses:true,
+                organization: true,
             },
         },
-        {
-            enabled: !!filters?.organizationId,
-        }
     )
+
+    // Tạo treeData từ organizations và lecturers
+    const treeData: any[] = useMemo(() => {
+        if (!organizations.length || !lecturerData.length) return []
+
+        return buildOrgAndLectureTree(
+            organizations.map((org) => ({
+                ...org,
+                id: org.Id,
+                name: `${org.sMa} - ${org.sTen}`,
+                parentId: org.sParentId,
+            })),
+            lecturerData.map((lec) => ({
+                ...lec,
+                id: lec.id,
+                userProfile: {
+                    ...lec.userProfile,
+                    fullName:
+                        `${lec.userProfile?.lastName ?? ''} ${
+                            lec.userProfile?.firstName ?? ''
+                        }`.trim() || 'Giảng viên không tên',
+                },
+                selectable: true,
+                organizationId: lec.organizationId,
+            })),
+            null
+        )
+    }, [organizations, lecturerData])
+
+
     const { data: SubjectVersion = [], isLoading } = useFindManySurvey(
         {
             include: {
@@ -99,55 +165,55 @@ export default function BaoCaoGiangVien() {
     )
 
     const hanleSearchReport = () => {
-        setFiltersMore(filters)
     }
 
     const items = useMemo(() => {
-        if (!filtersMore?.clusterId) {
+        if (!filters?.clusterId) {
             return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
         }
-        if (filtersMore?.clusterId) {
-            if (filtersMore.surveyId) {
-                return <SurveyReport selectedId={filtersMore?.surveyId || ''} />
-            }
-            if (filtersMore.lectureId) {
-                return (
-                    <LecturerSurveyReport
-                        selectedId={filtersMore?.clusterId}
-                        lectureId={filtersMore?.lectureId || ''}
-                        sublectClass={filters}
-                        setSublectClass={(value: any) => {
-                            setFilters({ ...filters, surveyId: value })
-                        }}
-                    />
-                )
-            }
-            if (filtersMore.organizationId) {
-                return (
-                    <ClusterSurveyReport
-                        selectedId={filtersMore?.clusterId}
-                        surveyName={filtersMore?.name}
-                        surveyId={filters?.surveyId || ''}
-                        setSurvey={(value) => {
-                            setFilters({ ...filters, surveyId: value })
-                        }}
-                        organizationSelected={filters?.organizationId}
-                    />
-                )
-            }
-            return (
-                <OrganizationSurveyReport
-                    selectedId={filtersMore?.clusterId}
-                    surveyName={filtersMore?.name}
-                    organizationSelected={filters?.organizationId}
-                    setOrganizationSelected={(value) => {
-                        setFilters({ ...filters, organizationId: value })
-                    }}
-                />
-            )
+        if (filters?.clusterId) {
+            return <>abc</>
+            // if (filtersMore.surveyId) {
+            //     return <SurveyReport selectedId={filtersMore?.surveyId || ''} />
+            // }
+            // if (filtersMore.lectureId) {
+            //     return (
+            //         <LecturerSurveyReport
+            //             selectedId={filtersMore?.clusterId}
+            //             lectureId={filtersMore?.lectureId || ''}
+            //             sublectClass={filters}
+            //             setSublectClass={(value: any) => {
+            //                 setFilters({ ...filters, surveyId: value })
+            //             }}
+            //         />
+            //     )
+            // }
+            // if (filtersMore.organizationId) {
+            //     return (
+            //         <ClusterSurveyReport
+            //             selectedId={filtersMore?.clusterId}
+            //             surveyName={filtersMore?.name}
+            //             surveyId={filters?.surveyId || ''}
+            //             setSurvey={(value) => {
+            //                 setFilters({ ...filters, surveyId: value })
+            //             }}
+            //             organizationSelected={filters?.organizationId}
+            //         />
+            //     )
+            // }
+            // return (
+            //     <OrganizationSurveyReport
+            //         selectedId={filtersMore?.clusterId}
+            //         surveyName={filtersMore?.name}
+            //         organizationSelected={filters?.organizationId}
+            //         setOrganizationSelected={(value) => {
+            //             setFilters({ ...filters, organizationId: value })
+            //         }}
+            //     />
+            // )
         }
         return
-    }, [filtersMore])
+    }, [filters,selectedItem])
     return (
         <Row gutter={[16, 4]}>
             <Col span={24}>
@@ -171,70 +237,27 @@ export default function BaoCaoGiangVien() {
                             }}
                             dropdownMatchSelectWidth={false}
                         />
-                        <TreeSelect
-                            allowClear
-                            showSearch
-                            placeholder="Chọn đơn vị quản lý"
-                            treeDefaultExpandAll
-                            treeData={treeData}
-                            value={filters.organizationId}
-                            className="mr-4 w-[250px]"
-                            onChange={(value) => setFilters({ ...filters, organizationId: value })}
-                            dropdownStyle={{
-                                maxHeight: 400,
-                                overflow: 'auto',
-                                width: 'fit-content',
-                                maxWidth: 400,
-                            }}
-                            dropdownMatchSelectWidth={false}
-                        />
-                        <Select
-                            className="mr-4 w-[250px]"
-                            placeholder="Chọn giảng viên"
-                            value={filters.lectureId}
-                            onChange={(value) => setFilters({ ...filters, lectureId: value })}
-                            options={lecturerData?.map((i) => {
-                                return {
-                                    label: `${i?.code || ''} - ${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim(),
-                                    value: i.id,
-                                    key: i.id,
-                                }
-                            })}
-                            dropdownStyle={{
-                                maxHeight: 400,
-                                overflow: 'auto',
-                                width: 'fit-content',
-                                maxWidth: 400,
-                            }}
-                            dropdownMatchSelectWidth={false}
-                        />
-                        <Select
-                            className="mr-4 w-[250px]"
-                            placeholder="Chọn môn học"
-                            value={filters.surveyId}
-                            onChange={(value) => setFilters({ ...filters, surveyId: value })}
-                            options={SubjectVersion?.map((i) => {
-                                return {
-                                    label: `${i?.subjectClass?.code || ''} - ${i?.subjectClass?.name || ''}`.trim(),
-                                    value: i.id,
-                                    key: i.id,
-                                }
-                            })}
-                            dropdownStyle={{
-                                maxHeight: 400,
-                                overflow: 'auto',
-                                width: 'fit-content',
-                                maxWidth: 400,
-                            }}
-                            dropdownMatchSelectWidth={false}
-                        />
                     </Flex>
                     <Button onClick={hanleSearchReport} type="primary">
                         Tìm kiếm
                     </Button>
                 </Flex>
             </Col>
-            <Col span={24}>{items}</Col>
+            <Col span={6}>
+                    <Tree
+                    showIcon
+                    selectedKeys={selectedKeys}
+                    treeData={treeData}
+                    className="w-full mb-3"
+                    onClick={(selectedKeys,e)=>{
+                        console.log(selectedKeys,e);
+                        setSelectedKeys(e?.id)
+                        setSelectedItem(e)
+                    }}
+                />
+            </Col>
+            
+            <Col span={18}>{items}</Col>
         </Row>
     )
 }

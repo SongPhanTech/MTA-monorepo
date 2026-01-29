@@ -87,6 +87,10 @@ export const SurveyStatsSchema = z.object({
     questions: z.array(QuestionStatSchema),
     average: z.array(AverageSchema),
 })
+export const SurveyStatsLecSchema = z.object({
+    questions: z.array(QuestionStatSchema),
+    average: z.array(AverageSchema),
+})
 
 export const LecturerSurveyStatsSchema = z.object({
     lecture: models.LecturerScalarSchema.extend({
@@ -291,3 +295,102 @@ export const getOrganizationsSurveyStats = async (
         average,
     }
 }
+
+export const getSurveyStatsforQuestion = async (
+    prisma: PrismaClient,
+    clusterSurveyId: string,
+    lectureId:string,
+    questions: SurveyQuestion[],
+    choices: SurveyChoice[]
+) => {
+    const questionIds = questions.map((q) => q.id)
+
+    const answerCounts = await prisma.surveyResponse.groupBy({
+        by: ['surveyQuestionId', 'surveyChoiceId'],
+        where: {
+            surveySession: { survey:{
+                clusterSurveyId,
+                lectureId
+            }},
+            surveyQuestionId: { in: questionIds },
+            surveyChoiceId: { not: null },
+        },
+        _count: { surveyChoiceId: true },
+    })
+    
+
+    const answerCountMap = answerCounts.reduce(
+        (acc, curr) => {
+            if (curr.surveyChoiceId) {
+                const key = `${curr.surveyQuestionId}-${curr.surveyChoiceId}`
+                acc[key] = curr._count.surveyChoiceId
+            }
+            return acc
+        },
+        {} as Record<string, number>
+    )
+
+    const responseCounts = await prisma.surveyResponse.groupBy({
+        by: ['surveyQuestionId'],
+        where: {
+            surveySession: { survey:{
+                clusterSurveyId,
+                lectureId
+            }},
+            surveyQuestionId: { in: questionIds },
+            surveyChoiceId: { not: null },
+        },
+        _count: { surveyQuestionId: true },
+    })
+
+    const questionCountMap = new Map(
+        responseCounts.map((i) => [i.surveyQuestionId, i._count.surveyQuestionId])
+    )
+
+    const questionsStatistics = questions.map((question) => {
+        const answers = choices.map((choice) => {
+            const key = `${question.id}-${choice.id}`
+            const rate = Number(
+                ((answerCountMap[key] || 0) / (questionCountMap.get(question.id) || 1)).toFixed(1)
+            )
+            const sRate = `${rate}%`
+            const summary = `${answerCountMap[key]}/${questionCountMap.get(question.id)} (${rate})`
+            return {
+                id: choice.id,
+                answer: choice.answer,
+                description: choice.description,
+                count: answerCountMap[key] || 0,
+                total: questionCountMap.get(question.id) || 0,
+                rate,
+                sRate,
+                summary,
+            }
+        })
+        return {
+            id: question.id,
+            name: question.name,
+            answers,
+        }
+    })
+
+    const average = choices.map((choice) => {
+        if (questionsStatistics.length === 0)
+            return {
+                average: 0,
+                totalRate: 0,
+            }
+
+        const count = questionsStatistics.reduce((acc, curr) => {
+            return acc + (curr.answers.find((i) => i.id === choice.id)?.count || 0)
+        }, 0)
+
+        // const average = Number((totalRate / questionsStatistics.length).toFixed(2))
+        return { average: 0, totalRate: count }
+    })
+
+    return {
+        questions: questionsStatistics,
+        average,
+    }
+}
+

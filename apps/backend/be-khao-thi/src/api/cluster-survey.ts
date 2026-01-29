@@ -7,8 +7,10 @@ import {
     getLecturerSurveyStats,
     getOrganizationsSurveyStats,
     getSurveyStats,
+    getSurveyStatsforQuestion,
     LecturerSurveyStatsSchema,
     OrgazationsSurveyStatsSchema,
+    SurveyStatsLecSchema,
     SurveyStatsSchema,
 } from '../services/survey.service'
 
@@ -681,5 +683,87 @@ app.openapi(exportClusterSurveyStatistics, async (c) => {
         'Content-Disposition': disposition,
     })
 })
+
+const getClusterSurveyStatisticsForLecturer = createRoute({
+    operationId: 'get-cluster-survey-statistics',
+    path: '/{id}/statistics',
+    method: 'get',
+    tags: ['ClusterSurvey'],
+    summary: 'Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát cuar từng giáo viên',
+    request: {
+        params: z.object({ id: z.string() }),
+        query: z.object({
+            organizations: z.string().array().optional(),
+            lectureId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Thành công',
+            content: {
+                'application/json': {
+                    schema: models.ClusterSurveySchema.extend({
+                        data: SurveyStatsLecSchema
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getClusterSurveyStatisticsForLecturer, async (c) => {
+    const { id } = c.req.valid('param')
+    const { organizations, lectureId, ...q } = c.req.valid('query')
+     const cluster = await prisma.clusterSurvey.findUnique({
+        where: { id },
+        include: {
+            surveyQuestion: {
+                where: {
+                    type: 'SINGLE_CHOICE',
+                },
+            },
+            surveyChoice: { orderBy: { answer: 'asc' } },
+            surveys: {
+                where: {
+                    lecture: {
+                        id: lectureId,
+                        organizationId: {
+                            in: organizations,
+                        },
+                    },
+                },
+                include: {
+                    subjectClass: true,
+                    lecture: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                },
+            },
+        },
+    })
+    if (!cluster) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const listData = await getSurveyStatsforQuestion(prisma, id,lectureId, cluster.surveyQuestion, cluster.surveyChoice)
+
+    const data = {
+       ...cluster,
+       data:listData
+    }
+
+    return c.json(data, 200)
+})
+
 
 export default app
