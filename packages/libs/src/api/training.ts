@@ -21,6 +21,7 @@ import type {
 } from '@tanstack/react-query'
 
 import type {
+    ApproveAwardScore400,
     AwardIds,
     AwardIdsResult,
     AwardScore400,
@@ -11144,6 +11145,114 @@ export const useAwardScore = <TError = AwardScore400, TContext = unknown>(
     TContext
 > => {
     const mutationOptions = getAwardScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Phê duyệt điểm giải thưởng
+ * @summary Phê duyệt điểm giải thưởng
+ */
+export type approveAwardScoreResponse200 = {
+    data: AwardIdsResult
+    status: 200
+}
+
+export type approveAwardScoreResponse400 = {
+    data: ApproveAwardScore400
+    status: 400
+}
+
+export type approveAwardScoreResponseSuccess = approveAwardScoreResponse200 & {
+    headers: Headers
+}
+export type approveAwardScoreResponseError = approveAwardScoreResponse400 & {
+    headers: Headers
+}
+
+export type approveAwardScoreResponse =
+    | approveAwardScoreResponseSuccess
+    | approveAwardScoreResponseError
+
+export const getApproveAwardScoreUrl = () => {
+    return `/api/archived-score/approve-award-score`
+}
+
+export const approveAwardScore = async (
+    awardIds: AwardIds,
+    options?: RequestInit
+): Promise<approveAwardScoreResponse> => {
+    return customTrainingFetch<approveAwardScoreResponse>(getApproveAwardScoreUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(awardIds),
+    })
+}
+
+export const getApproveAwardScoreMutationOptions = <
+    TError = ApproveAwardScore400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof approveAwardScore>>,
+        TError,
+        { data: AwardIds },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof approveAwardScore>>,
+    TError,
+    { data: AwardIds },
+    TContext
+> => {
+    const mutationKey = ['approveAwardScore']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof approveAwardScore>>,
+        { data: AwardIds }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return approveAwardScore(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ApproveAwardScoreMutationResult = NonNullable<
+    Awaited<ReturnType<typeof approveAwardScore>>
+>
+export type ApproveAwardScoreMutationBody = AwardIds
+export type ApproveAwardScoreMutationError = ApproveAwardScore400
+
+/**
+ * @summary Phê duyệt điểm giải thưởng
+ */
+export const useApproveAwardScore = <TError = ApproveAwardScore400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof approveAwardScore>>,
+            TError,
+            { data: AwardIds },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof approveAwardScore>>,
+    TError,
+    { data: AwardIds },
+    TContext
+> => {
+    const mutationOptions = getApproveAwardScoreMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

@@ -110,8 +110,11 @@ function SelectLecturer({
     //     }
     // )
 
-    const { data: subjectData = [], isLoading,
-  isSuccess, } = useFindManySubjectVersion(
+    const {
+        data: subjectData = [],
+        isLoading,
+        isSuccess,
+    } = useFindManySubjectVersion(
         {
             where: {
                 subjectClass: {
@@ -394,21 +397,19 @@ function SelectLecturer({
         //     disabled: !record.mainLecturer,
         // }),
     }
-    const ranRef = useRef(false);
+    const ranRef = useRef(false)
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        ranRef.current = false;
-   
+        ranRef.current = false
     }, [semesterId])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (!isSuccess) return;        // chưa load xong
-        if (ranRef.current) return;   // đảm bảo chỉ chạy 1 lần
+        if (!isSuccess) return // chưa load xong
+        if (ranRef.current) return // đảm bảo chỉ chạy 1 lần
 
-        ranRef.current = true;
+        ranRef.current = true
         if (subjectData.length) {
-            
             const list: string[] = []
             subjectData.forEach((e) => {
                 e?.subjectClass.forEach((i) => {

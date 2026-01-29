@@ -14,12 +14,16 @@ app.openapi(
                 content: {
                     'application/json': {
                         schema: z.object({
-                            tail: z.object({
-                                data: z.any(),
-                            }),
-                            head: z.object({
-                                data: z.any(),
-                            }),
+                            tail: z
+                                .object({
+                                    data: z.any(),
+                                })
+                                .optional(),
+                            head: z
+                                .object({
+                                    data: z.any(),
+                                })
+                                .optional(),
                             payload: z
                                 .array(
                                     z.object({
@@ -80,27 +84,21 @@ app.openapi(
         let headSheet: ExcelJS.Worksheet | undefined
         if (head?.data) {
             const headTemplate = new XlsxTemplate(nodeBuffer)
-            const headSheetIndex = templateWorkbook.worksheets.findIndex((ws) => ws.name === 'Head')
-            if (headSheetIndex >= 0) {
-                headTemplate.substitute(headSheetIndex + 1, head.data)
-                const headBuffer = await headTemplate.generate({ type: 'nodebuffer' })
-                const headWorkbook = new ExcelJS.Workbook()
-                await headWorkbook.xlsx.load(headBuffer)
-                headSheet = headWorkbook.getWorksheet('Head')
-            }
+            headTemplate.substitute('Head', head.data)
+            const headBuffer = await headTemplate.generate({ type: 'nodebuffer' })
+            const headWorkbook = new ExcelJS.Workbook()
+            await headWorkbook.xlsx.load(headBuffer)
+            headSheet = headWorkbook.getWorksheet('Head')
         }
         // Process Tail sheet if data is provided
         let tailSheet: ExcelJS.Worksheet | undefined
         if (tail?.data) {
             const tailTemplate = new XlsxTemplate(nodeBuffer)
-            const tailSheetIndex = templateWorkbook.worksheets.findIndex((ws) => ws.name === 'Tail')
-            if (tailSheetIndex >= 0) {
-                tailTemplate.substitute(tailSheetIndex + 1, tail.data)
-                const tailBuffer = await tailTemplate.generate({ type: 'nodebuffer' })
-                const tailWorkbook = new ExcelJS.Workbook()
-                await tailWorkbook.xlsx.load(tailBuffer)
-                tailSheet = tailWorkbook.getWorksheet('Tail')
-            }
+            tailTemplate.substitute('Tail', tail.data)
+            const tailBuffer = await tailTemplate.generate({ type: 'nodebuffer' })
+            const tailWorkbook = new ExcelJS.Workbook()
+            await tailWorkbook.xlsx.load(tailBuffer)
+            tailSheet = tailWorkbook.getWorksheet('Tail')
         }
 
         // Generate a workbook for each payload item

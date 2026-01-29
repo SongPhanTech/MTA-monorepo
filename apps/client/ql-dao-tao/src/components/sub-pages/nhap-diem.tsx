@@ -1124,11 +1124,17 @@ export default function NhapDiem({
                                         examBanned,
                                         subjectClass,
                                         examScore,
-                                    }: any
+                                    }
                                 ) => {
                                     const isMissingScore =
-                                        attendanceScore == null || midtermScore == null
-                                    if (role !== 'GV' || score === 'CC/TX' || !!examBanned) {
+                                        (attendanceScore == null || midtermScore == null) &&
+                                        !subjectClass?.subject?.onePoint
+                                    if (
+                                        role !== 'GV' ||
+                                        score === 'CC/TX' ||
+                                        !!examBanned ||
+                                        isMissingScore
+                                    ) {
                                         return examScore ?? ''
                                     }
 
@@ -1147,16 +1153,11 @@ export default function NhapDiem({
                                             ]}
                                         >
                                             <InputNumber
-                                                disabled={disabledForm || isMissingScore}
-                                                readOnly={disabledForm || isMissingScore}
-                                                variant={
-                                                    disabledForm || isMissingScore
-                                                        ? 'underlined'
-                                                        : 'outlined'
-                                                }
+                                                disabled={disabledForm}
+                                                readOnly={disabledForm}
+                                                variant={disabledForm ? 'underlined' : 'outlined'}
                                                 id={`score-thi-${id}`}
                                                 style={{ width: '100%' }}
-                                                placeholder={isMissingScore ? 'Thiếu điểm' : ''}
                                                 controls={false}
                                                 onKeyDown={(e) =>
                                                     handleScoreInputKeyDown(e, id, 'thi', dataTable)

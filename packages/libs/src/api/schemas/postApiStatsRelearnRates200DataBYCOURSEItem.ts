@@ -4,11 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsRelearnRates200DataBYCOURSEItemType } from './postApiStatsRelearnRates200DataBYCOURSEItemType'
+import type { PostApiStatsRelearnRates200DataByCourseItemType } from './postApiStatsRelearnRates200DataByCourseItemType'
 
-export type PostApiStatsRelearnRates200DataBYCOURSEItem = {
-    Type: PostApiStatsRelearnRates200DataBYCOURSEItemType
+export type PostApiStatsRelearnRates200DataByCourseItem = {
+    Type: PostApiStatsRelearnRates200DataByCourseItemType
+    id: string
     Name: string
+    PeriodId: string
     PeriodCode: string
     TotalStudents: number
     Count: number
