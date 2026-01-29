@@ -28192,6 +28192,7 @@ export namespace Prisma {
     thesisSession: number
     trainingBlocks: number
     surveyObjectType: number
+    survey: number
   }
 
   export type TrainingObjectTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -28208,6 +28209,7 @@ export namespace Prisma {
     thesisSession?: boolean | TrainingObjectTypeCountOutputTypeCountThesisSessionArgs
     trainingBlocks?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingBlocksArgs
     surveyObjectType?: boolean | TrainingObjectTypeCountOutputTypeCountSurveyObjectTypeArgs
+    survey?: boolean | TrainingObjectTypeCountOutputTypeCountSurveyArgs
   }
 
   // Custom InputTypes
@@ -28310,6 +28312,13 @@ export namespace Prisma {
    */
   export type TrainingObjectTypeCountOutputTypeCountSurveyObjectTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SurveyObjectTypeWhereInput
+  }
+
+  /**
+   * TrainingObjectTypeCountOutputType without action
+   */
+  export type TrainingObjectTypeCountOutputTypeCountSurveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SurveyWhereInput
   }
 
 
@@ -170069,6 +170078,7 @@ export namespace Prisma {
     thesisSession?: boolean | TrainingObjectType$thesisSessionArgs<ExtArgs>
     trainingBlocks?: boolean | TrainingObjectType$trainingBlocksArgs<ExtArgs>
     surveyObjectType?: boolean | TrainingObjectType$surveyObjectTypeArgs<ExtArgs>
+    survey?: boolean | TrainingObjectType$surveyArgs<ExtArgs>
     _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingObjectType"]>
 
@@ -170141,6 +170151,7 @@ export namespace Prisma {
     thesisSession?: boolean | TrainingObjectType$thesisSessionArgs<ExtArgs>
     trainingBlocks?: boolean | TrainingObjectType$trainingBlocksArgs<ExtArgs>
     surveyObjectType?: boolean | TrainingObjectType$surveyObjectTypeArgs<ExtArgs>
+    survey?: boolean | TrainingObjectType$surveyArgs<ExtArgs>
     _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TrainingObjectTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -170170,6 +170181,7 @@ export namespace Prisma {
       thesisSession: Prisma.$ThesisSessionPayload<ExtArgs>[]
       trainingBlocks: Prisma.$TrainingBlockPayload<ExtArgs>[]
       surveyObjectType: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
+      survey: Prisma.$SurveyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -170594,6 +170606,7 @@ export namespace Prisma {
     thesisSession<T extends TrainingObjectType$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$thesisSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     trainingBlocks<T extends TrainingObjectType$trainingBlocksArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$trainingBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     surveyObjectType<T extends TrainingObjectType$surveyObjectTypeArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$surveyObjectTypeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    survey<T extends TrainingObjectType$surveyArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$surveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -171379,6 +171392,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SurveyObjectTypeScalarFieldEnum | SurveyObjectTypeScalarFieldEnum[]
+  }
+
+  /**
+   * TrainingObjectType.survey
+   */
+  export type TrainingObjectType$surveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Survey
+     */
+    select?: SurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Survey
+     */
+    omit?: SurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SurveyInclude<ExtArgs> | null
+    where?: SurveyWhereInput
+    orderBy?: SurveyOrderByWithRelationInput | SurveyOrderByWithRelationInput[]
+    cursor?: SurveyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SurveyScalarFieldEnum | SurveyScalarFieldEnum[]
   }
 
   /**
@@ -266869,7 +266906,7 @@ export namespace Prisma {
     subjectClassId: string | null
     semesterId: string | null
     surveyTopicId: string | null
-    additionalSuggestion: boolean | null
+    trainingObjectTypeId: string | null
     clusterSurveyId: string | null
   }
 
@@ -266891,7 +266928,7 @@ export namespace Prisma {
     subjectClassId: string | null
     semesterId: string | null
     surveyTopicId: string | null
-    additionalSuggestion: boolean | null
+    trainingObjectTypeId: string | null
     clusterSurveyId: string | null
   }
 
@@ -266913,7 +266950,7 @@ export namespace Prisma {
     subjectClassId: number
     semesterId: number
     surveyTopicId: number
-    additionalSuggestion: number
+    trainingObjectTypeId: number
     clusterSurveyId: number
     _all: number
   }
@@ -266937,7 +266974,7 @@ export namespace Prisma {
     subjectClassId?: true
     semesterId?: true
     surveyTopicId?: true
-    additionalSuggestion?: true
+    trainingObjectTypeId?: true
     clusterSurveyId?: true
   }
 
@@ -266959,7 +266996,7 @@ export namespace Prisma {
     subjectClassId?: true
     semesterId?: true
     surveyTopicId?: true
-    additionalSuggestion?: true
+    trainingObjectTypeId?: true
     clusterSurveyId?: true
   }
 
@@ -266981,7 +267018,7 @@ export namespace Prisma {
     subjectClassId?: true
     semesterId?: true
     surveyTopicId?: true
-    additionalSuggestion?: true
+    trainingObjectTypeId?: true
     clusterSurveyId?: true
     _all?: true
   }
@@ -267076,7 +267113,7 @@ export namespace Prisma {
     subjectClassId: string | null
     semesterId: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId: string | null
     clusterSurveyId: string | null
     _count: SurveyCountAggregateOutputType | null
     _min: SurveyMinAggregateOutputType | null
@@ -267115,13 +267152,14 @@ export namespace Prisma {
     subjectClassId?: boolean
     semesterId?: boolean
     surveyTopicId?: boolean
-    additionalSuggestion?: boolean
+    trainingObjectTypeId?: boolean
     clusterSurveyId?: boolean
     surveyObjectType?: boolean | Survey$surveyObjectTypeArgs<ExtArgs>
     lecture?: boolean | Survey$lectureArgs<ExtArgs>
     subjectClass?: boolean | Survey$subjectClassArgs<ExtArgs>
     semester?: boolean | Survey$semesterArgs<ExtArgs>
     surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+    trainingObjectType?: boolean | Survey$trainingObjectTypeArgs<ExtArgs>
     surveyChoice?: boolean | Survey$surveyChoiceArgs<ExtArgs>
     surveyQuestion?: boolean | Survey$surveyQuestionArgs<ExtArgs>
     surveySessions?: boolean | Survey$surveySessionsArgs<ExtArgs>
@@ -267147,12 +267185,13 @@ export namespace Prisma {
     subjectClassId?: boolean
     semesterId?: boolean
     surveyTopicId?: boolean
-    additionalSuggestion?: boolean
+    trainingObjectTypeId?: boolean
     clusterSurveyId?: boolean
     lecture?: boolean | Survey$lectureArgs<ExtArgs>
     subjectClass?: boolean | Survey$subjectClassArgs<ExtArgs>
     semester?: boolean | Survey$semesterArgs<ExtArgs>
     surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+    trainingObjectType?: boolean | Survey$trainingObjectTypeArgs<ExtArgs>
     clusterSurvey?: boolean | Survey$clusterSurveyArgs<ExtArgs>
   }, ExtArgs["result"]["survey"]>
 
@@ -267174,12 +267213,13 @@ export namespace Prisma {
     subjectClassId?: boolean
     semesterId?: boolean
     surveyTopicId?: boolean
-    additionalSuggestion?: boolean
+    trainingObjectTypeId?: boolean
     clusterSurveyId?: boolean
     lecture?: boolean | Survey$lectureArgs<ExtArgs>
     subjectClass?: boolean | Survey$subjectClassArgs<ExtArgs>
     semester?: boolean | Survey$semesterArgs<ExtArgs>
     surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+    trainingObjectType?: boolean | Survey$trainingObjectTypeArgs<ExtArgs>
     clusterSurvey?: boolean | Survey$clusterSurveyArgs<ExtArgs>
   }, ExtArgs["result"]["survey"]>
 
@@ -267201,17 +267241,18 @@ export namespace Prisma {
     subjectClassId?: boolean
     semesterId?: boolean
     surveyTopicId?: boolean
-    additionalSuggestion?: boolean
+    trainingObjectTypeId?: boolean
     clusterSurveyId?: boolean
   }
 
-  export type SurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "isPublic" | "anonymous" | "lectureId" | "subjectClassId" | "semesterId" | "surveyTopicId" | "additionalSuggestion" | "clusterSurveyId", ExtArgs["result"]["survey"]>
+  export type SurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "isPublic" | "anonymous" | "lectureId" | "subjectClassId" | "semesterId" | "surveyTopicId" | "trainingObjectTypeId" | "clusterSurveyId", ExtArgs["result"]["survey"]>
   export type SurveyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     surveyObjectType?: boolean | Survey$surveyObjectTypeArgs<ExtArgs>
     lecture?: boolean | Survey$lectureArgs<ExtArgs>
     subjectClass?: boolean | Survey$subjectClassArgs<ExtArgs>
     semester?: boolean | Survey$semesterArgs<ExtArgs>
     surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+    trainingObjectType?: boolean | Survey$trainingObjectTypeArgs<ExtArgs>
     surveyChoice?: boolean | Survey$surveyChoiceArgs<ExtArgs>
     surveyQuestion?: boolean | Survey$surveyQuestionArgs<ExtArgs>
     surveySessions?: boolean | Survey$surveySessionsArgs<ExtArgs>
@@ -267223,6 +267264,7 @@ export namespace Prisma {
     subjectClass?: boolean | Survey$subjectClassArgs<ExtArgs>
     semester?: boolean | Survey$semesterArgs<ExtArgs>
     surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+    trainingObjectType?: boolean | Survey$trainingObjectTypeArgs<ExtArgs>
     clusterSurvey?: boolean | Survey$clusterSurveyArgs<ExtArgs>
   }
   export type SurveyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -267230,6 +267272,7 @@ export namespace Prisma {
     subjectClass?: boolean | Survey$subjectClassArgs<ExtArgs>
     semester?: boolean | Survey$semesterArgs<ExtArgs>
     surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+    trainingObjectType?: boolean | Survey$trainingObjectTypeArgs<ExtArgs>
     clusterSurvey?: boolean | Survey$clusterSurveyArgs<ExtArgs>
   }
 
@@ -267241,6 +267284,7 @@ export namespace Prisma {
       subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
       semester: Prisma.$SemesterPayload<ExtArgs> | null
       surveyTopic: Prisma.$SurveyTopicPayload<ExtArgs>
+      trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs> | null
       surveyChoice: Prisma.$SurveyChoicePayload<ExtArgs>[]
       surveyQuestion: Prisma.$SurveyQuestionPayload<ExtArgs>[]
       surveySessions: Prisma.$SurveySessionPayload<ExtArgs>[]
@@ -267264,7 +267308,7 @@ export namespace Prisma {
       subjectClassId: string | null
       semesterId: string | null
       surveyTopicId: string
-      additionalSuggestion: boolean
+      trainingObjectTypeId: string | null
       clusterSurveyId: string | null
     }, ExtArgs["result"]["survey"]>
     composites: {}
@@ -267665,6 +267709,7 @@ export namespace Prisma {
     subjectClass<T extends Survey$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, Survey$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     semester<T extends Survey$semesterArgs<ExtArgs> = {}>(args?: Subset<T, Survey$semesterArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     surveyTopic<T extends SurveyTopicDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SurveyTopicDefaultArgs<ExtArgs>>): Prisma__SurveyTopicClient<$Result.GetResult<Prisma.$SurveyTopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    trainingObjectType<T extends Survey$trainingObjectTypeArgs<ExtArgs> = {}>(args?: Subset<T, Survey$trainingObjectTypeArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     surveyChoice<T extends Survey$surveyChoiceArgs<ExtArgs> = {}>(args?: Subset<T, Survey$surveyChoiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyChoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     surveyQuestion<T extends Survey$surveyQuestionArgs<ExtArgs> = {}>(args?: Subset<T, Survey$surveyQuestionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     surveySessions<T extends Survey$surveySessionsArgs<ExtArgs> = {}>(args?: Subset<T, Survey$surveySessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -267715,7 +267760,7 @@ export namespace Prisma {
     readonly subjectClassId: FieldRef<"Survey", 'String'>
     readonly semesterId: FieldRef<"Survey", 'String'>
     readonly surveyTopicId: FieldRef<"Survey", 'String'>
-    readonly additionalSuggestion: FieldRef<"Survey", 'Boolean'>
+    readonly trainingObjectTypeId: FieldRef<"Survey", 'String'>
     readonly clusterSurveyId: FieldRef<"Survey", 'String'>
   }
     
@@ -268191,6 +268236,25 @@ export namespace Prisma {
      */
     include?: SemesterInclude<ExtArgs> | null
     where?: SemesterWhereInput
+  }
+
+  /**
+   * Survey.trainingObjectType
+   */
+  export type Survey$trainingObjectTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingObjectType
+     */
+    select?: TrainingObjectTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingObjectType
+     */
+    omit?: TrainingObjectTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingObjectTypeInclude<ExtArgs> | null
+    where?: TrainingObjectTypeWhereInput
   }
 
   /**
@@ -363367,7 +363431,7 @@ export namespace Prisma {
     subjectClassId: 'subjectClassId',
     semesterId: 'semesterId',
     surveyTopicId: 'surveyTopicId',
-    additionalSuggestion: 'additionalSuggestion',
+    trainingObjectTypeId: 'trainingObjectTypeId',
     clusterSurveyId: 'clusterSurveyId'
   };
 
@@ -367428,6 +367492,7 @@ export namespace Prisma {
     subjectClassId: 'subjectClassId',
     semesterId: 'semesterId',
     surveyTopicId: 'surveyTopicId',
+    trainingObjectTypeId: 'trainingObjectTypeId',
     clusterSurveyId: 'clusterSurveyId'
   };
 
@@ -382175,6 +382240,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionListRelationFilter
     trainingBlocks?: TrainingBlockListRelationFilter
     surveyObjectType?: SurveyObjectTypeListRelationFilter
+    survey?: SurveyListRelationFilter
   }
 
   export type TrainingObjectTypeOrderByWithRelationInput = {
@@ -382206,6 +382272,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionOrderByRelationAggregateInput
     trainingBlocks?: TrainingBlockOrderByRelationAggregateInput
     surveyObjectType?: SurveyObjectTypeOrderByRelationAggregateInput
+    survey?: SurveyOrderByRelationAggregateInput
     _relevance?: TrainingObjectTypeOrderByRelevanceInput
   }
 
@@ -382241,6 +382308,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionListRelationFilter
     trainingBlocks?: TrainingBlockListRelationFilter
     surveyObjectType?: SurveyObjectTypeListRelationFilter
+    survey?: SurveyListRelationFilter
   }, "id" | "code" | "name">
 
   export type TrainingObjectTypeOrderByWithAggregationInput = {
@@ -390660,13 +390728,14 @@ export namespace Prisma {
     subjectClassId?: StringNullableFilter<"Survey"> | string | null
     semesterId?: StringNullableFilter<"Survey"> | string | null
     surveyTopicId?: StringFilter<"Survey"> | string
-    additionalSuggestion?: BoolFilter<"Survey"> | boolean
+    trainingObjectTypeId?: StringNullableFilter<"Survey"> | string | null
     clusterSurveyId?: StringNullableFilter<"Survey"> | string | null
     surveyObjectType?: SurveyObjectTypeListRelationFilter
     lecture?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
     subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
     surveyTopic?: XOR<SurveyTopicScalarRelationFilter, SurveyTopicWhereInput>
+    trainingObjectType?: XOR<TrainingObjectTypeNullableScalarRelationFilter, TrainingObjectTypeWhereInput> | null
     surveyChoice?: SurveyChoiceListRelationFilter
     surveyQuestion?: SurveyQuestionListRelationFilter
     surveySessions?: SurveySessionListRelationFilter
@@ -390691,13 +390760,14 @@ export namespace Prisma {
     subjectClassId?: SortOrderInput | SortOrder
     semesterId?: SortOrderInput | SortOrder
     surveyTopicId?: SortOrder
-    additionalSuggestion?: SortOrder
+    trainingObjectTypeId?: SortOrderInput | SortOrder
     clusterSurveyId?: SortOrderInput | SortOrder
     surveyObjectType?: SurveyObjectTypeOrderByRelationAggregateInput
     lecture?: LecturerOrderByWithRelationInput
     subjectClass?: SubjectClassOrderByWithRelationInput
     semester?: SemesterOrderByWithRelationInput
     surveyTopic?: SurveyTopicOrderByWithRelationInput
+    trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
     surveyChoice?: SurveyChoiceOrderByRelationAggregateInput
     surveyQuestion?: SurveyQuestionOrderByRelationAggregateInput
     surveySessions?: SurveySessionOrderByRelationAggregateInput
@@ -390726,13 +390796,14 @@ export namespace Prisma {
     subjectClassId?: StringNullableFilter<"Survey"> | string | null
     semesterId?: StringNullableFilter<"Survey"> | string | null
     surveyTopicId?: StringFilter<"Survey"> | string
-    additionalSuggestion?: BoolFilter<"Survey"> | boolean
+    trainingObjectTypeId?: StringNullableFilter<"Survey"> | string | null
     clusterSurveyId?: StringNullableFilter<"Survey"> | string | null
     surveyObjectType?: SurveyObjectTypeListRelationFilter
     lecture?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
     subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
     surveyTopic?: XOR<SurveyTopicScalarRelationFilter, SurveyTopicWhereInput>
+    trainingObjectType?: XOR<TrainingObjectTypeNullableScalarRelationFilter, TrainingObjectTypeWhereInput> | null
     surveyChoice?: SurveyChoiceListRelationFilter
     surveyQuestion?: SurveyQuestionListRelationFilter
     surveySessions?: SurveySessionListRelationFilter
@@ -390757,7 +390828,7 @@ export namespace Prisma {
     subjectClassId?: SortOrderInput | SortOrder
     semesterId?: SortOrderInput | SortOrder
     surveyTopicId?: SortOrder
-    additionalSuggestion?: SortOrder
+    trainingObjectTypeId?: SortOrderInput | SortOrder
     clusterSurveyId?: SortOrderInput | SortOrder
     _count?: SurveyCountOrderByAggregateInput
     _max?: SurveyMaxOrderByAggregateInput
@@ -390785,7 +390856,7 @@ export namespace Prisma {
     subjectClassId?: StringNullableWithAggregatesFilter<"Survey"> | string | null
     semesterId?: StringNullableWithAggregatesFilter<"Survey"> | string | null
     surveyTopicId?: StringWithAggregatesFilter<"Survey"> | string
-    additionalSuggestion?: BoolWithAggregatesFilter<"Survey"> | boolean
+    trainingObjectTypeId?: StringNullableWithAggregatesFilter<"Survey"> | string | null
     clusterSurveyId?: StringNullableWithAggregatesFilter<"Survey"> | string | null
   }
 
@@ -412977,6 +413048,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateInput = {
@@ -413006,6 +413078,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUpdateInput = {
@@ -413035,6 +413108,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateInput = {
@@ -413064,6 +413138,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeCreateManyInput = {
@@ -422655,12 +422730,12 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
@@ -422685,7 +422760,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
@@ -422707,12 +422782,12 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
@@ -422737,7 +422812,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
@@ -422763,7 +422838,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
   }
 
@@ -422781,7 +422856,6 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SurveyUncheckedUpdateManyInput = {
@@ -422802,7 +422876,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -446858,7 +446932,7 @@ export namespace Prisma {
     subjectClassId?: SortOrder
     semesterId?: SortOrder
     surveyTopicId?: SortOrder
-    additionalSuggestion?: SortOrder
+    trainingObjectTypeId?: SortOrder
     clusterSurveyId?: SortOrder
   }
 
@@ -446880,7 +446954,7 @@ export namespace Prisma {
     subjectClassId?: SortOrder
     semesterId?: SortOrder
     surveyTopicId?: SortOrder
-    additionalSuggestion?: SortOrder
+    trainingObjectTypeId?: SortOrder
     clusterSurveyId?: SortOrder
   }
 
@@ -446902,7 +446976,7 @@ export namespace Prisma {
     subjectClassId?: SortOrder
     semesterId?: SortOrder
     surveyTopicId?: SortOrder
-    additionalSuggestion?: SortOrder
+    trainingObjectTypeId?: SortOrder
     clusterSurveyId?: SortOrder
   }
 
@@ -464010,6 +464084,13 @@ export namespace Prisma {
     connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
   }
 
+  export type SurveyCreateNestedManyWithoutTrainingObjectTypeInput = {
+    create?: XOR<SurveyCreateWithoutTrainingObjectTypeInput, SurveyUncheckedCreateWithoutTrainingObjectTypeInput> | SurveyCreateWithoutTrainingObjectTypeInput[] | SurveyUncheckedCreateWithoutTrainingObjectTypeInput[]
+    connectOrCreate?: SurveyCreateOrConnectWithoutTrainingObjectTypeInput | SurveyCreateOrConnectWithoutTrainingObjectTypeInput[]
+    createMany?: SurveyCreateManyTrainingObjectTypeInputEnvelope
+    connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+  }
+
   export type TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
     create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
     connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -464099,6 +464180,13 @@ export namespace Prisma {
     connectOrCreate?: SurveyObjectTypeCreateOrConnectWithoutTrainingObjectTypeInput | SurveyObjectTypeCreateOrConnectWithoutTrainingObjectTypeInput[]
     createMany?: SurveyObjectTypeCreateManyTrainingObjectTypeInputEnvelope
     connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
+  }
+
+  export type SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
+    create?: XOR<SurveyCreateWithoutTrainingObjectTypeInput, SurveyUncheckedCreateWithoutTrainingObjectTypeInput> | SurveyCreateWithoutTrainingObjectTypeInput[] | SurveyUncheckedCreateWithoutTrainingObjectTypeInput[]
+    connectOrCreate?: SurveyCreateOrConnectWithoutTrainingObjectTypeInput | SurveyCreateOrConnectWithoutTrainingObjectTypeInput[]
+    createMany?: SurveyCreateManyTrainingObjectTypeInputEnvelope
+    connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
   }
 
   export type EnumTrainingObjectTypesFieldUpdateOperationsInput = {
@@ -464312,6 +464400,20 @@ export namespace Prisma {
     deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
   }
 
+  export type SurveyUpdateManyWithoutTrainingObjectTypeNestedInput = {
+    create?: XOR<SurveyCreateWithoutTrainingObjectTypeInput, SurveyUncheckedCreateWithoutTrainingObjectTypeInput> | SurveyCreateWithoutTrainingObjectTypeInput[] | SurveyUncheckedCreateWithoutTrainingObjectTypeInput[]
+    connectOrCreate?: SurveyCreateOrConnectWithoutTrainingObjectTypeInput | SurveyCreateOrConnectWithoutTrainingObjectTypeInput[]
+    upsert?: SurveyUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | SurveyUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+    createMany?: SurveyCreateManyTrainingObjectTypeInputEnvelope
+    set?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    disconnect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    delete?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    update?: SurveyUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | SurveyUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+    updateMany?: SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput | SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+    deleteMany?: SurveyScalarWhereInput | SurveyScalarWhereInput[]
+  }
+
   export type TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
     create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
     connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -464492,6 +464594,20 @@ export namespace Prisma {
     update?: SurveyObjectTypeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | SurveyObjectTypeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
     updateMany?: SurveyObjectTypeUpdateManyWithWhereWithoutTrainingObjectTypeInput | SurveyObjectTypeUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
     deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
+  }
+
+  export type SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
+    create?: XOR<SurveyCreateWithoutTrainingObjectTypeInput, SurveyUncheckedCreateWithoutTrainingObjectTypeInput> | SurveyCreateWithoutTrainingObjectTypeInput[] | SurveyUncheckedCreateWithoutTrainingObjectTypeInput[]
+    connectOrCreate?: SurveyCreateOrConnectWithoutTrainingObjectTypeInput | SurveyCreateOrConnectWithoutTrainingObjectTypeInput[]
+    upsert?: SurveyUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | SurveyUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+    createMany?: SurveyCreateManyTrainingObjectTypeInputEnvelope
+    set?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    disconnect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    delete?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    update?: SurveyUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | SurveyUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+    updateMany?: SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput | SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+    deleteMany?: SurveyScalarWhereInput | SurveyScalarWhereInput[]
   }
 
   export type StudentCreateNestedManyWithoutPriorityObjectInput = {
@@ -472901,6 +473017,12 @@ export namespace Prisma {
     connect?: SurveyTopicWhereUniqueInput
   }
 
+  export type TrainingObjectTypeCreateNestedOneWithoutSurveyInput = {
+    create?: XOR<TrainingObjectTypeCreateWithoutSurveyInput, TrainingObjectTypeUncheckedCreateWithoutSurveyInput>
+    connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutSurveyInput
+    connect?: TrainingObjectTypeWhereUniqueInput
+  }
+
   export type SurveyChoiceCreateNestedManyWithoutSurveyInput = {
     create?: XOR<SurveyChoiceCreateWithoutSurveyInput, SurveyChoiceUncheckedCreateWithoutSurveyInput> | SurveyChoiceCreateWithoutSurveyInput[] | SurveyChoiceUncheckedCreateWithoutSurveyInput[]
     connectOrCreate?: SurveyChoiceCreateOrConnectWithoutSurveyInput | SurveyChoiceCreateOrConnectWithoutSurveyInput[]
@@ -473000,6 +473122,16 @@ export namespace Prisma {
     upsert?: SurveyTopicUpsertWithoutSurveyInput
     connect?: SurveyTopicWhereUniqueInput
     update?: XOR<XOR<SurveyTopicUpdateToOneWithWhereWithoutSurveyInput, SurveyTopicUpdateWithoutSurveyInput>, SurveyTopicUncheckedUpdateWithoutSurveyInput>
+  }
+
+  export type TrainingObjectTypeUpdateOneWithoutSurveyNestedInput = {
+    create?: XOR<TrainingObjectTypeCreateWithoutSurveyInput, TrainingObjectTypeUncheckedCreateWithoutSurveyInput>
+    connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutSurveyInput
+    upsert?: TrainingObjectTypeUpsertWithoutSurveyInput
+    disconnect?: TrainingObjectTypeWhereInput | boolean
+    delete?: TrainingObjectTypeWhereInput | boolean
+    connect?: TrainingObjectTypeWhereUniqueInput
+    update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutSurveyInput, TrainingObjectTypeUpdateWithoutSurveyInput>, TrainingObjectTypeUncheckedUpdateWithoutSurveyInput>
   }
 
   export type SurveyChoiceUpdateManyWithoutSurveyNestedInput = {
@@ -528410,6 +528542,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutPlanTrainingInput = {
@@ -528438,6 +528571,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutPlanTrainingInput = {
@@ -528696,6 +528830,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingInput = {
@@ -528724,6 +528859,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SemesterUpsertWithoutPlanTrainingInput = {
@@ -535459,11 +535595,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
@@ -535487,7 +535623,7 @@ export namespace Prisma {
     lectureId?: string | null
     subjectClassId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
@@ -536045,7 +536181,7 @@ export namespace Prisma {
     subjectClassId?: StringNullableFilter<"Survey"> | string | null
     semesterId?: StringNullableFilter<"Survey"> | string | null
     surveyTopicId?: StringFilter<"Survey"> | string
-    additionalSuggestion?: BoolFilter<"Survey"> | boolean
+    trainingObjectTypeId?: StringNullableFilter<"Survey"> | string | null
     clusterSurveyId?: StringNullableFilter<"Survey"> | string | null
   }
 
@@ -536587,6 +536723,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingCourseInput = {
@@ -536615,6 +536752,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingCourseInput = {
@@ -537600,6 +537738,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingCourseInput = {
@@ -537628,6 +537767,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput = {
@@ -540359,6 +540499,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutCurriculumInput = {
@@ -540387,6 +540528,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutCurriculumInput = {
@@ -540767,6 +540909,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumInput = {
@@ -540795,6 +540938,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type DocumentFileUpsertWithWhereUniqueWithoutCurriculumInput = {
@@ -540929,6 +541073,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutCurriculumVersionInput = {
@@ -540957,6 +541102,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutCurriculumVersionInput = {
@@ -541843,6 +541989,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumVersionInput = {
@@ -541871,6 +542018,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingCourseUpsertWithoutCurriculumVersionInput = {
@@ -543056,6 +543204,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutSubjectVersionInput = {
@@ -543084,6 +543233,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutSubjectVersionInput = {
@@ -544341,6 +544491,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionInput = {
@@ -544369,6 +544520,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SubjectVersionCategoryUpsertWithoutSubjectVersionsInput = {
@@ -547663,6 +547815,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutSubjectClassInput = {
@@ -547691,6 +547844,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutSubjectClassInput = {
@@ -548671,11 +548825,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
@@ -548699,7 +548853,7 @@ export namespace Prisma {
     lectureId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
@@ -548967,6 +549121,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutSubjectClassInput = {
@@ -548995,6 +549150,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SemesterUpsertWithoutSubjectClassesInput = {
@@ -553133,6 +553289,66 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SurveyCreateWithoutTrainingObjectTypeInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    isPublic?: boolean
+    anonymous?: boolean
+    surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
+    lecture?: LecturerCreateNestedOneWithoutSurveyInput
+    subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
+    semester?: SemesterCreateNestedOneWithoutSurveyInput
+    surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
+    surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
+    surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
+    clusterSurvey?: ClusterSurveyCreateNestedOneWithoutSurveysInput
+  }
+
+  export type SurveyUncheckedCreateWithoutTrainingObjectTypeInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    isPublic?: boolean
+    anonymous?: boolean
+    lectureId?: string | null
+    subjectClassId?: string | null
+    semesterId?: string | null
+    surveyTopicId: string
+    clusterSurveyId?: string | null
+    surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
+    surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
+    surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutSurveyInput
+    surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyInput
+  }
+
+  export type SurveyCreateOrConnectWithoutTrainingObjectTypeInput = {
+    where: SurveyWhereUniqueInput
+    create: XOR<SurveyCreateWithoutTrainingObjectTypeInput, SurveyUncheckedCreateWithoutTrainingObjectTypeInput>
+  }
+
+  export type SurveyCreateManyTrainingObjectTypeInputEnvelope = {
+    data: SurveyCreateManyTrainingObjectTypeInput | SurveyCreateManyTrainingObjectTypeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TrainingFormUpsertWithoutTrainingObjectTypeInput = {
     update: XOR<TrainingFormUpdateWithoutTrainingObjectTypeInput, TrainingFormUncheckedUpdateWithoutTrainingObjectTypeInput>
     create: XOR<TrainingFormCreateWithoutTrainingObjectTypeInput, TrainingFormUncheckedCreateWithoutTrainingObjectTypeInput>
@@ -553461,6 +553677,22 @@ export namespace Prisma {
   export type SurveyObjectTypeUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
     where: SurveyObjectTypeScalarWhereInput
     data: XOR<SurveyObjectTypeUpdateManyMutationInput, SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeInput>
+  }
+
+  export type SurveyUpsertWithWhereUniqueWithoutTrainingObjectTypeInput = {
+    where: SurveyWhereUniqueInput
+    update: XOR<SurveyUpdateWithoutTrainingObjectTypeInput, SurveyUncheckedUpdateWithoutTrainingObjectTypeInput>
+    create: XOR<SurveyCreateWithoutTrainingObjectTypeInput, SurveyUncheckedCreateWithoutTrainingObjectTypeInput>
+  }
+
+  export type SurveyUpdateWithWhereUniqueWithoutTrainingObjectTypeInput = {
+    where: SurveyWhereUniqueInput
+    data: XOR<SurveyUpdateWithoutTrainingObjectTypeInput, SurveyUncheckedUpdateWithoutTrainingObjectTypeInput>
+  }
+
+  export type SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
+    where: SurveyScalarWhereInput
+    data: XOR<SurveyUpdateManyMutationInput, SurveyUncheckedUpdateManyWithoutTrainingObjectTypeInput>
   }
 
   export type StudentCreateWithoutPriorityObjectInput = {
@@ -553866,6 +554098,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingLevelInput = {
@@ -553894,6 +554127,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingLevelInput = {
@@ -553983,6 +554217,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingFormInput = {
@@ -554011,6 +554246,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingFormInput = {
@@ -555936,6 +556172,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput = {
@@ -555964,6 +556201,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput = {
@@ -556057,6 +556295,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput = {
@@ -556085,6 +556324,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type DM_DonViCreateWithoutTrainingMajorsInput = {
@@ -557278,6 +557518,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingMajorsInput = {
@@ -557306,6 +557547,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingMajorsInput = {
@@ -557413,6 +557655,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingMajorsInput = {
@@ -557441,6 +557684,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeCreateWithoutTrainingBlocksInput = {
@@ -557469,6 +557713,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput = {
@@ -557497,6 +557742,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingBlocksInput = {
@@ -557660,6 +557906,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingBlocksInput = {
@@ -557688,6 +557935,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingBlockUpsertWithoutChildrenInput = {
@@ -568412,6 +568660,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingScoreSessionInput = {
@@ -568440,6 +568689,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingScoreSessionInput = {
@@ -568591,6 +568841,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingScoreSessionInput = {
@@ -568619,6 +568870,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type StudentTrainingScoreUpsertWithWhereUniqueWithoutTrainingScoreSessionInput = {
@@ -570666,11 +570918,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
@@ -570694,7 +570946,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
@@ -573943,6 +574195,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput = {
@@ -573971,6 +574224,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutThesisSessionInput = {
@@ -574228,6 +574482,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput = {
@@ -574256,6 +574511,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingCourseUpsertWithoutThesisSessionInput = {
@@ -584063,11 +584319,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
@@ -584092,7 +584348,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutSurveyInput
@@ -584701,6 +584957,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutSurveyObjectTypeInput = {
@@ -584729,6 +584986,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutSurveyObjectTypeInput = {
@@ -584947,6 +585205,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutSurveyObjectTypeInput = {
@@ -584975,6 +585234,7 @@ export namespace Prisma {
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type ClusterSurveyCreateWithoutSurveyTopicInput = {
@@ -585045,11 +585305,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
@@ -585073,7 +585333,7 @@ export namespace Prisma {
     lectureId?: string | null
     subjectClassId?: string | null
     semesterId?: string | null
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
@@ -585581,12 +585841,12 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
@@ -585610,7 +585870,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutSurveyInput
@@ -586098,6 +586358,69 @@ export namespace Prisma {
   export type SurveyTopicCreateOrConnectWithoutSurveyInput = {
     where: SurveyTopicWhereUniqueInput
     create: XOR<SurveyTopicCreateWithoutSurveyInput, SurveyTopicUncheckedCreateWithoutSurveyInput>
+  }
+
+  export type TrainingObjectTypeCreateWithoutSurveyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    type: $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
+    trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
+    trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
+    trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
+    curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
+    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
+    graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
+    planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
+    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
+    surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+  }
+
+  export type TrainingObjectTypeUncheckedCreateWithoutSurveyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    type: $Enums.TrainingObjectTypes
+    trainingFormId?: string | null
+    trainingLevelId?: string | null
+    vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
+    trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+  }
+
+  export type TrainingObjectTypeCreateOrConnectWithoutSurveyInput = {
+    where: TrainingObjectTypeWhereUniqueInput
+    create: XOR<TrainingObjectTypeCreateWithoutSurveyInput, TrainingObjectTypeUncheckedCreateWithoutSurveyInput>
   }
 
   export type SurveyChoiceCreateWithoutSurveyInput = {
@@ -586597,6 +586920,75 @@ export namespace Prisma {
     surveyQuestionGroup?: SurveyQuestionGroupUncheckedUpdateManyWithoutSurveyTopicNestedInput
   }
 
+  export type TrainingObjectTypeUpsertWithoutSurveyInput = {
+    update: XOR<TrainingObjectTypeUpdateWithoutSurveyInput, TrainingObjectTypeUncheckedUpdateWithoutSurveyInput>
+    create: XOR<TrainingObjectTypeCreateWithoutSurveyInput, TrainingObjectTypeUncheckedCreateWithoutSurveyInput>
+    where?: TrainingObjectTypeWhereInput
+  }
+
+  export type TrainingObjectTypeUpdateToOneWithWhereWithoutSurveyInput = {
+    where?: TrainingObjectTypeWhereInput
+    data: XOR<TrainingObjectTypeUpdateWithoutSurveyInput, TrainingObjectTypeUncheckedUpdateWithoutSurveyInput>
+  }
+
+  export type TrainingObjectTypeUpdateWithoutSurveyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
+    trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
+    trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
+    trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
+    curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
+    graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+    planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
+    thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
+    surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+  }
+
+  export type TrainingObjectTypeUncheckedUpdateWithoutSurveyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+    trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+    vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
+    trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+  }
+
   export type SurveyChoiceUpsertWithWhereUniqueWithoutSurveyInput = {
     where: SurveyChoiceWhereUniqueInput
     update: XOR<SurveyChoiceUpdateWithoutSurveyInput, SurveyChoiceUncheckedUpdateWithoutSurveyInput>
@@ -586745,12 +587137,12 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
     clusterSurvey?: ClusterSurveyCreateNestedOneWithoutSurveysInput
@@ -586774,7 +587166,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
@@ -587195,12 +587587,12 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     surveySessions?: SurveySessionCreateNestedManyWithoutSurveyInput
     clusterSurvey?: ClusterSurveyCreateNestedOneWithoutSurveysInput
@@ -587224,7 +587616,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutSurveyInput
@@ -587379,12 +587771,12 @@ export namespace Prisma {
     endDate?: Date | string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutSurveyInput
     lecture?: LecturerCreateNestedOneWithoutSurveyInput
     subjectClass?: SubjectClassCreateNestedOneWithoutSurveyInput
     semester?: SemesterCreateNestedOneWithoutSurveyInput
     surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyInput
+    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSurveyInput
     surveyChoice?: SurveyChoiceCreateNestedManyWithoutSurveyInput
     surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyInput
     clusterSurvey?: ClusterSurveyCreateNestedOneWithoutSurveysInput
@@ -587408,7 +587800,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSurveyInput
     surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput
@@ -588032,12 +588424,12 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     clusterSurvey?: ClusterSurveyUpdateOneWithoutSurveysNestedInput
@@ -588061,7 +588453,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
@@ -596436,6 +596828,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutGraduationSessionInput = {
@@ -596464,6 +596857,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutGraduationSessionInput = {
@@ -596756,6 +597150,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutGraduationSessionInput = {
@@ -596784,6 +597179,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutSessionInput = {
@@ -637703,7 +638099,7 @@ export namespace Prisma {
     lectureId?: string | null
     subjectClassId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
   }
 
@@ -638508,11 +638904,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
@@ -638536,7 +638932,7 @@ export namespace Prisma {
     lectureId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
@@ -638561,7 +638957,7 @@ export namespace Prisma {
     lectureId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -644281,7 +644677,7 @@ export namespace Prisma {
     lectureId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
   }
 
@@ -645014,11 +645410,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
@@ -645042,7 +645438,7 @@ export namespace Prisma {
     lectureId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
@@ -645067,7 +645463,7 @@ export namespace Prisma {
     lectureId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -645969,6 +646365,27 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     type?: SurveyObjectTypeCreatetypeInput | $Enums.SurveyObject[]
+  }
+
+  export type SurveyCreateManyTrainingObjectTypeInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    isPublic?: boolean
+    anonymous?: boolean
+    lectureId?: string | null
+    subjectClassId?: string | null
+    semesterId?: string | null
+    surveyTopicId: string
+    clusterSurveyId?: string | null
   }
 
   export type TrainingCourseUpdateWithoutTrainingObjectTypeInput = {
@@ -647036,6 +647453,77 @@ export namespace Prisma {
     type?: SurveyObjectTypeUpdatetypeInput | $Enums.SurveyObject[]
   }
 
+  export type SurveyUpdateWithoutTrainingObjectTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    anonymous?: BoolFieldUpdateOperationsInput | boolean
+    surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
+    lecture?: LecturerUpdateOneWithoutSurveyNestedInput
+    subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
+    semester?: SemesterUpdateOneWithoutSurveyNestedInput
+    surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
+    surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
+    surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
+    clusterSurvey?: ClusterSurveyUpdateOneWithoutSurveysNestedInput
+  }
+
+  export type SurveyUncheckedUpdateWithoutTrainingObjectTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    anonymous?: BoolFieldUpdateOperationsInput | boolean
+    lectureId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    surveyTopicId?: StringFieldUpdateOperationsInput | string
+    clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
+    surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
+    surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
+    surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutSurveyNestedInput
+    surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyNestedInput
+  }
+
+  export type SurveyUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    anonymous?: BoolFieldUpdateOperationsInput | boolean
+    lectureId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    surveyTopicId?: StringFieldUpdateOperationsInput | string
+    clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type StudentUpdateWithoutPriorityObjectInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647600,6 +648088,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingLevelInput = {
@@ -647628,6 +648117,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingLevelInput = {
@@ -647686,6 +648176,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFormInput = {
@@ -647714,6 +648205,7 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFormInput = {
@@ -654511,7 +655003,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
   }
 
@@ -655620,11 +656112,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
@@ -655648,7 +656140,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
@@ -655673,7 +656165,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -659238,11 +659730,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
@@ -659267,7 +659759,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutSurveyNestedInput
@@ -659292,7 +659784,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -660064,7 +660556,7 @@ export namespace Prisma {
     lectureId?: string | null
     subjectClassId?: string | null
     semesterId?: string | null
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
     clusterSurveyId?: string | null
   }
 
@@ -660143,11 +660635,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
@@ -660171,7 +660663,7 @@ export namespace Prisma {
     lectureId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
@@ -660196,7 +660688,7 @@ export namespace Prisma {
     lectureId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -660372,7 +660864,7 @@ export namespace Prisma {
     subjectClassId?: string | null
     semesterId?: string | null
     surveyTopicId: string
-    additionalSuggestion: boolean
+    trainingObjectTypeId?: string | null
   }
 
   export type SurveyObjectTypeUpdateWithoutClusterSurveyInput = {
@@ -660625,12 +661117,12 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
@@ -660654,7 +661146,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutSurveyNestedInput
@@ -660679,7 +661171,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SurveySessionCreateManySurveyInput = {
@@ -660948,12 +661440,12 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
     clusterSurvey?: ClusterSurveyUpdateOneWithoutSurveysNestedInput
@@ -660977,7 +661469,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutSurveyNestedInput
@@ -661002,7 +661494,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -661182,12 +661674,12 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     anonymous?: BoolFieldUpdateOperationsInput | boolean
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
     surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
     lecture?: LecturerUpdateOneWithoutSurveyNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutSurveyNestedInput
     semester?: SemesterUpdateOneWithoutSurveyNestedInput
     surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
     surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
     clusterSurvey?: ClusterSurveyUpdateOneWithoutSurveysNestedInput
@@ -661211,7 +661703,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
     surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutSurveyNestedInput
@@ -661236,7 +661728,7 @@ export namespace Prisma {
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     surveyTopicId?: StringFieldUpdateOperationsInput | string
-    additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 

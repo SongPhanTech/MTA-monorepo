@@ -3472,7 +3472,7 @@ exports.Prisma.SurveyScalarFieldEnum = {
   subjectClassId: 'subjectClassId',
   semesterId: 'semesterId',
   surveyTopicId: 'surveyTopicId',
-  additionalSuggestion: 'additionalSuggestion',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   clusterSurveyId: 'clusterSurveyId'
 };
 
@@ -6744,6 +6744,7 @@ exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
   subjectClassId: 'subjectClassId',
   semesterId: 'semesterId',
   surveyTopicId: 'surveyTopicId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   clusterSurveyId: 'clusterSurveyId'
 };
 

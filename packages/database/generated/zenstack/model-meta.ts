@@ -12417,6 +12417,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20575,9 +20581,21 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'surveyTopic',
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "Boolean",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, surveyChoice: {
                     name: "surveyChoice",
                     type: "SurveyChoice",

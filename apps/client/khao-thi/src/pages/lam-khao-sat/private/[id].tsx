@@ -1,4 +1,3 @@
-import FormItem from '@components/commons/form-item'
 import Loading from '@components/commons/loading'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
@@ -21,7 +20,6 @@ type PutSurveySession = SurveySession & {
         answerText?: string
         explanation?: string
     }[]
-    additionalSuggestion: string
 }
 
 type GroupedSurveyQuestion = {
@@ -136,7 +134,6 @@ function TakeTestPage() {
             showSpinner()
             const res = await createSavePublicSurvey({
                 data: {
-                    additionalSuggestion: dataSubmit.additionalSuggestion || '',
                     startedAt: new Date(startAt).toISOString(),
                     surveyId: id,
                     profileId: profileId,
@@ -388,79 +385,7 @@ function TakeTestPage() {
                     </Col>
 
                     <Col span={24} className="my-3">
-                        {survey?.subjectClass ? (
-                            <Table
-                                rowKey="id"
-                                dataSource={survey?.surveyQuestion || []}
-                                pagination={false}
-                                columns={[
-                                    {
-                                        title: 'STT',
-                                        width: 50,
-                                        align: 'center',
-                                        render: (_, __, index) => index + 1,
-                                    },
-                                    {
-                                        title: 'Nội dung phản hồi',
-                                        dataIndex: 'content',
-                                        render: (_, record) => {
-                                            return (
-                                                <div
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: record?.name,
-                                                    }}
-                                                />
-                                            )
-                                        },
-                                    },
-                                    {
-                                        title: 'Mức phản hồi',
-                                        width: 200,
-                                        align: 'center',
-                                        render: (_, record, qIndex) => {
-                                            const order = survey?.surveyQuestion.findIndex(
-                                                (item) => item.id === record.id
-                                            )
-                                            return record?.type === 'SINGLE_CHOICE' ? (
-                                                <Form.Item
-                                                    name={['responses', order, 'surveyChoiceId']}
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: 'Vui lòng chọn mức phản hồi',
-                                                        },
-                                                    ]}
-                                                    style={{ marginBottom: 0 }}
-                                                    className="w-full"
-                                                >
-                                                    <Radio.Group className="w-full gap-x-2 flex">
-                                                        {survey?.surveyChoice.map((i) => (
-                                                            <Radio.Button key={i?.id} value={i?.id}>
-                                                                {i?.answer}
-                                                            </Radio.Button>
-                                                        ))}
-                                                    </Radio.Group>
-                                                </Form.Item>
-                                            ) : (
-                                                <Form.Item
-                                                    name={['responses', order, 'answerText']}
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: 'Nhập câu trả lời',
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input.TextArea placeholder="Nhập câu trả lời" />
-                                                </Form.Item>
-                                            )
-                                        },
-                                    },
-                                ]}
-                                bordered={true}
-                            />
-                        ) : (
-                            <Table
+                         <Table
                                 rowKey="id"
                                 dataSource={dataTest || []}
                                 pagination={false}
@@ -627,85 +552,9 @@ function TakeTestPage() {
                                 ]}
                                 bordered={true}
                             />
-
-                            // <TableCollapse
-                            //     defaultExpandAll
-                            //     headerTitleKey={({ name }) =>
-                            //         `${[name].filter(Boolean).join(' - ')}`
-                            //     }
-                            //     childrenFieldName="children"
-                            //     rowKey="id"
-                            //     columns={[
-                            //         {
-                            //             title: 'Nội dung phản hồi',
-                            //             dataIndex: 'content',
-                            //             render: (_, record) => {
-                            //                 return (
-                            //                     <div
-                            //                         dangerouslySetInnerHTML={{
-                            //                             __html: record?.name,
-                            //                         }}
-                            //                     />
-                            //                 )
-                            //             },
-
-                            //         },
-                            //         {
-                            //             title: 'Mức phản hồi',
-                            //             width: 200,
-                            //             align: 'center',
-                            //             render: (_, record, qIndex) => {
-                            //                 return record?.type === 'SINGLE_CHOICE' ? (
-                            //                     <Form.Item
-                            //                         name={[
-                            //                             'responses',
-                            //                             record?.id,
-                            //                             'surveyChoiceId',
-                            //                         ]}
-                            //                         rules={[
-                            //                             {
-                            //                                 required: true,
-                            //                                 message: 'Vui lòng chọn mức phản hồi',
-                            //                             },
-                            //                         ]}
-                            //                         style={{ marginBottom: 0 }}
-                            //                         className="w-full"
-                            //                     >
-                            //                         <Radio.Group className="w-full gap-x-2 flex">
-                            //                             {survey?.surveyChoice.map((i) => (
-                            //                                 <Radio.Button key={i?.id} value={i?.id}>
-                            //                                     {i?.answer}
-                            //                                 </Radio.Button>
-                            //                             ))}
-                            //                         </Radio.Group>
-                            //                     </Form.Item>
-                            //                 ) : (
-                            //                     <Form.Item
-                            //                         name={['responses', qIndex, 'answerText']}
-                            //                         rules={[
-                            //                             {
-                            //                                 required: true,
-                            //                                 message: 'Nhập câu trả lời',
-                            //                             },
-                            //                         ]}
-                            //                     >
-                            //                         <Input.TextArea placeholder="Nhập câu trả lời" />
-                            //                     </Form.Item>
-                            //                 )
-                            //             },
-                            //         },
-                            //     ]}
-                            //     data={dataTest}
-                            //     pagination={false}
-                            //     expandable={{
-                            //         expandRowByClick: false,
-                            //         onExpand: () => false,
-                            //     }}
-                            // />
-                        )}
                     </Col>
 
-                    {survey.additionalSuggestion && (
+                    {/* {survey.additionalSuggestion && (
                         <Col span={24}>
                             <div className="mb-3 font-bold">Ý kiến khác :</div>
                             <FormItem
@@ -717,7 +566,7 @@ function TakeTestPage() {
                                 <Input.TextArea placeholder="Nhập ý kiến khác" />
                             </FormItem>
                         </Col>
-                    )}
+                    )} */}
 
                     <Col span={24} className="my-6">
                         <Flex justify="end">

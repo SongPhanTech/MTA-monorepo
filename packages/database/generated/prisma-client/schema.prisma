@@ -3406,6 +3406,7 @@ model TrainingObjectType {
   trainingBlocks       TrainingBlock[]
   vaiTro               String[]
   surveyObjectType     SurveyObjectType[]
+  survey               Survey[]
 
   @@schema("ql-dao-tao")
 }
@@ -5255,33 +5256,34 @@ model ClusterSurvey {
 }
 
 model Survey {
-  id                   String             @id() @default(cuid())
-  code                 String?            @unique()
-  active               Boolean            @default(true)
-  description          String?            @db.Text()
+  id                   String              @id() @default(cuid())
+  code                 String?             @unique()
+  active               Boolean             @default(true)
+  description          String?             @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @default(now()) @updatedAt()
-  createdBy            String?            @db.Uuid()
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @default(now()) @updatedAt()
+  createdBy            String?             @db.Uuid()
   name                 String
   startDate            DateTime
   endDate              DateTime?
-  isPublic             Boolean            @default(false)
-  anonymous            Boolean            @default(true)
+  isPublic             Boolean             @default(false)
+  anonymous            Boolean             @default(true)
   surveyObjectType     SurveyObjectType[]
-  lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
+  lecture              Lecturer?           @relation(fields: [lectureId], references: [id])
   lectureId            String?
-  subjectClass         SubjectClass?      @relation(fields: [subjectClassId], references: [id])
+  subjectClass         SubjectClass?       @relation(fields: [subjectClassId], references: [id])
   subjectClassId       String?
-  semester             Semester?          @relation(fields: [semesterId], references: [id])
+  semester             Semester?           @relation(fields: [semesterId], references: [id])
   semesterId           String?
-  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopic          SurveyTopic         @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
-  additionalSuggestion Boolean
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
   surveyChoice         SurveyChoice[]
   surveyQuestion       SurveyQuestion[]
   surveySessions       SurveySession[]
-  clusterSurvey        ClusterSurvey?     @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurvey        ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId      String?
 
   @@schema("khao-thi")

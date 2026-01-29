@@ -114,8 +114,8 @@ model Survey extends Base {
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
 
-  // Có góp ý bổ sung không?
-  additionalSuggestion Boolean
+  trainingObjectType          TrainingObjectType?    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId        String?
 
   // 1. Rất hài lòng
   // 2. Hài lòng
