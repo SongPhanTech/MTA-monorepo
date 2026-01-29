@@ -309,7 +309,7 @@ function SelectLecturer({
             },
         },
         {
-            enabled: !!semesterId || !!trainingObjectTypeId,
+            enabled: !!semesterId && !!trainingObjectTypeId,
         }
     )
 
