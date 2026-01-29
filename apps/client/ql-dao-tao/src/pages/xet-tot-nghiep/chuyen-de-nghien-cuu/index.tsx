@@ -483,6 +483,95 @@ export default function ChuyenDeNghienCuu() {
                                             { name: string },
                                             { name: string },
                                         ]
+
+                                        const res = await excelTemplate({
+                                            fileName: 'QD_GiaoChuyenDe.xlsx',
+                                            path: 'QD_GiaoChuyenDe.xlsx',
+                                            showGridLines: true,
+                                            wrapText: true,
+                                            payload: [
+                                                {
+                                                    data: {
+                                                        khoa: khoaVaKyData?.[0]?.name?.firstCase?.(),
+                                                        hoc_ky: khoaVaKyData?.[1]?.name?.toLowerCase?.(),
+                                                        so_hv: studentResearchTopicData.length,
+                                                        so_hv_chu:
+                                                            studentResearchTopicData.length.toVndWord(
+                                                                '',
+                                                                false
+                                                            ),
+                                                    },
+                                                },
+                                            ],
+                                        })
+                                        saveAs(
+                                            res.data,
+                                            `QD_GiaoChuyenDe_${dayjs().format('HH-mm-ss')}.xlsx`
+                                        )
+                                    }}
+                                >
+                                    QĐ giao chuyên đề nghiên cứu
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    icon={<FileOutlined />}
+                                    onClick={async () => {
+                                        if (!trainingCourseId) {
+                                            return message.warning(
+                                                'Vui lòng chọn khóa học trước khi xuất phụ lục!'
+                                            )
+                                        }
+
+                                        if (!semesterId) {
+                                            return message.warning(
+                                                'Vui lòng chọn kỳ học trước khi xuất phụ lục!'
+                                            )
+                                        }
+
+                                        let globalIndex = 0
+
+                                        const khoaVaKy = await sqlTransaction([
+                                            {
+                                                model: 'TrainingCourse',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: trainingCourseId },
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                            {
+                                                model: 'Semester',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: semesterId },
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                        ])
+                                        const khoaVaKyData = khoaVaKy.data as [
+                                            { name: string },
+                                            { name: string },
+                                        ]
+
+                                        // Count research topics per student
+                                        const researchTopicCountByStudent =
+                                            studentResearchTopicData.reduce(
+                                                (acc, e) => {
+                                                    const studentCode =
+                                                        e.studentSubjectScore.student?.code
+                                                    if (studentCode) {
+                                                        acc[studentCode] =
+                                                            (acc[studentCode] || 0) + 1
+                                                    }
+                                                    return acc
+                                                },
+                                                {} as Record<string, number>
+                                            )
+
                                         const payload = Object.values(
                                             studentResearchTopicData.reduce(
                                                 (acc, e) => {
@@ -504,6 +593,8 @@ export default function ChuyenDeNghienCuu() {
                                                     }
 
                                                     globalIndex++
+                                                    const studentCode =
+                                                        e.studentSubjectScore.student?.code
                                                     acc[ma_cn].students.push({
                                                         tt: globalIndex,
                                                         ten: `${
@@ -525,6 +616,11 @@ export default function ChuyenDeNghienCuu() {
                                                         stc: e.studentSubjectScore.subjectVersion
                                                             ?.credit,
                                                         ndcd: e.mainContent,
+                                                        so_cd: studentCode
+                                                            ? researchTopicCountByStudent[
+                                                                  studentCode
+                                                              ]
+                                                            : 0,
                                                     })
 
                                                     return acc
@@ -542,6 +638,7 @@ export default function ChuyenDeNghienCuu() {
                                                             macd?: string | null
                                                             stc: number | null
                                                             ndcd?: string | null
+                                                            so_cd: number
                                                         }[]
                                                     }
                                                 >
@@ -551,12 +648,16 @@ export default function ChuyenDeNghienCuu() {
                                             fileName: 'Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx',
                                             head: {
                                                 data: {
-                                                    title: `DANH SÁCH HỌC VIÊN CAO HỌC ĐỊNH HƯỚNG NGHIÊN CỨU ${khoaVaKyData?.[0]?.name?.toUpperCase()}\nTHỰC HIỆN CHUYÊN ĐỀ NGHIÊN CỨU ${khoaVaKyData?.[1]?.name?.toUpperCase()}`,
+                                                    khoa: khoaVaKyData?.[0]?.name?.toUpperCase(),
+                                                    hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase(),
                                                 },
                                             },
                                             tail: {
                                                 data: {
-                                                    note: `(Danh sách gồm ${payload.flatMap((item) => item.students).length} học viên ${payload.flatMap((item) => item.students).length} Chuyên đề nghiên cứu)`,
+                                                    so_hv: payload.flatMap((item) => item.students)
+                                                        .length,
+                                                    so_cd: payload.flatMap((item) => item.students)
+                                                        .length,
                                                 },
                                             },
                                             path: 'PL_ChuyenDeNghienCuu.xlsx',
@@ -575,6 +676,9 @@ export default function ChuyenDeNghienCuu() {
                                                         ndcd: student.ndcd,
                                                     })),
                                                 },
+                                                mergeCells: Object.values(researchTopicCountByStudent).map(
+                                                    (s) => `B2:B${1 + s}`
+                                                ),
                                             })),
                                         })
                                         saveAs(

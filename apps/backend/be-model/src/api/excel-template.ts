@@ -129,8 +129,7 @@ app.openapi(
         // Helper function to copy sheet content
         const copySheetContent = (
             sheet: ExcelJS.Worksheet,
-            startRow: number,
-            customMergeCells?: string[]
+            startRow: number
         ) => {
             const rowOffset = startRow - 1
             let currentRowInCopy = startRow
@@ -186,25 +185,6 @@ app.openapi(
                 }
             }
 
-            // Apply custom merge cells if provided
-            if (customMergeCells && customMergeCells.length > 0) {
-                for (const merge of customMergeCells) {
-                    const [topLeft, bottomRight] = merge.split(':')
-
-                    const topMatch = topLeft?.match(/([A-Z]+)(\d+)/)
-                    const bottomMatch = bottomRight?.match(/([A-Z]+)(\d+)/)
-
-                    if (topMatch && bottomMatch && topMatch[2] && bottomMatch[2]) {
-                        const startRowNum = Number.parseInt(topMatch[2], 10) + rowOffset
-                        const endRowNum = Number.parseInt(bottomMatch[2], 10) + rowOffset
-                        const startCol = topMatch[1]
-                        const endCol = bottomMatch[1]
-
-                        mergedSheet.mergeCells(`${startCol}${startRowNum}:${endCol}${endRowNum}`)
-                    }
-                }
-            }
-
             return currentRowInCopy
         }
 
@@ -215,7 +195,17 @@ app.openapi(
 
         // Copy all payload sheets
         for (const { worksheet: sheet, mergeCells: customMergeCells } of generatedSheets) {
-            currentRow = copySheetContent(sheet, currentRow, customMergeCells)
+            // Apply custom merge cells before copying
+            if (customMergeCells && customMergeCells.length > 0) {
+                for (const merge of customMergeCells) {
+                    try {
+                        sheet.mergeCells(merge)
+                    } catch (error) {
+                        console.log(`Failed to merge cells ${merge}:`, error)
+                    }
+                }
+            }
+            currentRow = copySheetContent(sheet, currentRow)
         }
 
         // Copy Tail sheet at the bottom

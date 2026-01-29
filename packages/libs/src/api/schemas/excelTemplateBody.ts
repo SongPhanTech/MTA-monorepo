@@ -9,8 +9,8 @@ import type { ExcelTemplateBodyHead } from './excelTemplateBodyHead'
 import type { ExcelTemplateBodyPayloadItem } from './excelTemplateBodyPayloadItem'
 
 export type ExcelTemplateBody = {
-    tail: ExcelTemplateBodyTail
-    head: ExcelTemplateBodyHead
+    tail?: ExcelTemplateBodyTail
+    head?: ExcelTemplateBodyHead
     /** Dữ liệu để điền vào template */
     payload: ExcelTemplateBodyPayloadItem[]
     fileName: string
