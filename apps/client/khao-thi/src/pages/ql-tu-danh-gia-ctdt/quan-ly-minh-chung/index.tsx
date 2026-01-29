@@ -12,7 +12,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, Input, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -21,7 +21,6 @@ export default function EvidenceCategory() {
     const { can, canSome } = useAbility()
     const [filters, setFilters] = useState<FilterProps>({
         evidenceName: '',
-        information: '',
         issuer: '',
     })
 
@@ -36,14 +35,6 @@ export default function EvidenceCategory() {
                       },
                   }
                 : {}),
-            ...(filters.information
-                ? {
-                      information: {
-                          contains: filters.information,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
             ...(filters.issuer
                 ? {
                       issuer: {
@@ -53,13 +44,14 @@ export default function EvidenceCategory() {
                   }
                 : {}),
         }),
-        [filters.evidenceName, filters.information, filters.issuer]
+        [filters.evidenceName, filters.issuer]
     )
 
     const { data } = useFindManyEvidenceCategory({
         include: {
             evidences: {
                 where,
+                orderBy: [{ name: 'desc' }],
             },
         },
         orderBy: [{ name: 'desc' }],
@@ -118,14 +110,24 @@ export default function EvidenceCategory() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24} className="mb-2">
-                    <Flex justify="end">
+                    <Flex justify="space-between" align="center">
+                        <Input
+                            className="w-[27rem]"
+                            placeholder="Nhập tên minh chứng,nơi ban hành"
+                            allowClear
+                            onChange={(e) =>
+                                setFilters({
+                                    ...filters,
+                                    evidenceName: e.target.value,
+                                })
+                            }
+                        />
                         {can(
                             KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                             'THEM'
                         ) && (
                             <Button
                                 type="primary"
-                                size="small"
                                 onClick={() => {
                                     onOpenPutEvidenceCategory()
                                 }}
@@ -197,11 +199,6 @@ export default function EvidenceCategory() {
                                 )}
                             </div>
                         )}
-                        // onRowClick={({ id }) => {
-                        //     router.push(
-                        //         `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI}/${id}`
-                        //     )
-                        // }}
                         columns={[
                             {
                                 title: 'Tên minh chứng',
@@ -209,14 +206,16 @@ export default function EvidenceCategory() {
                                 width: 200,
                                 align: 'left',
                                 type: 'input',
+                                sortDirections: ['ascend', 'descend'],
+                                sorter: (a, b) =>
+                                    a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+                                showSorterTooltip: false,
                                 render: (__, record) => record?.name,
                             },
                             {
                                 title: 'Số, ngày/tháng ban hành',
                                 width: 200,
-                                dataIndex: 'information',
                                 align: 'left',
-                                type: 'input',
                                 render: (_, record) =>
                                     record?.information ? record.information : '',
                             },
@@ -254,10 +253,6 @@ export default function EvidenceCategory() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip title="Chi tiết tiêu chí" placement="top">
-                                                    <EyeOutlined className="text-sm cursor-pointer" />
-                                                </Tooltip> */}
-
                                                 {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                                                     'SUA'
