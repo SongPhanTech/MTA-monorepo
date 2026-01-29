@@ -52,6 +52,22 @@ interface TthdbvTable {
     thongTinStk: string
     thongTinNganHang: string
 }
+
+interface DsnlvtvData {
+    data: {
+    khoa: string
+        dotxet: string
+        data: DsnlvtvTable[]    
+        tongsodetai:string
+    }
+}
+interface DsnlvtvTable {
+    stt: number
+    thongTinBaoVe: string
+    thongTinHuongDan: string
+    thongTinDeTai: string
+    thongTinLuuTru: string
+}
 export const exportPhuLucDsLuanVan = async ({
     allStudentsInClasses,
     showSpinner,
@@ -940,7 +956,6 @@ export const exportThanhToanHoiDongBaoVe = async ({
     try {
         showSpinner?.()
         const dataConvert = convertToTthdbvData(allStudentsInClasses)
-        console.log('dataConvert',dataConvert);
         if (dataConvert.length === 0) {
             message.error('Chưa có dữ liệu để tạo thanh toán hội đồng bảo vệ')
             return
@@ -1094,14 +1109,29 @@ export const exportDanhSachNopLuanVanThuVien = async ({
     hideSpinner,
     message,
 }: ExportOptions) => {
-    if (!allStudentsInClasses?.length) return [];
+    console.log('allStudentsInClasses',allStudentsInClasses);
+    if (!allStudentsInClasses?.length) {
+        message.error('Không có dữ liệu để xuất danh sách nộp luận văn thư viện')
+        return
+    }
+    const dataConvert = convertToDsnlvtvData(allStudentsInClasses);
+    if (dataConvert.data.data.length === 0) {
+        message.error('Chưa có dữ liệu để xuất danh sách nộp luận văn thư viện')
+        return
+    }
     try {
         showSpinner?.();
-        // const dataConvert = convertToDsnlvtvData(allStudentsInClasses)
-        // if (dataConvert.length === 0) {
-        //     message.error('Chưa có dữ liệu để xuất danh sách nộp luận văn thư viện')
-        //     return
-        // }
+        const payload: ExcelTemplateBody = {
+            fileName: 'DanhSachNopLuanVanThuVien',
+            path: 'DanhSachNopLuanVanTV.xlsx',
+            payload: [dataConvert],
+            showGridLines: true,
+        }
+        const response = await excelTemplate(payload);
+        if (response.status !== 200) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+       
     } catch (error) {
         message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         return
@@ -1109,3 +1139,61 @@ export const exportDanhSachNopLuanVanThuVien = async ({
         hideSpinner?.();
     }
 }
+export const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
+    if (!allStudentsInClasses?.length) {
+        return {
+            data: {
+                khoa: '',
+                dotxet: '',
+                data: [],
+                tongsodetai: '0'
+            }
+        };
+    }
+
+    const firstProject = allStudentsInClasses.find(s => s.thesisRegistrations?.[0]?.thesisProject)?.thesisRegistrations[0].thesisProject;
+    
+    const tableData: DsnlvtvTable[] = allStudentsInClasses.map((student, index) => {
+        const project = student?.thesisRegistrations?.[0]?.thesisProject;
+        
+        const hoTen = student.userProfile?.fullname || '';
+        const doiTuong = student?.fixedClass?.trainingCourse?.trainingObjectType?.name || '';
+        const khoaHoc = student?.fixedClass?.trainingCourse?.name || '';
+        const chuyenNganh = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '';
+        
+        const thongTinBaoVe = `${hoTen}\n${doiTuong} - ${khoaHoc} - ${chuyenNganh}`;
+
+        const gvhd1 = project?.supervisor?.name;
+        const gvhd2 = project?.coSupervisor?.name;
+        
+        let thongTinHuongDan = '';
+        if (gvhd1 && gvhd2) {
+            thongTinHuongDan = `1.${gvhd1};\n2.${gvhd2}.`;
+        } else {
+            thongTinHuongDan = gvhd1 || gvhd2 || 'Chưa có giảng viên hướng dẫn';
+        }
+
+        const thongTinDeTai = project?.title || 'Chưa có tên đề tài';
+
+        //TODO: Thông tin Lưu trữ
+        const lib = '';
+        const thongTinLuuTru = lib;
+
+        return {
+            stt: index + 1,
+            thongTinBaoVe,
+            thongTinHuongDan,
+            thongTinDeTai,
+            thongTinLuuTru
+        };
+    });
+
+    return {
+        data: {
+            khoa: allStudentsInClasses[0]?.fixedClass?.trainingCourse?.name || '',
+            dotxet: firstProject?.thesisSession?.name || '',
+            data: tableData,
+            tongsodetai: tableData.length.toString()
+        }
+    };
+};
