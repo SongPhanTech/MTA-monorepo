@@ -384570,8 +384570,6 @@ export namespace Prisma {
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    registerNumber?: string
-    doctoralCode?: string
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
@@ -384584,6 +384582,8 @@ export namespace Prisma {
     note?: StringNullableFilter<"Student"> | string | null
     from?: DateTimeNullableFilter<"Student"> | Date | string | null
     to?: DateTimeNullableFilter<"Student"> | Date | string | null
+    registerNumber?: StringNullableFilter<"Student"> | string | null
+    doctoralCode?: StringNullableFilter<"Student"> | string | null
     admissionCombination?: StringNullableFilter<"Student"> | string | null
     entryScore?: FloatNullableFilter<"Student"> | number | null
     competencyScore?: FloatNullableFilter<"Student"> | number | null
@@ -384645,7 +384645,7 @@ export namespace Prisma {
     classRegisterLogs?: ClassRegisterLogsListRelationFilter
     notes?: NoteListRelationFilter
     noteFolders?: NoteFolderListRelationFilter
-  }, "id" | "code" | "registerNumber" | "doctoralCode">
+  }, "id" | "code">
 
   export type StudentOrderByWithAggregationInput = {
     id?: SortOrder

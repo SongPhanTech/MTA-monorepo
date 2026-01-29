@@ -8,6 +8,8 @@ import type { CreateClusterSurveyRequestSurveyChoicesItem } from './createCluste
 
 export interface CreateClusterSurveyRequest {
     name: string
+    /** @minLength 1 */
+    trainingObjectTypeId: string
     /** @nullable */
     startDate: string | null
     /** @nullable */

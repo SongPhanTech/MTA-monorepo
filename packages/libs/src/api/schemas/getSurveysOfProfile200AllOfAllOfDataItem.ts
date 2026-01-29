@@ -6,9 +6,9 @@
  */
 import type { GetSurveysOfProfile200AllOfAllOfDataItemLecture } from './getSurveysOfProfile200AllOfAllOfDataItemLecture'
 import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClass'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopic } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyTopic'
 import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem'
 import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem } from './getSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopic } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyTopic'
 
 export type GetSurveysOfProfile200AllOfAllOfDataItem = {
     id: string

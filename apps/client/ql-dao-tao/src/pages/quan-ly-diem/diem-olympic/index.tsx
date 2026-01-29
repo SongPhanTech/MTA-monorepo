@@ -7,13 +7,15 @@ import { useArchivedCertificateStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
+import type { ArchivedAwardOnStudentSubjectScore } from '@workspace/db'
 import {
     useCountArchivedAward,
     useFindManyArchivedAward,
     useUpdateArchivedAward,
     useUpdateManyArchivedAward,
+    useUpdateManyArchivedAwardOnStudentSubjectScore,
 } from '@workspace/db/hooks'
-import { useAwardScore } from '@workspace/libs/api/training'
+import { useApproveAwardScore, useAwardScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
@@ -51,7 +53,11 @@ export default function ArchivedAward() {
     }
 
     const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
-    const { mutateAsync: updateArchivedAwardMany } = useUpdateManyArchivedAward()
+    const { mutateAsync: updateManyArchivedAward } = useUpdateManyArchivedAward()
+    const { mutateAsync: updateManyArchivedAwardOnStudentSubjectScore } =
+        useUpdateManyArchivedAwardOnStudentSubjectScore()
+    const { mutateAsync: approveAwardScore } = useApproveAwardScore()
+
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -180,16 +186,6 @@ export default function ArchivedAward() {
         },
     })
 
-    const rowSelection = {
-        selectedRowKeys,
-        getCheckboxProps: (record: any) => ({
-            disabled: record.status !== 'PENDING', // disable theo điều kiện
-        }),
-        onChange: (newSelectedRowKeys: React.Key[]) => {
-            setSelectedRowKeys(newSelectedRowKeys)
-        },
-    }
-
     const handleOpenAprove = () => {
         Modal.confirm({
             title: 'Xác nhận',
@@ -219,23 +215,21 @@ export default function ArchivedAward() {
         try {
             if (selectedRowKeys?.length > 0) {
                 if (status === 'REJECTED') {
-                    await updateArchivedAwardMany({
-                        where: {
-                            id: {
-                                in: selectedRowKeys as string[],
-                            },
-                        },
-                        data: {
-                            status: 'REJECTED',
-                        },
+                    await updateManyArchivedAwardOnStudentSubjectScore({
+                        where: { archivedAwardId: { in: selectedRowKeys as string[] } },
+                        data: { status: 'REJECTED' },
                     })
-                    message.success('Từ chối thành công')
+                    await updateManyArchivedAward({
+                        where: { id: { in: selectedRowKeys as string[] } },
+                        data: { status: 'REJECTED' },
+                    })
+                    await message.success('Từ chối thành công')
                     refetch()
                     setSelectedRowKeys([])
                     return
                 }
 
-                const res = await updateAwardScore({
+                const res = await approveAwardScore({
                     data: { archivedAwardIds: selectedRowKeys as string[] },
                 })
                 if (res?.status === 200) {
@@ -303,7 +297,18 @@ export default function ArchivedAward() {
                         setFilters(value)
                         setCurrentPage(1)
                     }}
-                    rowSelection={rowSelection}
+                    rowSelection={{
+                        selectedRowKeys,
+                        getCheckboxProps: (record) => ({
+                            disabled: record.studentSubjectScore.some(
+                                (item: ArchivedAwardOnStudentSubjectScore) =>
+                                    item.status !== 'PENDING'
+                            ),
+                        }),
+                        onChange: (newSelectedRowKeys: React.Key[]) => {
+                            setSelectedRowKeys(newSelectedRowKeys)
+                        },
+                    }}
                     columns={[
                         {
                             title: 'STT',
@@ -366,22 +371,21 @@ export default function ArchivedAward() {
                                 return record?.date ? formatDate(record?.date) : ''
                             },
                         },
-
-                        {
-                            title: 'Trạng thái',
-                            dataIndex: 'archivedAwardStatus',
-                            width: 150,
-                            align: 'center',
-                            type: 'select',
-                            options: archivedCertificateStatusOptions,
-                            render: (_, record) => {
-                                const label = getArchivedCertificateStatusStatusLabel(
-                                    record?.status
-                                )
-                                const color = getArchivedCertificateStatusColor(record?.status)
-                                return <Tag color={color}>{label}</Tag>
-                            },
-                        },
+                        // {
+                        //     title: 'Trạng thái',
+                        //     dataIndex: 'archivedAwardStatus',
+                        //     width: 150,
+                        //     align: 'center',
+                        //     type: 'select',
+                        //     options: archivedCertificateStatusOptions,
+                        //     render: (_, record) => {
+                        //         const label = getArchivedCertificateStatusStatusLabel(
+                        //             record?.status
+                        //         )
+                        //         const color = getArchivedCertificateStatusColor(record?.status)
+                        //         return <Tag color={color}>{label}</Tag>
+                        //     },
+                        // },
                         {
                             title: 'Điểm cộng',
                             align: 'center',

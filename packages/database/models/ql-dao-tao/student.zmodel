@@ -25,9 +25,9 @@ model Student extends Base {
   to                             DateTime? // đến ngày
 
   /// số báo danh
-  registerNumber                 String?                          @unique
+  registerNumber                 String?
   /// mã hồ sơ tiến sĩ
-  doctoralCode                   String?                          @unique
+  doctoralCode                   String?
   /// Tổ hợp xét tuyển
   admissionCombination           String?
   /// Điểm xét tuyển

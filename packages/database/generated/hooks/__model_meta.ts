@@ -14006,12 +14006,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, registerNumber: {
-                    name: "registerNumber",
-                    fields: ["registerNumber"]
-                }, doctoralCode: {
-                    name: "doctoralCode",
-                    fields: ["doctoralCode"]
                 },
             },
         },

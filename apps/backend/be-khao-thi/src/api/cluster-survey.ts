@@ -176,7 +176,7 @@ app.openapi(createClusterSurvey, async (c) => {
                 surveyTopicId,
                 lectureId: cls.lecturerId,
                 semesterId,
-                trainingObjectTypeId
+                trainingObjectTypeId,
             })),
         })
 
@@ -195,7 +195,6 @@ app.openapi(createClusterSurvey, async (c) => {
                     surveyObjectType: {
                         connect: surveyObjectTypeIds.map((id) => ({ id })),
                     },
-                    
                 },
             })
         }

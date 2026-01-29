@@ -4,12 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsRelearnRates200DataBYCOURSEItem } from './postApiStatsRelearnRates200DataBYCOURSEItem'
-import type { PostApiStatsRelearnRates200DataBYCURRICULUMItem } from './postApiStatsRelearnRates200DataBYCURRICULUMItem'
-import type { PostApiStatsRelearnRates200DataBYMAJORItem } from './postApiStatsRelearnRates200DataBYMAJORItem'
+import type { PostApiStatsRelearnRates200DataByCourseItem } from './postApiStatsRelearnRates200DataByCourseItem'
+import type { PostApiStatsRelearnRates200DataByCurriculumItem } from './postApiStatsRelearnRates200DataByCurriculumItem'
+import type { PostApiStatsRelearnRates200DataByMajorItem } from './postApiStatsRelearnRates200DataByMajorItem'
 
 export type PostApiStatsRelearnRates200Data = {
-    BY_COURSE: PostApiStatsRelearnRates200DataBYCOURSEItem[]
-    BY_CURRICULUM: PostApiStatsRelearnRates200DataBYCURRICULUMItem[]
-    BY_MAJOR: PostApiStatsRelearnRates200DataBYMAJORItem[]
+    By_Course: PostApiStatsRelearnRates200DataByCourseItem[]
+    By_Curriculum: PostApiStatsRelearnRates200DataByCurriculumItem[]
+    By_Major: PostApiStatsRelearnRates200DataByMajorItem[]
 }
