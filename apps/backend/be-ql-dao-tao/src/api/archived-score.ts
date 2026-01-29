@@ -1,6 +1,11 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, createId } from '@workspace/db'
 import { prisma } from '..'
+import {
+    exportStatsArchivedAward,
+    getStatsArchivedAward,
+    StatsArchivedResponseSchema,
+} from '../services/stats-archived'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -451,6 +456,92 @@ app.openapi(approveAwardScore, async (c) => {
     })
 
     return c.json({ success: true, message: 'Success' }, 200)
+})
+
+const statsArchivedAward = createRoute({
+    operationId: 'stats-archived-award',
+    path: '/stats-archived-award',
+    tags: ['ArchivedScore'],
+    summary: 'Thống kê điểm thưởng',
+    description: 'Thống kê điểm thưởng từ học kỳ đến học kỳ',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            fromSemesterId: z.string(),
+                            toSemesterId: z.string(),
+                        })
+                        .openapi('StatsArchivedAwardInput'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/json': {
+                    schema: StatsArchivedResponseSchema,
+                },
+            },
+        },
+    },
+})
+
+app.openapi(statsArchivedAward, async (c) => {
+    const { fromSemesterId, toSemesterId } = c.req.valid('json')
+    const result = await getStatsArchivedAward({ fromSemesterId, toSemesterId })
+    return c.json({ data: result }, 200)
+})
+
+const exportStatsArchivedAwardRoute = createRoute({
+    operationId: 'export-stats-archived-award',
+    path: '/export-stats-archived-award',
+    tags: ['ArchivedScore'],
+    summary: 'Xuất file thống kê điểm thưởng',
+    description: 'Xuất file excel thống kê điểm thưởng từ học kỳ đến học kỳ',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            fromSemesterId: z.string(),
+                            toSemesterId: z.string(),
+                        })
+                        .openapi('StatsArchivedAwardInput'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(exportStatsArchivedAwardRoute, async (c) => {
+    const { fromSemesterId, toSemesterId } = c.req.valid('json')
+
+    const result = await exportStatsArchivedAward({ fromSemesterId, toSemesterId })
+
+    const fileName = 'THONG_KE_DIEM_THUONG.xlsx'
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
 })
 
 export default app

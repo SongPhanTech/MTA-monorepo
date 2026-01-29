@@ -445,6 +445,14 @@ async function main() {
                 extensions: 'xlsx',
                 numberField: 0,
             },
+            {
+                name: 'Thống kê điểm thưởng',
+                code: 'THONG_KE_DIEM_THUONG',
+                path: 'https://minio.swantech.vn/mta/template/THONG_KE_DIEM_THUONG.xlsx',
+                fileType: 'DOWNLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
         ],
     })
 
