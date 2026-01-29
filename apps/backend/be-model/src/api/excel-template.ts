@@ -127,10 +127,7 @@ app.openapi(
         let currentRow = 1
 
         // Helper function to copy sheet content
-        const copySheetContent = (
-            sheet: ExcelJS.Worksheet,
-            startRow: number
-        ) => {
+        const copySheetContent = (sheet: ExcelJS.Worksheet, startRow: number) => {
             const rowOffset = startRow - 1
             let currentRowInCopy = startRow
 
