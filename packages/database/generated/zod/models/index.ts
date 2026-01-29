@@ -179,7 +179,6 @@ export * from './AnalysisCriterion.schema';
 export * from './EvaluationCriterion.schema';
 export * from './RequirementCriterion.schema';
 export * from './AnalysisFormEvidence.schema';
-export * from './EvaluationMemberRole.schema';
 export * from './EvaluationCouncil.schema';
 export * from './EvaluationCouncilMember.schema';
 export * from './EvidenceFile.schema';
