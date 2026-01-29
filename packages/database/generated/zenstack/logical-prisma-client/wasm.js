@@ -3169,6 +3169,18 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   conclude: 'conclude'
 };
 
+exports.Prisma.EvaluationStandardSetScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
 exports.Prisma.StandardCatalogScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3180,6 +3192,7 @@ exports.Prisma.StandardCatalogScalarFieldEnum = {
   createdBy: 'createdBy',
   order: 'order',
   name: 'name',
+  standardSetId: 'standardSetId',
   objectType: 'objectType'
 };
 
@@ -3353,6 +3366,18 @@ exports.Prisma.AnalysisFormEvidenceScalarFieldEnum = {
   order: 'order'
 };
 
+exports.Prisma.EvaluationMemberRoleScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
 exports.Prisma.EvaluationCouncilScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3377,7 +3402,7 @@ exports.Prisma.EvaluationCouncilMemberScalarFieldEnum = {
   createdBy: 'createdBy',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId',
-  role: 'role'
+  roleId: 'roleId'
 };
 
 exports.Prisma.EvidenceFileScalarFieldEnum = {
@@ -6545,12 +6570,21 @@ exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
   conclude: 'conclude'
 };
 
-exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {
+exports.Prisma.EvaluationStandardSetOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   name: 'name'
+};
+
+exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  standardSetId: 'standardSetId'
 };
 
 exports.Prisma.CriterionCatalogOrderByRelevanceFieldEnum = {
@@ -6668,6 +6702,14 @@ exports.Prisma.AnalysisFormEvidenceOrderByRelevanceFieldEnum = {
   evidenceId: 'evidenceId'
 };
 
+exports.Prisma.EvaluationMemberRoleOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
 exports.Prisma.EvaluationCouncilOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6683,7 +6725,8 @@ exports.Prisma.EvaluationCouncilMemberOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   evaluationCouncilId: 'evaluationCouncilId',
-  lecturerId: 'lecturerId'
+  lecturerId: 'lecturerId',
+  roleId: 'roleId'
 };
 
 exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {
@@ -7798,17 +7841,6 @@ exports.EvaluationStatus = exports.$Enums.EvaluationStatus = {
   COMPLETED: 'COMPLETED'
 };
 
-exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
-  CHAIRMAN: 'CHAIRMAN',
-  VICE_PRESIDENT: 'VICE_PRESIDENT',
-  HEAD_SECRETARY: 'HEAD_SECRETARY',
-  SECRETARY: 'SECRETARY',
-  MEMBER: 'MEMBER',
-  ADVISORY_BOARD: 'ADVISORY_BOARD',
-  HEAD_SPECIALIZED: 'HEAD_SPECIALIZED',
-  SPECIALIZED: 'SPECIALIZED'
-};
-
 exports.SurveyObject = exports.$Enums.SurveyObject = {
   MILITARY_STUDENT: 'MILITARY_STUDENT',
   CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
@@ -8061,6 +8093,7 @@ exports.Prisma.ModelName = {
   PaymentRecord: 'PaymentRecord',
   SupervisorPaymentRecord: 'SupervisorPaymentRecord',
   EvaluationPeriod: 'EvaluationPeriod',
+  EvaluationStandardSet: 'EvaluationStandardSet',
   StandardCatalog: 'StandardCatalog',
   CriterionCatalog: 'CriterionCatalog',
   EvidenceCategory: 'EvidenceCategory',
@@ -8073,6 +8106,7 @@ exports.Prisma.ModelName = {
   EvaluationCriterion: 'EvaluationCriterion',
   RequirementCriterion: 'RequirementCriterion',
   AnalysisFormEvidence: 'AnalysisFormEvidence',
+  EvaluationMemberRole: 'EvaluationMemberRole',
   EvaluationCouncil: 'EvaluationCouncil',
   EvaluationCouncilMember: 'EvaluationCouncilMember',
   EvidenceFile: 'EvidenceFile',

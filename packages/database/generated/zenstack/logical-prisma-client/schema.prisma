@@ -435,20 +435,6 @@ enum EvaluationStatus {
   @@schema("khao-thi")
 }
 
-/// Vai trò của thành viên trong hội đồng đánh giá
-enum EvaluationMemberRole {
-  CHAIRMAN
-  VICE_PRESIDENT
-  HEAD_SECRETARY
-  SECRETARY
-  MEMBER
-  ADVISORY_BOARD
-  HEAD_SPECIALIZED
-  SPECIALIZED
-
-  @@schema("khao-thi")
-}
-
 enum SurveyQuestionType {
   ESSAY
   SINGLE_CHOICE
@@ -5356,23 +5342,43 @@ model EvaluationPeriod {
   @@schema("khao-thi")
 }
 
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationStandardSet {
+  id          String            @id() @default(cuid())
+  code        String?           @unique()
+  active      Boolean           @default(true)
+  description String?           @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now()) @updatedAt()
+  createdBy   String?           @default("") @db.Uuid()
+  name        String            @unique()
+  standards   StandardCatalog[]
+
+  @@schema("khao-thi")
+}
+
 /// Danh mục tiêu chuẩn
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model StandardCatalog {
-  id          String              @id() @default(cuid())
-  code        String?             @unique()
-  active      Boolean             @default(true)
-  description String?             @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @default(now()) @updatedAt()
-  createdBy   String?             @default("") @db.Uuid()
-  order       Int
-  name        String
-  criteria    CriterionCatalog[]
-  objectType  StandardCatalogType
+  id            String                 @id() @default(cuid())
+  code          String?                @unique()
+  active        Boolean                @default(true)
+  description   String?                @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @default(now()) @updatedAt()
+  createdBy     String?                @default("") @db.Uuid()
+  order         Int
+  name          String
+  criteria      CriterionCatalog[]
+  standardSet   EvaluationStandardSet? @relation(fields: [standardSetId], references: [id])
+  standardSetId String?
+  objectType    StandardCatalogType
 
   @@schema("khao-thi")
 }
@@ -5653,6 +5659,24 @@ model AnalysisFormEvidence {
   @@schema("khao-thi")
 }
 
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationMemberRole {
+  id                      String                    @id() @default(cuid())
+  code                    String?                   @unique()
+  active                  Boolean                   @default(true)
+  description             String?                   @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now()) @updatedAt()
+  createdBy               String?                   @default("") @db.Uuid()
+  name                    String                    @unique()
+  evaluationCouncilMember EvaluationCouncilMember[]
+
+  @@schema("khao-thi")
+}
+
 /// Hội đồng đánh giá
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
@@ -5674,23 +5698,25 @@ model EvaluationCouncil {
   @@schema("khao-thi")
 }
 
+/// Thành viên hội đồng đánh giá
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model EvaluationCouncilMember {
-  id                   String                 @id() @default(cuid())
-  code                 String?                @unique()
-  active               Boolean                @default(true)
-  description          String?                @db.Text()
+  id                   String                @id() @default(cuid())
+  code                 String?               @unique()
+  active               Boolean               @default(true)
+  description          String?               @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @default(now()) @updatedAt()
-  createdBy            String?                @default("") @db.Uuid()
-  evaluationCouncil    EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @default(now()) @updatedAt()
+  createdBy            String?               @default("") @db.Uuid()
+  evaluationCouncil    EvaluationCouncil     @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId  String
-  lecturer             Lecturer               @relation(fields: [lecturerId], references: [id])
+  lecturer             Lecturer              @relation(fields: [lecturerId], references: [id])
   lecturerId           String
-  role                 EvaluationMemberRole[]
+  role                 EvaluationMemberRole? @relation(fields: [roleId], references: [id])
+  roleId               String?
   evaluationCriterions EvaluationCriterion[]
 
   @@schema("khao-thi")

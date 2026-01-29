@@ -826,6 +826,11 @@ export type SupervisorPaymentRecord = $Result.DefaultSelection<Prisma.$Superviso
  */
 export type EvaluationPeriod = $Result.DefaultSelection<Prisma.$EvaluationPeriodPayload>
 /**
+ * Model EvaluationStandardSet
+ * 
+ */
+export type EvaluationStandardSet = $Result.DefaultSelection<Prisma.$EvaluationStandardSetPayload>
+/**
  * Model StandardCatalog
  * Danh mục tiêu chuẩn
  */
@@ -886,13 +891,18 @@ export type RequirementCriterion = $Result.DefaultSelection<Prisma.$RequirementC
  */
 export type AnalysisFormEvidence = $Result.DefaultSelection<Prisma.$AnalysisFormEvidencePayload>
 /**
+ * Model EvaluationMemberRole
+ * 
+ */
+export type EvaluationMemberRole = $Result.DefaultSelection<Prisma.$EvaluationMemberRolePayload>
+/**
  * Model EvaluationCouncil
  * Hội đồng đánh giá
  */
 export type EvaluationCouncil = $Result.DefaultSelection<Prisma.$EvaluationCouncilPayload>
 /**
  * Model EvaluationCouncilMember
- * 
+ * Thành viên hội đồng đánh giá
  */
 export type EvaluationCouncilMember = $Result.DefaultSelection<Prisma.$EvaluationCouncilMemberPayload>
 /**
@@ -1763,20 +1773,6 @@ export const EvaluationStatus: {
 export type EvaluationStatus = (typeof EvaluationStatus)[keyof typeof EvaluationStatus]
 
 
-export const EvaluationMemberRole: {
-  CHAIRMAN: 'CHAIRMAN',
-  VICE_PRESIDENT: 'VICE_PRESIDENT',
-  HEAD_SECRETARY: 'HEAD_SECRETARY',
-  SECRETARY: 'SECRETARY',
-  MEMBER: 'MEMBER',
-  ADVISORY_BOARD: 'ADVISORY_BOARD',
-  HEAD_SPECIALIZED: 'HEAD_SPECIALIZED',
-  SPECIALIZED: 'SPECIALIZED'
-};
-
-export type EvaluationMemberRole = (typeof EvaluationMemberRole)[keyof typeof EvaluationMemberRole]
-
-
 export const SurveyQuestionType: {
   ESSAY: 'ESSAY',
   SINGLE_CHOICE: 'SINGLE_CHOICE'
@@ -2122,10 +2118,6 @@ export const EvaluationCriterionStatus: typeof $Enums.EvaluationCriterionStatus
 export type EvaluationStatus = $Enums.EvaluationStatus
 
 export const EvaluationStatus: typeof $Enums.EvaluationStatus
-
-export type EvaluationMemberRole = $Enums.EvaluationMemberRole
-
-export const EvaluationMemberRole: typeof $Enums.EvaluationMemberRole
 
 export type SurveyQuestionType = $Enums.SurveyQuestionType
 
@@ -3943,6 +3935,16 @@ export class PrismaClient<
   get evaluationPeriod(): Prisma.EvaluationPeriodDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.evaluationStandardSet`: Exposes CRUD operations for the **EvaluationStandardSet** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EvaluationStandardSets
+    * const evaluationStandardSets = await prisma.evaluationStandardSet.findMany()
+    * ```
+    */
+  get evaluationStandardSet(): Prisma.EvaluationStandardSetDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.standardCatalog`: Exposes CRUD operations for the **StandardCatalog** model.
     * Example usage:
     * ```ts
@@ -4061,6 +4063,16 @@ export class PrismaClient<
     * ```
     */
   get analysisFormEvidence(): Prisma.AnalysisFormEvidenceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.evaluationMemberRole`: Exposes CRUD operations for the **EvaluationMemberRole** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EvaluationMemberRoles
+    * const evaluationMemberRoles = await prisma.evaluationMemberRole.findMany()
+    * ```
+    */
+  get evaluationMemberRole(): Prisma.EvaluationMemberRoleDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.evaluationCouncil`: Exposes CRUD operations for the **EvaluationCouncil** model.
@@ -5503,6 +5515,7 @@ export namespace Prisma {
     PaymentRecord: 'PaymentRecord',
     SupervisorPaymentRecord: 'SupervisorPaymentRecord',
     EvaluationPeriod: 'EvaluationPeriod',
+    EvaluationStandardSet: 'EvaluationStandardSet',
     StandardCatalog: 'StandardCatalog',
     CriterionCatalog: 'CriterionCatalog',
     EvidenceCategory: 'EvidenceCategory',
@@ -5515,6 +5528,7 @@ export namespace Prisma {
     EvaluationCriterion: 'EvaluationCriterion',
     RequirementCriterion: 'RequirementCriterion',
     AnalysisFormEvidence: 'AnalysisFormEvidence',
+    EvaluationMemberRole: 'EvaluationMemberRole',
     EvaluationCouncil: 'EvaluationCouncil',
     EvaluationCouncilMember: 'EvaluationCouncilMember',
     EvidenceFile: 'EvidenceFile',
@@ -5617,7 +5631,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationMemberRole" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -17609,6 +17623,80 @@ export namespace Prisma {
           }
         }
       }
+      EvaluationStandardSet: {
+        payload: Prisma.$EvaluationStandardSetPayload<ExtArgs>
+        fields: Prisma.EvaluationStandardSetFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EvaluationStandardSetFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EvaluationStandardSetFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>
+          }
+          findFirst: {
+            args: Prisma.EvaluationStandardSetFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EvaluationStandardSetFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>
+          }
+          findMany: {
+            args: Prisma.EvaluationStandardSetFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>[]
+          }
+          create: {
+            args: Prisma.EvaluationStandardSetCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>
+          }
+          createMany: {
+            args: Prisma.EvaluationStandardSetCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EvaluationStandardSetCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>[]
+          }
+          delete: {
+            args: Prisma.EvaluationStandardSetDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>
+          }
+          update: {
+            args: Prisma.EvaluationStandardSetUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>
+          }
+          deleteMany: {
+            args: Prisma.EvaluationStandardSetDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EvaluationStandardSetUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EvaluationStandardSetUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>[]
+          }
+          upsert: {
+            args: Prisma.EvaluationStandardSetUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationStandardSetPayload>
+          }
+          aggregate: {
+            args: Prisma.EvaluationStandardSetAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEvaluationStandardSet>
+          }
+          groupBy: {
+            args: Prisma.EvaluationStandardSetGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationStandardSetGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EvaluationStandardSetCountArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationStandardSetCountAggregateOutputType> | number
+          }
+        }
+      }
       StandardCatalog: {
         payload: Prisma.$StandardCatalogPayload<ExtArgs>
         fields: Prisma.StandardCatalogFieldRefs
@@ -18494,6 +18582,80 @@ export namespace Prisma {
           count: {
             args: Prisma.AnalysisFormEvidenceCountArgs<ExtArgs>
             result: $Utils.Optional<AnalysisFormEvidenceCountAggregateOutputType> | number
+          }
+        }
+      }
+      EvaluationMemberRole: {
+        payload: Prisma.$EvaluationMemberRolePayload<ExtArgs>
+        fields: Prisma.EvaluationMemberRoleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EvaluationMemberRoleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EvaluationMemberRoleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>
+          }
+          findFirst: {
+            args: Prisma.EvaluationMemberRoleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EvaluationMemberRoleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>
+          }
+          findMany: {
+            args: Prisma.EvaluationMemberRoleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>[]
+          }
+          create: {
+            args: Prisma.EvaluationMemberRoleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>
+          }
+          createMany: {
+            args: Prisma.EvaluationMemberRoleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EvaluationMemberRoleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>[]
+          }
+          delete: {
+            args: Prisma.EvaluationMemberRoleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>
+          }
+          update: {
+            args: Prisma.EvaluationMemberRoleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>
+          }
+          deleteMany: {
+            args: Prisma.EvaluationMemberRoleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EvaluationMemberRoleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EvaluationMemberRoleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>[]
+          }
+          upsert: {
+            args: Prisma.EvaluationMemberRoleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationMemberRolePayload>
+          }
+          aggregate: {
+            args: Prisma.EvaluationMemberRoleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEvaluationMemberRole>
+          }
+          groupBy: {
+            args: Prisma.EvaluationMemberRoleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationMemberRoleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EvaluationMemberRoleCountArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationMemberRoleCountAggregateOutputType> | number
           }
         }
       }
@@ -24963,6 +25125,7 @@ export namespace Prisma {
     paymentRecord?: PaymentRecordOmit
     supervisorPaymentRecord?: SupervisorPaymentRecordOmit
     evaluationPeriod?: EvaluationPeriodOmit
+    evaluationStandardSet?: EvaluationStandardSetOmit
     standardCatalog?: StandardCatalogOmit
     criterionCatalog?: CriterionCatalogOmit
     evidenceCategory?: EvidenceCategoryOmit
@@ -24975,6 +25138,7 @@ export namespace Prisma {
     evaluationCriterion?: EvaluationCriterionOmit
     requirementCriterion?: RequirementCriterionOmit
     analysisFormEvidence?: AnalysisFormEvidenceOmit
+    evaluationMemberRole?: EvaluationMemberRoleOmit
     evaluationCouncil?: EvaluationCouncilOmit
     evaluationCouncilMember?: EvaluationCouncilMemberOmit
     evidenceFile?: EvidenceFileOmit
@@ -30145,6 +30309,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type EvaluationStandardSetCountOutputType
+   */
+
+  export type EvaluationStandardSetCountOutputType = {
+    standards: number
+  }
+
+  export type EvaluationStandardSetCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    standards?: boolean | EvaluationStandardSetCountOutputTypeCountStandardsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EvaluationStandardSetCountOutputType without action
+   */
+  export type EvaluationStandardSetCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSetCountOutputType
+     */
+    select?: EvaluationStandardSetCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationStandardSetCountOutputType without action
+   */
+  export type EvaluationStandardSetCountOutputTypeCountStandardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StandardCatalogWhereInput
+  }
+
+
+  /**
    * Count Type StandardCatalogCountOutputType
    */
 
@@ -30416,6 +30611,37 @@ export namespace Prisma {
    */
   export type RequirementCriterionCountOutputTypeCountEvaluationCriterionCommentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EvaluationCriterionCommentWhereInput
+  }
+
+
+  /**
+   * Count Type EvaluationMemberRoleCountOutputType
+   */
+
+  export type EvaluationMemberRoleCountOutputType = {
+    evaluationCouncilMember: number
+  }
+
+  export type EvaluationMemberRoleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evaluationCouncilMember?: boolean | EvaluationMemberRoleCountOutputTypeCountEvaluationCouncilMemberArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EvaluationMemberRoleCountOutputType without action
+   */
+  export type EvaluationMemberRoleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRoleCountOutputType
+     */
+    select?: EvaluationMemberRoleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationMemberRoleCountOutputType without action
+   */
+  export type EvaluationMemberRoleCountOutputTypeCountEvaluationCouncilMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationCouncilMemberWhereInput
   }
 
 
@@ -243646,6 +243872,1128 @@ export namespace Prisma {
 
 
   /**
+   * Model EvaluationStandardSet
+   */
+
+  export type AggregateEvaluationStandardSet = {
+    _count: EvaluationStandardSetCountAggregateOutputType | null
+    _min: EvaluationStandardSetMinAggregateOutputType | null
+    _max: EvaluationStandardSetMaxAggregateOutputType | null
+  }
+
+  export type EvaluationStandardSetMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    name: string | null
+  }
+
+  export type EvaluationStandardSetMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    name: string | null
+  }
+
+  export type EvaluationStandardSetCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    name: number
+    _all: number
+  }
+
+
+  export type EvaluationStandardSetMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+  }
+
+  export type EvaluationStandardSetMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+  }
+
+  export type EvaluationStandardSetCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+    _all?: true
+  }
+
+  export type EvaluationStandardSetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationStandardSet to aggregate.
+     */
+    where?: EvaluationStandardSetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationStandardSets to fetch.
+     */
+    orderBy?: EvaluationStandardSetOrderByWithRelationInput | EvaluationStandardSetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EvaluationStandardSetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationStandardSets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationStandardSets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EvaluationStandardSets
+    **/
+    _count?: true | EvaluationStandardSetCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EvaluationStandardSetMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EvaluationStandardSetMaxAggregateInputType
+  }
+
+  export type GetEvaluationStandardSetAggregateType<T extends EvaluationStandardSetAggregateArgs> = {
+        [P in keyof T & keyof AggregateEvaluationStandardSet]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEvaluationStandardSet[P]>
+      : GetScalarType<T[P], AggregateEvaluationStandardSet[P]>
+  }
+
+
+
+
+  export type EvaluationStandardSetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationStandardSetWhereInput
+    orderBy?: EvaluationStandardSetOrderByWithAggregationInput | EvaluationStandardSetOrderByWithAggregationInput[]
+    by: EvaluationStandardSetScalarFieldEnum[] | EvaluationStandardSetScalarFieldEnum
+    having?: EvaluationStandardSetScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EvaluationStandardSetCountAggregateInputType | true
+    _min?: EvaluationStandardSetMinAggregateInputType
+    _max?: EvaluationStandardSetMaxAggregateInputType
+  }
+
+  export type EvaluationStandardSetGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    name: string
+    _count: EvaluationStandardSetCountAggregateOutputType | null
+    _min: EvaluationStandardSetMinAggregateOutputType | null
+    _max: EvaluationStandardSetMaxAggregateOutputType | null
+  }
+
+  type GetEvaluationStandardSetGroupByPayload<T extends EvaluationStandardSetGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EvaluationStandardSetGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EvaluationStandardSetGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EvaluationStandardSetGroupByOutputType[P]>
+            : GetScalarType<T[P], EvaluationStandardSetGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EvaluationStandardSetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    standards?: boolean | EvaluationStandardSet$standardsArgs<ExtArgs>
+    _count?: boolean | EvaluationStandardSetCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationStandardSet"]>
+
+  export type EvaluationStandardSetSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["evaluationStandardSet"]>
+
+  export type EvaluationStandardSetSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["evaluationStandardSet"]>
+
+  export type EvaluationStandardSetSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+  }
+
+  export type EvaluationStandardSetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["evaluationStandardSet"]>
+  export type EvaluationStandardSetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    standards?: boolean | EvaluationStandardSet$standardsArgs<ExtArgs>
+    _count?: boolean | EvaluationStandardSetCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type EvaluationStandardSetIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type EvaluationStandardSetIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $EvaluationStandardSetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EvaluationStandardSet"
+    objects: {
+      standards: Prisma.$StandardCatalogPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      name: string
+    }, ExtArgs["result"]["evaluationStandardSet"]>
+    composites: {}
+  }
+
+  type EvaluationStandardSetGetPayload<S extends boolean | null | undefined | EvaluationStandardSetDefaultArgs> = $Result.GetResult<Prisma.$EvaluationStandardSetPayload, S>
+
+  type EvaluationStandardSetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EvaluationStandardSetFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EvaluationStandardSetCountAggregateInputType | true
+    }
+
+  export interface EvaluationStandardSetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EvaluationStandardSet'], meta: { name: 'EvaluationStandardSet' } }
+    /**
+     * Find zero or one EvaluationStandardSet that matches the filter.
+     * @param {EvaluationStandardSetFindUniqueArgs} args - Arguments to find a EvaluationStandardSet
+     * @example
+     * // Get one EvaluationStandardSet
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EvaluationStandardSetFindUniqueArgs>(args: SelectSubset<T, EvaluationStandardSetFindUniqueArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EvaluationStandardSet that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EvaluationStandardSetFindUniqueOrThrowArgs} args - Arguments to find a EvaluationStandardSet
+     * @example
+     * // Get one EvaluationStandardSet
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EvaluationStandardSetFindUniqueOrThrowArgs>(args: SelectSubset<T, EvaluationStandardSetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationStandardSet that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationStandardSetFindFirstArgs} args - Arguments to find a EvaluationStandardSet
+     * @example
+     * // Get one EvaluationStandardSet
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EvaluationStandardSetFindFirstArgs>(args?: SelectSubset<T, EvaluationStandardSetFindFirstArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationStandardSet that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationStandardSetFindFirstOrThrowArgs} args - Arguments to find a EvaluationStandardSet
+     * @example
+     * // Get one EvaluationStandardSet
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EvaluationStandardSetFindFirstOrThrowArgs>(args?: SelectSubset<T, EvaluationStandardSetFindFirstOrThrowArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EvaluationStandardSets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationStandardSetFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EvaluationStandardSets
+     * const evaluationStandardSets = await prisma.evaluationStandardSet.findMany()
+     * 
+     * // Get first 10 EvaluationStandardSets
+     * const evaluationStandardSets = await prisma.evaluationStandardSet.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const evaluationStandardSetWithIdOnly = await prisma.evaluationStandardSet.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EvaluationStandardSetFindManyArgs>(args?: SelectSubset<T, EvaluationStandardSetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EvaluationStandardSet.
+     * @param {EvaluationStandardSetCreateArgs} args - Arguments to create a EvaluationStandardSet.
+     * @example
+     * // Create one EvaluationStandardSet
+     * const EvaluationStandardSet = await prisma.evaluationStandardSet.create({
+     *   data: {
+     *     // ... data to create a EvaluationStandardSet
+     *   }
+     * })
+     * 
+     */
+    create<T extends EvaluationStandardSetCreateArgs>(args: SelectSubset<T, EvaluationStandardSetCreateArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EvaluationStandardSets.
+     * @param {EvaluationStandardSetCreateManyArgs} args - Arguments to create many EvaluationStandardSets.
+     * @example
+     * // Create many EvaluationStandardSets
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EvaluationStandardSetCreateManyArgs>(args?: SelectSubset<T, EvaluationStandardSetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EvaluationStandardSets and returns the data saved in the database.
+     * @param {EvaluationStandardSetCreateManyAndReturnArgs} args - Arguments to create many EvaluationStandardSets.
+     * @example
+     * // Create many EvaluationStandardSets
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EvaluationStandardSets and only return the `id`
+     * const evaluationStandardSetWithIdOnly = await prisma.evaluationStandardSet.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EvaluationStandardSetCreateManyAndReturnArgs>(args?: SelectSubset<T, EvaluationStandardSetCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EvaluationStandardSet.
+     * @param {EvaluationStandardSetDeleteArgs} args - Arguments to delete one EvaluationStandardSet.
+     * @example
+     * // Delete one EvaluationStandardSet
+     * const EvaluationStandardSet = await prisma.evaluationStandardSet.delete({
+     *   where: {
+     *     // ... filter to delete one EvaluationStandardSet
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EvaluationStandardSetDeleteArgs>(args: SelectSubset<T, EvaluationStandardSetDeleteArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EvaluationStandardSet.
+     * @param {EvaluationStandardSetUpdateArgs} args - Arguments to update one EvaluationStandardSet.
+     * @example
+     * // Update one EvaluationStandardSet
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EvaluationStandardSetUpdateArgs>(args: SelectSubset<T, EvaluationStandardSetUpdateArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EvaluationStandardSets.
+     * @param {EvaluationStandardSetDeleteManyArgs} args - Arguments to filter EvaluationStandardSets to delete.
+     * @example
+     * // Delete a few EvaluationStandardSets
+     * const { count } = await prisma.evaluationStandardSet.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EvaluationStandardSetDeleteManyArgs>(args?: SelectSubset<T, EvaluationStandardSetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationStandardSets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationStandardSetUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EvaluationStandardSets
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EvaluationStandardSetUpdateManyArgs>(args: SelectSubset<T, EvaluationStandardSetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationStandardSets and returns the data updated in the database.
+     * @param {EvaluationStandardSetUpdateManyAndReturnArgs} args - Arguments to update many EvaluationStandardSets.
+     * @example
+     * // Update many EvaluationStandardSets
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EvaluationStandardSets and only return the `id`
+     * const evaluationStandardSetWithIdOnly = await prisma.evaluationStandardSet.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EvaluationStandardSetUpdateManyAndReturnArgs>(args: SelectSubset<T, EvaluationStandardSetUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EvaluationStandardSet.
+     * @param {EvaluationStandardSetUpsertArgs} args - Arguments to update or create a EvaluationStandardSet.
+     * @example
+     * // Update or create a EvaluationStandardSet
+     * const evaluationStandardSet = await prisma.evaluationStandardSet.upsert({
+     *   create: {
+     *     // ... data to create a EvaluationStandardSet
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EvaluationStandardSet we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EvaluationStandardSetUpsertArgs>(args: SelectSubset<T, EvaluationStandardSetUpsertArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EvaluationStandardSets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationStandardSetCountArgs} args - Arguments to filter EvaluationStandardSets to count.
+     * @example
+     * // Count the number of EvaluationStandardSets
+     * const count = await prisma.evaluationStandardSet.count({
+     *   where: {
+     *     // ... the filter for the EvaluationStandardSets we want to count
+     *   }
+     * })
+    **/
+    count<T extends EvaluationStandardSetCountArgs>(
+      args?: Subset<T, EvaluationStandardSetCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EvaluationStandardSetCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EvaluationStandardSet.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationStandardSetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EvaluationStandardSetAggregateArgs>(args: Subset<T, EvaluationStandardSetAggregateArgs>): Prisma.PrismaPromise<GetEvaluationStandardSetAggregateType<T>>
+
+    /**
+     * Group by EvaluationStandardSet.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationStandardSetGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EvaluationStandardSetGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EvaluationStandardSetGroupByArgs['orderBy'] }
+        : { orderBy?: EvaluationStandardSetGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EvaluationStandardSetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEvaluationStandardSetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EvaluationStandardSet model
+   */
+  readonly fields: EvaluationStandardSetFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EvaluationStandardSet.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EvaluationStandardSetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    standards<T extends EvaluationStandardSet$standardsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationStandardSet$standardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardCatalogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EvaluationStandardSet model
+   */
+  interface EvaluationStandardSetFieldRefs {
+    readonly id: FieldRef<"EvaluationStandardSet", 'String'>
+    readonly code: FieldRef<"EvaluationStandardSet", 'String'>
+    readonly active: FieldRef<"EvaluationStandardSet", 'Boolean'>
+    readonly description: FieldRef<"EvaluationStandardSet", 'String'>
+    readonly deletedAt: FieldRef<"EvaluationStandardSet", 'DateTime'>
+    readonly createdAt: FieldRef<"EvaluationStandardSet", 'DateTime'>
+    readonly updatedAt: FieldRef<"EvaluationStandardSet", 'DateTime'>
+    readonly createdBy: FieldRef<"EvaluationStandardSet", 'String'>
+    readonly name: FieldRef<"EvaluationStandardSet", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EvaluationStandardSet findUnique
+   */
+  export type EvaluationStandardSetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationStandardSet to fetch.
+     */
+    where: EvaluationStandardSetWhereUniqueInput
+  }
+
+  /**
+   * EvaluationStandardSet findUniqueOrThrow
+   */
+  export type EvaluationStandardSetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationStandardSet to fetch.
+     */
+    where: EvaluationStandardSetWhereUniqueInput
+  }
+
+  /**
+   * EvaluationStandardSet findFirst
+   */
+  export type EvaluationStandardSetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationStandardSet to fetch.
+     */
+    where?: EvaluationStandardSetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationStandardSets to fetch.
+     */
+    orderBy?: EvaluationStandardSetOrderByWithRelationInput | EvaluationStandardSetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationStandardSets.
+     */
+    cursor?: EvaluationStandardSetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationStandardSets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationStandardSets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationStandardSets.
+     */
+    distinct?: EvaluationStandardSetScalarFieldEnum | EvaluationStandardSetScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationStandardSet findFirstOrThrow
+   */
+  export type EvaluationStandardSetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationStandardSet to fetch.
+     */
+    where?: EvaluationStandardSetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationStandardSets to fetch.
+     */
+    orderBy?: EvaluationStandardSetOrderByWithRelationInput | EvaluationStandardSetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationStandardSets.
+     */
+    cursor?: EvaluationStandardSetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationStandardSets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationStandardSets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationStandardSets.
+     */
+    distinct?: EvaluationStandardSetScalarFieldEnum | EvaluationStandardSetScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationStandardSet findMany
+   */
+  export type EvaluationStandardSetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationStandardSets to fetch.
+     */
+    where?: EvaluationStandardSetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationStandardSets to fetch.
+     */
+    orderBy?: EvaluationStandardSetOrderByWithRelationInput | EvaluationStandardSetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EvaluationStandardSets.
+     */
+    cursor?: EvaluationStandardSetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationStandardSets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationStandardSets.
+     */
+    skip?: number
+    distinct?: EvaluationStandardSetScalarFieldEnum | EvaluationStandardSetScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationStandardSet create
+   */
+  export type EvaluationStandardSetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EvaluationStandardSet.
+     */
+    data: XOR<EvaluationStandardSetCreateInput, EvaluationStandardSetUncheckedCreateInput>
+  }
+
+  /**
+   * EvaluationStandardSet createMany
+   */
+  export type EvaluationStandardSetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EvaluationStandardSets.
+     */
+    data: EvaluationStandardSetCreateManyInput | EvaluationStandardSetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EvaluationStandardSet createManyAndReturn
+   */
+  export type EvaluationStandardSetCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * The data used to create many EvaluationStandardSets.
+     */
+    data: EvaluationStandardSetCreateManyInput | EvaluationStandardSetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EvaluationStandardSet update
+   */
+  export type EvaluationStandardSetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EvaluationStandardSet.
+     */
+    data: XOR<EvaluationStandardSetUpdateInput, EvaluationStandardSetUncheckedUpdateInput>
+    /**
+     * Choose, which EvaluationStandardSet to update.
+     */
+    where: EvaluationStandardSetWhereUniqueInput
+  }
+
+  /**
+   * EvaluationStandardSet updateMany
+   */
+  export type EvaluationStandardSetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EvaluationStandardSets.
+     */
+    data: XOR<EvaluationStandardSetUpdateManyMutationInput, EvaluationStandardSetUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationStandardSets to update
+     */
+    where?: EvaluationStandardSetWhereInput
+    /**
+     * Limit how many EvaluationStandardSets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationStandardSet updateManyAndReturn
+   */
+  export type EvaluationStandardSetUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * The data used to update EvaluationStandardSets.
+     */
+    data: XOR<EvaluationStandardSetUpdateManyMutationInput, EvaluationStandardSetUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationStandardSets to update
+     */
+    where?: EvaluationStandardSetWhereInput
+    /**
+     * Limit how many EvaluationStandardSets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationStandardSet upsert
+   */
+  export type EvaluationStandardSetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EvaluationStandardSet to update in case it exists.
+     */
+    where: EvaluationStandardSetWhereUniqueInput
+    /**
+     * In case the EvaluationStandardSet found by the `where` argument doesn't exist, create a new EvaluationStandardSet with this data.
+     */
+    create: XOR<EvaluationStandardSetCreateInput, EvaluationStandardSetUncheckedCreateInput>
+    /**
+     * In case the EvaluationStandardSet was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EvaluationStandardSetUpdateInput, EvaluationStandardSetUncheckedUpdateInput>
+  }
+
+  /**
+   * EvaluationStandardSet delete
+   */
+  export type EvaluationStandardSetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    /**
+     * Filter which EvaluationStandardSet to delete.
+     */
+    where: EvaluationStandardSetWhereUniqueInput
+  }
+
+  /**
+   * EvaluationStandardSet deleteMany
+   */
+  export type EvaluationStandardSetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationStandardSets to delete
+     */
+    where?: EvaluationStandardSetWhereInput
+    /**
+     * Limit how many EvaluationStandardSets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationStandardSet.standards
+   */
+  export type EvaluationStandardSet$standardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StandardCatalog
+     */
+    select?: StandardCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StandardCatalog
+     */
+    omit?: StandardCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StandardCatalogInclude<ExtArgs> | null
+    where?: StandardCatalogWhereInput
+    orderBy?: StandardCatalogOrderByWithRelationInput | StandardCatalogOrderByWithRelationInput[]
+    cursor?: StandardCatalogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StandardCatalogScalarFieldEnum | StandardCatalogScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationStandardSet without action
+   */
+  export type EvaluationStandardSetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model StandardCatalog
    */
 
@@ -243676,6 +245024,7 @@ export namespace Prisma {
     createdBy: string | null
     order: number | null
     name: string | null
+    standardSetId: string | null
     objectType: $Enums.StandardCatalogType | null
   }
 
@@ -243690,6 +245039,7 @@ export namespace Prisma {
     createdBy: string | null
     order: number | null
     name: string | null
+    standardSetId: string | null
     objectType: $Enums.StandardCatalogType | null
   }
 
@@ -243704,6 +245054,7 @@ export namespace Prisma {
     createdBy: number
     order: number
     name: number
+    standardSetId: number
     objectType: number
     _all: number
   }
@@ -243728,6 +245079,7 @@ export namespace Prisma {
     createdBy?: true
     order?: true
     name?: true
+    standardSetId?: true
     objectType?: true
   }
 
@@ -243742,6 +245094,7 @@ export namespace Prisma {
     createdBy?: true
     order?: true
     name?: true
+    standardSetId?: true
     objectType?: true
   }
 
@@ -243756,6 +245109,7 @@ export namespace Prisma {
     createdBy?: true
     order?: true
     name?: true
+    standardSetId?: true
     objectType?: true
     _all?: true
   }
@@ -243857,6 +245211,7 @@ export namespace Prisma {
     createdBy: string | null
     order: number
     name: string
+    standardSetId: string | null
     objectType: $Enums.StandardCatalogType
     _count: StandardCatalogCountAggregateOutputType | null
     _avg: StandardCatalogAvgAggregateOutputType | null
@@ -243890,8 +245245,10 @@ export namespace Prisma {
     createdBy?: boolean
     order?: boolean
     name?: boolean
+    standardSetId?: boolean
     objectType?: boolean
     criteria?: boolean | StandardCatalog$criteriaArgs<ExtArgs>
+    standardSet?: boolean | StandardCatalog$standardSetArgs<ExtArgs>
     _count?: boolean | StandardCatalogCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["standardCatalog"]>
 
@@ -243906,7 +245263,9 @@ export namespace Prisma {
     createdBy?: boolean
     order?: boolean
     name?: boolean
+    standardSetId?: boolean
     objectType?: boolean
+    standardSet?: boolean | StandardCatalog$standardSetArgs<ExtArgs>
   }, ExtArgs["result"]["standardCatalog"]>
 
   export type StandardCatalogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -243920,7 +245279,9 @@ export namespace Prisma {
     createdBy?: boolean
     order?: boolean
     name?: boolean
+    standardSetId?: boolean
     objectType?: boolean
+    standardSet?: boolean | StandardCatalog$standardSetArgs<ExtArgs>
   }, ExtArgs["result"]["standardCatalog"]>
 
   export type StandardCatalogSelectScalar = {
@@ -243934,21 +245295,28 @@ export namespace Prisma {
     createdBy?: boolean
     order?: boolean
     name?: boolean
+    standardSetId?: boolean
     objectType?: boolean
   }
 
-  export type StandardCatalogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "order" | "name" | "objectType", ExtArgs["result"]["standardCatalog"]>
+  export type StandardCatalogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "order" | "name" | "standardSetId" | "objectType", ExtArgs["result"]["standardCatalog"]>
   export type StandardCatalogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     criteria?: boolean | StandardCatalog$criteriaArgs<ExtArgs>
+    standardSet?: boolean | StandardCatalog$standardSetArgs<ExtArgs>
     _count?: boolean | StandardCatalogCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type StandardCatalogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type StandardCatalogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type StandardCatalogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    standardSet?: boolean | StandardCatalog$standardSetArgs<ExtArgs>
+  }
+  export type StandardCatalogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    standardSet?: boolean | StandardCatalog$standardSetArgs<ExtArgs>
+  }
 
   export type $StandardCatalogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StandardCatalog"
     objects: {
       criteria: Prisma.$CriterionCatalogPayload<ExtArgs>[]
+      standardSet: Prisma.$EvaluationStandardSetPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -243961,6 +245329,7 @@ export namespace Prisma {
       createdBy: string | null
       order: number
       name: string
+      standardSetId: string | null
       objectType: $Enums.StandardCatalogType
     }, ExtArgs["result"]["standardCatalog"]>
     composites: {}
@@ -244357,6 +245726,7 @@ export namespace Prisma {
   export interface Prisma__StandardCatalogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     criteria<T extends StandardCatalog$criteriaArgs<ExtArgs> = {}>(args?: Subset<T, StandardCatalog$criteriaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionCatalogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    standardSet<T extends StandardCatalog$standardSetArgs<ExtArgs> = {}>(args?: Subset<T, StandardCatalog$standardSetArgs<ExtArgs>>): Prisma__EvaluationStandardSetClient<$Result.GetResult<Prisma.$EvaluationStandardSetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -244396,6 +245766,7 @@ export namespace Prisma {
     readonly createdBy: FieldRef<"StandardCatalog", 'String'>
     readonly order: FieldRef<"StandardCatalog", 'Int'>
     readonly name: FieldRef<"StandardCatalog", 'String'>
+    readonly standardSetId: FieldRef<"StandardCatalog", 'String'>
     readonly objectType: FieldRef<"StandardCatalog", 'StandardCatalogType'>
   }
     
@@ -244646,6 +246017,10 @@ export namespace Prisma {
      */
     data: StandardCatalogCreateManyInput | StandardCatalogCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StandardCatalogIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -244716,6 +246091,10 @@ export namespace Prisma {
      * Limit how many StandardCatalogs to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StandardCatalogIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -244806,6 +246185,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CriterionCatalogScalarFieldEnum | CriterionCatalogScalarFieldEnum[]
+  }
+
+  /**
+   * StandardCatalog.standardSet
+   */
+  export type StandardCatalog$standardSetArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationStandardSet
+     */
+    select?: EvaluationStandardSetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationStandardSet
+     */
+    omit?: EvaluationStandardSetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationStandardSetInclude<ExtArgs> | null
+    where?: EvaluationStandardSetWhereInput
   }
 
   /**
@@ -258244,6 +259642,1128 @@ export namespace Prisma {
 
 
   /**
+   * Model EvaluationMemberRole
+   */
+
+  export type AggregateEvaluationMemberRole = {
+    _count: EvaluationMemberRoleCountAggregateOutputType | null
+    _min: EvaluationMemberRoleMinAggregateOutputType | null
+    _max: EvaluationMemberRoleMaxAggregateOutputType | null
+  }
+
+  export type EvaluationMemberRoleMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    name: string | null
+  }
+
+  export type EvaluationMemberRoleMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    name: string | null
+  }
+
+  export type EvaluationMemberRoleCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    name: number
+    _all: number
+  }
+
+
+  export type EvaluationMemberRoleMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+  }
+
+  export type EvaluationMemberRoleMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+  }
+
+  export type EvaluationMemberRoleCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+    _all?: true
+  }
+
+  export type EvaluationMemberRoleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationMemberRole to aggregate.
+     */
+    where?: EvaluationMemberRoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationMemberRoles to fetch.
+     */
+    orderBy?: EvaluationMemberRoleOrderByWithRelationInput | EvaluationMemberRoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EvaluationMemberRoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationMemberRoles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationMemberRoles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EvaluationMemberRoles
+    **/
+    _count?: true | EvaluationMemberRoleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EvaluationMemberRoleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EvaluationMemberRoleMaxAggregateInputType
+  }
+
+  export type GetEvaluationMemberRoleAggregateType<T extends EvaluationMemberRoleAggregateArgs> = {
+        [P in keyof T & keyof AggregateEvaluationMemberRole]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEvaluationMemberRole[P]>
+      : GetScalarType<T[P], AggregateEvaluationMemberRole[P]>
+  }
+
+
+
+
+  export type EvaluationMemberRoleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationMemberRoleWhereInput
+    orderBy?: EvaluationMemberRoleOrderByWithAggregationInput | EvaluationMemberRoleOrderByWithAggregationInput[]
+    by: EvaluationMemberRoleScalarFieldEnum[] | EvaluationMemberRoleScalarFieldEnum
+    having?: EvaluationMemberRoleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EvaluationMemberRoleCountAggregateInputType | true
+    _min?: EvaluationMemberRoleMinAggregateInputType
+    _max?: EvaluationMemberRoleMaxAggregateInputType
+  }
+
+  export type EvaluationMemberRoleGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    name: string
+    _count: EvaluationMemberRoleCountAggregateOutputType | null
+    _min: EvaluationMemberRoleMinAggregateOutputType | null
+    _max: EvaluationMemberRoleMaxAggregateOutputType | null
+  }
+
+  type GetEvaluationMemberRoleGroupByPayload<T extends EvaluationMemberRoleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EvaluationMemberRoleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EvaluationMemberRoleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EvaluationMemberRoleGroupByOutputType[P]>
+            : GetScalarType<T[P], EvaluationMemberRoleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EvaluationMemberRoleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    evaluationCouncilMember?: boolean | EvaluationMemberRole$evaluationCouncilMemberArgs<ExtArgs>
+    _count?: boolean | EvaluationMemberRoleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationMemberRole"]>
+
+  export type EvaluationMemberRoleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["evaluationMemberRole"]>
+
+  export type EvaluationMemberRoleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["evaluationMemberRole"]>
+
+  export type EvaluationMemberRoleSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+  }
+
+  export type EvaluationMemberRoleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["evaluationMemberRole"]>
+  export type EvaluationMemberRoleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evaluationCouncilMember?: boolean | EvaluationMemberRole$evaluationCouncilMemberArgs<ExtArgs>
+    _count?: boolean | EvaluationMemberRoleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type EvaluationMemberRoleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type EvaluationMemberRoleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $EvaluationMemberRolePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EvaluationMemberRole"
+    objects: {
+      evaluationCouncilMember: Prisma.$EvaluationCouncilMemberPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      name: string
+    }, ExtArgs["result"]["evaluationMemberRole"]>
+    composites: {}
+  }
+
+  type EvaluationMemberRoleGetPayload<S extends boolean | null | undefined | EvaluationMemberRoleDefaultArgs> = $Result.GetResult<Prisma.$EvaluationMemberRolePayload, S>
+
+  type EvaluationMemberRoleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EvaluationMemberRoleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EvaluationMemberRoleCountAggregateInputType | true
+    }
+
+  export interface EvaluationMemberRoleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EvaluationMemberRole'], meta: { name: 'EvaluationMemberRole' } }
+    /**
+     * Find zero or one EvaluationMemberRole that matches the filter.
+     * @param {EvaluationMemberRoleFindUniqueArgs} args - Arguments to find a EvaluationMemberRole
+     * @example
+     * // Get one EvaluationMemberRole
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EvaluationMemberRoleFindUniqueArgs>(args: SelectSubset<T, EvaluationMemberRoleFindUniqueArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EvaluationMemberRole that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EvaluationMemberRoleFindUniqueOrThrowArgs} args - Arguments to find a EvaluationMemberRole
+     * @example
+     * // Get one EvaluationMemberRole
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EvaluationMemberRoleFindUniqueOrThrowArgs>(args: SelectSubset<T, EvaluationMemberRoleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationMemberRole that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationMemberRoleFindFirstArgs} args - Arguments to find a EvaluationMemberRole
+     * @example
+     * // Get one EvaluationMemberRole
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EvaluationMemberRoleFindFirstArgs>(args?: SelectSubset<T, EvaluationMemberRoleFindFirstArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationMemberRole that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationMemberRoleFindFirstOrThrowArgs} args - Arguments to find a EvaluationMemberRole
+     * @example
+     * // Get one EvaluationMemberRole
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EvaluationMemberRoleFindFirstOrThrowArgs>(args?: SelectSubset<T, EvaluationMemberRoleFindFirstOrThrowArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EvaluationMemberRoles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationMemberRoleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EvaluationMemberRoles
+     * const evaluationMemberRoles = await prisma.evaluationMemberRole.findMany()
+     * 
+     * // Get first 10 EvaluationMemberRoles
+     * const evaluationMemberRoles = await prisma.evaluationMemberRole.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const evaluationMemberRoleWithIdOnly = await prisma.evaluationMemberRole.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EvaluationMemberRoleFindManyArgs>(args?: SelectSubset<T, EvaluationMemberRoleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EvaluationMemberRole.
+     * @param {EvaluationMemberRoleCreateArgs} args - Arguments to create a EvaluationMemberRole.
+     * @example
+     * // Create one EvaluationMemberRole
+     * const EvaluationMemberRole = await prisma.evaluationMemberRole.create({
+     *   data: {
+     *     // ... data to create a EvaluationMemberRole
+     *   }
+     * })
+     * 
+     */
+    create<T extends EvaluationMemberRoleCreateArgs>(args: SelectSubset<T, EvaluationMemberRoleCreateArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EvaluationMemberRoles.
+     * @param {EvaluationMemberRoleCreateManyArgs} args - Arguments to create many EvaluationMemberRoles.
+     * @example
+     * // Create many EvaluationMemberRoles
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EvaluationMemberRoleCreateManyArgs>(args?: SelectSubset<T, EvaluationMemberRoleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EvaluationMemberRoles and returns the data saved in the database.
+     * @param {EvaluationMemberRoleCreateManyAndReturnArgs} args - Arguments to create many EvaluationMemberRoles.
+     * @example
+     * // Create many EvaluationMemberRoles
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EvaluationMemberRoles and only return the `id`
+     * const evaluationMemberRoleWithIdOnly = await prisma.evaluationMemberRole.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EvaluationMemberRoleCreateManyAndReturnArgs>(args?: SelectSubset<T, EvaluationMemberRoleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EvaluationMemberRole.
+     * @param {EvaluationMemberRoleDeleteArgs} args - Arguments to delete one EvaluationMemberRole.
+     * @example
+     * // Delete one EvaluationMemberRole
+     * const EvaluationMemberRole = await prisma.evaluationMemberRole.delete({
+     *   where: {
+     *     // ... filter to delete one EvaluationMemberRole
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EvaluationMemberRoleDeleteArgs>(args: SelectSubset<T, EvaluationMemberRoleDeleteArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EvaluationMemberRole.
+     * @param {EvaluationMemberRoleUpdateArgs} args - Arguments to update one EvaluationMemberRole.
+     * @example
+     * // Update one EvaluationMemberRole
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EvaluationMemberRoleUpdateArgs>(args: SelectSubset<T, EvaluationMemberRoleUpdateArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EvaluationMemberRoles.
+     * @param {EvaluationMemberRoleDeleteManyArgs} args - Arguments to filter EvaluationMemberRoles to delete.
+     * @example
+     * // Delete a few EvaluationMemberRoles
+     * const { count } = await prisma.evaluationMemberRole.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EvaluationMemberRoleDeleteManyArgs>(args?: SelectSubset<T, EvaluationMemberRoleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationMemberRoles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationMemberRoleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EvaluationMemberRoles
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EvaluationMemberRoleUpdateManyArgs>(args: SelectSubset<T, EvaluationMemberRoleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationMemberRoles and returns the data updated in the database.
+     * @param {EvaluationMemberRoleUpdateManyAndReturnArgs} args - Arguments to update many EvaluationMemberRoles.
+     * @example
+     * // Update many EvaluationMemberRoles
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EvaluationMemberRoles and only return the `id`
+     * const evaluationMemberRoleWithIdOnly = await prisma.evaluationMemberRole.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EvaluationMemberRoleUpdateManyAndReturnArgs>(args: SelectSubset<T, EvaluationMemberRoleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EvaluationMemberRole.
+     * @param {EvaluationMemberRoleUpsertArgs} args - Arguments to update or create a EvaluationMemberRole.
+     * @example
+     * // Update or create a EvaluationMemberRole
+     * const evaluationMemberRole = await prisma.evaluationMemberRole.upsert({
+     *   create: {
+     *     // ... data to create a EvaluationMemberRole
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EvaluationMemberRole we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EvaluationMemberRoleUpsertArgs>(args: SelectSubset<T, EvaluationMemberRoleUpsertArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EvaluationMemberRoles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationMemberRoleCountArgs} args - Arguments to filter EvaluationMemberRoles to count.
+     * @example
+     * // Count the number of EvaluationMemberRoles
+     * const count = await prisma.evaluationMemberRole.count({
+     *   where: {
+     *     // ... the filter for the EvaluationMemberRoles we want to count
+     *   }
+     * })
+    **/
+    count<T extends EvaluationMemberRoleCountArgs>(
+      args?: Subset<T, EvaluationMemberRoleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EvaluationMemberRoleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EvaluationMemberRole.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationMemberRoleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EvaluationMemberRoleAggregateArgs>(args: Subset<T, EvaluationMemberRoleAggregateArgs>): Prisma.PrismaPromise<GetEvaluationMemberRoleAggregateType<T>>
+
+    /**
+     * Group by EvaluationMemberRole.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationMemberRoleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EvaluationMemberRoleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EvaluationMemberRoleGroupByArgs['orderBy'] }
+        : { orderBy?: EvaluationMemberRoleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EvaluationMemberRoleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEvaluationMemberRoleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EvaluationMemberRole model
+   */
+  readonly fields: EvaluationMemberRoleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EvaluationMemberRole.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EvaluationMemberRoleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    evaluationCouncilMember<T extends EvaluationMemberRole$evaluationCouncilMemberArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationMemberRole$evaluationCouncilMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EvaluationMemberRole model
+   */
+  interface EvaluationMemberRoleFieldRefs {
+    readonly id: FieldRef<"EvaluationMemberRole", 'String'>
+    readonly code: FieldRef<"EvaluationMemberRole", 'String'>
+    readonly active: FieldRef<"EvaluationMemberRole", 'Boolean'>
+    readonly description: FieldRef<"EvaluationMemberRole", 'String'>
+    readonly deletedAt: FieldRef<"EvaluationMemberRole", 'DateTime'>
+    readonly createdAt: FieldRef<"EvaluationMemberRole", 'DateTime'>
+    readonly updatedAt: FieldRef<"EvaluationMemberRole", 'DateTime'>
+    readonly createdBy: FieldRef<"EvaluationMemberRole", 'String'>
+    readonly name: FieldRef<"EvaluationMemberRole", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EvaluationMemberRole findUnique
+   */
+  export type EvaluationMemberRoleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationMemberRole to fetch.
+     */
+    where: EvaluationMemberRoleWhereUniqueInput
+  }
+
+  /**
+   * EvaluationMemberRole findUniqueOrThrow
+   */
+  export type EvaluationMemberRoleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationMemberRole to fetch.
+     */
+    where: EvaluationMemberRoleWhereUniqueInput
+  }
+
+  /**
+   * EvaluationMemberRole findFirst
+   */
+  export type EvaluationMemberRoleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationMemberRole to fetch.
+     */
+    where?: EvaluationMemberRoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationMemberRoles to fetch.
+     */
+    orderBy?: EvaluationMemberRoleOrderByWithRelationInput | EvaluationMemberRoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationMemberRoles.
+     */
+    cursor?: EvaluationMemberRoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationMemberRoles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationMemberRoles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationMemberRoles.
+     */
+    distinct?: EvaluationMemberRoleScalarFieldEnum | EvaluationMemberRoleScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationMemberRole findFirstOrThrow
+   */
+  export type EvaluationMemberRoleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationMemberRole to fetch.
+     */
+    where?: EvaluationMemberRoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationMemberRoles to fetch.
+     */
+    orderBy?: EvaluationMemberRoleOrderByWithRelationInput | EvaluationMemberRoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationMemberRoles.
+     */
+    cursor?: EvaluationMemberRoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationMemberRoles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationMemberRoles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationMemberRoles.
+     */
+    distinct?: EvaluationMemberRoleScalarFieldEnum | EvaluationMemberRoleScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationMemberRole findMany
+   */
+  export type EvaluationMemberRoleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationMemberRoles to fetch.
+     */
+    where?: EvaluationMemberRoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationMemberRoles to fetch.
+     */
+    orderBy?: EvaluationMemberRoleOrderByWithRelationInput | EvaluationMemberRoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EvaluationMemberRoles.
+     */
+    cursor?: EvaluationMemberRoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationMemberRoles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationMemberRoles.
+     */
+    skip?: number
+    distinct?: EvaluationMemberRoleScalarFieldEnum | EvaluationMemberRoleScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationMemberRole create
+   */
+  export type EvaluationMemberRoleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EvaluationMemberRole.
+     */
+    data: XOR<EvaluationMemberRoleCreateInput, EvaluationMemberRoleUncheckedCreateInput>
+  }
+
+  /**
+   * EvaluationMemberRole createMany
+   */
+  export type EvaluationMemberRoleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EvaluationMemberRoles.
+     */
+    data: EvaluationMemberRoleCreateManyInput | EvaluationMemberRoleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EvaluationMemberRole createManyAndReturn
+   */
+  export type EvaluationMemberRoleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * The data used to create many EvaluationMemberRoles.
+     */
+    data: EvaluationMemberRoleCreateManyInput | EvaluationMemberRoleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EvaluationMemberRole update
+   */
+  export type EvaluationMemberRoleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EvaluationMemberRole.
+     */
+    data: XOR<EvaluationMemberRoleUpdateInput, EvaluationMemberRoleUncheckedUpdateInput>
+    /**
+     * Choose, which EvaluationMemberRole to update.
+     */
+    where: EvaluationMemberRoleWhereUniqueInput
+  }
+
+  /**
+   * EvaluationMemberRole updateMany
+   */
+  export type EvaluationMemberRoleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EvaluationMemberRoles.
+     */
+    data: XOR<EvaluationMemberRoleUpdateManyMutationInput, EvaluationMemberRoleUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationMemberRoles to update
+     */
+    where?: EvaluationMemberRoleWhereInput
+    /**
+     * Limit how many EvaluationMemberRoles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationMemberRole updateManyAndReturn
+   */
+  export type EvaluationMemberRoleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * The data used to update EvaluationMemberRoles.
+     */
+    data: XOR<EvaluationMemberRoleUpdateManyMutationInput, EvaluationMemberRoleUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationMemberRoles to update
+     */
+    where?: EvaluationMemberRoleWhereInput
+    /**
+     * Limit how many EvaluationMemberRoles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationMemberRole upsert
+   */
+  export type EvaluationMemberRoleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EvaluationMemberRole to update in case it exists.
+     */
+    where: EvaluationMemberRoleWhereUniqueInput
+    /**
+     * In case the EvaluationMemberRole found by the `where` argument doesn't exist, create a new EvaluationMemberRole with this data.
+     */
+    create: XOR<EvaluationMemberRoleCreateInput, EvaluationMemberRoleUncheckedCreateInput>
+    /**
+     * In case the EvaluationMemberRole was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EvaluationMemberRoleUpdateInput, EvaluationMemberRoleUncheckedUpdateInput>
+  }
+
+  /**
+   * EvaluationMemberRole delete
+   */
+  export type EvaluationMemberRoleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    /**
+     * Filter which EvaluationMemberRole to delete.
+     */
+    where: EvaluationMemberRoleWhereUniqueInput
+  }
+
+  /**
+   * EvaluationMemberRole deleteMany
+   */
+  export type EvaluationMemberRoleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationMemberRoles to delete
+     */
+    where?: EvaluationMemberRoleWhereInput
+    /**
+     * Limit how many EvaluationMemberRoles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationMemberRole.evaluationCouncilMember
+   */
+  export type EvaluationMemberRole$evaluationCouncilMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCouncilMember
+     */
+    select?: EvaluationCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCouncilMember
+     */
+    omit?: EvaluationCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCouncilMemberInclude<ExtArgs> | null
+    where?: EvaluationCouncilMemberWhereInput
+    orderBy?: EvaluationCouncilMemberOrderByWithRelationInput | EvaluationCouncilMemberOrderByWithRelationInput[]
+    cursor?: EvaluationCouncilMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvaluationCouncilMemberScalarFieldEnum | EvaluationCouncilMemberScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationMemberRole without action
+   */
+  export type EvaluationMemberRoleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model EvaluationCouncil
    */
 
@@ -259417,6 +261937,7 @@ export namespace Prisma {
     createdBy: string | null
     evaluationCouncilId: string | null
     lecturerId: string | null
+    roleId: string | null
   }
 
   export type EvaluationCouncilMemberMaxAggregateOutputType = {
@@ -259430,6 +261951,7 @@ export namespace Prisma {
     createdBy: string | null
     evaluationCouncilId: string | null
     lecturerId: string | null
+    roleId: string | null
   }
 
   export type EvaluationCouncilMemberCountAggregateOutputType = {
@@ -259443,7 +261965,7 @@ export namespace Prisma {
     createdBy: number
     evaluationCouncilId: number
     lecturerId: number
-    role: number
+    roleId: number
     _all: number
   }
 
@@ -259459,6 +261981,7 @@ export namespace Prisma {
     createdBy?: true
     evaluationCouncilId?: true
     lecturerId?: true
+    roleId?: true
   }
 
   export type EvaluationCouncilMemberMaxAggregateInputType = {
@@ -259472,6 +261995,7 @@ export namespace Prisma {
     createdBy?: true
     evaluationCouncilId?: true
     lecturerId?: true
+    roleId?: true
   }
 
   export type EvaluationCouncilMemberCountAggregateInputType = {
@@ -259485,7 +262009,7 @@ export namespace Prisma {
     createdBy?: true
     evaluationCouncilId?: true
     lecturerId?: true
-    role?: true
+    roleId?: true
     _all?: true
   }
 
@@ -259572,7 +262096,7 @@ export namespace Prisma {
     createdBy: string | null
     evaluationCouncilId: string
     lecturerId: string
-    role: $Enums.EvaluationMemberRole[]
+    roleId: string | null
     _count: EvaluationCouncilMemberCountAggregateOutputType | null
     _min: EvaluationCouncilMemberMinAggregateOutputType | null
     _max: EvaluationCouncilMemberMaxAggregateOutputType | null
@@ -259603,9 +262127,10 @@ export namespace Prisma {
     createdBy?: boolean
     evaluationCouncilId?: boolean
     lecturerId?: boolean
-    role?: boolean
+    roleId?: boolean
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    role?: boolean | EvaluationCouncilMember$roleArgs<ExtArgs>
     evaluationCriterions?: boolean | EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs>
     _count?: boolean | EvaluationCouncilMemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationCouncilMember"]>
@@ -259621,9 +262146,10 @@ export namespace Prisma {
     createdBy?: boolean
     evaluationCouncilId?: boolean
     lecturerId?: boolean
-    role?: boolean
+    roleId?: boolean
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    role?: boolean | EvaluationCouncilMember$roleArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationCouncilMember"]>
 
   export type EvaluationCouncilMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -259637,9 +262163,10 @@ export namespace Prisma {
     createdBy?: boolean
     evaluationCouncilId?: boolean
     lecturerId?: boolean
-    role?: boolean
+    roleId?: boolean
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    role?: boolean | EvaluationCouncilMember$roleArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationCouncilMember"]>
 
   export type EvaluationCouncilMemberSelectScalar = {
@@ -259653,23 +262180,26 @@ export namespace Prisma {
     createdBy?: boolean
     evaluationCouncilId?: boolean
     lecturerId?: boolean
-    role?: boolean
+    roleId?: boolean
   }
 
-  export type EvaluationCouncilMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "evaluationCouncilId" | "lecturerId" | "role", ExtArgs["result"]["evaluationCouncilMember"]>
+  export type EvaluationCouncilMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "evaluationCouncilId" | "lecturerId" | "roleId", ExtArgs["result"]["evaluationCouncilMember"]>
   export type EvaluationCouncilMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    role?: boolean | EvaluationCouncilMember$roleArgs<ExtArgs>
     evaluationCriterions?: boolean | EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs>
     _count?: boolean | EvaluationCouncilMemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EvaluationCouncilMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    role?: boolean | EvaluationCouncilMember$roleArgs<ExtArgs>
   }
   export type EvaluationCouncilMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    role?: boolean | EvaluationCouncilMember$roleArgs<ExtArgs>
   }
 
   export type $EvaluationCouncilMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -259677,6 +262207,7 @@ export namespace Prisma {
     objects: {
       evaluationCouncil: Prisma.$EvaluationCouncilPayload<ExtArgs>
       lecturer: Prisma.$LecturerPayload<ExtArgs>
+      role: Prisma.$EvaluationMemberRolePayload<ExtArgs> | null
       evaluationCriterions: Prisma.$EvaluationCriterionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -259690,7 +262221,7 @@ export namespace Prisma {
       createdBy: string | null
       evaluationCouncilId: string
       lecturerId: string
-      role: $Enums.EvaluationMemberRole[]
+      roleId: string | null
     }, ExtArgs["result"]["evaluationCouncilMember"]>
     composites: {}
   }
@@ -260087,6 +262618,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     evaluationCouncil<T extends EvaluationCouncilDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCouncilDefaultArgs<ExtArgs>>): Prisma__EvaluationCouncilClient<$Result.GetResult<Prisma.$EvaluationCouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     lecturer<T extends LecturerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerDefaultArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    role<T extends EvaluationCouncilMember$roleArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCouncilMember$roleArgs<ExtArgs>>): Prisma__EvaluationMemberRoleClient<$Result.GetResult<Prisma.$EvaluationMemberRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     evaluationCriterions<T extends EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -260127,7 +262659,7 @@ export namespace Prisma {
     readonly createdBy: FieldRef<"EvaluationCouncilMember", 'String'>
     readonly evaluationCouncilId: FieldRef<"EvaluationCouncilMember", 'String'>
     readonly lecturerId: FieldRef<"EvaluationCouncilMember", 'String'>
-    readonly role: FieldRef<"EvaluationCouncilMember", 'EvaluationMemberRole[]'>
+    readonly roleId: FieldRef<"EvaluationCouncilMember", 'String'>
   }
     
 
@@ -260521,6 +263053,25 @@ export namespace Prisma {
      * Limit how many EvaluationCouncilMembers to delete.
      */
     limit?: number
+  }
+
+  /**
+   * EvaluationCouncilMember.role
+   */
+  export type EvaluationCouncilMember$roleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationMemberRole
+     */
+    select?: EvaluationMemberRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationMemberRole
+     */
+    omit?: EvaluationMemberRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationMemberRoleInclude<ExtArgs> | null
+    where?: EvaluationMemberRoleWhereInput
   }
 
   /**
@@ -363045,6 +365596,21 @@ export namespace Prisma {
   export type EvaluationPeriodScalarFieldEnum = (typeof EvaluationPeriodScalarFieldEnum)[keyof typeof EvaluationPeriodScalarFieldEnum]
 
 
+  export const EvaluationStandardSetScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    name: 'name'
+  };
+
+  export type EvaluationStandardSetScalarFieldEnum = (typeof EvaluationStandardSetScalarFieldEnum)[keyof typeof EvaluationStandardSetScalarFieldEnum]
+
+
   export const StandardCatalogScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -363056,6 +365622,7 @@ export namespace Prisma {
     createdBy: 'createdBy',
     order: 'order',
     name: 'name',
+    standardSetId: 'standardSetId',
     objectType: 'objectType'
   };
 
@@ -363265,6 +365832,21 @@ export namespace Prisma {
   export type AnalysisFormEvidenceScalarFieldEnum = (typeof AnalysisFormEvidenceScalarFieldEnum)[keyof typeof AnalysisFormEvidenceScalarFieldEnum]
 
 
+  export const EvaluationMemberRoleScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    name: 'name'
+  };
+
+  export type EvaluationMemberRoleScalarFieldEnum = (typeof EvaluationMemberRoleScalarFieldEnum)[keyof typeof EvaluationMemberRoleScalarFieldEnum]
+
+
   export const EvaluationCouncilScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -363292,7 +365874,7 @@ export namespace Prisma {
     createdBy: 'createdBy',
     evaluationCouncilId: 'evaluationCouncilId',
     lecturerId: 'lecturerId',
-    role: 'role'
+    roleId: 'roleId'
   };
 
   export type EvaluationCouncilMemberScalarFieldEnum = (typeof EvaluationCouncilMemberScalarFieldEnum)[keyof typeof EvaluationCouncilMemberScalarFieldEnum]
@@ -367210,12 +369792,24 @@ export namespace Prisma {
   export type EvaluationPeriodOrderByRelevanceFieldEnum = (typeof EvaluationPeriodOrderByRelevanceFieldEnum)[keyof typeof EvaluationPeriodOrderByRelevanceFieldEnum]
 
 
-  export const StandardCatalogOrderByRelevanceFieldEnum: {
+  export const EvaluationStandardSetOrderByRelevanceFieldEnum: {
     id: 'id',
     code: 'code',
     description: 'description',
     createdBy: 'createdBy',
     name: 'name'
+  };
+
+  export type EvaluationStandardSetOrderByRelevanceFieldEnum = (typeof EvaluationStandardSetOrderByRelevanceFieldEnum)[keyof typeof EvaluationStandardSetOrderByRelevanceFieldEnum]
+
+
+  export const StandardCatalogOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    createdBy: 'createdBy',
+    name: 'name',
+    standardSetId: 'standardSetId'
   };
 
   export type StandardCatalogOrderByRelevanceFieldEnum = (typeof StandardCatalogOrderByRelevanceFieldEnum)[keyof typeof StandardCatalogOrderByRelevanceFieldEnum]
@@ -367369,6 +369963,17 @@ export namespace Prisma {
   export type AnalysisFormEvidenceOrderByRelevanceFieldEnum = (typeof AnalysisFormEvidenceOrderByRelevanceFieldEnum)[keyof typeof AnalysisFormEvidenceOrderByRelevanceFieldEnum]
 
 
+  export const EvaluationMemberRoleOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    createdBy: 'createdBy',
+    name: 'name'
+  };
+
+  export type EvaluationMemberRoleOrderByRelevanceFieldEnum = (typeof EvaluationMemberRoleOrderByRelevanceFieldEnum)[keyof typeof EvaluationMemberRoleOrderByRelevanceFieldEnum]
+
+
   export const EvaluationCouncilOrderByRelevanceFieldEnum: {
     id: 'id',
     code: 'code',
@@ -367387,7 +369992,8 @@ export namespace Prisma {
     description: 'description',
     createdBy: 'createdBy',
     evaluationCouncilId: 'evaluationCouncilId',
-    lecturerId: 'lecturerId'
+    lecturerId: 'lecturerId',
+    roleId: 'roleId'
   };
 
   export type EvaluationCouncilMemberOrderByRelevanceFieldEnum = (typeof EvaluationCouncilMemberOrderByRelevanceFieldEnum)[keyof typeof EvaluationCouncilMemberOrderByRelevanceFieldEnum]
@@ -369113,20 +371719,6 @@ export namespace Prisma {
    * Reference to a field of type 'EvaluationStatus[]'
    */
   export type ListEnumEvaluationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EvaluationStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'EvaluationMemberRole[]'
-   */
-  export type ListEnumEvaluationMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EvaluationMemberRole[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'EvaluationMemberRole'
-   */
-  export type EnumEvaluationMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EvaluationMemberRole'>
     
 
 
@@ -388812,6 +391404,82 @@ export namespace Prisma {
     conclude?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
   }
 
+  export type EvaluationStandardSetWhereInput = {
+    AND?: EvaluationStandardSetWhereInput | EvaluationStandardSetWhereInput[]
+    OR?: EvaluationStandardSetWhereInput[]
+    NOT?: EvaluationStandardSetWhereInput | EvaluationStandardSetWhereInput[]
+    id?: StringFilter<"EvaluationStandardSet"> | string
+    code?: StringNullableFilter<"EvaluationStandardSet"> | string | null
+    active?: BoolFilter<"EvaluationStandardSet"> | boolean
+    description?: StringNullableFilter<"EvaluationStandardSet"> | string | null
+    deletedAt?: DateTimeNullableFilter<"EvaluationStandardSet"> | Date | string | null
+    createdAt?: DateTimeFilter<"EvaluationStandardSet"> | Date | string
+    updatedAt?: DateTimeFilter<"EvaluationStandardSet"> | Date | string
+    createdBy?: UuidNullableFilter<"EvaluationStandardSet"> | string | null
+    name?: StringFilter<"EvaluationStandardSet"> | string
+    standards?: StandardCatalogListRelationFilter
+  }
+
+  export type EvaluationStandardSetOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    name?: SortOrder
+    standards?: StandardCatalogOrderByRelationAggregateInput
+    _relevance?: EvaluationStandardSetOrderByRelevanceInput
+  }
+
+  export type EvaluationStandardSetWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    name?: string
+    AND?: EvaluationStandardSetWhereInput | EvaluationStandardSetWhereInput[]
+    OR?: EvaluationStandardSetWhereInput[]
+    NOT?: EvaluationStandardSetWhereInput | EvaluationStandardSetWhereInput[]
+    active?: BoolFilter<"EvaluationStandardSet"> | boolean
+    description?: StringNullableFilter<"EvaluationStandardSet"> | string | null
+    deletedAt?: DateTimeNullableFilter<"EvaluationStandardSet"> | Date | string | null
+    createdAt?: DateTimeFilter<"EvaluationStandardSet"> | Date | string
+    updatedAt?: DateTimeFilter<"EvaluationStandardSet"> | Date | string
+    createdBy?: UuidNullableFilter<"EvaluationStandardSet"> | string | null
+    standards?: StandardCatalogListRelationFilter
+  }, "id" | "code" | "name">
+
+  export type EvaluationStandardSetOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    name?: SortOrder
+    _count?: EvaluationStandardSetCountOrderByAggregateInput
+    _max?: EvaluationStandardSetMaxOrderByAggregateInput
+    _min?: EvaluationStandardSetMinOrderByAggregateInput
+  }
+
+  export type EvaluationStandardSetScalarWhereWithAggregatesInput = {
+    AND?: EvaluationStandardSetScalarWhereWithAggregatesInput | EvaluationStandardSetScalarWhereWithAggregatesInput[]
+    OR?: EvaluationStandardSetScalarWhereWithAggregatesInput[]
+    NOT?: EvaluationStandardSetScalarWhereWithAggregatesInput | EvaluationStandardSetScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"EvaluationStandardSet"> | string
+    code?: StringNullableWithAggregatesFilter<"EvaluationStandardSet"> | string | null
+    active?: BoolWithAggregatesFilter<"EvaluationStandardSet"> | boolean
+    description?: StringNullableWithAggregatesFilter<"EvaluationStandardSet"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"EvaluationStandardSet"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EvaluationStandardSet"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EvaluationStandardSet"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"EvaluationStandardSet"> | string | null
+    name?: StringWithAggregatesFilter<"EvaluationStandardSet"> | string
+  }
+
   export type StandardCatalogWhereInput = {
     AND?: StandardCatalogWhereInput | StandardCatalogWhereInput[]
     OR?: StandardCatalogWhereInput[]
@@ -388826,8 +391494,10 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"StandardCatalog"> | string | null
     order?: IntFilter<"StandardCatalog"> | number
     name?: StringFilter<"StandardCatalog"> | string
+    standardSetId?: StringNullableFilter<"StandardCatalog"> | string | null
     objectType?: EnumStandardCatalogTypeFilter<"StandardCatalog"> | $Enums.StandardCatalogType
     criteria?: CriterionCatalogListRelationFilter
+    standardSet?: XOR<EvaluationStandardSetNullableScalarRelationFilter, EvaluationStandardSetWhereInput> | null
   }
 
   export type StandardCatalogOrderByWithRelationInput = {
@@ -388841,8 +391511,10 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     order?: SortOrder
     name?: SortOrder
+    standardSetId?: SortOrderInput | SortOrder
     objectType?: SortOrder
     criteria?: CriterionCatalogOrderByRelationAggregateInput
+    standardSet?: EvaluationStandardSetOrderByWithRelationInput
     _relevance?: StandardCatalogOrderByRelevanceInput
   }
 
@@ -388860,8 +391532,10 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"StandardCatalog"> | string | null
     order?: IntFilter<"StandardCatalog"> | number
     name?: StringFilter<"StandardCatalog"> | string
+    standardSetId?: StringNullableFilter<"StandardCatalog"> | string | null
     objectType?: EnumStandardCatalogTypeFilter<"StandardCatalog"> | $Enums.StandardCatalogType
     criteria?: CriterionCatalogListRelationFilter
+    standardSet?: XOR<EvaluationStandardSetNullableScalarRelationFilter, EvaluationStandardSetWhereInput> | null
   }, "id" | "code">
 
   export type StandardCatalogOrderByWithAggregationInput = {
@@ -388875,6 +391549,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     order?: SortOrder
     name?: SortOrder
+    standardSetId?: SortOrderInput | SortOrder
     objectType?: SortOrder
     _count?: StandardCatalogCountOrderByAggregateInput
     _avg?: StandardCatalogAvgOrderByAggregateInput
@@ -388897,6 +391572,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"StandardCatalog"> | string | null
     order?: IntWithAggregatesFilter<"StandardCatalog"> | number
     name?: StringWithAggregatesFilter<"StandardCatalog"> | string
+    standardSetId?: StringNullableWithAggregatesFilter<"StandardCatalog"> | string | null
     objectType?: EnumStandardCatalogTypeWithAggregatesFilter<"StandardCatalog"> | $Enums.StandardCatalogType
   }
 
@@ -389996,6 +392672,82 @@ export namespace Prisma {
     order?: IntWithAggregatesFilter<"AnalysisFormEvidence"> | number
   }
 
+  export type EvaluationMemberRoleWhereInput = {
+    AND?: EvaluationMemberRoleWhereInput | EvaluationMemberRoleWhereInput[]
+    OR?: EvaluationMemberRoleWhereInput[]
+    NOT?: EvaluationMemberRoleWhereInput | EvaluationMemberRoleWhereInput[]
+    id?: StringFilter<"EvaluationMemberRole"> | string
+    code?: StringNullableFilter<"EvaluationMemberRole"> | string | null
+    active?: BoolFilter<"EvaluationMemberRole"> | boolean
+    description?: StringNullableFilter<"EvaluationMemberRole"> | string | null
+    deletedAt?: DateTimeNullableFilter<"EvaluationMemberRole"> | Date | string | null
+    createdAt?: DateTimeFilter<"EvaluationMemberRole"> | Date | string
+    updatedAt?: DateTimeFilter<"EvaluationMemberRole"> | Date | string
+    createdBy?: UuidNullableFilter<"EvaluationMemberRole"> | string | null
+    name?: StringFilter<"EvaluationMemberRole"> | string
+    evaluationCouncilMember?: EvaluationCouncilMemberListRelationFilter
+  }
+
+  export type EvaluationMemberRoleOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    name?: SortOrder
+    evaluationCouncilMember?: EvaluationCouncilMemberOrderByRelationAggregateInput
+    _relevance?: EvaluationMemberRoleOrderByRelevanceInput
+  }
+
+  export type EvaluationMemberRoleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    name?: string
+    AND?: EvaluationMemberRoleWhereInput | EvaluationMemberRoleWhereInput[]
+    OR?: EvaluationMemberRoleWhereInput[]
+    NOT?: EvaluationMemberRoleWhereInput | EvaluationMemberRoleWhereInput[]
+    active?: BoolFilter<"EvaluationMemberRole"> | boolean
+    description?: StringNullableFilter<"EvaluationMemberRole"> | string | null
+    deletedAt?: DateTimeNullableFilter<"EvaluationMemberRole"> | Date | string | null
+    createdAt?: DateTimeFilter<"EvaluationMemberRole"> | Date | string
+    updatedAt?: DateTimeFilter<"EvaluationMemberRole"> | Date | string
+    createdBy?: UuidNullableFilter<"EvaluationMemberRole"> | string | null
+    evaluationCouncilMember?: EvaluationCouncilMemberListRelationFilter
+  }, "id" | "code" | "name">
+
+  export type EvaluationMemberRoleOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    name?: SortOrder
+    _count?: EvaluationMemberRoleCountOrderByAggregateInput
+    _max?: EvaluationMemberRoleMaxOrderByAggregateInput
+    _min?: EvaluationMemberRoleMinOrderByAggregateInput
+  }
+
+  export type EvaluationMemberRoleScalarWhereWithAggregatesInput = {
+    AND?: EvaluationMemberRoleScalarWhereWithAggregatesInput | EvaluationMemberRoleScalarWhereWithAggregatesInput[]
+    OR?: EvaluationMemberRoleScalarWhereWithAggregatesInput[]
+    NOT?: EvaluationMemberRoleScalarWhereWithAggregatesInput | EvaluationMemberRoleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"EvaluationMemberRole"> | string
+    code?: StringNullableWithAggregatesFilter<"EvaluationMemberRole"> | string | null
+    active?: BoolWithAggregatesFilter<"EvaluationMemberRole"> | boolean
+    description?: StringNullableWithAggregatesFilter<"EvaluationMemberRole"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"EvaluationMemberRole"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EvaluationMemberRole"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EvaluationMemberRole"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"EvaluationMemberRole"> | string | null
+    name?: StringWithAggregatesFilter<"EvaluationMemberRole"> | string
+  }
+
   export type EvaluationCouncilWhereInput = {
     AND?: EvaluationCouncilWhereInput | EvaluationCouncilWhereInput[]
     OR?: EvaluationCouncilWhereInput[]
@@ -390094,9 +392846,10 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"EvaluationCouncilMember"> | string | null
     evaluationCouncilId?: StringFilter<"EvaluationCouncilMember"> | string
     lecturerId?: StringFilter<"EvaluationCouncilMember"> | string
-    role?: EnumEvaluationMemberRoleNullableListFilter<"EvaluationCouncilMember">
+    roleId?: StringNullableFilter<"EvaluationCouncilMember"> | string | null
     evaluationCouncil?: XOR<EvaluationCouncilScalarRelationFilter, EvaluationCouncilWhereInput>
     lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    role?: XOR<EvaluationMemberRoleNullableScalarRelationFilter, EvaluationMemberRoleWhereInput> | null
     evaluationCriterions?: EvaluationCriterionListRelationFilter
   }
 
@@ -390111,9 +392864,10 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     evaluationCouncilId?: SortOrder
     lecturerId?: SortOrder
-    role?: SortOrder
+    roleId?: SortOrderInput | SortOrder
     evaluationCouncil?: EvaluationCouncilOrderByWithRelationInput
     lecturer?: LecturerOrderByWithRelationInput
+    role?: EvaluationMemberRoleOrderByWithRelationInput
     evaluationCriterions?: EvaluationCriterionOrderByRelationAggregateInput
     _relevance?: EvaluationCouncilMemberOrderByRelevanceInput
   }
@@ -390132,9 +392886,10 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"EvaluationCouncilMember"> | string | null
     evaluationCouncilId?: StringFilter<"EvaluationCouncilMember"> | string
     lecturerId?: StringFilter<"EvaluationCouncilMember"> | string
-    role?: EnumEvaluationMemberRoleNullableListFilter<"EvaluationCouncilMember">
+    roleId?: StringNullableFilter<"EvaluationCouncilMember"> | string | null
     evaluationCouncil?: XOR<EvaluationCouncilScalarRelationFilter, EvaluationCouncilWhereInput>
     lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    role?: XOR<EvaluationMemberRoleNullableScalarRelationFilter, EvaluationMemberRoleWhereInput> | null
     evaluationCriterions?: EvaluationCriterionListRelationFilter
   }, "id" | "code">
 
@@ -390149,7 +392904,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     evaluationCouncilId?: SortOrder
     lecturerId?: SortOrder
-    role?: SortOrder
+    roleId?: SortOrderInput | SortOrder
     _count?: EvaluationCouncilMemberCountOrderByAggregateInput
     _max?: EvaluationCouncilMemberMaxOrderByAggregateInput
     _min?: EvaluationCouncilMemberMinOrderByAggregateInput
@@ -390169,7 +392924,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"EvaluationCouncilMember"> | string | null
     evaluationCouncilId?: StringWithAggregatesFilter<"EvaluationCouncilMember"> | string
     lecturerId?: StringWithAggregatesFilter<"EvaluationCouncilMember"> | string
-    role?: EnumEvaluationMemberRoleNullableListFilter<"EvaluationCouncilMember">
+    roleId?: StringNullableWithAggregatesFilter<"EvaluationCouncilMember"> | string | null
   }
 
   export type EvidenceFileWhereInput = {
@@ -420570,6 +423325,94 @@ export namespace Prisma {
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type EvaluationStandardSetCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    standards?: StandardCatalogCreateNestedManyWithoutStandardSetInput
+  }
+
+  export type EvaluationStandardSetUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    standards?: StandardCatalogUncheckedCreateNestedManyWithoutStandardSetInput
+  }
+
+  export type EvaluationStandardSetUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    standards?: StandardCatalogUpdateManyWithoutStandardSetNestedInput
+  }
+
+  export type EvaluationStandardSetUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    standards?: StandardCatalogUncheckedUpdateManyWithoutStandardSetNestedInput
+  }
+
+  export type EvaluationStandardSetCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
+  export type EvaluationStandardSetUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EvaluationStandardSetUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StandardCatalogCreateInput = {
     id?: string
     code?: string | null
@@ -420583,6 +423426,7 @@ export namespace Prisma {
     name: string
     objectType: $Enums.StandardCatalogType
     criteria?: CriterionCatalogCreateNestedManyWithoutStandardInput
+    standardSet?: EvaluationStandardSetCreateNestedOneWithoutStandardsInput
   }
 
   export type StandardCatalogUncheckedCreateInput = {
@@ -420596,6 +423440,7 @@ export namespace Prisma {
     createdBy?: string | null
     order: number
     name: string
+    standardSetId?: string | null
     objectType: $Enums.StandardCatalogType
     criteria?: CriterionCatalogUncheckedCreateNestedManyWithoutStandardInput
   }
@@ -420613,6 +423458,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
     criteria?: CriterionCatalogUpdateManyWithoutStandardNestedInput
+    standardSet?: EvaluationStandardSetUpdateOneWithoutStandardsNestedInput
   }
 
   export type StandardCatalogUncheckedUpdateInput = {
@@ -420626,6 +423472,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    standardSetId?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
     criteria?: CriterionCatalogUncheckedUpdateManyWithoutStandardNestedInput
   }
@@ -420641,6 +423488,7 @@ export namespace Prisma {
     createdBy?: string | null
     order: number
     name: string
+    standardSetId?: string | null
     objectType: $Enums.StandardCatalogType
   }
 
@@ -420669,6 +423517,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    standardSetId?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
@@ -421893,6 +424742,94 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
   }
 
+  export type EvaluationMemberRoleCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutRoleInput
+  }
+
+  export type EvaluationMemberRoleUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutRoleInput
+  }
+
+  export type EvaluationMemberRoleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutRoleNestedInput
+  }
+
+  export type EvaluationMemberRoleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutRoleNestedInput
+  }
+
+  export type EvaluationMemberRoleCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
+  export type EvaluationMemberRoleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EvaluationMemberRoleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
   export type EvaluationCouncilCreateInput = {
     id?: string
     code?: string | null
@@ -421996,9 +424933,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil: EvaluationCouncilCreateNestedOneWithoutMembersInput
     lecturer: LecturerCreateNestedOneWithoutEvaluationCouncilMemberInput
+    role?: EvaluationMemberRoleCreateNestedOneWithoutEvaluationCouncilMemberInput
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutReviewerInput
   }
 
@@ -422013,7 +424950,7 @@ export namespace Prisma {
     createdBy?: string | null
     evaluationCouncilId: string
     lecturerId: string
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: string | null
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutReviewerInput
   }
 
@@ -422026,9 +424963,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil?: EvaluationCouncilUpdateOneRequiredWithoutMembersNestedInput
     lecturer?: LecturerUpdateOneRequiredWithoutEvaluationCouncilMemberNestedInput
+    role?: EvaluationMemberRoleUpdateOneWithoutEvaluationCouncilMemberNestedInput
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutReviewerNestedInput
   }
 
@@ -422043,7 +424980,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCouncilId?: StringFieldUpdateOperationsInput | string
     lecturerId?: StringFieldUpdateOperationsInput | string
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
@@ -422058,7 +424995,7 @@ export namespace Prisma {
     createdBy?: string | null
     evaluationCouncilId: string
     lecturerId: string
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: string | null
   }
 
   export type EvaluationCouncilMemberUpdateManyMutationInput = {
@@ -422070,7 +425007,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
   }
 
   export type EvaluationCouncilMemberUncheckedUpdateManyInput = {
@@ -422084,7 +425020,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCouncilId?: StringFieldUpdateOperationsInput | string
     lecturerId?: StringFieldUpdateOperationsInput | string
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EvidenceFileCreateInput = {
@@ -445531,6 +448467,58 @@ export namespace Prisma {
     _max?: NestedEnumEvaluationPeriodStatusFilter<$PrismaModel>
   }
 
+  export type StandardCatalogListRelationFilter = {
+    every?: StandardCatalogWhereInput
+    some?: StandardCatalogWhereInput
+    none?: StandardCatalogWhereInput
+  }
+
+  export type StandardCatalogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EvaluationStandardSetOrderByRelevanceInput = {
+    fields: EvaluationStandardSetOrderByRelevanceFieldEnum | EvaluationStandardSetOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type EvaluationStandardSetCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+  }
+
+  export type EvaluationStandardSetMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+  }
+
+  export type EvaluationStandardSetMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+  }
+
   export type EnumStandardCatalogTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.StandardCatalogType | EnumStandardCatalogTypeFieldRefInput<$PrismaModel>
     in?: $Enums.StandardCatalogType[] | ListEnumStandardCatalogTypeFieldRefInput<$PrismaModel>
@@ -445542,6 +448530,11 @@ export namespace Prisma {
     every?: CriterionCatalogWhereInput
     some?: CriterionCatalogWhereInput
     none?: CriterionCatalogWhereInput
+  }
+
+  export type EvaluationStandardSetNullableScalarRelationFilter = {
+    is?: EvaluationStandardSetWhereInput | null
+    isNot?: EvaluationStandardSetWhereInput | null
   }
 
   export type CriterionCatalogOrderByRelationAggregateInput = {
@@ -445565,6 +448558,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     order?: SortOrder
     name?: SortOrder
+    standardSetId?: SortOrder
     objectType?: SortOrder
   }
 
@@ -445583,6 +448577,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     order?: SortOrder
     name?: SortOrder
+    standardSetId?: SortOrder
     objectType?: SortOrder
   }
 
@@ -445597,6 +448592,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     order?: SortOrder
     name?: SortOrder
+    standardSetId?: SortOrder
     objectType?: SortOrder
   }
 
@@ -446403,6 +449399,48 @@ export namespace Prisma {
     order?: SortOrder
   }
 
+  export type EvaluationMemberRoleOrderByRelevanceInput = {
+    fields: EvaluationMemberRoleOrderByRelevanceFieldEnum | EvaluationMemberRoleOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type EvaluationMemberRoleCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+  }
+
+  export type EvaluationMemberRoleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+  }
+
+  export type EvaluationMemberRoleMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+  }
+
   export type EvaluationCouncilOrderByRelevanceInput = {
     fields: EvaluationCouncilOrderByRelevanceFieldEnum | EvaluationCouncilOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -446448,17 +449486,14 @@ export namespace Prisma {
     name?: SortOrder
   }
 
-  export type EnumEvaluationMemberRoleNullableListFilter<$PrismaModel = never> = {
-    equals?: $Enums.EvaluationMemberRole[] | ListEnumEvaluationMemberRoleFieldRefInput<$PrismaModel> | null
-    has?: $Enums.EvaluationMemberRole | EnumEvaluationMemberRoleFieldRefInput<$PrismaModel> | null
-    hasEvery?: $Enums.EvaluationMemberRole[] | ListEnumEvaluationMemberRoleFieldRefInput<$PrismaModel>
-    hasSome?: $Enums.EvaluationMemberRole[] | ListEnumEvaluationMemberRoleFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type EvaluationCouncilScalarRelationFilter = {
     is?: EvaluationCouncilWhereInput
     isNot?: EvaluationCouncilWhereInput
+  }
+
+  export type EvaluationMemberRoleNullableScalarRelationFilter = {
+    is?: EvaluationMemberRoleWhereInput | null
+    isNot?: EvaluationMemberRoleWhereInput | null
   }
 
   export type EvaluationCouncilMemberOrderByRelevanceInput = {
@@ -446478,7 +449513,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     evaluationCouncilId?: SortOrder
     lecturerId?: SortOrder
-    role?: SortOrder
+    roleId?: SortOrder
   }
 
   export type EvaluationCouncilMemberMaxOrderByAggregateInput = {
@@ -446492,6 +449527,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     evaluationCouncilId?: SortOrder
     lecturerId?: SortOrder
+    roleId?: SortOrder
   }
 
   export type EvaluationCouncilMemberMinOrderByAggregateInput = {
@@ -446505,6 +449541,7 @@ export namespace Prisma {
     createdBy?: SortOrder
     evaluationCouncilId?: SortOrder
     lecturerId?: SortOrder
+    roleId?: SortOrder
   }
 
   export type EvidenceFileOrderByRelevanceInput = {
@@ -471168,11 +474205,59 @@ export namespace Prisma {
     deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
   }
 
+  export type StandardCatalogCreateNestedManyWithoutStandardSetInput = {
+    create?: XOR<StandardCatalogCreateWithoutStandardSetInput, StandardCatalogUncheckedCreateWithoutStandardSetInput> | StandardCatalogCreateWithoutStandardSetInput[] | StandardCatalogUncheckedCreateWithoutStandardSetInput[]
+    connectOrCreate?: StandardCatalogCreateOrConnectWithoutStandardSetInput | StandardCatalogCreateOrConnectWithoutStandardSetInput[]
+    createMany?: StandardCatalogCreateManyStandardSetInputEnvelope
+    connect?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+  }
+
+  export type StandardCatalogUncheckedCreateNestedManyWithoutStandardSetInput = {
+    create?: XOR<StandardCatalogCreateWithoutStandardSetInput, StandardCatalogUncheckedCreateWithoutStandardSetInput> | StandardCatalogCreateWithoutStandardSetInput[] | StandardCatalogUncheckedCreateWithoutStandardSetInput[]
+    connectOrCreate?: StandardCatalogCreateOrConnectWithoutStandardSetInput | StandardCatalogCreateOrConnectWithoutStandardSetInput[]
+    createMany?: StandardCatalogCreateManyStandardSetInputEnvelope
+    connect?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+  }
+
+  export type StandardCatalogUpdateManyWithoutStandardSetNestedInput = {
+    create?: XOR<StandardCatalogCreateWithoutStandardSetInput, StandardCatalogUncheckedCreateWithoutStandardSetInput> | StandardCatalogCreateWithoutStandardSetInput[] | StandardCatalogUncheckedCreateWithoutStandardSetInput[]
+    connectOrCreate?: StandardCatalogCreateOrConnectWithoutStandardSetInput | StandardCatalogCreateOrConnectWithoutStandardSetInput[]
+    upsert?: StandardCatalogUpsertWithWhereUniqueWithoutStandardSetInput | StandardCatalogUpsertWithWhereUniqueWithoutStandardSetInput[]
+    createMany?: StandardCatalogCreateManyStandardSetInputEnvelope
+    set?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+    disconnect?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+    delete?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+    connect?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+    update?: StandardCatalogUpdateWithWhereUniqueWithoutStandardSetInput | StandardCatalogUpdateWithWhereUniqueWithoutStandardSetInput[]
+    updateMany?: StandardCatalogUpdateManyWithWhereWithoutStandardSetInput | StandardCatalogUpdateManyWithWhereWithoutStandardSetInput[]
+    deleteMany?: StandardCatalogScalarWhereInput | StandardCatalogScalarWhereInput[]
+  }
+
+  export type StandardCatalogUncheckedUpdateManyWithoutStandardSetNestedInput = {
+    create?: XOR<StandardCatalogCreateWithoutStandardSetInput, StandardCatalogUncheckedCreateWithoutStandardSetInput> | StandardCatalogCreateWithoutStandardSetInput[] | StandardCatalogUncheckedCreateWithoutStandardSetInput[]
+    connectOrCreate?: StandardCatalogCreateOrConnectWithoutStandardSetInput | StandardCatalogCreateOrConnectWithoutStandardSetInput[]
+    upsert?: StandardCatalogUpsertWithWhereUniqueWithoutStandardSetInput | StandardCatalogUpsertWithWhereUniqueWithoutStandardSetInput[]
+    createMany?: StandardCatalogCreateManyStandardSetInputEnvelope
+    set?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+    disconnect?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+    delete?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+    connect?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
+    update?: StandardCatalogUpdateWithWhereUniqueWithoutStandardSetInput | StandardCatalogUpdateWithWhereUniqueWithoutStandardSetInput[]
+    updateMany?: StandardCatalogUpdateManyWithWhereWithoutStandardSetInput | StandardCatalogUpdateManyWithWhereWithoutStandardSetInput[]
+    deleteMany?: StandardCatalogScalarWhereInput | StandardCatalogScalarWhereInput[]
+  }
+
   export type CriterionCatalogCreateNestedManyWithoutStandardInput = {
     create?: XOR<CriterionCatalogCreateWithoutStandardInput, CriterionCatalogUncheckedCreateWithoutStandardInput> | CriterionCatalogCreateWithoutStandardInput[] | CriterionCatalogUncheckedCreateWithoutStandardInput[]
     connectOrCreate?: CriterionCatalogCreateOrConnectWithoutStandardInput | CriterionCatalogCreateOrConnectWithoutStandardInput[]
     createMany?: CriterionCatalogCreateManyStandardInputEnvelope
     connect?: CriterionCatalogWhereUniqueInput | CriterionCatalogWhereUniqueInput[]
+  }
+
+  export type EvaluationStandardSetCreateNestedOneWithoutStandardsInput = {
+    create?: XOR<EvaluationStandardSetCreateWithoutStandardsInput, EvaluationStandardSetUncheckedCreateWithoutStandardsInput>
+    connectOrCreate?: EvaluationStandardSetCreateOrConnectWithoutStandardsInput
+    connect?: EvaluationStandardSetWhereUniqueInput
   }
 
   export type CriterionCatalogUncheckedCreateNestedManyWithoutStandardInput = {
@@ -471198,6 +474283,16 @@ export namespace Prisma {
     update?: CriterionCatalogUpdateWithWhereUniqueWithoutStandardInput | CriterionCatalogUpdateWithWhereUniqueWithoutStandardInput[]
     updateMany?: CriterionCatalogUpdateManyWithWhereWithoutStandardInput | CriterionCatalogUpdateManyWithWhereWithoutStandardInput[]
     deleteMany?: CriterionCatalogScalarWhereInput | CriterionCatalogScalarWhereInput[]
+  }
+
+  export type EvaluationStandardSetUpdateOneWithoutStandardsNestedInput = {
+    create?: XOR<EvaluationStandardSetCreateWithoutStandardsInput, EvaluationStandardSetUncheckedCreateWithoutStandardsInput>
+    connectOrCreate?: EvaluationStandardSetCreateOrConnectWithoutStandardsInput
+    upsert?: EvaluationStandardSetUpsertWithoutStandardsInput
+    disconnect?: EvaluationStandardSetWhereInput | boolean
+    delete?: EvaluationStandardSetWhereInput | boolean
+    connect?: EvaluationStandardSetWhereUniqueInput
+    update?: XOR<XOR<EvaluationStandardSetUpdateToOneWithWhereWithoutStandardsInput, EvaluationStandardSetUpdateWithoutStandardsInput>, EvaluationStandardSetUncheckedUpdateWithoutStandardsInput>
   }
 
   export type CriterionCatalogUncheckedUpdateManyWithoutStandardNestedInput = {
@@ -471974,6 +475069,48 @@ export namespace Prisma {
     update?: XOR<XOR<EvidenceUpdateToOneWithWhereWithoutAnalysisFormEvidenceInput, EvidenceUpdateWithoutAnalysisFormEvidenceInput>, EvidenceUncheckedUpdateWithoutAnalysisFormEvidenceInput>
   }
 
+  export type EvaluationCouncilMemberCreateNestedManyWithoutRoleInput = {
+    create?: XOR<EvaluationCouncilMemberCreateWithoutRoleInput, EvaluationCouncilMemberUncheckedCreateWithoutRoleInput> | EvaluationCouncilMemberCreateWithoutRoleInput[] | EvaluationCouncilMemberUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: EvaluationCouncilMemberCreateOrConnectWithoutRoleInput | EvaluationCouncilMemberCreateOrConnectWithoutRoleInput[]
+    createMany?: EvaluationCouncilMemberCreateManyRoleInputEnvelope
+    connect?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+  }
+
+  export type EvaluationCouncilMemberUncheckedCreateNestedManyWithoutRoleInput = {
+    create?: XOR<EvaluationCouncilMemberCreateWithoutRoleInput, EvaluationCouncilMemberUncheckedCreateWithoutRoleInput> | EvaluationCouncilMemberCreateWithoutRoleInput[] | EvaluationCouncilMemberUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: EvaluationCouncilMemberCreateOrConnectWithoutRoleInput | EvaluationCouncilMemberCreateOrConnectWithoutRoleInput[]
+    createMany?: EvaluationCouncilMemberCreateManyRoleInputEnvelope
+    connect?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+  }
+
+  export type EvaluationCouncilMemberUpdateManyWithoutRoleNestedInput = {
+    create?: XOR<EvaluationCouncilMemberCreateWithoutRoleInput, EvaluationCouncilMemberUncheckedCreateWithoutRoleInput> | EvaluationCouncilMemberCreateWithoutRoleInput[] | EvaluationCouncilMemberUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: EvaluationCouncilMemberCreateOrConnectWithoutRoleInput | EvaluationCouncilMemberCreateOrConnectWithoutRoleInput[]
+    upsert?: EvaluationCouncilMemberUpsertWithWhereUniqueWithoutRoleInput | EvaluationCouncilMemberUpsertWithWhereUniqueWithoutRoleInput[]
+    createMany?: EvaluationCouncilMemberCreateManyRoleInputEnvelope
+    set?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+    disconnect?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+    delete?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+    connect?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+    update?: EvaluationCouncilMemberUpdateWithWhereUniqueWithoutRoleInput | EvaluationCouncilMemberUpdateWithWhereUniqueWithoutRoleInput[]
+    updateMany?: EvaluationCouncilMemberUpdateManyWithWhereWithoutRoleInput | EvaluationCouncilMemberUpdateManyWithWhereWithoutRoleInput[]
+    deleteMany?: EvaluationCouncilMemberScalarWhereInput | EvaluationCouncilMemberScalarWhereInput[]
+  }
+
+  export type EvaluationCouncilMemberUncheckedUpdateManyWithoutRoleNestedInput = {
+    create?: XOR<EvaluationCouncilMemberCreateWithoutRoleInput, EvaluationCouncilMemberUncheckedCreateWithoutRoleInput> | EvaluationCouncilMemberCreateWithoutRoleInput[] | EvaluationCouncilMemberUncheckedCreateWithoutRoleInput[]
+    connectOrCreate?: EvaluationCouncilMemberCreateOrConnectWithoutRoleInput | EvaluationCouncilMemberCreateOrConnectWithoutRoleInput[]
+    upsert?: EvaluationCouncilMemberUpsertWithWhereUniqueWithoutRoleInput | EvaluationCouncilMemberUpsertWithWhereUniqueWithoutRoleInput[]
+    createMany?: EvaluationCouncilMemberCreateManyRoleInputEnvelope
+    set?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+    disconnect?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+    delete?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+    connect?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
+    update?: EvaluationCouncilMemberUpdateWithWhereUniqueWithoutRoleInput | EvaluationCouncilMemberUpdateWithWhereUniqueWithoutRoleInput[]
+    updateMany?: EvaluationCouncilMemberUpdateManyWithWhereWithoutRoleInput | EvaluationCouncilMemberUpdateManyWithWhereWithoutRoleInput[]
+    deleteMany?: EvaluationCouncilMemberScalarWhereInput | EvaluationCouncilMemberScalarWhereInput[]
+  }
+
   export type EvaluationPeriodCreateNestedOneWithoutCouncilInput = {
     create?: XOR<EvaluationPeriodCreateWithoutCouncilInput, EvaluationPeriodUncheckedCreateWithoutCouncilInput>
     connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutCouncilInput
@@ -472030,10 +475167,6 @@ export namespace Prisma {
     deleteMany?: EvaluationCouncilMemberScalarWhereInput | EvaluationCouncilMemberScalarWhereInput[]
   }
 
-  export type EvaluationCouncilMemberCreateroleInput = {
-    set: $Enums.EvaluationMemberRole[]
-  }
-
   export type EvaluationCouncilCreateNestedOneWithoutMembersInput = {
     create?: XOR<EvaluationCouncilCreateWithoutMembersInput, EvaluationCouncilUncheckedCreateWithoutMembersInput>
     connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutMembersInput
@@ -472044,6 +475177,12 @@ export namespace Prisma {
     create?: XOR<LecturerCreateWithoutEvaluationCouncilMemberInput, LecturerUncheckedCreateWithoutEvaluationCouncilMemberInput>
     connectOrCreate?: LecturerCreateOrConnectWithoutEvaluationCouncilMemberInput
     connect?: LecturerWhereUniqueInput
+  }
+
+  export type EvaluationMemberRoleCreateNestedOneWithoutEvaluationCouncilMemberInput = {
+    create?: XOR<EvaluationMemberRoleCreateWithoutEvaluationCouncilMemberInput, EvaluationMemberRoleUncheckedCreateWithoutEvaluationCouncilMemberInput>
+    connectOrCreate?: EvaluationMemberRoleCreateOrConnectWithoutEvaluationCouncilMemberInput
+    connect?: EvaluationMemberRoleWhereUniqueInput
   }
 
   export type EvaluationCriterionCreateNestedManyWithoutReviewerInput = {
@@ -472060,11 +475199,6 @@ export namespace Prisma {
     connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
   }
 
-  export type EvaluationCouncilMemberUpdateroleInput = {
-    set?: $Enums.EvaluationMemberRole[]
-    push?: $Enums.EvaluationMemberRole | $Enums.EvaluationMemberRole[]
-  }
-
   export type EvaluationCouncilUpdateOneRequiredWithoutMembersNestedInput = {
     create?: XOR<EvaluationCouncilCreateWithoutMembersInput, EvaluationCouncilUncheckedCreateWithoutMembersInput>
     connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutMembersInput
@@ -472079,6 +475213,16 @@ export namespace Prisma {
     upsert?: LecturerUpsertWithoutEvaluationCouncilMemberInput
     connect?: LecturerWhereUniqueInput
     update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutEvaluationCouncilMemberInput, LecturerUpdateWithoutEvaluationCouncilMemberInput>, LecturerUncheckedUpdateWithoutEvaluationCouncilMemberInput>
+  }
+
+  export type EvaluationMemberRoleUpdateOneWithoutEvaluationCouncilMemberNestedInput = {
+    create?: XOR<EvaluationMemberRoleCreateWithoutEvaluationCouncilMemberInput, EvaluationMemberRoleUncheckedCreateWithoutEvaluationCouncilMemberInput>
+    connectOrCreate?: EvaluationMemberRoleCreateOrConnectWithoutEvaluationCouncilMemberInput
+    upsert?: EvaluationMemberRoleUpsertWithoutEvaluationCouncilMemberInput
+    disconnect?: EvaluationMemberRoleWhereInput | boolean
+    delete?: EvaluationMemberRoleWhereInput | boolean
+    connect?: EvaluationMemberRoleWhereUniqueInput
+    update?: XOR<XOR<EvaluationMemberRoleUpdateToOneWithWhereWithoutEvaluationCouncilMemberInput, EvaluationMemberRoleUpdateWithoutEvaluationCouncilMemberInput>, EvaluationMemberRoleUncheckedUpdateWithoutEvaluationCouncilMemberInput>
   }
 
   export type EvaluationCriterionUpdateManyWithoutReviewerNestedInput = {
@@ -571144,8 +574288,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil: EvaluationCouncilCreateNestedOneWithoutMembersInput
+    role?: EvaluationMemberRoleCreateNestedOneWithoutEvaluationCouncilMemberInput
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutReviewerInput
   }
 
@@ -571159,7 +574303,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     evaluationCouncilId: string
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: string | null
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutReviewerInput
   }
 
@@ -572118,7 +575262,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"EvaluationCouncilMember"> | string | null
     evaluationCouncilId?: StringFilter<"EvaluationCouncilMember"> | string
     lecturerId?: StringFilter<"EvaluationCouncilMember"> | string
-    role?: EnumEvaluationMemberRoleNullableListFilter<"EvaluationCouncilMember">
+    roleId?: StringNullableFilter<"EvaluationCouncilMember"> | string | null
   }
 
   export type StudentResearchTopicUpsertWithWhereUniqueWithoutSupervisorInput = {
@@ -579937,6 +583081,80 @@ export namespace Prisma {
     data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodInput>
   }
 
+  export type StandardCatalogCreateWithoutStandardSetInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    order: number
+    name: string
+    objectType: $Enums.StandardCatalogType
+    criteria?: CriterionCatalogCreateNestedManyWithoutStandardInput
+  }
+
+  export type StandardCatalogUncheckedCreateWithoutStandardSetInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    order: number
+    name: string
+    objectType: $Enums.StandardCatalogType
+    criteria?: CriterionCatalogUncheckedCreateNestedManyWithoutStandardInput
+  }
+
+  export type StandardCatalogCreateOrConnectWithoutStandardSetInput = {
+    where: StandardCatalogWhereUniqueInput
+    create: XOR<StandardCatalogCreateWithoutStandardSetInput, StandardCatalogUncheckedCreateWithoutStandardSetInput>
+  }
+
+  export type StandardCatalogCreateManyStandardSetInputEnvelope = {
+    data: StandardCatalogCreateManyStandardSetInput | StandardCatalogCreateManyStandardSetInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StandardCatalogUpsertWithWhereUniqueWithoutStandardSetInput = {
+    where: StandardCatalogWhereUniqueInput
+    update: XOR<StandardCatalogUpdateWithoutStandardSetInput, StandardCatalogUncheckedUpdateWithoutStandardSetInput>
+    create: XOR<StandardCatalogCreateWithoutStandardSetInput, StandardCatalogUncheckedCreateWithoutStandardSetInput>
+  }
+
+  export type StandardCatalogUpdateWithWhereUniqueWithoutStandardSetInput = {
+    where: StandardCatalogWhereUniqueInput
+    data: XOR<StandardCatalogUpdateWithoutStandardSetInput, StandardCatalogUncheckedUpdateWithoutStandardSetInput>
+  }
+
+  export type StandardCatalogUpdateManyWithWhereWithoutStandardSetInput = {
+    where: StandardCatalogScalarWhereInput
+    data: XOR<StandardCatalogUpdateManyMutationInput, StandardCatalogUncheckedUpdateManyWithoutStandardSetInput>
+  }
+
+  export type StandardCatalogScalarWhereInput = {
+    AND?: StandardCatalogScalarWhereInput | StandardCatalogScalarWhereInput[]
+    OR?: StandardCatalogScalarWhereInput[]
+    NOT?: StandardCatalogScalarWhereInput | StandardCatalogScalarWhereInput[]
+    id?: StringFilter<"StandardCatalog"> | string
+    code?: StringNullableFilter<"StandardCatalog"> | string | null
+    active?: BoolFilter<"StandardCatalog"> | boolean
+    description?: StringNullableFilter<"StandardCatalog"> | string | null
+    deletedAt?: DateTimeNullableFilter<"StandardCatalog"> | Date | string | null
+    createdAt?: DateTimeFilter<"StandardCatalog"> | Date | string
+    updatedAt?: DateTimeFilter<"StandardCatalog"> | Date | string
+    createdBy?: UuidNullableFilter<"StandardCatalog"> | string | null
+    order?: IntFilter<"StandardCatalog"> | number
+    name?: StringFilter<"StandardCatalog"> | string
+    standardSetId?: StringNullableFilter<"StandardCatalog"> | string | null
+    objectType?: EnumStandardCatalogTypeFilter<"StandardCatalog"> | $Enums.StandardCatalogType
+  }
+
   export type CriterionCatalogCreateWithoutStandardInput = {
     id?: string
     code?: string | null
@@ -579975,6 +583193,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EvaluationStandardSetCreateWithoutStandardsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
+  export type EvaluationStandardSetUncheckedCreateWithoutStandardsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
+  export type EvaluationStandardSetCreateOrConnectWithoutStandardsInput = {
+    where: EvaluationStandardSetWhereUniqueInput
+    create: XOR<EvaluationStandardSetCreateWithoutStandardsInput, EvaluationStandardSetUncheckedCreateWithoutStandardsInput>
+  }
+
   export type CriterionCatalogUpsertWithWhereUniqueWithoutStandardInput = {
     where: CriterionCatalogWhereUniqueInput
     update: XOR<CriterionCatalogUpdateWithoutStandardInput, CriterionCatalogUncheckedUpdateWithoutStandardInput>
@@ -580008,6 +583255,41 @@ export namespace Prisma {
     name?: StringFilter<"CriterionCatalog"> | string
   }
 
+  export type EvaluationStandardSetUpsertWithoutStandardsInput = {
+    update: XOR<EvaluationStandardSetUpdateWithoutStandardsInput, EvaluationStandardSetUncheckedUpdateWithoutStandardsInput>
+    create: XOR<EvaluationStandardSetCreateWithoutStandardsInput, EvaluationStandardSetUncheckedCreateWithoutStandardsInput>
+    where?: EvaluationStandardSetWhereInput
+  }
+
+  export type EvaluationStandardSetUpdateToOneWithWhereWithoutStandardsInput = {
+    where?: EvaluationStandardSetWhereInput
+    data: XOR<EvaluationStandardSetUpdateWithoutStandardsInput, EvaluationStandardSetUncheckedUpdateWithoutStandardsInput>
+  }
+
+  export type EvaluationStandardSetUpdateWithoutStandardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EvaluationStandardSetUncheckedUpdateWithoutStandardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StandardCatalogCreateWithoutCriteriaInput = {
     id?: string
     code?: string | null
@@ -580020,6 +583302,7 @@ export namespace Prisma {
     order: number
     name: string
     objectType: $Enums.StandardCatalogType
+    standardSet?: EvaluationStandardSetCreateNestedOneWithoutStandardsInput
   }
 
   export type StandardCatalogUncheckedCreateWithoutCriteriaInput = {
@@ -580033,6 +583316,7 @@ export namespace Prisma {
     createdBy?: string | null
     order: number
     name: string
+    standardSetId?: string | null
     objectType: $Enums.StandardCatalogType
   }
 
@@ -580102,6 +583386,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+    standardSet?: EvaluationStandardSetUpdateOneWithoutStandardsNestedInput
   }
 
   export type StandardCatalogUncheckedUpdateWithoutCriteriaInput = {
@@ -580115,6 +583400,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    standardSetId?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
@@ -582401,9 +585687,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil: EvaluationCouncilCreateNestedOneWithoutMembersInput
     lecturer: LecturerCreateNestedOneWithoutEvaluationCouncilMemberInput
+    role?: EvaluationMemberRoleCreateNestedOneWithoutEvaluationCouncilMemberInput
   }
 
   export type EvaluationCouncilMemberUncheckedCreateWithoutEvaluationCriterionsInput = {
@@ -582417,7 +585703,7 @@ export namespace Prisma {
     createdBy?: string | null
     evaluationCouncilId: string
     lecturerId: string
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: string | null
   }
 
   export type EvaluationCouncilMemberCreateOrConnectWithoutEvaluationCriterionsInput = {
@@ -582607,9 +585893,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil?: EvaluationCouncilUpdateOneRequiredWithoutMembersNestedInput
     lecturer?: LecturerUpdateOneRequiredWithoutEvaluationCouncilMemberNestedInput
+    role?: EvaluationMemberRoleUpdateOneWithoutEvaluationCouncilMemberNestedInput
   }
 
   export type EvaluationCouncilMemberUncheckedUpdateWithoutEvaluationCriterionsInput = {
@@ -582623,7 +585909,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCouncilId?: StringFieldUpdateOperationsInput | string
     lecturerId?: StringFieldUpdateOperationsInput | string
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EvaluationCriterionCommentUpsertWithWhereUniqueWithoutEvaluationCriterionInput = {
@@ -582998,6 +586284,60 @@ export namespace Prisma {
     evidenceFile?: EvidenceFileUncheckedUpdateManyWithoutEvidenceNestedInput
   }
 
+  export type EvaluationCouncilMemberCreateWithoutRoleInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    evaluationCouncil: EvaluationCouncilCreateNestedOneWithoutMembersInput
+    lecturer: LecturerCreateNestedOneWithoutEvaluationCouncilMemberInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutReviewerInput
+  }
+
+  export type EvaluationCouncilMemberUncheckedCreateWithoutRoleInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    evaluationCouncilId: string
+    lecturerId: string
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutReviewerInput
+  }
+
+  export type EvaluationCouncilMemberCreateOrConnectWithoutRoleInput = {
+    where: EvaluationCouncilMemberWhereUniqueInput
+    create: XOR<EvaluationCouncilMemberCreateWithoutRoleInput, EvaluationCouncilMemberUncheckedCreateWithoutRoleInput>
+  }
+
+  export type EvaluationCouncilMemberCreateManyRoleInputEnvelope = {
+    data: EvaluationCouncilMemberCreateManyRoleInput | EvaluationCouncilMemberCreateManyRoleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EvaluationCouncilMemberUpsertWithWhereUniqueWithoutRoleInput = {
+    where: EvaluationCouncilMemberWhereUniqueInput
+    update: XOR<EvaluationCouncilMemberUpdateWithoutRoleInput, EvaluationCouncilMemberUncheckedUpdateWithoutRoleInput>
+    create: XOR<EvaluationCouncilMemberCreateWithoutRoleInput, EvaluationCouncilMemberUncheckedCreateWithoutRoleInput>
+  }
+
+  export type EvaluationCouncilMemberUpdateWithWhereUniqueWithoutRoleInput = {
+    where: EvaluationCouncilMemberWhereUniqueInput
+    data: XOR<EvaluationCouncilMemberUpdateWithoutRoleInput, EvaluationCouncilMemberUncheckedUpdateWithoutRoleInput>
+  }
+
+  export type EvaluationCouncilMemberUpdateManyWithWhereWithoutRoleInput = {
+    where: EvaluationCouncilMemberScalarWhereInput
+    data: XOR<EvaluationCouncilMemberUpdateManyMutationInput, EvaluationCouncilMemberUncheckedUpdateManyWithoutRoleInput>
+  }
+
   export type EvaluationPeriodCreateWithoutCouncilInput = {
     id?: string
     code?: string | null
@@ -583056,8 +586396,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
     lecturer: LecturerCreateNestedOneWithoutEvaluationCouncilMemberInput
+    role?: EvaluationMemberRoleCreateNestedOneWithoutEvaluationCouncilMemberInput
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutReviewerInput
   }
 
@@ -583071,7 +586411,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     lecturerId: string
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: string | null
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutReviewerInput
   }
 
@@ -583262,6 +586602,35 @@ export namespace Prisma {
     create: XOR<LecturerCreateWithoutEvaluationCouncilMemberInput, LecturerUncheckedCreateWithoutEvaluationCouncilMemberInput>
   }
 
+  export type EvaluationMemberRoleCreateWithoutEvaluationCouncilMemberInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
+  export type EvaluationMemberRoleUncheckedCreateWithoutEvaluationCouncilMemberInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
+  export type EvaluationMemberRoleCreateOrConnectWithoutEvaluationCouncilMemberInput = {
+    where: EvaluationMemberRoleWhereUniqueInput
+    create: XOR<EvaluationMemberRoleCreateWithoutEvaluationCouncilMemberInput, EvaluationMemberRoleUncheckedCreateWithoutEvaluationCouncilMemberInput>
+  }
+
   export type EvaluationCriterionCreateWithoutReviewerInput = {
     id?: string
     code?: string | null
@@ -583432,6 +586801,41 @@ export namespace Prisma {
     analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
     supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
     coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+  }
+
+  export type EvaluationMemberRoleUpsertWithoutEvaluationCouncilMemberInput = {
+    update: XOR<EvaluationMemberRoleUpdateWithoutEvaluationCouncilMemberInput, EvaluationMemberRoleUncheckedUpdateWithoutEvaluationCouncilMemberInput>
+    create: XOR<EvaluationMemberRoleCreateWithoutEvaluationCouncilMemberInput, EvaluationMemberRoleUncheckedCreateWithoutEvaluationCouncilMemberInput>
+    where?: EvaluationMemberRoleWhereInput
+  }
+
+  export type EvaluationMemberRoleUpdateToOneWithWhereWithoutEvaluationCouncilMemberInput = {
+    where?: EvaluationMemberRoleWhereInput
+    data: XOR<EvaluationMemberRoleUpdateWithoutEvaluationCouncilMemberInput, EvaluationMemberRoleUncheckedUpdateWithoutEvaluationCouncilMemberInput>
+  }
+
+  export type EvaluationMemberRoleUpdateWithoutEvaluationCouncilMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EvaluationMemberRoleUncheckedUpdateWithoutEvaluationCouncilMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput = {
@@ -654989,7 +658393,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     evaluationCouncilId: string
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: string | null
   }
 
   export type StudentResearchTopicCreateManySupervisorInput = {
@@ -656357,8 +659761,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil?: EvaluationCouncilUpdateOneRequiredWithoutMembersNestedInput
+    role?: EvaluationMemberRoleUpdateOneWithoutEvaluationCouncilMemberNestedInput
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutReviewerNestedInput
   }
 
@@ -656372,7 +659776,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCouncilId?: StringFieldUpdateOperationsInput | string
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
@@ -656386,7 +659790,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCouncilId?: StringFieldUpdateOperationsInput | string
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentResearchTopicUpdateWithoutSupervisorInput = {
@@ -658816,6 +662220,64 @@ export namespace Prisma {
     knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type StandardCatalogCreateManyStandardSetInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    order: number
+    name: string
+    objectType: $Enums.StandardCatalogType
+  }
+
+  export type StandardCatalogUpdateWithoutStandardSetInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+    criteria?: CriterionCatalogUpdateManyWithoutStandardNestedInput
+  }
+
+  export type StandardCatalogUncheckedUpdateWithoutStandardSetInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+    criteria?: CriterionCatalogUncheckedUpdateManyWithoutStandardNestedInput
+  }
+
+  export type StandardCatalogUncheckedUpdateManyWithoutStandardSetInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+  }
+
   export type CriterionCatalogCreateManyStandardInput = {
     id?: string
     code?: string | null
@@ -659458,6 +662920,60 @@ export namespace Prisma {
     evaluationCriterionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type EvaluationCouncilMemberCreateManyRoleInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    evaluationCouncilId: string
+    lecturerId: string
+  }
+
+  export type EvaluationCouncilMemberUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCouncil?: EvaluationCouncilUpdateOneRequiredWithoutMembersNestedInput
+    lecturer?: LecturerUpdateOneRequiredWithoutEvaluationCouncilMemberNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutReviewerNestedInput
+  }
+
+  export type EvaluationCouncilMemberUncheckedUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCouncilId?: StringFieldUpdateOperationsInput | string
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutReviewerNestedInput
+  }
+
+  export type EvaluationCouncilMemberUncheckedUpdateManyWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCouncilId?: StringFieldUpdateOperationsInput | string
+    lecturerId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type EvaluationCouncilMemberCreateManyEvaluationCouncilInput = {
     id?: string
     code?: string | null
@@ -659468,7 +662984,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     lecturerId: string
-    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: string | null
   }
 
   export type EvaluationCouncilMemberUpdateWithoutEvaluationCouncilInput = {
@@ -659480,8 +662996,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
     lecturer?: LecturerUpdateOneRequiredWithoutEvaluationCouncilMemberNestedInput
+    role?: EvaluationMemberRoleUpdateOneWithoutEvaluationCouncilMemberNestedInput
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutReviewerNestedInput
   }
 
@@ -659495,7 +663011,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerId?: StringFieldUpdateOperationsInput | string
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
@@ -659509,7 +663025,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerId?: StringFieldUpdateOperationsInput | string
-    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EvaluationCriterionCreateManyReviewerInput = {

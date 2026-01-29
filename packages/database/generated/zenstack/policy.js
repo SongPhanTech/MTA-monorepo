@@ -2111,6 +2111,19 @@ const policy = {
                 update: {},
             },
         },
+        evaluationStandardSet: {
+            modelLevel: {
+                read: { guard: EvaluationStandardSet_read, },
+                create: { guard: EvaluationStandardSet_create, inputChecker: EvaluationStandardSet_create_input, },
+                update: { guard: EvaluationStandardSet_update, },
+                postUpdate: { guard: EvaluationStandardSet_postUpdate, },
+                delete: { guard: EvaluationStandardSet_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         standardCatalog: {
             modelLevel: {
                 read: { guard: StandardCatalog_read, },
@@ -2261,6 +2274,19 @@ const policy = {
                 update: { guard: AnalysisFormEvidence_update, },
                 postUpdate: { guard: AnalysisFormEvidence_postUpdate, },
                 delete: { guard: AnalysisFormEvidence_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        evaluationMemberRole: {
+            modelLevel: {
+                read: { guard: EvaluationMemberRole_read, },
+                create: { guard: EvaluationMemberRole_create, inputChecker: EvaluationMemberRole_create_input, },
+                update: { guard: EvaluationMemberRole_update, },
+                postUpdate: { guard: EvaluationMemberRole_postUpdate, },
+                delete: { guard: EvaluationMemberRole_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3523,6 +3549,7 @@ const policy = {
         paymentRecord: { hasValidation: false },
         supervisorPaymentRecord: { hasValidation: false },
         evaluationPeriod: { hasValidation: false },
+        evaluationStandardSet: { hasValidation: false },
         standardCatalog: { hasValidation: false },
         criterionCatalog: { hasValidation: false },
         evidenceCategory: { hasValidation: false },
@@ -3535,6 +3562,7 @@ const policy = {
         evaluationCriterion: { hasValidation: false },
         requirementCriterion: { hasValidation: false },
         analysisFormEvidence: { hasValidation: false },
+        evaluationMemberRole: { hasValidation: false },
         evaluationCouncil: { hasValidation: false },
         evaluationCouncilMember: { hasValidation: false },
         evidenceFile: { hasValidation: false },
@@ -16212,6 +16240,84 @@ function $check_EvaluationPeriod_delete(input, context) {
     }
     return false;
 }
+function EvaluationStandardSet_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_EvaluationStandardSet_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationStandardSet_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationStandardSet_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationStandardSet_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function EvaluationStandardSet_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationStandardSet_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationStandardSet_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_EvaluationStandardSet_postUpdate(input, context) {
+    return true;
+}
+function EvaluationStandardSet_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationStandardSet_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
 function StandardCatalog_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -17141,6 +17247,84 @@ function AnalysisFormEvidence_delete(context, db) {
     return { OR: [] };
 }
 function $check_AnalysisFormEvidence_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationMemberRole_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_EvaluationMemberRole_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationMemberRole_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationMemberRole_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationMemberRole_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function EvaluationMemberRole_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationMemberRole_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationMemberRole_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_EvaluationMemberRole_postUpdate(input, context) {
+    return true;
+}
+function EvaluationMemberRole_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationMemberRole_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
