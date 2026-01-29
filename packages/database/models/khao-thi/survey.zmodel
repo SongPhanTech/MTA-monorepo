@@ -71,22 +71,21 @@ model SurveyQuestionGroup extends Base {
 
 /// Khảo sát cụm
 model ClusterSurvey extends Base {
-  name                 String
-  additionalSuggestion Boolean
+  name             String
 
   // những cấu hình sẽ được copy sang Survey
-  startDate            DateTime
-  endDate              DateTime?
-  isPublic             Boolean            @default(false)
-  anonymous            Boolean            @default(true)
-  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId        String
-  surveyObjectType     SurveyObjectType[]
-  lecturers            Lecturer[] // DS giảng viên => sinh ra Survey cho từng giảng viên
-  surveyChoice         SurveyChoice[] // lựa chọn
-  surveyQuestion       SurveyQuestion[] // câu hỏi
+  startDate        DateTime
+  endDate          DateTime?
+  isPublic         Boolean            @default(false)
+  anonymous        Boolean            @default(true)
+  surveyTopic      SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId    String
+  surveyObjectType SurveyObjectType[]
+  lecturers        Lecturer[] // DS giảng viên => sinh ra Survey cho từng giảng viên
+  surveyChoice     SurveyChoice[] // lựa chọn
+  surveyQuestion   SurveyQuestion[] // câu hỏi
 
-  surveys              Survey[]
+  surveys          Survey[]
 
   @@schema("khao-thi")
 }
@@ -97,25 +96,25 @@ model Survey extends Base {
   startDate            DateTime
   endDate              DateTime?
 
-  isPublic             Boolean            @default(false)
-  anonymous            Boolean            @default(true)
+  isPublic             Boolean             @default(false)
+  anonymous            Boolean             @default(true)
 
   surveyObjectType     SurveyObjectType[]
 
-  lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
+  lecture              Lecturer?           @relation(fields: [lectureId], references: [id])
   lectureId            String?
 
-  subjectClass         SubjectClass?      @relation(fields: [subjectClassId], references: [id])
+  subjectClass         SubjectClass?       @relation(fields: [subjectClassId], references: [id])
   subjectClassId       String?
 
-  semester             Semester?          @relation(fields: [semesterId], references: [id])
+  semester             Semester?           @relation(fields: [semesterId], references: [id])
   semesterId           String?
   // TODO: SurveyTopic[]
-  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopic          SurveyTopic         @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
 
-  trainingObjectType          TrainingObjectType?    @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId        String?
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
 
   // 1. Rất hài lòng
   // 2. Hài lòng
@@ -127,7 +126,7 @@ model Survey extends Base {
   surveySessions       SurveySession[]   // Thêm relation mới
 
   // thuộc khảo sát cụm
-  clusterSurvey        ClusterSurvey?     @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurvey        ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId      String?
 
   @@schema("khao-thi")
@@ -177,25 +176,23 @@ model SurveyChoice extends Base {
 
 /// Bảng lưu phiên khảo sát
 model SurveySession extends Base {
-  survey               Survey            @relation(fields: [surveyId], references: [id])
-  surveyId             String
+  survey             Survey            @relation(fields: [surveyId], references: [id])
+  surveyId           String
 
-  additionalSuggestion String?
+  profile            UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId          String?           @db.Uuid
 
-  profile              UserProfile?      @relation(fields: [profileId], references: [id])
-  profileId            String?           @db.Uuid
+  student            Student?          @relation(fields: [studentId], references: [id])
+  studentId          String?
 
-  student              Student?          @relation(fields: [studentId], references: [id])
-  studentId            String?
+  startedAt          DateTime          @default(now())
+  completedAt        DateTime?
+  isCompleted        Boolean           @default(false)
 
-  startedAt            DateTime          @default(now())
-  completedAt          DateTime?
-  isCompleted          Boolean           @default(false)
+  surveyObjectType   SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
+  surveyObjectTypeId String?
 
-  surveyObjectType     SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
-  surveyObjectTypeId   String?
-
-  responses            SurveyResponse[]
+  responses          SurveyResponse[]
 
   @@unique([surveyId, studentId])
   @@schema("khao-thi")

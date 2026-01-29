@@ -5794,27 +5794,26 @@ model SurveyQuestionGroup {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ClusterSurvey {
-  id                   String             @id() @default(cuid())
-  code                 String?            @unique()
-  active               Boolean            @default(true)
-  description          String?            @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @default(now()) @updatedAt()
-  createdBy            String?            @default("") @db.Uuid()
-  name                 String
-  additionalSuggestion Boolean
-  startDate            DateTime
-  endDate              DateTime?
-  isPublic             Boolean            @default(false)
-  anonymous            Boolean            @default(true)
-  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId        String
-  surveyObjectType     SurveyObjectType[]
-  lecturers            Lecturer[]
-  surveyChoice         SurveyChoice[]
-  surveyQuestion       SurveyQuestion[]
-  surveys              Survey[]
+  id               String             @id() @default(cuid())
+  code             String?            @unique()
+  active           Boolean            @default(true)
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt()
+  createdBy        String?            @default("") @db.Uuid()
+  name             String
+  startDate        DateTime
+  endDate          DateTime?
+  isPublic         Boolean            @default(false)
+  anonymous        Boolean            @default(true)
+  surveyTopic      SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId    String
+  surveyObjectType SurveyObjectType[]
+  lecturers        Lecturer[]
+  surveyChoice     SurveyChoice[]
+  surveyQuestion   SurveyQuestion[]
+  surveys          Survey[]
 
   @@schema("khao-thi")
 }
@@ -5927,27 +5926,26 @@ model SurveyChoice {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SurveySession {
-  id                   String            @id() @default(cuid())
-  code                 String?           @unique()
-  active               Boolean           @default(true)
-  description          String?           @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime          @default(now())
-  updatedAt            DateTime          @default(now()) @updatedAt()
-  createdBy            String?           @default("") @db.Uuid()
-  survey               Survey            @relation(fields: [surveyId], references: [id])
-  surveyId             String
-  additionalSuggestion String?
-  profile              UserProfile?      @relation(fields: [profileId], references: [id])
-  profileId            String?           @db.Uuid()
-  student              Student?          @relation(fields: [studentId], references: [id])
-  studentId            String?
-  startedAt            DateTime          @default(now())
-  completedAt          DateTime?
-  isCompleted          Boolean           @default(false)
-  surveyObjectType     SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
-  surveyObjectTypeId   String?
-  responses            SurveyResponse[]
+  id                 String            @id() @default(cuid())
+  code               String?           @unique()
+  active             Boolean           @default(true)
+  description        String?           @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @default(now()) @updatedAt()
+  createdBy          String?           @default("") @db.Uuid()
+  survey             Survey            @relation(fields: [surveyId], references: [id])
+  surveyId           String
+  profile            UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId          String?           @db.Uuid()
+  student            Student?          @relation(fields: [studentId], references: [id])
+  studentId          String?
+  startedAt          DateTime          @default(now())
+  completedAt        DateTime?
+  isCompleted        Boolean           @default(false)
+  surveyObjectType   SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
+  surveyObjectTypeId String?
+  responses          SurveyResponse[]
 
   @@unique([surveyId, studentId])
   @@schema("khao-thi")

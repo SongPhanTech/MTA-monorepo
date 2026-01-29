@@ -361,4 +361,96 @@ app.openapi(awardScore, async (c) => {
     return c.json({ success: true, message: 'Success' }, 200)
 })
 
+const approveAwardScore = createRoute({
+    operationId: 'approve-award-score',
+    path: '/approve-award-score',
+    tags: ['ArchivedScore'],
+    summary: 'Phê duyệt điểm giải thưởng',
+    description: 'Phê duyệt điểm giải thưởng',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z.object({ archivedAwardIds: z.string().array() }).openapi('AwardIds'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            success: z.boolean(),
+                            message: z.string(),
+                        })
+                        .openapi('AwardIdsResult'),
+                },
+            },
+        },
+        400: {
+            description: 'Invalid request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(approveAwardScore, async (c) => {
+    const { archivedAwardIds } = c.req.valid('json')
+
+    const archivedAwards = await prisma.archivedAward.findMany({
+        where: { id: { in: archivedAwardIds } },
+        include: {
+            studentSubjectScore: { include: { studentSubjectScore: true } },
+        },
+    })
+
+    const archivedAwardOnStudentSubjectScoreIds = archivedAwards.flatMap((archivedAward) =>
+        archivedAward.studentSubjectScore.map((studentSubjectScore) => studentSubjectScore.id)
+    )
+
+    const studentSubjectScores = archivedAwards.flatMap((archivedAward) => {
+        const bonusScore = archivedAward.bonusScore
+        return archivedAward.studentSubjectScore.map((studentSubjectScore) => {
+            const finalScore = studentSubjectScore.studentSubjectScore.finalScore?.add(bonusScore)
+            return {
+                id: studentSubjectScore.id,
+                finalScore,
+            }
+        })
+    })
+
+    await prisma.$transaction(async (tx) => {
+        await tx.archivedAward.updateMany({
+            where: { id: { in: archivedAwardIds } },
+            data: { status: $Enums.ArchivedCertificateStatus.APPROVED },
+        })
+
+        await tx.archivedAwardOnStudentSubjectScore.updateMany({
+            where: { id: { in: archivedAwardOnStudentSubjectScoreIds } },
+            data: { status: $Enums.ArchivedCertificateStatus.APPROVED },
+        })
+
+        await Promise.all(
+            studentSubjectScores.map((s) =>
+                tx.studentSubjectScore.update({
+                    where: { id: s.id },
+                    data: { finalScore: s.finalScore },
+                })
+            )
+        )
+    })
+
+    return c.json({ success: true, message: 'Success' }, 200)
+})
+
 export default app

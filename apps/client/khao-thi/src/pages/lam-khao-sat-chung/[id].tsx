@@ -21,7 +21,6 @@ type PutSurveySession = SurveySession & {
         answerText?: string
         explanation?: string
     }[]
-    additionalSuggestion: string
 }
 
 type GroupedSurveyQuestion = {
@@ -127,7 +126,6 @@ function TakeTestPage() {
             showSpinner()
             const res = await createSavePublicSurvey({
                 data: {
-                    additionalSuggestion: dataSubmit.additionalSuggestion || '',
                     startedAt: new Date(startAt).toISOString(),
                     surveyId: id,
                     studentCode,
@@ -494,20 +492,6 @@ function TakeTestPage() {
                                     />
                                 )}
                             </Col>
-
-                            {survey.additionalSuggestion && (
-                                <Col span={24}>
-                                    <div className="mb-3 font-bold">Ý kiến khác :</div>
-                                    <FormItem
-                                        className="block"
-                                        form={form}
-                                        name="additionalSuggestion"
-                                        label=""
-                                    >
-                                        <Input.TextArea placeholder="Nhập ý kiến khác" />
-                                    </FormItem>
-                                </Col>
-                            )}
 
                             <Col span={24} className="mt-6">
                                 <Flex justify="end">

@@ -1,4 +1,3 @@
-import FormItem from '@components/commons/form-item'
 import Loading from '@components/commons/loading'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -7,7 +6,7 @@ import KhaoSatPrivateLayout from '@layouts/khao-sat-layout/private'
 import { useSession } from '@workspace/auth/react'
 import type { SurveySession } from '@workspace/db'
 import { useSuspenseFindFirstStudent } from '@workspace/db/hooks'
-import { useSavePublicSurvey, getPrivateSurvey } from '@workspace/libs/api/exam'
+import { getPrivateSurvey, useSavePublicSurvey } from '@workspace/libs/api/exam'
 import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
 import { Button, Col, Flex, Form, Input, message, Radio, Row } from 'antd'
 
@@ -21,7 +20,6 @@ type PutSurveySession = SurveySession & {
         answerText?: string
         explanation?: string
     }[]
-    additionalSuggestion: string
 }
 
 type GroupedSurveyQuestion = {
@@ -131,7 +129,6 @@ function TakeTestPage() {
             showSpinner()
             const res = await createSavePublicSurvey({
                 data: {
-                    additionalSuggestion: dataSubmit.additionalSuggestion || '',
                     startedAt: new Date(startAt).toISOString(),
                     surveyId: id,
                     profileId: profileId,
@@ -458,20 +455,6 @@ function TakeTestPage() {
                             />
                         )}
                     </Col>
-
-                    {survey.additionalSuggestion && (
-                        <Col span={24}>
-                            <div className="mb-3 font-bold">Ý kiến khác :</div>
-                            <FormItem
-                                className="block"
-                                form={form}
-                                name="additionalSuggestion"
-                                label=""
-                            >
-                                <Input.TextArea placeholder="Nhập ý kiến khác" />
-                            </FormItem>
-                        </Col>
-                    )}
 
                     <Col span={24} className="mt-6">
                         <Flex justify="end">

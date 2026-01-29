@@ -229,6 +229,7 @@ app.openapi(saveExamScore, async (c) => {
                     },
                     awards: {
                         select: {
+                            status: true,
                             archivedAward: {
                                 select: {
                                     bonusScore: true,

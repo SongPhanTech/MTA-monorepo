@@ -72,6 +72,7 @@ export default function ArchivedAward() {
 
     const where = useMemo(() => {
         return {
+            ...(filters.archivedAwardStatus ? { status: { in: filters.archivedAwardStatus } } : {}),
             award: {
                 ...(filters.awardName
                     ? {
@@ -80,9 +81,6 @@ export default function ArchivedAward() {
                               mode: 'insensitive' as const,
                           },
                       }
-                    : {}),
-                ...(filters.archivedAwardStatus
-                    ? { status: { in: filters.archivedAwardStatus } }
                     : {}),
             },
             ...(filters.bonusScoreStatus
@@ -121,7 +119,7 @@ export default function ArchivedAward() {
     }, [filters, trainingObjectTypeId])
 
     const { data: dataTable = [], refetch } = useFindManyArchivedAward({
-        where,
+        where: {},
         include: {
             studentSubjectScore: {
                 include: {
@@ -280,7 +278,7 @@ export default function ArchivedAward() {
                                         disabled={!selectedRowKeys.length}
                                         type="primary"
                                     >
-                                        Phê duyệtf
+                                        Phê duyệt
                                     </Button>
                                 </>
                             )}
@@ -370,7 +368,7 @@ export default function ArchivedAward() {
                         },
 
                         {
-                            title: 'Trạng thái chứng chỉ',
+                            title: 'Trạng thái',
                             dataIndex: 'archivedAwardStatus',
                             width: 150,
                             align: 'center',
@@ -450,7 +448,7 @@ export default function ArchivedAward() {
                             },
                         },
                         {
-                            title: 'Trạng thái phiên điểm',
+                            title: 'Trạng thái cộng điểm',
                             dataIndex: 'bonusScoreStatus',
                             width: 150,
                             align: 'center',

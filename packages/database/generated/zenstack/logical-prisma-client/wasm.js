@@ -3446,7 +3446,6 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name',
-  additionalSuggestion: 'additionalSuggestion',
   startDate: 'startDate',
   endDate: 'endDate',
   isPublic: 'isPublic',
@@ -3527,7 +3526,6 @@ exports.Prisma.SurveySessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   surveyId: 'surveyId',
-  additionalSuggestion: 'additionalSuggestion',
   profileId: 'profileId',
   studentId: 'studentId',
   startedAt: 'startedAt',
@@ -6781,7 +6779,6 @@ exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   surveyId: 'surveyId',
-  additionalSuggestion: 'additionalSuggestion',
   profileId: 'profileId',
   studentId: 'studentId',
   surveyObjectTypeId: 'surveyObjectTypeId'

@@ -183,19 +183,6 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
                 )}
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name={'additionalSuggestion'}
-                    label="Có góp ý bổ sung không?"
-                    required
-                >
-                    <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>Có</Radio>
-                        <Radio value={false}>Không</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name={'isPublic'} label="Có công khai không?" required>
                     <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Có</Radio>

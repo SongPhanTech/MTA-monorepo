@@ -20380,9 +20380,6 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "Boolean",
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
@@ -20942,10 +20939,6 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'survey',
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "String",
-                    isOptional: true,
                 }, profile: {
                     name: "profile",
                     type: "UserProfile",

@@ -13,7 +13,6 @@ export interface SaveSurveyRequest {
     studentCode?: string
     /** @nullable */
     surveyObjectTypeId?: string | null
-    additionalSuggestion: string
     startedAt?: string
     responses: SaveSurveyRequestResponsesItem[]
 }

@@ -4,11 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyResultSurveyQuestionItem } from './getSurveyResultSurveyQuestionItem'
-import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem'
+
 import type { GetSurveyResultLectureInfo } from './getSurveyResultLectureInfo'
-import type { GetSurveyResultSubjectClass } from './getSurveyResultSubjectClass'
 import type { GetSurveyResultSemester } from './getSurveyResultSemester'
+import type { GetSurveyResultSubjectClass } from './getSurveyResultSubjectClass'
+import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem'
+import type { GetSurveyResultSurveyQuestionItem } from './getSurveyResultSurveyQuestionItem'
 
 export interface GetSurveyResult {
     id: string
@@ -32,7 +33,6 @@ export interface GetSurveyResult {
     endDate?: string | null
     isPublic?: boolean
     anonymous?: boolean
-    additionalSuggestion: boolean
     surveyQuestion: GetSurveyResultSurveyQuestionItem[]
     surveyChoice: GetSurveyResultSurveyChoiceItem[]
     /** @nullable */

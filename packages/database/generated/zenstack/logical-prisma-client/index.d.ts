@@ -9283,7 +9283,6 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
         name: 'name',
-        additionalSuggestion: 'additionalSuggestion',
         startDate: 'startDate',
         endDate: 'endDate',
         isPublic: 'isPublic',
@@ -9359,7 +9358,6 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
         surveyId: 'surveyId',
-        additionalSuggestion: 'additionalSuggestion',
         profileId: 'profileId',
         studentId: 'studentId',
         startedAt: 'startedAt',
@@ -12350,7 +12348,6 @@ export namespace Prisma {
         description: 'description',
         createdBy: 'createdBy',
         surveyId: 'surveyId',
-        additionalSuggestion: 'additionalSuggestion',
         profileId: 'profileId',
         studentId: 'studentId',
         surveyObjectTypeId: 'surveyObjectTypeId'
@@ -83665,7 +83662,6 @@ export namespace Prisma {
         readonly updatedAt: FieldRef<"ClusterSurvey", 'DateTime'>;
         readonly createdBy: FieldRef<"ClusterSurvey", 'String'>;
         readonly name: FieldRef<"ClusterSurvey", 'String'>;
-        readonly additionalSuggestion: FieldRef<"ClusterSurvey", 'Boolean'>;
         readonly startDate: FieldRef<"ClusterSurvey", 'DateTime'>;
         readonly endDate: FieldRef<"ClusterSurvey", 'DateTime'>;
         readonly isPublic: FieldRef<"ClusterSurvey", 'Boolean'>;
@@ -85610,7 +85606,6 @@ export namespace Prisma {
         readonly updatedAt: FieldRef<"SurveySession", 'DateTime'>;
         readonly createdBy: FieldRef<"SurveySession", 'String'>;
         readonly surveyId: FieldRef<"SurveySession", 'String'>;
-        readonly additionalSuggestion: FieldRef<"SurveySession", 'String'>;
         readonly profileId: FieldRef<"SurveySession", 'String'>;
         readonly studentId: FieldRef<"SurveySession", 'String'>;
         readonly startedAt: FieldRef<"SurveySession", 'DateTime'>;
@@ -285067,7 +285062,6 @@ export namespace Prisma {
         updatedAt: Date | null
         createdBy: string | null
         name: string | null
-        additionalSuggestion: boolean | null
         startDate: Date | null
         endDate: Date | null
         isPublic: boolean | null
@@ -285084,7 +285078,6 @@ export namespace Prisma {
         updatedAt: Date | null
         createdBy: string | null
         name: string | null
-        additionalSuggestion: boolean | null
         startDate: Date | null
         endDate: Date | null
         isPublic: boolean | null
@@ -285101,7 +285094,6 @@ export namespace Prisma {
         updatedAt: number
         createdBy: number
         name: number
-        additionalSuggestion: number
         startDate: number
         endDate: number
         isPublic: number
@@ -285119,7 +285111,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         name?: true
-        additionalSuggestion?: true
         startDate?: true
         endDate?: true
         isPublic?: true
@@ -285136,7 +285127,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         name?: true
-        additionalSuggestion?: true
         startDate?: true
         endDate?: true
         isPublic?: true
@@ -285153,7 +285143,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         name?: true
-        additionalSuggestion?: true
         startDate?: true
         endDate?: true
         isPublic?: true
@@ -285237,7 +285226,6 @@ export namespace Prisma {
         updatedAt: Date
         createdBy: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date
         endDate: Date | null
         isPublic: boolean
@@ -285269,7 +285257,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        additionalSuggestion?: boolean
         startDate?: boolean
         endDate?: boolean
         isPublic?: boolean
@@ -285293,7 +285280,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        additionalSuggestion?: boolean
         startDate?: boolean
         endDate?: boolean
         isPublic?: boolean
@@ -285311,7 +285297,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        additionalSuggestion?: boolean
         startDate?: boolean
         endDate?: boolean
         isPublic?: boolean
@@ -285329,14 +285314,13 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        additionalSuggestion?: boolean
         startDate?: boolean
         endDate?: boolean
         isPublic?: boolean
         anonymous?: boolean
         surveyTopicId?: boolean
     };
-    export type ClusterSurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "additionalSuggestion" | "startDate" | "endDate" | "isPublic" | "anonymous" | "surveyTopicId", ExtArgs["result"]["clusterSurvey"]>;
+    export type ClusterSurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "isPublic" | "anonymous" | "surveyTopicId", ExtArgs["result"]["clusterSurvey"]>;
     export type ClusterSurveyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
         surveyObjectType?: boolean | ClusterSurvey$surveyObjectTypeArgs<ExtArgs>
@@ -285372,7 +285356,6 @@ export namespace Prisma {
             updatedAt: Date
             createdBy: string | null
             name: string
-            additionalSuggestion: boolean
             startDate: Date
             endDate: Date | null
             isPublic: boolean
@@ -289083,7 +289066,6 @@ export namespace Prisma {
         updatedAt: Date | null
         createdBy: string | null
         surveyId: string | null
-        additionalSuggestion: string | null
         profileId: string | null
         studentId: string | null
         startedAt: Date | null
@@ -289101,7 +289083,6 @@ export namespace Prisma {
         updatedAt: Date | null
         createdBy: string | null
         surveyId: string | null
-        additionalSuggestion: string | null
         profileId: string | null
         studentId: string | null
         startedAt: Date | null
@@ -289119,7 +289100,6 @@ export namespace Prisma {
         updatedAt: number
         createdBy: number
         surveyId: number
-        additionalSuggestion: number
         profileId: number
         studentId: number
         startedAt: number
@@ -289138,7 +289118,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         surveyId?: true
-        additionalSuggestion?: true
         profileId?: true
         studentId?: true
         startedAt?: true
@@ -289156,7 +289135,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         surveyId?: true
-        additionalSuggestion?: true
         profileId?: true
         studentId?: true
         startedAt?: true
@@ -289174,7 +289152,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         surveyId?: true
-        additionalSuggestion?: true
         profileId?: true
         studentId?: true
         startedAt?: true
@@ -289259,7 +289236,6 @@ export namespace Prisma {
         updatedAt: Date
         createdBy: string | null
         surveyId: string
-        additionalSuggestion: string | null
         profileId: string | null
         studentId: string | null
         startedAt: Date
@@ -289292,7 +289268,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         surveyId?: boolean
-        additionalSuggestion?: boolean
         profileId?: boolean
         studentId?: boolean
         startedAt?: boolean
@@ -289316,7 +289291,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         surveyId?: boolean
-        additionalSuggestion?: boolean
         profileId?: boolean
         studentId?: boolean
         startedAt?: boolean
@@ -289338,7 +289312,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         surveyId?: boolean
-        additionalSuggestion?: boolean
         profileId?: boolean
         studentId?: boolean
         startedAt?: boolean
@@ -289360,7 +289333,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         surveyId?: boolean
-        additionalSuggestion?: boolean
         profileId?: boolean
         studentId?: boolean
         startedAt?: boolean
@@ -289368,7 +289340,7 @@ export namespace Prisma {
         isCompleted?: boolean
         surveyObjectTypeId?: boolean
     };
-    export type SurveySessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "surveyId" | "additionalSuggestion" | "profileId" | "studentId" | "startedAt" | "completedAt" | "isCompleted" | "surveyObjectTypeId", ExtArgs["result"]["surveySession"]>;
+    export type SurveySessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "surveyId" | "profileId" | "studentId" | "startedAt" | "completedAt" | "isCompleted" | "surveyObjectTypeId", ExtArgs["result"]["surveySession"]>;
     export type SurveySessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         survey?: boolean | SurveyDefaultArgs<ExtArgs>
         profile?: boolean | SurveySession$profileArgs<ExtArgs>
@@ -289408,7 +289380,6 @@ export namespace Prisma {
             updatedAt: Date
             createdBy: string | null
             surveyId: string
-            additionalSuggestion: string | null
             profileId: string | null
             studentId: string | null
             startedAt: Date
@@ -363248,7 +363219,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         createdBy?: UuidNullableFilter<"ClusterSurvey"> | string | null
         name?: StringFilter<"ClusterSurvey"> | string
-        additionalSuggestion?: BoolFilter<"ClusterSurvey"> | boolean
         startDate?: DateTimeFilter<"ClusterSurvey"> | Date | string
         endDate?: DateTimeNullableFilter<"ClusterSurvey"> | Date | string | null
         isPublic?: BoolFilter<"ClusterSurvey"> | boolean
@@ -363271,7 +363241,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
-        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrderInput | SortOrder
         isPublic?: SortOrder
@@ -363298,7 +363267,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         createdBy?: UuidNullableFilter<"ClusterSurvey"> | string | null
         name?: StringFilter<"ClusterSurvey"> | string
-        additionalSuggestion?: BoolFilter<"ClusterSurvey"> | boolean
         startDate?: DateTimeFilter<"ClusterSurvey"> | Date | string
         endDate?: DateTimeNullableFilter<"ClusterSurvey"> | Date | string | null
         isPublic?: BoolFilter<"ClusterSurvey"> | boolean
@@ -363321,7 +363289,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
-        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrderInput | SortOrder
         isPublic?: SortOrder
@@ -363344,7 +363311,6 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"ClusterSurvey"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"ClusterSurvey"> | string | null
         name?: StringWithAggregatesFilter<"ClusterSurvey"> | string
-        additionalSuggestion?: BoolWithAggregatesFilter<"ClusterSurvey"> | boolean
         startDate?: DateTimeWithAggregatesFilter<"ClusterSurvey"> | Date | string
         endDate?: DateTimeNullableWithAggregatesFilter<"ClusterSurvey"> | Date | string | null
         isPublic?: BoolWithAggregatesFilter<"ClusterSurvey"> | boolean
@@ -363768,7 +363734,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"SurveySession"> | Date | string
         createdBy?: UuidNullableFilter<"SurveySession"> | string | null
         surveyId?: StringFilter<"SurveySession"> | string
-        additionalSuggestion?: StringNullableFilter<"SurveySession"> | string | null
         profileId?: UuidNullableFilter<"SurveySession"> | string | null
         studentId?: StringNullableFilter<"SurveySession"> | string | null
         startedAt?: DateTimeFilter<"SurveySession"> | Date | string
@@ -363791,7 +363756,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         surveyId?: SortOrder
-        additionalSuggestion?: SortOrderInput | SortOrder
         profileId?: SortOrderInput | SortOrder
         studentId?: SortOrderInput | SortOrder
         startedAt?: SortOrder
@@ -363819,7 +363783,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"SurveySession"> | Date | string
         createdBy?: UuidNullableFilter<"SurveySession"> | string | null
         surveyId?: StringFilter<"SurveySession"> | string
-        additionalSuggestion?: StringNullableFilter<"SurveySession"> | string | null
         profileId?: UuidNullableFilter<"SurveySession"> | string | null
         studentId?: StringNullableFilter<"SurveySession"> | string | null
         startedAt?: DateTimeFilter<"SurveySession"> | Date | string
@@ -363842,7 +363805,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         surveyId?: SortOrder
-        additionalSuggestion?: SortOrderInput | SortOrder
         profileId?: SortOrderInput | SortOrder
         studentId?: SortOrderInput | SortOrder
         startedAt?: SortOrder
@@ -363866,7 +363828,6 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"SurveySession"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"SurveySession"> | string | null
         surveyId?: StringWithAggregatesFilter<"SurveySession"> | string
-        additionalSuggestion?: StringNullableWithAggregatesFilter<"SurveySession"> | string | null
         profileId?: UuidNullableWithAggregatesFilter<"SurveySession"> | string | null
         studentId?: StringNullableWithAggregatesFilter<"SurveySession"> | string | null
         startedAt?: DateTimeWithAggregatesFilter<"SurveySession"> | Date | string
@@ -393580,7 +393541,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -393602,7 +393562,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -393624,7 +393583,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -393646,7 +393604,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -393668,7 +393625,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -393685,7 +393641,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -393701,7 +393656,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -394161,7 +394115,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        additionalSuggestion?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
@@ -394181,7 +394134,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         profileId?: string | null
         studentId?: string | null
         startedAt?: Date | string
@@ -394199,7 +394151,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
@@ -394219,7 +394170,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -394238,7 +394188,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         profileId?: string | null
         studentId?: string | null
         startedAt?: Date | string
@@ -394255,7 +394204,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
@@ -394270,7 +394218,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -415803,7 +415750,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         name?: SortOrder
-        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
         isPublic?: SortOrder
@@ -415820,7 +415766,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         name?: SortOrder
-        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
         isPublic?: SortOrder
@@ -415837,7 +415782,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         name?: SortOrder
-        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
         isPublic?: SortOrder
@@ -416111,7 +416055,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         surveyId?: SortOrder
-        additionalSuggestion?: SortOrder
         profileId?: SortOrder
         studentId?: SortOrder
         startedAt?: SortOrder
@@ -416129,7 +416072,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         surveyId?: SortOrder
-        additionalSuggestion?: SortOrder
         profileId?: SortOrder
         studentId?: SortOrder
         startedAt?: SortOrder
@@ -416147,7 +416089,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         surveyId?: SortOrder
-        additionalSuggestion?: SortOrder
         profileId?: SortOrder
         studentId?: SortOrder
         startedAt?: SortOrder
@@ -449313,7 +449254,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        additionalSuggestion?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
@@ -449332,7 +449272,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         studentId?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
@@ -452863,7 +452802,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"SurveySession"> | Date | string
         createdBy?: UuidNullableFilter<"SurveySession"> | string | null
         surveyId?: StringFilter<"SurveySession"> | string
-        additionalSuggestion?: StringNullableFilter<"SurveySession"> | string | null
         profileId?: UuidNullableFilter<"SurveySession"> | string | null
         studentId?: StringNullableFilter<"SurveySession"> | string | null
         startedAt?: DateTimeFilter<"SurveySession"> | Date | string
@@ -523386,7 +523324,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        additionalSuggestion?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
@@ -523405,7 +523342,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         profileId?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
@@ -532248,7 +532184,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -532269,7 +532204,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -533214,7 +533148,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         createdBy?: UuidNullableFilter<"ClusterSurvey"> | string | null
         name?: StringFilter<"ClusterSurvey"> | string
-        additionalSuggestion?: BoolFilter<"ClusterSurvey"> | boolean
         startDate?: DateTimeFilter<"ClusterSurvey"> | Date | string
         endDate?: DateTimeNullableFilter<"ClusterSurvey"> | Date | string | null
         isPublic?: BoolFilter<"ClusterSurvey"> | boolean
@@ -545311,7 +545244,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        additionalSuggestion?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
@@ -545330,7 +545262,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         profileId?: string | null
         studentId?: string | null
         startedAt?: Date | string
@@ -545356,7 +545287,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -545377,7 +545307,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -545673,7 +545602,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -545694,7 +545622,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -546832,7 +546759,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        additionalSuggestion?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
@@ -546850,7 +546776,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        additionalSuggestion?: string | null
         profileId?: string | null
         studentId?: string | null
         startedAt?: Date | string
@@ -546877,7 +546802,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -546898,7 +546822,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -547343,7 +547266,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -547364,7 +547286,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -547465,7 +547386,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -547486,7 +547406,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -547775,7 +547694,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -547796,7 +547714,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -547920,7 +547837,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -547941,7 +547857,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -549234,7 +549149,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        additionalSuggestion?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
@@ -549253,7 +549167,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         profileId?: string | null
         studentId?: string | null
         startedAt?: Date | string
@@ -549351,7 +549264,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
@@ -549370,7 +549282,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -570821,7 +570732,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         studentId?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
@@ -572804,7 +572714,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
@@ -572823,7 +572732,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -572841,7 +572749,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609866,7 +609773,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         profileId?: string | null
         startedAt?: Date | string
         completedAt?: Date | string | null
@@ -610814,7 +610720,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
@@ -610833,7 +610738,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -610851,7 +610755,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614037,7 +613940,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -614058,7 +613960,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -614079,7 +613980,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -617416,7 +617316,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         surveyId: string
-        additionalSuggestion?: string | null
         profileId?: string | null
         studentId?: string | null
         startedAt?: Date | string
@@ -618099,7 +617998,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
@@ -618118,7 +618016,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -618136,7 +618033,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         surveyId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -618153,7 +618049,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -618174,7 +618069,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -618195,7 +618089,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -618212,7 +618105,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
@@ -618248,7 +618140,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -618269,7 +618160,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -618290,7 +618180,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -618828,7 +618717,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        additionalSuggestion?: string | null
         profileId?: string | null
         studentId?: string | null
         startedAt?: Date | string
@@ -618986,7 +618874,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
@@ -619004,7 +618891,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -619022,7 +618908,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: NullableStringFieldUpdateOperationsInput | string | null
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -619135,7 +619020,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -619156,7 +619040,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -619177,7 +619060,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean

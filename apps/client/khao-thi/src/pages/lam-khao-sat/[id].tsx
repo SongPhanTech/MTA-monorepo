@@ -408,195 +408,178 @@ function TakeTestPage() {
                             </Col>
 
                             <Col span={24} className="my-3">
-                              <Table
-                                        rowKey="id"
-                                        dataSource={dataTest || []}
-                                        pagination={false}
-                                        columns={[
-                                            {
-                                                title: 'STT',
-                                                width: 50,
-                                                align: 'center',
-                                                render: (_, record) => {
-                                                    return (
-                                                        <div
-                                                            className={`${record.isParent ? 'font-semibold' : ''}`}
-                                                        >
-                                                            {record?.index}
-                                                        </div>
-                                                    )
-                                                },
+                                <Table
+                                    rowKey="id"
+                                    dataSource={dataTest || []}
+                                    pagination={false}
+                                    columns={[
+                                        {
+                                            title: 'STT',
+                                            width: 50,
+                                            align: 'center',
+                                            render: (_, record) => {
+                                                return (
+                                                    <div
+                                                        className={`${record.isParent ? 'font-semibold' : ''}`}
+                                                    >
+                                                        {record?.index}
+                                                    </div>
+                                                )
                                             },
-                                            {
-                                                title: 'Nội dung phản hồi',
-                                                dataIndex: 'content',
-                                                render: (_, record) => {
-                                                    const order = survey?.surveyQuestion.findIndex(
-                                                        (item) => item.id === record.id
-                                                    )
-                                                    return record.isParent ? (
-                                                        <div className="font-semibold uppercase">
-                                                            {record?.name}
-                                                        </div>
-                                                    ) : record?.type === 'ESSAY' ? (
-                                                        <div>
-                                                            <div
-                                                                dangerouslySetInnerHTML={{
-                                                                    __html: record?.name,
-                                                                }}
-                                                            />
-                                                            <Form.Item
-                                                                name={[
-                                                                    'responses',
-                                                                    order,
-                                                                    'answerText',
-                                                                ]}
-                                                                rules={[
-                                                                    {
-                                                                        required: true,
-                                                                        message: 'Nhập câu trả lời',
-                                                                    },
-                                                                ]}
-                                                            >
-                                                                <Input.TextArea placeholder="Nhập câu trả lời" />
-                                                            </Form.Item>
-                                                        </div>
-                                                    ) : record?.specificChoice?.length > 0 ? (
-                                                        <div>
-                                                            <div
-                                                                dangerouslySetInnerHTML={{
-                                                                    __html: record?.name,
-                                                                }}
-                                                            />
-                                                            <Form.Item
-                                                                name={[
-                                                                    'responses',
-                                                                    order,
-                                                                    'surveyChoiceId',
-                                                                ]}
-                                                                rules={[
-                                                                    {
-                                                                        required: true,
-                                                                        message:
-                                                                            'Vui lòng chọn mức phản hồi',
-                                                                    },
-                                                                ]}
-                                                                style={{ marginBottom: 0 }}
-                                                                className="w-full"
-                                                            >
-                                                                <Radio.Group className="w-full gap-x-2 flex">
-                                                                    {survey?.surveyChoice.map(
-                                                                        (i, index: number) => (
-                                                                            <Radio
-                                                                                key={i?.id}
-                                                                                value={i?.id}
-                                                                                className="relative"
-                                                                            >
-                                                                                <div>
-                                                                                    {
-                                                                                        record
-                                                                                            ?.specificChoice[
-                                                                                            index
-                                                                                        ]
-                                                                                            ?.description
-                                                                                    }
-                                                                                </div>
-                                                                            </Radio>
-                                                                        )
-                                                                    )}
-                                                                </Radio.Group>
-                                                            </Form.Item>
-                                                        </div>
-                                                    ) : (
+                                        },
+                                        {
+                                            title: 'Nội dung phản hồi',
+                                            dataIndex: 'content',
+                                            render: (_, record) => {
+                                                const order = survey?.surveyQuestion.findIndex(
+                                                    (item) => item.id === record.id
+                                                )
+                                                return record.isParent ? (
+                                                    <div className="font-semibold uppercase">
+                                                        {record?.name}
+                                                    </div>
+                                                ) : record?.type === 'ESSAY' ? (
+                                                    <div>
                                                         <div
                                                             dangerouslySetInnerHTML={{
                                                                 __html: record?.name,
                                                             }}
                                                         />
-                                                    )
-                                                },
-                                                onCell: (record, rowIndex) => {
-                                                    return {
-                                                        colSpan:
-                                                            record.isParent ||
-                                                            record?.specificChoice?.length > 0 ||
-                                                            record?.type === 'ESSAY'
-                                                                ? 2
-                                                                : 1,
-                                                    }
-                                                },
+                                                        <Form.Item
+                                                            name={[
+                                                                'responses',
+                                                                order,
+                                                                'answerText',
+                                                            ]}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: 'Nhập câu trả lời',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                        </Form.Item>
+                                                    </div>
+                                                ) : record?.specificChoice?.length > 0 ? (
+                                                    <div>
+                                                        <div
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: record?.name,
+                                                            }}
+                                                        />
+                                                        <Form.Item
+                                                            name={[
+                                                                'responses',
+                                                                order,
+                                                                'surveyChoiceId',
+                                                            ]}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message:
+                                                                        'Vui lòng chọn mức phản hồi',
+                                                                },
+                                                            ]}
+                                                            style={{ marginBottom: 0 }}
+                                                            className="w-full"
+                                                        >
+                                                            <Radio.Group className="w-full gap-x-2 flex">
+                                                                {survey?.surveyChoice.map(
+                                                                    (i, index: number) => (
+                                                                        <Radio
+                                                                            key={i?.id}
+                                                                            value={i?.id}
+                                                                            className="relative"
+                                                                        >
+                                                                            <div>
+                                                                                {
+                                                                                    record
+                                                                                        ?.specificChoice[
+                                                                                        index
+                                                                                    ]?.description
+                                                                                }
+                                                                            </div>
+                                                                        </Radio>
+                                                                    )
+                                                                )}
+                                                            </Radio.Group>
+                                                        </Form.Item>
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: record?.name,
+                                                        }}
+                                                    />
+                                                )
                                             },
-                                            {
-                                                title: 'Mức phản hồi',
-                                                width: 200,
-                                                align: 'center',
-                                                onCell: (record, rowIndex) => {
-                                                    return {
-                                                        colSpan:
-                                                            record.isParent ||
-                                                            record?.specificChoice?.length > 0 ||
-                                                            record?.type === 'ESSAY'
-                                                                ? 0
-                                                                : 1,
-                                                    }
-                                                },
-                                                render: (_, record, qIndex) => {
-                                                    const order = survey?.surveyQuestion.findIndex(
-                                                        (item) => item.id === record.id
-                                                    )
-                                                    return (
-                                                        record?.type === 'SINGLE_CHOICE' && (
-                                                            <Form.Item
-                                                                name={[
-                                                                    'responses',
-                                                                    order,
-                                                                    'surveyChoiceId',
-                                                                ]}
-                                                                rules={[
-                                                                    {
-                                                                        required: true,
-                                                                        message:
-                                                                            'Vui lòng chọn mức phản hồi',
-                                                                    },
-                                                                ]}
-                                                                style={{ marginBottom: 0 }}
-                                                                className="w-full"
-                                                            >
-                                                                <Radio.Group className="w-full gap-x-2 flex">
-                                                                    {survey?.surveyChoice.map(
-                                                                        (i) => (
-                                                                            <Radio.Button
-                                                                                key={i?.id}
-                                                                                value={i?.id}
-                                                                            >
-                                                                                {i?.answer}
-                                                                            </Radio.Button>
-                                                                        )
-                                                                    )}
-                                                                </Radio.Group>
-                                                            </Form.Item>
-                                                        )
-                                                    )
-                                                },
+                                            onCell: (record, rowIndex) => {
+                                                return {
+                                                    colSpan:
+                                                        record.isParent ||
+                                                        record?.specificChoice?.length > 0 ||
+                                                        record?.type === 'ESSAY'
+                                                            ? 2
+                                                            : 1,
+                                                }
                                             },
-                                        ]}
-                                        bordered={true}
-                                    />
+                                        },
+                                        {
+                                            title: 'Mức phản hồi',
+                                            width: 200,
+                                            align: 'center',
+                                            onCell: (record, rowIndex) => {
+                                                return {
+                                                    colSpan:
+                                                        record.isParent ||
+                                                        record?.specificChoice?.length > 0 ||
+                                                        record?.type === 'ESSAY'
+                                                            ? 0
+                                                            : 1,
+                                                }
+                                            },
+                                            render: (_, record, qIndex) => {
+                                                const order = survey?.surveyQuestion.findIndex(
+                                                    (item) => item.id === record.id
+                                                )
+                                                return (
+                                                    record?.type === 'SINGLE_CHOICE' && (
+                                                        <Form.Item
+                                                            name={[
+                                                                'responses',
+                                                                order,
+                                                                'surveyChoiceId',
+                                                            ]}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message:
+                                                                        'Vui lòng chọn mức phản hồi',
+                                                                },
+                                                            ]}
+                                                            style={{ marginBottom: 0 }}
+                                                            className="w-full"
+                                                        >
+                                                            <Radio.Group className="w-full gap-x-2 flex">
+                                                                {survey?.surveyChoice.map((i) => (
+                                                                    <Radio.Button
+                                                                        key={i?.id}
+                                                                        value={i?.id}
+                                                                    >
+                                                                        {i?.answer}
+                                                                    </Radio.Button>
+                                                                ))}
+                                                            </Radio.Group>
+                                                        </Form.Item>
+                                                    )
+                                                )
+                                            },
+                                        },
+                                    ]}
+                                    bordered={true}
+                                />
                             </Col>
-
-                            {/* {survey.additionalSuggestion && (
-                                <Col span={24}>
-                                    <div className="mb-3 font-bold">Ý kiến khác :</div>
-                                    <FormItem
-                                        className="block"
-                                        form={form}
-                                        name="additionalSuggestion"
-                                        label=""
-                                    >
-                                        <Input.TextArea placeholder="Nhập ý kiến khác" />
-                                    </FormItem>
-                                </Col>
-                            )} */}
 
                             <Col span={24} className="my-6">
                                 <Flex justify="end">

@@ -202,7 +202,6 @@ const savePublicSurvey = createRoute({
                             studentId: z.string().optional(),
                             studentCode: z.string().optional(),
                             surveyObjectTypeId: z.string().nullish(),
-                            additionalSuggestion: z.string(),
                             startedAt: z.string().datetime().optional(),
                             responses: z.array(
                                 z.object({
@@ -257,16 +256,8 @@ const savePublicSurvey = createRoute({
 })
 
 app.openapi(savePublicSurvey, async (c) => {
-    let {
-        surveyId,
-        profileId,
-        studentId,
-        studentCode,
-        surveyObjectTypeId,
-        additionalSuggestion,
-        startedAt,
-        responses,
-    } = c.req.valid('json')
+    let { surveyId, profileId, studentId, studentCode, surveyObjectTypeId, startedAt, responses } =
+        c.req.valid('json')
     const survey = await prisma.survey.findUnique({
         where: { id: surveyId, deletedAt: null, active: true },
         include: { surveyChoice: true },
@@ -315,7 +306,6 @@ app.openapi(savePublicSurvey, async (c) => {
                 surveyObjectType: { connect: { id: surveyObjectTypeId } },
             }),
             startedAt,
-            additionalSuggestion,
             completedAt: new Date(),
             isCompleted: true,
             responses: {

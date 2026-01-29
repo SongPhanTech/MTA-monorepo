@@ -913,6 +913,7 @@ export default function NhapDiem({
                                     examScore,
                                     awards:
                                         dataForCalc?.awards?.map?.((a) => ({
+                                            status: a.status,
                                             archivedAward: {
                                                 bonusScore: a.archivedAward.bonusScore ?? 0,
                                             },
