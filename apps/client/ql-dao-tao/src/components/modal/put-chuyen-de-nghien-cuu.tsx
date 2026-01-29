@@ -1,7 +1,7 @@
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import {
-    useFindManyLecturer,
+    useFindManyExpertProfile,
     useFindUniqueStudentResearchTopic,
     useUpdateStudentResearchTopic,
 } from '@workspace/db/hooks'
@@ -33,9 +33,19 @@ const PutResearchTopicModal = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const { data: lecturer = [] } = useFindManyLecturer({
+    const { data: expertProfile = [] } = useFindManyExpertProfile({
         include: {
-            userProfile: true,
+            lecturer: {
+                select: {
+                    code: true,
+                    userProfile: {
+                        include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                        },
+                    },
+                },
+            },
         },
     })
 
@@ -45,12 +55,20 @@ const PutResearchTopicModal = () => {
             include: {
                 supervisor: {
                     include: {
-                        userProfile: true,
+                        lecturer: {
+                            select: {
+                                userProfile: true,
+                            },
+                        },
                     },
                 },
                 coSupervisor: {
                     include: {
-                        userProfile: true,
+                        lecturer: {
+                            select: {
+                                userProfile: true,
+                            },
+                        },
                     },
                 },
                 studentSubjectScore: {
@@ -71,27 +89,27 @@ const PutResearchTopicModal = () => {
     )
 
     const { mutateAsync: updateStudentResearchTopic } = useUpdateStudentResearchTopic()
-    async function onOk() {
+    async function onOk(values: PutResearchTopicForm) {
         try {
             showSpinner()
             if (input?.studentResearchTopicId) {
-                const score = form.getFieldValue('score')
-                    ? Number(form.getFieldValue('score'))
-                    : null
+                const score = values.score ? Number(values.score) : null
 
                 await updateStudentResearchTopic({
                     where: { id: input?.studentResearchTopicId },
                     data: {
-                        name: form.getFieldValue('name'),
-                        mainContent: form.getFieldValue('mainContent'),
+                        name: values.name,
+                        mainContent: values.mainContent,
                         supervisor: {
-                            connect: { id: form.getFieldValue('supervisorId') || null },
+                            connect: { id: values.supervisorId ?? '' },
                         },
-                        coSupervisor: {
-                            connect: { id: form.getFieldValue('coSupervisorId') || null },
-                        },
-                        reportDate: form.getFieldValue('reportDate'),
-                        deadline: form.getFieldValue('deadline'),
+                        ...(values.coSupervisorId
+                            ? {
+                                  coSupervisor: { connect: { id: values.coSupervisorId } },
+                              }
+                            : {}),
+                        reportDate: values.reportDate,
+                        deadline: values.deadline,
                         studentSubjectScore: {
                             update: {
                                 attendanceScore: score,
@@ -195,8 +213,18 @@ const PutResearchTopicModal = () => {
                     <FormItem form={form} name="supervisorId" label="Giảng viên hướng dẫn" required>
                         <Select
                             placeholder="Chọn giảng viên hướng dẫn"
-                            options={lecturer.map((item) => ({
-                                label: `${item.lectureID ? `${item.lectureID} -` : ''} ${item.userProfile.fullname}`,
+                            options={expertProfile.map((item) => ({
+                                label: item.lecturer
+                                    ? [
+                                          item.lecturer?.userProfile.academicRankType?.sMa,
+                                          item.lecturer?.userProfile.academicDegreeType?.sMa,
+                                          item.lecturer?.userProfile.fullname,
+                                      ]
+                                          .filter(Boolean)
+                                          .join('. ')
+                                    : [item.academicRank, item.academicDegree, item.name]
+                                          .filter(Boolean)
+                                          .join('. '),
                                 value: item.id,
                             }))}
                             showSearch
@@ -209,8 +237,18 @@ const PutResearchTopicModal = () => {
                     <FormItem form={form} name="coSupervisorId" label="Chuyên gia hướng dẫn phụ">
                         <Select
                             placeholder="Chọn chuyên gia phụ"
-                            options={lecturer.map((item) => ({
-                                label: `${item.lectureID ? `${item.lectureID} -` : ''} ${item.userProfile.fullname}`,
+                            options={expertProfile.map((item) => ({
+                                label: item.lecturer
+                                    ? [
+                                          item.lecturer?.userProfile.academicRankType?.sMa,
+                                          item.lecturer?.userProfile.academicDegreeType?.sMa,
+                                          item.lecturer?.userProfile.fullname,
+                                      ]
+                                          .filter(Boolean)
+                                          .join('. ')
+                                    : [item.academicRank, item.academicDegree, item.name]
+                                          .filter(Boolean)
+                                          .join('. '),
                                 value: item.id,
                             }))}
                             showSearch

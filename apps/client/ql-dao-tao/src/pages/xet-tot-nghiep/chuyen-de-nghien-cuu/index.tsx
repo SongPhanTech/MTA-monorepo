@@ -121,7 +121,13 @@ export default function ChuyenDeNghienCuu() {
                     include: {
                         lecturer: {
                             select: {
-                                userProfile: true,
+                                userProfile: {
+                                    select: {
+                                        fullname: true,
+                                        academicRankType: true,
+                                        academicDegreeType: true,
+                                    },
+                                },
                             },
                         },
                     },
@@ -130,7 +136,13 @@ export default function ChuyenDeNghienCuu() {
                     include: {
                         lecturer: {
                             select: {
-                                userProfile: true,
+                                userProfile: {
+                                    select: {
+                                        fullname: true,
+                                        academicRankType: true,
+                                        academicDegreeType: true,
+                                    },
+                                },
                             },
                         },
                     },
@@ -462,9 +474,6 @@ export default function ChuyenDeNghienCuu() {
                                                 'Vui lòng chọn kỳ học trước khi xuất phụ lục!'
                                             )
                                         }
-
-                                        let globalIndex = 0
-
                                         const khoaVaKy = await sqlTransaction([
                                             {
                                                 model: 'TrainingCourse',
@@ -707,6 +716,300 @@ export default function ChuyenDeNghienCuu() {
                                 >
                                     Phụ lục QĐ chuyên đề nghiên cứu
                                 </Button>
+                                <Button
+                                    type="primary"
+                                    icon={<FileOutlined />}
+                                    onClick={async () => {
+                                        if (!trainingCourseId) {
+                                            return message.warning(
+                                                'Vui lòng chọn khóa học trước khi xuất phụ lục!'
+                                            )
+                                        }
+
+                                        if (!semesterId) {
+                                            return message.warning(
+                                                'Vui lòng chọn kỳ học trước khi xuất phụ lục!'
+                                            )
+                                        }
+
+                                        const khoaVaKy = await sqlTransaction([
+                                            {
+                                                model: 'TrainingCourse',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: trainingCourseId },
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                            {
+                                                model: 'Semester',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: semesterId },
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                        ])
+                                        const khoaVaKyData = khoaVaKy.data as [
+                                            { name: string },
+                                            { name: string },
+                                        ]
+
+                                        const expertProfiles = await sqlTransaction([
+                                            {
+                                                model: 'ExpertProfile',
+                                                operation: 'findMany',
+                                                data: {
+                                                    where: {
+                                                        OR: [
+                                                            {
+                                                                supervisorResearchTopic: {
+                                                                    some: {
+                                                                        studentSubjectScore: {
+                                                                            subjectClass: {
+                                                                                semesterId,
+                                                                                trainingObjectTypeId,
+                                                                            },
+                                                                            student: {
+                                                                                fixedClass: {
+                                                                                    trainingCourseId,
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                            {
+                                                                coSupervisorResearchTopic: {
+                                                                    some: {
+                                                                        studentSubjectScore: {
+                                                                            subjectClass: {
+                                                                                semesterId,
+                                                                                trainingObjectTypeId,
+                                                                            },
+                                                                            student: {
+                                                                                fixedClass: {
+                                                                                    trainingCourseId,
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                    include: {
+                                                        supervisorResearchTopic: {
+                                                            select: {
+                                                                id: true,
+                                                                coSupervisorId: true,
+                                                                studentSubjectScore: {
+                                                                    select: {
+                                                                        subjectVersion: {
+                                                                            select: {
+                                                                                credit: true,
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        coSupervisorResearchTopic: {
+                                                            select: {
+                                                                id: true,
+                                                                supervisorId: true,
+                                                                studentSubjectScore: {
+                                                                    select: {
+                                                                        subjectVersion: {
+                                                                            select: {
+                                                                                credit: true,
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        lecturer: {
+                                                            select: {
+                                                                userProfile: {
+                                                                    select: {
+                                                                        fullname: true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        ])
+
+                                        const expertProfilesData = expertProfiles
+                                            .data[0] as Prisma.ExpertProfileGetPayload<{
+                                            include: {
+                                                supervisorResearchTopic: {
+                                                    select: {
+                                                        id: true
+                                                        coSupervisorId: true
+                                                        studentSubjectScore: {
+                                                            select: {
+                                                                subjectVersion: {
+                                                                    select: {
+                                                                        credit: true
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                coSupervisorResearchTopic: {
+                                                    select: {
+                                                        id: true
+                                                        supervisorId: true
+                                                        studentSubjectScore: {
+                                                            select: {
+                                                                subjectVersion: {
+                                                                    select: {
+                                                                        credit: true
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                lecturer: {
+                                                    select: {
+                                                        userProfile: {
+                                                            select: {
+                                                                fullname: true
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }>[]
+
+                                        const res = await excelTemplate({
+                                            fileName: 'TK_TaiGiangDayCuaGiangVien.xlsx',
+                                            path: 'TK_TaiGiangDayCuaGiangVien.xlsx',
+                                            showGridLines: true,
+                                            wrapText: true,
+                                            payload: [
+                                                {
+                                                    data: {
+                                                        khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
+                                                        hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
+                                                        data: expertProfilesData.map(
+                                                            (profile, idx) => {
+                                                                return {
+                                                                    tt: idx + 1,
+                                                                    ho_ten:
+                                                                        profile?.name ??
+                                                                        profile?.lecturer
+                                                                            ?.userProfile?.fullname,
+                                                                    cd_dl:
+                                                                        profile.supervisorResearchTopic.filter(
+                                                                            (t) => !t.coSupervisorId
+                                                                        ).length +
+                                                                        profile.coSupervisorResearchTopic.filter(
+                                                                            (t) => !t.supervisorId
+                                                                        ).length,
+                                                                    tc_dl:
+                                                                        profile.supervisorResearchTopic
+                                                                            .filter(
+                                                                                (t) =>
+                                                                                    !t.coSupervisorId
+                                                                            )
+                                                                            .map(
+                                                                                (e) =>
+                                                                                    e
+                                                                                        .studentSubjectScore
+                                                                                        .subjectVersion
+                                                                                        .credit
+                                                                            )
+                                                                            .reduce(
+                                                                                (a, b) => a + b,
+                                                                                0
+                                                                            ) +
+                                                                        profile.coSupervisorResearchTopic
+                                                                            .filter(
+                                                                                (t) =>
+                                                                                    !t.supervisorId
+                                                                            )
+                                                                            .map(
+                                                                                (e) =>
+                                                                                    e
+                                                                                        .studentSubjectScore
+                                                                                        .subjectVersion
+                                                                                        .credit
+                                                                            )
+                                                                            .reduce(
+                                                                                (a, b) => a + b,
+                                                                                0
+                                                                            ),
+                                                                    cd_dhd:
+                                                                        profile.coSupervisorResearchTopic.filter(
+                                                                            (t) => !!t.supervisorId
+                                                                        ).length +
+                                                                        profile.supervisorResearchTopic.filter(
+                                                                            (t) =>
+                                                                                !!t.coSupervisorId
+                                                                        ).length,
+                                                                    tc_dhd:
+                                                                        profile.coSupervisorResearchTopic
+                                                                            .filter(
+                                                                                (t) =>
+                                                                                    !!t.supervisorId
+                                                                            )
+                                                                            .map(
+                                                                                (e) =>
+                                                                                    e
+                                                                                        .studentSubjectScore
+                                                                                        .subjectVersion
+                                                                                        .credit
+                                                                            )
+                                                                            .reduce(
+                                                                                (a, b) => a + b,
+                                                                                0
+                                                                            ) +
+                                                                        profile.supervisorResearchTopic
+                                                                            .filter(
+                                                                                (t) =>
+                                                                                    !!t.coSupervisorId
+                                                                            )
+                                                                            .map(
+                                                                                (e) =>
+                                                                                    e
+                                                                                        .studentSubjectScore
+                                                                                        .subjectVersion
+                                                                                        .credit
+                                                                            )
+                                                                            .reduce(
+                                                                                (a, b) => a + b,
+                                                                                0
+                                                                            ),
+                                                                    cd_tong: `=E${9 + idx}+C${9 + idx}`,
+                                                                    tai_tong: `=D${9 + idx}*H${9 + idx}+(F${9 + idx}*H${9 + idx}/2)`,
+                                                                    dinh_muc: 3.75,
+                                                                    ghi_chu: '',
+                                                                }
+                                                            }
+                                                        ),
+                                                    },
+                                                },
+                                            ],
+                                        })
+                                        saveAs(
+                                            res.data,
+                                            `TK_TaiGiangDayCuaGiangVien_${dayjs().format('HH-mm-ss')}.xlsx`
+                                        )
+                                    }}
+                                >
+                                    TK tải giảng GV
+                                </Button>
                             </div>
                         </Form.Item>
                     </Flex>
@@ -872,8 +1175,23 @@ export default function ChuyenDeNghienCuu() {
                             width: 150,
                             align: 'left',
                             render: (_, record) => {
-                                return `${record?.supervisor?.userProfile?.lastName || ''}
-                 ${record?.supervisor?.userProfile?.firstName || ''}`.trim()
+                                return record?.supervisor?.lecturer
+                                    ? [
+                                          record?.supervisor?.lecturer?.userProfile.academicRankType
+                                              ?.sMa,
+                                          record?.supervisor?.lecturer?.userProfile
+                                              .academicDegreeType?.sMa,
+                                          record?.supervisor?.lecturer?.userProfile.fullname,
+                                      ]
+                                          .filter(Boolean)
+                                          .join('. ')
+                                    : [
+                                          record?.supervisor?.academicRank,
+                                          record?.supervisor?.academicDegree,
+                                          record?.supervisor?.name,
+                                      ]
+                                          .filter(Boolean)
+                                          .join('. ')
                             },
                         },
                         {
@@ -881,8 +1199,23 @@ export default function ChuyenDeNghienCuu() {
                             width: 150,
                             align: 'left',
                             render: (_, record) => {
-                                return `${record?.coSupervisor?.userProfile?.lastName || ''}
-                 ${record?.coSupervisor?.userProfile?.firstName || ''}`.trim()
+                                return record?.coSupervisor?.lecturer
+                                    ? [
+                                          record?.coSupervisor?.lecturer?.userProfile
+                                              ?.academicRankType?.sMa,
+                                          record?.coSupervisor?.lecturer?.userProfile
+                                              ?.academicDegreeType?.sMa,
+                                          record?.coSupervisor?.lecturer?.userProfile?.fullname,
+                                      ]
+                                          .filter(Boolean)
+                                          .join('. ')
+                                    : [
+                                          record?.coSupervisor?.academicRank,
+                                          record?.coSupervisor?.academicDegree,
+                                          record?.coSupervisor?.name,
+                                      ]
+                                          .filter(Boolean)
+                                          .join('. ')
                             },
                         },
                         {
