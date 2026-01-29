@@ -1,103 +1,31 @@
-import { HomeOutlined } from '@ant-design/icons'
 import logo_mta from '@assets/images/khaothi.svg'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
-import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
-// import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
-import { Divider, Layout, theme, Tooltip } from 'antd'
+import { Layout, theme, Tooltip } from 'antd'
 import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
-import { useSession } from '@workspace/auth/react'
-import { SelectTrainingObjectType } from '@workspace/ui'
 import { SelecterSchoolYear } from '@components/selecter-school-year'
 
 const { Header, Content } = Layout
-interface breadcrumListProps {
-    title: string
-    href?: string
-}
 
 const EvaluateLayout = ({
     children,
     className,
-    breadcrumbList,
     unLayout = false,
 }: {
     children: ReactNode
     className?: string
-    breadcrumbList?: breadcrumListProps[]
     unLayout?: boolean
 }) => {
     const menus = useMenuList()
-    const { status } = useSession()
-    const router = useRouter()
-    const currentPath = router.pathname
-    const breadcrumb = getDynamicBreadcrumb('KHAO_THI', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
-
-    const listBreadcrumb = useMemo(() => {
-        return breadcrumb?.length > 0
-            ? [
-                  {
-                      title: (
-                          <Link href="/home">
-                              <HomeOutlined className="mr-1" />
-                              Trang chủ
-                          </Link>
-                      ),
-                  },
-                  ...breadcrumb.map((i: { title: string; href?: string }) => {
-                      if (i?.href) {
-                          return {
-                              title: <Link href={i.href}>{i.title}</Link>,
-                          }
-                      }
-                      return {
-                          title: i.title,
-                      }
-                  }),
-              ]
-            : breadcrumbList
-              ? [
-                    {
-                        title: (
-                            <Link href="/home">
-                                <HomeOutlined className="mr-1" />
-                                Trang chủ
-                            </Link>
-                        ),
-                    },
-                    ...breadcrumbList.map((i: { title: string; href?: string }) => {
-                        if (i?.href) {
-                            return {
-                                title: <Link href={i.href}>{i.title}</Link>,
-                            }
-                        }
-                        return {
-                            title: i.title,
-                        }
-                    }),
-                ]
-              : [
-                    {
-                        title: (
-                            <Link href="/home">
-                                <HomeOutlined className="mr-1" />
-                                Trang chủ
-                            </Link>
-                        ),
-                    },
-                ]
-    }, [breadcrumb, breadcrumbList])
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
@@ -151,20 +79,13 @@ const EvaluateLayout = ({
                     <Header
                         className={`flex justify-between items-center bg-white fixed z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
                     >
-                        {/* <span className="text-lg font-bold text-primary">
-                            {headerChildren ? headerChildren : title}
-                        </span> */}
-
                         <div className="flex items-center">
-                            <SelectTrainingObjectType />
-                            <Divider type="vertical" className="bg-primary h-[30px]" />
                             <div className="flex items-center space-x-2">
                                 <Tooltip title="Học kỳ">
                                     <div className="mr-2 font-bold">Năm học</div>
                                 </Tooltip>
                                 <SelecterSchoolYear />
                             </div>
-                            {/* <Breadcrumb items={listBreadcrumb} /> */}
                         </div>
                         <HeaderApp />
                     </Header>
@@ -181,9 +102,6 @@ const EvaluateLayout = ({
                                     background: colorBgContainer,
                                 }}
                             >
-                                {/* <div className="my-0">
-                                    <Breadcrumb items={listBreadcrumb} />
-                                </div> */}
                                 {children}
                             </div>
                         )}
