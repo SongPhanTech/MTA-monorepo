@@ -49,13 +49,11 @@ const CriteriaAnalysisSubPage = ({
     userRole,
     idx,
     refetch,
-    handleViewAll,
 }: {
     data: DataTabType
     userRole: 'P13' | 'GV'
     idx: number
     refetch: () => void
-    handleViewAll: () => void
 }) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
     const [statusFilter, setStatusFilter] = useState<$Enums.EvaluationCriterionStatus | null>(null)
@@ -218,7 +216,7 @@ const CriteriaAnalysisSubPage = ({
                             </Popconfirm>
                         )}
 
-                    <Button type="primary" size="small" onClick={handleViewAll}>
+                    <Button type="primary" size="small">
                         Xuất file
                     </Button>
                 </div>

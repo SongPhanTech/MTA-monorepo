@@ -12,7 +12,6 @@ import {
     useFindUniqueEvaluationCouncilMember,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, message } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -29,8 +28,6 @@ const PutEvaluationCouncilMember = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { mutateAsync: createEvaluationCouncilMember } = useCreateEvaluationCouncilMember()
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
@@ -100,14 +97,6 @@ const PutEvaluationCouncilMember = () => {
                     },
                 },
             },
-            subjectVersions: {
-                where: {
-                    deletedAt: null,
-                    ...(trainingObjectTypeId && {
-                        trainingObjectTypeId,
-                    }),
-                },
-            },
         },
     })
 
@@ -150,8 +139,6 @@ const PutEvaluationCouncilMember = () => {
             <Col span={24}>
                 <FormItem form={form} name="role" label="Chức vụ trong hội đồng" required>
                     <Select
-                        mode="multiple"
-                        maxTagCount={'responsive'}
                         placeholder="Chọn chức vụ trong hội đồng"
                         options={EVALUATION_MEMBER_ROLE}
                     />
