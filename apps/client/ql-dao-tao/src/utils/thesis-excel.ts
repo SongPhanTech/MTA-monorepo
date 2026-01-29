@@ -55,10 +55,10 @@ interface TthdbvTable {
 
 interface DsnlvtvData {
     data: {
-    khoa: string
+        khoa: string
         dotxet: string
-        data: DsnlvtvTable[]    
-        tongsodetai:string
+        data: DsnlvtvTable[]
+        tongSo: string
     }
 }
 interface DsnlvtvTable {
@@ -847,6 +847,8 @@ export const exportGiayMoiChamLvPb = async ({
             return;
         }
         const payload: ExcelTemplateBody = {
+            head: {data: {}},
+            tail: {data: {}},
             fileName: 'GiayMoiChamLuanVan',
             path: 'GiayMoiChamLuanVan.xlsx',
             payload: dataConvert,
@@ -961,6 +963,8 @@ export const exportThanhToanHoiDongBaoVe = async ({
             return
         }
         const payload: ExcelTemplateBody = {
+            head: {data: {}},
+            tail: {data: {}},
             fileName: 'ThanhToanHoiDongBaoVe',
             path: 'ThanhToanHoiDongBV.xlsx',
             payload: dataConvert,
@@ -982,15 +986,16 @@ export const exportThanhToanHoiDongBaoVe = async ({
     }
     
 }
+const tenDoiTuong = {
+    [TrainingObjectTypes.MILITARY]: {fullname: 'Quân sự', shortname: 'QS'},
+    [TrainingObjectTypes.CIVILIAN]: {fullname: 'Dân sự', shortname: 'DS'},
+    [TrainingObjectTypes.INTERNATIONAL_MILITARY]: {fullname: 'Quân sự quốc tế', shortname: 'QSQT'},
+};
 export const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
     if (!allStudentsInClasses?.length) return [];
 
     const now = dayjs();
-    const tenDoiTuong = {
-        [TrainingObjectTypes.MILITARY]: 'Quân sự',
-        [TrainingObjectTypes.CIVILIAN]: 'Dân sự',
-        [TrainingObjectTypes.INTERNATIONAL_MILITARY]: 'Quân sự quốc tế',
-    };
+  
 
     const majorMap = new Map<string, any[]>();
     let khoaquanli= '';
@@ -1007,7 +1012,7 @@ export const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] =
         
         const dob = student.userProfile?.dateOfBirth ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY') : '';
         const doiTuong = student?.fixedClass?.trainingCourse?.trainingObjectType?.type;
-        const loaiDoiTuong = tenDoiTuong[doiTuong as keyof typeof tenDoiTuong];
+        const loaiDoiTuong = tenDoiTuong[doiTuong as keyof typeof tenDoiTuong]?.fullname || '';
         const khoaHoc = student?.fixedClass?.trainingCourse?.name || '';
         const chuyenNganhCode = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '';
         const ngayBV = project.defenseDate ? dayjs(project.defenseDate).format('DD/MM/YYYY') : '';
@@ -1109,12 +1114,12 @@ export const exportDanhSachNopLuanVanThuVien = async ({
     hideSpinner,
     message,
 }: ExportOptions) => {
-    console.log('allStudentsInClasses',allStudentsInClasses);
     if (!allStudentsInClasses?.length) {
         message.error('Không có dữ liệu để xuất danh sách nộp luận văn thư viện')
         return
     }
     const dataConvert = convertToDsnlvtvData(allStudentsInClasses);
+    console.log('dataConvert',dataConvert);
     if (dataConvert.data.data.length === 0) {
         message.error('Chưa có dữ liệu để xuất danh sách nộp luận văn thư viện')
         return
@@ -1122,16 +1127,21 @@ export const exportDanhSachNopLuanVanThuVien = async ({
     try {
         showSpinner?.();
         const payload: ExcelTemplateBody = {
+            head: {data: {}},
+            tail: {data: {}},
             fileName: 'DanhSachNopLuanVanThuVien',
-            path: 'DanhSachNopLuanVanTV.xlsx',
+            path: 'DanhSachNopLuanVanThuVien.xlsx',
             payload: [dataConvert],
             showGridLines: true,
+            wrapText: true,
         }
         const response = await excelTemplate(payload);
         if (response.status !== 200) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
-       
+        const blob = response.data;
+        downloadFile(blob, 'DanhSachNopLuanVanThuVien.xlsx');
+        message.success('Xuất file thành công')
     } catch (error) {
         message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         return
@@ -1146,7 +1156,7 @@ export const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData =
                 khoa: '',
                 dotxet: '',
                 data: [],
-                tongsodetai: '0'
+                tongSo: '0'
             }
         };
     }
@@ -1161,7 +1171,7 @@ export const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData =
         const khoaHoc = student?.fixedClass?.trainingCourse?.name || '';
         const chuyenNganh = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '';
         
-        const thongTinBaoVe = `${hoTen}\n${doiTuong} - ${khoaHoc} - ${chuyenNganh}`;
+        const thongTinBaoVe = `${hoTen} \n ${doiTuong} - ${khoaHoc} - ${chuyenNganh}`;
 
         const gvhd1 = project?.supervisor?.name;
         const gvhd2 = project?.coSupervisor?.name;
@@ -1170,7 +1180,7 @@ export const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData =
         if (gvhd1 && gvhd2) {
             thongTinHuongDan = `1.${gvhd1};\n2.${gvhd2}.`;
         } else {
-            thongTinHuongDan = gvhd1 || gvhd2 || 'Chưa có giảng viên hướng dẫn';
+            thongTinHuongDan = gvhd1 || gvhd2 || 'Chưa có GVHD';
         }
 
         const thongTinDeTai = project?.title || 'Chưa có tên đề tài';
@@ -1193,7 +1203,7 @@ export const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData =
             khoa: allStudentsInClasses[0]?.fixedClass?.trainingCourse?.name || '',
             dotxet: firstProject?.thesisSession?.name || '',
             data: tableData,
-            tongsodetai: tableData.length.toString()
+            tongSo: tableData.length.toString()
         }
     };
 };
