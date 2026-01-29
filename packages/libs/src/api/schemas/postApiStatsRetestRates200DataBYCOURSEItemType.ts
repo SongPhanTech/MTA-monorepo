@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsRetestRates200DataBYCOURSEItemType =
-    (typeof PostApiStatsRetestRates200DataBYCOURSEItemType)[keyof typeof PostApiStatsRetestRates200DataBYCOURSEItemType]
+export type PostApiStatsRetestRates200DataByCourseItemType =
+    (typeof PostApiStatsRetestRates200DataByCourseItemType)[keyof typeof PostApiStatsRetestRates200DataByCourseItemType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PostApiStatsRetestRates200DataBYCOURSEItemType = {
-    BY_COURSE: 'BY_COURSE',
-    BY_CURRICULUM: 'BY_CURRICULUM',
-    BY_MAJOR: 'BY_MAJOR',
+export const PostApiStatsRetestRates200DataByCourseItemType = {
+    By_Course: 'By_Course',
+    By_Curriculum: 'By_Curriculum',
+    By_Major: 'By_Major',
 } as const

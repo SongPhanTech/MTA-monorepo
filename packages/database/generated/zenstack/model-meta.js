@@ -14392,12 +14392,10 @@ const metadata = {
                     name: "registerNumber",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, doctoralCode: {
                     name: "doctoralCode",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, admissionCombination: {
                     name: "admissionCombination",
                     type: "String",
@@ -14744,12 +14742,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, registerNumber: {
-                    name: "registerNumber",
-                    fields: ["registerNumber"]
-                }, doctoralCode: {
-                    name: "doctoralCode",
-                    fields: ["doctoralCode"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],

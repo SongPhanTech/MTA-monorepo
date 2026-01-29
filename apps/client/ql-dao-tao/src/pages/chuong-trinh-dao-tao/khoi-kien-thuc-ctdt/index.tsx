@@ -37,24 +37,7 @@ interface TreeNode {
     createdAt?: string
     updatedAt?: string
 }
-type TrainingBlockType = Prisma.TrainingBlockGetPayload<{
-    include: {
-        curriculumVersions: {
-            include: {
-                subjects: {
-                    include: {
-                        subject: {
-                            select: {
-                                credit: true
-                                period: true
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}>
+type TrainingBlockType = Prisma.TrainingBlockGetPayload<{}>
 
 export default function TrainingBlock() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -74,23 +57,6 @@ export default function TrainingBlock() {
                 ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
                 ...(filters.active?.length === 1 ? { active: filters.active[0] } : {}),
                 trainingObjectTypeId,
-            },
-            include: {
-                curriculumVersions: {
-                    include: {
-                        curriculumVersion: true,
-                        subjects: {
-                            include: {
-                                subject: {
-                                    select: {
-                                        credit: true,
-                                        period: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
             },
             orderBy: { priority: 'asc' },
             // take: numberOfPages,
@@ -149,18 +115,6 @@ export default function TrainingBlock() {
         }
     }
 
-    const calculateTotal = (record: TrainingBlockType, field: 'credit' | 'period') => {
-        const curriculumVersion = record.curriculumVersions?.[0]
-
-        if (!curriculumVersion?.subjects) {
-            return 0
-        }
-
-        return curriculumVersion.subjects.reduce((sum, tbs) => {
-            const value = field === 'credit' ? tbs.subject?.credit || 0 : tbs.subject?.period || 0
-            return sum + value
-        }, 0)
-    }
     const treeColumns: NestedColumn<TrainingBlockType>[] = [
         {
             title: 'Mã khối kiến thức',
@@ -172,16 +126,6 @@ export default function TrainingBlock() {
             title: 'Tên khối kiến thức',
             dataIndex: 'name',
             align: 'center',
-        },
-        {
-            title: 'Tổng số tín chỉ',
-            align: 'center',
-            render: (_: any, record: TrainingBlockType) => calculateTotal(record, 'credit') || 0,
-        },
-        {
-            title: 'Tổng số tiết',
-            align: 'center',
-            render: (_: any, record: TrainingBlockType) => calculateTotal(record, 'period') || 0,
         },
         {
             title: 'Trạng thái',

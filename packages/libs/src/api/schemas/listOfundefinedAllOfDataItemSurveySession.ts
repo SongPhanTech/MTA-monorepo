@@ -21,8 +21,6 @@ export type ListOfundefinedAllOfDataItemSurveySession = {
     /** @nullable */
     createdBy?: string | null
     /** @nullable */
-    additionalSuggestion?: string | null
-    /** @nullable */
     startedAt?: string | null
     /** @nullable */
     completedAt?: string | null
