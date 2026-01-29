@@ -299,7 +299,7 @@ export const getOrganizationsSurveyStats = async (
 export const getSurveyStatsforQuestion = async (
     prisma: PrismaClient,
     clusterSurveyId: string,
-    lectureId:string,
+    lectureId: string,
     questions: SurveyQuestion[],
     choices: SurveyChoice[]
 ) => {
@@ -308,16 +308,17 @@ export const getSurveyStatsforQuestion = async (
     const answerCounts = await prisma.surveyResponse.groupBy({
         by: ['surveyQuestionId', 'surveyChoiceId'],
         where: {
-            surveySession: { survey:{
-                clusterSurveyId,
-                lectureId
-            }},
+            surveySession: {
+                survey: {
+                    clusterSurveyId,
+                    lectureId,
+                },
+            },
             surveyQuestionId: { in: questionIds },
             surveyChoiceId: { not: null },
         },
         _count: { surveyChoiceId: true },
     })
-    
 
     const answerCountMap = answerCounts.reduce(
         (acc, curr) => {
@@ -333,10 +334,12 @@ export const getSurveyStatsforQuestion = async (
     const responseCounts = await prisma.surveyResponse.groupBy({
         by: ['surveyQuestionId'],
         where: {
-            surveySession: { survey:{
-                clusterSurveyId,
-                lectureId
-            }},
+            surveySession: {
+                survey: {
+                    clusterSurveyId,
+                    lectureId,
+                },
+            },
             surveyQuestionId: { in: questionIds },
             surveyChoiceId: { not: null },
         },
@@ -393,4 +396,3 @@ export const getSurveyStatsforQuestion = async (
         average,
     }
 }
-

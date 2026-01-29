@@ -2149,7 +2149,7 @@ export const useCreateClusterSurvey = <
 }
 
 /**
- * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát
+ * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát cuar từng giáo viên
  */
 export type getClusterSurveyStatisticsResponse200 = {
     data: GetClusterSurveyStatistics200
@@ -2174,7 +2174,7 @@ export type getClusterSurveyStatisticsResponse =
 
 export const getGetClusterSurveyStatisticsUrl = (
     id: string,
-    params?: GetClusterSurveyStatisticsParams
+    params: GetClusterSurveyStatisticsParams
 ) => {
     const normalizedParams = new URLSearchParams()
 
@@ -2202,7 +2202,7 @@ export const getGetClusterSurveyStatisticsUrl = (
 
 export const getClusterSurveyStatistics = async (
     id: string,
-    params?: GetClusterSurveyStatisticsParams,
+    params: GetClusterSurveyStatisticsParams,
     options?: RequestInit
 ): Promise<getClusterSurveyStatisticsResponse> => {
     return customExamFetch<getClusterSurveyStatisticsResponse>(
@@ -2226,7 +2226,7 @@ export const getGetClusterSurveyStatisticsQueryOptions = <
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
-    params?: GetClusterSurveyStatisticsParams,
+    params: GetClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -2259,7 +2259,7 @@ export function useGetClusterSurveyStatistics<
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
-    params: undefined | GetClusterSurveyStatisticsParams,
+    params: GetClusterSurveyStatisticsParams,
     options: {
         query: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -2281,7 +2281,7 @@ export function useGetClusterSurveyStatistics<
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
-    params?: GetClusterSurveyStatisticsParams,
+    params: GetClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -2303,7 +2303,7 @@ export function useGetClusterSurveyStatistics<
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
-    params?: GetClusterSurveyStatisticsParams,
+    params: GetClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -2313,7 +2313,7 @@ export function useGetClusterSurveyStatistics<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát
+ * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát cuar từng giáo viên
  */
 
 export function useGetClusterSurveyStatistics<
@@ -2321,7 +2321,7 @@ export function useGetClusterSurveyStatistics<
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
-    params?: GetClusterSurveyStatisticsParams,
+    params: GetClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>

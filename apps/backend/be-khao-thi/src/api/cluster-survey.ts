@@ -703,7 +703,7 @@ const getClusterSurveyStatisticsForLecturer = createRoute({
             content: {
                 'application/json': {
                     schema: models.ClusterSurveySchema.extend({
-                        data: SurveyStatsLecSchema
+                        data: SurveyStatsLecSchema,
                     }),
                 },
             },
@@ -722,7 +722,7 @@ const getClusterSurveyStatisticsForLecturer = createRoute({
 app.openapi(getClusterSurveyStatisticsForLecturer, async (c) => {
     const { id } = c.req.valid('param')
     const { organizations, lectureId, ...q } = c.req.valid('query')
-     const cluster = await prisma.clusterSurvey.findUnique({
+    const cluster = await prisma.clusterSurvey.findUnique({
         where: { id },
         include: {
             surveyQuestion: {
@@ -755,15 +755,20 @@ app.openapi(getClusterSurveyStatisticsForLecturer, async (c) => {
         return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
     }
 
-    const listData = await getSurveyStatsforQuestion(prisma, id,lectureId, cluster.surveyQuestion, cluster.surveyChoice)
+    const listData = await getSurveyStatsforQuestion(
+        prisma,
+        id,
+        lectureId,
+        cluster.surveyQuestion,
+        cluster.surveyChoice
+    )
 
     const data = {
-       ...cluster,
-       data:listData
+        ...cluster,
+        data: listData,
     }
 
     return c.json(data, 200)
 })
-
 
 export default app

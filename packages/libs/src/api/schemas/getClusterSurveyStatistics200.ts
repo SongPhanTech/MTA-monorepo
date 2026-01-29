@@ -10,8 +10,7 @@ import type { GetClusterSurveyStatistics200LecturersItem } from './getClusterSur
 import type { GetClusterSurveyStatistics200SurveyChoiceItem } from './getClusterSurveyStatistics200SurveyChoiceItem'
 import type { GetClusterSurveyStatistics200SurveyQuestionItem } from './getClusterSurveyStatistics200SurveyQuestionItem'
 import type { GetClusterSurveyStatistics200SurveysItem } from './getClusterSurveyStatistics200SurveysItem'
-import type { GetClusterSurveyStatistics200ChoicesItem } from './getClusterSurveyStatistics200ChoicesItem'
-import type { GetClusterSurveyStatistics200DataItem } from './getClusterSurveyStatistics200DataItem'
+import type { GetClusterSurveyStatistics200Data } from './getClusterSurveyStatistics200Data'
 
 export type GetClusterSurveyStatistics200 = {
     id: string
@@ -42,8 +41,5 @@ export type GetClusterSurveyStatistics200 = {
     surveyChoice?: GetClusterSurveyStatistics200SurveyChoiceItem[]
     surveyQuestion?: GetClusterSurveyStatistics200SurveyQuestionItem[]
     surveys?: GetClusterSurveyStatistics200SurveysItem[]
-    choices: GetClusterSurveyStatistics200ChoicesItem[]
-    choicesAnswer: string[]
-    choicesDesc: (string | null)[]
-    data: GetClusterSurveyStatistics200DataItem[]
+    data: GetClusterSurveyStatistics200Data
 }

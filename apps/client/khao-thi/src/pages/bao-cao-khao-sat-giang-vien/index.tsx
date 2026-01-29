@@ -6,14 +6,14 @@ import {
     useFindManyLecturer,
     useFindManySurvey,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Row,Tree } from 'antd'
+import { Button, Col, Flex, Row, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
-import { useSemesterStore,useTrainingMajorStore } from '@workspace/ui'
-import { FolderOpenOutlined } from '@ant-design/icons';
+import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
+import { FolderOpenOutlined } from '@ant-design/icons'
 
 interface MyTreeNode {
     title: string
@@ -33,7 +33,7 @@ function buildOrgAndLectureTree(
             ...item,
             title: item.name || 'Đơn vị không tên',
             key: item.id,
-            icon:<FolderOpenOutlined/>,
+            icon: <FolderOpenOutlined />,
             selectable: false,
             children: [
                 ...lecturers
@@ -49,7 +49,6 @@ function buildOrgAndLectureTree(
 }
 
 export default function BaoCaoGiangVien() {
-   
     const [filters, setFilters] = useState<any>({
         name: '',
         surveyId: undefined,
@@ -59,11 +58,11 @@ export default function BaoCaoGiangVien() {
         clusterId: undefined,
     })
 
-    const [selectedKeys,setSelectedKeys]=useState<any>() 
-    const [selectedItem,setSelectedItem]=useState<any>() 
+    const [selectedKeys, setSelectedKeys] = useState<any>()
+    const [selectedItem, setSelectedItem] = useState<any>()
 
     const { id: semesterId } = useSemesterStore()
-    const {id: trainingObjectTypeId} =useTrainingMajorStore()
+    const { id: trainingObjectTypeId } = useTrainingMajorStore()
 
     const { data = [], refetch } = useFindManyClusterSurvey({
         where: {
@@ -89,36 +88,33 @@ export default function BaoCaoGiangVien() {
             },
         },
         orderBy: { createdAt: 'desc' },
-
     })
 
-  const {
+    const {
         data: organizations = [],
         isLoading: organizationsLoading,
         error: organizationsError,
     } = useFindManyDM_DonVi()
 
-    const { data: lecturerData = [] } = useFindManyLecturer(
-        {
-            where: {
-                mainSubjectClasses: {
-                    some: {
-                        ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
-                    },
+    const { data: lecturerData = [] } = useFindManyLecturer({
+        where: {
+            mainSubjectClasses: {
+                some: {
+                    ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
                 },
-            },
-            orderBy: {
-                userProfile: {
-                    firstName: 'asc',
-                },
-            },
-            include: {
-                userProfile:true,
-                mainSubjectClasses:true,
-                organization: true,
             },
         },
-    )
+        orderBy: {
+            userProfile: {
+                firstName: 'asc',
+            },
+        },
+        include: {
+            userProfile: true,
+            mainSubjectClasses: true,
+            organization: true,
+        },
+    })
 
     // Tạo treeData từ organizations và lecturers
     const treeData: any[] = useMemo(() => {
@@ -148,7 +144,6 @@ export default function BaoCaoGiangVien() {
         )
     }, [organizations, lecturerData])
 
-
     const { data: SubjectVersion = [], isLoading } = useFindManySurvey(
         {
             include: {
@@ -164,8 +159,7 @@ export default function BaoCaoGiangVien() {
         { enabled: !!filters?.lectureId || !!filters?.clusterId }
     )
 
-    const hanleSearchReport = () => {
-    }
+    const hanleSearchReport = () => {}
 
     const items = useMemo(() => {
         if (!filters?.clusterId) {
@@ -213,7 +207,7 @@ export default function BaoCaoGiangVien() {
             // )
         }
         return
-    }, [filters,selectedItem])
+    }, [filters, selectedItem])
     return (
         <Row gutter={[16, 4]}>
             <Col span={24}>
@@ -244,19 +238,19 @@ export default function BaoCaoGiangVien() {
                 </Flex>
             </Col>
             <Col span={6}>
-                    <Tree
+                <Tree
                     showIcon
                     selectedKeys={selectedKeys}
                     treeData={treeData}
                     className="w-full mb-3"
-                    onClick={(selectedKeys,e)=>{
-                        console.log(selectedKeys,e);
+                    onClick={(selectedKeys, e) => {
+                        console.log(selectedKeys, e)
                         setSelectedKeys(e?.id)
                         setSelectedItem(e)
                     }}
                 />
             </Col>
-            
+
             <Col span={18}>{items}</Col>
         </Row>
     )
