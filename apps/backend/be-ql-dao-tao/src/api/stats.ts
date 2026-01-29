@@ -4799,145 +4799,168 @@ app.openapi(
             )
         }
         const sql = `
-            WITH RetestStudent AS (
-                SELECT DISTINCT
-                    S.id        AS "studentId",
-                    SEM.id     AS "periodId",
-                    SEM.code    AS "periodCode",
-                    TC.id       AS "courseId",
-                    TC.name     AS "courseName",
-                    C.id        AS "curriculumId",
-                    C.name      AS "curriculumName",
-                    CV.id       AS "curriculumVersionId",
-                    CV.name     AS "curriculumVersionName"
-                FROM "ql-dao-tao"."StudentSubjectScore" SSS
-                JOIN "ql-dao-tao"."SubjectClass" SC 
-                    ON SC.id = SSS."subjectClassId"
-                JOIN "ql-dao-tao"."Student" S 
-                    ON S.id = SSS."studentId"
-                JOIN "ql-dao-tao"."FixedClass" FC 
-                    ON FC.id = S."fixedClassId"
-                JOIN "ql-dao-tao"."TrainingCourse" TC 
-                    ON TC.id = FC."trainingCourseId"
-                JOIN "ql-dao-tao"."Semester" SEM 
-                    ON SEM.id = SC."semesterId"
-                JOIN "ql-dao-tao"."CurriculumVersion" CV 
-                    ON CV.id = S."curriculumVersionId"
-                JOIN "ql-dao-tao"."Curriculum" C 
-                    ON C.id = CV."curriculumId"
-                WHERE
-                    SC.cancelled = false
-                    AND SC.type = 'REEXAM'
-                    AND SEM."endDate" <= $1
-            ),
+   WITH SemesterPeriod AS (
+    SELECT
+        SEM.id AS "semesterId",
+        SEM.id AS "periodId",
+        (
+            EXTRACT(YEAR FROM SY."startDate")::text
+            || '-'
+            || CASE SEM."semesterType"
+                WHEN 'FIRST' THEN '1'
+                WHEN 'SECOND' THEN '2'
+            END
+        ) AS "periodCode"
+    FROM "ql-dao-tao"."Semester" SEM
+    JOIN "ql-dao-tao"."SchoolYear" SY
+        ON SY.id = SEM."schoolYearId"
+    WHERE SEM."endDate" <= $1
+),
 
-                TotalStudent AS (
-                    SELECT DISTINCT
-                        S.id        AS "studentId",
-                        SEM.id     AS "periodId",
-                        SEM.code    AS "periodCode",
-                        TC.id       AS "courseId",
-                        TC.name     AS "courseName",
-                        C.id        AS "curriculumId",
-                        C.name      AS "curriculumName",
-                        CV.id       AS "curriculumVersionId",
-                        CV.name     AS "curriculumVersionName"
-                    FROM "ql-dao-tao"."Student" S
-                    JOIN "ql-dao-tao"."FixedClass" FC 
-                        ON FC.id = S."fixedClassId"
-                    JOIN "ql-dao-tao"."TrainingCourse" TC 
-                        ON TC.id = FC."trainingCourseId"
-                    JOIN "ql-dao-tao"."CurriculumVersion" CV 
-                        ON CV.id = S."curriculumVersionId"
-                    JOIN "ql-dao-tao"."Curriculum" C 
-                        ON C.id = CV."curriculumId"
-                    JOIN "ql-dao-tao"."StudentSubjectScore" SSS
-                        ON SSS."studentId" = S.id
-                    JOIN "ql-dao-tao"."SubjectClass" SC
-                        ON SC.id = SSS."subjectClassId"
-                    JOIN "ql-dao-tao"."Semester" SEM
-                        ON SEM.id = SC."semesterId"
-                    WHERE
-                        SC.cancelled = false
-                        AND SEM."endDate" <= $1
-                )
+RetestStudent AS (
+    SELECT DISTINCT
+        S.id AS "studentId",
+        SP."periodId",
+        SP."periodCode",
+        TC.id AS "courseId",
+        TC.name AS "courseName",
+        C.id AS "curriculumId",
+        C.name AS "curriculumName",
+        CV.id AS "curriculumVersionId",
+        CV.name AS "curriculumVersionName"
+    FROM "ql-dao-tao"."StudentSubjectScore" SSS
+    JOIN "ql-dao-tao"."Student" S
+        ON S.id = SSS."studentId"
+    JOIN "ql-dao-tao"."FixedClass" FC
+        ON FC.id = S."fixedClassId"
+    JOIN "ql-dao-tao"."TrainingCourse" TC
+        ON TC.id = FC."trainingCourseId"
+    JOIN "ql-dao-tao"."SubjectClass" SC
+        ON SC.id = SSS."subjectClassId"
+    JOIN SemesterPeriod SP
+        ON SP."semesterId" = SC."semesterId"
+    JOIN "ql-dao-tao"."CurriculumVersion" CV
+        ON CV.id = S."curriculumVersionId"
+    JOIN "ql-dao-tao"."Curriculum" C
+        ON C.id = CV."curriculumId"
+    WHERE
+        SC.cancelled = false
+        AND SSS."finalScore" IS NOT NULL
+        AND SSS."examBanned" = false
+        AND SSS.suspended = false
+        AND SSS.withdrew = false
+        AND SSS.exempted = false
+        AND SSS."examPostponed" = false
+        AND (
+            SSS."finalScore" < TC."scoreToPass"
+            OR SSS."manualFinalScore" < TC."scoreToPass"
+        )
+),
 
+TotalStudent AS (
+    SELECT DISTINCT
+        S.id AS "studentId",
+        SP."periodId",
+        SP."periodCode",
+        TC.id AS "courseId",
+        TC.name AS "courseName",
+        C.id AS "curriculumId",
+        C.name AS "curriculumName",
+        CV.id AS "curriculumVersionId",
+        CV.name AS "curriculumVersionName"
+    FROM "ql-dao-tao"."Student" S
+    JOIN "ql-dao-tao"."FixedClass" FC
+        ON FC.id = S."fixedClassId"
+    JOIN "ql-dao-tao"."TrainingCourse" TC
+        ON TC.id = FC."trainingCourseId"
+    JOIN "ql-dao-tao"."CurriculumVersion" CV
+        ON CV.id = S."curriculumVersionId"
+    JOIN "ql-dao-tao"."Curriculum" C
+        ON C.id = CV."curriculumId"
+    JOIN "ql-dao-tao"."StudentSubjectScore" SSS
+        ON SSS."studentId" = S.id
+    JOIN "ql-dao-tao"."SubjectClass" SC
+        ON SC.id = SSS."subjectClassId"
+    JOIN SemesterPeriod SP
+        ON SP."semesterId" = SC."semesterId"
+    WHERE SC.cancelled = false
+)
 
-                SELECT
-                    'By_Course'                     AS "Type",
-                    T."courseId"                    AS "Id",
-                    T."courseName"                  AS "Name",
-                    T."periodId"                   AS "PeriodId",
-                    T."periodCode"                  AS "PeriodCode",
-                    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
-                    COUNT(DISTINCT R."studentId")::int AS "RetestCount",
-                    ROUND(
-                        COUNT(DISTINCT R."studentId")::decimal
-                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
-                        4
-                    )::float                         AS "Value"
-                FROM TotalStudent T
-                LEFT JOIN RetestStudent R
-                    ON R."studentId"  = T."studentId"
-                    AND R."periodCode" = T."periodCode"
-                    AND R."courseName" = T."courseName"
-                GROUP BY
-                   T."courseId",
-                    T."courseName",
-                    T."periodCode"
-                    T."periodId"
+SELECT
+    'By_Course' AS "Type",
+    T."courseId" AS "Id",
+    T."courseName" AS "Name",
+    T."periodId",
+    T."periodCode",
+    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
+    COUNT(DISTINCT R."studentId")::int AS "RetestCount",
+    ROUND(
+        COUNT(DISTINCT R."studentId")::decimal
+        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+        4
+    )::float AS "Value"
+FROM TotalStudent T
+LEFT JOIN RetestStudent R
+    ON R."studentId" = T."studentId"
+    AND R."periodCode" = T."periodCode"
+    AND R."courseId" = T."courseId"
+GROUP BY
+    T."courseId",
+    T."courseName",
+    T."periodId",
+    T."periodCode"
 
-                UNION ALL
+UNION ALL
 
-                SELECT
-                    'By_Curriculum'                     AS "Type",
-                    T."curriculumId"                   AS "Id",
-                    T."curriculumName"                  AS "Name",
-                    T."periodId"                       AS "PeriodId",
-                    T."periodCode"                      AS "PeriodCode",
-                    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
-                    COUNT(DISTINCT R."studentId")::int AS "RetestCount",
-                    ROUND(
-                        COUNT(DISTINCT R."studentId")::decimal
-                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
-                        4
-                    )::float                             AS "Value"
-                FROM TotalStudent T
-                LEFT JOIN RetestStudent R
-                    ON R."studentId"       = T."studentId"
-                    AND R."periodCode"     = T."periodCode"
-                    AND R."curriculumName" = T."curriculumName"
-                GROUP BY
-                    T."curriculumId",
-                    T."curriculumName",
-                    T."periodId",
-                    T."periodCode"
+SELECT
+    'By_Curriculum',
+    T."curriculumId",
+    T."curriculumName",
+    T."periodId",
+    T."periodCode",
+    COUNT(DISTINCT T."studentId")::int,
+    COUNT(DISTINCT R."studentId")::int,
+    ROUND(
+        COUNT(DISTINCT R."studentId")::decimal
+        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+        4
+    )::float
+FROM TotalStudent T
+LEFT JOIN RetestStudent R
+    ON R."studentId" = T."studentId"
+    AND R."periodCode" = T."periodCode"
+    AND R."curriculumId" = T."curriculumId"
+GROUP BY
+    T."curriculumId",
+    T."curriculumName",
+    T."periodId",
+    T."periodCode"
 
+UNION ALL
+SELECT
+    'By_Major',
+    T."curriculumVersionId",
+    T."curriculumVersionName",
+    T."periodId",
+    T."periodCode",
+    COUNT(DISTINCT T."studentId")::int,
+    COUNT(DISTINCT R."studentId")::int,
+    ROUND(
+        COUNT(DISTINCT R."studentId")::decimal
+        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+        4
+    )::float
+FROM TotalStudent T
+LEFT JOIN RetestStudent R
+    ON R."studentId" = T."studentId"
+    AND R."periodCode" = T."periodCode"
+    AND R."curriculumVersionId" = T."curriculumVersionId"
+GROUP BY
+    T."curriculumVersionId",
+    T."curriculumVersionName",
+    T."periodId",
+    T."periodCode";
 
-                UNION ALL
-                SELECT
-                    'By_Major'                             AS "Type",
-                    T."curriculumVersionId"              AS "Id",
-                    T."curriculumVersionName"              AS "Name",
-                    T."periodId"                         AS "PeriodId",
-                    T."periodCode"                         AS "PeriodCode",
-                    COUNT(DISTINCT T."studentId")::int    AS "TotalStudents",
-                    COUNT(DISTINCT R."studentId")::int    AS "RetestCount",
-                    ROUND(
-                        COUNT(DISTINCT R."studentId")::decimal
-                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
-                        4
-                    )::float                               AS "Value"
-                FROM TotalStudent T
-                LEFT JOIN RetestStudent R
-                    ON R."studentId"               = T."studentId"
-                    AND R."periodCode"             = T."periodCode"
-                    AND R."curriculumVersionName"  = T."curriculumVersionName"
-                GROUP BY
-                    T."curriculumVersionId",
-                    T."curriculumVersionName",
-                    T."periodId",
-                    T."periodCode"
                 `
 
         const date = new Date()
@@ -5067,60 +5090,76 @@ app.openapi(
             )
         }
         const sql = `
-            WITH RelearnStudent AS (
-                SELECT DISTINCT
-                    S.id        AS "studentId",
-                    SEM.id     AS "periodId",
-                    SEM.code    AS "periodCode",
-                    TC.id       AS "courseId",
-                    TC.name     AS "courseName",
-                    C.id        AS "curriculumId",
-                    C.name      AS "curriculumName",
-                    CV.id       AS "curriculumVersionId",
-                    CV.name     AS "curriculumVersionName"
-                FROM "ql-dao-tao"."StudentSubjectScore" SSS
-                JOIN "ql-dao-tao"."Student" S 
-                    ON S.id = SSS."studentId"
-                JOIN "ql-dao-tao"."FixedClass" FC 
-                    ON FC.id = S."fixedClassId"
-                JOIN "ql-dao-tao"."TrainingCourse" TC 
-                    ON TC.id = FC."trainingCourseId"
-                JOIN "ql-dao-tao"."SubjectClass" SC 
-                    ON SC.id = SSS."subjectClassId"
-                JOIN "ql-dao-tao"."Semester" SEM 
-                    ON SEM.id = SC."semesterId"
-                JOIN "ql-dao-tao"."SubjectVersion" sv 
-                    ON sv.id = SSS."subjectVersionId"
-                JOIN "ql-dao-tao"."CurriculumVersion" CV 
-                    ON CV.id = S."curriculumVersionId"
-                JOIN "ql-dao-tao"."Curriculum" C 
-                    ON C.id = CV."curriculumId"
-                JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV 
-                    ON CV.id = TBOCV."curriculumVersionId"
-                JOIN "ql-dao-tao"."TrainingBlockSubject" TBS 
-                    ON TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
-                    AND TBS."subjectId" = sv.id
-                WHERE
-                    SC.cancelled = false
-                    AND SEM."endDate" <= $1
-                    AND (
-                        SSS."finalScore" IS NULL
-                        OR (TBS.graduation = true AND SSS."finalScore" < TC."scoreToPassGraduation")
-                        OR (TBS."useForFinalScore" = true AND SSS."finalScore" < TC."scoreToPass")
-                        OR (TBS."useForFinalScore" = false AND SSS."finalScore" < TC."scoreToPassConditional")
-                        OR SSS."examBanned" = true
-                        OR SSS.suspended = true
-                    )
-                    AND SSS.withdrew = false
-                    AND SSS.exempted = false
-                    AND SSS."examPostponed" = false
+                         WITH SemesterPeriod AS (
+    SELECT
+        SEM.id AS "semesterId",
+        SEM.id AS "periodId",
+        (
+            EXTRACT(YEAR FROM SY."startDate")::text
+            || '-'
+            || CASE SEM."semesterType"
+                   WHEN 'FIRST' THEN '1'
+                   WHEN 'SECOND' THEN '2'
+               END
+        ) AS "periodCode"
+    FROM "ql-dao-tao"."Semester" SEM
+    JOIN "ql-dao-tao"."SchoolYear" SY
+        ON SY.id = SEM."schoolYearId"
+    WHERE SEM."endDate" <= $1
+),
 
-                    AND NOT EXISTS (
+RelearnStudent AS (
+    SELECT DISTINCT
+        S.id        AS "studentId",
+        SP."periodId",
+        SP."periodCode",
+        TC.id       AS "courseId",
+        TC.name     AS "courseName",
+        C.id        AS "curriculumId",
+        C.name      AS "curriculumName",
+        CV.id       AS "curriculumVersionId",
+        CV.name     AS "curriculumVersionName"
+    FROM "ql-dao-tao"."StudentSubjectScore" SSS
+    JOIN "ql-dao-tao"."Student" S 
+        ON S.id = SSS."studentId"
+    JOIN "ql-dao-tao"."FixedClass" FC 
+        ON FC.id = S."fixedClassId"
+    JOIN "ql-dao-tao"."TrainingCourse" TC 
+        ON TC.id = FC."trainingCourseId"
+    JOIN "ql-dao-tao"."SubjectClass" SC 
+        ON SC.id = SSS."subjectClassId"
+    JOIN SemesterPeriod SP
+        ON SP."semesterId" = SC."semesterId"
+    JOIN "ql-dao-tao"."SubjectVersion" SV 
+        ON SV.id = SSS."subjectVersionId"
+    JOIN "ql-dao-tao"."CurriculumVersion" CV 
+        ON CV.id = S."curriculumVersionId"
+    JOIN "ql-dao-tao"."Curriculum" C 
+        ON C.id = CV."curriculumId"
+    JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV 
+        ON CV.id = TBOCV."curriculumVersionId"
+    JOIN "ql-dao-tao"."TrainingBlockSubject" TBS 
+        ON TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+        AND TBS."subjectId" = SV.id
+    WHERE
+        SC.cancelled = false
+        AND (
+            SSS."finalScore" IS NULL
+            OR (TBS.graduation = true AND SSS."finalScore" < TC."scoreToPassGraduation")
+            OR (TBS."useForFinalScore" = true AND SSS."finalScore" < TC."scoreToPass")
+            OR (TBS."useForFinalScore" = false AND SSS."finalScore" < TC."scoreToPassConditional")
+            OR SSS."examBanned" = true
+            OR SSS.suspended = true
+        )
+        AND SSS.withdrew = false
+        AND SSS.exempted = false
+        AND SSS."examPostponed" = false
+        AND NOT EXISTS (
             SELECT 1
             FROM "ql-dao-tao"."StudentSubjectScore" SSS_pass
             WHERE
                 SSS_pass."studentId" = SSS."studentId"
-                AND SSS_pass."subjectVersionId" = sv.id
+                AND SSS_pass."subjectVersionId" = SV.id
                 AND SSS_pass.withdrew = false
                 AND SSS_pass.exempted = false
                 AND SSS_pass."examPostponed" = false
@@ -5139,119 +5178,116 @@ app.openapi(
                         (SSS_pass."finalScore" >= TC."scoreToPassConditional"
                          OR SSS_pass."manualFinalScore" >= TC."scoreToPassConditional"))
                 )
-                        )
-                ),
+        )
+),
 
-                TotalStudent AS (
-                    SELECT DISTINCT
-                        S.id        AS "studentId",
-                        SEM.id     AS "periodId",
-                        SEM.code    AS "periodCode",
-                        TC.id       AS "courseId",
-                        TC.name     AS "courseName",
-                        C.id        AS "curriculumId",
-                        C.name      AS "curriculumName",
-                        CV.id       AS "curriculumVersionId",
-                        CV.name     AS "curriculumVersionName"
-                    FROM "ql-dao-tao"."Student" S
-                    JOIN "ql-dao-tao"."FixedClass" FC 
-                        ON FC.id = S."fixedClassId"
-                    JOIN "ql-dao-tao"."TrainingCourse" TC 
-                        ON TC.id = FC."trainingCourseId"
-                    JOIN "ql-dao-tao"."CurriculumVersion" CV 
-                        ON CV.id = S."curriculumVersionId"
-                    JOIN "ql-dao-tao"."Curriculum" C 
-                        ON C.id = CV."curriculumId"
-                    JOIN "ql-dao-tao"."StudentSubjectScore" SSS
-                        ON SSS."studentId" = S.id
-                    JOIN "ql-dao-tao"."SubjectClass" SC
-                        ON SC.id = SSS."subjectClassId"
-                    JOIN "ql-dao-tao"."Semester" SEM
-                        ON SEM.id = SC."semesterId"
-                    WHERE
-                        SC.cancelled = false
-                        AND SEM."endDate" <= $1
-                )
+TotalStudent AS (
+    SELECT DISTINCT
+        S.id        AS "studentId",
+        SP."periodId",
+        SP."periodCode",
+        TC.id       AS "courseId",
+        TC.name     AS "courseName",
+        C.id        AS "curriculumId",
+        C.name      AS "curriculumName",
+        CV.id       AS "curriculumVersionId",
+        CV.name     AS "curriculumVersionName"
+    FROM "ql-dao-tao"."Student" S
+    JOIN "ql-dao-tao"."FixedClass" FC 
+        ON FC.id = S."fixedClassId"
+    JOIN "ql-dao-tao"."TrainingCourse" TC 
+        ON TC.id = FC."trainingCourseId"
+    JOIN "ql-dao-tao"."CurriculumVersion" CV 
+        ON CV.id = S."curriculumVersionId"
+    JOIN "ql-dao-tao"."Curriculum" C 
+        ON C.id = CV."curriculumId"
+    JOIN "ql-dao-tao"."StudentSubjectScore" SSS
+        ON SSS."studentId" = S.id
+    JOIN "ql-dao-tao"."SubjectClass" SC
+        ON SC.id = SSS."subjectClassId"
+    JOIN SemesterPeriod SP
+        ON SP."semesterId" = SC."semesterId"
+    WHERE
+        SC.cancelled = false
+)
 
+SELECT
+    'By_Course' AS "Type",
+    T."courseId" AS "Id",
+    T."courseName" AS "Name",
+    T."periodId" AS "PeriodId",
+    T."periodCode" AS "PeriodCode",
+    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
+    COUNT(DISTINCT R."studentId")::int AS "RelearnCount",
+    ROUND(
+        COUNT(DISTINCT R."studentId")::decimal
+        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+        4
+    )::float AS "Value"
+FROM TotalStudent T
+LEFT JOIN RelearnStudent R
+    ON R."studentId" = T."studentId"
+    AND R."periodCode" = T."periodCode"
+    AND R."courseId" = T."courseId"
+GROUP BY
+    T."courseId",
+    T."courseName",
+    T."periodId",
+    T."periodCode"
 
-                SELECT
-                    'By_Course'                     AS "Type",
-                    T."courseId"                     AS "Id",
-                    T."courseName"                  AS "Name",
-                    T."periodId"                   AS "PeriodId",
-                    T."periodCode"                  AS "PeriodCode",
-                    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
-                    COUNT(DISTINCT R."studentId")::int AS "RelearnCount",
-                    ROUND(
-                        COUNT(DISTINCT R."studentId")::decimal
-                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
-                        4
-                    )::float                         AS "Value"
-                FROM TotalStudent T
-                LEFT JOIN RelearnStudent R
-                    ON R."studentId"  = T."studentId"
-                    AND R."periodCode" = T."periodCode"
-                    AND R."courseName" = T."courseName"
-                GROUP BY
-                   T."courseId",
-                    T."courseName",
-                    T."periodId",
-                    T."periodCode"
+UNION ALL
 
-                UNION ALL
+SELECT
+    'By_Curriculum',
+    T."curriculumId",
+    T."curriculumName",
+    T."periodId",
+    T."periodCode",
+    COUNT(DISTINCT T."studentId")::int,
+    COUNT(DISTINCT R."studentId")::int,
+    ROUND(
+        COUNT(DISTINCT R."studentId")::decimal
+        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+        4
+    )::float
+FROM TotalStudent T
+LEFT JOIN RelearnStudent R
+    ON R."studentId" = T."studentId"
+    AND R."periodCode" = T."periodCode"
+    AND R."curriculumId" = T."curriculumId"
+GROUP BY
+    T."curriculumId",
+    T."curriculumName",
+    T."periodId",
+    T."periodCode"
 
-                SELECT
-                    'By_Curriculum'                     AS "Type",
-                    T."curriculumId"                   AS "Id",
-                    T."curriculumName"                  AS "Name",
-                    T."periodId"                       AS "PeriodId",
-                    T."periodCode"                      AS "PeriodCode",
-                    COUNT(DISTINCT T."studentId")::int AS "TotalStudents",
-                    COUNT(DISTINCT R."studentId")::int AS "RelearnCount",
-                    ROUND(
-                        COUNT(DISTINCT R."studentId")::decimal
-                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
-                        4
-                    )::float                             AS "Value"
-                FROM TotalStudent T
-                LEFT JOIN RelearnStudent R
-                    ON R."studentId"       = T."studentId"
-                    AND R."periodCode"     = T."periodCode"
-                    AND R."curriculumName" = T."curriculumName"
-                GROUP BY
-                    T."curriculumId",
-                    T."curriculumName",
-                    T."periodId",
-                    T."periodCode"
+UNION ALL
 
+SELECT
+    'By_Major',
+    T."curriculumVersionId",
+    T."curriculumVersionName",
+    T."periodId",
+    T."periodCode",
+    COUNT(DISTINCT T."studentId")::int,
+    COUNT(DISTINCT R."studentId")::int,
+    ROUND(
+        COUNT(DISTINCT R."studentId")::decimal
+        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
+        4
+    )::float
+FROM TotalStudent T
+LEFT JOIN RelearnStudent R
+    ON R."studentId" = T."studentId"
+    AND R."periodCode" = T."periodCode"
+    AND R."curriculumVersionId" = T."curriculumVersionId"
+GROUP BY
+    T."curriculumVersionId",
+    T."curriculumVersionName",
+    T."periodId",
+    T."periodCode";
 
-                UNION ALL
-                SELECT
-                    'By_Major'                             AS "Type",
-                    T."curriculumVersionId"               AS "Id",
-                    T."curriculumVersionName"              AS "Name",
-                    T."periodId"                            AS "periodId",
-                    T."periodCode"                         AS "PeriodCode",
-                    COUNT(DISTINCT T."studentId")::int    AS "TotalStudents",
-                    COUNT(DISTINCT R."studentId")::int    AS "RelearnCount",
-                    ROUND(
-                        COUNT(DISTINCT R."studentId")::decimal
-                        / NULLIF(COUNT(DISTINCT T."studentId"), 0),
-                        4
-                    )::float                               AS "Value"
-                FROM TotalStudent T
-                LEFT JOIN RelearnStudent R
-                    ON R."studentId"               = T."studentId"
-                    AND R."periodCode"             = T."periodCode"
-                    AND R."curriculumVersionName"  = T."curriculumVersionName"
-                GROUP BY
-                 T."curriculumVersionId",
-                    T."curriculumVersionName",
-                    T."periodId",
-                    T."periodCode"
-
-
-                `
+                      `
 
         const date = new Date()
 
