@@ -676,9 +676,19 @@ export default function ChuyenDeNghienCuu() {
                                                         ndcd: student.ndcd,
                                                     })),
                                                 },
-                                                mergeCells: Object.values(researchTopicCountByStudent).map(
-                                                    (s) => `B2:B${1 + s}`
-                                                ),
+                                                mergeCells: item.students.map((s, idx, arr) => {
+                                                    const startRow =
+                                                        2 +
+                                                        arr
+                                                            .slice(0, idx)
+                                                            .reduce(
+                                                                (sum, student) =>
+                                                                    sum + student.so_cd,
+                                                                0
+                                                            )
+                                                    const endRow = startRow + s.so_cd - 1
+                                                    return `B${startRow}:B${endRow}`
+                                                }),
                                             })),
                                         })
                                         saveAs(
