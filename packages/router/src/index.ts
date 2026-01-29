@@ -189,6 +189,11 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
             },
             {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
+                label: 'Phân công CĐNC',
+                path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
+            },
+            {
                 id: 'dang-ky-hoc',
                 label: 'Đăng ký học',
                 description: 'Đăng ký học',
@@ -285,9 +290,9 @@ const NAVIGATION: NavigationType = {
                         description: 'SV/HV chuyển trường',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU,
                         label: 'Chuyên đề nghiên cứu',
-                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_CHUYEN_DE_NGHIEN_CUU,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU,
                         description: 'Chuyên đề nghiên cứu',
                     },
                 ],
