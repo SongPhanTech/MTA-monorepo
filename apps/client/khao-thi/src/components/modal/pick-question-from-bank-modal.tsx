@@ -21,6 +21,7 @@ import { renderWithMath } from '@components/commons/rich-text-editor/renderWithM
 import { QuestionType } from '@workspace/db/client'
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from '@constants/constants'
 import type { FilterProps } from '@components/commons/typeFilter'
+import { store } from '@pages/thiet-lap-de-thi/danh-sach-de'
 
 const PickQuestionFromBankModal = () => {
     const [form] = Form.useForm()
@@ -31,6 +32,7 @@ const PickQuestionFromBankModal = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [isAllSelected, setIsAllSelected] = useState(false)
+    const [originMatrixId, setOriginMatrixId] = useState<string | undefined>()
     const [filters, setFilters] = useState<FilterProps>({
         questionType: undefined,
         content: '',
@@ -167,37 +169,14 @@ const PickQuestionFromBankModal = () => {
 
     const { data: totalQuestions = 0 } = useCountQuestion(
         {
-            where: {
-                questionBankId,
-                deletedAt: null,
-            },
+            where,
         },
         { enabled: !!questionBankId }
     )
 
     useEffect(() => {
-        if (!examFrameworkId) return
-
-        form.setFieldsValue({
-            examMatrixId: input?.matrixId,
-            knowledgeBlockId: undefined,
-        })
-
-        setQuestionBankId(undefined)
-        setSelectedRowKeys([])
-        setSelectedQuestions([])
-    }, [examFrameworkId, input?.matrixId, form])
-
-    useEffect(() => {
-        if (!examMatrixId) return
-
-        form.setFieldsValue({
-            knowledgeBlockId: undefined,
-        })
-    }, [examMatrixId, form])
-
-    useEffect(() => {
         if (!isOpen) return
+        setOriginMatrixId(input?.matrixId)
 
         form.setFieldsValue({
             examFrameworkId: input?.examFrameworkId,
@@ -208,18 +187,15 @@ const PickQuestionFromBankModal = () => {
 
     useEffect(() => {
         if (!questionBankId) return
-        setCurrentPage(1)
         setSelectedRowKeys([])
         setSelectedQuestions([])
         setIsAllSelected(false)
     }, [questionBankId])
 
     useEffect(() => {
-        if (!isOpen) return
-        if (questionBankId) return
-        if (questionBanks.length === 0) return
-
-        setQuestionBankId(questionBanks[0].id)
+        if (isOpen && !questionBankId && questionBanks.length > 0) {
+            setQuestionBankId(questionBanks[0].id)
+        }
     }, [isOpen, questionBanks, questionBankId])
 
     const rowSelection = {
@@ -351,15 +327,24 @@ const PickQuestionFromBankModal = () => {
                 message.success(`Đã chuyển ${idsToUpdate.length} câu hỏi`)
             }
 
+            if (originMatrixId) {
+                store.setState((s) => ({
+                    ...s,
+                    matrixId: originMatrixId,
+                }))
+                localStorage.setItem('currentMatrixId', originMatrixId)
+            }
+
+            await queryClient.invalidateQueries({
+                queryKey: ['Question'],
+            })
+
             form.resetFields()
             onClose()
         } catch (error) {
             console.error(error)
             message.error('Thao tác thất bại')
         }
-        await queryClient.invalidateQueries({
-            queryKey: ['Question'],
-        })
     }
 
     return (
@@ -396,6 +381,16 @@ const PickQuestionFromBankModal = () => {
                                     value: i.id,
                                     label: i.name,
                                 }))}
+                                onChange={(value) => {
+                                    form.setFieldsValue({
+                                        examMatrixId: undefined,
+                                        knowledgeBlockId: undefined,
+                                    })
+
+                                    setQuestionBankId(undefined)
+                                    setSelectedRowKeys([])
+                                    setSelectedQuestions([])
+                                }}
                             />
                         </FormItem>
                     </Col>
@@ -408,6 +403,11 @@ const PickQuestionFromBankModal = () => {
                                     value: i.id,
                                     label: i.name,
                                 }))}
+                                onChange={() => {
+                                    form.setFieldsValue({
+                                        knowledgeBlockId: undefined,
+                                    })
+                                }}
                             />
                         </FormItem>
                     </Col>
@@ -464,6 +464,7 @@ const PickQuestionFromBankModal = () => {
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
+                            setCurrentPage(1)
                         }}
                         dataSource={questions}
                         scroll={{ y: 420 }}
