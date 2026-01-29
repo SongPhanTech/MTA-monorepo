@@ -54,6 +54,7 @@ import {
     exportSaoQDHDLV,
     exportThongKeCbHdlv,
 } from '@/utils/thesis-excel'
+import { whereOrganization } from '@workspace/libs/constants'
 
 interface ExpertStat {
     expertId: string
@@ -106,7 +107,10 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
     }>({
         tag: 'ModalChuyenDiemLopMonHoc',
     })
-    const { data: sDm_Donvi = [] } = useFindManyDM_DonVi()
+    const { data: sDm_Donvi = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+        orderBy: { sTen: 'asc' },
+    })
     const { data: roomData } = useFindManyRoom()
     const { data: defenseSessionData } = useFindManyDefenseSession()
 

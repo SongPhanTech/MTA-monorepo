@@ -7,6 +7,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Tabs } from 'antd'
 import type React from 'react'
 import { useMemo } from 'react'
+import { whereOrganization } from '@workspace/libs/constants'
 
 export default function KhaoBoMonPhanCongGiangDay() {
     const { id: semesterId } = useSemesterStore()
@@ -29,9 +30,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
         {
             select: { Id: true },
-            where: {
-                bActive: true,
-            },
+            where: whereOrganization,
         },
         {
             refetchOnWindowFocus: false,
@@ -88,6 +87,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     Id: {
                         in: orgIds,
                     },
+                    ...whereOrganization,
                 },
             },
             {
@@ -128,6 +128,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     Id: {
                         in: orgIds,
                     },
+                    ...whereOrganization,
                 },
             },
             {
@@ -168,6 +169,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     Id: {
                         in: orgIds,
                     },
+                    ...whereOrganization,
                 },
             },
             {

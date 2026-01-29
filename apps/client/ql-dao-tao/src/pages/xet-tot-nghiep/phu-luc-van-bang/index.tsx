@@ -15,6 +15,7 @@ import { Button, DatePicker, Form, Input, TreeSelect, Upload } from 'antd'
 import dayjs from 'dayjs'
 import type React from 'react'
 import { useState } from 'react'
+import { whereOrganization } from '@workspace/libs/constants'
 
 export type StudentGradeSystemForm = {
     trainingObjectTypeId: string[]
@@ -75,7 +76,9 @@ export default function StudentGradeSystem() {
     const { data: fixedClasses = [] } = useFindManyFixedClass()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
     const { data: thesisSessionData = [] } = useFindManyThesisSession()
-    const { data: dm_DonVi = [] } = useFindManyDM_DonVi()
+    const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+    })
     const treeData = buildOrgTree(dm_DonVi)
     return (
         <div className="flex h-screen bg-gray-50">

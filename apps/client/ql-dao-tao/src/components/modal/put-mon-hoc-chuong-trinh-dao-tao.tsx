@@ -22,6 +22,7 @@ import _ from 'lodash'
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
 import { normalizeVietnamese } from '@workspace/libs/utils'
+import { whereOrganization } from '@workspace/libs/constants'
 export type PutTrainingBlockSubject = TrainingBlockSubject & {
     conditional?: boolean
 }
@@ -89,7 +90,9 @@ const PutTrainingBlockSubject = () => {
             enabled: !!input?.trainingBlockOnCurriculumVersionId,
         }
     )
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+    })
 
     const treeData = useMemo(() => buildOrgTree(manageOrgData), [manageOrgData])
     const treeDataLimited = useMemo(() => limitTreeDepth(treeData, 2), [treeData])

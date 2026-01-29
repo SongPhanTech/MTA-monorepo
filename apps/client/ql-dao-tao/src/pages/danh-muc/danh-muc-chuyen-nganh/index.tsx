@@ -23,6 +23,7 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
+import { whereOrganization } from '@workspace/libs/constants'
 
 export default function TrainingMajorPage() {
     const { can, canSome } = useAbility()
@@ -224,7 +225,10 @@ export default function TrainingMajorPage() {
         where: { ...where, deletedAt: null },
     })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+        orderBy: { sTen: 'asc' },
+    })
     const treeData = buildOrgTree(manageOrgData)
 
     const debouncedRefetch = useCallback(

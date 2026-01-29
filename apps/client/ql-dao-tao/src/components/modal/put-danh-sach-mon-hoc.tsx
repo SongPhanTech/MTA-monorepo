@@ -17,6 +17,7 @@ import 'dayjs/locale/vi'
 import useTrimText from '@hooks/trimText'
 import { buildOrgTree } from '@lib/utils'
 import TreeSelect from '@/components/commons/tree-select'
+import { whereOrganization } from '@workspace/libs/constants'
 export type PutSubject = Subject
 dayjs.locale('vi')
 type PutSubjectInput = {
@@ -32,7 +33,9 @@ const PutSubjectListModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+    })
     const treeData = buildOrgTree(manageOrgData)
     const normalize = (str = '') =>
         str

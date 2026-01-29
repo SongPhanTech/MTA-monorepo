@@ -27,6 +27,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 
 dayjs.locale('vi')
 
@@ -59,9 +60,7 @@ export default function UserProfilePageLecture() {
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
         {
             select: { Id: true },
-            where: {
-                bActive: true,
-            },
+            where: whereOrganization,
         },
         {
             refetchOnWindowFocus: false,
@@ -226,6 +225,7 @@ export default function UserProfilePageLecture() {
     const { data: academicDegreeTypes = [] } = useFindManyDM_HocVi()
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
         orderBy: { sTen: 'asc' },
     })
     const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId || '0')

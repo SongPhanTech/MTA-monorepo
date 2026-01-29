@@ -20,6 +20,7 @@ import { buildOrgTree } from '@lib/utils'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
+import { whereOrganization } from '@workspace/libs/constants'
 export type PutThesisProject = ThesisProject
 dayjs.locale('vi')
 
@@ -46,6 +47,7 @@ const PutThesisProject = () => {
                       sTen: { contains: searchOrganization, mode: 'insensitive' },
                   }
                 : {}),
+            ...whereOrganization,
         },
     })
 

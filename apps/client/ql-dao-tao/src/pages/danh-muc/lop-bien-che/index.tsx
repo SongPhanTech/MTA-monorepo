@@ -31,6 +31,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 export default function FixedClassPage() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -164,7 +165,10 @@ export default function FixedClassPage() {
 
     const { data: count } = useCountFixedClass({ where: { ...where, deletedAt: null } })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+        orderBy: { sTen: 'asc' },
+    })
     const treeData = buildOrgTree(manageOrgData)
 
     const { onOpen } = useDisclosure<string>({

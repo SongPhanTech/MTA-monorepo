@@ -5,11 +5,9 @@ import { DEFAULT_PAGINATE_SIZE, TRAINING_OBJECT_TYPE } from '@constants/constant
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
 import type { TrainingObjectTypes } from '@workspace/db/client'
 import {
     useCountTrainingObjectType,
-    useFindManyDM_DonVi,
     useFindManyTrainingForm,
     useFindManyTrainingLevel,
     useFindManyTrainingObjectType,
@@ -161,9 +159,6 @@ export default function TrainingObjectTypePage() {
             hideSpinner()
         }
     }
-
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
-    const treeData = buildOrgTree(manageOrgData)
 
     return (
         <div>

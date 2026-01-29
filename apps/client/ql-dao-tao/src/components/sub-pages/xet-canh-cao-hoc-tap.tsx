@@ -34,6 +34,7 @@ import { useExportStudentAcademicWarningJson } from '@workspace/libs/api/trainin
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 
 dayjs.locale('vi')
 
@@ -161,7 +162,10 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
         },
     })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+        orderBy: { sTen: 'asc' },
+    })
 
     const treeData = buildOrgTree(manageOrgData)
 

@@ -26,7 +26,7 @@ const importCurriculumVersion = createRoute({
                         createNewSubjects: z.coerce.boolean().default(false),
                         deleteOldData: z.coerce.boolean().default(false),
                         timeout: z.coerce.number().default(30),
-                    }).openapi('ImportPhienBanCTDTSubject'),
+                    }),
                 },
             },
         },

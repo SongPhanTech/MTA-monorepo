@@ -16,6 +16,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
 import TreeSelect from '@/components/commons/tree-select'
+import { whereOrganization } from '@workspace/libs/constants'
 export type PutSubjectFormType = Subject
 dayjs.locale('vi')
 const PutSubjectModal = () => {
@@ -83,7 +84,9 @@ const PutSubjectModal = () => {
             form.setFieldsValue(level)
         }
     }, [level])
-    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+    })
     const treeData = buildOrgTree(manageOrgData)
 
     return (

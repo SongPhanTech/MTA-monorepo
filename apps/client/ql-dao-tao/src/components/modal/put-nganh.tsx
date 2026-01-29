@@ -20,6 +20,7 @@ import 'dayjs/locale/vi'
 import DocumentPaths from '@components/commons/documentPaths'
 import TreeSelect from '@/components/commons/tree-select'
 import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
+import { whereOrganization } from '@workspace/libs/constants'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
     documentFiles?: DocumentFile[]
@@ -38,7 +39,9 @@ const PutTrainingFieldModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
-    const { data: organizations = [] } = useFindManyDM_DonVi()
+    const { data: organizations = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+    })
     const treeData = buildOrgTree(organizations)
     const { mutateAsync: createTrainingField } = useCreateTrainingField()
     const { mutateAsync: updateTrainingField } = useUpdateTrainingField()

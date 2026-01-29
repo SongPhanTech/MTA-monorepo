@@ -2,6 +2,7 @@ import { buildOrgTree } from '@lib/utils'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import type { TreeSelectProps } from 'antd'
 import { TreeSelect as TreeSelectAnt } from 'antd'
+import { whereOrganization } from '@workspace/libs/constants'
 
 // Define props for our custom component
 type TreeSelectDepartmentProps = {
@@ -22,6 +23,7 @@ const TreeSelectDepartment: React.FC<TreeSelectDepartmentProps> = ({
     const { data: organizationData = [] } = useFindManyDM_DonVi({
         where: {
             bActive: true,
+            ...whereOrganization,
         },
     })
     // Tạo treeData từ schoolYears và semesters
