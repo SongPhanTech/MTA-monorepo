@@ -5,6 +5,7 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { EvaluationMemberRoleSchema } from '../enums/EvaluationMemberRole.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -14,6 +15,7 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    role: EvaluationMemberRoleSchema.nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -25,19 +27,18 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    role: EvaluationMemberRoleSchema.nullish(),
 }
 ).strict();
 const relationSchema = z.object({
     evaluationCouncil: z.record(z.string(), z.unknown()),
     lecturer: z.record(z.string(), z.unknown()),
-    role: z.record(z.string(), z.unknown()).optional(),
     evaluationCriterions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     evaluationCouncilId: z.string(),
     lecturerId: z.string(),
-    roleId: z.string().nullish(),
 }
 );
 
@@ -72,7 +73,8 @@ export const EvaluationCouncilMemberPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    createdBy: z.string().uuid().nullish()
+    createdBy: z.string().uuid().nullish(),
+    role: EvaluationMemberRoleSchema.nullish()
 }).partial().passthrough();
 
 

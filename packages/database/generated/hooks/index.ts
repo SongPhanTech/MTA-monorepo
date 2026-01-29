@@ -179,7 +179,6 @@ export * from './analysis-criterion';
 export * from './evaluation-criterion';
 export * from './requirement-criterion';
 export * from './analysis-form-evidence';
-export * from './evaluation-member-role';
 export * from './evaluation-council';
 export * from './evaluation-council-member';
 export * from './evidence-file';

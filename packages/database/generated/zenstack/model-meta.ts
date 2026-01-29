@@ -19875,70 +19875,6 @@ const metadata: ModelMeta = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
-        evaluationMemberRole: {
-            name: 'EvaluationMemberRole', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvaluationMemberRole$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, evaluationCouncilMember: {
-                    name: "evaluationCouncilMember",
-                    type: "EvaluationCouncilMember",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'role',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
         evaluationCouncil: {
             name: 'EvaluationCouncil', fields: {
                 id: {
@@ -20086,18 +20022,7 @@ const metadata: ModelMeta = {
                 }, role: {
                     name: "role",
                     type: "EvaluationMemberRole",
-                    isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'evaluationCouncilMember',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "roleId" },
-                }, roleId: {
-                    name: "roleId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'role',
                 }, evaluationCriterions: {
                     name: "evaluationCriterions",
                     type: "EvaluationCriterion",
@@ -27977,10 +27902,6 @@ function $default$RequirementCriterion$createdBy(user: any): unknown {
 }
 
 function $default$AnalysisFormEvidence$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$EvaluationMemberRole$createdBy(user: any): unknown {
     return user?.id;
 }
 

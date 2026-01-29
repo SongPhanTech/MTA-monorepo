@@ -3366,18 +3366,6 @@ exports.Prisma.AnalysisFormEvidenceScalarFieldEnum = {
   order: 'order'
 };
 
-exports.Prisma.EvaluationMemberRoleScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
 exports.Prisma.EvaluationCouncilScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3402,7 +3390,7 @@ exports.Prisma.EvaluationCouncilMemberScalarFieldEnum = {
   createdBy: 'createdBy',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId',
-  roleId: 'roleId'
+  role: 'role'
 };
 
 exports.Prisma.EvidenceFileScalarFieldEnum = {
@@ -6702,14 +6690,6 @@ exports.Prisma.AnalysisFormEvidenceOrderByRelevanceFieldEnum = {
   evidenceId: 'evidenceId'
 };
 
-exports.Prisma.EvaluationMemberRoleOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
 exports.Prisma.EvaluationCouncilOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6725,8 +6705,7 @@ exports.Prisma.EvaluationCouncilMemberOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   evaluationCouncilId: 'evaluationCouncilId',
-  lecturerId: 'lecturerId',
-  roleId: 'roleId'
+  lecturerId: 'lecturerId'
 };
 
 exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {
@@ -7841,6 +7820,17 @@ exports.EvaluationStatus = exports.$Enums.EvaluationStatus = {
   COMPLETED: 'COMPLETED'
 };
 
+exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
+  CHAIRMAN: 'CHAIRMAN',
+  VICE_PRESIDENT: 'VICE_PRESIDENT',
+  HEAD_SECRETARY: 'HEAD_SECRETARY',
+  SECRETARY: 'SECRETARY',
+  MEMBER: 'MEMBER',
+  ADVISORY_BOARD: 'ADVISORY_BOARD',
+  HEAD_SPECIALIZED: 'HEAD_SPECIALIZED',
+  SPECIALIZED: 'SPECIALIZED'
+};
+
 exports.SurveyObject = exports.$Enums.SurveyObject = {
   MILITARY_STUDENT: 'MILITARY_STUDENT',
   CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
@@ -8106,7 +8096,6 @@ exports.Prisma.ModelName = {
   EvaluationCriterion: 'EvaluationCriterion',
   RequirementCriterion: 'RequirementCriterion',
   AnalysisFormEvidence: 'AnalysisFormEvidence',
-  EvaluationMemberRole: 'EvaluationMemberRole',
   EvaluationCouncil: 'EvaluationCouncil',
   EvaluationCouncilMember: 'EvaluationCouncilMember',
   EvidenceFile: 'EvidenceFile',
