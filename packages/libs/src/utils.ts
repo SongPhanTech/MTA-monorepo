@@ -191,6 +191,7 @@ declare global {
         toFixedSmart(fractionDigits: number): string
         formatVND(): string
         toVndWord(unit?: string, firstCase?: boolean): string
+        toRoman(): string
     }
     interface String {
         titleCase(): string
@@ -205,6 +206,42 @@ declare global {
 }
 
 type ScoreStats = { count: number; percentage: number }
+
+Number.prototype.toRoman = function (): string {
+    // A lookup object mapping Roman numeral symbols to their integer values,
+    // ordered by value from largest to smallest.
+    let num = this.valueOf()
+    const romanValues = {
+        M: 1000,
+        CM: 900,
+        D: 500,
+        CD: 400,
+        C: 100,
+        XC: 90,
+        L: 50,
+        XL: 40,
+        X: 10,
+        IX: 9,
+        V: 5,
+        IV: 4,
+        I: 1,
+    } as Record<string, number>
+    let roman = ''
+
+    // Iterate over the lookup object
+    for (const key in romanValues) {
+        const romanValue = romanValues[key as keyof typeof romanValues]
+
+        // While the number is greater than or equal to the current value
+        while (romanValue && num >= romanValue) {
+            // Append the Roman symbol to the result string
+            roman += key
+            // Subtract the value from the number
+            num -= romanValue
+        }
+    }
+    return roman
+}
 
 Number.prototype.toVndWord = function (unit = '', firstCase = true): string {
     const config = new ReadingConfig()

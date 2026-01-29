@@ -15,7 +15,7 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, message, Modal, Row, Tooltip } from 'antd'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import { excelTemplate, sqlTransaction } from '@workspace/libs/api/model'
 import dayjs from 'dayjs'
 import { SquarePen } from 'lucide-react'
 import ExcelJS from 'exceljs'
@@ -25,6 +25,7 @@ import DatePicker from '@components/commons/date-picker'
 
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import type { Prisma } from '@workspace/db/client'
+import { saveAs } from 'file-saver'
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -140,6 +141,20 @@ export default function ChuyenDeNghienCuu() {
                                 fixedClass: {
                                     include: {
                                         trainingCourse: true,
+                                    },
+                                },
+                                curriculumVersion: {
+                                    select: {
+                                        curriculum: {
+                                            select: {
+                                                trainingMajor: {
+                                                    select: {
+                                                        name: true,
+                                                        code: true,
+                                                    },
+                                                },
+                                            },
+                                        },
                                     },
                                 },
                             },
@@ -424,7 +439,137 @@ export default function ChuyenDeNghienCuu() {
                         </Form.Item>
                         <Form.Item className="mb-0">
                             <div className="flex gap-2">
-                                <Button type="primary" icon={<FileOutlined />} onClick={() => {}}>
+                                <Button
+                                    type="primary"
+                                    icon={<FileOutlined />}
+                                    onClick={async () => {
+                                        if (!trainingCourseId) {
+                                            return message.warning(
+                                                'Vui lòng chọn khóa học trước khi xuất phụ lục!'
+                                            )
+                                        }
+
+                                        if (!semesterId) {
+                                            return message.warning(
+                                                'Vui lòng chọn kỳ học trước khi xuất phụ lục!'
+                                            )
+                                        }
+
+                                        let globalIndex = 0
+
+                                        const khoaVaKy = await sqlTransaction([
+                                            {
+                                                model: 'TrainingCourse',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: trainingCourseId },
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                            {
+                                                model: 'Semester',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: semesterId },
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                        ])
+                                        const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
+                                        const payload = Object.values(
+                                            studentResearchTopicData.reduce(
+                                                (acc, e) => {
+                                                    const ma_cn =
+                                                        e.studentSubjectScore.student
+                                                            ?.curriculumVersion?.curriculum
+                                                            ?.trainingMajor?.code
+                                                    if (!ma_cn) return acc
+
+                                                    if (!acc[ma_cn]) {
+                                                        acc[ma_cn] = {
+                                                            ma_cn,
+                                                            chuyen_nganh:
+                                                                e.studentSubjectScore.student
+                                                                    ?.curriculumVersion?.curriculum
+                                                                    ?.trainingMajor?.name,
+                                                            students: [],
+                                                        }
+                                                    }
+
+                                                    globalIndex++
+                                                    acc[ma_cn].students.push({
+                                                        tt: globalIndex,
+                                                        ten: e.studentSubjectScore.student
+                                                            ?.userProfile?.fullname,
+                                                        cbhd: `1.${e.supervisor?.userProfile?.fullname ?? ''}\n2.${e.coSupervisor?.userProfile?.fullname ?? ''}`.trim(),
+                                                        ten_cd: e.name,
+                                                        macd: e.studentSubjectScore.subjectVersion
+                                                            ?.code,
+                                                        stc: e.studentSubjectScore.subjectVersion
+                                                            ?.credit,
+                                                        ndcd: e.mainContent,
+                                                    })
+
+                                                    return acc
+                                                },
+                                                {} as Record<
+                                                    string,
+                                                    {
+                                                        ma_cn: string
+                                                        chuyen_nganh?: string
+                                                        students: {
+                                                            tt: number
+                                                            ten?: string | null
+                                                            cbhd: string
+                                                            ten_cd?: string | null
+                                                            macd?: string | null
+                                                            stc: number | null
+                                                            ndcd?: string | null
+                                                        }[]
+                                                    }
+                                                >
+                                            )
+                                        )
+                                        const res = await excelTemplate({
+                                            fileName: 'Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx',
+                                            head: {
+                                                data: {
+                                                    title: `DANH SÁCH HỌC VIÊN CAO HỌC ĐỊNH HƯỚNG NGHIÊN CỨU ${khoaVaKyData?.[0]?.name?.toUpperCase()}\nTHỰC HIỆN CHUYÊN ĐỀ NGHIÊN CỨU ${khoaVaKyData?.[1]?.name?.toUpperCase()}`,
+                                                },
+                                            },
+                                            tail: {
+                                                data: {
+                                                    note:`(Danh sách gồm ${payload.flatMap(item => item.students).length} học viên ${payload.flatMap(item => item.students).length} Chuyên đề nghiên cứu)`
+                                                },
+                                            },
+                                            path: 'PL_ChuyenDeNghienCuu.xlsx',
+                                            showGridLines: true,
+                                            wrapText: true,
+                                            payload: payload.map((item, idx) => ({
+                                                data: {
+                                                    chuyen_nganh: `  ${(idx + 1).toRoman()}. ${item.chuyen_nganh}: ${item.students.length} học viên.`,
+                                                    data: item.students.map((student) => ({
+                                                        tt: student.tt,
+                                                        ten: student.ten,
+                                                        cbhd: student.cbhd,
+                                                        ten_cd: student.ten_cd,
+                                                        macd: student.macd,
+                                                        stc: student.stc,
+                                                        ndcd: student.ndcd,
+                                                    })),
+                                                },
+                                            })),
+                                        })
+                                        saveAs(
+                                            res.data,
+                                            `PL_ChuyenDeNghienCuu_${dayjs().format('HHmmss')}.xlsx`
+                                        )
+                                    }}
+                                >
                                     Phụ lục QĐ chuyên đề nghiên cứu
                                 </Button>
                             </div>
