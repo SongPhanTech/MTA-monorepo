@@ -4,14 +4,15 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatistics200SurveyTopic } from './getClusterSurveyStatistics200SurveyTopic'
-import type { GetClusterSurveyStatistics200SurveyObjectTypeItem } from './getClusterSurveyStatistics200SurveyObjectTypeItem'
-import type { GetClusterSurveyStatistics200LecturersItem } from './getClusterSurveyStatistics200LecturersItem'
-import type { GetClusterSurveyStatistics200SurveyChoiceItem } from './getClusterSurveyStatistics200SurveyChoiceItem'
-import type { GetClusterSurveyStatistics200SurveyQuestionItem } from './getClusterSurveyStatistics200SurveyQuestionItem'
-import type { GetClusterSurveyStatistics200SurveysItem } from './getClusterSurveyStatistics200SurveysItem'
+
 import type { GetClusterSurveyStatistics200ChoicesItem } from './getClusterSurveyStatistics200ChoicesItem'
 import type { GetClusterSurveyStatistics200DataItem } from './getClusterSurveyStatistics200DataItem'
+import type { GetClusterSurveyStatistics200LecturersItem } from './getClusterSurveyStatistics200LecturersItem'
+import type { GetClusterSurveyStatistics200SurveyChoiceItem } from './getClusterSurveyStatistics200SurveyChoiceItem'
+import type { GetClusterSurveyStatistics200SurveyObjectTypeItem } from './getClusterSurveyStatistics200SurveyObjectTypeItem'
+import type { GetClusterSurveyStatistics200SurveyQuestionItem } from './getClusterSurveyStatistics200SurveyQuestionItem'
+import type { GetClusterSurveyStatistics200SurveysItem } from './getClusterSurveyStatistics200SurveysItem'
+import type { GetClusterSurveyStatistics200SurveyTopic } from './getClusterSurveyStatistics200SurveyTopic'
 
 export type GetClusterSurveyStatistics200 = {
     id: string
@@ -29,7 +30,6 @@ export type GetClusterSurveyStatistics200 = {
     /** @nullable */
     createdBy?: string | null
     name: string
-    additionalSuggestion: boolean
     /** @nullable */
     startDate: string | null
     /** @nullable */

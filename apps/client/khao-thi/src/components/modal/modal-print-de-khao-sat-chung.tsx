@@ -1,11 +1,11 @@
 import { PrinterOutlined } from '@ant-design/icons'
+import { toRoman } from '@lib/utils'
 import { useFindUniqueSurvey } from '@workspace/db/hooks'
 import { Button, Col, Input, Modal, Radio, Row, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
-import { toRoman } from '@lib/utils'
 
 dayjs.locale('vi')
 type GroupedSurveyQuestion = {
@@ -374,12 +374,6 @@ const ModalPrintExamSurvey = () => {
                                 bordered={true}
                             /> */}
                         </Col>
-                        {survey?.additionalSuggestion && (
-                            <Col span={24}>
-                                <div className="mb-3 font-bold">Ý kiến khác :</div>
-                                <Input.TextArea placeholder="Nhập ý kiến khác" />
-                            </Col>
-                        )}
                     </Row>
                 )}
             </div>

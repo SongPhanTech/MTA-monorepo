@@ -3,7 +3,7 @@ import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 import { SubjectClassType } from '@workspace/db'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
-import { InvalidNumberError, ReadingConfig, doReadNumber } from 'read-vietnamese-number' // or CDN URL
+import { doReadNumber, InvalidNumberError, ReadingConfig } from 'read-vietnamese-number' // or CDN URL
 
 export { fastIsEqual } from './fast-is-equal'
 
@@ -391,6 +391,7 @@ export const calcFinalScore = (
             }
             awards: {
                 select: {
+                    status: true
                     archivedAward: {
                         select: {
                             bonusScore: true
@@ -457,10 +458,9 @@ export const calcFinalScore = (
         return new Decimal(finalScore).toDecimalPlaces(1)
     }
 
-    const bonusScore = subjectScore.awards.reduce(
-        (prev, curr) => prev + curr?.archivedAward?.bonusScore,
-        0
-    )
+    const bonusScore = subjectScore.awards
+        .filter((a) => a.status === 'APPROVED')
+        .reduce((prev, curr) => prev + curr?.archivedAward?.bonusScore, 0)
 
     return Decimal.min(
         Decimal.max(finalScore, maxCertFinalScore || 0).add(bonusScore),

@@ -2622,18 +2622,19 @@ model ArchivedCertificate {
 }
 
 model ArchivedAwardOnStudentSubjectScore {
-  id                    String              @id() @default(cuid())
-  code                  String?             @unique()
-  active                Boolean             @default(true)
-  description           String?             @db.Text()
+  id                    String                    @id() @default(cuid())
+  code                  String?                   @unique()
+  active                Boolean                   @default(true)
+  description           String?                   @db.Text()
   deletedAt             DateTime?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @default(now()) @updatedAt()
-  createdBy             String?             @db.Uuid()
-  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @default(now()) @updatedAt()
+  createdBy             String?                   @db.Uuid()
+  studentSubjectScore   StudentSubjectScore       @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
-  archivedAward         ArchivedAward       @relation(fields: [archivedAwardId], references: [id])
+  archivedAward         ArchivedAward             @relation(fields: [archivedAwardId], references: [id])
   archivedAwardId       String
+  status                ArchivedCertificateStatus @default(PENDING)
 
   @@unique([studentSubjectScoreId, archivedAwardId])
   @@schema("ql-dao-tao")
@@ -3073,6 +3074,7 @@ model SubjectVersion {
   exams                    Exam[]
   examFramework            ExamFramework[]
 
+  @@index([name, trainingObjectTypeId])
   @@schema("ql-dao-tao")
 }
 
@@ -3404,6 +3406,7 @@ model TrainingObjectType {
   trainingBlocks       TrainingBlock[]
   vaiTro               String[]
   surveyObjectType     SurveyObjectType[]
+  survey               Survey[]
 
   @@schema("ql-dao-tao")
 }
@@ -5227,59 +5230,59 @@ model SurveyQuestionGroup {
 
 /// Khảo sát cụm
 model ClusterSurvey {
-  id                   String             @id() @default(cuid())
-  code                 String?            @unique()
-  active               Boolean            @default(true)
-  description          String?            @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @default(now()) @updatedAt()
-  createdBy            String?            @db.Uuid()
-  name                 String
-  additionalSuggestion Boolean
-  startDate            DateTime
-  endDate              DateTime?
-  isPublic             Boolean            @default(false)
-  anonymous            Boolean            @default(true)
-  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId        String
-  surveyObjectType     SurveyObjectType[]
-  lecturers            Lecturer[]
-  surveyChoice         SurveyChoice[]
-  surveyQuestion       SurveyQuestion[]
-  surveys              Survey[]
+  id               String             @id() @default(cuid())
+  code             String?            @unique()
+  active           Boolean            @default(true)
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt()
+  createdBy        String?            @db.Uuid()
+  name             String
+  startDate        DateTime
+  endDate          DateTime?
+  isPublic         Boolean            @default(false)
+  anonymous        Boolean            @default(true)
+  surveyTopic      SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId    String
+  surveyObjectType SurveyObjectType[]
+  lecturers        Lecturer[]
+  surveyChoice     SurveyChoice[]
+  surveyQuestion   SurveyQuestion[]
+  surveys          Survey[]
 
   @@schema("khao-thi")
 }
 
 model Survey {
-  id                   String             @id() @default(cuid())
-  code                 String?            @unique()
-  active               Boolean            @default(true)
-  description          String?            @db.Text()
+  id                   String              @id() @default(cuid())
+  code                 String?             @unique()
+  active               Boolean             @default(true)
+  description          String?             @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @default(now()) @updatedAt()
-  createdBy            String?            @db.Uuid()
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @default(now()) @updatedAt()
+  createdBy            String?             @db.Uuid()
   name                 String
   startDate            DateTime
   endDate              DateTime?
-  isPublic             Boolean            @default(false)
-  anonymous            Boolean            @default(true)
+  isPublic             Boolean             @default(false)
+  anonymous            Boolean             @default(true)
   surveyObjectType     SurveyObjectType[]
-  lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
+  lecture              Lecturer?           @relation(fields: [lectureId], references: [id])
   lectureId            String?
-  subjectClass         SubjectClass?      @relation(fields: [subjectClassId], references: [id])
+  subjectClass         SubjectClass?       @relation(fields: [subjectClassId], references: [id])
   subjectClassId       String?
-  semester             Semester?          @relation(fields: [semesterId], references: [id])
+  semester             Semester?           @relation(fields: [semesterId], references: [id])
   semesterId           String?
-  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopic          SurveyTopic         @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
-  additionalSuggestion Boolean
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
   surveyChoice         SurveyChoice[]
   surveyQuestion       SurveyQuestion[]
   surveySessions       SurveySession[]
-  clusterSurvey        ClusterSurvey?     @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurvey        ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId      String?
 
   @@schema("khao-thi")
@@ -5344,27 +5347,26 @@ model SurveyChoice {
 
 /// Bảng lưu phiên khảo sát
 model SurveySession {
-  id                   String            @id() @default(cuid())
-  code                 String?           @unique()
-  active               Boolean           @default(true)
-  description          String?           @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime          @default(now())
-  updatedAt            DateTime          @default(now()) @updatedAt()
-  createdBy            String?           @db.Uuid()
-  survey               Survey            @relation(fields: [surveyId], references: [id])
-  surveyId             String
-  additionalSuggestion String?
-  profile              UserProfile?      @relation(fields: [profileId], references: [id])
-  profileId            String?           @db.Uuid()
-  student              Student?          @relation(fields: [studentId], references: [id])
-  studentId            String?
-  startedAt            DateTime          @default(now())
-  completedAt          DateTime?
-  isCompleted          Boolean           @default(false)
-  surveyObjectType     SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
-  surveyObjectTypeId   String?
-  responses            SurveyResponse[]
+  id                 String            @id() @default(cuid())
+  code               String?           @unique()
+  active             Boolean           @default(true)
+  description        String?           @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @default(now()) @updatedAt()
+  createdBy          String?           @db.Uuid()
+  survey             Survey            @relation(fields: [surveyId], references: [id])
+  surveyId           String
+  profile            UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId          String?           @db.Uuid()
+  student            Student?          @relation(fields: [studentId], references: [id])
+  studentId          String?
+  startedAt          DateTime          @default(now())
+  completedAt        DateTime?
+  isCompleted        Boolean           @default(false)
+  surveyObjectType   SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
+  surveyObjectTypeId String?
+  responses          SurveyResponse[]
 
   @@unique([surveyId, studentId])
   @@schema("khao-thi")

@@ -1652,7 +1652,8 @@ exports.Prisma.ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   studentSubjectScoreId: 'studentSubjectScoreId',
-  archivedAwardId: 'archivedAwardId'
+  archivedAwardId: 'archivedAwardId',
+  status: 'status'
 };
 
 exports.Prisma.ArchivedAwardScalarFieldEnum = {
@@ -3445,7 +3446,6 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name',
-  additionalSuggestion: 'additionalSuggestion',
   startDate: 'startDate',
   endDate: 'endDate',
   isPublic: 'isPublic',
@@ -3471,7 +3471,7 @@ exports.Prisma.SurveyScalarFieldEnum = {
   subjectClassId: 'subjectClassId',
   semesterId: 'semesterId',
   surveyTopicId: 'surveyTopicId',
-  additionalSuggestion: 'additionalSuggestion',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   clusterSurveyId: 'clusterSurveyId'
 };
 
@@ -3526,7 +3526,6 @@ exports.Prisma.SurveySessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   surveyId: 'surveyId',
-  additionalSuggestion: 'additionalSuggestion',
   profileId: 'profileId',
   studentId: 'studentId',
   startedAt: 'startedAt',
@@ -6743,6 +6742,7 @@ exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
   subjectClassId: 'subjectClassId',
   semesterId: 'semesterId',
   surveyTopicId: 'surveyTopicId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   clusterSurveyId: 'clusterSurveyId'
 };
 
@@ -6779,7 +6779,6 @@ exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   surveyId: 'surveyId',
-  additionalSuggestion: 'additionalSuggestion',
   profileId: 'profileId',
   studentId: 'studentId',
   surveyObjectTypeId: 'surveyObjectTypeId'

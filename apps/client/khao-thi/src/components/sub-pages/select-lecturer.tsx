@@ -4,7 +4,7 @@ import { useFindManySubjectVersion } from '@workspace/db/hooks'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Form } from 'antd'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useExamTypeOptions } from '@hooks/examType'
 import { FilterProps } from '@components/commons/typeFilter'
@@ -110,7 +110,8 @@ function SelectLecturer({
     //     }
     // )
 
-    const { data: subjectData = [] } = useFindManySubjectVersion(
+    const { data: subjectData = [], isLoading,
+  isSuccess, } = useFindManySubjectVersion(
         {
             where: {
                 subjectClass: {
@@ -393,10 +394,21 @@ function SelectLecturer({
         //     disabled: !record.mainLecturer,
         // }),
     }
+    const ranRef = useRef(false);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    useEffect(() => {
+        ranRef.current = false;
+   
+    }, [semesterId])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (subjectData.length && isFirst) {
+        if (!isSuccess) return;        // chưa load xong
+        if (ranRef.current) return;   // đảm bảo chỉ chạy 1 lần
+
+        ranRef.current = true;
+        if (subjectData.length) {
+            
             const list: string[] = []
             subjectData.forEach((e) => {
                 e?.subjectClass.forEach((i) => {

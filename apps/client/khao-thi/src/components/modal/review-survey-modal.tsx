@@ -253,15 +253,6 @@ const ReviewSurveyModal = () => {
                                         />
                                     </Form>
                                 </Col>
-                                {data?.additionalSuggestion && (
-                                    <Col span={24}>
-                                        <div className="mb-3 font-bold">Ý kiến khác :</div>
-                                        <Input.TextArea
-                                            value={data?.additionalSuggestion || ''}
-                                            placeholder="Nhập ý kiến khác"
-                                        />
-                                    </Col>
-                                )}
                             </Row>
                         )}
                     </div>

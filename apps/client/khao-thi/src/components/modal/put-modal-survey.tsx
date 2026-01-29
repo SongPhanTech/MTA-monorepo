@@ -31,7 +31,7 @@ import {
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useSemesterStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 
 const { Step } = Steps
 
@@ -67,6 +67,7 @@ interface Choices {
 const PutSurveyModal = () => {
     const [form] = Form.useForm<PutSurveyType>()
     const { id: semesterIdStore } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { isOpen, onClose, input } = useDisclosure<{
         id: string
         type: string
@@ -168,13 +169,13 @@ const PutSurveyModal = () => {
                         endDate: output?.endDate ? output?.endDate.toISOString() : null,
                         isPublic: output.isPublic,
                         anonymous: output.anonymous,
-                        additionalSuggestion: output.additionalSuggestion,
                         subjectClassIds: output.subjectClassIds.length
                             ? output.subjectClassIds
                             : [],
                         surveyChoices: output.surveyChoice,
                         surveyQuestionIds: output.surveyQuestionIds,
                         semesterId: output.semesterId,
+                        trainingObjectTypeId,
                     },
                 })
                 if (res?.status === 200) {
@@ -194,7 +195,6 @@ const PutSurveyModal = () => {
                             startDate: output.startDate,
                             endDate: output.endDate,
                             description: output.description,
-                            additionalSuggestion: output.additionalSuggestion,
                             isPublic: output.isPublic,
                             anonymous: !output.isPublic ? false : output.anonymous,
                             surveyChoice: {
@@ -255,16 +255,6 @@ const PutSurveyModal = () => {
                             description: output.description,
                             isPublic: output.isPublic,
                             anonymous: !output.isPublic ? false : output.anonymous,
-                            additionalSuggestion: output.additionalSuggestion,
-                            // surveyChoice: {
-                            //     create: {
-                            //         data: output.surveyChoice.map((item) => ({
-                            //             answer: item.answer,
-                            //             description: item.description,
-                            //             requireExplanation: item.requireExplanation,
-                            //         })),
-                            //     },
-                            // },
                             surveyQuestion: {
                                 connect: output.surveyQuestionIds.length
                                     ? output.surveyQuestionIds.map((item) => ({ id: item }))
@@ -273,6 +263,11 @@ const PutSurveyModal = () => {
                             semester: {
                                 connect: {
                                     id: semesterIdStore,
+                                },
+                            },
+                            trainingObjectType: {
+                                connect: {
+                                    id: trainingObjectTypeId,
                                 },
                             },
                         },
@@ -466,19 +461,6 @@ const PutSurveyModal = () => {
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name={'additionalSuggestion'}
-                                label="Có góp ý bổ sung không?"
-                                required
-                            >
-                                <Radio.Group buttonStyle="solid">
-                                    <Radio value={true}>Có</Radio>
-                                    <Radio value={false}>Không</Radio>
-                                </Radio.Group>
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
                                 name={'isPublic'}
                                 label="Có công khai không?"
                                 required
@@ -581,7 +563,6 @@ const PutSurveyModal = () => {
                 semesterId: semesterIdStore,
                 isPublic: false,
                 anonymous: false,
-                additionalSuggestion: false,
                 surveyChoice: choices,
             })
         }

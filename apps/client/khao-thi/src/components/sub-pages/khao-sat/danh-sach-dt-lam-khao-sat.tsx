@@ -38,9 +38,9 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
         where: {
-            trainingCourse:{
-                trainingObjectTypeId
-            }
+            trainingCourse: {
+                trainingObjectTypeId,
+            },
         },
         orderBy: { name: 'asc' },
     })
@@ -158,7 +158,9 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 render: (_, record) =>
                                     record?.educationAndTraining?.length > 0
                                         ? record?.educationAndTraining[0]?.code
-                                        : record?.lecturer?.code?record?.lecturer?.code: '',
+                                        : record?.lecturer?.code
+                                          ? record?.lecturer?.code
+                                          : '',
                             },
                             // {
                             //     title: 'Mã GV',

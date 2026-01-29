@@ -222,12 +222,6 @@ const ModalPrintExamClusterSurvey = () => {
                                 bordered={true}
                             />
                         </Col>
-                        {data?.surveys[0]?.additionalSuggestion && (
-                            <Col span={24}>
-                                <div className="mb-3 font-bold">Ý kiến khác :</div>
-                                <Input.TextArea placeholder="Nhập ý kiến khác" />
-                            </Col>
-                        )}
                     </Row>
                 )}
             </div>

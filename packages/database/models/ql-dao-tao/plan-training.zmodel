@@ -270,11 +270,13 @@ model ArchivedCertificate extends Base {
 }
 
 model ArchivedAwardOnStudentSubjectScore extends Base {
-  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScore   StudentSubjectScore       @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
 
-  archivedAward         ArchivedAward       @relation(fields: [archivedAwardId], references: [id])
+  archivedAward         ArchivedAward             @relation(fields: [archivedAwardId], references: [id])
   archivedAwardId       String
+
+  status                ArchivedCertificateStatus @default(PENDING)
 
   @@unique([studentSubjectScoreId, archivedAwardId])
   @@schema("ql-dao-tao")
@@ -709,6 +711,8 @@ model SubjectVersion extends BaseNoCode {
   exams                    Exam[]
   examFramework            ExamFramework[]
 
+  // @@unique([trainingObjectTypeId, name, credit, period])
+  @@index([name, trainingObjectTypeId])
   @@schema("ql-dao-tao")
 }
 

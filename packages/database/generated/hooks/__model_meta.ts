@@ -8538,6 +8538,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'archivedAward',
+                }, status: {
+                    name: "status",
+                    type: "ArchivedCertificateStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -11789,6 +11793,12 @@ const metadata: ModelMeta = {
                 }, surveyObjectType: {
                     name: "surveyObjectType",
                     type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -19307,9 +19317,6 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "Boolean",
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
@@ -19497,9 +19504,20 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'surveyTopic',
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "Boolean",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, surveyChoice: {
                     name: "surveyChoice",
                     type: "SurveyChoice",
@@ -19832,10 +19850,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'survey',
-                }, additionalSuggestion: {
-                    name: "additionalSuggestion",
-                    type: "String",
-                    isOptional: true,
                 }, profile: {
                     name: "profile",
                     type: "UserProfile",
