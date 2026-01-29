@@ -55,7 +55,9 @@ import {
     exportPhuLucDsLuanVan,
     exportSaoQDHDLV,
     exportThanhToanHoiDongBaoVe,
+    exportThanhToanHuongDanTrongHv,
     exportThongKeCbHdlv,
+    exportThongKeCbThamGiaHd,
 } from '@/utils/thesis-excel'
 
 interface ThesisProjectForm {
@@ -211,10 +213,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                             curriculum: {
                                 include: {
                                     trainingMajor: {
-                                        include: { trainingField: true,
-                                            organization: true,
-
-                                        },
+                                        include: { trainingField: true, organization: true },
                                     },
                                 },
                             },
@@ -244,17 +243,22 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                             supervisorPayment: true,
                             coSupervisorPayment: true,
                             council: {
-                                include: { members: { include: { expert: {
-                                    include: {
-                                        lecturer: {
-                                            include: {
-                                                userProfile: true,
+                                include: {
+                                    members: {
+                                        include: {
+                                            expert: {
+                                                include: {
+                                                    lecturer: {
+                                                        select: {
+                                                            userProfile: true,
+                                                        },
+                                                    },
+                                                },
                                             },
+                                            payment: true,
                                         },
                                     },
                                 },
-                                    payment: true,
-                                 } } },
                             },
                         },
                     },
@@ -640,8 +644,12 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 13,
             label: 'Thanh toán hướng dẫn',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportThanhToanHuongDanTrongHv({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            }),
         },
         {
             id: 13.1,
@@ -663,8 +671,12 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 15,
             label: 'Thống kê cán bộ tham gia HĐ',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportThongKeCbThamGiaHd({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            }),
         },
         {
             id: 16,
@@ -694,7 +706,6 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
           
         },
     ]
-    // hàm xử lý render component
     return (
         <div>
             <Row gutter={[8, 0]}>
