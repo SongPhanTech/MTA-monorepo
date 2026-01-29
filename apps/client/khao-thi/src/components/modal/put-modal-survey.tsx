@@ -151,7 +151,9 @@ const PutSurveyModal = () => {
             type: input?.type === 'multiple' ? 'CLUSTER' : 'SINGLE',
         },
     })
-    const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType()
+    const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType({
+        where:{trainingObjectTypeId},
+    })
 
     async function onOk(output?: PutSurveyType) {
         if (!output) return

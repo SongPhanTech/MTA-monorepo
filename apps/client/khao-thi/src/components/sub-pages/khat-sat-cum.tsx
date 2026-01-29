@@ -15,7 +15,7 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { useSemesterStore } from '@workspace/ui'
+import { useSemesterStore,useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -33,6 +33,7 @@ function TabDotKhaoSatCum({
     const [currentPage, setCurrentPage] = useState(1)
     const { id: semesterId } = useSemesterStore()
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const {id: trainingObjectTypeId} =useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         surveyObjectTypeId: undefined,
@@ -84,6 +85,13 @@ function TabDotKhaoSatCum({
                     },
                 },
             }),
+            ...(trainingObjectTypeId? {
+                 surveys: {
+                    some: {
+                        trainingObjectTypeId,
+                    },
+                },
+            }:{}),
             ...(filters.semesterIds && {
                 surveys: {
                     some: {

@@ -18,7 +18,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { useSemesterStore } from '@workspace/ui'
+import { useSemesterStore,useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -37,6 +37,7 @@ function TabDotKhaoSat({
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { id: semesterId } = useSemesterStore()
+    const {id: trainingObjectTypeId} =useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         surveyObjectTypeId: undefined,
@@ -52,6 +53,7 @@ function TabDotKhaoSat({
         () => ({
             clusterSurveyId: null,
             ...(semesterId ? { semesterId } : {}),
+            ...(trainingObjectTypeId? {trainingObjectTypeId}:{}),
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
