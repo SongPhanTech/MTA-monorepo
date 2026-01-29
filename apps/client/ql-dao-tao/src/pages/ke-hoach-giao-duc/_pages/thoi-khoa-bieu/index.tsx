@@ -21,6 +21,7 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 
 type TeachingAssignmentForm = {
     subjectClass: Record<
@@ -218,9 +219,7 @@ export default function ThoiKhoaBieu({
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
         {
             select: { Id: true },
-            where: {
-                bActive: true,
-            },
+            where: whereOrganization,
         },
         {
             refetchOnWindowFocus: false,
@@ -338,6 +337,7 @@ export default function ThoiKhoaBieu({
                     : {
                           in: orgIds,
                       },
+                ...whereOrganization,
                 // sParentId: !khoaBoMon ? undefined : orgId,
             },
         },

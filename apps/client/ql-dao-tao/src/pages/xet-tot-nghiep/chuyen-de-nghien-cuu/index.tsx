@@ -26,6 +26,7 @@ import DatePicker from '@components/commons/date-picker'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { $Enums, type Prisma } from '@workspace/db/client'
 import { saveAs } from 'file-saver'
+import { whereOrganization } from '@workspace/libs/constants'
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -63,7 +64,11 @@ export default function ChuyenDeNghienCuu() {
             userProfile: true,
         },
     })
-    const { data: organizationData = [] } = useFindManyDM_DonVi()
+    const { data: organizationData = [] } = useFindManyDM_DonVi({
+        where: {
+            ...whereOrganization,
+        },
+    })
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         where: {
             subject: {

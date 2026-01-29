@@ -31,6 +31,7 @@ import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSele
 import { buildOrgTree } from '@lib/utils'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import TreeSelect from '@/components/commons/tree-select'
+import { whereOrganization } from '@workspace/libs/constants'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
@@ -48,7 +49,9 @@ const PutFixedClassModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const [dataOutput, setDataOutput] = useState<PutFixedClass>()
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+    })
     const { onOpen: onOpenModalConfirm } = useDisclosure<string>({
         tag: 'ConfirmModal',
         onOk: (value: any) => {

@@ -19,6 +19,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import TreeSelect from '@/components/commons/tree-select'
 import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
+import { whereOrganization } from '@workspace/libs/constants'
 export type PutTrainingMajor = TrainingMajor & {
     trainingObjectTypeIds: string[]
 }
@@ -49,7 +50,9 @@ const PutTrainingMajorModal = () => {
             },
         })
 
-    const { data: organizations = [] } = useFindManyDM_DonVi()
+    const { data: organizations = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+    })
     const treeData = buildOrgTree(organizations)
 
     const { mutateAsync: createTrainingMajor } = useCreateTrainingMajor()

@@ -35,6 +35,7 @@ import { BookCheckIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
+import { whereOrganization } from '@workspace/libs/constants'
 export default function GraduationDecisionDiploma() {
     const { can, canSome } = useAbility()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -263,6 +264,7 @@ export default function GraduationDecisionDiploma() {
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
     const { data: organization = [] } = useFindManyDM_DonVi({
         orderBy: { sTen: 'asc' },
+        where: whereOrganization,
     })
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({
         orderBy: { name: 'asc' },

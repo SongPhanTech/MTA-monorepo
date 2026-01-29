@@ -35,6 +35,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 
 export default function ThesisProject() {
     const { can, canSome } = useAbility()
@@ -59,7 +60,10 @@ export default function ThesisProject() {
     const { id: semesterId } = useSemesterStore()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { mutateAsync: createManyInvitation } = useCreateManyInvitation()
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+        orderBy: { sTen: 'asc' },
+    })
     const treeData = buildOrgTree(manageOrgData)
     const ALLOWED_STATUSES: ThesisProjectStatus[] = [
         ThesisProjectStatus.COMPLETED,

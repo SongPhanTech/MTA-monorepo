@@ -20,7 +20,6 @@ import {
     setScoreDeadLine,
     useCreateExams,
 } from '@workspace/libs/api/training'
-// import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -922,27 +921,6 @@ export default function ClassSubject() {
                                                         strokeWidth={2}
                                                     />
                                                 </Tooltip>
-                                                {/* {(profileId === listUser.lecturer ||
-                                                    !!subject?.oneType) && (
-                                                    <Tooltip
-                                                        title="Nhập điểm TX/CC"
-                                                        placement="top"
-                                                    >
-                                                        <FilePen
-                                                            size={16}
-                                                            onClick={() => handleNavigate(id)}
-                                                            strokeWidth={2}
-                                                        />
-                                                    </Tooltip>
-                                                )}
-
-                                                <Tooltip title="Nhập điểm thi" placement="top">
-                                                    <FilePenLine
-                                                        size={16}
-                                                        onClick={() => handleNavigateThi(id)}
-                                                        strokeWidth={2}
-                                                    />
-                                                </Tooltip> */}
                                             </Row>
                                         )
                                     }

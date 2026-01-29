@@ -16,6 +16,7 @@ import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
+import { whereOrganization } from '@workspace/libs/constants'
 export default function SubjectVersionPage({ subjectInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -105,7 +106,9 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
             }
         }
     }, [dataSchoolYear])
-    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: whereOrganization,
+    })
     const treeData = buildOrgTree(manageOrgData)
     const debouncedRefetch = useCallback(
         _.debounce(() => {

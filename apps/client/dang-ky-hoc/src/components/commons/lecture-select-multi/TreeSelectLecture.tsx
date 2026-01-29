@@ -61,7 +61,22 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
         isLoading: organizationsLoading,
         error: organizationsError,
     } = useFindManyDM_DonVi({
-        where: {},
+        where: {
+            OR: [
+                {
+                    iLoaiDonVi: 6,
+                },
+                {
+                    iLoaiDonVi: 7,
+                },
+                {
+                    iLoaiDonVi: 2,
+                },
+                {
+                    sParentId: null,
+                },
+            ],
+        },
     })
 
     // Lấy danh sách Lecturer

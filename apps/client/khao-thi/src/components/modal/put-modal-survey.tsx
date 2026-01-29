@@ -152,7 +152,7 @@ const PutSurveyModal = () => {
         },
     })
     const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType({
-        where:{trainingObjectTypeId},
+        where: { trainingObjectTypeId },
     })
 
     async function onOk(output?: PutSurveyType) {

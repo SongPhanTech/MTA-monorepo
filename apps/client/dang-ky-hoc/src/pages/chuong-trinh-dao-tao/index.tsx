@@ -19,6 +19,7 @@ import { Col, Divider, Row, Tooltip } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const [filters, setFilters] = useState<FilterProps>({
@@ -349,7 +350,12 @@ export default function TrainingProgramSubjects() {
         },
     })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+        where: {
+            ...whereOrganization,
+        },
+        orderBy: { sTen: 'asc' },
+    })
 
     const { onOpen: openChiTietMonHoc } = useDisclosure<{
         subjectVersionId?: string
