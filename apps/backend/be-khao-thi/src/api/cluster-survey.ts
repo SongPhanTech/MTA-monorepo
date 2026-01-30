@@ -685,8 +685,8 @@ app.openapi(exportClusterSurveyStatistics, async (c) => {
 })
 
 const getClusterSurveyStatisticsForLecturer = createRoute({
-    operationId: 'get-cluster-survey-statistics',
-    path: '/{id}/statistics',
+    operationId: 'get-cluster-survey-statistics-for-lecturer',
+    path: '/{id}/statistics-for-lecturer',
     method: 'get',
     tags: ['ClusterSurvey'],
     summary: 'Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát cuar từng giáo viên',

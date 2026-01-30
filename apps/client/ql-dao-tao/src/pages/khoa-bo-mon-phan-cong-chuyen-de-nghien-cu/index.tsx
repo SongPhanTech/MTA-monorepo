@@ -1,10 +1,10 @@
 import DefaultLayout from '@layouts/default-layout'
 import type React from 'react'
-import ChuyenDeNghienCuu from '@pages/quan-ly-diem/chuyen-de-nghien-cuu';
+import ChuyenDeNghienCuu from '@pages/quan-ly-diem/chuyen-de-nghien-cuu'
 
 export default function KhaoBoMonPhanCongChuyenDeNghienCuu() {
     // biome-ignore lint/a11y/useValidAriaRole: <explanation>
-    return <ChuyenDeNghienCuu role="KHOA_BO_MON"/>
+    return <ChuyenDeNghienCuu role="KHOA_BO_MON" />
 }
 
 KhaoBoMonPhanCongChuyenDeNghienCuu.getLayout = function getLayout(page: React.ReactElement) {
