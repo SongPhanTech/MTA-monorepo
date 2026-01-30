@@ -15,6 +15,7 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    groupName: z.string().nullish(),
     role: EvaluationMemberRoleSchema.nullish(),
 }
 ).strict();
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    groupName: z.string().nullish(),
     role: EvaluationMemberRoleSchema.nullish(),
 }
 ).strict();
@@ -74,6 +76,7 @@ export const EvaluationCouncilMemberPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    groupName: z.string().nullish(),
     role: EvaluationMemberRoleSchema.nullish()
 }).partial().passthrough();
 

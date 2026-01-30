@@ -70,7 +70,7 @@ export default function EvaluationPeriod() {
             ...(schoolYearId && { schoolYearId }),
             deletedAt: null,
         }
-    }, [idProfile, lecturer?.id, schoolYearId])
+    }, [idProfile, schoolYearId])
 
     const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
         {

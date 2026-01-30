@@ -41,9 +41,10 @@ model Lecturer extends Base {
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
   examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
-  evaluationCriterions        EvaluationCriterion[]
+  evaluationCriterions        EvaluationCriterion[]         @relation("EvaluationCriterionLecturer")
   analysisCriterion           AnalysisCriterion[]
   evaluationCouncilMember     EvaluationCouncilMember[]
+  evaluationCriterionReviews  EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
 
   @@schema("ql-dao-tao")
 }
@@ -65,6 +66,8 @@ model LecturerHistory extends Base {
 
   lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId String
+
+
 
   @@schema("ql-dao-tao")
 }

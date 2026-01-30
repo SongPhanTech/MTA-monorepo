@@ -216,7 +216,7 @@ model EvaluationCriterion extends Base {
   criterionPeriodId           String                       @unique
 
   // người được phân công làm phiếu phân tích
-  lecturer                    Lecturer?                    @relation(fields: [lecturerId], references: [id])
+  lecturer                    Lecturer?                    @relation("EvaluationCriterionLecturer",  fields: [lecturerId], references: [id])
   lecturerId                  String?
   deadline                    DateTime?
 
@@ -225,6 +225,8 @@ model EvaluationCriterion extends Base {
   reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
   reviewerId                  String?
   deadlineReview              DateTime?
+
+  lecturerReview              Lecturer[]                   @relation("EvaluationCriterionLecturerReview")
 
   evaluationCriterionComments EvaluationCriterionComment[]
 
@@ -304,8 +306,10 @@ model EvaluationCouncilMember extends Base {
   evaluationCouncilId  String
   lecturer             Lecturer              @relation(fields: [lecturerId], references: [id])
   lecturerId           String
-  role                 EvaluationMemberRole?
 
+  // dùng cho nhóm chuyên trách
+  groupName            String?
+  role                 EvaluationMemberRole?
 
   evaluationCriterions EvaluationCriterion[]
 

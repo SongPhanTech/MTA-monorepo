@@ -4360,9 +4360,10 @@ model Lecturer {
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
   examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
-  evaluationCriterions        EvaluationCriterion[]
+  evaluationCriterions        EvaluationCriterion[]         @relation("EvaluationCriterionLecturer")
   analysisCriterion           AnalysisCriterion[]
   evaluationCouncilMember     EvaluationCouncilMember[]
+  evaluationCriterionReviews  EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
 
   @@schema("ql-dao-tao")
 }
@@ -5062,13 +5063,14 @@ model EvaluationCriterion {
   createdBy                   String?                      @db.Uuid()
   criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
   criterionPeriodId           String                       @unique()
-  lecturer                    Lecturer?                    @relation(fields: [lecturerId], references: [id])
+  lecturer                    Lecturer?                    @relation("EvaluationCriterionLecturer", fields: [lecturerId], references: [id])
   lecturerId                  String?
   deadline                    DateTime?
   status                      EvaluationStatus             @default(LOCK)
   reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
   reviewerId                  String?
   deadlineReview              DateTime?
+  lecturerReview              Lecturer[]                   @relation("EvaluationCriterionLecturerReview")
   evaluationCriterionComments EvaluationCriterionComment[]
   /// 1. Mô tả hiện trạng
   currentSituation            String                       @default("")
@@ -5159,6 +5161,7 @@ model EvaluationCouncilMember {
   evaluationCouncilId  String
   lecturer             Lecturer              @relation(fields: [lecturerId], references: [id])
   lecturerId           String
+  groupName            String?
   role                 EvaluationMemberRole?
   evaluationCriterions EvaluationCriterion[]
 

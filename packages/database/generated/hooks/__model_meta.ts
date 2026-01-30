@@ -15748,6 +15748,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
+                }, evaluationCriterionReviews: {
+                    name: "evaluationCriterionReviews",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturerReview',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18625,6 +18631,12 @@ const metadata: ModelMeta = {
                     name: "deadlineReview",
                     type: "DateTime",
                     isOptional: true,
+                }, lecturerReview: {
+                    name: "lecturerReview",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationCriterionReviews',
                 }, evaluationCriterionComments: {
                     name: "evaluationCriterionComments",
                     type: "EvaluationCriterionComment",
@@ -18969,6 +18981,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'lecturer',
+                }, groupName: {
+                    name: "groupName",
+                    type: "String",
+                    isOptional: true,
                 }, role: {
                     name: "role",
                     type: "EvaluationMemberRole",

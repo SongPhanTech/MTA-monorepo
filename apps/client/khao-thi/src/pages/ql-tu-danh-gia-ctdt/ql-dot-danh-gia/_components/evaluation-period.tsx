@@ -136,7 +136,6 @@ export default function EvaluationPeriod() {
     const { data: count, refetch: refetchCount } = useCountEvaluationPeriod({
         where: {
             ...where,
-            deletedAt: null,
         },
     })
 
