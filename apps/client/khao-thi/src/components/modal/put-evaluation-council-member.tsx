@@ -6,19 +6,21 @@ import TreeSelect from '@components/commons/tree-select'
 import { EVALUATION_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { EvaluationCouncilMember } from '@workspace/db'
+import { $Enums } from '@workspace/db'
 import {
     useCreateEvaluationCouncilMember,
     useFindManyDM_DonVi,
     useFindUniqueEvaluationCouncilMember,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
-import { Col, Form, message } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { buildOrgProfileTree } from '@/utils/buildOrgProfileTree'
 export type PutEvaluationCouncilMemberType = EvaluationCouncilMember
 const PutEvaluationCouncilMember = () => {
     const [form] = Form.useForm<PutEvaluationCouncilMemberType>()
+
     const { isOpen, onClose, input } = useDisclosure<{
         evaluationCouncilId: string
         evaluationCouncilMemberId?: string
@@ -29,8 +31,15 @@ const PutEvaluationCouncilMember = () => {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
+    const roleWatch = Form.useWatch('role', form)
+
+    const isSpecializedRole =
+        roleWatch === $Enums.EvaluationMemberRole.HEAD_SPECIALIZED ||
+        roleWatch === $Enums.EvaluationMemberRole.SPECIALIZED
+
     const { mutateAsync: createEvaluationCouncilMember } = useCreateEvaluationCouncilMember()
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
+
     async function onOk(output?: PutEvaluationCouncilMemberType) {
         if (!output || !input) return
 
@@ -40,6 +49,7 @@ const PutEvaluationCouncilMember = () => {
                 evaluationCouncilId: input.evaluationCouncilId,
                 lecturerId: output.lecturerId,
                 role: output.role,
+                groupName: output.groupName,
             }
             if (input.evaluationCouncilMemberId) {
                 await updateEvaluationCouncilMember({
@@ -144,6 +154,23 @@ const PutEvaluationCouncilMember = () => {
                     />
                 </FormItem>
             </Col>
+            {isSpecializedRole && (
+                <Col span={24}>
+                    <FormItem
+                        form={form}
+                        name="groupName"
+                        label="Tên nhóm"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập tên nhóm',
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Nhập tên nhóm chuyên trách" />
+                    </FormItem>
+                </Col>
+            )}
             <Col span={24}>
                 <FormItem
                     form={form}

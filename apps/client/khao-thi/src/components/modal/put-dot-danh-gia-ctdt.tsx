@@ -3,7 +3,7 @@ import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import Select from '@components/commons/select'
+import { useSchoolYearStore } from '@components/selecter-school-year'
 import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
 import { createId, type EvaluationPeriod } from '@workspace/db'
@@ -11,7 +11,6 @@ import type { DocumentFile } from '@workspace/db/client'
 import {
     useCreateEvaluationCouncil,
     useCreateEvaluationPeriod,
-    useFindManySchoolYear,
     useFindUniqueEvaluationPeriod,
     useUpdateEvaluationCouncil,
     useUpdateEvaluationPeriod,
@@ -42,21 +41,12 @@ const PutEvaluationPeriod = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: schoolYears = [] } = useFindManySchoolYear(
-        {
-            orderBy: {
-                startDate: 'desc',
-            },
-        },
-        {
-            enabled: isOpen,
-        }
-    )
-
     const { data: initialData } = useFindUniqueEvaluationPeriod(
         { where: { id }, include: { council: true, documentFiles: true } },
         { enabled: !!id }
     )
+
+    const { id: schoolYearId } = useSchoolYearStore()
 
     const { mutateAsync: createEvaluationPeriod } = useCreateEvaluationPeriod()
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
@@ -64,8 +54,6 @@ const PutEvaluationPeriod = () => {
     const { mutateAsync: updateEvaluationCouncil } = useUpdateEvaluationCouncil()
 
     async function onOk(output?: PutEvaluationPeriod) {
-        console.log(output)
-
         if (!output) return
         try {
             showSpinner()
@@ -73,8 +61,7 @@ const PutEvaluationPeriod = () => {
                 name: output.name.trim(),
                 startDate: output.startDate,
                 endDate: output.endDate,
-                description: output.description,
-                schoolYearId: output.schoolYearId,
+                schoolYearId: schoolYearId || '',
                 createdBy: idProfile,
             }
             if (id) {
@@ -204,21 +191,9 @@ const PutEvaluationPeriod = () => {
             title={id ? 'Chỉnh sửa đợt đánh giá CTĐT' : 'Thêm mới đợt đánh giá CTĐT'}
             className="w-[60vw] top-2"
         >
-            <Col span={16}>
+            <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt đánh giá" required>
                     <Input placeholder="Nhập tên đợt đánh giá" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="schoolYearId" label="Năm học" required>
-                    <Select
-                        className="w-full"
-                        placeholder="Chọn năm học"
-                        options={schoolYears.map((year) => ({
-                            label: year.name,
-                            value: year.id,
-                        }))}
-                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -252,11 +227,6 @@ const PutEvaluationPeriod = () => {
                             return current && current < dayjs(startTime).startOf('day')
                         }}
                     />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
             <Col span={24}>

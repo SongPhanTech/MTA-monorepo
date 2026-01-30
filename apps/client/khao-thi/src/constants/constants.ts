@@ -1,4 +1,4 @@
-import { $Enums, Difficult, QuestionType } from '@workspace/db'
+import { $Enums, type Difficult, QuestionType } from '@workspace/db'
 
 const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
@@ -11,9 +11,20 @@ const EVALUATION_MEMBER_ROLE = [
     { label: 'Thư ký', value: $Enums.EvaluationMemberRole.SECRETARY },
     { label: 'Uỷ viên', value: $Enums.EvaluationMemberRole.MEMBER },
     { label: 'Ban tư vấn', value: $Enums.EvaluationMemberRole.ADVISORY_BOARD },
-    { label: 'Trướng nhóm chuyên trách', value: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED },
+    { label: 'Trưởng nhóm chuyên trách', value: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED },
     { label: 'Nhóm chuyên trách', value: $Enums.EvaluationMemberRole.SPECIALIZED },
 ]
+
+const EVALUATION_MEMBER_ROLE_MAP: Record<$Enums.EvaluationMemberRole, string> = {
+    [$Enums.EvaluationMemberRole.CHAIRMAN]: 'Chủ tịch hội đồng',
+    [$Enums.EvaluationMemberRole.VICE_PRESIDENT]: 'Phó chủ tịch',
+    [$Enums.EvaluationMemberRole.HEAD_SECRETARY]: 'Trưởng ban thư ký',
+    [$Enums.EvaluationMemberRole.SECRETARY]: 'Thư ký',
+    [$Enums.EvaluationMemberRole.MEMBER]: 'Uỷ viên',
+    [$Enums.EvaluationMemberRole.ADVISORY_BOARD]: 'Ban tư vấn',
+    [$Enums.EvaluationMemberRole.HEAD_SPECIALIZED]: 'Trưởng nhóm chuyên trách',
+    [$Enums.EvaluationMemberRole.SPECIALIZED]: 'Nhóm chuyên trách',
+}
 
 const EVALUATION_CRITERION_STATUS_OPTIONS = [
     { value: $Enums.EvaluationCriterionStatus.PENDING, label: 'Chưa nộp' },
@@ -218,4 +229,5 @@ export {
     DIFFICULT_LABELS,
     QUESTION_TYPE_LABELS,
     LEVEL_COLUMNS,
+    EVALUATION_MEMBER_ROLE_MAP,
 }
