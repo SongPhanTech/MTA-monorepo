@@ -5,7 +5,7 @@ import {
     useFindManyDM_DonVi,
     useFindManyLecturer,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Row, Tree } from 'antd'
+import {  Col, Flex, Row, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
@@ -14,6 +14,7 @@ import { useMemo, useState } from 'react'
 import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
 import { FolderOpenOutlined } from '@ant-design/icons'
 import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
+import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
 
 interface MyTreeNode {
     title: string
@@ -166,13 +167,21 @@ export default function BaoCaoGiangVien() {
             return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
         }
         if (filters?.clusterId) {
-            if (selectedItem?.id) {
+            console.log(selectedItem);
+            
+            if (selectedItem?.id && selectedItem?.iCapDonVi) {
                 return (
-                    <SurveylecturerReport
+                    <SurveyOrganizationReport
+                        selectedId={filters?.clusterId}
+                        organizationId={selectedItem?.id}
+                    />
+                )
+            } 
+             if(selectedItem?.id && !selectedItem?.iCapDonVi) {
+                  return <SurveylecturerReport
                         selectedId={filters?.clusterId}
                         lectureId={selectedItem?.id}
                     />
-                )
             }
             return <>ABC</>
             // if (filtersMore.surveyId) {
@@ -240,9 +249,9 @@ export default function BaoCaoGiangVien() {
                             dropdownMatchSelectWidth={false}
                         />
                     </Flex>
-                    <Button onClick={hanleSearchReport} type="primary">
+                    {/* <Button onClick={hanleSearchReport} type="primary">
                         Tìm kiếm
-                    </Button>
+                    </Button> */}
                 </Flex>
             </Col>
             <Col span={6}>

@@ -12,8 +12,9 @@ import {
     OrgazationsSurveyStatsSchema,
     SurveyStatsLecSchema,
     SurveyStatsSchema,
-    getSurveyStatsforDonVi
+    getSurveyStatsforDonVi,
 } from '../services/survey.service'
+import { getOrganizationAndAllChildren } from '@workspace/db'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -773,8 +774,8 @@ app.openapi(getClusterSurveyStatisticsForLecturer, async (c) => {
 })
 
 const getClusterSurveyStatisticsForDonVi = createRoute({
-    operationId: 'get-cluster-survey-statistics-for-lecturer',
-    path: '/{id}/statistics-for-lecturer',
+    operationId: 'get-cluster-survey-statistics-for-organization',
+    path: '/{id}/statistics-for-organization',
     method: 'get',
     tags: ['ClusterSurvey'],
     summary: 'Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị',
@@ -809,7 +810,7 @@ const getClusterSurveyStatisticsForDonVi = createRoute({
 app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
     const { id } = c.req.valid('param')
     const { organizationId, ...q } = c.req.valid('query')
-    const organizations= await getOrganizationAndAllChildren(prisma,organizationId).map(i=>i.id)||[]
+    const organizations = await getOrganizationAndAllChildren(prisma, organizationId)
     const cluster = await prisma.clusterSurvey.findUnique({
         where: { id },
         include: {
@@ -823,7 +824,10 @@ app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
                 where: {
                     lecture: {
                         organizationId: {
-                            in:organizations?.length>0? organizations:[organizationId],
+                            in:
+                                organizations?.length > 0
+                                    ? organizations.map((i: any) => i.id)
+                                    : [organizationId],
                         },
                     },
                 },
@@ -845,8 +849,8 @@ app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
     const listData = await getSurveyStatsforDonVi(
         prisma,
         id,
-        lectureId,
-        organizations?.length>0? organizations:[organizationId],
+        organizations?.length > 0 ? organizations.map((i: any) => i.id) : [organizationId],
+        cluster.surveyQuestion,
         cluster.surveyChoice
     )
 

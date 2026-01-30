@@ -412,10 +412,10 @@ export const getSurveyStatsforDonVi = async (
             surveySession: {
                 survey: {
                     clusterSurveyId,
-                    lecture:{
+                    lecture: {
                         organizationId: {
-                            in: organizations
-                        }
+                            in: organizations,
+                        },
                     },
                 },
             },
@@ -442,10 +442,10 @@ export const getSurveyStatsforDonVi = async (
             surveySession: {
                 survey: {
                     clusterSurveyId,
-                      lecture:{
+                    lecture: {
                         organizationId: {
-                            in: organizations
-                        }
+                            in: organizations,
+                        },
                     },
                 },
             },
