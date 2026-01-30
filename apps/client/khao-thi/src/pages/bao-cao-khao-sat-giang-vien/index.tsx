@@ -14,6 +14,7 @@ import { useMemo, useState } from 'react'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
 import { FolderOpenOutlined } from '@ant-design/icons'
+import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
 
 interface MyTreeNode {
     title: string
@@ -166,6 +167,14 @@ export default function BaoCaoGiangVien() {
             return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
         }
         if (filters?.clusterId) {
+            if (selectedItem?.id) {
+                return (
+                    <SurveylecturerReport
+                        selectedId={selectedItem?.id}
+                        lectureId={selectedItem?.id}
+                    />
+                )
+            }
             return <>abc</>
             // if (filtersMore.surveyId) {
             //     return <SurveyReport selectedId={filtersMore?.surveyId || ''} />

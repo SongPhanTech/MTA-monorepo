@@ -594,7 +594,6 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                     hideSpinner,
                     message,
                 }),
-            
         },
         {
             id: 6,
@@ -648,12 +647,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 13,
             label: 'Thanh toán hướng dẫn',
-            onClick: async () => await exportThanhToanHuongDanTrongHv({
-                allStudentsInClasses,
-                showSpinner,
-                hideSpinner,
-                message,
-            }),
+            onClick: async () =>
+                await exportThanhToanHuongDanTrongHv({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 13.1,
@@ -675,12 +675,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 15,
             label: 'Thống kê cán bộ tham gia HĐ',
-            onClick: async () => await exportThongKeCbThamGiaHd({
-                allStudentsInClasses,
-                showSpinner,
-                hideSpinner,
-                message,
-            }),
+            onClick: async () =>
+                await exportThongKeCbThamGiaHd({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 16,
@@ -691,23 +692,24 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 19,
             label: 'Danh sách nộp luận văn thư viện',
-            onClick: async () => await exportDanhSachNopLuanVanThuVien({
-                allStudentsInClasses,
-                showSpinner,
-                hideSpinner,
-                message,
-            }),
+            onClick: async () =>
+                await exportDanhSachNopLuanVanThuVien({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 11,
             label: 'Thanh toán hội đồng bảo vệ',
-            onClick: async () => await exportThanhToanHoiDongBaoVe({
-                allStudentsInClasses,
-                showSpinner,
-                hideSpinner,
-                message,
-            }),
-          
+            onClick: async () =>
+                await exportThanhToanHoiDongBaoVe({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
     ]
     return (

@@ -71,25 +71,24 @@ export default function DetailSurveyPage({
             ...(filters.subjectClassName && filters.subjectClassName !== ''
                 ? {
                       survey: {
-                        some:{
+                          some: {
                               subjectClass: {
-                              OR: [
-                                  {
-                                      code: {
-                                          contains: filters.subjectClassName,
-                                          mode: 'insensitive' as const,
+                                  OR: [
+                                      {
+                                          code: {
+                                              contains: filters.subjectClassName,
+                                              mode: 'insensitive' as const,
+                                          },
                                       },
-                                  },
-                                  {
-                                      name: {
-                                          contains: filters.subjectClassName,
-                                          mode: 'insensitive' as const,
+                                      {
+                                          name: {
+                                              contains: filters.subjectClassName,
+                                              mode: 'insensitive' as const,
+                                          },
                                       },
-                                  },
-                              ],
+                                  ],
+                              },
                           },
-                        }
-                        
                       },
                   }
                 : {}),
