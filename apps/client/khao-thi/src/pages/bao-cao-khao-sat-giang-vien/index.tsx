@@ -58,7 +58,7 @@ export default function BaoCaoGiangVien() {
         clusterId: undefined,
     })
 
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
+    const [selectedKeys, setSelectedKeys] = useState<any>([])
     const [selectedItem, setSelectedItem] = useState<any>()
 
     const { id: semesterId } = useSemesterStore()
