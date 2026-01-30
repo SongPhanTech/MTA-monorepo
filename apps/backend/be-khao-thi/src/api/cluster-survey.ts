@@ -825,8 +825,8 @@ app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
                     lecture: {
                         organizationId: {
                             in:
-                                organizations?.length > 0
-                                    ? organizations.map((i: any) => i.id)
+                                organizations?.length
+                                    ? organizations.map((i) => i.Id)
                                     : [organizationId],
                         },
                     },
@@ -849,7 +849,7 @@ app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
     const listData = await getSurveyStatsforDonVi(
         prisma,
         id,
-        organizations?.length > 0 ? organizations.map((i: any) => i.id) : [organizationId],
+        organizations?.length > 0 ? organizations.map((i: any) => i.Id) : [organizationId],
         cluster.surveyQuestion,
         cluster.surveyChoice
     )
