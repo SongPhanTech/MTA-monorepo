@@ -1,25 +1,26 @@
-import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/commons/typeFilter'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import { EVALUATION_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { $Enums, type EvaluationMemberRole } from '@workspace/db'
+import { $Enums } from '@workspace/db'
 import {
     useFindFirstEvaluationCouncil,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
-import { Button, Col, Empty, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Button, Empty, Flex, message, Typography } from 'antd'
+import MemberSidebar, {
+    createTreeData,
+    type GroupKey,
+} from '@components/features/thanh-lap-hoi-dong/member-sidebar'
+import MemberTable, {
+    type CouncilMemberType,
+} from '@components/features/thanh-lap-hoi-dong/member-table'
 
 export default function EvaluationCouncilTab() {
-    const [filters, setFilters] = useState<FilterProps>({
-        name: '',
-    })
+    const [selectedGroup, setSelectedGroup] = useState<GroupKey>('all')
+    const [expandedNodes, setExpandedNodes] = useState<string[]>(['specialized'])
 
     const { onOpen } = useDisclosure<{
         evaluationCouncilId?: string
@@ -29,7 +30,6 @@ export default function EvaluationCouncilTab() {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data: evaluationCouncil, isLoading: isLoadingEvaluationCouncil } =
@@ -43,16 +43,6 @@ export default function EvaluationCouncilTab() {
                     members: {
                         where: {
                             deletedAt: null,
-                            ...(filters.name && {
-                                lecturer: {
-                                    userProfile: {
-                                        fullname: {
-                                            contains: filters.name,
-                                            mode: 'insensitive',
-                                        },
-                                    },
-                                },
-                            }),
                         },
                         include: {
                             lecturer: {
@@ -60,14 +50,10 @@ export default function EvaluationCouncilTab() {
                                     userProfile: {
                                         include: {
                                             academicDegreeType: {
-                                                select: {
-                                                    sTen: true,
-                                                },
+                                                select: { sTen: true },
                                             },
                                             academicRankType: {
-                                                select: {
-                                                    sTen: true,
-                                                },
+                                                select: { sTen: true },
                                             },
                                         },
                                     },
@@ -86,13 +72,20 @@ export default function EvaluationCouncilTab() {
             }
         )
 
-    const tableDataCollapse = useMemo(() => {
-        if (!evaluationCouncil?.members) return []
+    const categorizedMembers = useMemo(() => {
+        if (!evaluationCouncil?.members) {
+            return {
+                leaders: [],
+                secretary: [],
+                advisory: [],
+                specialized: {},
+            }
+        }
 
-        const secretaryMembers: typeof evaluationCouncil.members = []
-        const otherMembers: typeof evaluationCouncil.members = []
-        const advisoryBoardMembers: typeof evaluationCouncil.members = []
-        const specializedMembers: typeof evaluationCouncil.members = []
+        const leaders: CouncilMemberType[] = []
+        const secretary: CouncilMemberType[] = []
+        const advisory: CouncilMemberType[] = []
+        const specialized: Record<string, CouncilMemberType[]> = {}
 
         const hasAnyRole = (
             member: (typeof evaluationCouncil.members)[0],
@@ -106,82 +99,92 @@ export default function EvaluationCouncilTab() {
                     $Enums.EvaluationMemberRole.HEAD_SECRETARY,
                 ])
             ) {
-                secretaryMembers.push(member)
+                secretary.push(member)
             } else if (hasAnyRole(member, [$Enums.EvaluationMemberRole.ADVISORY_BOARD])) {
-                advisoryBoardMembers.push(member)
+                advisory.push(member)
             } else if (
                 hasAnyRole(member, [
                     $Enums.EvaluationMemberRole.SPECIALIZED,
                     $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
                 ])
             ) {
-                specializedMembers.push(member)
+                const groupName = member.groupName || 'Chưa phân nhóm'
+                if (!specialized[groupName]) {
+                    specialized[groupName] = []
+                }
+                specialized[groupName].push(member)
             } else {
-                otherMembers.push(member)
+                leaders.push(member)
             }
         }
 
-        const result: any[] = []
-        let sttCounter = 1
-
-        for (const member of otherMembers) {
-            result.push({
-                ...member,
-                key: member.id,
-                $type: 'child' as const,
-                $stt: sttCounter++,
-            })
-        }
-
-        if (secretaryMembers.length > 0) {
-            result.push({
-                id: 'secretary-group',
-                key: 'secretary-group',
-                name: 'Ban thư ký',
-                $type: 'parent' as const,
-                children: secretaryMembers.map((member) => ({
-                    ...member,
-                    key: member.id,
-                    $type: 'child' as const,
-                    $stt: sttCounter++,
-                })),
-            })
-        }
-
-        if (advisoryBoardMembers.length > 0) {
-            result.push({
-                id: 'advisory-board-group',
-                key: 'advisory-board-group',
-                name: 'Ban tư vấn',
-                $type: 'parent' as const,
-                children: advisoryBoardMembers.map((member) => ({
-                    ...member,
-                    key: member.id,
-                    $type: 'child' as const,
-                    $stt: sttCounter++,
-                })),
-            })
-        }
-
-        if (specializedMembers.length > 0) {
-            result.push({
-                id: 'specialized-group',
-                key: 'specialized-group',
-                name: 'Nhóm chuyên trách',
-                $type: 'parent' as const,
-                children: specializedMembers.map((member) => ({
-                    ...member,
-                    key: member.id,
-                    $type: 'child' as const,
-                    $stt: sttCounter++,
-                })),
-            })
-        }
-
-        return result
+        return { leaders, secretary, advisory, specialized }
     }, [evaluationCouncil?.members])
 
+    const treeData = useMemo(() => {
+        const specializedGroups = Object.entries(categorizedMembers.specialized).map(
+            ([groupName, members]) => ({
+                key: groupName,
+                label: groupName,
+                count: members.length,
+            })
+        )
+
+        return createTreeData(
+            categorizedMembers.leaders.length,
+            categorizedMembers.secretary.length,
+            categorizedMembers.advisory.length,
+            specializedGroups
+        )
+    }, [categorizedMembers])
+
+    const displayedMembers = useMemo((): CouncilMemberType[] => {
+        const { leaders, secretary, advisory, specialized } = categorizedMembers
+        const allSpecialized = Object.values(specialized).flat()
+
+        switch (selectedGroup) {
+            case 'all':
+                return [...leaders, ...secretary, ...advisory, ...allSpecialized]
+            case 'leaders':
+                return leaders
+            case 'secretary':
+                return secretary
+            case 'advisory':
+                return advisory
+            case 'specialized':
+                return allSpecialized
+            default:
+                // Handle specialized sub-groups: specialized-{groupName}
+                if (selectedGroup.startsWith('specialized-')) {
+                    const groupName = selectedGroup.replace('specialized-', '')
+                    return specialized[groupName] || []
+                }
+                return []
+        }
+    }, [selectedGroup, categorizedMembers])
+
+    const currentGroupLabel = useMemo(() => {
+        const findLabel = (nodes: typeof treeData): string => {
+            for (const node of nodes) {
+                if (node.key === selectedGroup) return node.label
+                if (node.children) {
+                    const found = findLabel(node.children)
+                    if (found) return found
+                }
+            }
+            return ''
+        }
+        return findLabel(treeData) || 'Tất cả thành viên'
+    }, [selectedGroup, treeData])
+
+    const handleToggleNode = useCallback((key: string) => {
+        setExpandedNodes((prev) =>
+            prev.includes(key) ? prev.filter((n) => n !== key) : [...prev, key]
+        )
+    }, [])
+
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
+
     async function handleDeleteEvaluationCouncilMember(id: string) {
         try {
             showSpinner()
@@ -200,192 +203,76 @@ export default function EvaluationCouncilTab() {
         }
     }
 
+    const handleEdit = useCallback(
+        (id: string) => {
+            onOpen({ evaluationCouncilMemberId: id })
+        },
+        [onOpen]
+    )
+
+    const totalMembers = evaluationCouncil?.members?.length || 0
+
+    if (!isLoadingEvaluationCouncil && totalMembers === 0) {
+        return (
+            <Flex justify="center" align="center" style={{ minHeight: 'calc(100vh - 200px)' }}>
+                <Empty description="Chưa có thành viên nào" image={Empty.PRESENTED_IMAGE_SIMPLE}>
+                    <Button
+                        type="primary"
+                        icon={<BookPlus size={16} className="mr-1" />}
+                        onClick={() => {
+                            onOpen({ evaluationCouncilId: evaluationCouncil?.id })
+                        }}
+                    >
+                        Thêm thành viên hội đồng đánh giá
+                    </Button>
+                </Empty>
+            </Flex>
+        )
+    }
+
     return (
-        <div>
-            <Row gutter={[16, 16]}>
-                <Col span={24}>
-                    {tableDataCollapse.length === 0 ? (
-                        <Flex
-                            justify="center"
-                            align="center"
-                            style={{ minHeight: 'calc(100vh - 200px)' }}
-                        >
-                            <Empty
-                                description="Chưa có thành viên nào"
-                                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            >
-                                <Button
-                                    type="primary"
-                                    icon={<BookPlus size={16} className="top-1" />}
-                                    size="small"
-                                    onClick={() => {
-                                        onOpen({
-                                            evaluationCouncilId: evaluationCouncil?.id,
-                                        })
-                                    }}
-                                >
-                                    Thêm thành viên hội đồng đánh giá
-                                </Button>
-                            </Empty>
-                        </Flex>
-                    ) : (
-                        <>
-                            <Flex justify="space-between" align="center">
-                                <span style={{ fontSize: 16, fontWeight: 600 }}>
-                                    Danh sách thành viên
-                                </span>
-                                <Button
-                                    type="primary"
-                                    size="small"
-                                    icon={<BookPlus size={16} />}
-                                    onClick={() => {
-                                        onOpen({
-                                            evaluationCouncilId: evaluationCouncil?.id,
-                                        })
-                                    }}
-                                >
-                                    Thêm thành viên hội đồng đánh giá
-                                </Button>
-                            </Flex>
+        <>
+            <div className="flex justify-between items-center mb-2">
+                <Typography.Title level={4}>Danh sách thành viên hội đồng</Typography.Title>
+                <Button
+                    type="primary"
+                    icon={<BookPlus size={16} />}
+                    onClick={() => {
+                        onOpen({ evaluationCouncilId: evaluationCouncil?.id })
+                    }}
+                >
+                    Thêm thành viên
+                </Button>
+            </div>
 
-                            <TableCollapse
-                                rowKey="id"
-                                filters={filters}
-                                setFilters={(value) => {
-                                    setFilters(value)
-                                }}
-                                loading={isLoadingEvaluationCouncil}
-                                headerTitleKey="name"
-                                childrenFieldName="children"
-                                defaultExpandAll
-                                columns={[
-                                    {
-                                        title: 'Tên đồng chí',
-                                        dataIndex: 'name',
-                                        type: 'input',
-                                        width: 200,
-                                        render: (__, record) => {
-                                            if (record.$type === 'parent') return ''
+            <div className="flex">
+                <MemberSidebar
+                    selectedGroup={selectedGroup}
+                    onSelectGroup={setSelectedGroup}
+                    expandedNodes={expandedNodes}
+                    onToggleNode={handleToggleNode}
+                    treeData={treeData}
+                />
 
-                                            const academicRank =
-                                                record?.lecturer?.userProfile?.academicRankType
-                                                    ?.sTen || ''
-                                            const degree =
-                                                record?.lecturer?.userProfile?.academicDegreeType
-                                                    ?.sTen || ''
-
-                                            const fullName = record?.lecturer?.userProfile?.fullname
-                                                ? record?.lecturer?.userProfile?.fullname
-                                                : `${record?.lecturer?.userProfile?.lastName} ${record?.lecturer?.userProfile?.firstName}`
-
-                                            const academicTitle = [academicRank, degree]
-                                                .filter(Boolean)
-                                                .join('.')
-
-                                            return academicTitle
-                                                ? `${academicTitle} ${fullName}`
-                                                : fullName
-                                        },
-                                    },
-                                    {
-                                        title: 'Số điện thoại',
-                                        width: 100,
-                                        render: (__, record) =>
-                                            record?.lecturer?.userProfile?.phoneNumber,
-                                    },
-                                    {
-                                        title: 'Email',
-                                        width: 200,
-                                        render: (__, record) => {
-                                            return record?.lecturer?.userProfile?.email
-                                        },
-                                    },
-                                    {
-                                        title: 'Đơn vị',
-                                        dataIndex: 'period',
-                                        width: 200,
-                                        render: (__, record) => {
-                                            if (record.$type === 'parent') return ''
-
-                                            return record?.lecturer?.organization?.sTen || ''
-                                        },
-                                    },
-                                    {
-                                        title: 'Chức vụ trong HĐ',
-                                        dataIndex: 'role',
-                                        width: 200,
-                                        render: (__, record) => {
-                                            if (record.$type === 'parent') return ''
-
-                                            return (
-                                                <ul
-                                                    style={{
-                                                        paddingLeft: 16,
-                                                        margin: 0,
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    {record?.role?.map(
-                                                        (
-                                                            val: EvaluationMemberRole,
-                                                            index: number
-                                                        ) => (
-                                                            <li key={index}>
-                                                                {
-                                                                    EVALUATION_MEMBER_ROLE.find(
-                                                                        (i) => i.value === val
-                                                                    )?.label
-                                                                }
-                                                            </li>
-                                                        )
-                                                    )}
-                                                </ul>
-                                            )
-                                        },
-                                    },
-                                    {
-                                        title: 'Thao tác',
-                                        width: 50,
-                                        align: 'center',
-                                        render: (_, record) => {
-                                            if (record?.id && record?.$type !== 'parent') {
-                                                return (
-                                                    <Row className="justify-center gap-2">
-                                                        <EditIcon
-                                                            onClick={(e) => {
-                                                                e.stopPropagation()
-                                                                onOpen({
-                                                                    evaluationCouncilMemberId:
-                                                                        record.id,
-                                                                })
-                                                            }}
-                                                            className="text-sm text-blue-700 cursor-pointer"
-                                                        />
-                                                        <DeleteIcon
-                                                            popConfirm={{
-                                                                onConfirm: (e) => {
-                                                                    handleDeleteEvaluationCouncilMember(
-                                                                        record?.id
-                                                                    )
-                                                                    e?.stopPropagation()
-                                                                },
-                                                            }}
-                                                            onClick={(e) => e.stopPropagation()}
-                                                        />
-                                                    </Row>
-                                                )
-                                            }
-                                            return ''
-                                        },
-                                    },
-                                ]}
-                                data={tableDataCollapse}
-                                pagination={false}
-                            />
-                        </>
-                    )}
-                </Col>
-            </Row>
-        </div>
+                <div className="flex-1 flex flex-col min-w-0">
+                    <div className="px-4 py-3 border-b border-gray-200 bg-gray-50/50 flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                            <span className="font-semibold text-gray-800">{currentGroupLabel}</span>
+                            <span className="text-sm text-gray-500">
+                                ({displayedMembers.length} thành viên)
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex-1 overflow-auto p-4">
+                        <MemberTable
+                            data={displayedMembers}
+                            loading={isLoadingEvaluationCouncil}
+                            onEdit={handleEdit}
+                            onDelete={handleDeleteEvaluationCouncilMember}
+                        />
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
