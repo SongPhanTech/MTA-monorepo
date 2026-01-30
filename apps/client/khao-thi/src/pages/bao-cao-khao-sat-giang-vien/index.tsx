@@ -4,7 +4,6 @@ import {
     useFindManyClusterSurvey,
     useFindManyDM_DonVi,
     useFindManyLecturer,
-    useFindManySurvey,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Row, Tree } from 'antd'
 import { useMemo, useState } from 'react'
@@ -145,20 +144,20 @@ export default function BaoCaoGiangVien() {
         )
     }, [organizations, lecturerData])
 
-    const { data: SubjectVersion = [], isLoading } = useFindManySurvey(
-        {
-            include: {
-                lecture: true,
-                subjectClass: true,
-            },
-            where: {
-                lectureId: filters?.lectureId,
-                active: true,
-                clusterSurveyId: filters?.clusterId,
-            },
-        },
-        { enabled: !!filters?.lectureId || !!filters?.clusterId }
-    )
+    // const { data: SubjectVersion = [], isLoading } = useFindManySurvey(
+    //     {
+    //         include: {
+    //             lecture: true,
+    //             subjectClass: true,
+    //         },
+    //         where: {
+    //             lectureId: filters?.lectureId,
+    //             active: true,
+    //             clusterSurveyId: filters?.clusterId,
+    //         },
+    //     },
+    //     { enabled: !!filters?.lectureId || !!filters?.clusterId }
+    // )
 
     const hanleSearchReport = () => {}
 
@@ -170,12 +169,12 @@ export default function BaoCaoGiangVien() {
             if (selectedItem?.id) {
                 return (
                     <SurveylecturerReport
-                        selectedId={selectedItem?.id}
+                        selectedId={filters?.clusterId}
                         lectureId={selectedItem?.id}
                     />
                 )
             }
-            return <>abc</>
+            return <>ABC</>
             // if (filtersMore.surveyId) {
             //     return <SurveyReport selectedId={filtersMore?.surveyId || ''} />
             // }
