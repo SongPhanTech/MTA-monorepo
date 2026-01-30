@@ -16,6 +16,7 @@ import {
     useUpdateSurvey,
 } from '@workspace/db/hooks'
 import { useCreateClusterSurvey } from '@workspace/libs/api/exam'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
     Col,
@@ -31,7 +32,6 @@ import {
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 
 const { Step } = Steps
 
@@ -156,6 +156,10 @@ const PutSurveyModal = () => {
     })
 
     async function onOk(output?: PutSurveyType) {
+        if (!trainingObjectTypeId) {
+            message.error('Vui lòng chọn loại đối tượng đào tạo')
+            return
+        }
         if (!output) return
         try {
             showSpinner()

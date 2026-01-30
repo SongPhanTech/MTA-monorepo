@@ -39,9 +39,7 @@ export default function PutPhanCongHangLoatCrossModal() {
                 evaluationCouncil: {
                     periodId: selectedEvaluationPeriodId || '',
                 },
-                role: {
-                    has: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
-                },
+                role: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
             },
             include: {
                 lecturer: {
