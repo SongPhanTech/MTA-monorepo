@@ -34,7 +34,7 @@ function buildOrgAndLectureTree(
             title: item.name || 'Đơn vị không tên',
             key: item.id,
             icon: <FolderOpenOutlined />,
-            selectable: false,
+            selectable: true,
             children: [
                 ...lecturers
                     .filter((lecturer) => lecturer.organizationId === item.id)
@@ -58,7 +58,7 @@ export default function BaoCaoGiangVien() {
         clusterId: undefined,
     })
 
-    const [selectedKeys, setSelectedKeys] = useState<any>()
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
     const [selectedItem, setSelectedItem] = useState<any>()
 
     const { id: semesterId } = useSemesterStore()
@@ -243,10 +243,9 @@ export default function BaoCaoGiangVien() {
                     selectedKeys={selectedKeys}
                     treeData={treeData}
                     className="w-full mb-3"
-                    onClick={(selectedKeys, e) => {
-                        console.log(selectedKeys, e)
-                        setSelectedKeys(e?.id)
-                        setSelectedItem(e)
+                    onSelect={(keys, info) => {
+                        setSelectedKeys(keys)
+                        setSelectedItem(info.node)
                     }}
                 />
             </Col>
