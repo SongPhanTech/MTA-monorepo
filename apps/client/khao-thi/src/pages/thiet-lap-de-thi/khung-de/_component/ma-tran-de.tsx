@@ -5,14 +5,15 @@ import EditIcon from '@components/icons/edit'
 import { useFindManyExamMatrix, useUpdateExamMatrix } from '@workspace/db/hooks'
 import { Button, Col, message, Row, Typography } from 'antd'
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TableChuongMuc from './table-chuong-muc'
 import { LayoutGrid } from 'lucide-react'
 import { store } from '@pages/thiet-lap-de-thi/khung-de'
+import { useStore } from '@tanstack/react-store'
 
 export default function MaTranDePage({ id }: { id?: string }) {
-    const [selectedMatrixId, setSelectedMatrixId] = useState<string | undefined>(undefined)
+    const matrixId = useStore(store, (s) => s.matrixId)
     const { onOpen } = useDisclosure<{
         id?: string
     }>({
@@ -58,22 +59,21 @@ export default function MaTranDePage({ id }: { id?: string }) {
     }
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        setSelectedMatrixId(undefined)
-        store.setState((s) => ({ ...s, matrixId: undefined }))
-    }, [id])
 
     useEffect(() => {
-        if (examMatrix.length > 0) {
-            const defaultMatrix = examMatrix.find((matrix) => matrix.isDefault)
-            if (defaultMatrix) {
-                setSelectedMatrixId(defaultMatrix.id)
-                store.setState((s) => ({ ...s, matrixId: defaultMatrix.id }))
-            } else {
-                setSelectedMatrixId(examMatrix[0].id)
-                store.setState((s) => ({ ...s, matrixId: examMatrix[0].id }))
-            }
+        if (!examMatrix.length) {
+            store.setState((s) => ({ ...s, matrixId: undefined }))
+            return
         }
+
+        const currentId = store.state.matrixId
+        const exists = examMatrix.some((m) => m.id === currentId)
+
+        if (exists) return
+
+        const defaultMatrix = examMatrix.find((m) => m.isDefault) ?? examMatrix[0]
+
+        store.setState((s) => ({ ...s, matrixId: defaultMatrix.id }))
     }, [examMatrix])
 
     return (
@@ -85,12 +85,11 @@ export default function MaTranDePage({ id }: { id?: string }) {
                             <div
                                 key={matrix.id}
                                 onClick={() => {
-                                    setSelectedMatrixId(matrix.id)
                                     store.setState((s) => ({ ...s, matrixId: matrix.id }))
                                 }}
                                 className={clsx(
                                     'p-2.5 border rounded-[5px] first:mt-0 mt-2 mr-2 cursor-pointer transition-all',
-                                    selectedMatrixId === matrix.id
+                                    matrixId === matrix.id
                                         ? 'bg-[rgb(238,252,253)] border-[rgb(179,240,243)]'
                                         : 'bg-gray-100 border-gray-300 hover:border-gray-400'
                                 )}
@@ -127,8 +126,8 @@ export default function MaTranDePage({ id }: { id?: string }) {
             </Col>
 
             <Col span={19}>
-                {selectedMatrixId ? (
-                    <TableChuongMuc matrixId={selectedMatrixId} />
+                {matrixId ? (
+                    <TableChuongMuc matrixId={matrixId} />
                 ) : (
                     <div className="flex flex-col items-center justify-center h-[80vh] bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
                         <div className="w-24 h-30 bg-green-100 rounded-full flex items-center justify-center mb-6">
