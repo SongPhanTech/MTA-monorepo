@@ -71,21 +71,23 @@ export default function DetailSurveyPage({
             ...(filters.subjectClassName && filters.subjectClassName !== ''
                 ? {
                       survey: {
-                          subjectClass: {
-                              OR: [
-                                  {
-                                      code: {
-                                          contains: filters.subjectClassName,
-                                          mode: 'insensitive' as const,
+                          some: {
+                              subjectClass: {
+                                  OR: [
+                                      {
+                                          code: {
+                                              contains: filters.subjectClassName,
+                                              mode: 'insensitive' as const,
+                                          },
                                       },
-                                  },
-                                  {
-                                      name: {
-                                          contains: filters.subjectClassName,
-                                          mode: 'insensitive' as const,
+                                      {
+                                          name: {
+                                              contains: filters.subjectClassName,
+                                              mode: 'insensitive' as const,
+                                          },
                                       },
-                                  },
-                              ],
+                                  ],
+                              },
                           },
                       },
                   }
@@ -233,7 +235,7 @@ export default function DetailSurveyPage({
                                 },
                                 {
                                     title: 'Lớp môn học',
-                                    dataIndex: 'name',
+                                    dataIndex: 'subjectClassName',
                                     type: 'input',
                                     render: (__, record) => {
                                         return record?.survey?.length ? (
@@ -284,6 +286,7 @@ export default function DetailSurveyPage({
                                     title: 'Ngày bắt đầu',
                                     dataIndex: 'startDate',
                                     type: 'date',
+                                    width: 150,
                                     render: (_, record) =>
                                         record?.survey[0]?.startDate
                                             ? dayjs(record?.survey[0]?.startDate).format(
@@ -295,6 +298,7 @@ export default function DetailSurveyPage({
                                     title: 'Ngày kết thúc',
                                     dataIndex: 'endDate',
                                     type: 'date',
+                                    width: 150,
                                     render: (_, record) =>
                                         record?.survey[0]?.endDate
                                             ? dayjs(record?.survey[0]?.endDate).format('DD/MM/YYYY')

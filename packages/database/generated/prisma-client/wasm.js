@@ -3390,6 +3390,7 @@ exports.Prisma.EvaluationCouncilMemberScalarFieldEnum = {
   createdBy: 'createdBy',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId',
+  groupName: 'groupName',
   role: 'role'
 };
 
@@ -6705,7 +6706,8 @@ exports.Prisma.EvaluationCouncilMemberOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   evaluationCouncilId: 'evaluationCouncilId',
-  lecturerId: 'lecturerId'
+  lecturerId: 'lecturerId',
+  groupName: 'groupName'
 };
 
 exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {

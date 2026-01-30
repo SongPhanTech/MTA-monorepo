@@ -1,21 +1,21 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import useSpinner from '@hooks/spinner'
-import type { PutPhanCongHangLoatModalProps } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/assigment'
-import { Col, Form, message, Tree } from 'antd'
-import dayjs from 'dayjs'
-import { useMemo } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
+import useSpinner from '@hooks/spinner'
+import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import type { PutPhanCongHangLoatModalProps } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/assigment'
+import { useStore } from '@tanstack/react-store'
+import { $Enums } from '@workspace/db/client'
 import {
     useFindManyEvaluationCouncilMember,
     useUpsertAnalysisCriterion,
     useUpsertEvaluationCriterion,
 } from '@workspace/db/hooks'
-import { $Enums } from '@workspace/db/client'
-import { useStore } from '@tanstack/react-store'
-import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import { Col, Form, message, Tree } from 'antd'
+import dayjs from 'dayjs'
+import { useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type CriteriaAssignmentModalFormType = {
     lecturerId: string
@@ -37,9 +37,7 @@ export default function PutPhanCongHangLoatModal() {
             evaluationCouncil: {
                 periodId: selectedEvaluationPeriodId,
             },
-            role: {
-                has: $Enums.EvaluationMemberRole.SPECIALIZED,
-            },
+            role: $Enums.EvaluationMemberRole.SPECIALIZED,
         },
         include: {
             lecturer: {

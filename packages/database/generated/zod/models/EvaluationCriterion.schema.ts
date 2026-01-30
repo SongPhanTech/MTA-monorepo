@@ -49,6 +49,7 @@ const relationSchema = z.object({
     criterionPeriod: z.record(z.string(), z.unknown()),
     lecturer: z.record(z.string(), z.unknown()).optional(),
     reviewer: z.record(z.string(), z.unknown()).optional(),
+    lecturerReview: z.array(z.unknown()).optional(),
     evaluationCriterionComments: z.array(z.unknown()).optional(),
 }
 );

@@ -77,11 +77,9 @@ export default function CrossReviewAssignment() {
             where: {
                 deletedAt: null,
                 evaluationCouncil: {
-                    periodId: selectedEvaluationPeriodId || '',
+                    periodId: selectedEvaluationPeriodId,
                 },
-                role: {
-                    has: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
-                },
+                role: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
             },
             include: {
                 lecturer: {

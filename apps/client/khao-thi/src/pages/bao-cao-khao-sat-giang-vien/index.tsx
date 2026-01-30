@@ -4,9 +4,8 @@ import {
     useFindManyClusterSurvey,
     useFindManyDM_DonVi,
     useFindManyLecturer,
-    useFindManySurvey,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Row, Tree } from 'antd'
+import { Col, Flex, Row, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
@@ -14,6 +13,8 @@ import { useMemo, useState } from 'react'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
 import { FolderOpenOutlined } from '@ant-design/icons'
+import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
+import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
 
 interface MyTreeNode {
     title: string
@@ -144,20 +145,20 @@ export default function BaoCaoGiangVien() {
         )
     }, [organizations, lecturerData])
 
-    const { data: SubjectVersion = [], isLoading } = useFindManySurvey(
-        {
-            include: {
-                lecture: true,
-                subjectClass: true,
-            },
-            where: {
-                lectureId: filters?.lectureId,
-                active: true,
-                clusterSurveyId: filters?.clusterId,
-            },
-        },
-        { enabled: !!filters?.lectureId || !!filters?.clusterId }
-    )
+    // const { data: SubjectVersion = [], isLoading } = useFindManySurvey(
+    //     {
+    //         include: {
+    //             lecture: true,
+    //             subjectClass: true,
+    //         },
+    //         where: {
+    //             lectureId: filters?.lectureId,
+    //             active: true,
+    //             clusterSurveyId: filters?.clusterId,
+    //         },
+    //     },
+    //     { enabled: !!filters?.lectureId || !!filters?.clusterId }
+    // )
 
     const hanleSearchReport = () => {}
 
@@ -166,7 +167,25 @@ export default function BaoCaoGiangVien() {
             return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
         }
         if (filters?.clusterId) {
-            return <>abc</>
+            console.log(selectedItem)
+
+            if (selectedItem?.id && selectedItem?.iCapDonVi) {
+                return (
+                    <SurveyOrganizationReport
+                        selectedId={filters?.clusterId}
+                        organizationId={selectedItem?.id}
+                    />
+                )
+            }
+            if (selectedItem?.id && !selectedItem?.iCapDonVi) {
+                return (
+                    <SurveylecturerReport
+                        selectedId={filters?.clusterId}
+                        lectureId={selectedItem?.id}
+                    />
+                )
+            }
+            return <>ABC</>
             // if (filtersMore.surveyId) {
             //     return <SurveyReport selectedId={filtersMore?.surveyId || ''} />
             // }
@@ -232,9 +251,9 @@ export default function BaoCaoGiangVien() {
                             dropdownMatchSelectWidth={false}
                         />
                     </Flex>
-                    <Button onClick={hanleSearchReport} type="primary">
+                    {/* <Button onClick={hanleSearchReport} type="primary">
                         Tìm kiếm
-                    </Button>
+                    </Button> */}
                 </Flex>
             </Col>
             <Col span={6}>
@@ -243,8 +262,8 @@ export default function BaoCaoGiangVien() {
                     selectedKeys={selectedKeys}
                     treeData={treeData}
                     className="w-full mb-3"
-                    onSelect={(keys, info) => {
-                        setSelectedKeys(keys)
+                    onSelect={(key, info) => {
+                        setSelectedKeys(key)
                         setSelectedItem(info.node)
                     }}
                 />

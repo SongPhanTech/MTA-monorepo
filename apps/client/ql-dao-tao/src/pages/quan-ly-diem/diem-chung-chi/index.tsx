@@ -138,25 +138,87 @@ export default function ArchivedCertificate() {
         const conditions: any = {}
 
         if (filters.name) {
-            conditions.fullname = {
-                contains: filters.name,
-                mode: 'insensitive' as const,
+            conditions.userProfile = {
+                fullname: {
+                    contains: filters.name,
+                    mode: 'insensitive' as const,
+                },
             }
         }
 
-        if (filters.fixedClassId) {
-            conditions.fixedClassId = filters.fixedClassId
-        } else if (filters.trainingCourseId) {
-            conditions.fixedClass = {
-                trainingCourseId: filters.trainingCourseId,
-            }
-        } else {
-            // Mặc định lọc theo trainingObjectTypeId nếu không có filter khác
-            conditions.fixedClass = {
-                trainingCourse: {
-                    trainingObjectTypeId,
+        if ((filters as any).code) {
+            conditions.userProfile = {
+                ...conditions.userProfile,
+                code: {
+                    contains: (filters as any).code,
+                    mode: 'insensitive' as const,
                 },
             }
+        }
+
+        if ((filters as any).phone) {
+            conditions.userProfile = {
+                ...conditions.userProfile,
+                phoneNumber: {
+                    contains: (filters as any).phone,
+                    mode: 'insensitive' as const,
+                },
+            }
+        }
+
+        const fixedClassCondition: any = {}
+
+        const hasValue = (val: any) => {
+            if (Array.isArray(val)) return val.length > 0
+            return val !== undefined && val !== null && val !== ''
+        }
+
+        if (hasValue(filters.trainingCourseId)) {
+            if (Array.isArray(filters.trainingCourseId)) {
+                fixedClassCondition.trainingCourseId = { in: filters.trainingCourseId }
+            } else {
+                fixedClassCondition.trainingCourseId = filters.trainingCourseId
+            }
+        } else {
+            fixedClassCondition.trainingCourse = {
+                trainingObjectTypeId,
+                deletedAt: null,
+                active: true,
+            }
+        }
+
+        if (hasValue((filters as any).trainingMajorId)) {
+            const val = (filters as any).trainingMajorId
+            fixedClassCondition.curriculumVersion = {
+                curriculum: {
+                    trainingMajorId: Array.isArray(val) ? { in: val } : val,
+                },
+            }
+        }
+
+        if (hasValue((filters as any).trainingFieldId)) {
+            const val = (filters as any).trainingFieldId
+            fixedClassCondition.curriculumVersion = {
+                ...fixedClassCondition.curriculumVersion,
+                curriculum: {
+                    ...fixedClassCondition.curriculumVersion?.curriculum,
+                    trainingMajor: {
+                        trainingFieldId: Array.isArray(val) ? { in: val } : val,
+                    },
+                },
+            }
+        }
+
+        if (hasValue(filters.fixedClassId)) {
+            if (Array.isArray(filters.fixedClassId)) {
+                conditions.fixedClassId = { in: filters.fixedClassId }
+            } else {
+                conditions.fixedClassId = filters.fixedClassId
+            }
+        }
+
+        if (Object.keys(fixedClassCondition).length > 0) {
+            conditions.fixedClass = fixedClassCondition
         }
 
         if (filters.certificateId) {
@@ -472,11 +534,12 @@ export default function ArchivedCertificate() {
                         },
                         {
                             title: 'Mã học viên',
-                            dataIndex: ['userProfile', 'code'],
+                            dataIndex: 'code',
                             align: 'center',
                             width: 130,
                             fixed: 'left',
                             type: 'input',
+                            render: (__, record) => record?.userProfile?.code,
                         },
                         {
                             title: 'Họ và tên',

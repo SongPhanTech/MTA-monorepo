@@ -47,25 +47,20 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 import {
     exportDanhSachBaoVe,
+    exportDanhSachNopLuanVanThuVien,
+    exportGiayMoiChamLvPb,
     exportGiayMoiHdlv,
     exportHosobvlv,
     exportKiemTraTienDo,
     exportPhuLucDsLuanVan,
     exportSaoQDHDLV,
+    exportThanhToanHoiDongBaoVe,
+    exportThanhToanHuongDanTrongHv,
     exportThongKeCbHdlv,
+    exportThongKeCbThamGiaHd,
 } from '@/utils/thesis-excel'
 import { whereOrganization } from '@workspace/libs/constants'
 
-interface ExpertStat {
-    expertId: string
-    name: string
-    sDonvi: string
-    stk: string
-    tennganhang: string
-    GVHD1Student: number
-    GVHD2Student: number
-    totalPayment: number
-}
 interface ThesisProjectForm {
     thesisSessionId: string
     fixedClassId: string[]
@@ -222,7 +217,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                             curriculum: {
                                 include: {
                                     trainingMajor: {
-                                        include: { trainingField: true },
+                                        include: { trainingField: true, organization: true },
                                     },
                                 },
                             },
@@ -235,7 +230,15 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                     thesisProject: {
                         include: {
                             defenseSession: true,
-                            thesisSession: true,
+                            thesisSession: {
+                                include: {
+                                    trainingCourse: {
+                                        include: {
+                                            trainingObjectType: true,
+                                        },
+                                    },
+                                },
+                            },
                             organization: true,
                             supervisor: true,
                             coSupervisor: true,
@@ -244,7 +247,22 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                             supervisorPayment: true,
                             coSupervisorPayment: true,
                             council: {
-                                include: { members: { include: { expert: true } } },
+                                include: {
+                                    members: {
+                                        include: {
+                                            expert: {
+                                                include: {
+                                                    lecturer: {
+                                                        select: {
+                                                            userProfile: true,
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                            payment: true,
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
@@ -569,8 +587,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 5,
             label: 'Giấy mời chấm LV PB',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportGiayMoiChamLvPb({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 6,
@@ -624,8 +647,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 13,
             label: 'Thanh toán hướng dẫn',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportThanhToanHuongDanTrongHv({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 13.1,
@@ -647,8 +675,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 15,
             label: 'Thống kê cán bộ tham gia HĐ',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportThongKeCbThamGiaHd({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 16,
@@ -659,17 +692,26 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 19,
             label: 'Danh sách nộp luận văn thư viện',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportDanhSachNopLuanVanThuVien({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 11,
             label: 'Thanh toán hội đồng bảo vệ',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportThanhToanHoiDongBaoVe({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
     ]
-    // hàm xử lý render component
     return (
         <div>
             <Row gutter={[8, 0]}>

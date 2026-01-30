@@ -62,9 +62,7 @@ export default function AssigmentOfAssessmentTab() {
             evaluationCouncil: {
                 periodId: selectedEvaluationPeriodId,
             },
-            role: {
-                has: $Enums.EvaluationMemberRole.SPECIALIZED,
-            },
+            role: $Enums.EvaluationMemberRole.SPECIALIZED,
         },
         include: {
             lecturer: {

@@ -12,7 +12,9 @@ import {
     OrgazationsSurveyStatsSchema,
     SurveyStatsLecSchema,
     SurveyStatsSchema,
+    getSurveyStatsforDonVi,
 } from '../services/survey.service'
+import { getOrganizationAndAllChildren } from '@workspace/db'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -685,8 +687,8 @@ app.openapi(exportClusterSurveyStatistics, async (c) => {
 })
 
 const getClusterSurveyStatisticsForLecturer = createRoute({
-    operationId: 'get-cluster-survey-statistics',
-    path: '/{id}/statistics',
+    operationId: 'get-cluster-survey-statistics-for-lecturer',
+    path: '/{id}/statistics-for-lecturer',
     method: 'get',
     tags: ['ClusterSurvey'],
     summary: 'Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát cuar từng giáo viên',
@@ -759,6 +761,192 @@ app.openapi(getClusterSurveyStatisticsForLecturer, async (c) => {
         prisma,
         id,
         lectureId,
+        cluster.surveyQuestion,
+        cluster.surveyChoice
+    )
+
+    const data = {
+        ...cluster,
+        data: listData,
+    }
+
+    return c.json(data, 200)
+})
+
+const getClusterSurveyStatisticsForDonVi = createRoute({
+    operationId: 'get-cluster-survey-statistics-for-organization',
+    path: '/{id}/statistics-for-organization',
+    method: 'get',
+    tags: ['ClusterSurvey'],
+    summary: 'Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị',
+    request: {
+        params: z.object({ id: z.string() }),
+        query: z.object({
+            organizationId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Thành công',
+            content: {
+                'application/json': {
+                    schema: models.ClusterSurveySchema.extend({
+                        data: SurveyStatsLecSchema,
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
+    const { id } = c.req.valid('param')
+    const { organizationId, ...q } = c.req.valid('query')
+    const organizations = await getOrganizationAndAllChildren(prisma, organizationId)
+    const cluster = await prisma.clusterSurvey.findUnique({
+        where: { id },
+        include: {
+            surveyQuestion: {
+                where: {
+                    type: 'SINGLE_CHOICE',
+                },
+            },
+            surveyChoice: { orderBy: { answer: 'asc' } },
+            surveys: {
+                where: {
+                    lecture: {
+                        organizationId: {
+                            in: organizations?.length
+                                ? organizations.map((i) => i.Id)
+                                : [organizationId],
+                        },
+                    },
+                },
+                include: {
+                    subjectClass: true,
+                    lecture: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                },
+            },
+        },
+    })
+    if (!cluster) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const listData = await getSurveyStatsforDonVi(
+        prisma,
+        id,
+        organizations?.length > 0 ? organizations.map((i: any) => i.Id) : [organizationId],
+        cluster.surveyQuestion,
+        cluster.surveyChoice
+    )
+
+    const data = {
+        ...cluster,
+        data: listData,
+    }
+
+    return c.json(data, 200)
+})
+
+
+const getClusterSurveyStatisticsForHocVien = createRoute({
+    operationId: 'get-cluster-survey-statistics-for-all',
+    path: '/{id}/statistics-for-all',
+    method: 'get',
+    tags: ['ClusterSurvey'],
+    summary: 'Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị',
+    request: {
+        params: z.object({ id: z.string() }),
+        query: z.object({
+            organizationId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Thành công',
+            content: {
+                'application/json': {
+                    schema: models.ClusterSurveySchema.extend({
+                        data: SurveyStatsLecSchema,
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getClusterSurveyStatisticsForHocVien, async (c) => {
+    const { id } = c.req.valid('param')
+    const { organizationId, ...q } = c.req.valid('query')
+    const organizations = await prisma.dM_DonVi.findMany({
+        where: {
+            sParentId: organizationId,
+        }
+    })
+
+    if(organizations?.length<=0){
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const cluster = await prisma.clusterSurvey.findUnique({
+        where: { id },
+        include: {
+            surveyQuestion: {
+                where: {
+                    type: 'SINGLE_CHOICE',
+                },
+            },
+            surveyChoice: { orderBy: { answer: 'asc' } },
+            surveys: {
+                where: {
+                    lecture: {
+                        organizationId: {
+                            in: organizations?.length
+                                ? [...organizations.map((i) => i.Id),organizationId]
+                                : [organizationId],
+                        },
+                    },
+                },
+                include: {
+                    subjectClass: true,
+                    lecture: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                },
+            },
+        },
+    })
+    if (!cluster) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const listData = await getSurveyStatsforDonVi(
+        prisma,
+        id,
+        organizations?.length > 0 ? [...organizations.map((i) => i.Id),organizationId] : [organizationId],
         cluster.surveyQuestion,
         cluster.surveyChoice
     )

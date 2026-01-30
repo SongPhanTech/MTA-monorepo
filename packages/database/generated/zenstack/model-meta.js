@@ -16578,6 +16578,7 @@ const metadata = {
                     type: "EvaluationCriterion",
                     isDataModel: true,
                     isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "EvaluationCriterionLecturer" }] }],
                     backLink: 'lecturer',
                 }, analysisCriterion: {
                     name: "analysisCriterion",
@@ -16591,6 +16592,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
+                }, evaluationCriterionReviews: {
+                    name: "evaluationCriterionReviews",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "EvaluationCriterionLecturerReview" }] }],
+                    backLink: 'lecturerReview',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19615,7 +19623,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "EvaluationCriterionLecturer" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evaluationCriterions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerId" },
@@ -19653,6 +19661,13 @@ const metadata = {
                     name: "deadlineReview",
                     type: "DateTime",
                     isOptional: true,
+                }, lecturerReview: {
+                    name: "lecturerReview",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "EvaluationCriterionLecturerReview" }] }],
+                    backLink: 'evaluationCriterionReviews',
                 }, evaluationCriterionComments: {
                     name: "evaluationCriterionComments",
                     type: "EvaluationCriterionComment",
@@ -20016,6 +20031,10 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'lecturer',
+                }, groupName: {
+                    name: "groupName",
+                    type: "String",
+                    isOptional: true,
                 }, role: {
                     name: "role",
                     type: "EvaluationMemberRole",
