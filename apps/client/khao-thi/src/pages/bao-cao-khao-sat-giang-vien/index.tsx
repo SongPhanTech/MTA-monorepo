@@ -5,7 +5,7 @@ import {
     useFindManyDM_DonVi,
     useFindManyLecturer,
 } from '@workspace/db/hooks'
-import {  Col, Flex, Row, Tree } from 'antd'
+import { Col, Flex, Row, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
@@ -167,8 +167,8 @@ export default function BaoCaoGiangVien() {
             return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
         }
         if (filters?.clusterId) {
-            console.log(selectedItem);
-            
+            console.log(selectedItem)
+
             if (selectedItem?.id && selectedItem?.iCapDonVi) {
                 return (
                     <SurveyOrganizationReport
@@ -176,12 +176,14 @@ export default function BaoCaoGiangVien() {
                         organizationId={selectedItem?.id}
                     />
                 )
-            } 
-             if(selectedItem?.id && !selectedItem?.iCapDonVi) {
-                  return <SurveylecturerReport
+            }
+            if (selectedItem?.id && !selectedItem?.iCapDonVi) {
+                return (
+                    <SurveylecturerReport
                         selectedId={filters?.clusterId}
                         lectureId={selectedItem?.id}
                     />
+                )
             }
             return <>ABC</>
             // if (filtersMore.surveyId) {

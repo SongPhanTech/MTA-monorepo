@@ -1,4 +1,4 @@
-import type { PrismaClient } from './client';
+import type { PrismaClient } from './client'
 
 export { createId } from '@paralleldrive/cuid2'
 export * from '../generated/prisma-client'

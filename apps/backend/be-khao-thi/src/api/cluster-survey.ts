@@ -824,10 +824,9 @@ app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
                 where: {
                     lecture: {
                         organizationId: {
-                            in:
-                                organizations?.length
-                                    ? organizations.map((i) => i.Id)
-                                    : [organizationId],
+                            in: organizations?.length
+                                ? organizations.map((i) => i.Id)
+                                : [organizationId],
                         },
                     },
                 },

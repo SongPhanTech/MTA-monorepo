@@ -1014,6 +1014,7 @@ app.openapi(getSurveysByProfile, async (c) => {
             : {}),
 
         deletedAt: null,
+        isPublic: false,
         // startDate: { lte: new Date() },
     }
 
