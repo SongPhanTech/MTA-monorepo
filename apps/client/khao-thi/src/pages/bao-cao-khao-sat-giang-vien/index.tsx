@@ -35,7 +35,7 @@ function buildOrgAndLectureTree(
             title: item.name || 'Đơn vị không tên',
             key: item.id,
             icon: <FolderOpenOutlined />,
-            selectable: false,
+            selectable: true,
             children: [
                 ...lecturers
                     .filter((lecturer) => lecturer.organizationId === item.id)
@@ -262,10 +262,9 @@ export default function BaoCaoGiangVien() {
                     selectedKeys={selectedKeys}
                     treeData={treeData}
                     className="w-full mb-3"
-                    onClick={(selectedKeys, e) => {
-                        console.log(selectedKeys, e)
-                        setSelectedKeys(e?.id)
-                        setSelectedItem(e)
+                    onSelect={(key, info) => {
+                        setSelectedKeys(key)
+                        setSelectedItem(info.node)
                     }}
                 />
             </Col>
