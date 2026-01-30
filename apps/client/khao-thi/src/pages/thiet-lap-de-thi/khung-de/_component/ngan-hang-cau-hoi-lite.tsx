@@ -1,6 +1,6 @@
 import { Button, Row, Col, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
@@ -135,6 +135,16 @@ export default function QuestionBankLite({
         })
     }, [knowledgeBlocks, allQuestionsForStats, matrixMap])
 
+    useEffect(() => {
+        const savedMatrixId = localStorage.getItem('currentMatrixId')
+
+        if (!store.state.matrixId && savedMatrixId) {
+            store.setState((s) => ({
+                ...s,
+                matrixId: savedMatrixId,
+            }))
+        }
+    }, [])
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -145,6 +155,11 @@ export default function QuestionBankLite({
                             size="middle"
                             onClick={() => {
                                 if (!examFrameworkId || !matrixId) return
+                                store.setState((s) => ({
+                                    ...s,
+                                    matrixId,
+                                }))
+                                localStorage.setItem('currentMatrixId', matrixId)
                                 onOpenPickQuestionFromBank({
                                     examFrameworkId: examFrameworkId,
                                     matrixId: matrixId,

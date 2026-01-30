@@ -59,11 +59,17 @@ export default function MaTranDePage({ id }: { id?: string }) {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
+        if (!id) return
+
         setSelectedMatrixId(undefined)
         store.setState((s) => ({ ...s, matrixId: undefined }))
     }, [id])
 
     useEffect(() => {
+         if (store.state.matrixId) {
+            setSelectedMatrixId(store.state.matrixId)
+            return
+        }
         if (examMatrix.length > 0) {
             const defaultMatrix = examMatrix.find((matrix) => matrix.isDefault)
             if (defaultMatrix) {

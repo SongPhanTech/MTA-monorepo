@@ -170,9 +170,11 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
             message.success(`Đã xóa ${selectedRowKeys.length} câu hỏi`)
             setSelectedRowKeys([])
             queryClient.invalidateQueries({
-                queryKey: ['Question'],
+                predicate: (query) =>
+                    Array.isArray(query.queryKey) && query.queryKey[0] === 'Question',
             })
-        } catch {
+        } catch (error) {
+            console.error(error)
             message.error('Xóa câu hỏi thất bại')
         }
     }

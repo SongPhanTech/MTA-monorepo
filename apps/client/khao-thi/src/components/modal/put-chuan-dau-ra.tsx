@@ -13,7 +13,6 @@ import PutFormModal from '@components/commons/put-modal'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import type { ConfigExam } from '@workspace/db/client'
-
 export interface KnowledgeBlockFormData extends Record<string, unknown> {
     name: string
     code: string
@@ -79,6 +78,38 @@ const PutChuongMucModal = () => {
     }, [knowledgeBlockData, input?.id, form])
 
     const onOk = async (values: KnowledgeBlockFormData) => {
+        const existingConfigMap = new Map(
+            knowledgeBlockData?.configExams?.map((c) => [c.difficult, c]) ?? []
+        )
+
+        const updateConfigs: any[] = []
+        const createConfigs: any[] = []
+
+        LEVEL_COLUMNS.forEach((level) => {
+            const levelData = values[level.key] as ConfigExam
+            if (!levelData?.quantity) return
+
+            const existing = existingConfigMap.get(level.difficult)
+
+            if (existing) {
+                updateConfigs.push({
+                    where: { id: existing.id },
+                    data: {
+                        type: levelData.type,
+                        quantity: levelData.quantity,
+                        point: levelData.point ?? existing.point,
+                    },
+                })
+            } else {
+                createConfigs.push({
+                    difficult: level.difficult,
+                    type: levelData.type,
+                    quantity: levelData.quantity,
+                    point: levelData.point ?? 0,
+                })
+            }
+        })
+
         const configExams = LEVEL_COLUMNS.reduce<any[]>((acc, level) => {
             const levelData = values[level.key] as ConfigExam
             if (!levelData?.quantity) return acc
@@ -106,8 +137,8 @@ const PutChuongMucModal = () => {
                         code: values.code,
                         description: values.description,
                         configExams: {
-                            deleteMany: {},
-                            create: configExams,
+                            update: updateConfigs,
+                            create: createConfigs,
                         },
                     },
                 })
