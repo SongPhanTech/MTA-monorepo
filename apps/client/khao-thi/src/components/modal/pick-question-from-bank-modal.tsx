@@ -99,6 +99,7 @@ const PickQuestionFromBankModal = () => {
         () => ({
             deletedAt: null as null,
             questionBankId,
+            knowledgeBlockId: null as string | null,
 
             ...(filters.questionType && filters.questionType.length > 0
                 ? {
