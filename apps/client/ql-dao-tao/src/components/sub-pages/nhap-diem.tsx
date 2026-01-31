@@ -73,6 +73,8 @@ type SubjectClassScoreForm = {
             suspended?: boolean | null
             suspendedReason?: string | null
             finalScore?: Decimal | null
+            finalScoreBase4?: number | string | null
+            letter?: string | null
             isChanged?: boolean
         }
     >
@@ -664,6 +666,13 @@ export default function NhapDiem({
                         if (!acc) {
                             return {}
                         }
+                        const scoreConvertResult =
+                            cur.finalScore !== null && cur.finalScore !== undefined
+                                ? scoreConvert(
+                                      Number(cur.finalScore),
+                                      cur.student?.fixedClass?.trainingCourse?.scoreConverts || []
+                                  )
+                                : null
                         acc[cur.id] = {
                             attendanceScore: cur.attendanceScore,
                             midtermScore: cur.midtermScore,
@@ -676,6 +685,8 @@ export default function NhapDiem({
                             scoreToTakeExam:
                                 cur.student?.fixedClass?.trainingCourse?.scoreToTakeExam,
                             finalScore: cur.finalScore,
+                            finalScoreBase4: scoreConvertResult?.base4,
+                            letter: scoreConvertResult?.letter,
                             suspended: cur.suspended,
                             suspendedReason: cur.suspendedReason,
                             isChanged: false,
