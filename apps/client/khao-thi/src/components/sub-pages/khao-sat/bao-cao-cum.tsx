@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
-import { buildOrgTree, cn } from '@lib/utils'
+import { buildOrgTree } from '@lib/utils'
 const { Title } = Typography
 
 type AnswerItem = {
@@ -29,25 +29,14 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function ClusterSurveyReport({
     selectedId,
     surveyName,
-    surveyId,
-    setSurvey,
-    organizationSelected,
 }: {
     selectedId: string
     surveyName: string
-    surveyId: string
-    setSurvey: (value: string) => void
-    organizationSelected: string
 }) {
     const router = useRouter()
 
     const { data: dataLevel } = useGetLectureSurveyStatistics(
         selectedId as string,
-        organizationSelected
-            ? {
-                  organizations: organizationSelected,
-              }
-            : {}
     )
     const { data: organizations = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
@@ -254,14 +243,14 @@ function ClusterSurveyReport({
     const renderTable = (dataTable: any, choices: any) => {
         return (
             <Table
-                onRow={(record) => {
-                    return {
-                        onClick: () => {
-                            setSurvey(record?.id as string)
-                        },
-                        className: cn(surveyId === record?.id ? 'bg-orange-200' : ''),
-                    }
-                }}
+                // onRow={(record) => {
+                //     return {
+                //         onClick: () => {
+                //             setSurvey(record?.id as string)
+                //         },
+                //         className: cn(surveyId === record?.id ? 'bg-orange-200' : ''),
+                //     }
+                // }}
                 columns={
                     choices?.length > 0
                         ? [

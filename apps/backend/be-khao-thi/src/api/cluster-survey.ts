@@ -441,7 +441,7 @@ const getOrganizationSurveyStatistics = createRoute({
     request: {
         params: z.object({ id: z.string() }),
         query: z.object({
-            organizations: z.string().optional(),
+            organizationId: z.string(),
         }),
     },
     responses: {
@@ -478,7 +478,7 @@ const getOrganizationSurveyStatistics = createRoute({
 
 app.openapi(getOrganizationSurveyStatistics, async (c) => {
     const { id } = c.req.valid('param')
-    const { organizations, ...q } = c.req.valid('query')
+    const {  organizationId,...q } = c.req.valid('query')
     const cluster = await prisma.clusterSurvey.findUnique({
         where: { id },
         include: {
@@ -505,11 +505,7 @@ app.openapi(getOrganizationSurveyStatistics, async (c) => {
     }
     const organization = await prisma.dM_DonVi.findMany({
         where: {
-            ...(organizations && {
-                Id: {
-                    in: organizations.split(','),
-                },
-            }),
+            sParentId: organizationId,
             lecturers: {
                 some: {
                     survey: {
