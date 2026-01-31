@@ -17,9 +17,9 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     finalScore: z.number(),
-    score: z.number(),
-    issuedBy: z.string(),
-    issuedDate: z.coerce.date(),
+    score: z.number().nullish(),
+    issuedBy: z.string().nullish(),
+    issuedDate: z.coerce.date().nullish(),
     expiredDate: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema,
 }
@@ -34,9 +34,9 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     finalScore: z.number(),
-    score: z.number(),
-    issuedBy: z.string(),
-    issuedDate: z.coerce.date(),
+    score: z.number().nullish(),
+    issuedBy: z.string().nullish(),
+    issuedDate: z.coerce.date().nullish(),
     expiredDate: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema,
 }
@@ -87,9 +87,9 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     finalScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    score: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    issuedBy: z.string(),
-    issuedDate: z.coerce.date(),
+    score: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    issuedBy: z.string().nullish(),
+    issuedDate: z.coerce.date().nullish(),
     expiredDate: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema
 }).partial().passthrough();

@@ -256,11 +256,11 @@ model ArchivedCertificate extends Base {
   // TODO: dùng `code` cho mã/ID chứng chỉ
 
   /// điểm chứng chỉ
-  score               Float
+  score               Float?
   /// nơi cấp
-  issuedBy            String
+  issuedBy            String?
   /// ngày cấp
-  issuedDate          DateTime
+  issuedDate          DateTime?
   /// ngày hết hạn
   expiredDate         DateTime?
   status              ArchivedCertificateStatus                  @default(PENDING)

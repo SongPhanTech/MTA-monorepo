@@ -144,8 +144,8 @@ export default function AssigmentOfAssessmentTab() {
         }
     )
 
-    const isVicePersident = councilMember?.role?.includes(
-        $Enums.EvaluationMemberRole.VICE_PRESIDENT
+    const isHeadSecretary = councilMember?.role?.includes(
+        $Enums.EvaluationMemberRole.HEAD_SECRETARY
     )
 
     const tableData = useMemo(() => {
@@ -339,7 +339,7 @@ export default function AssigmentOfAssessmentTab() {
 
     return (
         <Row gutter={0}>
-            {isVicePersident && (
+            {isHeadSecretary && (
                 <Col span={24}>
                     <Flex justify="flex-end" align="center" gap={8} className="pb-2">
                         <Button
@@ -453,7 +453,7 @@ export default function AssigmentOfAssessmentTab() {
                                         >
                                             <Select
                                                 placeholder="Chọn giảng viên"
-                                                disabled={!isVicePersident}
+                                                disabled={!isHeadSecretary}
                                                 onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
@@ -484,7 +484,7 @@ export default function AssigmentOfAssessmentTab() {
                             },
                             {
                                 title: 'Hạn hoàn thành',
-                                width: 90,
+                                width: 120,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
@@ -494,7 +494,7 @@ export default function AssigmentOfAssessmentTab() {
                                             <DatePicker
                                                 className="w-full"
                                                 format={'DD/MM/YYYY'}
-                                                disabled={!isVicePersident}
+                                                disabled={!isHeadSecretary}
                                                 onClick={(e) => e.stopPropagation()}
                                                 disabledDate={(current) =>
                                                     current?.isBefore(dayjs(), 'day')
