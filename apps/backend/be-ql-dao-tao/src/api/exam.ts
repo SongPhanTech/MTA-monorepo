@@ -121,23 +121,25 @@ app.openapi(createNewExamList, async (c) => {
     }))
 
     await prisma.$transaction(async (tx) => {
-        await tx.exam.createMany({
-            data: groupedExams.map(({ examId, subjectId, roomId, count }) => ({
-                id: examId,
-                subjectVersionId: subjectId,
-                semesterId,
-                ...(roomId
-                    ? {
-                          examRooms: {
-                              create: {
-                                  roomId,
-                                  capacity: count,
+        for (const { examId, subjectId, roomId, count } of groupedExams) {
+            await tx.exam.create({
+                data: {
+                    id: examId,
+                    subjectVersionId: subjectId,
+                    semesterId,
+                    ...(roomId
+                        ? {
+                              examRooms: {
+                                  create: {
+                                      roomId,
+                                      capacity: count,
+                                  },
                               },
-                          },
-                      }
-                    : {}),
-            })),
-        })
+                          }
+                        : {}),
+                },
+            })
+        }
         for (const { classIds, examId } of groupedExams) {
             await tx.subjectClass.updateMany({
                 where: { id: { in: classIds } },

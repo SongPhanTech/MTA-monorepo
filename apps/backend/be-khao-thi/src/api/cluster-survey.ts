@@ -478,7 +478,7 @@ const getOrganizationSurveyStatistics = createRoute({
 
 app.openapi(getOrganizationSurveyStatistics, async (c) => {
     const { id } = c.req.valid('param')
-    const {  organizationId,...q } = c.req.valid('query')
+    const { organizationId, ...q } = c.req.valid('query')
     const cluster = await prisma.clusterSurvey.findUnique({
         where: { id },
         include: {
