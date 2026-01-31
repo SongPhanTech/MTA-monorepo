@@ -10,6 +10,7 @@ interface ExportOptions {
     showSpinner: () => void
     hideSpinner: () => void
     message: any // Antd message instance
+    inAcademy? : boolean
 }
 interface GmcLvPbData {
     data: {
@@ -100,8 +101,10 @@ interface ThanhToanHuongDanTrongHvData {
         nam: string
         khoa: string
         dotXet: string
-        khoaQuanLy: string
+        khoaQuanLi: string
         soHocVien: string
+        tongTienSo:number
+        tongTienChu:string
         data: ThanhToanHuongDanTrongHvTable[]
     }
 }
@@ -110,10 +113,12 @@ interface ThanhToanHuongDanTrongHvTable {
     quyetDinh: string
     thongTinHuongDan: string
     thongTinBaoVe: string
-    thongTinKhoa: number
-    thongTinThanhToan: number
+    thongTinKhoa: string
+    thongTinThanhToan: string
     thongTinStk: string
     thongTinBank: string
+    thongtinKyNhan:string
+    tienThanhToan:number
 }
 
 export const exportPhuLucDsLuanVan = async ({
@@ -1055,7 +1060,7 @@ const tenDoiTuong = {
         shortname: 'QSQT',
     },
 }
-export const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
+ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
     if (!allStudentsInClasses?.length) return []
 
     const now = dayjs()
@@ -1325,7 +1330,7 @@ export const exportThongKeCbThamGiaHd = async ({
         hideSpinner?.()
     }
 }
-export const convertToThongKeCbThamGiaHdData = (
+ const convertToThongKeCbThamGiaHdData = (
     allStudentsInClasses: any[]
 ): ThongKeCbThamGiaHdData[] => {
     if (!allStudentsInClasses || allStudentsInClasses.length === 0) return []
@@ -1440,6 +1445,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
     showSpinner,
     hideSpinner,
     message,
+    inAcademy
 }: ExportOptions) => {
     if (!allStudentsInClasses?.length) {
         message.error('Không có dữ liệu để xuất thanh toán hướng dẫn')
@@ -1452,11 +1458,13 @@ export const exportThanhToanHuongDanTrongHv = async ({
             message.error('Chưa có dữ liệu để xuất thanh toán hướng dẫn')
             return []
         }
+        const fileName = inAcademy ? 'ThanhToanHuongDanTrongHv' : 'ThanhToanHuongDanNgoaiHV'
+        const path = inAcademy ? 'ThanhToanHuongDanTrongHV.xlsx' : 'ThanhToanHuongDanNgoaiHV.xlsx'
         const payload: ExcelTemplateBody = {
             head: { data: null },
             tail: { data: null },
-            fileName: 'ThanhToanHuongDanTrongHv',
-            path: 'ThanhToanHuongDanTrongHV.xlsx',
+            fileName: fileName,
+            path: path,
             payload: dataConvert,
             showGridLines: true,
             wrapText: true,
@@ -1467,7 +1475,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
             return []
         }
         const blob = response.data
-        downloadFile(blob, 'ThanhToanHuongDanTrongHv.xlsx')
+        downloadFile(blob, `${fileName}.xlsx`)
         message.success('Xuất file thành công')
     } catch (error) {
         message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -1475,7 +1483,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
         hideSpinner?.()
     }
 }
-export const convertToThanhToanHuongDanTrongHvData = (
+ const convertToThanhToanHuongDanTrongHvData = (
     allStudentsInClasses: any[]
 ): ThanhToanHuongDanTrongHvData[] => {
     if (!allStudentsInClasses?.length) {
@@ -1499,8 +1507,10 @@ export const convertToThanhToanHuongDanTrongHvData = (
                     nam: now.format('YYYY'),
                     khoa: student.fixedClass?.trainingCourse?.name || '',
                     dotXet: project.thesisSession?.name || '',
-                    khoaQuanLy: orgName,
+                    khoaQuanLi: orgName,
                     soHocVien: '0',
+                    tongTienSo: 0,
+                    tongTienChu: '',
                     data: [],
                 },
             })
@@ -1513,6 +1523,7 @@ export const convertToThanhToanHuongDanTrongHvData = (
         const qdDate = project.thesisSession?.defenseDecisionDate
             ? dayjs(project.thesisSession.defenseDecisionDate).format('DD/MM/YYYY')
             : '.../.../....'
+            console.log('project',project.thesisSession)
         const quyetDinh = `${qdNum} \n ngày ${qdDate}`
 
         const gv1 = project.supervisor?.name
@@ -1531,25 +1542,29 @@ export const convertToThanhToanHuongDanTrongHvData = (
 
         const amount1 = Number(project.supervisorPayment?.amount || 0)
         const amount2 = Number(project.coSupervisorPayment?.amount || 0)
-        const tongThanhToan = amount1 + amount2
-
+      
         const stk1 = project.supervisor?.bankAccountNumber || ''
         const stk2 = project.coSupervisor?.bankAccountNumber || ''
         const bank1 = project.supervisor?.bankName || ''
         const bank2 = project.coSupervisor?.bankName || ''
-
+        const tienThanhToan = (amount1 + amount2 === 0) ? 0 : amount1 + amount2
+        const thongTinThanhToan = (amount1 + amount2 === 0) ? '' : `${amount1}\n${amount2}`
         currentGroup.data.data.push({
             stt: currentGroup.data.data.length + 1,
             quyetDinh: quyetDinh,
             thongTinHuongDan: thongTinHuongDan,
             thongTinBaoVe: student.userProfile?.fullname || '',
-            thongTinKhoa: thongTinKhoaStr as any,
-            thongTinThanhToan: tongThanhToan,
+            thongTinKhoa: thongTinKhoaStr,
+            thongTinThanhToan: thongTinThanhToan,
             thongTinStk: gv1 && gv2 ? `${stk1}\n${stk2}` : stk1 || stk2,
             thongTinBank: gv1 && gv2 ? `${bank1}\n${bank2}` : bank1 || bank2,
+            thongtinKyNhan: '',
+            tienThanhToan: tienThanhToan,
         })
 
         currentGroup.data.soHocVien = currentGroup.data.data.length.toString()
+        currentGroup.data.tongTienSo += tienThanhToan || 0;
+        currentGroup.data.tongTienChu = Number(currentGroup.data.tongTienSo).toVndWord('đồng')
     })
 
     return Array.from(organizationMap.values())
