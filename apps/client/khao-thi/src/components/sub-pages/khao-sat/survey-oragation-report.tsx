@@ -1,15 +1,17 @@
 import useSpinner from '@hooks/spinner'
 import { useGetClusterSurveyStatisticsForOrganization } from '@workspace/libs/api/exam'
-import { Button, Col, Empty, Row, Typography } from 'antd'
+import { Button, Col, Dropdown, Empty, Row, Typography } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 // @ts-nocheck
 import ReactECharts from 'echarts-for-react'
-import { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
+import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
 import Table from '@components/commons/table'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import HtmlTruncate from '@components/commons/html-truncate'
+import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 const { Title } = Typography
 
 export interface CriteriaItem {
@@ -28,12 +30,24 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function SurveyOrganizationReport({
     selectedId,
     organizationId,
+    surveyName,
+    trainingObjectTypeName,
+    organizationCode,
+    organizationName,
 }: {
     selectedId: string
     organizationId: string
+    surveyName?: string
+    trainingObjectTypeName?: string
+    organizationCode?: string
+    organizationName?: string
 }) {
+    console.log('trainingObjectTypeName:', trainingObjectTypeName)
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
+    const { onOpen } = useDisclosure({
+        tag: 'ModalPrintSurveyOrganization',
+    })
 
     const { data: dataLevel } = useGetClusterSurveyStatisticsForOrganization(selectedId as string, {
         organizationId,
@@ -391,19 +405,44 @@ function SurveyOrganizationReport({
                         <div className="p-4 flex justify-between">
                             <Title level={4}>Thống kê theo từng Câu hỏi</Title>
                             {dataLevel?.status === 200 && (
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        exportTemplate(
-                                            'Bao_cao_khao_sat',
-                                            dataLevel?.data?.data?.questions,
-                                            dataLevel?.data?.data
-                                        )
+                                <Dropdown
+                                    trigger={['click']}
+                                    menu={{
+                                        items: [
+                                            {
+                                                key: 'export',
+                                                icon: <FileExcelOutlined />,
+                                                label: 'Xuất báo cáo',
+                                                onClick: () => {
+                                                    exportTemplate(
+                                                        `Bao_cao_khao_sat_${surveyName}`,
+                                                        dataLevel?.data?.data?.questions,
+                                                        dataLevel?.data?.data
+                                                    )
+                                                },
+                                            },
+                                            {
+                                                key: 'print',
+                                                icon: <PrinterOutlined />,
+                                                label: 'In báo cáo',
+                                                onClick: () => {
+                                                    onOpen({
+                                                        surveyName,
+                                                        trainingObjectTypeName,
+                                                        questions: dataLevel?.data?.data?.questions,
+                                                        chartOption: dataBarchart,
+                                                        organizationCode: organizationCode,
+                                                        organizationName:organizationName,
+                                                    })
+                                                },
+                                            },
+                                        ],
                                     }}
-                                    size="small"
                                 >
-                                    Xuất báo cáo
-                                </Button>
+                                    <Button type="primary" size="small">
+                                        Xuất báo cáo <DownOutlined />
+                                    </Button>
+                                </Dropdown>
                             )}
                         </div>
                         <div className="flex-1 mb-6">
@@ -412,7 +451,15 @@ function SurveyOrganizationReport({
                                 <div style={{ width: '100%', height: '100%' }}>
                                     <ReactECharts
                                         option={dataBarchart}
-                                        className="w-full min-h-[400px]"
+                                        style={{
+                                            width: '100%',
+                                            height: Math.max(
+                                                300,
+                                                (dataLevel?.data?.data?.questions?.length || 0) *
+                                                    35 +
+                                                    120
+                                            ),
+                                        }}
                                     />
                                     {dataLevel?.data?.data?.questions?.length > 0 &&
                                         renderTable(dataLevel?.data?.data?.questions)}

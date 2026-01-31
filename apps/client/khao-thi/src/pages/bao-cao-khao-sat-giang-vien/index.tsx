@@ -12,7 +12,7 @@ import { useMemo, useState } from 'react'
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
-import { FolderOpenOutlined } from '@ant-design/icons'
+import { FolderOpenOutlined, UserOutlined } from '@ant-design/icons'
 import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
 import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
@@ -45,6 +45,7 @@ function buildOrgAndLectureTree(
                         ...lecturer,
                         title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
                         key: `${lecturer.id}`,
+                        icon: <UserOutlined />,
                     })),
                 ...buildOrgAndLectureTree(list, lecturers, item.id),
             ],
@@ -65,7 +66,7 @@ export default function BaoCaoGiangVien() {
     const [selectedItem, setSelectedItem] = useState<any>()
 
     const { id: semesterId } = useSemesterStore()
-    const { id: trainingObjectTypeId } = useTrainingMajorStore()
+    const { id: trainingObjectTypeId, name: trainingObjectTypeName } = useTrainingMajorStore()
 
     const { data = [], refetch } = useFindManyClusterSurvey({
         where: {
@@ -175,6 +176,7 @@ export default function BaoCaoGiangVien() {
                         selectedId={filters?.clusterId}
                         surveyName={filters?.name || ''}
                         organizationId={selectedItem?.id}
+                        trainingObjectTypeName={trainingObjectTypeName}
                     />
                 )
             }
@@ -183,6 +185,10 @@ export default function BaoCaoGiangVien() {
                     <SurveyOrganizationReport
                         selectedId={filters?.clusterId}
                         organizationId={selectedItem?.id}
+                        surveyName={filters.name}
+                        trainingObjectTypeName={trainingObjectTypeName}
+                        organizationCode={selectedItem?.sMa}
+                        organizationName={selectedItem?.sTen}
                     />
                 )
             }
@@ -192,6 +198,7 @@ export default function BaoCaoGiangVien() {
                     <SurveylecturerReport
                         selectedId={filters?.clusterId}
                         lectureId={selectedItem?.id}
+                        surveyName={filters.name}
                     />
                 )
             }
@@ -236,7 +243,7 @@ export default function BaoCaoGiangVien() {
             // )
         }
         return
-    }, [filters, selectedItem])
+    }, [filters, selectedItem, trainingObjectTypeName])
     return (
         <Row gutter={[16, 4]}>
             <Col span={24}>
@@ -275,6 +282,11 @@ export default function BaoCaoGiangVien() {
                     onSelect={(key, info) => {
                         setSelectedKeys(key)
                         setSelectedItem(info.node)
+
+                        setFilters((prev: any) => ({
+                            ...prev,
+                            name: info.node?.userProfile?.fullName || info.node?.name || '',
+                        }))
                     }}
                 />
             </Col>

@@ -45,6 +45,8 @@ import MoveQuestionModal from './modal-chuyen-question'
 import PickQuestionFromBankModal from './pick-question-from-bank-modal'
 import QuestionListByKnowledgeBlockModal from './modal-question-by-knowledge'
 import ExportExcelModal from './export-data-modal'
+import ModalPrintBaoCaoDonVi from './modal-print-bao-cao-don-vi';
+import ModalPrintSurveyOrganization from './modal-print-survey-organization-report';
 
 export {
     ConfirmModal,
@@ -94,4 +96,6 @@ export {
     PickQuestionFromBankModal,
     QuestionListByKnowledgeBlockModal,
     ExportExcelModal,
+    ModalPrintBaoCaoDonVi,
+    ModalPrintSurveyOrganization,
 }
