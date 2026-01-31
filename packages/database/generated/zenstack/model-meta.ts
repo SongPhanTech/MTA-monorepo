@@ -8902,12 +8902,15 @@ const metadata: ModelMeta = {
                 }, score: {
                     name: "score",
                     type: "Float",
+                    isOptional: true,
                 }, issuedBy: {
                     name: "issuedBy",
                     type: "String",
+                    isOptional: true,
                 }, issuedDate: {
                     name: "issuedDate",
                     type: "DateTime",
+                    isOptional: true,
                 }, expiredDate: {
                     name: "expiredDate",
                     type: "DateTime",
