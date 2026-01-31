@@ -3,7 +3,7 @@ import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
 const { Title } = Typography
@@ -27,25 +27,21 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function OrganizationSurveyReport({
     selectedId,
     surveyName,
+    organizationId,
     // organizationSelected,
     // setOrganizationSelected,
 }: {
     selectedId: string
     surveyName: string
+    organizationId: string
     // organizationSelected: string
     // setOrganizationSelected: (value: string) => void
 }) {
     const router = useRouter()
-    const [organization, setOrganization] = useState<string[]>([])
 
-    const { data: dataLevel } = useGetOrganizationSurveyStatistics(
-        selectedId as string,
-        organization?.length > 0
-            ? {
-                  organizations: organization.join(','),
-              }
-            : {}
-    )
+    const { data: dataLevel } = useGetOrganizationSurveyStatistics(selectedId as string, {
+        organizationId,
+    })
     // const { data: organizations = [] } = useFindManyDM_DonVi()
     // const treeData = buildOrgTree(organizations)
 

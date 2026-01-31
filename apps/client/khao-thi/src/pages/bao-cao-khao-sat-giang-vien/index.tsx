@@ -174,6 +174,7 @@ export default function BaoCaoGiangVien() {
                     <OrganizationSurveyReport
                         selectedId={filters?.clusterId}
                         surveyName={filters?.name || ''}
+                        organizationId={selectedItem?.id}
                     />
                 )
             }
