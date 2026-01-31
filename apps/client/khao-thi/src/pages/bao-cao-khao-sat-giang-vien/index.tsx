@@ -16,7 +16,7 @@ import { FolderOpenOutlined } from '@ant-design/icons'
 import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
 import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
-import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi';
+import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 
 interface MyTreeNode {
     title: string
@@ -169,9 +169,9 @@ export default function BaoCaoGiangVien() {
             return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
         }
         if (filters?.clusterId) {
-        if (selectedItem?.id && selectedItem?.iCapDonVi===0) {
+            if (selectedItem?.id && selectedItem?.iCapDonVi === 0) {
                 return (
-                     <OrganizationSurveyReport
+                    <OrganizationSurveyReport
                         selectedId={filters?.clusterId}
                         surveyName={filters?.name || ''}
                     />
@@ -185,10 +185,10 @@ export default function BaoCaoGiangVien() {
                     />
                 )
             }
-      
-              if (selectedItem?.id && !selectedItem?.iCapDonVi) {
+
+            if (selectedItem?.id && !selectedItem?.iCapDonVi) {
                 return (
-                      <SurveylecturerReport
+                    <SurveylecturerReport
                         selectedId={filters?.clusterId}
                         lectureId={selectedItem?.id}
                     />

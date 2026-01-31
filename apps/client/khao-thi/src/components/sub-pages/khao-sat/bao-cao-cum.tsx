@@ -35,9 +35,7 @@ function ClusterSurveyReport({
 }) {
     const router = useRouter()
 
-    const { data: dataLevel } = useGetLectureSurveyStatistics(
-        selectedId as string,
-    )
+    const { data: dataLevel } = useGetLectureSurveyStatistics(selectedId as string)
     const { data: organizations = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
 
