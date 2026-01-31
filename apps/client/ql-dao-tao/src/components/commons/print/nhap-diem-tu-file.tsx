@@ -64,8 +64,8 @@ const ImportScoreModal = ({
             // Format dữ liệu theo cấu trúc mong muốn
             const formattedData = tableData
                 .map((row) => {
-                    const attendanceScore = Number.parseFloat(row.__EMPTY_4) // Điểm CC
-                    const midtermScore = Number.parseFloat(row.__EMPTY_5) // Điểm TX
+                    const attendanceScore = Number.parseFloat(row.__EMPTY_4) // Điểm TX
+                    const midtermScore = Number.parseFloat(row.__EMPTY_5) // Điểm ĐK
                     const examScore = Number.parseFloat(row.__EMPTY_6) // Điểm thi
                     const id = existingStudents.find((s) => s.student?.code === row.__EMPTY)?.id
 
@@ -140,8 +140,8 @@ const ImportScoreModal = ({
                 }
             }
 
-            checkScoreRange(item.attendanceScore, 'Điểm CC')
-            checkScoreRange(item.midtermScore, 'Điểm TX')
+            checkScoreRange(item.attendanceScore, 'Điểm TX')
+            checkScoreRange(item.midtermScore, 'Điểm ĐK')
             checkScoreRange(item.examScore, 'Điểm thi')
         })
 
@@ -182,7 +182,7 @@ const ImportScoreModal = ({
             key: 'className',
         },
         {
-            title: 'Điểm CC',
+            title: 'Điểm TX',
             dataIndex: 'attendanceScore',
             key: 'attendanceScore',
             render: (score: number) => (
@@ -196,7 +196,7 @@ const ImportScoreModal = ({
             ),
         },
         {
-            title: 'Điểm TX',
+            title: 'Điểm ĐK',
             dataIndex: 'midtermScore',
             key: 'midtermScore',
             render: (score: number) => (

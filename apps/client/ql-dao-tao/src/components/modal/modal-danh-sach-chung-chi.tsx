@@ -89,7 +89,7 @@ const ModalDanhSachChungChi = () => {
                         render: (__, cert) => cert?.certificate?.name || '',
                     },
                     {
-                        title: 'Điểm CC',
+                        title: 'Điểm TX',
                         dataIndex: 'score',
                         align: 'center',
                         width: 100,

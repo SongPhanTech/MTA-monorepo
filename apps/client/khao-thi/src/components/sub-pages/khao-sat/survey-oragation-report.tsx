@@ -286,27 +286,30 @@ function SurveyOrganizationReport({
 
     const renderTable = (dataTable: any) => {
         if (!dataTable?.length) return
-        let average =dataTable[0]?.answers.map((i:any)=>{
-            return {...i,total:0,count:0}
-        });
-        dataTable.forEach((e:any) => {
+        let average = dataTable[0]?.answers.map((i: any) => {
+            return { ...i, total: 0, count: 0 }
+        })
+        dataTable.forEach((e: any) => {
             average = average.map((i: any) => {
                 return {
                     ...i,
                     total: i.total + e.answers.find((a: any) => a.id === i.id)?.total,
                     count: i.count + e.answers.find((a: any) => a.id === i.id)?.count,
                 }
-            });
-        });
-        const datarender=[...dataTable,{
-            name:'Trung bình',
-            answers:average,
-            id:'average'
-        }]
-        
+            })
+        })
+        const datarender = [
+            ...dataTable,
+            {
+                name: 'Trung bình',
+                answers: average,
+                id: 'average',
+            },
+        ]
+
         return (
             <Table
-                rowKey={"id"}
+                rowKey={'id'}
                 columns={
                     dataTable?.length > 0
                         ? [
@@ -322,14 +325,20 @@ function SurveyOrganizationReport({
                                   align: 'center',
                                   width: 100,
                                   render: (_, record, index) => {
-                                      return index===datarender.length-1?'ĐGTB': `Câu hỏi ${index + 1}`
+                                      return index === datarender.length - 1
+                                          ? 'ĐGTB'
+                                          : `Câu hỏi ${index + 1}`
                                   },
                               },
                               {
                                   title: 'Nội dung câu hỏi',
                                   align: 'left',
                                   render: (_, record, index) => {
-                                      return index===datarender.length-1?'':<HtmlTruncate>{record?.name}</HtmlTruncate>
+                                      return index === datarender.length - 1 ? (
+                                          ''
+                                      ) : (
+                                          <HtmlTruncate>{record?.name}</HtmlTruncate>
+                                      )
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
@@ -384,16 +393,13 @@ function SurveyOrganizationReport({
                             {dataLevel?.status === 200 && (
                                 <Button
                                     type="primary"
-                                    onClick={
-                                        () => {
-                                              exportTemplate(
+                                    onClick={() => {
+                                        exportTemplate(
                                             'Bao_cao_khao_sat',
                                             dataLevel?.data?.data?.questions,
                                             dataLevel?.data?.data
                                         )
-                                        }
-                                      
-                                    }
+                                    }}
                                     size="small"
                                 >
                                     Xuất báo cáo

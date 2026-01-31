@@ -621,7 +621,7 @@ const PutOneSubjectClassModal = () => {
                                 <FormItem
                                     form={form}
                                     name="scoreDeadLineStart"
-                                    label="Hạn bắt đầu nhập điểm CC/TX"
+                                    label="Hạn bắt đầu nhập điểm TX/ĐK"
                                 >
                                     <DatePicker
                                         disabled
@@ -634,7 +634,7 @@ const PutOneSubjectClassModal = () => {
                                 <FormItem
                                     form={form}
                                     name="scoreDeadline"
-                                    label="Hạn kết thúc nhập điểm CC/TX"
+                                    label="Hạn kết thúc nhập điểm TX/ĐK"
                                 >
                                     <DatePicker
                                         disabled
@@ -834,18 +834,18 @@ const PutOneSubjectClassModal = () => {
                                     type: 'input',
                                     render: (_, record) => record.student?.fixedClass?.code || '',
                                 },
-                                // #region Điểm CC
+                                // #region Điểm TX
                                 {
-                                    title: 'Điểm CC',
+                                    title: 'Điểm TX',
                                     dataIndex: 'attendanceScore',
                                     width: 100,
                                     align: 'center',
                                     type: 'order',
                                     render: (_, record) => record.attendanceScore ?? '',
                                 },
-                                // #region Điểm TX
+                                // #region Điểm ĐK
                                 {
-                                    title: 'Điểm TX',
+                                    title: 'Điểm ĐK',
                                     dataIndex: 'midtermScore',
                                     width: 100,
                                     align: 'center',

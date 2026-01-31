@@ -26,7 +26,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { $Enums, type Prisma } from '@workspace/db/client'
 import { saveAs } from 'file-saver'
 import { whereOrganization } from '@workspace/libs/constants'
-import { cn } from '@workspace/ui/lib/utils';
+import { cn } from '@workspace/ui/lib/utils'
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -1457,12 +1457,12 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                             render: (_, record) => {
                                 return (
                                     <p
-                                    className={cn(
-                                        record?.deadline && dayjs().isAfter(dayjs(record.deadline))
-                                            ? 'text-red-600'
-                                            : ''
-                                    )}
-                                        
+                                        className={cn(
+                                            record?.deadline &&
+                                                dayjs().isAfter(dayjs(record.deadline))
+                                                ? 'text-red-600'
+                                                : ''
+                                        )}
                                     >
                                         {record?.deadline
                                             ? dayjs(record.deadline).format('DD/MM/YYYY')

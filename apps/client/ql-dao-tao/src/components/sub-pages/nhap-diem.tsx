@@ -1023,9 +1023,9 @@ export default function NhapDiem({
                                 type: 'input',
                                 render: (_, record) => record.student?.fixedClass?.code || '',
                             },
-                            // #region Điểm CC
+                            // #region Điểm TX
                             {
-                                title: 'Điểm CC',
+                                title: 'Điểm TX',
                                 dataIndex: 'attendanceScore',
                                 width: 65,
                                 align: 'center',
@@ -1065,9 +1065,9 @@ export default function NhapDiem({
                                     )
                                 },
                             },
-                            // #region Điểm TX
+                            // #region Điểm ĐK
                             {
-                                title: 'Điểm TX',
+                                title: 'Điểm ĐK',
                                 dataIndex: 'midtermScore',
                                 width: 65,
                                 align: 'center',

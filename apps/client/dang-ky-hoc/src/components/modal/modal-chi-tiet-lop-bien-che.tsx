@@ -545,7 +545,7 @@ export default function ModalChiTietLopBienChe() {
                             align: 'center',
                         },
                         {
-                            title: 'Hạn nhập điểm CC/TX',
+                            title: 'Hạn nhập điểm TX/ĐK',
                             dataIndex: 'scoreDeadline',
                             width: 150,
                             align: 'center',
@@ -561,7 +561,7 @@ export default function ModalChiTietLopBienChe() {
                                 value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
                         },
                         {
-                            title: 'Khóa điểm CC/TX',
+                            title: 'Khóa điểm TX/ĐK',
                             dataIndex: 'isLockScore',
                             width: 100,
                             align: 'center',
@@ -577,7 +577,7 @@ export default function ModalChiTietLopBienChe() {
                                 value ? <Tag color="error">Đã khóa</Tag> : <Tag>Chưa khóa</Tag>,
                         },
                         {
-                            title: 'Đã nhập điểm CC/TX',
+                            title: 'Đã nhập điểm TX/ĐK',
                             dataIndex: 'enteredScore',
                             width: 120,
                             align: 'center',

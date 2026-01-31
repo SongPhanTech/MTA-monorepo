@@ -457,14 +457,14 @@ const HoSoCaNhan = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm CC',
+                            title: 'Điểm TX',
                             dataIndex: 'attendanceScore',
                             width: 90,
                             align: 'center',
                             render: (score) => (score ? Number(score).toFixedSmart(2) : ''),
                         },
                         {
-                            title: 'Điểm TX',
+                            title: 'Điểm ĐK',
                             dataIndex: 'midtermScore',
                             width: 90,
                             align: 'center',

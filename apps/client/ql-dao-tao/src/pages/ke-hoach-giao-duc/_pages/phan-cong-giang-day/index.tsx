@@ -2093,7 +2093,7 @@ export default function PhanCongGiangDay({
                                 // },
 
                                 // {
-                                //     title: 'Hạn nhập điểm CC/TX',
+                                //     title: 'Hạn nhập điểm TX/ĐK',
                                 //     width: 200,
                                 //     align: 'center',
                                 //     render: (value) => (value ? formatDate(value) : ''),

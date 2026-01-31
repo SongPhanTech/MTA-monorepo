@@ -209,8 +209,8 @@ const ExportScoreTemplate = ({
             'Họ và tên',
             'Ngày sinh',
             'Tên lớp',
-            'Điểm CC',
             'Điểm TX',
+            'Điểm ĐK',
             'Điểm thi',
         ]
 
@@ -289,8 +289,8 @@ const ExportScoreTemplate = ({
             { width: 30 }, // Họ tên
             { width: 20 }, // Ngày sinh
             { width: 20 }, // Tên lớp
-            { width: 15 }, // Điểm CC
             { width: 15 }, // Điểm TX
+            { width: 15 }, // Điểm ĐK
             { width: 15 }, // Điểm Thi
         ]
         if (type !== 'THI') {

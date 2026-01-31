@@ -697,7 +697,7 @@ export default function ThoiKhoaBieu({
                                         record.examDate ? formatDate(record.examDate) : '',
                                 },
                                 // {
-                                //     title: 'Hạn nhập điểm CC/TX',
+                                //     title: 'Hạn nhập điểm TX/ĐK',
                                 //     width: 200,
                                 //     align: 'center',
                                 //     render: (value) => (value ? formatDate(value) : ''),

@@ -177,7 +177,7 @@ const ModalLearningResult = () => {
                             render: (_, record) => record?.attendanceScore,
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             width: 80,
                             align: 'center',
                             render: (_, record) => record?.midtermScore,
@@ -244,7 +244,7 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             dataIndex: 'midtermScore',
                             width: 80,
                             align: 'center',
@@ -312,7 +312,7 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             dataIndex: 'midtermScore',
                             width: 80,
                             align: 'center',

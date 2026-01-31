@@ -223,7 +223,7 @@ export default function SubjectClassScore() {
                                 marginBottom: 16,
                             }}
                         >
-                            Hạn nhập điểm CC, TX tự động đặt là trước ngày thi 1 tuần, hạn nhập điểm
+                            Hạn nhập điểm TX, ĐK tự động đặt là trước ngày thi 1 tuần, hạn nhập điểm
                             thi tự động đặt là trước ngày thi lớp 1 tuần
                         </p>
                         <Table

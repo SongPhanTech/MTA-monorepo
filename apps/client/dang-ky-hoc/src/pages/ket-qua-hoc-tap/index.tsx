@@ -652,7 +652,7 @@ export default function StudentScoreClassPage() {
                                     record?.subjectClassStudent?.[0]?.subjectVersion.name,
                             },
                             {
-                                title: 'Điểm CC',
+                                title: 'Điểm TX',
                                 align: 'center',
                                 dataIndex: 'attendanceScoreCmp',
                                 type: 'cmp',
@@ -661,7 +661,7 @@ export default function StudentScoreClassPage() {
                                     record?.subjectClassStudent?.[0]?.attendanceScore,
                             },
                             {
-                                title: 'Điểm TX',
+                                title: 'Điểm ĐK',
                                 align: 'center',
                                 dataIndex: 'midtermScoreCmp',
                                 type: 'cmp',

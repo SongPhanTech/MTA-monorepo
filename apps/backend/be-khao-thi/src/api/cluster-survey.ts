@@ -861,7 +861,6 @@ app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
     return c.json(data, 200)
 })
 
-
 const getClusterSurveyStatisticsForHocVien = createRoute({
     operationId: 'get-cluster-survey-statistics-for-all',
     path: '/{id}/statistics-for-all',
@@ -902,10 +901,10 @@ app.openapi(getClusterSurveyStatisticsForHocVien, async (c) => {
     const organizations = await prisma.dM_DonVi.findMany({
         where: {
             sParentId: organizationId,
-        }
+        },
     })
 
-    if(organizations?.length<=0){
+    if (organizations?.length <= 0) {
         return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
     }
 
@@ -923,7 +922,7 @@ app.openapi(getClusterSurveyStatisticsForHocVien, async (c) => {
                     lecture: {
                         organizationId: {
                             in: organizations?.length
-                                ? [...organizations.map((i) => i.Id),organizationId]
+                                ? [...organizations.map((i) => i.Id), organizationId]
                                 : [organizationId],
                         },
                     },
@@ -946,7 +945,9 @@ app.openapi(getClusterSurveyStatisticsForHocVien, async (c) => {
     const listData = await getSurveyStatsforDonVi(
         prisma,
         id,
-        organizations?.length > 0 ? [...organizations.map((i) => i.Id),organizationId] : [organizationId],
+        organizations?.length > 0
+            ? [...organizations.map((i) => i.Id), organizationId]
+            : [organizationId],
         cluster.surveyQuestion,
         cluster.surveyChoice
     )

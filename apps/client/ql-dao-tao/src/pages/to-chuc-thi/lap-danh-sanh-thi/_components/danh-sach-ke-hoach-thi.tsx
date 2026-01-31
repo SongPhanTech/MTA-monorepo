@@ -704,7 +704,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     return record.subjectClass?.[0]?.enteredExamScore ? (
                                         'Đã nhập điểm thi'
                                     ) : record.subjectClass?.[0]?.enteredScore ? (
-                                        'Đã nhập điểm TX,CC'
+                                        'Đã nhập điểm TX,ĐK'
                                     ) : (
                                         <div className="text-red-500">Chưa nhập điểm</div>
                                     )

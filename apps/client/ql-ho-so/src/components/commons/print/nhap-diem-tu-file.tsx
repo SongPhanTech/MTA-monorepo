@@ -57,8 +57,8 @@ const ImportScoreModal = ({
                     studentName: row.__EMPTY_1, // Họ và Tên
                     dobStudent: row.__EMPTY_2, // Ngày sinh
                     className: row.__EMPTY_3, // Tên lớp
-                    attendanceScore: Number.parseFloat(row.__EMPTY_4) || 0, // Điểm CC
-                    midtermScore: Number.parseFloat(row.__EMPTY_5) || 0, // Điểm TX
+                    attendanceScore: Number.parseFloat(row.__EMPTY_4) || 0, // Điểm TX
+                    midtermScore: Number.parseFloat(row.__EMPTY_5) || 0, // Điểm ĐK
                     examScore: Number.parseFloat(row.__EMPTY_6) || 0, // Điểm thi
                 }))
                 .filter((item: any) => item.studentCode) // Lọc các dòng trống
@@ -124,8 +124,8 @@ const ImportScoreModal = ({
                 }
             }
 
-            checkScoreRange(item.attendanceScore, 'Điểm CC')
-            checkScoreRange(item.midtermScore, 'Điểm TX')
+            checkScoreRange(item.attendanceScore, 'Điểm TX')
+            checkScoreRange(item.midtermScore, 'Điểm ĐK')
             checkScoreRange(item.examScore, 'Điểm thi')
         })
 
@@ -166,7 +166,7 @@ const ImportScoreModal = ({
             key: 'className',
         },
         {
-            title: 'Điểm CC',
+            title: 'Điểm TX',
             dataIndex: 'attendanceScore',
             key: 'attendanceScore',
             render: (score: number) => (
@@ -180,7 +180,7 @@ const ImportScoreModal = ({
             ),
         },
         {
-            title: 'Điểm TX',
+            title: 'Điểm ĐK',
             dataIndex: 'midtermScore',
             key: 'midtermScore',
             render: (score: number) => (

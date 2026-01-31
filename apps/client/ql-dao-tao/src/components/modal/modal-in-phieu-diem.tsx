@@ -270,7 +270,7 @@ const ModalPrintStudentSubjectScore = () => {
                 value: firstTrainingCourse?.coef_1 ?? '-',
             },
             {
-                title: 'Hệ số điểm thường xuyên:',
+                title: 'Hệ số điểm định kỳ:',
                 value: firstTrainingCourse?.coef_2 ?? '-',
             },
             {
