@@ -145,6 +145,11 @@ export default function QuestionBankLite({
                             size="middle"
                             onClick={() => {
                                 if (!examFrameworkId || !matrixId) return
+                                store.setState((s) => ({
+                                    ...s,
+                                    matrixId,
+                                }))
+                                localStorage.setItem('currentMatrixId', matrixId)
                                 onOpenPickQuestionFromBank({
                                     examFrameworkId: examFrameworkId,
                                     matrixId: matrixId,

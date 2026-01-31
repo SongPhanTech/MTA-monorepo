@@ -185,7 +185,6 @@ export const SqlTransactionBodyItemModel = {
     EvaluationCriterion: 'EvaluationCriterion',
     RequirementCriterion: 'RequirementCriterion',
     AnalysisFormEvidence: 'AnalysisFormEvidence',
-    EvaluationMemberRole: 'EvaluationMemberRole',
     EvaluationCouncil: 'EvaluationCouncil',
     EvaluationCouncilMember: 'EvaluationCouncilMember',
     EvidenceFile: 'EvidenceFile',

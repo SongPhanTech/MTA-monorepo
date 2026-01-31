@@ -23,6 +23,8 @@ import ExportReport from './export-report'
 import { useSchoolYearStore } from '@components/selecter-school-year'
 import type { Prisma } from '@workspace/db/client'
 import { cn } from '@lib/utils'
+import type { UploadedFileItem } from '@components/commons/documentPaths'
+import { getMinioUrl } from '@workspace/libs/utils'
 
 export type EvaluationPeriodType = Prisma.EvaluationPeriodGetPayload<{
     include: {
@@ -147,6 +149,27 @@ export default function EvaluationPeriod() {
         },
     })
 
+    const { onOpen: onOpenPreview } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+    }>({
+        tag: 'XemTaiLieu',
+    })
+
+    const handlePreviewFile = async (file: UploadedFileItem) => {
+        try {
+            return onOpenPreview({
+                uri: getMinioUrl(file.path),
+                name: file.name,
+                mimeType: file.name.split('.').pop() || file.mimeType,
+            })
+        } catch (error) {
+            console.error('Error opening file:', error)
+            message.error('Không thể mở file')
+        }
+    }
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
@@ -213,7 +236,7 @@ export default function EvaluationPeriod() {
                                 },
                                 className: cn(
                                     selectedEvaluationPeriodId === record.id
-                                        ? 'bg-orange-200 hover:bg-orange-200'
+                                        ? '!bg-orange-200 hover:!bg-orange-200 [&>td]:!bg-orange-200 [&>td]:hover:!bg-orange-200'
                                         : ''
                                 ),
                             }
@@ -281,34 +304,11 @@ export default function EvaluationPeriod() {
                                         : '',
                             },
                             {
-                                title: 'Mô tả',
-                                align: 'center',
-                                width: 150,
-                                dataIndex: 'description',
-                                render: (value: string) => {
-                                    return <div className="line-clamp-2">{value}</div>
-                                },
-                            },
-                            {
                                 title: 'Tài liệu hội đồng',
                                 align: 'center',
                                 width: 120,
                                 render: (_, record) => record?._count?.documentFiles || 0,
                             },
-                            // {
-                            //     title: 'Trạng thái',
-                            //     align: 'center',
-                            //     width: 130,
-                            //     render: (_, record) => {
-                            //         const statusInfo =
-                            //             EVALUATION_PERIOD_STATUS_LABELS[record.status]
-                            //         return (
-                            //             <Tag color={statusInfo?.color || 'default'}>
-                            //                 {statusInfo?.label || record.status}
-                            //             </Tag>
-                            //         )
-                            //     },
-                            // },
                             {
                                 title: 'Thao tác',
                                 align: 'center',
@@ -380,8 +380,72 @@ export default function EvaluationPeriod() {
                         expandable={{
                             expandedRowRender: (record) => (
                                 <div className="p-4 bg-gray-50">
-                                    <p className="mb-2 font-semibold">Tài liệu hội đồng:</p>
-                                    <p>{record.description || 'Không có mô tả'}</p>
+                                    <p className="mb-4 font-semibold">Tài liệu hội đồng:</p>
+                                    {record.documentFiles && record.documentFiles.length > 0 ? (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {record.documentFiles.map(
+                                                (file: {
+                                                    id: string
+                                                    name: string
+                                                    path: string
+                                                }) => (
+                                                    <div
+                                                        key={file.id}
+                                                        className="border rounded-lg p-2 bg-white shadow-sm"
+                                                    >
+                                                        <div className="flex flex-col items-center justify-center gap-2">
+                                                            <div className="text-4xl">
+                                                                {file.name.endsWith('.pdf') ? (
+                                                                    <span className="text-red-500">
+                                                                        📄
+                                                                    </span>
+                                                                ) : file.name.endsWith('.xlsx') ||
+                                                                  file.name.endsWith('.xls') ? (
+                                                                    <span className="text-green-500">
+                                                                        📊
+                                                                    </span>
+                                                                ) : (
+                                                                    <span>📁</span>
+                                                                )}
+                                                            </div>
+                                                            <div className="text-center">
+                                                                <p className="text-sm font-medium truncate max-w-[200px]">
+                                                                    {file.name}
+                                                                </p>
+                                                            </div>
+                                                            <div className="flex gap-2 mt-2">
+                                                                <Button
+                                                                    size="small"
+                                                                    icon={<span>👁️</span>}
+                                                                    onClick={() => {
+                                                                        window.open(
+                                                                            file.path,
+                                                                            '_blank'
+                                                                        )
+                                                                    }}
+                                                                />
+                                                                <Button
+                                                                    size="small"
+                                                                    icon={<span>⬇️</span>}
+                                                                    onClick={() => {
+                                                                        const link =
+                                                                            document.createElement(
+                                                                                'a'
+                                                                            )
+                                                                        link.href = file.path
+                                                                        link.download = file.name
+                                                                        link.click()
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p className="text-gray-500">Không có mô tả</p>
+                                    )}
                                 </div>
                             ),
                             expandIcon: ({ expanded, onExpand, record }) =>
