@@ -26,6 +26,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { $Enums, type Prisma } from '@workspace/db/client'
 import { saveAs } from 'file-saver'
 import { whereOrganization } from '@workspace/libs/constants'
+import { cn } from '@workspace/ui/lib/utils';
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -1433,29 +1434,40 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                             render: (_, record) => {
                                 return (
                                     <div className="flex justify-center items-center">
-                                        <SquarePen
-                                            className="text-sm cursor-pointer"
-                                            onClick={() =>
-                                                openPutResearchTopicModal({
-                                                    studentResearchTopicId: record.id,
-                                                })
-                                            }
-                                        />
+                                        {((record?.deadline &&
+                                            dayjs().isAfter(dayjs(record.deadline))) ||
+                                            role === 'P7') && (
+                                            <SquarePen
+                                                className="text-sm cursor-pointer m-1"
+                                                onClick={() =>
+                                                    openPutResearchTopicModal({
+                                                        studentResearchTopicId: record.id,
+                                                    })
+                                                }
+                                            />
+                                        )}
                                     </div>
                                 )
                             },
                         },
                         {
-                            title: 'Hạn nhập chuyên đề',
-                            width: 140,
+                            title: 'Hạn nhập',
+                            width: 80,
                             align: 'center',
                             render: (_, record) => {
                                 return (
-                                    <div>
+                                    <p
+                                    className={cn(
+                                        record?.deadline && dayjs().isAfter(dayjs(record.deadline))
+                                            ? 'text-red-600'
+                                            : ''
+                                    )}
+                                        
+                                    >
                                         {record?.deadline
                                             ? dayjs(record.deadline).format('DD/MM/YYYY')
                                             : ''}
-                                    </div>
+                                    </p>
                                 )
                             },
                         },

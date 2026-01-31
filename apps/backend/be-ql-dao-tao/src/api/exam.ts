@@ -76,12 +76,18 @@ app.openapi(createNewExamList, async (c) => {
                 select: {
                     id: true,
                 },
+                where: {
+                    exempted: false,
+                    withdrew: false,
+                    examBanned: false,
+                },
             },
+            roomId: true,
         },
     })
 
     const mapExamToSubjectClass: Record<string, string> = {}
-    const exams = subjectClasses.map(({ id, subjectId }) => {
+    const exams = subjectClasses.map(({ id, subjectId, roomId, subjectClassStudent }) => {
         if (mapExamToSubjectClass) {
             if (!mapExamToSubjectClass?.[subjectId]) {
                 mapExamToSubjectClass[subjectId] = createId()
@@ -92,6 +98,8 @@ app.openapi(createNewExamList, async (c) => {
             examId: examId as string,
             subjectClassId: id,
             subjectId: subjectId,
+            roomId,
+            studentCount: subjectClassStudent.length,
         }
     })
 
@@ -108,14 +116,26 @@ app.openapi(createNewExamList, async (c) => {
         examId,
         subjectId: items?.[0]?.subjectId ?? '',
         classIds: items?.map((i) => i.subjectClassId),
+        roomId: items?.[0]?.roomId ?? undefined,
+        count: items?.reduce((acc, curr) => acc + curr.studentCount, 0),
     }))
 
     await prisma.$transaction(async (tx) => {
         await tx.exam.createMany({
-            data: groupedExams.map(({ examId, subjectId }) => ({
+            data: groupedExams.map(({ examId, subjectId, roomId, count }) => ({
                 id: examId,
                 subjectVersionId: subjectId,
                 semesterId,
+                ...(roomId
+                    ? {
+                          examRooms: {
+                              create: {
+                                  roomId,
+                                  capacity: count,
+                              },
+                          },
+                      }
+                    : {}),
             })),
         })
         for (const { classIds, examId } of groupedExams) {
