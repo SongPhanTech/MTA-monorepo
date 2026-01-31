@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
-import { cn } from '@lib/utils'
 const { Title } = Typography
 
 type AnswerItem = {
@@ -28,13 +27,13 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function OrganizationSurveyReport({
     selectedId,
     surveyName,
-    organizationSelected,
-    setOrganizationSelected,
+    // organizationSelected,
+    // setOrganizationSelected,
 }: {
     selectedId: string
     surveyName: string
-    organizationSelected: string
-    setOrganizationSelected: (value: string) => void
+    // organizationSelected: string
+    // setOrganizationSelected: (value: string) => void
 }) {
     const router = useRouter()
     const [organization, setOrganization] = useState<string[]>([])
@@ -242,16 +241,16 @@ function OrganizationSurveyReport({
     const renderTable = (dataTable: any, choices: any) => {
         return (
             <Table
-                onRow={(record) => {
-                    return {
-                        onClick: () => {
-                            setOrganizationSelected(record?.organization?.Id as string)
-                        },
-                        className: cn(
-                            organizationSelected === record?.organization.Id ? 'bg-orange-200' : ''
-                        ),
-                    }
-                }}
+                // onRow={(record) => {
+                //     return {
+                //         onClick: () => {
+                //             setOrganizationSelected(record?.organization?.Id as string)
+                //         },
+                //         className: cn(
+                //             organizationSelected === record?.organization.Id ? 'bg-orange-200' : ''
+                //         ),
+                //     }
+                // }}
                 columns={
                     choices?.length > 0
                         ? [
