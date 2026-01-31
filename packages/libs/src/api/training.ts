@@ -236,8 +236,8 @@ import type {
     StatisticsGraduationDecision200Item,
     StatisticsGraduationDecision404,
     StatisticsGraduationDecisionParams,
+    StatsArchivedAward200,
     StatsArchivedAwardInput,
-    StatsArchivedAwardResult,
     TrainingField200Item,
     TrainingField400,
     UnmergeExamBadResponse,
@@ -11267,7 +11267,7 @@ export const useApproveAwardScore = <TError = ApproveAwardScore400, TContext = u
  * @summary Thống kê điểm thưởng
  */
 export type statsArchivedAwardResponse200 = {
-    data: StatsArchivedAwardResult
+    data: StatsArchivedAward200
     status: 200
 }
 
@@ -11356,6 +11356,104 @@ export const useStatsArchivedAward = <TError = unknown, TContext = unknown>(
     TContext
 > => {
     const mutationOptions = getStatsArchivedAwardMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Xuất file excel thống kê điểm thưởng từ học kỳ đến học kỳ
+ * @summary Xuất file thống kê điểm thưởng
+ */
+export type exportStatsArchivedAwardResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStatsArchivedAwardResponseSuccess = exportStatsArchivedAwardResponse200 & {
+    headers: Headers
+}
+
+export type exportStatsArchivedAwardResponse = exportStatsArchivedAwardResponseSuccess
+
+export const getExportStatsArchivedAwardUrl = () => {
+    return `/api/archived-score/export-stats-archived-award`
+}
+
+export const exportStatsArchivedAward = async (
+    statsArchivedAwardInput: StatsArchivedAwardInput,
+    options?: RequestInit
+): Promise<exportStatsArchivedAwardResponse> => {
+    return customTrainingFetch<exportStatsArchivedAwardResponse>(getExportStatsArchivedAwardUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(statsArchivedAwardInput),
+    })
+}
+
+export const getExportStatsArchivedAwardMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportStatsArchivedAward>>,
+        TError,
+        { data: StatsArchivedAwardInput },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportStatsArchivedAward>>,
+    TError,
+    { data: StatsArchivedAwardInput },
+    TContext
+> => {
+    const mutationKey = ['exportStatsArchivedAward']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportStatsArchivedAward>>,
+        { data: StatsArchivedAwardInput }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportStatsArchivedAward(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportStatsArchivedAwardMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportStatsArchivedAward>>
+>
+export type ExportStatsArchivedAwardMutationBody = StatsArchivedAwardInput
+export type ExportStatsArchivedAwardMutationError = unknown
+
+/**
+ * @summary Xuất file thống kê điểm thưởng
+ */
+export const useExportStatsArchivedAward = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportStatsArchivedAward>>,
+            TError,
+            { data: StatsArchivedAwardInput },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportStatsArchivedAward>>,
+    TError,
+    { data: StatsArchivedAwardInput },
+    TContext
+> => {
+    const mutationOptions = getExportStatsArchivedAwardMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
