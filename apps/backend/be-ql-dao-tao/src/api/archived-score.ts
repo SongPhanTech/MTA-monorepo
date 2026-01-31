@@ -425,10 +425,11 @@ app.openapi(approveAwardScore, async (c) => {
 
     const studentSubjectScores = archivedAwards.flatMap((archivedAward) => {
         const bonusScore = archivedAward.bonusScore
-        return archivedAward.studentSubjectScore.map((studentSubjectScore) => {
-            const finalScore = studentSubjectScore.studentSubjectScore.finalScore?.add(bonusScore)
+        return archivedAward.studentSubjectScore.map((awardOnStudentSubjectScore) => {
+            const finalScore =
+                awardOnStudentSubjectScore.studentSubjectScore.finalScore?.add(bonusScore)
             return {
-                id: studentSubjectScore.id,
+                id: awardOnStudentSubjectScore.studentSubjectScoreId,
                 finalScore,
             }
         })
