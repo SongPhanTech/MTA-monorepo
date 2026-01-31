@@ -66,8 +66,8 @@ export default function EvaluationPeriodTabPage() {
             },
         ]
 
-        const isVicePersident = councilMember?.role?.includes(
-            $Enums.EvaluationMemberRole.VICE_PRESIDENT
+        const isHeadSecretary = councilMember?.role?.includes(
+            $Enums.EvaluationMemberRole.HEAD_SECRETARY
         )
 
         if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'THEM')) {
@@ -88,7 +88,7 @@ export default function EvaluationPeriodTabPage() {
         }
 
         if (
-            isVicePersident ||
+            isHeadSecretary ||
             can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM')
         ) {
             tabs.push({

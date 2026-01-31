@@ -45,6 +45,7 @@ import MoveQuestionModal from './modal-chuyen-question'
 import PickQuestionFromBankModal from './pick-question-from-bank-modal'
 import QuestionListByKnowledgeBlockModal from './modal-question-by-knowledge'
 import ExportExcelModal from './export-data-modal'
+import PutBoTieuChuanModal from './put-bo-tieu-chuan'
 
 export {
     ConfirmModal,
@@ -94,4 +95,5 @@ export {
     PickQuestionFromBankModal,
     QuestionListByKnowledgeBlockModal,
     ExportExcelModal,
+    PutBoTieuChuanModal,
 }

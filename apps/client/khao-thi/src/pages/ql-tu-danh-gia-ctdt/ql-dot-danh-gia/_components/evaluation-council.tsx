@@ -154,7 +154,6 @@ export default function EvaluationCouncilTab() {
             case 'specialized':
                 return allSpecialized
             default:
-                // Handle specialized sub-groups: specialized-{groupName}
                 if (selectedGroup.startsWith('specialized-')) {
                     const groupName = selectedGroup.replace('specialized-', '')
                     return specialized[groupName] || []
