@@ -120,11 +120,11 @@ export default function ArchivedAward() {
                         : {}),
                     trainingCourse: { trainingObjectTypeId },
                 },
-                ...(filters.name
+                ...(filters.studentName
                     ? {
                           userProfile: {
                               fullname: {
-                                  contains: filters.name,
+                                  contains: filters.studentName,
                                   mode: 'insensitive' as const,
                               },
                           },
@@ -135,7 +135,7 @@ export default function ArchivedAward() {
     }, [filters, trainingObjectTypeId])
 
     const { data: dataTable = [], refetch } = useFindManyArchivedAward({
-        where: {},
+        where,
         include: {
             studentSubjectScore: {
                 include: {
@@ -316,9 +316,9 @@ export default function ArchivedAward() {
                     rowSelection={{
                         selectedRowKeys,
                         getCheckboxProps: (record) => ({
-                            disabled: record.studentSubjectScore.some(
+                            disabled: !record.studentSubjectScore.some(
                                 (item: ArchivedAwardOnStudentSubjectScore) =>
-                                    item.status !== 'PENDING'
+                                    item.status === 'PENDING'
                             ),
                         }),
                         onChange: (newSelectedRowKeys: React.Key[]) => {
@@ -338,6 +338,7 @@ export default function ArchivedAward() {
                             title: 'Họ và tên',
                             width: 200,
                             dataIndex: 'studentName',
+                            type: 'input',
                             align: 'left',
                             fixed: 'left',
                             render: (__, record) => {
@@ -380,7 +381,6 @@ export default function ArchivedAward() {
                         },
                         {
                             title: 'Ngày nhận',
-                            dataIndex: 'name',
                             align: 'center',
                             width: 100,
                             render: (__, record) => {

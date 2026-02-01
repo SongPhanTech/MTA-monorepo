@@ -357,7 +357,13 @@ const DiemTrungBinhKyHoc = () => {
                                 align: 'center',
                             },
                             {
-                                title: 'Số TC học lại + cải thiện',
+                                title: 'Tổng số tín chỉ thi lại',
+                                dataIndex: ['studentSemesterResult', '0', 'reExamCredits'],
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Tổng số tín chỉ học lại',
                                 dataIndex: ['studentSemesterResult', '0', 'retakingCredits'],
                                 width: 120,
                                 align: 'center',

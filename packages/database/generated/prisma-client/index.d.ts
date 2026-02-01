@@ -200798,13 +200798,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultMinAggregateOutputType = {
     id: string | null
+    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
-    code: string | null
     studentId: string | null
     semesterId: string | null
     studyYear: number | null
@@ -200843,13 +200843,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultMaxAggregateOutputType = {
     id: string | null
+    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
-    code: string | null
     studentId: string | null
     semesterId: string | null
     studyYear: number | null
@@ -200888,13 +200888,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCountAggregateOutputType = {
     id: number
+    code: number
     active: number
     description: number
     deletedAt: number
     createdAt: number
     updatedAt: number
     createdBy: number
-    code: number
     studentId: number
     semesterId: number
     studyYear: number
@@ -200983,13 +200983,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultMinAggregateInputType = {
     id?: true
+    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    code?: true
     studentId?: true
     semesterId?: true
     studyYear?: true
@@ -201028,13 +201028,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultMaxAggregateInputType = {
     id?: true
+    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    code?: true
     studentId?: true
     semesterId?: true
     studyYear?: true
@@ -201073,13 +201073,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCountAggregateInputType = {
     id?: true
+    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    code?: true
     studentId?: true
     semesterId?: true
     studyYear?: true
@@ -201205,13 +201205,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultGroupByOutputType = {
     id: string
+    code: string | null
     active: boolean
     description: string | null
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     createdBy: string | null
-    code: string
     studentId: string
     semesterId: string
     studyYear: number
@@ -201269,13 +201269,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    code?: boolean
     studentId?: boolean
     semesterId?: boolean
     studyYear?: boolean
@@ -201317,13 +201317,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    code?: boolean
     studentId?: boolean
     semesterId?: boolean
     studyYear?: boolean
@@ -201365,13 +201365,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    code?: boolean
     studentId?: boolean
     semesterId?: boolean
     studyYear?: boolean
@@ -201413,13 +201413,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultSelectScalar = {
     id?: boolean
+    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    code?: boolean
     studentId?: boolean
     semesterId?: boolean
     studyYear?: boolean
@@ -201456,7 +201456,7 @@ export namespace Prisma {
     expelled?: boolean
   }
 
-  export type StudentSemesterResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "studentId" | "semesterId" | "studyYear" | "semesterIndexInCourse" | "isLastSemester" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "reExamCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "foreignLangPass" | "isClassMonitor" | "isUnionLeader" | "entryScore" | "isImproving" | "postponeWithReason" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentSemesterResult"]>
+  export type StudentSemesterResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "semesterId" | "studyYear" | "semesterIndexInCourse" | "isLastSemester" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "reExamCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "foreignLangPass" | "isClassMonitor" | "isUnionLeader" | "entryScore" | "isImproving" | "postponeWithReason" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentSemesterResult"]>
   export type StudentSemesterResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     semester?: boolean | SemesterDefaultArgs<ExtArgs>
@@ -201482,13 +201482,13 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      code: string | null
       active: boolean
       description: string | null
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
       createdBy: string | null
-      code: string
       studentId: string
       semesterId: string
       studyYear: number
@@ -201950,13 +201950,13 @@ export namespace Prisma {
    */
   interface StudentSemesterResultFieldRefs {
     readonly id: FieldRef<"StudentSemesterResult", 'String'>
+    readonly code: FieldRef<"StudentSemesterResult", 'String'>
     readonly active: FieldRef<"StudentSemesterResult", 'Boolean'>
     readonly description: FieldRef<"StudentSemesterResult", 'String'>
     readonly deletedAt: FieldRef<"StudentSemesterResult", 'DateTime'>
     readonly createdAt: FieldRef<"StudentSemesterResult", 'DateTime'>
     readonly updatedAt: FieldRef<"StudentSemesterResult", 'DateTime'>
     readonly createdBy: FieldRef<"StudentSemesterResult", 'String'>
-    readonly code: FieldRef<"StudentSemesterResult", 'String'>
     readonly studentId: FieldRef<"StudentSemesterResult", 'String'>
     readonly semesterId: FieldRef<"StudentSemesterResult", 'String'>
     readonly studyYear: FieldRef<"StudentSemesterResult", 'Int'>
@@ -202472,13 +202472,13 @@ export namespace Prisma {
 
   export type StudentYearResultMinAggregateOutputType = {
     id: string | null
+    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
-    code: string | null
     studentId: string | null
     schoolYearId: string | null
     studyYear: number | null
@@ -202507,13 +202507,13 @@ export namespace Prisma {
 
   export type StudentYearResultMaxAggregateOutputType = {
     id: string | null
+    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
-    code: string | null
     studentId: string | null
     schoolYearId: string | null
     studyYear: number | null
@@ -202542,13 +202542,13 @@ export namespace Prisma {
 
   export type StudentYearResultCountAggregateOutputType = {
     id: number
+    code: number
     active: number
     description: number
     deletedAt: number
     createdAt: number
     updatedAt: number
     createdBy: number
-    code: number
     studentId: number
     schoolYearId: number
     studyYear: number
@@ -202613,13 +202613,13 @@ export namespace Prisma {
 
   export type StudentYearResultMinAggregateInputType = {
     id?: true
+    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    code?: true
     studentId?: true
     schoolYearId?: true
     studyYear?: true
@@ -202648,13 +202648,13 @@ export namespace Prisma {
 
   export type StudentYearResultMaxAggregateInputType = {
     id?: true
+    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    code?: true
     studentId?: true
     schoolYearId?: true
     studyYear?: true
@@ -202683,13 +202683,13 @@ export namespace Prisma {
 
   export type StudentYearResultCountAggregateInputType = {
     id?: true
+    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
-    code?: true
     studentId?: true
     schoolYearId?: true
     studyYear?: true
@@ -202805,13 +202805,13 @@ export namespace Prisma {
 
   export type StudentYearResultGroupByOutputType = {
     id: string
+    code: string | null
     active: boolean
     description: string | null
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     createdBy: string | null
-    code: string
     studentId: string
     schoolYearId: string
     studyYear: number
@@ -202859,13 +202859,13 @@ export namespace Prisma {
 
   export type StudentYearResultSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    code?: boolean
     studentId?: boolean
     schoolYearId?: boolean
     studyYear?: boolean
@@ -202897,13 +202897,13 @@ export namespace Prisma {
 
   export type StudentYearResultSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    code?: boolean
     studentId?: boolean
     schoolYearId?: boolean
     studyYear?: boolean
@@ -202935,13 +202935,13 @@ export namespace Prisma {
 
   export type StudentYearResultSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    code?: boolean
     studentId?: boolean
     schoolYearId?: boolean
     studyYear?: boolean
@@ -202973,13 +202973,13 @@ export namespace Prisma {
 
   export type StudentYearResultSelectScalar = {
     id?: boolean
+    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
-    code?: boolean
     studentId?: boolean
     schoolYearId?: boolean
     studyYear?: boolean
@@ -203006,7 +203006,7 @@ export namespace Prisma {
     expelled?: boolean
   }
 
-  export type StudentYearResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "studentId" | "schoolYearId" | "studyYear" | "isLastStudyYear" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "retakingCredits" | "reExamCredits" | "failedCredits" | "isClassMonitor" | "isUnionLeader" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentYearResult"]>
+  export type StudentYearResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "schoolYearId" | "studyYear" | "isLastStudyYear" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "retakingCredits" | "reExamCredits" | "failedCredits" | "isClassMonitor" | "isUnionLeader" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentYearResult"]>
   export type StudentYearResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     schoolYear?: boolean | SchoolYearDefaultArgs<ExtArgs>
@@ -203032,13 +203032,13 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      code: string | null
       active: boolean
       description: string | null
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
       createdBy: string | null
-      code: string
       studentId: string
       schoolYearId: string
       studyYear: number
@@ -203490,13 +203490,13 @@ export namespace Prisma {
    */
   interface StudentYearResultFieldRefs {
     readonly id: FieldRef<"StudentYearResult", 'String'>
+    readonly code: FieldRef<"StudentYearResult", 'String'>
     readonly active: FieldRef<"StudentYearResult", 'Boolean'>
     readonly description: FieldRef<"StudentYearResult", 'String'>
     readonly deletedAt: FieldRef<"StudentYearResult", 'DateTime'>
     readonly createdAt: FieldRef<"StudentYearResult", 'DateTime'>
     readonly updatedAt: FieldRef<"StudentYearResult", 'DateTime'>
     readonly createdBy: FieldRef<"StudentYearResult", 'String'>
-    readonly code: FieldRef<"StudentYearResult", 'String'>
     readonly studentId: FieldRef<"StudentYearResult", 'String'>
     readonly schoolYearId: FieldRef<"StudentYearResult", 'String'>
     readonly studyYear: FieldRef<"StudentYearResult", 'Int'>
@@ -363693,13 +363693,13 @@ export namespace Prisma {
 
   export const StudentSemesterResultScalarFieldEnum: {
     id: 'id',
+    code: 'code',
     active: 'active',
     description: 'description',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
-    code: 'code',
     studentId: 'studentId',
     semesterId: 'semesterId',
     studyYear: 'studyYear',
@@ -363741,13 +363741,13 @@ export namespace Prisma {
 
   export const StudentYearResultScalarFieldEnum: {
     id: 'id',
+    code: 'code',
     active: 'active',
     description: 'description',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
-    code: 'code',
     studentId: 'studentId',
     schoolYearId: 'schoolYearId',
     studyYear: 'studyYear',
@@ -368143,9 +368143,9 @@ export namespace Prisma {
 
   export const StudentSemesterResultOrderByRelevanceFieldEnum: {
     id: 'id',
+    code: 'code',
     description: 'description',
     createdBy: 'createdBy',
-    code: 'code',
     studentId: 'studentId',
     semesterId: 'semesterId',
     rankId: 'rankId'
@@ -368156,9 +368156,9 @@ export namespace Prisma {
 
   export const StudentYearResultOrderByRelevanceFieldEnum: {
     id: 'id',
+    code: 'code',
     description: 'description',
     createdBy: 'createdBy',
-    code: 'code',
     studentId: 'studentId',
     schoolYearId: 'schoolYearId',
     rankId: 'rankId'
@@ -386169,13 +386169,13 @@ export namespace Prisma {
     OR?: StudentSemesterResultWhereInput[]
     NOT?: StudentSemesterResultWhereInput | StudentSemesterResultWhereInput[]
     id?: StringFilter<"StudentSemesterResult"> | string
+    code?: StringNullableFilter<"StudentSemesterResult"> | string | null
     active?: BoolFilter<"StudentSemesterResult"> | boolean
     description?: StringNullableFilter<"StudentSemesterResult"> | string | null
     deletedAt?: DateTimeNullableFilter<"StudentSemesterResult"> | Date | string | null
     createdAt?: DateTimeFilter<"StudentSemesterResult"> | Date | string
     updatedAt?: DateTimeFilter<"StudentSemesterResult"> | Date | string
     createdBy?: UuidNullableFilter<"StudentSemesterResult"> | string | null
-    code?: StringFilter<"StudentSemesterResult"> | string
     studentId?: StringFilter<"StudentSemesterResult"> | string
     semesterId?: StringFilter<"StudentSemesterResult"> | string
     studyYear?: IntFilter<"StudentSemesterResult"> | number
@@ -386217,13 +386217,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultOrderByWithRelationInput = {
     id?: SortOrder
+    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     semesterId?: SortOrder
     studyYear?: SortOrder
@@ -386266,6 +386266,7 @@ export namespace Prisma {
 
   export type StudentSemesterResultWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    code?: string
     studentId_semesterId?: StudentSemesterResultStudentIdSemesterIdCompoundUniqueInput
     AND?: StudentSemesterResultWhereInput | StudentSemesterResultWhereInput[]
     OR?: StudentSemesterResultWhereInput[]
@@ -386276,7 +386277,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"StudentSemesterResult"> | Date | string
     updatedAt?: DateTimeFilter<"StudentSemesterResult"> | Date | string
     createdBy?: UuidNullableFilter<"StudentSemesterResult"> | string | null
-    code?: StringFilter<"StudentSemesterResult"> | string
     studentId?: StringFilter<"StudentSemesterResult"> | string
     semesterId?: StringFilter<"StudentSemesterResult"> | string
     studyYear?: IntFilter<"StudentSemesterResult"> | number
@@ -386314,17 +386314,17 @@ export namespace Prisma {
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
     rank?: XOR<AcademicRankingConvertNullableScalarRelationFilter, AcademicRankingConvertWhereInput> | null
-  }, "id" | "studentId_semesterId">
+  }, "id" | "code" | "studentId_semesterId">
 
   export type StudentSemesterResultOrderByWithAggregationInput = {
     id?: SortOrder
+    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     semesterId?: SortOrder
     studyYear?: SortOrder
@@ -386371,13 +386371,13 @@ export namespace Prisma {
     OR?: StudentSemesterResultScalarWhereWithAggregatesInput[]
     NOT?: StudentSemesterResultScalarWhereWithAggregatesInput | StudentSemesterResultScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"StudentSemesterResult"> | string
+    code?: StringNullableWithAggregatesFilter<"StudentSemesterResult"> | string | null
     active?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
     description?: StringNullableWithAggregatesFilter<"StudentSemesterResult"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"StudentSemesterResult"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"StudentSemesterResult"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"StudentSemesterResult"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"StudentSemesterResult"> | string | null
-    code?: StringWithAggregatesFilter<"StudentSemesterResult"> | string
     studentId?: StringWithAggregatesFilter<"StudentSemesterResult"> | string
     semesterId?: StringWithAggregatesFilter<"StudentSemesterResult"> | string
     studyYear?: IntWithAggregatesFilter<"StudentSemesterResult"> | number
@@ -386419,13 +386419,13 @@ export namespace Prisma {
     OR?: StudentYearResultWhereInput[]
     NOT?: StudentYearResultWhereInput | StudentYearResultWhereInput[]
     id?: StringFilter<"StudentYearResult"> | string
+    code?: StringNullableFilter<"StudentYearResult"> | string | null
     active?: BoolFilter<"StudentYearResult"> | boolean
     description?: StringNullableFilter<"StudentYearResult"> | string | null
     deletedAt?: DateTimeNullableFilter<"StudentYearResult"> | Date | string | null
     createdAt?: DateTimeFilter<"StudentYearResult"> | Date | string
     updatedAt?: DateTimeFilter<"StudentYearResult"> | Date | string
     createdBy?: UuidNullableFilter<"StudentYearResult"> | string | null
-    code?: StringFilter<"StudentYearResult"> | string
     studentId?: StringFilter<"StudentYearResult"> | string
     schoolYearId?: StringFilter<"StudentYearResult"> | string
     studyYear?: IntFilter<"StudentYearResult"> | number
@@ -386457,13 +386457,13 @@ export namespace Prisma {
 
   export type StudentYearResultOrderByWithRelationInput = {
     id?: SortOrder
+    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     schoolYearId?: SortOrder
     studyYear?: SortOrder
@@ -386496,6 +386496,7 @@ export namespace Prisma {
 
   export type StudentYearResultWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    code?: string
     studentId_schoolYearId?: StudentYearResultStudentIdSchoolYearIdCompoundUniqueInput
     AND?: StudentYearResultWhereInput | StudentYearResultWhereInput[]
     OR?: StudentYearResultWhereInput[]
@@ -386506,7 +386507,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"StudentYearResult"> | Date | string
     updatedAt?: DateTimeFilter<"StudentYearResult"> | Date | string
     createdBy?: UuidNullableFilter<"StudentYearResult"> | string | null
-    code?: StringFilter<"StudentYearResult"> | string
     studentId?: StringFilter<"StudentYearResult"> | string
     schoolYearId?: StringFilter<"StudentYearResult"> | string
     studyYear?: IntFilter<"StudentYearResult"> | number
@@ -386534,17 +386534,17 @@ export namespace Prisma {
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     schoolYear?: XOR<SchoolYearScalarRelationFilter, SchoolYearWhereInput>
     rank?: XOR<AcademicRankingConvertNullableScalarRelationFilter, AcademicRankingConvertWhereInput> | null
-  }, "id" | "studentId_schoolYearId">
+  }, "id" | "code" | "studentId_schoolYearId">
 
   export type StudentYearResultOrderByWithAggregationInput = {
     id?: SortOrder
+    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     schoolYearId?: SortOrder
     studyYear?: SortOrder
@@ -386581,13 +386581,13 @@ export namespace Prisma {
     OR?: StudentYearResultScalarWhereWithAggregatesInput[]
     NOT?: StudentYearResultScalarWhereWithAggregatesInput | StudentYearResultScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"StudentYearResult"> | string
+    code?: StringNullableWithAggregatesFilter<"StudentYearResult"> | string | null
     active?: BoolWithAggregatesFilter<"StudentYearResult"> | boolean
     description?: StringNullableWithAggregatesFilter<"StudentYearResult"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"StudentYearResult"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"StudentYearResult"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"StudentYearResult"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"StudentYearResult"> | string | null
-    code?: StringWithAggregatesFilter<"StudentYearResult"> | string
     studentId?: StringWithAggregatesFilter<"StudentYearResult"> | string
     schoolYearId?: StringWithAggregatesFilter<"StudentYearResult"> | string
     studyYear?: IntWithAggregatesFilter<"StudentYearResult"> | number
@@ -417441,13 +417441,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCreateInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studyYear: number
     semesterIndexInCourse: number
     isLastSemester: boolean
@@ -417486,13 +417486,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedCreateInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     semesterId: string
     studyYear: number
@@ -417531,13 +417531,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
     isLastSemester?: BoolFieldUpdateOperationsInput | boolean
@@ -417576,13 +417576,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
@@ -417621,13 +417621,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCreateManyInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     semesterId: string
     studyYear: number
@@ -417666,13 +417666,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
     isLastSemester?: BoolFieldUpdateOperationsInput | boolean
@@ -417708,13 +417708,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
@@ -417753,13 +417753,13 @@ export namespace Prisma {
 
   export type StudentYearResultCreateInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studyYear: number
     isLastStudyYear: boolean
     baseScore: $Enums.AcademicRankingBaseType
@@ -417788,13 +417788,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedCreateInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     schoolYearId: string
     studyYear: number
@@ -417823,13 +417823,13 @@ export namespace Prisma {
 
   export type StudentYearResultUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
@@ -417858,13 +417858,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     schoolYearId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
@@ -417893,13 +417893,13 @@ export namespace Prisma {
 
   export type StudentYearResultCreateManyInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     schoolYearId: string
     studyYear: number
@@ -417928,13 +417928,13 @@ export namespace Prisma {
 
   export type StudentYearResultUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
@@ -417960,13 +417960,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     schoolYearId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
@@ -444163,13 +444163,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCountOrderByAggregateInput = {
     id?: SortOrder
+    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     semesterId?: SortOrder
     studyYear?: SortOrder
@@ -444232,13 +444232,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultMaxOrderByAggregateInput = {
     id?: SortOrder
+    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     semesterId?: SortOrder
     studyYear?: SortOrder
@@ -444277,13 +444277,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultMinOrderByAggregateInput = {
     id?: SortOrder
+    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     semesterId?: SortOrder
     studyYear?: SortOrder
@@ -444383,13 +444383,13 @@ export namespace Prisma {
 
   export type StudentYearResultCountOrderByAggregateInput = {
     id?: SortOrder
+    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     schoolYearId?: SortOrder
     studyYear?: SortOrder
@@ -444435,13 +444435,13 @@ export namespace Prisma {
 
   export type StudentYearResultMaxOrderByAggregateInput = {
     id?: SortOrder
+    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     schoolYearId?: SortOrder
     studyYear?: SortOrder
@@ -444470,13 +444470,13 @@ export namespace Prisma {
 
   export type StudentYearResultMinOrderByAggregateInput = {
     id?: SortOrder
+    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
-    code?: SortOrder
     studentId?: SortOrder
     schoolYearId?: SortOrder
     studyYear?: SortOrder
@@ -536270,13 +536270,13 @@ export namespace Prisma {
 
   export type StudentYearResultCreateWithoutSchoolYearInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studyYear: number
     isLastStudyYear: boolean
     baseScore: $Enums.AcademicRankingBaseType
@@ -536304,13 +536304,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedCreateWithoutSchoolYearInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     studyYear: number
     isLastStudyYear: boolean
@@ -536545,13 +536545,13 @@ export namespace Prisma {
     OR?: StudentYearResultScalarWhereInput[]
     NOT?: StudentYearResultScalarWhereInput | StudentYearResultScalarWhereInput[]
     id?: StringFilter<"StudentYearResult"> | string
+    code?: StringNullableFilter<"StudentYearResult"> | string | null
     active?: BoolFilter<"StudentYearResult"> | boolean
     description?: StringNullableFilter<"StudentYearResult"> | string | null
     deletedAt?: DateTimeNullableFilter<"StudentYearResult"> | Date | string | null
     createdAt?: DateTimeFilter<"StudentYearResult"> | Date | string
     updatedAt?: DateTimeFilter<"StudentYearResult"> | Date | string
     createdBy?: UuidNullableFilter<"StudentYearResult"> | string | null
-    code?: StringFilter<"StudentYearResult"> | string
     studentId?: StringFilter<"StudentYearResult"> | string
     schoolYearId?: StringFilter<"StudentYearResult"> | string
     studyYear?: IntFilter<"StudentYearResult"> | number
@@ -536982,13 +536982,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCreateWithoutSemesterInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studyYear: number
     semesterIndexInCourse: number
     isLastSemester: boolean
@@ -537026,13 +537026,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedCreateWithoutSemesterInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     studyYear: number
     semesterIndexInCourse: number
@@ -537668,13 +537668,13 @@ export namespace Prisma {
     OR?: StudentSemesterResultScalarWhereInput[]
     NOT?: StudentSemesterResultScalarWhereInput | StudentSemesterResultScalarWhereInput[]
     id?: StringFilter<"StudentSemesterResult"> | string
+    code?: StringNullableFilter<"StudentSemesterResult"> | string | null
     active?: BoolFilter<"StudentSemesterResult"> | boolean
     description?: StringNullableFilter<"StudentSemesterResult"> | string | null
     deletedAt?: DateTimeNullableFilter<"StudentSemesterResult"> | Date | string | null
     createdAt?: DateTimeFilter<"StudentSemesterResult"> | Date | string
     updatedAt?: DateTimeFilter<"StudentSemesterResult"> | Date | string
     createdBy?: UuidNullableFilter<"StudentSemesterResult"> | string | null
-    code?: StringFilter<"StudentSemesterResult"> | string
     studentId?: StringFilter<"StudentSemesterResult"> | string
     semesterId?: StringFilter<"StudentSemesterResult"> | string
     studyYear?: IntFilter<"StudentSemesterResult"> | number
@@ -562683,13 +562683,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCreateWithoutStudentInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studyYear: number
     semesterIndexInCourse: number
     isLastSemester: boolean
@@ -562727,13 +562727,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedCreateWithoutStudentInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     semesterId: string
     studyYear: number
     semesterIndexInCourse: number
@@ -562781,13 +562781,13 @@ export namespace Prisma {
 
   export type StudentYearResultCreateWithoutStudentInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studyYear: number
     isLastStudyYear: boolean
     baseScore: $Enums.AcademicRankingBaseType
@@ -562815,13 +562815,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedCreateWithoutStudentInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     schoolYearId: string
     studyYear: number
     isLastStudyYear: boolean
@@ -602781,13 +602781,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCreateWithoutRankInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studyYear: number
     semesterIndexInCourse: number
     isLastSemester: boolean
@@ -602825,13 +602825,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedCreateWithoutRankInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     semesterId: string
     studyYear: number
@@ -602879,13 +602879,13 @@ export namespace Prisma {
 
   export type StudentYearResultCreateWithoutRankInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studyYear: number
     isLastStudyYear: boolean
     baseScore: $Enums.AcademicRankingBaseType
@@ -602913,13 +602913,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedCreateWithoutRankInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     schoolYearId: string
     studyYear: number
@@ -639439,13 +639439,13 @@ export namespace Prisma {
 
   export type StudentYearResultCreateManySchoolYearInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     studyYear: number
     isLastStudyYear: boolean
@@ -639632,13 +639632,13 @@ export namespace Prisma {
 
   export type StudentYearResultUpdateWithoutSchoolYearInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
@@ -639666,13 +639666,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedUpdateWithoutSchoolYearInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
@@ -639700,13 +639700,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedUpdateManyWithoutSchoolYearInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
@@ -639957,13 +639957,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCreateManySemesterInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     studyYear: number
     semesterIndexInCourse: number
@@ -640479,13 +640479,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUpdateWithoutSemesterInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
     isLastSemester?: BoolFieldUpdateOperationsInput | boolean
@@ -640523,13 +640523,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedUpdateWithoutSemesterInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
@@ -640567,13 +640567,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedUpdateManyWithoutSemesterInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
@@ -653623,13 +653623,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCreateManyStudentInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     semesterId: string
     studyYear: number
     semesterIndexInCourse: number
@@ -653667,13 +653667,13 @@ export namespace Prisma {
 
   export type StudentYearResultCreateManyStudentInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     schoolYearId: string
     studyYear: number
     isLastStudyYear: boolean
@@ -654161,13 +654161,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
     isLastSemester?: BoolFieldUpdateOperationsInput | boolean
@@ -654205,13 +654205,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
@@ -654249,13 +654249,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedUpdateManyWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
@@ -654293,13 +654293,13 @@ export namespace Prisma {
 
   export type StudentYearResultUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
@@ -654327,13 +654327,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     schoolYearId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
@@ -654361,13 +654361,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedUpdateManyWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     schoolYearId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
@@ -666164,13 +666164,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultCreateManyRankInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     semesterId: string
     studyYear: number
@@ -666208,13 +666208,13 @@ export namespace Prisma {
 
   export type StudentYearResultCreateManyRankInput = {
     id?: string
+    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
-    code: string
     studentId: string
     schoolYearId: string
     studyYear: number
@@ -666562,13 +666562,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUpdateWithoutRankInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     semesterIndexInCourse?: IntFieldUpdateOperationsInput | number
     isLastSemester?: BoolFieldUpdateOperationsInput | boolean
@@ -666606,13 +666606,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedUpdateWithoutRankInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
@@ -666650,13 +666650,13 @@ export namespace Prisma {
 
   export type StudentSemesterResultUncheckedUpdateManyWithoutRankInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
@@ -666694,13 +666694,13 @@ export namespace Prisma {
 
   export type StudentYearResultUpdateWithoutRankInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
     isLastStudyYear?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
@@ -666728,13 +666728,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedUpdateWithoutRankInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     schoolYearId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number
@@ -666762,13 +666762,13 @@ export namespace Prisma {
 
   export type StudentYearResultUncheckedUpdateManyWithoutRankInput = {
     id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     schoolYearId?: StringFieldUpdateOperationsInput | string
     studyYear?: IntFieldUpdateOperationsInput | number

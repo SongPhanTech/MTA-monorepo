@@ -2531,13 +2531,13 @@ exports.Prisma.StudentScalarFieldEnum = {
 
 exports.Prisma.StudentSemesterResultScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  code: 'code',
   studentId: 'studentId',
   semesterId: 'semesterId',
   studyYear: 'studyYear',
@@ -2576,13 +2576,13 @@ exports.Prisma.StudentSemesterResultScalarFieldEnum = {
 
 exports.Prisma.StudentYearResultScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  code: 'code',
   studentId: 'studentId',
   schoolYearId: 'schoolYearId',
   studyYear: 'studyYear',
@@ -6189,9 +6189,9 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
 
 exports.Prisma.StudentSemesterResultOrderByRelevanceFieldEnum = {
   id: 'id',
+  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  code: 'code',
   studentId: 'studentId',
   semesterId: 'semesterId',
   rankId: 'rankId'
@@ -6199,9 +6199,9 @@ exports.Prisma.StudentSemesterResultOrderByRelevanceFieldEnum = {
 
 exports.Prisma.StudentYearResultOrderByRelevanceFieldEnum = {
   id: 'id',
+  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  code: 'code',
   studentId: 'studentId',
   schoolYearId: 'schoolYearId',
   rankId: 'rankId'

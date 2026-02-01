@@ -14759,6 +14759,11 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -14786,9 +14791,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentSemesterResult$createdBy,
-                }, code: {
-                    name: "code",
-                    type: "String",
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -14942,6 +14944,9 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 }, studentId_semesterId: {
                     name: "studentId_semesterId",
                     fields: ["studentId", "semesterId"]
@@ -14956,6 +14961,11 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -14983,9 +14993,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentYearResult$createdBy,
-                }, code: {
-                    name: "code",
-                    type: "String",
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -15108,6 +15115,9 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 }, studentId_schoolYearId: {
                     name: "studentId_schoolYearId",
                     fields: ["studentId", "schoolYearId"]
