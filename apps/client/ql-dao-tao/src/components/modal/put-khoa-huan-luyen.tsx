@@ -1018,7 +1018,7 @@ const PutTrainingCourseModal = () => {
                     <FormItem
                         form={form}
                         name="coef_1"
-                        label="Hệ số điểm chuyên cần"
+                        label="Hệ số điểm thường xuyên"
                         rules={[
                             {
                                 validator: validateCoefficient('coef_1'),
@@ -1030,7 +1030,7 @@ const PutTrainingCourseModal = () => {
                             min={0}
                             max={1}
                             step={0.1}
-                            placeholder="Nhập hệ số điểm chuyên cần"
+                            placeholder="Nhập hệ số điểm thường xuyên"
                             className="w-full"
                             onChange={() => {
                                 setTimeout(() => debouncedValidate(['coef_2', 'coef_3']), 300)

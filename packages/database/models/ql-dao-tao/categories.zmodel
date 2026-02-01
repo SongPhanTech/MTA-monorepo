@@ -45,8 +45,8 @@ model TrainingObjectType extends Base {
   thesisSession        ThesisSession[]
   trainingBlocks       TrainingBlock[]
   vaiTro               String[] // Array of DM_VaiTro IDs
-  surveyObjectType SurveyObjectType[]
-  survey Survey[]
+  surveyObjectType     SurveyObjectType[]
+  survey               Survey[]
 
   @@schema("ql-dao-tao")
 }
@@ -236,7 +236,6 @@ model TrainingBlockOnCurriculumVersion extends Base {
   priority                Int                    @default(0)
   electiveCreditsRequired Int                    @default(0)
   subjects                TrainingBlockSubject[]
-
 
   @@unique([trainingBlockId, curriculumVersionId])
   @@schema("ql-dao-tao")

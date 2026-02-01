@@ -171,7 +171,7 @@ const ModalLearningResult = () => {
                             render: (_, record) => record?.credit,
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             width: 80,
                             align: 'center',
                             render: (_, record) => record?.attendanceScore,
@@ -238,7 +238,7 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             dataIndex: 'attendanceScore',
                             width: 80,
                             align: 'center',
@@ -306,7 +306,7 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             dataIndex: 'attendanceScore',
                             width: 80,
                             align: 'center',

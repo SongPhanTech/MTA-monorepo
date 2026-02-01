@@ -266,7 +266,7 @@ const ModalPrintStudentSubjectScore = () => {
     const scoreCoefs = useMemo(
         () => [
             {
-                title: 'Hệ số điểm chuyên cần:',
+                title: 'Hệ số điểm thường xuyên:',
                 value: firstTrainingCourse?.coef_1 ?? '-',
             },
             {

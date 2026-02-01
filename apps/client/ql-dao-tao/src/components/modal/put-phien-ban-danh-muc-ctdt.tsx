@@ -189,16 +189,7 @@ const PutCurriculumVersion = () => {
                 return total + blockCredit
             }, 0)
             const totalOptionalCredits = versionData.trainingBlocks.reduce((total, block) => {
-                const blockCredit =
-                    block?.subjects?.reduce(
-                        (sum, { subject, type }) =>
-                            sum +
-                            (type === $Enums.SubjectRequirementType.Optional
-                                ? subject?.credit || 0
-                                : 0),
-                        0
-                    ) || 0
-                return total + blockCredit
+                return total + block.electiveCreditsRequired
             }, 0)
 
             const allSemester = versionData.trainingBlocks.flatMap((block) => {
@@ -453,6 +444,42 @@ const PutCurriculumVersion = () => {
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
+                                            label="Thời gian đào tạo"
+                                            name="trainingTimeId"
+                                            required
+                                        >
+                                            <Select
+                                                placeholder="Chọn thời gian đào tạo"
+                                                options={trainingTimeData.map(
+                                                    (i: TrainingTime) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                allowClear
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name="diplomaTypeId"
+                                            label="Loại văn bằng"
+                                            required
+                                        >
+                                            <Select
+                                                placeholder="Chọn loại văn bằng"
+                                                options={diplomaTypeData.map((i: DiplomaType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }))}
+                                                allowClear
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
                                             label="Ngôn ngữ đào tạo"
                                             name="trainingLanguageId"
                                         >
@@ -565,44 +592,6 @@ const PutCurriculumVersion = () => {
                                             />
                                         </FormItem>
                                     </Col>
-                                    <Col span={12}>
-                                        <FormItem
-                                            form={form}
-                                            label="Thời gian đào tạo"
-                                            name="trainingTimeId"
-                                            required
-                                        >
-                                            <Select
-                                                placeholder="Chọn thời gian đào tạo"
-                                                options={trainingTimeData.map(
-                                                    (i: TrainingTime) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                allowClear
-                                            />
-                                        </FormItem>
-                                    </Col>
-
-                                    <Col span={12}>
-                                        <FormItem
-                                            form={form}
-                                            name="diplomaTypeId"
-                                            label="Loại văn bằng"
-                                            required
-                                        >
-                                            <Select
-                                                placeholder="Chọn loại văn bằng"
-                                                options={diplomaTypeData.map((i: DiplomaType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                allowClear
-                                            />
-                                        </FormItem>
-                                    </Col>
-
                                     <Col span={12}>
                                         <FormItem
                                             form={form}

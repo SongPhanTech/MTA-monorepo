@@ -321,7 +321,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
         worksheet.getCell('C8').style = headerSubtitleStyleLeft
 
         worksheet.mergeCells('A9:B9')
-        // worksheet.getCell('A9').value = 'Hệ số điểm chuyên cần: '
+        // worksheet.getCell('A9').value = 'Hệ số điểm thường xuyên: '
         worksheet.getCell('A9').style = headerSubtitleStyleLeft
 
         // worksheet.getCell('C9').value = `${firstTrainingCourse?.coef_1 || ''}`
