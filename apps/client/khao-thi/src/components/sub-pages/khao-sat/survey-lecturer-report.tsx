@@ -11,6 +11,7 @@ import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import HtmlTruncate from '@components/commons/html-truncate'
 import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 const { Title } = Typography
 
 export interface CriteriaItem {
@@ -30,15 +31,33 @@ function SurveylecturerReport({
     selectedId,
     lectureId,
     surveyName,
+    trainingObjectTypeName,
+    organizationCode,
+    organizationName,
+    lecturerName,
+    lecturerCode,
+    departmentName,
+    departmentCode,
 }: {
     selectedId: string
     lectureId: string
     surveyName: string
+    trainingObjectTypeName?: string
+    organizationCode?: string
+    organizationName?: string
+    lecturerName?: string
+    lecturerCode?: string
+    departmentName?: string
+    departmentCode?: string
 }) {
-    console.log(selectedId, lectureId)
+    console.log(surveyName)
+    
 
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
+    const { onOpen } = useDisclosure({
+        tag: 'ModalPrintSurveylecturer',
+    })
 
     const { data: dataLevel } = useGetClusterSurveyStatisticsForLecturer(selectedId as string, {
         lectureId,
@@ -417,7 +436,22 @@ function SurveylecturerReport({
                                                 icon: <PrinterOutlined />,
                                                 label: 'In báo cáo',
                                                 onClick: () => {
-                                                    window.print()
+                                                    onOpen({
+                                                        surveyName,
+                                                        trainingObjectTypeName,
+
+                                                        lecturerName,
+                                                        lecturerCode,
+
+                                                        departmentName,
+                                                        departmentCode,
+
+                                                        organizationName,
+                                                        organizationCode,
+
+                                                        questions: dataLevel?.data?.data?.questions,
+                                                        chartOption: dataBarchart,
+                                                    })
                                                 },
                                             },
                                         ],

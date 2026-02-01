@@ -34,6 +34,7 @@ function buildOrgAndLectureTree(
         .filter((item) => (item.parentId ?? null) === parentId)
         .map((item) => ({
             ...item,
+            parent: list.find(p => p.id === item.parentId),
             title: item.name || 'Đơn vị không tên',
             key: item.id,
             icon: <FolderOpenOutlined />,
@@ -46,6 +47,7 @@ function buildOrgAndLectureTree(
                         title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
                         key: `${lecturer.id}`,
                         icon: <UserOutlined />,
+                        parent: item,
                     })),
                 ...buildOrgAndLectureTree(list, lecturers, item.id),
             ],
@@ -180,15 +182,31 @@ export default function BaoCaoGiangVien() {
                     />
                 )
             }
-            if (selectedItem?.id && selectedItem?.iCapDonVi) {
+
+            if (selectedItem?.id && selectedItem?.iCapDonVi === 2) {
                 return (
                     <SurveyOrganizationReport
-                        selectedId={filters?.clusterId}
-                        organizationId={selectedItem?.id}
+                        selectedId={filters.clusterId}
+                        organizationId={selectedItem.id}
                         surveyName={filters.name}
                         trainingObjectTypeName={trainingObjectTypeName}
-                        organizationCode={selectedItem?.sMa}
-                        organizationName={selectedItem?.sTen}
+                        organizationCode={selectedItem.sMa}
+                        organizationName={selectedItem.sTen}
+                    />
+                )
+            }
+
+            if (selectedItem?.id && selectedItem?.iCapDonVi === 3) {
+                return (
+                    <SurveyOrganizationReport
+                        selectedId={filters.clusterId}
+                        organizationId={selectedItem.id}
+                        surveyName={filters.name}
+                        trainingObjectTypeName={trainingObjectTypeName}
+                        departmentName={selectedItem.sTen}
+                        departmentCode={selectedItem.sMa}
+                        organizationName={selectedItem.parent?.sTen}
+                        organizationCode={selectedItem.parent?.sMa}
                     />
                 )
             }
@@ -199,6 +217,13 @@ export default function BaoCaoGiangVien() {
                         selectedId={filters?.clusterId}
                         lectureId={selectedItem?.id}
                         surveyName={filters.name}
+                        trainingObjectTypeName={trainingObjectTypeName}
+                        organizationName={selectedItem.parent?.sTen}
+                        organizationCode={selectedItem.parent?.sMa}
+                        lecturerName={selectedItem?.userProfile?.fullName}
+                        lecturerCode={selectedItem?.sMa}
+                        departmentName={selectedItem?.organization?.sTen}
+                        departmentCode={selectedItem?.organization?.sMa}
                     />
                 )
             }
@@ -287,6 +312,7 @@ export default function BaoCaoGiangVien() {
                             ...prev,
                             name: info.node?.userProfile?.fullName || info.node?.name || '',
                         }))
+                        console.log('selectedItem:', info.node)
                     }}
                 />
             </Col>

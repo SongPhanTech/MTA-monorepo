@@ -50,6 +50,8 @@ const ModalPrintSurveyOrganization = () => {
         chartOption: any
         organizationCode?: string
         trainingObjectTypeName?: string
+        departmentName?: string
+        departmentCode?: string
     }>({
         tag: 'ModalPrintSurveyOrganization',
     })
@@ -110,6 +112,7 @@ const ModalPrintSurveyOrganization = () => {
     })
 
     if (!input) return null
+    const hasDepartment = !!input.departmentName
 
     return (
         <Modal
@@ -150,21 +153,29 @@ const ModalPrintSurveyOrganization = () => {
                     </div>
 
                     {/* ===== FACULTY INFO ===== */}
-                    <div className="mt-4 text-sm text-left">
+                    <div className="mt-4 text-sm leading-6 text-left">
+                        {hasDepartment && (
+                            <div className="flex justify-between">
+                                <div>
+                                    <b>1. Bộ môn:</b> {input.departmentName}
+                                </div>
+                                <div>
+                                    <b>Mã bộ môn:</b> {input.departmentCode}
+                                </div>
+                            </div>
+                        )}
+
                         <div className="flex justify-between">
                             <div>
-                                <span className="font-bold">I.</span>{' '}
-                                {input.organizationName && `Khoa: Khoa ${input.organizationName}`}
+                                <b>{hasDepartment ? '2.' : '1.'} Khoa:</b> {input.organizationName}
                             </div>
-
                             <div>
-                                {input.organizationCode && `Mã khoa: ${input.organizationCode}`}
+                                <b>Mã khoa:</b> {input.organizationCode}
                             </div>
                         </div>
 
                         <div className="mt-2">
-                            <span className="font-bold">A.</span> Kết quả đánh giá theo{' '}
-                            {input.questions?.length || 0} tiêu chí:
+                            <b>A. Kết quả đánh giá theo</b> {input.questions?.length || 0} tiêu chí:
                         </div>
                     </div>
                 </div>

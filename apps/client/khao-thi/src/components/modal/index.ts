@@ -48,6 +48,7 @@ import ExportExcelModal from './export-data-modal'
 import ModalPrintBaoCaoDonVi from './modal-print-bao-cao-don-vi';
 import ModalPrintSurveyOrganization from './modal-print-survey-organization-report';
 import PutBoTieuChuanModal from './put-bo-tieu-chuan'
+import ModalPrintSurveylecturer from './modal-print-survey-lecturer-report';
 
 export {
     ConfirmModal,
@@ -100,4 +101,5 @@ export {
     ModalPrintBaoCaoDonVi,
     ModalPrintSurveyOrganization,
     PutBoTieuChuanModal,
+    ModalPrintSurveylecturer,
 }

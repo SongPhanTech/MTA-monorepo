@@ -34,6 +34,8 @@ function SurveyOrganizationReport({
     trainingObjectTypeName,
     organizationCode,
     organizationName,
+    departmentName,
+    departmentCode,
 }: {
     selectedId: string
     organizationId: string
@@ -41,6 +43,8 @@ function SurveyOrganizationReport({
     trainingObjectTypeName?: string
     organizationCode?: string
     organizationName?: string
+    departmentName?: string
+    departmentCode?: string
 }) {
     console.log('trainingObjectTypeName:', trainingObjectTypeName)
     const router = useRouter()
@@ -432,7 +436,9 @@ function SurveyOrganizationReport({
                                                         questions: dataLevel?.data?.data?.questions,
                                                         chartOption: dataBarchart,
                                                         organizationCode: organizationCode,
-                                                        organizationName:organizationName,
+                                                        organizationName: organizationName,
+                                                        departmentName: departmentName,
+                                                        departmentCode: departmentCode,
                                                     })
                                                 },
                                             },
