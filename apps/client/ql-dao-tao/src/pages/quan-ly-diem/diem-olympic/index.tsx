@@ -120,11 +120,11 @@ export default function ArchivedAward() {
                         : {}),
                     trainingCourse: { trainingObjectTypeId },
                 },
-                ...(filters.studentName
+                ...(filters.name
                     ? {
                           userProfile: {
                               fullname: {
-                                  contains: filters.studentName,
+                                  contains: filters.name,
                                   mode: 'insensitive' as const,
                               },
                           },
@@ -337,7 +337,7 @@ export default function ArchivedAward() {
                         {
                             title: 'Họ và tên',
                             width: 200,
-                            dataIndex: 'studentName',
+                            dataIndex: 'name',
                             type: 'input',
                             align: 'left',
                             fixed: 'left',
