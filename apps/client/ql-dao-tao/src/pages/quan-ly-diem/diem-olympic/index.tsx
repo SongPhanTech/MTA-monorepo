@@ -1,6 +1,8 @@
+import { DownloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import { ExportStatsArchivedAwardModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useArchivedCertificateStatusOptions } from '@hooks/paymentStatus'
@@ -48,8 +50,16 @@ export default function ArchivedAward() {
         tag: 'PutArchivedAwardModal',
     })
 
+    const { onOpen: onOpenExport } = useDisclosure<string>({
+        tag: 'ExportStatsArchivedAwardModal',
+    })
+
     const handleModal = () => {
         onOpen()
+    }
+
+    const handleExportModal = () => {
+        onOpenExport()
     }
 
     const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
@@ -282,6 +292,12 @@ export default function ArchivedAward() {
                             ) && (
                                 <Button onClick={handleModal} type="primary" className="ml-3">
                                     Thêm mới
+                                </Button>
+                            )}
+                            {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG, 'XEM') && (
+                                <Button onClick={handleExportModal} type="primary" className="ml-3">
+                                    <DownloadOutlined />
+                                    Xuất thống kê
                                 </Button>
                             )}
                         </Flex>
@@ -524,6 +540,7 @@ export default function ArchivedAward() {
                     }}
                 />
             </Col>
+            <ExportStatsArchivedAwardModal />
         </Row>
     )
 }

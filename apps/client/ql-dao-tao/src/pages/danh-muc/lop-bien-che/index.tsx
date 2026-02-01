@@ -21,6 +21,7 @@ import {
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { fixedClassStudentCount } from '@workspace/libs/api/training'
+import { whereOrganization } from '@workspace/libs/constants'
 import { getFilenameFromContentDisposition } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
@@ -31,7 +32,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 export default function FixedClassPage() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -288,15 +288,17 @@ export default function FixedClassPage() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end">
-                                <Button
-                                    className="mr-3"
-                                    type="primary"
-                                    onClick={downloadStatsFile}
-                                    loading={loading}
-                                >
-                                    <DownloadOutlined />
-                                    QS theo khoá
-                                </Button>
+                                <Tooltip title="Quân số theo khoá">
+                                    <Button
+                                        className="mr-3"
+                                        type="primary"
+                                        onClick={downloadStatsFile}
+                                        loading={loading}
+                                    >
+                                        <DownloadOutlined />
+                                        QS theo khoá
+                                    </Button>
+                                </Tooltip>
                                 <Button
                                     className="mr-3"
                                     type="primary"

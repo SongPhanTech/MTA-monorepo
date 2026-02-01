@@ -1,15 +1,15 @@
 import logo_mta from '@assets/images/khaothi.svg'
 import SiderDefaultLayout from '@components/layouts/sider'
+import { SelecterSchoolYear } from '@components/selecter-school-year'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
-import { Layout, theme, Tooltip } from 'antd'
+import { Layout, Tooltip, theme } from 'antd'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
-import { SelecterSchoolYear } from '@components/selecter-school-year'
 
 const { Header, Content } = Layout
 
@@ -81,7 +81,7 @@ const EvaluateLayout = ({
                     >
                         <div className="flex items-center">
                             <div className="flex items-center space-x-2">
-                                <Tooltip title="Học kỳ">
+                                <Tooltip title="Năm học">
                                     <div className="mr-2 font-bold">Năm học</div>
                                 </Tooltip>
                                 <SelecterSchoolYear />
