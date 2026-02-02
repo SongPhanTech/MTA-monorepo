@@ -2,12 +2,17 @@ import { type SelectProps, Tooltip } from 'antd'
 import { Select } from '../commons'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from './hook'
 
-type AntdSelectProps = SelectProps
+type SelectTrainingObjectTypeProps = SelectProps & {
+  subsystem?: string;
+};
 
-const SelectTrainingObjectType = (props: AntdSelectProps) => {
+const SelectTrainingObjectType = ({subsystem,
+  ...props}: SelectTrainingObjectTypeProps) => {
     const { id, onSelect } = useTrainingObjectTypeStore()
 
-    const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectTypePermission()
+    const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectTypePermission(undefined, {
+        subsystem
+    })
 
     // useEffect(() => {
     //     if (!id && doiTuongDaoTao.length > 0 && doiTuongDaoTao?.[0]?.id) {

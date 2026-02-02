@@ -57,7 +57,9 @@ export function useFindManyTrainingObjectTypePermission<
     TError = DefaultError,
 >(
     args?: Prisma.SelectSubset<TArgs, Prisma.TrainingObjectTypeFindManyArgs>,
-    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions &{
+        subsystem?: string
+    }
 ) {
     const { data: permission } = useGetUserPermissionsPermissionAppCodeUserId(
         'lms',
@@ -73,7 +75,7 @@ export function useFindManyTrainingObjectTypePermission<
         {
             where: {
                 active: true,
-                ...(isDevEnvironment()
+                ...(isDevEnvironment() || options?.subsystem ==='ems'
                     ? {}
                     : {
                           vaiTro: {

@@ -155,7 +155,7 @@ const ExamLayout = ({
 
                         <div className="flex items-center">
                             {/* <Breadcrumb items={listBreadcrumb} /> */}
-                            <SelectTrainingObjectType />
+                            <SelectTrainingObjectType subsystem={'ems'} />
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <div className="flex items-center space-x-2">
                                 <p>Học kỳ</p>

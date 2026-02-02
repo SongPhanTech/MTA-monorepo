@@ -76,7 +76,7 @@ export default function BaoCaoGiangVien() {
             surveys: {
                 some: {
                     semesterId,
-                    trainingObjectTypeId
+                    trainingObjectTypeId,
                 },
             },
         },
@@ -302,10 +302,14 @@ export default function BaoCaoGiangVien() {
                             }}
                             dropdownMatchSelectWidth={false}
                         />
-                      <Input placeholder="Tìm kiếm"  className="mr-4 w-[250px]" value={searchText} onChange={ debounce((e) => {
-               setSearchText(e.target.value)
-
-        }, 500)}/>
+                        <Input
+                            placeholder="Tìm kiếm"
+                            className="mr-4 w-[250px]"
+                            value={searchText}
+                            onChange={debounce((e) => {
+                                setSearchText(e.target.value)
+                            }, 500)}
+                        />
                     </Flex>
                     {/* <Button onClick={hanleSearchReport} type="primary">
                         Tìm kiếm
@@ -313,22 +317,25 @@ export default function BaoCaoGiangVien() {
                 </Flex>
             </Col>
             <Col span={6}>
-                     {isFetching ?<Skeleton/>:<Tree
-                    showIcon
-                    selectedKeys={selectedKeys}
-                    treeData={treeData}
-                    className="w-full mb-3"
-                    onSelect={(key, info) => {
-                        setSelectedKeys(key)
-                        setSelectedItem(info.node)
-                        // setFilters((prev: any) => ({
-                        //     ...prev,
-                        // }))
-                        // console.log('selectedItem:', info.node)
-                    }}
-                />
-}   
-                          </Col>
+                {isFetching ? (
+                    <Skeleton />
+                ) : (
+                    <Tree
+                        showIcon
+                        selectedKeys={selectedKeys}
+                        treeData={treeData}
+                        className="w-full mb-3"
+                        onSelect={(key, info) => {
+                            setSelectedKeys(key)
+                            setSelectedItem(info.node)
+                            // setFilters((prev: any) => ({
+                            //     ...prev,
+                            // }))
+                            // console.log('selectedItem:', info.node)
+                        }}
+                    />
+                )}
+            </Col>
 
             <Col span={18}>{items}</Col>
         </Row>
