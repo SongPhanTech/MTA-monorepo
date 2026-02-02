@@ -223,7 +223,7 @@ const SinhDeModal = () => {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="subjectClassId" label="Dùng cho lớp">
+                        <FormItem form={form} name="subjectClassId" label="Dùng cho lớp" required>
                             <Select options={dataOption} placeholder="Chọn lớp môn học" />
                         </FormItem>
                     </Col>
