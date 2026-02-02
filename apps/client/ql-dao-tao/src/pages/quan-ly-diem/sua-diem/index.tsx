@@ -18,6 +18,8 @@ import {
     useUpdateScoreCorrectionItem,
     useUpdateScoreCorrectionTicket,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { SelectTrainingCourse, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
@@ -56,6 +58,7 @@ export default function QuanLySuaDiem() {
 }
 
 function TicketList() {
+    const { can, canSome } = useAbility()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({})
     const [currentPage, setCurrentPage] = useState(1)
@@ -104,9 +107,11 @@ function TicketList() {
     return (
         <div>
             <div className="mb-4 flex justify-end">
-                <Button type="primary" onClick={() => setIsCreateModalOpen(true)}>
-                    Tạo phiếu
-                </Button>
+                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM, 'THEM') && (
+                    <Button type="primary" onClick={() => setIsCreateModalOpen(true)}>
+                        Tạo phiếu
+                    </Button>
+                )}
             </div>
             <Table
                 filters={filters}
@@ -199,26 +204,30 @@ function TicketList() {
                                 <Button type="link" onClick={() => setSelectedTicketId(record.id)}>
                                     Chi tiết
                                 </Button>
-                                {record.status === 'PENDING_APPROVAL' && (
-                                    <Popconfirm
-                                        title="Bạn có chắc chắn muốn duyệt phiếu này?"
-                                        onConfirm={async () => {
-                                            try {
-                                                await updateTicket({
-                                                    where: { id: record.id },
-                                                    data: { status: 'APPROVED' },
-                                                })
-                                                message.success('Duyệt phiếu thành công')
-                                            } catch (e) {
-                                                message.error('Lỗi khi duyệt phiếu')
-                                            }
-                                        }}
-                                    >
-                                        <Button type="primary" size="small">
-                                            Duyệt
-                                        </Button>
-                                    </Popconfirm>
-                                )}
+                                {record.status === 'PENDING_APPROVAL' &&
+                                    can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
+                                        'DUYET'
+                                    ) && (
+                                        <Popconfirm
+                                            title="Bạn có chắc chắn muốn duyệt phiếu này?"
+                                            onConfirm={async () => {
+                                                try {
+                                                    await updateTicket({
+                                                        where: { id: record.id },
+                                                        data: { status: 'APPROVED' },
+                                                    })
+                                                    message.success('Duyệt phiếu thành công')
+                                                } catch (e) {
+                                                    message.error('Lỗi khi duyệt phiếu')
+                                                }
+                                            }}
+                                        >
+                                            <Button type="primary" size="small">
+                                                Duyệt
+                                            </Button>
+                                        </Popconfirm>
+                                    )}
                             </Space>
                         ),
                     },
@@ -247,6 +256,7 @@ function TicketList() {
                     ticketId={selectedTicketId}
                     open={!!selectedTicketId}
                     onClose={() => setSelectedTicketId(null)}
+                    can={can}
                 />
             )}
         </div>
@@ -335,10 +345,12 @@ function TicketDetailDrawer({
     ticketId,
     open,
     onClose,
+    can,
 }: {
     ticketId: string
     open: boolean
     onClose: () => void
+    can: any
 }) {
     const { data: ticket } = useFindUniqueScoreCorrectionTicket({
         where: { id: ticketId },
@@ -413,7 +425,12 @@ function TicketDetailDrawer({
             extra={
                 <Space>
                     {ticket?.status === 'INITIALIZED' && (
-                        <Button onClick={() => handleStatusChange('PENDING_APPROVAL')}>
+                        <Button
+                            disabled={
+                                !can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM, 'SUA')
+                            }
+                            onClick={() => handleStatusChange('PENDING_APPROVAL')}
+                        >
                             Gửi duyệt
                         </Button>
                     )}
@@ -440,11 +457,12 @@ function TicketDetailDrawer({
             </Descriptions>
 
             <div className="mb-4 flex justify-end">
-                {(ticket?.status === 'INITIALIZED' || ticket?.status === 'PENDING_APPROVAL') && (
-                    <Button type="primary" onClick={() => setIsAddStudentModalOpen(true)}>
-                        Thêm sinh viên
-                    </Button>
-                )}
+                {(ticket?.status === 'INITIALIZED' || ticket?.status === 'PENDING_APPROVAL') &&
+                    can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM, 'THEM') && (
+                        <Button type="primary" onClick={() => setIsAddStudentModalOpen(true)}>
+                            Thêm sinh viên
+                        </Button>
+                    )}
             </div>
 
             <Table
@@ -520,28 +538,38 @@ function TicketDetailDrawer({
                             ticket?.status === 'INITIALIZED' ||
                             ticket?.status === 'PENDING_APPROVAL' ? (
                                 <Space>
-                                    <Button
-                                        type="link"
-                                        size="small"
-                                        onClick={() => setEditingItem(record)}
-                                    >
-                                        Sửa điểm
-                                    </Button>
-                                    <Popconfirm
-                                        title="Xoá sinh viên này khỏi phiếu?"
-                                        onConfirm={async () => {
-                                            try {
-                                                await deleteItem({ where: { id: record.id } })
-                                                message.success('Đã xoá thành công')
-                                            } catch (e) {
-                                                message.error('Lỗi khi xoá')
-                                            }
-                                        }}
-                                    >
-                                        <Button type="link" danger size="small">
-                                            Xoá
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
+                                        'SUA'
+                                    ) && (
+                                        <Button
+                                            type="link"
+                                            size="small"
+                                            onClick={() => setEditingItem(record)}
+                                        >
+                                            Sửa điểm
                                         </Button>
-                                    </Popconfirm>
+                                    )}
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
+                                        'XOA'
+                                    ) && (
+                                        <Popconfirm
+                                            title="Xoá sinh viên này khỏi phiếu?"
+                                            onConfirm={async () => {
+                                                try {
+                                                    await deleteItem({ where: { id: record.id } })
+                                                    message.success('Đã xoá thành công')
+                                                } catch (e) {
+                                                    message.error('Lỗi khi xoá')
+                                                }
+                                            }}
+                                        >
+                                            <Button type="link" danger size="small">
+                                                Xoá
+                                            </Button>
+                                        </Popconfirm>
+                                    )}
                                 </Space>
                             ) : null,
                     },

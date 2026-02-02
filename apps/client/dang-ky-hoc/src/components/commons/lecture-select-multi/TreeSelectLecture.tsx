@@ -64,6 +64,10 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
         where: {
             OR: [
                 {
+                    // TODO: fix
+                    iLoaiDonVi: 0,
+                },
+                {
                     iLoaiDonVi: 6,
                 },
                 {

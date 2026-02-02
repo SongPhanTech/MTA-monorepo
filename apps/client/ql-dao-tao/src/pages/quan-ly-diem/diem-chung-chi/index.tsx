@@ -456,7 +456,7 @@ export default function ArchivedCertificate() {
                     <Col span={8}>
                         <Flex justify="end">
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
                                 'THEM'
                             ) && (
                                 <>
@@ -502,7 +502,7 @@ export default function ArchivedCertificate() {
                                 </>
                             )}
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
                                 'THEM'
                             ) && (
                                 <Button onClick={handleModal} type="primary" className="ml-3">

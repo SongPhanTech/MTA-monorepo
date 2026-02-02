@@ -1,5 +1,5 @@
 import { $Enums, CriteriaField, CriteriaOperator, QuestionType } from '@workspace/db'
-import { Prisma } from '@workspace/db/client'
+import type { Prisma } from '@workspace/db/client'
 
 export const subjectVersionTypes: Record<string, $Enums.SubjectVersionType> = {
     Thường: $Enums.SubjectVersionType.Normal,
@@ -114,6 +114,10 @@ export const questionTypeOptions: QuestionTypeOption[] = Object.entries(question
 )
 export const whereOrganization: Prisma.DM_DonViWhereInput = {
     OR: [
+        {
+            // TODO: fix
+            iLoaiDonVi: 0,
+        },
         {
             iLoaiDonVi: 6,
         },

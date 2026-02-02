@@ -66,22 +66,57 @@ export const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     placeholder = 'Chọn học kỳ',
     style = { width: 200 },
     dropdownStyle = { maxHeight: 400, overflow: 'auto', width: 300 },
-    ...rest
 }) => {
     const { id: semesterId, onSelect } = useSemesterStore()
+
+    const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+        include: {
+            semesters: {
+                orderBy: { createdAt: 'desc' },
+            },
+        },
+    })
+
+    // Tạo treeData từ schoolYears và semesters
+    const treeData: TreeNodeType[] = useMemo(() => {
+        return (
+            schoolYears?.map((schoolYear) => ({
+                value: `schoolYear-${schoolYear.id}`,
+                title: schoolYear.name,
+                selectable: false,
+                children:
+                    schoolYear.semesters.map((semester) => ({
+                        value: semester.id,
+                        title: `${semester.name}`,
+                    })) || [],
+            })) || []
+        )
+    }, [schoolYears])
 
     const handleChange = (newValue: string) => {
         onSelect(newValue)
     }
 
+    const filterTreeNode = (input: string, treeNode: any) => {
+        return fuzzyMatch(input, treeNode?.title?.toString() || '')
+        // return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
+    }
+
     return (
-        <SelectSemester
+        <TreeSelectAnt
+            showSearch
             style={style}
+            value={semesterId}
             dropdownStyle={dropdownStyle}
             placeholder={placeholder}
-            value={semesterId}
+            allowClear
+            treeDefaultExpandAll
             onChange={handleChange}
-            {...rest}
+            treeData={treeData}
+            filterTreeNode={filterTreeNode}
+            treeNodeFilterProp="title"
+            loading={schoolYearLoading}
         />
     )
 }
