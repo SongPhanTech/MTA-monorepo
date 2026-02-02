@@ -1,11 +1,13 @@
 import { useGetOrganizationSurveyStatistics } from '@workspace/libs/api/exam'
-import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
+import { Button, Col, Dropdown, Empty, Flex, message, Row, Typography } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
+import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 const { Title } = Typography
 
 type AnswerItem = {
@@ -28,16 +30,21 @@ function OrganizationSurveyReport({
     selectedId,
     surveyName,
     organizationId,
+    trainingObjectTypeName,
     // organizationSelected,
     // setOrganizationSelected,
 }: {
     selectedId: string
     surveyName: string
     organizationId: string
+    trainingObjectTypeName?: string
     // organizationSelected: string
     // setOrganizationSelected: (value: string) => void
 }) {
     const router = useRouter()
+    const { onOpen } = useDisclosure({
+        tag: 'ModalPrintBaoCaoDonVi',
+    })
 
     const { data: dataLevel } = useGetOrganizationSurveyStatistics(selectedId as string, {
         organizationId,
@@ -337,18 +344,40 @@ function OrganizationSurveyReport({
                                             setOrganization(value)
                                         }}
                                     /> */}
-                                    <Button
-                                        size="small"
-                                        type="primary"
-                                        onClick={() =>
-                                            exportReport(
-                                                dataLevel?.data?.data,
-                                                dataLevel?.data?.choices
-                                            )
-                                        }
+                                    <Dropdown
+                                        trigger={['click']}
+                                        menu={{
+                                            items: [
+                                                {
+                                                    key: 'export',
+                                                    icon: <FileExcelOutlined />,
+                                                    label: 'Xuất báo cáo',
+                                                    onClick: () =>
+                                                        exportReport(
+                                                            dataLevel?.data?.data,
+                                                            dataLevel?.data?.choices
+                                                        ),
+                                                },
+                                                {
+                                                    key: 'print',
+                                                    icon: <PrinterOutlined />,
+                                                    label: 'In báo cáo',
+                                                    onClick: () =>
+                                                        onOpen({
+                                                            surveyName,
+                                                            data: dataLevel?.data?.data,
+                                                            choices: dataLevel?.data?.choices,
+                                                            chartOption: dataBarchart,
+                                                            trainingObjectTypeName,
+                                                        }),
+                                                },
+                                            ],
+                                        }}
                                     >
-                                        Xuất báo cáo
-                                    </Button>
+                                        <Button size="small" type="primary">
+                                            Xuất báo cáo <DownOutlined />
+                                        </Button>
+                                    </Dropdown>
                                 </Flex>
                             </div>
                             <div className="flex-1">
@@ -357,7 +386,13 @@ function OrganizationSurveyReport({
                                         <ReactECharts
                                             onEvents={onEvents}
                                             option={dataBarchart}
-                                            className="w-full min-h-[400px] mb-6"
+                                            style={{
+                                                width: '100%',
+                                                height: Math.max(
+                                                    300,
+                                                    (dataLevel?.data?.data?.length || 0) * 35 + 120
+                                                ),
+                                            }}
                                         />
 
                                         {dataLevel?.data?.data?.length > 0 &&
