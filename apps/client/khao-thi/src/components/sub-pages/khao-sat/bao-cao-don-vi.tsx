@@ -168,6 +168,24 @@ function OrganizationSurveyReport({
                 },
             }
 
+            const addBorderToRange = (
+                sheet: ExcelJS.Worksheet,
+                fromRow: number,
+                toRow: number,
+                toCol: number
+            ) => {
+                for (let row = fromRow; row <= toRow; row++) {
+                    for (let col = 1; col <= toCol; col++) {
+                        sheet.getCell(row, col).border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            right: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                        }
+                    }
+                }
+            }
+
             worksheet.mergeCells('A1:C2')
             worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
             worksheet.getCell('A1').style = headerTitleStyle
@@ -188,8 +206,15 @@ function OrganizationSurveyReport({
             // Thêm tiêu đề bảng
             const headerRow = worksheet.getRow(7)
             headerRow.values = ['STT', 'Đợn vị quản lý', ...choices.map((i: any) => i?.description)]
-            headerRow.eachCell((cell: any) => {
-                cell.style = tableHeaderStyle
+            headerRow.eachCell((cell: any, colNumber: number) => {
+                cell.style = {
+                    ...tableHeaderStyle,
+                    alignment: {
+                        horizontal: colNumber === 2 ? 'left' : 'center',
+                        vertical: 'middle',
+                        wrapText: true,
+                    },
+                }
             })
 
             // Điều chỉnh độ rộng cột
@@ -197,7 +222,6 @@ function OrganizationSurveyReport({
                 { width: 10 },
                 { width: 40 },
                 { width: 40 },
-                { width: 20 },
                 { width: 20 },
                 { width: 20 },
                 { width: 20 },
@@ -214,8 +238,16 @@ function OrganizationSurveyReport({
                                 `${a.percent || 0}% (${a?.totalCount || 0}/${a?.total || 0})`
                         ),
                     ]
+                    headerRowValue.eachCell((cell: any, colNumber: number) => {
+                        cell.alignment = {
+                            horizontal: colNumber === 2 ? 'left' : 'center',
+                            vertical: 'middle',
+                            wrapText: true,
+                        }
+                    })
                 })
             }
+            addBorderToRange(worksheet, 7, 7 + dataExport.length, worksheet.columns.length)
 
             // Xuất file
             const buffer = await workbook.xlsx.writeBuffer()
