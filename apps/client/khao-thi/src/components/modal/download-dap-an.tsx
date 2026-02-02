@@ -4,7 +4,7 @@ import { useFindUniqueExamBank, useUpdateExamBank } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Flex, Input, Modal } from 'antd'
 import { TemplateHandler } from 'easy-template-x'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
@@ -51,6 +51,15 @@ const PrintExplanation = () => {
                         name: true,
                     },
                 },
+                examMatrix: {
+                    include: {
+                        examFramework: {
+                            select: {
+                                time: true,
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -59,6 +68,13 @@ const PrintExplanation = () => {
     )
 
     const subjectClassName = data?.subjectClass?.name || ''
+
+    // Tự động fill thời gian từ examFramework
+    useEffect(() => {
+        if (data?.examMatrix?.examFramework?.time) {
+            setDuration(String(data.examMatrix.examFramework.time))
+        }
+    }, [data?.examMatrix?.examFramework?.time])
 
     const { mutateAsync: updateExamBank } = useUpdateExamBank()
 
@@ -86,7 +102,7 @@ const PrintExplanation = () => {
                 subjectName: data.exam?.subjectVersion?.name || '',
                 semesterName: data.exam?.semester?.name || '',
                 className: data.subjectClass?.name || '',
-                duration: data.exam?.duration || duration,
+                duration: String(duration || data.examMatrix?.examFramework?.time || ''),
                 day: String(day),
                 month: String(month),
                 year: String(year),
@@ -313,7 +329,10 @@ const PrintExplanation = () => {
                                     </div>
                                     <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                                         <strong>
-                                            Thời gian làm bài: {data?.exam?.duration || duration}{' '}
+                                            Thời gian làm bài:{' '}
+                                            {duration ||
+                                                data?.examMatrix?.examFramework?.time ||
+                                                data?.exam?.duration}{' '}
                                             phút
                                         </strong>
                                     </div>

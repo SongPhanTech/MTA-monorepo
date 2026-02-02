@@ -1,6 +1,6 @@
 import { Modal, Button, Flex, Divider, Input } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
@@ -47,6 +47,15 @@ const PrintBatchExamBank = () => {
                         code: true,
                     },
                 },
+                examMatrix: {
+                    include: {
+                        examFramework: {
+                            select: {
+                                time: true,
+                            },
+                        },
+                    },
+                },
             },
             orderBy: {
                 examCode: 'asc',
@@ -56,6 +65,13 @@ const PrintBatchExamBank = () => {
             enabled: !!input?.ids && input?.ids.length > 0,
         }
     )
+
+    // Tự động fill thời gian từ examFramework của exam đầu tiên
+    useEffect(() => {
+        if (exams.length > 0 && exams[0]?.examMatrix?.examFramework?.time) {
+            setDuration(String(exams[0].examMatrix.examFramework.time))
+        }
+    }, [exams])
 
     const { mutateAsync: updateExamBank } = useUpdateExamBank()
 
@@ -87,7 +103,7 @@ const PrintBatchExamBank = () => {
                 semesterName: exam?.exam?.semester?.name || '',
                 examCode: exam?.examCode || '',
                 subjectName: exam?.exam?.subjectVersion?.name || '',
-                duration: exam?.exam?.duration || 30,
+                duration: duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
                 teacherName: name,
                 allowMaterials: allowMaterials ? '(Được sử dụng tài liệu)' : '',
                 questions:
@@ -240,7 +256,10 @@ const PrintBatchExamBank = () => {
                                     </div>
                                     <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                                         <strong>
-                                            Thời gian làm bài: {exam?.exam?.duration || duration}{' '}
+                                            Thời gian làm bài:{' '}
+                                            {duration ||
+                                                exam?.examMatrix?.examFramework?.time ||
+                                                exam?.exam?.duration}{' '}
                                             phút
                                         </strong>
                                     </div>

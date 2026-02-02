@@ -1,6 +1,6 @@
 import { Modal, Button, Flex, Input } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { useFindUniqueExamBank, useUpdateExamBank } from '@workspace/db/hooks'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
@@ -45,6 +45,15 @@ const PrintExamBank = () => {
                         name: true,
                     },
                 },
+                examMatrix: {
+                    include: {
+                        examFramework: {
+                            select: {
+                                time: true,
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -53,6 +62,13 @@ const PrintExamBank = () => {
     )
 
     const subjectClassName = data?.subjectClass?.name || ''
+
+    // Tự động fill thời gian từ examFramework
+    useEffect(() => {
+        if (data?.examMatrix?.examFramework?.time) {
+            setDuration(String(data.examMatrix.examFramework.time))
+        }
+    }, [data?.examMatrix?.examFramework?.time])
 
     const { mutateAsync: updateExamBank } = useUpdateExamBank()
 
@@ -78,7 +94,7 @@ const PrintExamBank = () => {
             subjectName: data.exam?.subjectVersion?.name || '',
             semesterName: data.exam?.semester?.name || '',
             className: data.subjectClass?.name || '',
-            duration: data.exam?.duration || duration,
+            duration: String(duration || data.examMatrix?.examFramework?.time || data.exam?.duration || ''),
             day: String(day),
             month: String(month),
             year: String(year),
@@ -253,7 +269,10 @@ const PrintExamBank = () => {
                                     </div>
                                     <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                                         <strong>
-                                            Thời gian làm bài: {data?.exam?.duration || duration}{' '}
+                                            Thời gian làm bài:{' '}
+                                            {duration ||
+                                                data?.examMatrix?.examFramework?.time ||
+                                                data?.exam?.duration}{' '}
                                             phút
                                         </strong>
                                     </div>
