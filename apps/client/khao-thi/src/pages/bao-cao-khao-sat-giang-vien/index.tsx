@@ -34,7 +34,7 @@ function buildOrgAndLectureTree(
         .filter((item) => (item.parentId ?? null) === parentId)
         .map((item) => ({
             ...item,
-            parent: list.find(p => p.id === item.parentId),
+            parent: list.find((p) => p.id === item.parentId),
             title: item.name || 'Đơn vị không tên',
             key: item.id,
             icon: <FolderOpenOutlined />,
@@ -57,6 +57,7 @@ function buildOrgAndLectureTree(
 export default function BaoCaoGiangVien() {
     const [filters, setFilters] = useState<any>({
         name: '',
+        surveyName: '',
         surveyId: undefined,
         lectureId: undefined,
         organizationId: undefined,
@@ -178,7 +179,7 @@ export default function BaoCaoGiangVien() {
                 return (
                     <OrganizationSurveyReport
                         selectedId={filters?.clusterId}
-                        surveyName={filters?.name || ''}
+                        surveyName={filters?.surveyName}
                         organizationId={selectedItem?.id}
                         trainingObjectTypeName={trainingObjectTypeName}
                     />
@@ -190,7 +191,7 @@ export default function BaoCaoGiangVien() {
                     <SurveyOrganizationReport
                         selectedId={filters.clusterId}
                         organizationId={selectedItem.id}
-                        surveyName={filters.name}
+                        surveyName={filters?.surveyName}
                         trainingObjectTypeName={trainingObjectTypeName}
                         organizationCode={selectedItem.sMa}
                         organizationName={selectedItem.sTen}
@@ -203,7 +204,7 @@ export default function BaoCaoGiangVien() {
                     <SurveyOrganizationReport
                         selectedId={filters.clusterId}
                         organizationId={selectedItem.id}
-                        surveyName={filters.name}
+                        surveyName={filters?.surveyName}
                         trainingObjectTypeName={trainingObjectTypeName}
                         departmentName={selectedItem.sTen}
                         departmentCode={selectedItem.sMa}
@@ -218,7 +219,7 @@ export default function BaoCaoGiangVien() {
                     <SurveylecturerReport
                         selectedId={filters?.clusterId}
                         lectureId={selectedItem?.id}
-                        surveyName={filters.name}
+                        surveyName={filters?.surveyName}
                         trainingObjectTypeName={trainingObjectTypeName}
                         organizationName={selectedItem.parent?.sTen}
                         organizationCode={selectedItem.parent?.sMa}
@@ -277,7 +278,14 @@ export default function BaoCaoGiangVien() {
                 <Flex justify="space-between">
                     <Flex>
                         <Select
-                            onChange={(value) => setFilters({ ...filters, clusterId: value })}
+                            onChange={(value, option: any) => {
+                                setFilters((prev: any) => ({
+                                    ...prev,
+                                    clusterId: value,
+                                    surveyName: option?.label,
+                                }))
+                                console.log(option?.label)
+                            }}
                             className="mr-4 w-[250px]"
                             options={data.map((i) => {
                                 return {
@@ -313,12 +321,10 @@ export default function BaoCaoGiangVien() {
                     onSelect={(key, info) => {
                         setSelectedKeys(key)
                         setSelectedItem(info.node)
-
-                        setFilters((prev: any) => ({
-                            ...prev,
-                            name: info.node?.userProfile?.fullName || info.node?.name || '',
-                        }))
-                        console.log('selectedItem:', info.node)
+                        // setFilters((prev: any) => ({
+                        //     ...prev,
+                        // }))
+                        // console.log('selectedItem:', info.node)
                     }}
                 />
 }   

@@ -50,9 +50,6 @@ function SurveylecturerReport({
     departmentName?: string
     departmentCode?: string
 }) {
-    console.log(surveyName)
-    
-
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const { onOpen } = useDisclosure({
@@ -211,6 +208,24 @@ function SurveylecturerReport({
             },
         }
 
+        const addBorderToRange = (
+            sheet: ExcelJS.Worksheet,
+            fromRow: number,
+            toRow: number,
+            toCol: number
+        ) => {
+            for (let row = fromRow; row <= toRow; row++) {
+                for (let col = 1; col <= toCol; col++) {
+                    sheet.getCell(row, col).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        right: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                    }
+                }
+            }
+        }
+
         worksheet.mergeCells('A1:C2')
         worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
         worksheet.getCell('A1').style = headerTitleStyle
@@ -224,7 +239,7 @@ function SurveylecturerReport({
         worksheet.getCell('E1').style = headerTitleStyle
 
         worksheet.mergeCells('A4:H4')
-        worksheet.getCell('A4').value = `Báo cáo khảo sát: ${surveyName}`
+        worksheet.getCell('A4').value = `Báo cáo ${surveyName}`
         worksheet.getCell('A4').style = headerSubtitleStyle
         worksheet.getRow(4).height = 20
 
@@ -292,10 +307,22 @@ function SurveylecturerReport({
                         (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
                     ),
                 ]
+                headerRowValue.eachCell((cell: any, colNumber: number) => {
+                    cell.alignment = {
+                        horizontal: colNumber === 3 ? 'left' : 'center',
+                        vertical: 'middle',
+                        wrapText: true,
+                    }
+                })
             })
         }
-
-        // Xuất file
+        addBorderToRange(
+            worksheet,
+            rowIndex + 2,
+            rowIndex + 2 + dataTable.length,
+            worksheet.columns.length
+        )
+          // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
         saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ''}.xlsx`)
     }

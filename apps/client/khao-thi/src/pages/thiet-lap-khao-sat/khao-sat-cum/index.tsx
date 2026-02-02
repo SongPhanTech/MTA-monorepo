@@ -4,7 +4,7 @@ import DanhSachHocVien from '@components/sub-pages/khao-sat/danh-sach-hoc-vien'
 import TabDotKhaoSatCum from '@components/sub-pages/khat-sat-cum'
 import DefaultLayout from '@layouts/default-layout'
 import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
-import { Lecturer, Survey } from '@workspace/db'
+import type { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo,
 useState } from 'react'

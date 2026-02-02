@@ -46,7 +46,6 @@ function SurveyOrganizationReport({
     departmentName?: string
     departmentCode?: string
 }) {
-    console.log('trainingObjectTypeName:', trainingObjectTypeName)
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const { onOpen } = useDisclosure({
@@ -204,16 +203,49 @@ function SurveyOrganizationReport({
             },
         }
 
+        const addBorderToRange = (
+            sheet: ExcelJS.Worksheet,
+            fromRow: number,
+            toRow: number,
+            toCol: number
+        ) => {
+            for (let row = fromRow; row <= toRow; row++) {
+                for (let col = 1; col <= toCol; col++) {
+                    sheet.getCell(row, col).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        right: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                    }
+                }
+            }
+        }
+
         worksheet.mergeCells('A1:C2')
-        worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
+        worksheet.getCell('A1').value = {
+            richText: [
+                { text: 'BỘ QUỐC PHÒNG\n' },
+                {
+                    text: 'HỌC VIỆN KỸ THUẬT QUÂN SỰ',
+                    font: { underline: true, bold: true },
+                },
+            ],
+        }
         worksheet.getCell('A1').style = headerTitleStyle
 
         worksheet.getRow(1).height = 30
         worksheet.getRow(2).height = 30
 
         worksheet.mergeCells('E1:H2')
-        worksheet.getCell('E1').value =
-            'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc'
+        worksheet.getCell('E1').value = {
+            richText: [
+                { text: 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\n' },
+                {
+                    text: 'Độc lập - Tự do - Hạnh phúc',
+                    font: { underline: true, bold: true },
+                },
+            ],
+        }
         worksheet.getCell('E1').style = headerTitleStyle
 
         worksheet.mergeCells('A4:H4')
@@ -254,13 +286,20 @@ function SurveyOrganizationReport({
             ? [
                   'STT',
                   'Câu hỏi',
-                  'Tên Câu hỏi',
+                  'Nội dung Câu hỏi',
                   // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
                   ...dataTable[0]?.answers?.map((i: any) => i?.description),
               ]
-            : ['STT', 'Câu hỏi', 'Tên Câu hỏi']
+            : ['STT', 'Câu hỏi', 'Nội dung Câu hỏi']
         headerRow.eachCell((cell: any) => {
-            cell.style = tableHeaderStyle
+            cell.style = {
+                ...tableHeaderStyle,
+                alignment: {
+                    horizontal: 'center',
+                    vertical: 'middle',
+                    wrapText: true,
+                },
+            }
         })
 
         // Điều chỉnh độ rộng cột
@@ -285,7 +324,20 @@ function SurveyOrganizationReport({
                         (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
                     ),
                 ]
+                headerRowValue.eachCell((cell: any, colNumber: number) => {
+                    cell.alignment = {
+                        horizontal: colNumber === 3 ? 'left' : 'center',
+                        vertical: 'middle',
+                        wrapText: true,
+                    }
+                })
             })
+            addBorderToRange(
+                worksheet,
+                rowIndex + 2,
+                rowIndex + 2 + dataTable.length,
+                worksheet.columns.length
+            )
         }
 
         // Xuất file
