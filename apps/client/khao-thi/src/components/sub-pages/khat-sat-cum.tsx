@@ -21,6 +21,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Link } from 'lucide-react';
 
 function TabDotKhaoSatCum({
     selectedId,
@@ -181,6 +182,10 @@ function TabDotKhaoSatCum({
     const handleModal = () => {
         onOpen({ id: '', type: 'multiple' })
     }
+
+    const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
+        tag: 'ThongTinKhaoSatModal',
+    })
 
     // const { mutateAsync: updateSurvey } = useUpdateClusterSurvey()
 
@@ -437,7 +442,7 @@ function TabDotKhaoSatCum({
                                     'XOA',
                                     'XEM_CHI_TIET'
                                 ),
-                                render: (_, { id, surveyQuestion, surveys }) => (
+                                render: (_, { id,isPublic, surveyQuestion, surveys,surveyObjectType }) => (
                                     <Row className="justify-center gap-2">
                                         {/* {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -472,6 +477,30 @@ function TabDotKhaoSatCum({
                                                             onOpenPrint({ id })
                                                         }}
                                                         style={{ fontSize: '16px' }}
+                                                    />
+                                                </Tooltip>
+                                            )}
+                                                {surveyQuestion?.length > 0 &&
+                                            can(
+                                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                                'XEM_CHI_TIET'
+                                            ) &&
+                                            !!isPublic && (
+                                                <Tooltip
+                                                    className="mr-2"
+                                                    title={'Lấy đường dẫn khảo sát công khai'}
+                                                    placement="top"
+                                                >
+                                                    <Link
+                                                        size={16}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenKhaoSat({
+                                                                dataTable: surveyObjectType,
+                                                                id: id,
+                                                            })
+                                                            // router.push(`/lam-khao-sat/${id}`)
+                                                        }}
                                                     />
                                                 </Tooltip>
                                             )}
