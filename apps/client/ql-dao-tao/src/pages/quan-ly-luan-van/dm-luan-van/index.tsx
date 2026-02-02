@@ -46,11 +46,13 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 import {
+    exportBanSaoHDDGLV,
     exportDanhSachBaoVe,
     exportDanhSachNopLuanVanThuVien,
     exportGiayMoiChamLvPb,
     exportGiayMoiHdlv,
     exportHosobvlv,
+    exportKetQuaBaoVeLuanVan,
     exportKiemTraTienDo,
     exportPhuLucDsLuanVan,
     exportSaoQDHDLV,
@@ -604,8 +606,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 6.1,
             label: 'Bản sao HDDGLV',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportBanSaoHDDGLV({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 7,
@@ -693,8 +700,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 16,
             label: 'Thống kê KQ BV LV',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportKetQuaBaoVeLuanVan({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 19,
