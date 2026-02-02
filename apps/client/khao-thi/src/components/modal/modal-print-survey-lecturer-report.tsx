@@ -64,6 +64,7 @@ const ModalPrintSurveylecturer = () => {
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
+        documentTitle: 'HỌC VIỆN KĨ QUÂN SỰ',
         pageStyle: `
         @page { size: A4; margin: 1.5cm; }
 
@@ -87,7 +88,7 @@ const ModalPrintSurveylecturer = () => {
                 width: 100%;
                 border-collapse: collapse;
                 page-break-after: auto;
-                border: 2px solid #000;
+                border: 1px solid #000;
             }
 
             thead {
@@ -105,7 +106,7 @@ const ModalPrintSurveylecturer = () => {
             }
 
             th, td {
-                border: 2px solid #000;
+                border: 1px solid #000;
                 padding: 6px 6px;
                 vertical-align: middle;
             }
@@ -118,6 +119,7 @@ const ModalPrintSurveylecturer = () => {
     })
 
     if (!input) return null
+    const hasDepartment = Boolean(input.departmentName)
 
     return (
         <Modal
@@ -139,7 +141,7 @@ const ModalPrintSurveylecturer = () => {
                 <div className="flex justify-between text-center font-bold">
                     <div className="w-[45%]">
                         <div className="uppercase">HỌC VIỆN KỸ THUẬT QUÂN SỰ</div>
-                        <div className="uppercase underline">PHÒNG KT & ĐBCLGD-ĐT</div>
+                        <div className="uppercase underline">BAN KT & ĐBCLGD-ĐT</div>
                     </div>
                     <div className="w-[45%]">
                         <div className="uppercase">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
@@ -168,18 +170,21 @@ const ModalPrintSurveylecturer = () => {
                             </div>
                         </div>
 
-                        <div className="flex justify-between">
-                            <div>
-                                <b>2. Bộ môn:</b> {input.departmentName || ''}
+                        {hasDepartment && (
+                            <div className="flex justify-between">
+                                <div>
+                                    <b>2. Bộ môn:</b> {input.departmentName}
+                                </div>
+                                <div>
+                                    <b>Mã bộ môn:</b> {input.departmentCode}
+                                </div>
                             </div>
-                            <div>
-                                <b>Mã bộ môn:</b> {input.departmentCode || ''}
-                            </div>
-                        </div>
+                        )}
 
                         <div className="flex justify-between">
                             <div>
-                                <b>3. Khoa:</b> {input.organizationName || ''}
+                                <b>{hasDepartment ? '3' : '2'}. Khoa:</b>{' '}
+                                {input.organizationName || ''}
                             </div>
                             <div>
                                 <b>Mã khoa:</b> {input.organizationCode || ''}
@@ -192,25 +197,14 @@ const ModalPrintSurveylecturer = () => {
                     </div>
                 </div>
 
-                {/* ===== CHART ===== */}
-                <div className="mt-6">
-                    <ReactECharts
-                        option={input.chartOption}
-                        className="echarts-for-react"
-                        style={{
-                            height: Math.max(350, input.questions.length * 30 + 150),
-                        }}
-                    />
-                </div>
-
                 {/* ===== TABLE ===== */}
-                <table className="mt-6 text-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                <table className="mt-6 text-sm border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
                     <thead>
                         <tr className="font-bold text-center">
-                            <th style={{ width: 50 }}>STT</th>
-                            <th style={{ width: 90 }}>Câu hỏi</th>
+                            <th className="border-2 border-black" style={{ width: 50 }}>STT</th>
+                            <th className="border-2  border-black" style={{ width: 90 }}>Câu hỏi</th>
                             {input.questions[0]?.answers.map((a: any) => (
-                                <th key={a.id}>{a.description}</th>
+                                <th key={a.id} className="border-2  border-black">{a.description}</th>
                             ))}
                         </tr>
                     </thead>
@@ -223,14 +217,14 @@ const ModalPrintSurveylecturer = () => {
 
                                 return (
                                     <tr key={q.id} className={isAvg ? 'avg-row' : ''}>
-                                        <td className="text-center">
+                                        <td className="text-center border-2  border-black">
                                             {isAvg ? 'ĐGTB' : index + 1}
                                         </td>
-                                        <td className="text-center">
+                                        <td className="text-center border-2  border-black">
                                             {isAvg ? '' : `Câu ${index + 1}`}
                                         </td>
                                         {percent.map((p: any) => (
-                                            <td key={p.id} className="text-center">
+                                            <td key={p.id} className="text-center border-2  border-black">
                                                 {p.percent}% ({p.count}/{p.total})
                                             </td>
                                         ))}
@@ -239,6 +233,17 @@ const ModalPrintSurveylecturer = () => {
                             })}
                     </tbody>
                 </table>
+
+                {/* ===== CHART ===== */}
+                <div className="mt-6">
+                    <ReactECharts
+                        option={input.chartOption}
+                        className="echarts-for-react"
+                        style={{
+                            height: Math.max(350, input.questions.length * 30 + 150),
+                        }}
+                    />
+                </div>
 
                 {/* ===== FOOTER ===== */}
                 <div className="mt-3 text-sm italic">
@@ -251,7 +256,7 @@ const ModalPrintSurveylecturer = () => {
                 </div>
 
                 <div className=" flex text-lg justify-end">
-                    <div className="text-center font-bold">TRƯỞNG PHÒNG</div>
+                    <div className="text-center font-bold">TRƯỞNG BAN</div>
                 </div>
             </div>
         </Modal>

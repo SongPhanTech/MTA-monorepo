@@ -4,6 +4,7 @@ import {
     useFindManyClusterSurvey,
     useFindManyDM_DonVi,
     useFindManyLecturer,
+    useFindUniqueTrainingObjectType,
 } from '@workspace/db/hooks'
 import { Col, Flex, Input, Row, Skeleton, Tree } from 'antd'
 import { useMemo, useState } from 'react'
@@ -69,7 +70,21 @@ export default function BaoCaoGiangVien() {
     const [selectedItem, setSelectedItem] = useState<any>()
 
     const { id: semesterId } = useSemesterStore()
-    const { id: trainingObjectTypeId, name: trainingObjectTypeName } = useTrainingMajorStore()
+    const { id: trainingObjectTypeId } = useTrainingMajorStore()
+
+    const { data: trainingObjectType } = useFindUniqueTrainingObjectType(
+        {
+            where: { id: trainingObjectTypeId },
+            select: { name: true },
+        },
+        {
+            enabled: !!trainingObjectTypeId,
+        }
+    )
+    const trainingObjectTypeName = useMemo(
+        () => trainingObjectType?.name ?? '',
+        [trainingObjectType]
+    )
 
     const { data = [], refetch } = useFindManyClusterSurvey({
         where: {
