@@ -5,7 +5,7 @@ import {
     useFindManyDM_DonVi,
     useFindManyLecturer,
 } from '@workspace/db/hooks'
-import { Col, Flex, Row, Tree } from 'antd'
+import { Col, Flex, Row, Skeleton, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
@@ -100,6 +100,7 @@ export default function BaoCaoGiangVien() {
     const {
         data: organizations = [],
         isLoading: organizationsLoading,
+        isFetching,
         error: organizationsError,
     } = useFindManyDM_DonVi()
 
@@ -228,7 +229,7 @@ export default function BaoCaoGiangVien() {
                     />
                 )
             }
-            return <>Vui lòng chọn đợt khảo sát</>
+            return <>Vui lòng chọn đối tượng</>
             // if (filtersMore.surveyId) {
             //     return <SurveyReport selectedId={filtersMore?.surveyId || ''} />
             // }
@@ -307,7 +308,7 @@ export default function BaoCaoGiangVien() {
                 </Flex>
             </Col>
             <Col span={6}>
-                <Tree
+                     {isFetching ?<Skeleton/>:<Tree
                     showIcon
                     selectedKeys={selectedKeys}
                     treeData={treeData}
@@ -321,7 +322,8 @@ export default function BaoCaoGiangVien() {
                         // console.log('selectedItem:', info.node)
                     }}
                 />
-            </Col>
+}   
+                          </Col>
 
             <Col span={18}>{items}</Col>
         </Row>

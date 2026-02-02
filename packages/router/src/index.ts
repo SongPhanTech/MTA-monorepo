@@ -278,16 +278,16 @@ const NAVIGATION: NavigationType = {
                         description: 'Điểm giải thưởng',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
-                        label: 'Sửa điểm',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_SUA_DIEM,
-                        description: 'Sửa điểm',
-                    },
-                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
                         label: 'Điểm chứng chỉ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_CHUNG_CHI,
                         description: 'Điểm chứng chỉ',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
+                        label: 'Sửa điểm',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_SUA_DIEM,
+                        description: 'Sửa điểm',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
@@ -772,17 +772,17 @@ const NAVIGATION: NavigationType = {
                 icon: Landmark,
                 children: [
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                         label: 'Ngân hàng câu hỏi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                         label: 'Khung đề',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_KHUNG_DE,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                         label: 'Danh sách đề thi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DANH_SACH_DE,
                     },
