@@ -130,7 +130,7 @@ export default function ThesisSession() {
                         <Col span={24}>
                             <Flex justify="end">
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                                     'THEM'
                                 ) && (
                                     <Button onClick={handleModal} type="primary">
@@ -219,7 +219,7 @@ export default function ThesisSession() {
                                 align: 'center',
                                 fixed: 'right',
                                 hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                                     'XEM_CHI_TIET',
                                     'SUA',
                                     'XOA'
@@ -229,7 +229,7 @@ export default function ThesisSession() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                                                     'SUA'
                                                 ) && (
                                                     <EditIcon
@@ -241,7 +241,7 @@ export default function ThesisSession() {
                                                     />
                                                 )}
                                                 {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                                                     'XOA'
                                                 ) && (
                                                     <DeleteIcon
