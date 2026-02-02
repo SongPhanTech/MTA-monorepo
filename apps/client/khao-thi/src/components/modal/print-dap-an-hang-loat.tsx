@@ -2,41 +2,16 @@ import { Modal, Button, Flex, Divider, Input } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useState, useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
-import {
-    Document,
-    Packer,
-    Paragraph,
-    Table,
-    TableRow,
-    TableCell,
-    TextRun,
-    AlignmentType,
-    WidthType,
-    BorderStyle,
-    VerticalAlign,
-    PageBreak,
-    SectionType,
-    ImageRun,
-} from 'docx'
-import html2canvas from 'html2canvas'
 import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { queryClient } from '@api/index'
 import { getMinioUrl } from '@workspace/libs/utils'
-
-// Type cho content elements (text hoặc image)
-type ContentElement =
-    | { type: 'text'; content: string; bold?: boolean }
-    | {
-          type: 'image'
-          data: Uint8Array
-          width: number
-          height: number
-          imageType: 'png' | 'jpg' | 'gif' | 'bmp'
-      }
+import { TemplateHandler } from 'easy-template-x'
+import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
 
 const PrintBatchExplanation = () => {
     const [name, setName] = useState('Nguyễn Văn A')
+    const [duration, setDuration] = useState('')
     const { isOpen, onClose, input } = useDisclosure<{
         ids: string[]
     }>({
@@ -95,852 +70,73 @@ const PrintBatchExplanation = () => {
         documentTitle: `Dap-An-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name || 'Exam'}`,
     })
 
-    // ========== RENDER LATEX THÀNH HÌNH ẢNH ==========
+    // Download file
+    const handleDownload = async () => {
+        if (!exams || exams.length === 0) return
 
-    // Render 1 công thức LaTeX thành hình ảnh PNG
-    async function renderLatexToImage({
-        latexFormula,
-        isBlock = false,
-    }: {
-        latexFormula: string
-        isBlock?: boolean
-    }): Promise<{ data: Uint8Array; width: number; height: number } | null> {
-        try {
-            // Tạo wrapper container để đảm bảo không bị cắt
-            const wrapper = document.createElement('div')
-            wrapper.style.position = 'absolute'
-            wrapper.style.left = '-9999px'
-            wrapper.style.top = '-9999px'
-            wrapper.style.backgroundColor = '#FFFFFF'
-            wrapper.style.padding = '15px'
-            wrapper.style.display = 'inline-block'
+        const res = await fetch(getMinioUrl('mta/template/template-dap-an-hang-loat-bk.docx'))
+        const templateFile = await res.blob()
 
-            const container = document.createElement('div')
-            container.style.backgroundColor = '#FFFFFF'
-            container.style.fontSize = '12pt'
-            container.style.fontFamily = 'Times New Roman, serif'
-            container.style.lineHeight = '1.4'
-            container.style.display = 'inline-block'
-            container.style.padding = '2px'
-
-            // Wrap LaTeX và render
-            const wrappedLatex = isBlock ? `$$${latexFormula}$$` : `$${latexFormula}$`
-            container.innerHTML = renderWithMath(wrappedLatex)
-
-            wrapper.appendChild(container)
-            document.body.appendChild(wrapper)
-
-            // Đợi fonts và MathJax/KaTeX render xong
-            await new Promise((resolve) => setTimeout(resolve, 800))
-            await document.fonts.ready
-
-            // Capture toàn bộ wrapper để bao gồm cả padding
-            const canvas = await html2canvas(wrapper, {
-                backgroundColor: '#FFFFFF',
-                scale: 3,
-                logging: false,
-                useCORS: true,
-                allowTaint: true,
-                width: wrapper.scrollWidth,
-                height: wrapper.scrollHeight,
-            })
-
-            document.body.removeChild(wrapper)
-
-            return new Promise((resolve) => {
-                canvas.toBlob(
-                    (blob) => {
-                        if (blob) {
-                            blob.arrayBuffer().then((buffer) => {
-                                resolve({
-                                    data: new Uint8Array(buffer),
-                                    width: Math.round(canvas.width / 3),
-                                    height: Math.round(canvas.height / 3),
-                                })
-                            })
-                        } else {
-                            resolve(null)
-                        }
-                    },
-                    'image/png',
-                    1.0
-                )
-            })
-        } catch (error) {
-            console.error('Error rendering LaTeX:', error)
-            return null
-        }
-    }
-
-    // Tách nội dung thành các phần: text thường và LaTeX
-    const parseContentWithLatex = (
-        text: string
-    ): Array<{
-        type: 'text' | 'latex-block' | 'latex-inline'
-        content: string
-    }> => {
-        const parts: Array<{
-            type: 'text' | 'latex-block' | 'latex-inline'
-            content: string
-        }> = []
-
-        const regex = /(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$)/g
-        let lastIndex = 0
-        let match: RegExpExecArray | null = null
-
-        match = regex.exec(text)
-        while (match !== null) {
-            if (match.index > lastIndex) {
-                const textBefore = text.slice(lastIndex, match.index)
-                if (textBefore) {
-                    parts.push({ type: 'text', content: textBefore })
-                }
-            }
-
-            const latex = match[1]
-            if (latex.startsWith('$$')) {
-                parts.push({
-                    type: 'latex-block',
-                    content: latex.slice(2, -2).trim(),
-                })
-            } else {
-                parts.push({
-                    type: 'latex-inline',
-                    content: latex.slice(1, -1).trim(),
-                })
-            }
-
-            lastIndex = regex.lastIndex
-            match = regex.exec(text)
-        }
-
-        if (lastIndex < text.length) {
-            const remaining = text.slice(lastIndex)
-            if (remaining) {
-                parts.push({ type: 'text', content: remaining })
-            }
-        }
-
-        return parts
-    }
-
-    // Loại bỏ HTML tags để lấy text thuần
-    const stripHtml = (html: string): string => {
-        const tmp = document.createElement('div')
-        tmp.innerHTML = html
-        return tmp.textContent || tmp.innerText || ''
-    }
-
-    // Hàm lấy image type từ URL
-    const getImageType = (src: string): 'png' | 'jpg' | 'gif' | 'bmp' => {
-        const lowerSrc = src.toLowerCase()
-        if (lowerSrc.includes('.png')) return 'png'
-        if (lowerSrc.includes('.gif')) return 'gif'
-        if (lowerSrc.includes('.bmp')) return 'bmp'
-        if (lowerSrc.includes('.jpeg')) return 'jpg'
-        return 'jpg'
-    }
-
-    // Hàm đọc file ảnh từ Minio URL
-    const readImageFile = async (src: string): Promise<Uint8Array | null> => {
-        try {
-            const fullUrl = getMinioUrl(src)
-            const response = await fetch(fullUrl)
-            if (!response.ok) return null
-            const arrayBuffer = await response.arrayBuffer()
-            return new Uint8Array(arrayBuffer)
-        } catch (error) {
-            console.error('Error reading image:', error)
-            return null
-        }
-    }
-
-    // Hàm lấy kích thước thực của ảnh
-    const getImageDimensions = (src: string): Promise<{ width: number; height: number }> => {
-        return new Promise((resolve) => {
-            const img = new Image()
-            img.onload = () => {
-                let width = img.naturalWidth
-                let height = img.naturalHeight
-                const maxWidth = 400
-                const maxHeight = 300
-
-                if (width > maxWidth) {
-                    height = (height * maxWidth) / width
-                    width = maxWidth
-                }
-                if (height > maxHeight) {
-                    width = (width * maxHeight) / height
-                    height = maxHeight
-                }
-
-                resolve({ width: Math.round(width), height: Math.round(height) })
-            }
-            img.onerror = () => {
-                resolve({ width: 200, height: 150 })
-            }
-            img.src = getMinioUrl(src)
-        })
-    }
-
-    // Hàm parse HTML và trích xuất text + images + LaTeX
-    const parseHtmlContent = async (html: string): Promise<ContentElement[]> => {
-        const elements: ContentElement[] = []
-        const tmp = document.createElement('div')
-        tmp.innerHTML = html
-
-        // Kiểm tra xem có hình ảnh IMG trong HTML không
-        const hasImages = tmp.querySelector('img') !== null
-
-        if (hasImages) {
-            // Nếu có hình ảnh, xử lý theo cách cũ
-            const processNode = async (node: Node) => {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    const text = node.textContent?.trim()
-                    if (text) {
-                        elements.push({ type: 'text', content: `${text} ` })
-                    }
-                } else if (node.nodeType === Node.ELEMENT_NODE) {
-                    const element = node as HTMLElement
-
-                    if (element.tagName === 'IMG') {
-                        const img = element as HTMLImageElement
-                        const src = img.getAttribute('src') || img.src
-                        if (src) {
-                            const imageData = await readImageFile(src)
-                            if (imageData) {
-                                const dimensions = await getImageDimensions(src)
-                                elements.push({
-                                    type: 'image',
-                                    data: imageData,
-                                    width: dimensions.width,
-                                    height: dimensions.height,
-                                    imageType: getImageType(src),
-                                })
-                            }
-                        }
-                    } else if (element.tagName === 'BR') {
-                        elements.push({ type: 'text', content: ' ' })
-                    } else {
-                        for (const child of Array.from(node.childNodes)) {
-                            await processNode(child)
-                        }
-                    }
-                }
-            }
-
-            for (const child of Array.from(tmp.childNodes)) {
-                await processNode(child)
-            }
-        } else {
-            // Nếu không có hình ảnh, xử lý LaTeX
-            const plainText = stripHtml(html)
-            const parts = parseContentWithLatex(plainText)
-
-            for (const part of parts) {
-                if (part.type === 'text') {
-                    elements.push({ type: 'text', content: part.content })
-                } else {
-                    const isBlock = part.type === 'latex-block'
-                    const imageData = await renderLatexToImage({
-                        latexFormula: part.content,
-                        isBlock,
-                    })
-
-                    if (imageData) {
-                        elements.push({
-                            type: 'image',
-                            data: imageData.data,
-                            width: imageData.width,
-                            height: imageData.height,
-                            imageType: 'png',
-                        })
-                    } else {
-                        elements.push({ type: 'text', content: part.content })
-                    }
-                }
-            }
-        }
-
-        return elements
-    }
-
-    // Hàm tạo Paragraph children từ parsed content
-    const createParagraphChildren = (
-        elements: ContentElement[],
-        prefixText?: string,
-        prefixBold?: boolean
-    ) => {
-        const children: (TextRun | ImageRun)[] = []
-
-        if (prefixText) {
-            children.push(
-                new TextRun({
-                    text: prefixText,
-                    bold: prefixBold,
-                    font: 'Times New Roman',
-                    size: 24,
-                })
-            )
-        }
-
-        for (const el of elements) {
-            if (el.type === 'text') {
-                children.push(
-                    new TextRun({
-                        text: el.content,
-                        font: 'Times New Roman',
-                        size: 24,
-                    })
-                )
-            } else if (el.type === 'image') {
-                children.push(
-                    new ImageRun({
-                        type: el.imageType,
-                        data: el.data,
-                        transformation: {
-                            width: el.width,
-                            height: el.height,
-                        },
-                        altText: {
-                            title: 'Image',
-                            description: 'Question image',
-                            name: 'image',
-                        },
-                    })
-                )
-            }
-        }
-
-        return children
-    }
-
-    // Tạo document Word cho một đáp án
-    const createAnswerSection = async (exam: any, isLastExam: boolean) => {
         const currentDate = new Date()
         const day = currentDate.getDate()
         const month = currentDate.getMonth() + 1
         const year = currentDate.getFullYear()
 
-        // Pre-process tất cả questions để lấy parsed content
-        const processedQuestions = await Promise.all(
-            (exam?.questions || []).map(async (q: any, index: number) => {
-                const questionContent = await parseHtmlContent(q?.question?.content || '')
-                const explanationContent = await parseHtmlContent(q?.question?.explanation || '')
+        const templateData = {
+            exams: exams.map((exam, index) => ({
+                semester: exam?.exam?.semester?.name || '',
+                className: exam?.subjectClass?.name || '',
+                day,
+                month,
+                year,
+                semesterName: exam?.exam?.semester?.name || '',
+                examCode: exam?.examCode || '',
+                subjectName: exam?.exam?.subjectVersion?.name || '',
+                duration: exam?.exam?.duration || 30,
+                teacherName: name,
+                questions:
+                    exam?.questions?.map((q, qIndex) => {
+                        const question = q?.question
+                        let answer = ''
 
-                // Process multiple choice options
-                const processedOptions = await Promise.all(
-                    (q?.question?.multipleChoiceOptions || []).map(async (option: any) => ({
-                        ...option,
-                        parsedContent: await parseHtmlContent(option?.content || ''),
-                    }))
-                )
+                        // Xử lý đáp án theo loại câu hỏi
+                        if (
+                            question?.multipleChoiceOptions &&
+                            question?.multipleChoiceOptions?.length > 0
+                        ) {
+                            // Lấy các đáp án đúng
+                            const correctAnswers = question.multipleChoiceOptions
+                                .filter((option) => option?.isCorrect)
+                                .map((option) => convertHtmlBreaks(option?.content || ''))
+                                .join(', ')
+                            answer = correctAnswers
+                        } else if (question?.orderingItems && question?.orderingItems?.length > 0) {
+                            // Hiển thị thứ tự đúng
+                            const orderSequence = question.orderingItems
+                                .sort((a, b) => (a?.correctOrder || 0) - (b?.correctOrder || 0))
+                                .map((_, idx) => String.fromCharCode(65 + idx))
+                                .join(' → ')
+                            answer = orderSequence
+                        } else {
+                            // Các loại câu hỏi khác (tự luận, điền chỗ trống, v.v.)
+                            answer = convertHtmlBreaks(question?.explanation || '')
+                        }
 
-                // Process ordering items
-                const processedOrderingItems = await Promise.all(
-                    (q?.question?.orderingItems || []).map(async (item: any) => ({
-                        ...item,
-                        parsedContent: await parseHtmlContent(item?.content || ''),
-                    }))
-                )
-
-                return {
-                    ...q,
-                    index,
-                    questionContent,
-                    explanationContent,
-                    processedOptions,
-                    processedOrderingItems,
-                }
-            })
-        )
-
-        const children = [
-            // Header row
-            new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                borders: {
-                    top: { style: BorderStyle.NONE },
-                    bottom: { style: BorderStyle.NONE },
-                    left: { style: BorderStyle.NONE },
-                    right: { style: BorderStyle.NONE },
-                    insideHorizontal: { style: BorderStyle.NONE },
-                    insideVertical: { style: BorderStyle.NONE },
-                },
-                rows: [
-                    new TableRow({
-                        children: [
-                            new TableCell({
-                                width: { size: 36, type: WidthType.PERCENTAGE },
-                                borders: {
-                                    top: { style: BorderStyle.NONE },
-                                    bottom: { style: BorderStyle.NONE },
-                                    left: { style: BorderStyle.NONE },
-                                    right: { style: BorderStyle.NONE },
-                                },
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: 'BAN KHẢO THÍ & ĐBCLGD-ĐT',
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            }),
-                            new TableCell({
-                                width: { size: 32, type: WidthType.PERCENTAGE },
-                                borders: {
-                                    top: { style: BorderStyle.NONE },
-                                    bottom: { style: BorderStyle.NONE },
-                                    left: { style: BorderStyle.NONE },
-                                    right: { style: BorderStyle.NONE },
-                                },
-                                children: [
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        children: [
-                                            new TextRun({
-                                                text: 'PHIẾU ĐỀ THI',
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        spacing: { before: 100 },
-                                        children: [
-                                            new TextRun({
-                                                text: `(Dùng cho lớp: ${exam?.subjectClass?.name || ''})`,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            }),
-                            new TableCell({
-                                width: { size: 32, type: WidthType.PERCENTAGE },
-                                borders: {
-                                    top: { style: BorderStyle.NONE },
-                                    bottom: { style: BorderStyle.NONE },
-                                    left: { style: BorderStyle.NONE },
-                                    right: { style: BorderStyle.NONE },
-                                },
-                                children: [
-                                    new Paragraph({
-                                        alignment: AlignmentType.RIGHT,
-                                        children: [
-                                            new TextRun({
-                                                text: exam?.exam?.semester?.name || 'HKI',
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            }),
-                        ],
-                    }),
-                ],
-            }),
-
-            // Date
-            new Paragraph({
-                alignment: AlignmentType.RIGHT,
-                spacing: { after: 300 },
-                children: [
-                    new TextRun({
-                        text: `Ngày ${day} tháng ${month} năm ${year}`,
-                        italics: true,
-                        font: 'Times New Roman',
-                        size: 24,
-                    }),
-                ],
-            }),
-
-            // Main info table
-            new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                rows: [
-                    new TableRow({
-                        children: [
-                            new TableCell({
-                                width: { size: 25, type: WidthType.PERCENTAGE },
-                                verticalAlign: VerticalAlign.CENTER,
-                                children: [
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        children: [
-                                            new TextRun({
-                                                text: 'Giáo viên ra đề',
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            }),
-                            new TableCell({
-                                width: { size: 50, type: WidthType.PERCENTAGE },
-                                verticalAlign: VerticalAlign.CENTER,
-                                children: [
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        spacing: { after: 100 },
-                                        children: [
-                                            new TextRun({
-                                                text: `Đề thi số : ${exam?.examCode || '001'}`,
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        spacing: { after: 100 },
-                                        children: [
-                                            new TextRun({
-                                                text: `Học phần: ${exam?.exam?.subjectVersion?.name || ''}`,
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        spacing: { after: 150 },
-                                        children: [
-                                            new TextRun({
-                                                text: `Thời gian làm bài: ${exam?.exam?.duration || 30} phút`,
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            }),
-                            new TableCell({
-                                width: { size: 25, type: WidthType.PERCENTAGE },
-                                verticalAlign: VerticalAlign.CENTER,
-                                children: [
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        spacing: { after: 100 },
-                                        children: [
-                                            new TextRun({
-                                                text: 'Ban Khảo thi',
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        spacing: { after: 100 },
-                                        children: [
-                                            new TextRun({
-                                                text: '& ĐBCLGD-ĐT',
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        children: [
-                                            new TextRun({
-                                                text: name,
-                                                italics: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            }),
-                        ],
-                    }),
-                ],
-            }),
-
-            new Paragraph({ spacing: { after: 400 } }),
-
-            // Questions and Answers Table
-            new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                rows: [
-                    // Header row
-                    new TableRow({
-                        children: [
-                            new TableCell({
-                                width: { size: 85, type: WidthType.PERCENTAGE },
-                                verticalAlign: VerticalAlign.CENTER,
-                                margins: {
-                                    top: 150,
-                                    bottom: 150,
-                                    left: 100,
-                                    right: 100,
-                                },
-                                children: [
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        children: [
-                                            new TextRun({
-                                                text: 'Nội dung câu hỏi và đáp án',
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            }),
-                            new TableCell({
-                                width: { size: 15, type: WidthType.PERCENTAGE },
-                                verticalAlign: VerticalAlign.CENTER,
-                                margins: {
-                                    top: 150,
-                                    bottom: 150,
-                                    left: 100,
-                                    right: 100,
-                                },
-                                children: [
-                                    new Paragraph({
-                                        alignment: AlignmentType.CENTER,
-                                        children: [
-                                            new TextRun({
-                                                text: 'Điểm',
-                                                bold: true,
-                                                font: 'Times New Roman',
-                                                size: 24,
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            }),
-                        ],
-                    }),
-                    // Question rows
-                    ...processedQuestions.map(
-                        (q) =>
-                            new TableRow({
-                                children: [
-                                    new TableCell({
-                                        width: { size: 85, type: WidthType.PERCENTAGE },
-                                        margins: {
-                                            top: 150,
-                                            bottom: 150,
-                                            left: 100,
-                                            right: 100,
-                                        },
-                                        children: [
-                                            // Question content với hình ảnh
-                                            new Paragraph({
-                                                spacing: { after: 150 },
-                                                children: createParagraphChildren(
-                                                    q.questionContent,
-                                                    `Câu ${q?.order || q.index + 1}(${Number(q?.question?.point || 0).toFixed(1)} điểm): `,
-                                                    true
-                                                ),
-                                            }),
-                                            // Multiple choice options
-                                            ...(q.processedOptions && q.processedOptions.length > 0
-                                                ? [
-                                                      ...q.processedOptions.map(
-                                                          (option: any) =>
-                                                              new Paragraph({
-                                                                  spacing: { before: 100 },
-                                                                  children: createParagraphChildren(
-                                                                      option.parsedContent
-                                                                  ),
-                                                              })
-                                                      ),
-                                                      // Đáp án đúng
-                                                      new Paragraph({
-                                                          spacing: { before: 150 },
-                                                          children: [
-                                                              new TextRun({
-                                                                  text: 'Đáp án: ',
-                                                                  bold: true,
-                                                                  font: 'Times New Roman',
-                                                                  size: 24,
-                                                              }),
-                                                              ...q.processedOptions
-                                                                  .filter(
-                                                                      (option: any) =>
-                                                                          option?.isCorrect
-                                                                  )
-                                                                  .flatMap((option: any) =>
-                                                                      createParagraphChildren(
-                                                                          option.parsedContent
-                                                                      )
-                                                                  ),
-                                                          ],
-                                                      }),
-                                                  ]
-                                                : q.processedOrderingItems &&
-                                                    q.processedOrderingItems.length > 0
-                                                  ? [
-                                                        // Ordering items
-                                                        ...q.processedOrderingItems.map(
-                                                            (item: any) =>
-                                                                new Paragraph({
-                                                                    spacing: { before: 100 },
-                                                                    children:
-                                                                        createParagraphChildren(
-                                                                            item.parsedContent
-                                                                        ),
-                                                                })
-                                                        ),
-                                                        new Paragraph({
-                                                            spacing: { before: 150 },
-                                                            children: [
-                                                                new TextRun({
-                                                                    text: 'Đáp án: ',
-                                                                    bold: true,
-                                                                    font: 'Times New Roman',
-                                                                    size: 24,
-                                                                }),
-                                                                new TextRun({
-                                                                    text: [
-                                                                        ...q.processedOrderingItems,
-                                                                    ]
-                                                                        .sort(
-                                                                            (a: any, b: any) =>
-                                                                                (a?.correctOrder ||
-                                                                                    0) -
-                                                                                (b?.correctOrder ||
-                                                                                    0)
-                                                                        )
-                                                                        .map(
-                                                                            (_: any, idx: number) =>
-                                                                                String.fromCharCode(
-                                                                                    65 + idx
-                                                                                )
-                                                                        )
-                                                                        .join(' -> '),
-                                                                    font: 'Times New Roman',
-                                                                    size: 24,
-                                                                }),
-                                                            ],
-                                                        }),
-                                                    ]
-                                                  : [
-                                                        // Explanation với hình ảnh
-                                                        new Paragraph({
-                                                            spacing: { before: 150 },
-                                                            children: createParagraphChildren(
-                                                                q.explanationContent,
-                                                                'Đáp án: ',
-                                                                true
-                                                            ),
-                                                        }),
-                                                    ]),
-                                        ],
-                                    }),
-                                    new TableCell({
-                                        width: { size: 15, type: WidthType.PERCENTAGE },
-                                        verticalAlign: VerticalAlign.CENTER,
-                                        children: [
-                                            new Paragraph({
-                                                alignment: AlignmentType.CENTER,
-                                                children: [
-                                                    new TextRun({
-                                                        text: `${Number(q?.question?.point || 0).toFixed(1)}đ`,
-                                                        font: 'Times New Roman',
-                                                        size: 24,
-                                                    }),
-                                                ],
-                                            }),
-                                        ],
-                                    }),
-                                ],
-                            })
-                    ),
-                ],
-            }),
-        ]
-
-        // Thêm page break nếu không phải đề cuối cùng
-        if (!isLastExam) {
-            children.push(
-                new Paragraph({
-                    children: [new PageBreak()],
-                })
-            )
+                        return {
+                            order: q?.order || qIndex + 1,
+                            point: Number(question?.point || 0).toFixed(1),
+                            content: convertHtmlBreaks(question?.content || ''),
+                            answer: answer,
+                        }
+                    }) || [],
+                isLastExam: index === exams.length - 1,
+            })),
         }
 
-        return children
-    }
+        const handler = new TemplateHandler()
+        const doc = await handler.process(templateFile, templateData)
 
-    // Tạo document Word
-    const createDocument = async () => {
-        const allChildren: any[] = []
-
-        for (let index = 0; index < exams.length; index++) {
-            const exam = exams[index]
-            const isLastExam = index === exams.length - 1
-            const answerChildren = await createAnswerSection(exam, isLastExam)
-            allChildren.push(...answerChildren)
-        }
-
-        const doc = new Document({
-            sections: [
-                {
-                    properties: {
-                        type: SectionType.ODD_PAGE,
-                        page: {
-                            margin: {
-                                top: 567,
-                                bottom: 567,
-                                left: 850,
-                                right: 850,
-                            },
-                        },
-                    },
-                    children: allChildren,
-                },
-            ],
-        })
-
-        return doc
-    }
-
-    // Download file
-    const handleDownload = async () => {
-        setIsDownloading(true)
-        try {
-            const doc = await createDocument()
-            const blob = await Packer.toBlob(doc)
-
-            const url = URL.createObjectURL(blob)
-            const link = document.createElement('a')
-            link.href = url
-            link.download = `Dap-An-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name || 'Exam'}.docx`
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-            URL.revokeObjectURL(url)
-
-            setHasDownloaded(true)
-        } catch (error) {
-            console.error('Error downloading document:', error)
-        } finally {
-            setIsDownloading(false)
-        }
+        saveFile(`Dap-An-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name}.docx`, doc)
     }
 
     const handleClose = async () => {
@@ -1080,7 +276,8 @@ const PrintBatchExplanation = () => {
                                     </div>
                                     <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                                         <strong>
-                                            Thời gian làm bài: {exam?.exam?.duration || 30} phút
+                                            Thời gian làm bài: {exam?.exam?.duration || duration}{' '}
+                                            phút
                                         </strong>
                                     </div>
                                 </td>
@@ -1165,50 +362,6 @@ const PrintBatchExplanation = () => {
                                                     ),
                                                 }}
                                             />
-                                            {/* {q?.question?.multipleChoiceOptions &&
-                        q?.question?.multipleChoiceOptions?.length > 0 && (
-                          <div>
-                            {q.question.multipleChoiceOptions.map(
-                              (option: any) => (
-                                <div
-                                  key={option?.id}
-                                  style={{
-                                    marginLeft: "20px",
-                                    color: "#000",
-                                    fontWeight: "normal",
-                                  }}
-                                >
-                                  <span
-                                    dangerouslySetInnerHTML={{
-                                      __html: renderWithMath(option?.content || ""),
-                                    }}
-                                  />
-                                </div>
-                              )
-                            )}
-                          </div>
-                        )}
-                      {q?.question?.orderingItems &&
-                        q?.question?.orderingItems?.length > 0 && (
-                          <div>
-                            {q.question.orderingItems.map((option: any) => (
-                              <div
-                                key={option?.id}
-                                style={{
-                                  marginLeft: "20px",
-                                  color: "#000",
-                                  fontWeight: "normal",
-                                }}
-                              >
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html: renderWithMath(option?.content || ""),
-                                  }}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        )} */}
                                         </div>
                                         <div style={{ marginTop: '8px' }}>
                                             <strong>Đáp án:</strong>{' '}
@@ -1284,11 +437,17 @@ const PrintBatchExplanation = () => {
             title={
                 <div className="flex items-center gap-4">
                     <span>Xem trước {exams.length} đáp án</span>
-                    <div className="flex-1 flex items-center justify-end gap-4 mr-6">
+                    <div className="flex-1 flex items-center justify-center gap-4">
                         <Input
                             placeholder="Nhập tên"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            className="w-56"
+                        />
+                        <Input
+                            placeholder="Nhập thời gian thi"
+                            value={duration}
+                            onChange={(e) => setDuration(e.target.value)}
                             className="w-56"
                         />
                     </div>

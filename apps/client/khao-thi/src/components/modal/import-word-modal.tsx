@@ -1,5 +1,7 @@
 import { UploadOutlined } from '@ant-design/icons'
 import FormItem from '@components/commons/form-item'
+import HtmlTruncate from '@components/commons/html-truncate'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from '@constants/constants'
@@ -470,11 +472,14 @@ const WordImportModal: React.FC = () => {
                 html = renderContentWithImagePlaceholders(html, record.contentImagesRaw || [])
 
                 return (
-                    <div
-                        dangerouslySetInnerHTML={{
-                            __html: html,
-                        }}
-                    />
+                    <HtmlTruncate>
+                        <div
+                            style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+                            dangerouslySetInnerHTML={{
+                                __html: renderWithMath(html),
+                            }}
+                        />
+                    </HtmlTruncate>
                 )
             },
         },
