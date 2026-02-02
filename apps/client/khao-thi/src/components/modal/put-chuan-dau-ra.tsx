@@ -112,7 +112,7 @@ const PutChuongMucModal = () => {
                             },
                         },
                     },
-                     {
+                    {
                         model: 'ConfigExam',
                         operation: 'deleteMany',
                         data: {
@@ -121,7 +121,7 @@ const PutChuongMucModal = () => {
                             },
                         },
                     },
-                      {
+                    {
                         model: 'ConfigExam',
                         operation: 'createMany',
                         data: {
@@ -131,10 +131,9 @@ const PutChuongMucModal = () => {
                             })),
                         },
                     },
-
                 ])
-                if(res?.status === 200) {
-                    message.success('Cập nhật chuẩn đầu ra thành công' )
+                if (res?.status === 200) {
+                    message.success('Cập nhật chuẩn đầu ra thành công')
                 }
             } else {
                 const createData: any = {

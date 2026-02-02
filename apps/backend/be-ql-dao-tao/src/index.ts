@@ -23,6 +23,7 @@ import ImportApp from './api/import'
 import LecturerApp from './api/lecturer'
 import PlanTraining from './api/plan-training'
 import RoomApp from './api/room'
+import ScoreCorrectionApp from './api/score-correction'
 import Stats from './api/stats'
 import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
@@ -96,6 +97,7 @@ app.route('/api/graduation', GraduationApp)
 app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
 app.route('/api/import', ImportApp)
+app.route('/api/score-correction', ScoreCorrectionApp)
 app.route('/api/archived-score', ArchivedScoreApp)
 app.route('/api/exam', ExamApp)
 app.route('/api/exam-score', ExamScoreApp)

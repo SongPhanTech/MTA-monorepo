@@ -22,6 +22,10 @@ import type {
 
 import type {
     ApproveAwardScore400,
+    ApproveScoreCorrection200,
+    ApproveScoreCorrection400,
+    ApproveScoreCorrection500,
+    ApproveScoreCorrectionInput,
     AwardIds,
     AwardIdsResult,
     AwardScore400,
@@ -10941,6 +10945,127 @@ export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown
     TContext
 > => {
     const mutationOptions = getImportHeQuanSuMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Duyệt phiếu sửa điểm và cập nhật điểm cho sinh viên
+ * @summary Duyệt phiếu sửa điểm
+ */
+export type approveScoreCorrectionResponse200 = {
+    data: ApproveScoreCorrection200
+    status: 200
+}
+
+export type approveScoreCorrectionResponse400 = {
+    data: ApproveScoreCorrection400
+    status: 400
+}
+
+export type approveScoreCorrectionResponse500 = {
+    data: ApproveScoreCorrection500
+    status: 500
+}
+
+export type approveScoreCorrectionResponseSuccess = approveScoreCorrectionResponse200 & {
+    headers: Headers
+}
+export type approveScoreCorrectionResponseError = (
+    | approveScoreCorrectionResponse400
+    | approveScoreCorrectionResponse500
+) & {
+    headers: Headers
+}
+
+export type approveScoreCorrectionResponse =
+    | approveScoreCorrectionResponseSuccess
+    | approveScoreCorrectionResponseError
+
+export const getApproveScoreCorrectionUrl = () => {
+    return `/api/score-correction/approve`
+}
+
+export const approveScoreCorrection = async (
+    approveScoreCorrectionInput: ApproveScoreCorrectionInput,
+    options?: RequestInit
+): Promise<approveScoreCorrectionResponse> => {
+    return customTrainingFetch<approveScoreCorrectionResponse>(getApproveScoreCorrectionUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(approveScoreCorrectionInput),
+    })
+}
+
+export const getApproveScoreCorrectionMutationOptions = <
+    TError = ApproveScoreCorrection400 | ApproveScoreCorrection500,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof approveScoreCorrection>>,
+        TError,
+        { data: ApproveScoreCorrectionInput },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof approveScoreCorrection>>,
+    TError,
+    { data: ApproveScoreCorrectionInput },
+    TContext
+> => {
+    const mutationKey = ['approveScoreCorrection']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof approveScoreCorrection>>,
+        { data: ApproveScoreCorrectionInput }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return approveScoreCorrection(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ApproveScoreCorrectionMutationResult = NonNullable<
+    Awaited<ReturnType<typeof approveScoreCorrection>>
+>
+export type ApproveScoreCorrectionMutationBody = ApproveScoreCorrectionInput
+export type ApproveScoreCorrectionMutationError =
+    | ApproveScoreCorrection400
+    | ApproveScoreCorrection500
+
+/**
+ * @summary Duyệt phiếu sửa điểm
+ */
+export const useApproveScoreCorrection = <
+    TError = ApproveScoreCorrection400 | ApproveScoreCorrection500,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof approveScoreCorrection>>,
+            TError,
+            { data: ApproveScoreCorrectionInput },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof approveScoreCorrection>>,
+    TError,
+    { data: ApproveScoreCorrectionInput },
+    TContext
+> => {
+    const mutationOptions = getApproveScoreCorrectionMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

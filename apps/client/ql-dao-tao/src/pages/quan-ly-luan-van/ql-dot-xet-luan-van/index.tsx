@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -17,10 +16,10 @@ import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useRouter } from 'next/router'
 
 export default function ThesisSession() {
     const { can, canSome } = useAbility()
@@ -146,7 +145,7 @@ export default function ThesisSession() {
 
                 <Col span={24}>
                     <Table
-                        rowKey="key"
+                        rowKey="id"
                         id="thesis-session"
                         filters={filters}
                         setFilters={(value) => {

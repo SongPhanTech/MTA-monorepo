@@ -18,6 +18,7 @@ import {
     useUpdateScoreCorrectionItem,
     useUpdateScoreCorrectionTicket,
 } from '@workspace/db/hooks'
+import { useApproveScoreCorrection } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { SelectTrainingCourse, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -85,7 +86,7 @@ function TicketList() {
             : undefined,
     }
 
-    const { data: tickets = [] } = useFindManyScoreCorrectionTicket({
+    const { data: tickets = [], refetch } = useFindManyScoreCorrectionTicket({
         where,
         include: {
             trainingObjectType: true,
@@ -98,11 +99,8 @@ function TicketList() {
         take: pageSize,
     })
 
-    const { data: total } = useCountScoreCorrectionTicket({
-        where,
-    })
-
-    const { mutateAsync: updateTicket } = useUpdateScoreCorrectionTicket()
+    const { data: total } = useCountScoreCorrectionTicket({ where })
+    const { mutateAsync: approveTicket } = useApproveScoreCorrection()
 
     return (
         <div>
@@ -212,14 +210,56 @@ function TicketList() {
                                         <Popconfirm
                                             title="Bạn có chắc chắn muốn duyệt phiếu này?"
                                             onConfirm={async () => {
+                                                // Validation
+                                                if (
+                                                    !record.proposal ||
+                                                    !record.decision ||
+                                                    !record.date ||
+                                                    !record.number
+                                                ) {
+                                                    message.error('Thông tin phiếu chưa đầy đủ')
+                                                    return
+                                                }
+                                                // Note: record.items might not have full details if not fetched.
+                                                // But useFindManyScoreCorrectionTicket includes items: true.
+                                                if (!record.items || record.items.length === 0) {
+                                                    message.error('Phiếu chưa có sinh viên')
+                                                    return
+                                                }
+                                                // Check items
+                                                const invalidItems = record.items.some(
+                                                    (item: any) =>
+                                                        item.newAttendanceScore === null ||
+                                                        item.newAttendanceScore === undefined ||
+                                                        item.newMidtermScore === null ||
+                                                        item.newMidtermScore === undefined ||
+                                                        item.newExamScore === null ||
+                                                        item.newExamScore === undefined
+                                                )
+
+                                                if (invalidItems) {
+                                                    message.error(
+                                                        'Thông tin điểm mới của các sinh viên chưa đầy đủ'
+                                                    )
+                                                    return
+                                                }
+
                                                 try {
-                                                    await updateTicket({
-                                                        where: { id: record.id },
-                                                        data: { status: 'APPROVED' },
+                                                    const res = await approveTicket({
+                                                        data: {
+                                                            ticketId: record.id,
+                                                        },
                                                     })
-                                                    message.success('Duyệt phiếu thành công')
-                                                } catch (e) {
-                                                    message.error('Lỗi khi duyệt phiếu')
+                                                    if (res.status === 200) {
+                                                        message.success(res.data.message)
+                                                        refetch()
+                                                    } else {
+                                                        message.error(res.data.message)
+                                                    }
+                                                } catch (e: any) {
+                                                    message.error(
+                                                        e.message || 'Lỗi khi duyệt phiếu'
+                                                    )
                                                 }
                                             }}
                                         >
@@ -260,6 +300,75 @@ function TicketList() {
                 />
             )}
         </div>
+    )
+}
+
+function UpdateTicketModal({
+    open,
+    ticket,
+    onCancel,
+    onSuccess,
+}: {
+    open: boolean
+    ticket: any
+    onCancel: () => void
+    onSuccess: () => void
+}) {
+    const [form] = Form.useForm()
+    const { mutateAsync: updateTicket } = useUpdateScoreCorrectionTicket()
+
+    useEffect(() => {
+        if (ticket) {
+            form.setFieldsValue({
+                ...ticket,
+                date: ticket.date ? dayjs(ticket.date) : undefined,
+                deadline: ticket.deadline ? dayjs(ticket.deadline) : undefined,
+            })
+        }
+    }, [ticket, open])
+
+    const onFinish = async (values: any) => {
+        try {
+            await updateTicket({
+                where: { id: ticket.id },
+                data: {
+                    ...values,
+                    date: values.date ? values.date.toISOString() : undefined,
+                    deadline: values.deadline ? values.deadline.toISOString() : undefined,
+                },
+            })
+            message.success('Cập nhật phiếu thành công')
+            onSuccess()
+        } catch (error) {
+            message.error('Có lỗi xảy ra')
+        }
+    }
+
+    return (
+        <Modal
+            title="Cập nhật phiếu sửa điểm"
+            open={open}
+            onCancel={onCancel}
+            onOk={() => form.submit()}
+        >
+            <Form form={form} layout="vertical" onFinish={onFinish}>
+                <Form.Item name="number" label="Số lượng (dự kiến)">
+                    <InputNumber min={0} className="w-full" />
+                </Form.Item>
+                <Form.Item name="proposal" label="Tờ trình">
+                    <Input />
+                </Form.Item>
+                <Form.Item name="decision" label="Số quyết định">
+                    <Input />
+                </Form.Item>
+                <Form.Item name="date" label="Ngày">
+                    <DatePicker className="w-full" format="DD/MM/YYYY" />
+                </Form.Item>
+                <Form.Item name="deadline" label="Hạn nhập">
+                    <DatePicker className="w-full" format="DD/MM/YYYY HH:mm" showTime />
+                </Form.Item>
+            </Form>
+        </Modal>
     )
 }
 
@@ -392,6 +501,7 @@ function TicketDetailDrawer({
     const { mutateAsync: deleteItem } = useDeleteScoreCorrectionItem()
 
     const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false)
+    const [isUpdateTicketModalOpen, setIsUpdateTicketModalOpen] = useState(false) // Added
     const [editingItem, setEditingItem] = useState<any>(null)
 
     const handleStatusChange = async (newStatus: ScoreCorrectionStatus) => {
@@ -399,11 +509,37 @@ function TicketDetailDrawer({
         console.log('items', items)
         console.log('ticket', ticket)
 
-        if (newStatus === 'PENDING_APPROVAL' && items?.length !== ticket?.number) {
-            message.error(
-                `Số lượng sinh viên (${items?.length}) không khớp với số lượng dự kiến (${ticket?.number})`
+        if (newStatus === 'PENDING_APPROVAL') {
+            if (items?.length !== ticket?.number) {
+                message.error(
+                    `Số lượng sinh viên (${items?.length}) không khớp với số lượng dự kiến (${ticket?.number})`
+                )
+                return
+            }
+            // Validate ticket info
+            if (!ticket.proposal || !ticket.decision || !ticket.date) {
+                message.error('Thông tin phiếu chưa đầy đủ (Tờ trình, Số quyết định, Ngày)')
+                return
+            }
+            // Validate items
+            if (!items || items.length === 0) {
+                message.error('Phiếu chưa có sinh viên')
+                return
+            }
+            const invalidItems = items.some(
+                (item: any) =>
+                    item.newAttendanceScore === null ||
+                    item.newAttendanceScore === undefined ||
+                    item.newMidtermScore === null ||
+                    item.newMidtermScore === undefined ||
+                    item.newExamScore === null ||
+                    item.newExamScore === undefined
             )
-            return
+
+            if (invalidItems) {
+                message.error('Thông tin điểm mới của các sinh viên chưa đầy đủ')
+                return
+            }
         }
         try {
             await updateTicket({
@@ -434,6 +570,12 @@ function TicketDetailDrawer({
                             Gửi duyệt
                         </Button>
                     )}
+                    {(ticket?.status === 'INITIALIZED' || ticket?.status === 'PENDING_APPROVAL') &&
+                        can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM, 'SUA') && (
+                            <Button onClick={() => setIsUpdateTicketModalOpen(true)}>
+                                Sửa phiếu
+                            </Button>
+                        )}
                 </Space>
             }
         >
@@ -593,6 +735,14 @@ function TicketDetailDrawer({
                 onCancel={() => setEditingItem(null)}
                 onSuccess={() => {
                     setEditingItem(null)
+                }}
+            />
+            <UpdateTicketModal
+                open={isUpdateTicketModalOpen}
+                ticket={ticket}
+                onCancel={() => setIsUpdateTicketModalOpen(false)}
+                onSuccess={() => {
+                    setIsUpdateTicketModalOpen(false)
                 }}
             />
         </Drawer>

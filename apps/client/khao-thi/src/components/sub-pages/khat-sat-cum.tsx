@@ -5,7 +5,7 @@ import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
-import { SchoolYear, Semester, Survey } from '@workspace/db'
+import type { SchoolYear, Semester, Survey } from '@workspace/db'
 import {
     useCountClusterSurvey,
     useFindManyClusterSurvey,
@@ -18,10 +18,10 @@ import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { Link } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Link } from 'lucide-react';
 
 function TabDotKhaoSatCum({
     selectedId,
@@ -33,7 +33,7 @@ function TabDotKhaoSatCum({
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const { id: semesterId } = useSemesterStore()
-    
+
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
@@ -70,9 +70,8 @@ function TabDotKhaoSatCum({
     // Tạo treeData từ schoolYears và semesters
     const treeData = converData(schoolYears)
     const router = useRouter()
-    const where = useMemo(
-        () => {
-   return {
+    const where = useMemo(() => {
+        return {
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -81,16 +80,17 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
-            ...(semesterId && trainingObjectTypeId && {
-                surveys: {
-                    some: {
-                        semesterId,
-                        trainingObjectTypeId
+            ...(semesterId &&
+                trainingObjectTypeId && {
+                    surveys: {
+                        some: {
+                            semesterId,
+                            trainingObjectTypeId,
+                        },
                     },
-                },
-            }),
-            
-            ...(semesterId&&!trainingObjectTypeId
+                }),
+
+            ...(semesterId && !trainingObjectTypeId
                 ? {
                       surveys: {
                           some: {
@@ -99,7 +99,7 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
-                ...(!semesterId&&trainingObjectTypeId
+            ...(!semesterId && trainingObjectTypeId
                 ? {
                       surveys: {
                           some: {
@@ -143,36 +143,35 @@ function TabDotKhaoSatCum({
                   }
                 : {}),
         }
-        }
-            
-         ,
-        [filters, semesterId,trainingObjectTypeId]
-    )
+    }, [filters, semesterId, trainingObjectTypeId])
 
-    const { data = [], refetch } = useFindManyClusterSurvey({
-        where,
-        include: {
-            surveyObjectType: true,
-            surveyTopic: true,
-            surveyQuestion: true,
-            surveys: {
-                include: {
-                    surveySessions: true,
-                    semester: true,
-                    subjectClass: {
-                        include: {
-                            semester: true,
+    const { data = [], refetch } = useFindManyClusterSurvey(
+        {
+            where,
+            include: {
+                surveyObjectType: true,
+                surveyTopic: true,
+                surveyQuestion: true,
+                surveys: {
+                    include: {
+                        surveySessions: true,
+                        semester: true,
+                        subjectClass: {
+                            include: {
+                                semester: true,
+                            },
                         },
                     },
                 },
             },
+            orderBy: { createdAt: 'desc' },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        orderBy: { createdAt: 'desc' },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    },{
-        enabled: !!semesterId && !!trainingObjectTypeId,
-    })
+        {
+            enabled: !!semesterId && !!trainingObjectTypeId,
+        }
+    )
 
     const { data: count, refetch: refetchCount } = useCountClusterSurvey({
         where: { ...where, deletedAt: null },
@@ -451,7 +450,10 @@ function TabDotKhaoSatCum({
                                     'XOA',
                                     'XEM_CHI_TIET'
                                 ),
-                                render: (_, { id,isPublic, surveyQuestion, surveys,surveyObjectType }) => (
+                                render: (
+                                    _,
+                                    { id, isPublic, surveyQuestion, surveys, surveyObjectType }
+                                ) => (
                                     <Row className="justify-center gap-2">
                                         {/* {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -489,7 +491,7 @@ function TabDotKhaoSatCum({
                                                     />
                                                 </Tooltip>
                                             )}
-                                                {surveyQuestion?.length > 0 &&
+                                        {surveyQuestion?.length > 0 &&
                                             can(
                                                 KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                                 'XEM_CHI_TIET'

@@ -6,8 +6,7 @@ import DefaultLayout from '@layouts/default-layout'
 import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import type { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
-import { useMemo,
-useState } from 'react'
+import { useMemo, useState } from 'react'
 import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 import SurveyEssay from '@components/sub-pages/khao-sat/liet-ke'
 // import OrganizationSurveyReport from '@components/sub-pages/khao-sat/bao-cao-don-vi'
@@ -22,101 +21,101 @@ export default function ClussterSurveyPage() {
     const [lecturer, setLecturer] = useState<LectuerType | null>(null)
     const [sublectClass, setSublectClass] = useState<any>(null)
     const [organizationSelected, setOrganizationSelected] = useState<string>('')
-    const items = useMemo(()=>{
+    const items = useMemo(() => {
         return [
-        {
-            key: '1',
-            label: 'Đợt khảo sát',
-            children: (
-                <TabDotKhaoSatCum
-                    selectedId={selectedId}
-                    setSelectedId={(value) => {
-                        setSelectedId(value)
-                        setLecturer(null)
-                    }}
-                />
-            ),
-        },
-        {
-            key: '2',
-            label: 'Danh sách giảng viên',
-            children: (
-                <DetailSurveyPage
-                    selectedId={selectedId}
-                    surveyId={lecturer?.id || ''}
-                    setSurvey={(value) => {
-                        setLecturer(value)
-                    }}
-                />
-            ),
-            disabled: !selectedId,
-        },
-        {
-            key: '3',
-            label: 'Danh sách người làm khảo sát',
-            children: <DanhSachHocVien lecturer={lecturer} selectedId={selectedId} />,
-            disabled: !lecturer?.id,
-        },
-        // {
-        //     key: '4',
-        //     label: 'Báo cáo theo đơn vị',
-        //     children: (
-        //         <OrganizationSurveyReport
-        //             selectedId={selectedId}
-        //             surveyName=""
-        //             organizationSelected={organizationSelected}
-        //             setOrganizationSelected={(value) => {
-        //                 setOrganizationSelected(value)
-        //             }}
-        //         />
-        //     ),
-        //     disabled: !selectedId,
-        // },
-        // {
-        //     key: '7',
-        //     label: 'Báo cáo theo giảng viên',
-        //     children: (
-        //         <ClusterSurveyReport
-        //             selectedId={selectedId}
-        //             surveyName=""
-        //             surveyId={lecturer?.id || ''}
-        //             setSurvey={(value) => {
-        //                 setLecturer(value)
-        //             }}
-        //             organizationSelected={organizationSelected}
-        //         />
-        //     ),
-        //     disabled: !organizationSelected,
-        // },
-        {
-            key: '5',
-            label: 'Báo cáo theo lớp môn học',
-            children: (
-                <LecturerSurveyReport
-                    selectedId={selectedId}
-                    lectureId={lecturer?.id || ''}
-                    sublectClass={sublectClass}
-                    setSublectClass={(value: any) => {
-                        setSublectClass(value)
-                    }}
-                />
-            ),
-            disabled: !lecturer?.id,
-        },
-        {
-            key: '6',
-            label: 'Báo cáo chi tiết',
-            children: <SurveyReport selectedId={sublectClass?.surveyId || ''} />,
-            disabled: !sublectClass?.surveyId,
-        },
-        {
-            key: '4',
-            label: 'Liệt kê câu hỏi tự luận',
-            children: <SurveyEssay selectedId={sublectClass?.surveyId || ''} />,
-            disabled: !sublectClass?.surveyId,
-        },
-    ]
-    },[sublectClass, lecturer, selectedId])
+            {
+                key: '1',
+                label: 'Đợt khảo sát',
+                children: (
+                    <TabDotKhaoSatCum
+                        selectedId={selectedId}
+                        setSelectedId={(value) => {
+                            setSelectedId(value)
+                            setLecturer(null)
+                        }}
+                    />
+                ),
+            },
+            {
+                key: '2',
+                label: 'Danh sách giảng viên',
+                children: (
+                    <DetailSurveyPage
+                        selectedId={selectedId}
+                        surveyId={lecturer?.id || ''}
+                        setSurvey={(value) => {
+                            setLecturer(value)
+                        }}
+                    />
+                ),
+                disabled: !selectedId,
+            },
+            {
+                key: '3',
+                label: 'Danh sách người làm khảo sát',
+                children: <DanhSachHocVien lecturer={lecturer} selectedId={selectedId} />,
+                disabled: !lecturer?.id,
+            },
+            // {
+            //     key: '4',
+            //     label: 'Báo cáo theo đơn vị',
+            //     children: (
+            //         <OrganizationSurveyReport
+            //             selectedId={selectedId}
+            //             surveyName=""
+            //             organizationSelected={organizationSelected}
+            //             setOrganizationSelected={(value) => {
+            //                 setOrganizationSelected(value)
+            //             }}
+            //         />
+            //     ),
+            //     disabled: !selectedId,
+            // },
+            // {
+            //     key: '7',
+            //     label: 'Báo cáo theo giảng viên',
+            //     children: (
+            //         <ClusterSurveyReport
+            //             selectedId={selectedId}
+            //             surveyName=""
+            //             surveyId={lecturer?.id || ''}
+            //             setSurvey={(value) => {
+            //                 setLecturer(value)
+            //             }}
+            //             organizationSelected={organizationSelected}
+            //         />
+            //     ),
+            //     disabled: !organizationSelected,
+            // },
+            {
+                key: '5',
+                label: 'Báo cáo theo lớp môn học',
+                children: (
+                    <LecturerSurveyReport
+                        selectedId={selectedId}
+                        lectureId={lecturer?.id || ''}
+                        sublectClass={sublectClass}
+                        setSublectClass={(value: any) => {
+                            setSublectClass(value)
+                        }}
+                    />
+                ),
+                disabled: !lecturer?.id,
+            },
+            {
+                key: '6',
+                label: 'Báo cáo chi tiết',
+                children: <SurveyReport selectedId={sublectClass?.surveyId || ''} />,
+                disabled: !sublectClass?.surveyId,
+            },
+            {
+                key: '4',
+                label: 'Liệt kê câu hỏi tự luận',
+                children: <SurveyEssay selectedId={sublectClass?.surveyId || ''} />,
+                disabled: !sublectClass?.surveyId,
+            },
+        ]
+    }, [sublectClass, lecturer, selectedId])
 
     return (
         <Row gutter={[16, 16]}>

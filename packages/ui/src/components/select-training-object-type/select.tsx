@@ -3,15 +3,14 @@ import { Select } from '../commons'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from './hook'
 
 type SelectTrainingObjectTypeProps = SelectProps & {
-  subsystem?: string;
-};
+    subsystem?: string
+}
 
-const SelectTrainingObjectType = ({subsystem,
-  ...props}: SelectTrainingObjectTypeProps) => {
+const SelectTrainingObjectType = ({ subsystem, ...props }: SelectTrainingObjectTypeProps) => {
     const { id, onSelect } = useTrainingObjectTypeStore()
 
     const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectTypePermission(undefined, {
-        subsystem
+        subsystem,
     })
 
     // useEffect(() => {

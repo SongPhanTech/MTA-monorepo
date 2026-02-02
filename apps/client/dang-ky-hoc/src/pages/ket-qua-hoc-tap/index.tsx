@@ -521,6 +521,9 @@ export default function StudentScoreClassPage() {
                                 },
                             },
                             awards: {
+                                where: {
+                                    status: $Enums.ArchivedCertificateStatus.APPROVED,
+                                },
                                 include: {
                                     archivedAward: true,
                                 },

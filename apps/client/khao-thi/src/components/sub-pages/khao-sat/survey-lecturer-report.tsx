@@ -322,7 +322,7 @@ function SurveylecturerReport({
             rowIndex + 2 + dataTable.length,
             worksheet.columns.length
         )
-          // Xuất file
+        // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
         saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ''}.xlsx`)
     }

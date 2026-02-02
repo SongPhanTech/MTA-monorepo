@@ -115,6 +115,8 @@ export const SqlTransactionBodyItemModel = {
     SubjectClassHistory: 'SubjectClassHistory',
     SubjectClassTime: 'SubjectClassTime',
     ClassSchedule: 'ClassSchedule',
+    ScoreCorrectionTicket: 'ScoreCorrectionTicket',
+    ScoreCorrectionItem: 'ScoreCorrectionItem',
     TrainingObjectType: 'TrainingObjectType',
     PriorityObject: 'PriorityObject',
     TrainingType: 'TrainingType',
