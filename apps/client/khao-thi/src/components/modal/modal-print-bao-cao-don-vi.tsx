@@ -32,6 +32,7 @@ const ModalPrintBaoCaoDonVi = () => {
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
+        documentTitle: 'HỌC VIỆN KĨ QUÂN SỰ',
         pageStyle: `
         @page { size: A4; margin: 1.5cm; }
 
@@ -85,11 +86,10 @@ const ModalPrintBaoCaoDonVi = () => {
         >
             <div ref={printRef}>
                 {/* ===== HEADER ===== */}
-                {/* ===== HEADER ===== */}
                 <div className="flex justify-between text-center text-black font-bold">
                     <div className="w-[45%]">
                         <div className="uppercase">HỌC VIỆN KỸ THUẬT QUÂN SỰ</div>
-                        <div className="uppercase underline">PHÒNG KT & ĐBCLGD-ĐT</div>
+                        <div className="uppercase underline">BAN KT & ĐBCLGD-ĐT</div>
                     </div>
 
                     <div className="w-[45%]">
@@ -112,24 +112,14 @@ const ModalPrintBaoCaoDonVi = () => {
                     </div>
                 </div>
 
-                {/* ===== CHART ===== */}
-                <div className="mt-6">
-                    <ReactECharts
-                        option={input.chartOption}
-                        style={{
-                            height: Math.max(300, (input.data?.length || 0) * 35 + 120),
-                        }}
-                    />
-                </div>
-
                 {/* ===== TABLE ===== */}
                 <table className="w-full mt-6 text-sm border-collapse">
                     <thead>
                         <tr className="font-bold text-center">
-                            <th className="border">STT</th>
-                            <th className="border">Đơn vị quản lý</th>
+                            <th className="border-2  border-black">STT</th>
+                            <th className="border-2 border-black">Đơn vị quản lý</th>
                             {input.choices.map((c: any) => (
-                                <th key={c.id} className="border">
+                                <th key={c.id} className="border-2  border-black">
                                     {c.description}
                                 </th>
                             ))}
@@ -142,9 +132,9 @@ const ModalPrintBaoCaoDonVi = () => {
 
                             return (
                                 <tr key={row.organization?.Id || index}>
-                                    <td className="border text-center">{index + 1}</td>
+                                    <td className="border-2  border-black text-center">{index + 1}</td>
 
-                                    <td className="border px-2">
+                                    <td className="border-2 border-black px-2">
                                         {row.organization?.sMa || ''} -{' '}
                                         {row.organization?.sTen || ''}
                                     </td>
@@ -153,7 +143,7 @@ const ModalPrintBaoCaoDonVi = () => {
                                         const found = percentData.find((p: any) => p.id === c.id)
 
                                         return (
-                                            <td key={c.id} className="border text-center">
+                                            <td key={c.id} className="border-2 border-black text-center">
                                                 {found
                                                     ? `${found.percent}% (${found.totalCount}/${found.total})`
                                                     : '0% (0/0)'}
@@ -165,6 +155,16 @@ const ModalPrintBaoCaoDonVi = () => {
                         })}
                     </tbody>
                 </table>
+
+                {/* ===== CHART ===== */}
+                <div className="mt-6">
+                    <ReactECharts
+                        option={input.chartOption}
+                        style={{
+                            height: Math.max(300, (input.data?.length || 0) * 35 + 120),
+                        }}
+                    />
+                </div>
 
                 {/* ===== FOOTER ===== */}
                 <div className="mt-6 text-right italic">

@@ -1,11 +1,15 @@
-import { Col, Row, Typography } from 'antd'
+import { Button, Col, Row, Typography } from 'antd'
 // @ts-nocheck
-import { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
+import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
 import Table from '@components/commons/table'
 import HtmlTruncate from '@components/commons/html-truncate'
 import { useFindManySurveyQuestion, useFindManySurveyResponse } from '@workspace/db/hooks'
 import Select from '@components/commons/select'
 import { useState } from 'react'
+import { Document, Packer, Paragraph, Table as DocxTable, TableRow, TableCell, TextRun } from 'docx'
+import { saveAs } from 'file-saver'
+import { DownloadOutlined } from '@ant-design/icons'
+
 const { Title } = Typography
 
 export interface CriteriaItem {
@@ -38,7 +42,7 @@ function SurveyEssay({ selectedId }: { selectedId: string }) {
             enabled: !!selectedId,
         }
     )
-    const { data } = useFindManySurveyResponse(
+    const { data = [] } = useFindManySurveyResponse(
         {
             where: {
                 surveyQuestionId: surveyQuestionId || '',
@@ -63,6 +67,56 @@ function SurveyEssay({ selectedId }: { selectedId: string }) {
             enabled: !!surveyQuestionId,
         }
     )
+    const exportWord = async () => {
+        if (!surveyQuestionId) return
+
+        const question = dataQuestion.find((q) => q.id === surveyQuestionId)
+
+        const rows = [
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph('STT')] }),
+                    new TableCell({ children: [new Paragraph('Nội dung câu trả lời')] }),
+                ],
+            }),
+            ...data.map(
+                (item, index) =>
+                    new TableRow({
+                        children: [
+                            new TableCell({
+                                children: [new Paragraph(String(index + 1))],
+                            }),
+                            new TableCell({
+                                children: [new Paragraph(item?.answerText || '')],
+                            }),
+                        ],
+                    })
+            ),
+        ]
+
+        const doc = new Document({
+            sections: [
+                {
+                    children: [
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: question?.name || 'Câu hỏi',
+                                    bold: true,
+                                    size: 28,
+                                }),
+                            ],
+                        }),
+                        new Paragraph(''),
+                        new DocxTable({ rows }),
+                    ],
+                },
+            ],
+        })
+
+        const blob = await Packer.toBlob(doc)
+        saveAs(blob, 'cau-hoi-tu-luan.docx')
+    }
     return (
         <div>
             <Row gutter={[16, 8]}>
@@ -80,6 +134,16 @@ function SurveyEssay({ selectedId }: { selectedId: string }) {
                         placeholder="Chọn câu hỏi"
                         className="w-[300px]"
                     />
+
+                    <Button
+                        type="primary"
+                        icon={<DownloadOutlined />}
+                        className="ml-3"
+                        disabled={!surveyQuestionId}
+                        onClick={exportWord}
+                    >
+                        Xuất Word
+                    </Button>
                 </Col>
                 <Col span={24}>
                     <Table
