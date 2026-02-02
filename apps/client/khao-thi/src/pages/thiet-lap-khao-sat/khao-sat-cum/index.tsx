@@ -6,7 +6,8 @@ import DefaultLayout from '@layouts/default-layout'
 import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
-import { useState } from 'react'
+import { useMemo,
+useState } from 'react'
 import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 import SurveyEssay from '@components/sub-pages/khao-sat/liet-ke'
 // import OrganizationSurveyReport from '@components/sub-pages/khao-sat/bao-cao-don-vi'
@@ -21,7 +22,8 @@ export default function ClussterSurveyPage() {
     const [lecturer, setLecturer] = useState<LectuerType | null>(null)
     const [sublectClass, setSublectClass] = useState<any>(null)
     const [organizationSelected, setOrganizationSelected] = useState<string>('')
-    const items = [
+    const items = useMemo(()=>{
+        return [
         {
             key: '1',
             label: 'Đợt khảo sát',
@@ -114,6 +116,7 @@ export default function ClussterSurveyPage() {
             disabled: !sublectClass?.surveyId,
         },
     ]
+    },[sublectClass, lecturer, selectedId])
 
     return (
         <Row gutter={[16, 16]}>

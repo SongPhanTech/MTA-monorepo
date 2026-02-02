@@ -33,6 +33,7 @@ function TabDotKhaoSatCum({
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const { id: semesterId } = useSemesterStore()
+    
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
@@ -70,7 +71,8 @@ function TabDotKhaoSatCum({
     const treeData = converData(schoolYears)
     const router = useRouter()
     const where = useMemo(
-        () => ({
+        () => {
+   return {
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -79,14 +81,25 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
-            ...(semesterId && {
+            ...(semesterId && trainingObjectTypeId && {
                 surveys: {
                     some: {
                         semesterId,
+                        trainingObjectTypeId
                     },
                 },
             }),
-            ...(trainingObjectTypeId
+            
+            ...(semesterId&&!trainingObjectTypeId
+                ? {
+                      surveys: {
+                          some: {
+                              semesterId,
+                          },
+                      },
+                  }
+                : {}),
+                ...(!semesterId&&trainingObjectTypeId
                 ? {
                       surveys: {
                           some: {
@@ -95,15 +108,6 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
-            ...(filters.semesterIds && {
-                surveys: {
-                    some: {
-                        semesterId: {
-                            in: filters.semesterIds,
-                        },
-                    },
-                },
-            }),
             ...(filters.surveyObjectTypeId
                 ? {
                       surveyObjectType: {
@@ -138,8 +142,11 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
-        }),
-        [filters, semesterId]
+        }
+        }
+            
+         ,
+        [filters, semesterId,trainingObjectTypeId]
     )
 
     const { data = [], refetch } = useFindManyClusterSurvey({
@@ -163,6 +170,8 @@ function TabDotKhaoSatCum({
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
+    },{
+        enabled: !!semesterId && !!trainingObjectTypeId,
     })
 
     const { data: count, refetch: refetchCount } = useCountClusterSurvey({

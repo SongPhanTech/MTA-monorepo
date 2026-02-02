@@ -5,7 +5,7 @@ import {
     useFindManyDM_DonVi,
     useFindManyLecturer,
 } from '@workspace/db/hooks'
-import { Col, Flex, Row, Skeleton, Tree } from 'antd'
+import { Col, Flex, Input, Row, Skeleton, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
@@ -17,7 +17,7 @@ import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer
 import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
 import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
-
+import { debounce } from 'lodash'
 interface MyTreeNode {
     title: string
     key: string
@@ -63,7 +63,7 @@ export default function BaoCaoGiangVien() {
         semesterIds: undefined,
         clusterId: undefined,
     })
-
+    const [searchText, setSearchText] = useState<any>('')
     const [selectedKeys, setSelectedKeys] = useState<any>([])
     const [selectedItem, setSelectedItem] = useState<any>()
 
@@ -75,6 +75,7 @@ export default function BaoCaoGiangVien() {
             surveys: {
                 some: {
                     semesterId,
+                    trainingObjectTypeId
                 },
             },
         },
@@ -293,6 +294,10 @@ export default function BaoCaoGiangVien() {
                             }}
                             dropdownMatchSelectWidth={false}
                         />
+                      <Input placeholder="Tìm kiếm"  className="mr-4 w-[250px]" value={searchText} onChange={ debounce((e) => {
+               setSearchText(e.target.value)
+
+        }, 500)}/>
                     </Flex>
                     {/* <Button onClick={hanleSearchReport} type="primary">
                         Tìm kiếm
