@@ -5,9 +5,7 @@ import { useSemesterStore } from '../select-semester'
 import { useTrainingObjectTypeStore } from '../select-training-object-type'
 import { useTrainingCourseStore } from './hook'
 
-type AntdSelectProps = SelectProps
-
-const SelectTrainingCourse = (props: AntdSelectProps) => {
+export const SelectTrainingCourse = (props: SelectProps) => {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
 
@@ -31,9 +29,7 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
                 },
             },
         },
-        {
-            enabled: !!trainingObjectTypeId,
-        }
+        { enabled: !!trainingObjectTypeId }
     )
 
     const { data: semester } = useFindUniqueSemester(
@@ -43,12 +39,8 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
                 schoolYear: true,
             },
         },
-        {
-            enabled: !!semesterId,
-        }
+        { enabled: !!semesterId }
     )
-
-    const { id, onSelect } = useTrainingCourseStore()
 
     return (
         <Select
@@ -74,12 +66,13 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
                 }
             })}
             allowClear={true}
-            style={{ width: 200 }}
             {...props}
-            value={id}
-            onChange={onSelect}
         />
     )
 }
 
-export { SelectTrainingCourse }
+export const SelectTrainingCourseStore = (props: SelectProps) => {
+    const { id, onSelect } = useTrainingCourseStore()
+
+    return <SelectTrainingCourse value={id} onChange={onSelect} style={{ width: 200 }} {...props} />
+}

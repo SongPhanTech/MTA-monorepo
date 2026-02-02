@@ -101,6 +101,7 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC": "/quan-ly-diem/ql-diem-lop-mon-hoc",
     "QUAN_LY_DIEM_QL_DIEM_THI": "/quan-ly-diem/ql-diem-thi",
     "QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG": "/quan-ly-diem/ql-sv-hv-chuyen-truong",
+    "QUAN_LY_DIEM_SUA_DIEM": "/quan-ly-diem/sua-diem",
     "QUAN_LY_DIEM_TONG_KET_KY_HOC": "/quan-ly-diem/tong-ket-ky-hoc",
     "QUAN_LY_DIEM_TONG_KET_NAM_HOC": "/quan-ly-diem/tong-ket-nam-hoc",
     "QUAN_LY_DO_AN_CAU_HINH_THANH_TOAN_DO_AN": "/quan-ly-do-an/cau-hinh-thanh-toan-do-an",

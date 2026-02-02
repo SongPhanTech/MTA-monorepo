@@ -278,6 +278,12 @@ const NAVIGATION: NavigationType = {
                         description: 'Điểm giải thưởng',
                     },
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
+                        label: 'Sửa điểm',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_SUA_DIEM,
+                        description: 'Sửa điểm',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
                         label: 'Điểm chứng chỉ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_CHUNG_CHI,

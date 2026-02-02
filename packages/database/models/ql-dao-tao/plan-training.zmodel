@@ -99,11 +99,11 @@ model StudentSubjectScore extends Base {
   student                      Student                                    @relation(fields: [studentId], references: [id])
   studentId                    String
 
-  /// điểm chuyên cần
+  /// điểm thường xuyên
   attendanceScore              Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
-  /// điểm giữa kỳ
+  /// điểm định kỳ
   midtermScore                 Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
-  /// điểm cuối kỳ
+  /// điểm thi
   examScore                    Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
 
   // dùng hàm `calcFinalScore` từ @workspace/libs/utils
@@ -160,6 +160,7 @@ model StudentSubjectScore extends Base {
   awards                       ArchivedAwardOnStudentSubjectScore[]
   studentThesisRegistration    StudentThesisRegistration[]                @relation("ScoreToRegistration")
   studentSubjectScoreHistory   StudentSubjectScoreHistory[]
+  scoreCorrectionItem          ScoreCorrectionItem[]
 
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
@@ -210,11 +211,11 @@ model StudentResearchTopic extends Base {
   mainContent           String?
 
   /// GVHD 1
-  supervisor            ExpertProfile?           @relation("SupervisorToResearchTopic", fields: [supervisorId], references: [id])
+  supervisor            ExpertProfile?      @relation("SupervisorToResearchTopic", fields: [supervisorId], references: [id])
   supervisorId          String?
 
   /// GVHD 2
-  coSupervisor          ExpertProfile?           @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
+  coSupervisor          ExpertProfile?      @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
 
   /// ngày báo cáo
@@ -1036,5 +1037,54 @@ model ClassSchedule extends Base {
 
   cancelReason        String?          // Lý do hủy
 
+  @@schema("ql-dao-tao")
+}
+
+/// Trạng thái phiếu sửa điểm
+enum ScoreCorrectionStatus {
+  INITIALIZED       // Khởi tạo
+  PENDING_APPROVAL  // Chờ duyệt
+  APPROVED          // Đã duyệt
+
+  @@schema("ql-dao-tao")
+}
+
+/// Phiếu sửa điểm
+model ScoreCorrectionTicket extends Base {
+  trainingObjectType   TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  number               Int                   @default(0) // Số lượng (dự kiến)
+  proposal             String?             // Tờ trình
+  decision             String?             // Số quyết định
+  date                 DateTime              @default(now()) // Ngày
+  deadline             DateTime?           // Hạn nhập
+
+  status               ScoreCorrectionStatus @default(INITIALIZED)
+
+  items                ScoreCorrectionItem[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Chi tiết sửa điểm
+model ScoreCorrectionItem extends Base {
+  ticket                ScoreCorrectionTicket @relation(fields: [ticketId], references: [id])
+  ticketId              String
+
+  studentSubjectScore   StudentSubjectScore   @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String
+
+  // Điểm mới
+  newAttendanceScore    Float?
+  newMidtermScore       Float?
+  newExamScore          Float?
+
+  // Điểm cũ (lưu lại để đối chiếu)
+  oldAttendanceScore    Float?
+  oldMidtermScore       Float?
+  oldExamScore          Float?
+
+  @@unique([ticketId, studentSubjectScoreId])
   @@schema("ql-dao-tao")
 }

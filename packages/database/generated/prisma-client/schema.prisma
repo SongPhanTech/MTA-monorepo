@@ -201,6 +201,15 @@ enum SubjectClassStatus {
   @@schema("ql-dao-tao")
 }
 
+/// Trạng thái phiếu sửa điểm
+enum ScoreCorrectionStatus {
+  INITIALIZED
+  PENDING_APPROVAL
+  APPROVED
+
+  @@schema("ql-dao-tao")
+}
+
 enum TrainingObjectTypes {
   MILITARY
   CIVILIAN
@@ -2502,6 +2511,7 @@ model StudentSubjectScore {
   awards                       ArchivedAwardOnStudentSubjectScore[]
   studentThesisRegistration    StudentThesisRegistration[]                @relation("ScoreToRegistration")
   studentSubjectScoreHistory   StudentSubjectScoreHistory[]
+  scoreCorrectionItem          ScoreCorrectionItem[]
 
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
@@ -3376,37 +3386,86 @@ model ClassSchedule {
   @@schema("ql-dao-tao")
 }
 
+/// Phiếu sửa điểm
+model ScoreCorrectionTicket {
+  id                   String                @id() @default(cuid())
+  code                 String?               @unique()
+  active               Boolean               @default(true)
+  description          String?               @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @default(now()) @updatedAt()
+  createdBy            String?               @db.Uuid()
+  trainingObjectType   TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  number               Int                   @default(0)
+  proposal             String?
+  decision             String?
+  date                 DateTime              @default(now())
+  deadline             DateTime?
+  status               ScoreCorrectionStatus @default(INITIALIZED)
+  items                ScoreCorrectionItem[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Chi tiết sửa điểm
+model ScoreCorrectionItem {
+  id                    String                @id() @default(cuid())
+  code                  String?               @unique()
+  active                Boolean               @default(true)
+  description           String?               @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @default(now()) @updatedAt()
+  createdBy             String?               @db.Uuid()
+  ticket                ScoreCorrectionTicket @relation(fields: [ticketId], references: [id])
+  ticketId              String
+  studentSubjectScore   StudentSubjectScore   @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String
+  newAttendanceScore    Float?
+  newMidtermScore       Float?
+  newExamScore          Float?
+  oldAttendanceScore    Float?
+  oldMidtermScore       Float?
+  oldExamScore          Float?
+
+  @@unique([ticketId, studentSubjectScoreId])
+  @@schema("ql-dao-tao")
+}
+
 /// Đối tượng đào tạo
 model TrainingObjectType {
-  id                   String                              @id() @default(cuid())
-  code                 String?                             @unique()
-  active               Boolean                             @default(true)
-  description          String?                             @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime                            @default(now())
-  updatedAt            DateTime                            @default(now()) @updatedAt()
-  createdBy            String?                             @db.Uuid()
-  name                 String                              @unique()
-  type                 TrainingObjectTypes
-  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
-  trainingFormId       String?
-  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId      String?
-  trainingCourse       TrainingCourse[]
-  curriculum           Curriculum[]
-  curriculumVersion    CurriculumVersion[]
-  trainingMajors       TrainingMajorOnTrainingObjectType[]
-  trainingFields       TrainingFieldOnTrainingObjectType[]
-  trainingScoreSession TrainingScoreSession[]
-  subjectClass         SubjectClass[]
-  graduationSession    GraduationSession[]
-  subjectVersion       SubjectVersion[]
-  planTraining         PlanTraining[]
-  thesisSession        ThesisSession[]
-  trainingBlocks       TrainingBlock[]
-  vaiTro               String[]
-  surveyObjectType     SurveyObjectType[]
-  survey               Survey[]
+  id                    String                              @id() @default(cuid())
+  code                  String?                             @unique()
+  active                Boolean                             @default(true)
+  description           String?                             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime                            @default(now())
+  updatedAt             DateTime                            @default(now()) @updatedAt()
+  createdBy             String?                             @db.Uuid()
+  name                  String                              @unique()
+  type                  TrainingObjectTypes
+  trainingForm          TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId        String?
+  trainingLevel         TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId       String?
+  trainingCourse        TrainingCourse[]
+  curriculum            Curriculum[]
+  curriculumVersion     CurriculumVersion[]
+  trainingMajors        TrainingMajorOnTrainingObjectType[]
+  trainingFields        TrainingFieldOnTrainingObjectType[]
+  trainingScoreSession  TrainingScoreSession[]
+  subjectClass          SubjectClass[]
+  graduationSession     GraduationSession[]
+  subjectVersion        SubjectVersion[]
+  planTraining          PlanTraining[]
+  thesisSession         ThesisSession[]
+  trainingBlocks        TrainingBlock[]
+  vaiTro                String[]
+  surveyObjectType      SurveyObjectType[]
+  survey                Survey[]
+  scoreCorrectionTicket ScoreCorrectionTicket[]
 
   @@schema("ql-dao-tao")
 }

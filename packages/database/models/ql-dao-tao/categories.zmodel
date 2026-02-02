@@ -23,30 +23,31 @@ enum TrainingObjectTypes {
 
 /// Đối tượng đào tạo
 model TrainingObjectType extends Base {
-  name                 String                              @unique
-  type                 TrainingObjectTypes
+  name                  String                              @unique
+  type                  TrainingObjectTypes
 
-  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
-  trainingFormId       String?
+  trainingForm          TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId        String?
 
-  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId      String?
+  trainingLevel         TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId       String?
 
-  trainingCourse       TrainingCourse[]
-  curriculum           Curriculum[]
-  curriculumVersion    CurriculumVersion[]
-  trainingMajors       TrainingMajorOnTrainingObjectType[]
-  trainingFields       TrainingFieldOnTrainingObjectType[]
-  trainingScoreSession TrainingScoreSession[]
-  subjectClass         SubjectClass[]
-  graduationSession    GraduationSession[]
-  subjectVersion       SubjectVersion[]
-  planTraining         PlanTraining[]
-  thesisSession        ThesisSession[]
-  trainingBlocks       TrainingBlock[]
-  vaiTro               String[] // Array of DM_VaiTro IDs
-  surveyObjectType     SurveyObjectType[]
-  survey               Survey[]
+  trainingCourse        TrainingCourse[]
+  curriculum            Curriculum[]
+  curriculumVersion     CurriculumVersion[]
+  trainingMajors        TrainingMajorOnTrainingObjectType[]
+  trainingFields        TrainingFieldOnTrainingObjectType[]
+  trainingScoreSession  TrainingScoreSession[]
+  subjectClass          SubjectClass[]
+  graduationSession     GraduationSession[]
+  subjectVersion        SubjectVersion[]
+  planTraining          PlanTraining[]
+  thesisSession         ThesisSession[]
+  trainingBlocks        TrainingBlock[]
+  vaiTro                String[] // Array of DM_VaiTro IDs
+  surveyObjectType      SurveyObjectType[]
+  survey                Survey[]
+  scoreCorrectionTicket ScoreCorrectionTicket[]
 
   @@schema("ql-dao-tao")
 }

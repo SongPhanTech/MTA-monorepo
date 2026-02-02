@@ -1370,6 +1370,32 @@ const policy = {
                 update: {},
             },
         },
+        scoreCorrectionTicket: {
+            modelLevel: {
+                read: { guard: ScoreCorrectionTicket_read, },
+                create: { guard: ScoreCorrectionTicket_create, inputChecker: ScoreCorrectionTicket_create_input, },
+                update: { guard: ScoreCorrectionTicket_update, },
+                postUpdate: { guard: ScoreCorrectionTicket_postUpdate, },
+                delete: { guard: ScoreCorrectionTicket_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        scoreCorrectionItem: {
+            modelLevel: {
+                read: { guard: ScoreCorrectionItem_read, },
+                create: { guard: ScoreCorrectionItem_create, inputChecker: ScoreCorrectionItem_create_input, },
+                update: { guard: ScoreCorrectionItem_update, },
+                postUpdate: { guard: ScoreCorrectionItem_postUpdate, },
+                delete: { guard: ScoreCorrectionItem_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         trainingObjectType: {
             modelLevel: {
                 read: { guard: TrainingObjectType_read, },
@@ -3479,6 +3505,8 @@ const policy = {
         subjectClassHistory: { hasValidation: false },
         subjectClassTime: { hasValidation: false },
         classSchedule: { hasValidation: false },
+        scoreCorrectionTicket: { hasValidation: false },
+        scoreCorrectionItem: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
         priorityObject: { hasValidation: false },
         trainingType: { hasValidation: false },
@@ -11773,6 +11801,162 @@ function ClassSchedule_delete(context, db) {
     return { OR: [] };
 }
 function $check_ClassSchedule_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreCorrectionTicket_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ScoreCorrectionTicket_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreCorrectionTicket_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreCorrectionTicket_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreCorrectionTicket_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ScoreCorrectionTicket_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreCorrectionTicket_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreCorrectionTicket_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ScoreCorrectionTicket_postUpdate(input, context) {
+    return true;
+}
+function ScoreCorrectionTicket_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreCorrectionTicket_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreCorrectionItem_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ScoreCorrectionItem_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreCorrectionItem_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreCorrectionItem_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreCorrectionItem_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ScoreCorrectionItem_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreCorrectionItem_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreCorrectionItem_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ScoreCorrectionItem_postUpdate(input, context) {
+    return true;
+}
+function ScoreCorrectionItem_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreCorrectionItem_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

@@ -8059,6 +8059,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'studentSubjectScore',
+                }, scoreCorrectionItem: {
+                    name: "scoreCorrectionItem",
+                    type: "ScoreCorrectionItem",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'studentSubjectScore',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -11646,6 +11652,195 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        scoreCorrectionTicket: {
+            name: 'ScoreCorrectionTicket', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreCorrectionTicket$createdBy,
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'scoreCorrectionTicket',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, number: {
+                    name: "number",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, proposal: {
+                    name: "proposal",
+                    type: "String",
+                    isOptional: true,
+                }, decision: {
+                    name: "decision",
+                    type: "String",
+                    isOptional: true,
+                }, date: {
+                    name: "date",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ScoreCorrectionStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, items: {
+                    name: "items",
+                    type: "ScoreCorrectionItem",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'ticket',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        scoreCorrectionItem: {
+            name: 'ScoreCorrectionItem', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreCorrectionItem$createdBy,
+                }, ticket: {
+                    name: "ticket",
+                    type: "ScoreCorrectionTicket",
+                    isDataModel: true,
+                    backLink: 'items',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "ticketId" },
+                }, ticketId: {
+                    name: "ticketId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ticket',
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    backLink: 'scoreCorrectionItem',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, newAttendanceScore: {
+                    name: "newAttendanceScore",
+                    type: "Float",
+                    isOptional: true,
+                }, newMidtermScore: {
+                    name: "newMidtermScore",
+                    type: "Float",
+                    isOptional: true,
+                }, newExamScore: {
+                    name: "newExamScore",
+                    type: "Float",
+                    isOptional: true,
+                }, oldAttendanceScore: {
+                    name: "oldAttendanceScore",
+                    type: "Float",
+                    isOptional: true,
+                }, oldMidtermScore: {
+                    name: "oldMidtermScore",
+                    type: "Float",
+                    isOptional: true,
+                }, oldExamScore: {
+                    name: "oldExamScore",
+                    type: "Float",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, ticketId_studentSubjectScoreId: {
+                    name: "ticketId_studentSubjectScoreId",
+                    fields: ["ticketId", "studentSubjectScoreId"]
+                },
+            },
+        },
         trainingObjectType: {
             name: 'TrainingObjectType', fields: {
                 id: {
@@ -11802,6 +11997,12 @@ const metadata: ModelMeta = {
                 }, survey: {
                     name: "survey",
                     type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, scoreCorrectionTicket: {
+                    name: "scoreCorrectionTicket",
+                    type: "ScoreCorrectionTicket",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -26198,6 +26399,14 @@ function $default$SubjectClassTime$createdBy(user: any): unknown {
 }
 
 function $default$ClassSchedule$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ScoreCorrectionTicket$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ScoreCorrectionItem$createdBy(user: any): unknown {
     return user?.id;
 }
 

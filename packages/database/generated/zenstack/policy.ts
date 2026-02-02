@@ -24,6 +24,7 @@ import { SubjectClassSchedule } from "../prisma-client";
 import { PeriodType } from "../prisma-client";
 import { SubjectClassType } from "../prisma-client";
 import { SubjectClassStatus } from "../prisma-client";
+import { ScoreCorrectionStatus } from "../prisma-client";
 import { TrainingObjectTypes } from "../prisma-client";
 import { DiplomaTypeEnum } from "../prisma-client";
 import { AcademicRankingBaseType } from "../prisma-client";
@@ -2154,6 +2155,46 @@ const policy: PolicyDef = {
                 update: { guard: ClassSchedule_update, },
                 postUpdate: { guard: ClassSchedule_postUpdate, },
                 delete: { guard: ClassSchedule_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        scoreCorrectionTicket: {
+            modelLevel: {
+                read: { guard: ScoreCorrectionTicket_read, },
+                create: { guard: ScoreCorrectionTicket_create, inputChecker: ScoreCorrectionTicket_create_input, },
+                update: { guard: ScoreCorrectionTicket_update, },
+                postUpdate: { guard: ScoreCorrectionTicket_postUpdate, },
+                delete: { guard: ScoreCorrectionTicket_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        scoreCorrectionItem: {
+            modelLevel: {
+                read: { guard: ScoreCorrectionItem_read, },
+                create: { guard: ScoreCorrectionItem_create, inputChecker: ScoreCorrectionItem_create_input, },
+                update: { guard: ScoreCorrectionItem_update, },
+                postUpdate: { guard: ScoreCorrectionItem_postUpdate, },
+                delete: { guard: ScoreCorrectionItem_delete, }
             },
             fieldLevel: {
                 read:
@@ -5354,6 +5395,8 @@ const policy: PolicyDef = {
         subjectClassHistory: { hasValidation: false },
         subjectClassTime: { hasValidation: false },
         classSchedule: { hasValidation: false },
+        scoreCorrectionTicket: { hasValidation: false },
+        scoreCorrectionItem: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
         priorityObject: { hasValidation: false },
         trainingType: { hasValidation: false },
@@ -12310,6 +12353,136 @@ function ClassSchedule_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_ClassSchedule_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreCorrectionTicket_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ScoreCorrectionTicket_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreCorrectionTicket_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreCorrectionTicket_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreCorrectionTicket_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ScoreCorrectionTicket_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreCorrectionTicket_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreCorrectionTicket_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ScoreCorrectionTicket_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ScoreCorrectionTicket_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreCorrectionTicket_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreCorrectionItem_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ScoreCorrectionItem_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreCorrectionItem_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreCorrectionItem_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreCorrectionItem_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ScoreCorrectionItem_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreCorrectionItem_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreCorrectionItem_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ScoreCorrectionItem_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ScoreCorrectionItem_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreCorrectionItem_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

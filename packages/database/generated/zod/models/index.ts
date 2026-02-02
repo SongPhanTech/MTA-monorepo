@@ -109,6 +109,8 @@ export * from './SubjectClass.schema';
 export * from './SubjectClassHistory.schema';
 export * from './SubjectClassTime.schema';
 export * from './ClassSchedule.schema';
+export * from './ScoreCorrectionTicket.schema';
+export * from './ScoreCorrectionItem.schema';
 export * from './TrainingObjectType.schema';
 export * from './PriorityObject.schema';
 export * from './TrainingType.schema';

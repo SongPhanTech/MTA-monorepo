@@ -109,6 +109,8 @@ export * from './subject-class';
 export * from './subject-class-history';
 export * from './subject-class-time';
 export * from './class-schedule';
+export * from './score-correction-ticket';
+export * from './score-correction-item';
 export * from './training-object-type';
 export * from './priority-object';
 export * from './training-type';

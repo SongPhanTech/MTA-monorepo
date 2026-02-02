@@ -10,7 +10,7 @@ import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from '@wor
 import { useCalculateStudentSchoolYearResult } from '@workspace/libs/api/training'
 import {
     Select,
-    SelectTrainingCourse,
+    SelectTrainingCourseStore,
     useSemesterStore,
     useTrainingCourseStore,
     useTrainingObjectTypeStore,
@@ -219,7 +219,7 @@ const DiemTrungBinhKyHoc = () => {
                         <Col span={18}>
                             <Flex gap={8}>
                                 <Col span={4}>
-                                    <SelectTrainingCourse allowClear className="w-full" />
+                                    <SelectTrainingCourseStore allowClear className="w-full" />
                                 </Col>
                                 <Col span={8}>
                                     <Form.Item className="mb-0" name="fixedClassId">

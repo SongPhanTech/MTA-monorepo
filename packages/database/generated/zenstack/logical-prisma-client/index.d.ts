@@ -1079,6 +1079,28 @@ export type SubjectClassTime = $Result.DefaultSelection<Prisma.$SubjectClassTime
  */
 export type ClassSchedule = $Result.DefaultSelection<Prisma.$ClassSchedulePayload>;
 /**
+ * Model ScoreCorrectionTicket
+ * Phiếu sửa điểm
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ScoreCorrectionTicket = $Result.DefaultSelection<Prisma.$ScoreCorrectionTicketPayload>;
+/**
+ * Model ScoreCorrectionItem
+ * Chi tiết sửa điểm
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ScoreCorrectionItem = $Result.DefaultSelection<Prisma.$ScoreCorrectionItemPayload>;
+/**
  * Model TrainingObjectType
  * Đối tượng đào tạo
  * @
@@ -2724,6 +2746,7 @@ export type SubjectClassSchedule = $Enums.SubjectClassSchedule;
 export type PeriodType = $Enums.PeriodType;
 export type SubjectClassType = $Enums.SubjectClassType;
 export type SubjectClassStatus = $Enums.SubjectClassStatus;
+export type ScoreCorrectionStatus = $Enums.ScoreCorrectionStatus;
 export type TrainingObjectTypes = $Enums.TrainingObjectTypes;
 export type DiplomaTypeEnum = $Enums.DiplomaTypeEnum;
 export type AcademicRankingBaseType = $Enums.AcademicRankingBaseType;
@@ -3743,6 +3766,24 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get classSchedule(): Prisma.ClassScheduleDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.scoreCorrectionTicket`: Exposes CRUD operations for the **ScoreCorrectionTicket** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ScoreCorrectionTickets
+     * const scoreCorrectionTickets = await prisma.scoreCorrectionTicket.findMany()
+     * ```
+     */
+    get scoreCorrectionTicket(): Prisma.ScoreCorrectionTicketDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.scoreCorrectionItem`: Exposes CRUD operations for the **ScoreCorrectionItem** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ScoreCorrectionItems
+     * const scoreCorrectionItems = await prisma.scoreCorrectionItem.findMany()
+     * ```
+     */
+    get scoreCorrectionItem(): Prisma.ScoreCorrectionItemDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.trainingObjectType`: Exposes CRUD operations for the **TrainingObjectType** model.
      * Example usage:
@@ -5232,6 +5273,7 @@ export const SubjectClassSchedule: typeof $Enums.SubjectClassSchedule;
 export const PeriodType: typeof $Enums.PeriodType;
 export const SubjectClassType: typeof $Enums.SubjectClassType;
 export const SubjectClassStatus: typeof $Enums.SubjectClassStatus;
+export const ScoreCorrectionStatus: typeof $Enums.ScoreCorrectionStatus;
 export const TrainingObjectTypes: typeof $Enums.TrainingObjectTypes;
 export const DiplomaTypeEnum: typeof $Enums.DiplomaTypeEnum;
 export const AcademicRankingBaseType: typeof $Enums.AcademicRankingBaseType;
@@ -5419,6 +5461,12 @@ export namespace $Enums {
         OFFICIAL: 'OFFICIAL'
     };
     export type SubjectClassStatus = (typeof SubjectClassStatus)[keyof typeof SubjectClassStatus];
+    export const ScoreCorrectionStatus: {
+        INITIALIZED: 'INITIALIZED',
+        PENDING_APPROVAL: 'PENDING_APPROVAL',
+        APPROVED: 'APPROVED'
+    };
+    export type ScoreCorrectionStatus = (typeof ScoreCorrectionStatus)[keyof typeof ScoreCorrectionStatus];
     export const TrainingObjectTypes: {
         MILITARY: 'MILITARY',
         CIVILIAN: 'CIVILIAN',
@@ -5993,6 +6041,8 @@ export namespace Prisma {
         SubjectClassHistory: 'SubjectClassHistory',
         SubjectClassTime: 'SubjectClassTime',
         ClassSchedule: 'ClassSchedule',
+        ScoreCorrectionTicket: 'ScoreCorrectionTicket',
+        ScoreCorrectionItem: 'ScoreCorrectionItem',
         TrainingObjectType: 'TrainingObjectType',
         PriorityObject: 'PriorityObject',
         TrainingType: 'TrainingType',
@@ -8079,6 +8129,41 @@ export namespace Prisma {
         isReplacement: 'isReplacement',
         originalScheduleId: 'originalScheduleId',
         cancelReason: 'cancelReason'
+    };
+    export const ScoreCorrectionTicketScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        trainingObjectTypeId: 'trainingObjectTypeId',
+        number: 'number',
+        proposal: 'proposal',
+        decision: 'decision',
+        date: 'date',
+        deadline: 'deadline',
+        status: 'status'
+    };
+    export const ScoreCorrectionItemScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        ticketId: 'ticketId',
+        studentSubjectScoreId: 'studentSubjectScoreId',
+        newAttendanceScore: 'newAttendanceScore',
+        newMidtermScore: 'newMidtermScore',
+        newExamScore: 'newExamScore',
+        oldAttendanceScore: 'oldAttendanceScore',
+        oldMidtermScore: 'oldMidtermScore',
+        oldExamScore: 'oldExamScore'
     };
     export const TrainingObjectTypeScalarFieldEnum: {
         id: 'id',
@@ -11613,6 +11698,23 @@ export namespace Prisma {
         notes: 'notes',
         originalScheduleId: 'originalScheduleId',
         cancelReason: 'cancelReason'
+    };
+    export const ScoreCorrectionTicketOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        trainingObjectTypeId: 'trainingObjectTypeId',
+        proposal: 'proposal',
+        decision: 'decision'
+    };
+    export const ScoreCorrectionItemOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        ticketId: 'ticketId',
+        studentSubjectScoreId: 'studentSubjectScoreId'
     };
     export const TrainingObjectTypeOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -42675,6 +42777,7 @@ export namespace Prisma {
         awards<T extends StudentSubjectScore$awardsArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$awardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedAwardOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentThesisRegistration<T extends StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentThesisRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentSubjectScoreHistory<T extends StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        scoreCorrectionItem<T extends StudentSubjectScore$scoreCorrectionItemArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$scoreCorrectionItemArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -54139,6 +54242,783 @@ export namespace Prisma {
         readonly cancelReason: FieldRef<"ClassSchedule", 'String'>;
     }
 
+    export interface ScoreCorrectionTicketDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ScoreCorrectionTicket'], meta: { name: 'ScoreCorrectionTicket' } };
+        /**
+         * Fields of the ScoreCorrectionTicket model
+         */
+        readonly fields: ScoreCorrectionTicketFieldRefs;
+        /**
+         * Find zero or one ScoreCorrectionTicket that matches the filter.
+         * @param {ScoreCorrectionTicketFindUniqueArgs} args - Arguments to find a ScoreCorrectionTicket
+         * @example
+         * // Get one ScoreCorrectionTicket
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ScoreCorrectionTicketFindUniqueArgs>(args: SelectSubset<T, ScoreCorrectionTicketFindUniqueArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ScoreCorrectionTicket that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ScoreCorrectionTicketFindUniqueOrThrowArgs} args - Arguments to find a ScoreCorrectionTicket
+         * @example
+         * // Get one ScoreCorrectionTicket
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ScoreCorrectionTicketFindUniqueOrThrowArgs>(args: SelectSubset<T, ScoreCorrectionTicketFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ScoreCorrectionTicket that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionTicketFindFirstArgs} args - Arguments to find a ScoreCorrectionTicket
+         * @example
+         * // Get one ScoreCorrectionTicket
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ScoreCorrectionTicketFindFirstArgs>(args?: SelectSubset<T, ScoreCorrectionTicketFindFirstArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ScoreCorrectionTicket that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionTicketFindFirstOrThrowArgs} args - Arguments to find a ScoreCorrectionTicket
+         * @example
+         * // Get one ScoreCorrectionTicket
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ScoreCorrectionTicketFindFirstOrThrowArgs>(args?: SelectSubset<T, ScoreCorrectionTicketFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ScoreCorrectionTickets that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionTicketFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ScoreCorrectionTickets
+         * const scoreCorrectionTickets = await prisma.scoreCorrectionTicket.findMany()
+         *
+         * // Get first 10 ScoreCorrectionTickets
+         * const scoreCorrectionTickets = await prisma.scoreCorrectionTicket.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const scoreCorrectionTicketWithIdOnly = await prisma.scoreCorrectionTicket.findMany({ select: { id: true } })
+         */
+        findMany<T extends ScoreCorrectionTicketFindManyArgs>(args?: SelectSubset<T, ScoreCorrectionTicketFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ScoreCorrectionTicket.
+         * @param {ScoreCorrectionTicketCreateArgs} args - Arguments to create a ScoreCorrectionTicket.
+         * @example
+         * // Create one ScoreCorrectionTicket
+         * const ScoreCorrectionTicket = await prisma.scoreCorrectionTicket.create({
+         *   data: {
+         *     // ... data to create a ScoreCorrectionTicket
+         *   }
+         * })
+         */
+        create<T extends ScoreCorrectionTicketCreateArgs>(args: SelectSubset<T, ScoreCorrectionTicketCreateArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ScoreCorrectionTickets.
+         * @param {ScoreCorrectionTicketCreateManyArgs} args - Arguments to create many ScoreCorrectionTickets.
+         * @example
+         * // Create many ScoreCorrectionTickets
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ScoreCorrectionTicketCreateManyArgs>(args?: SelectSubset<T, ScoreCorrectionTicketCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ScoreCorrectionTickets and returns the data saved in the database.
+         * @param {ScoreCorrectionTicketCreateManyAndReturnArgs} args - Arguments to create many ScoreCorrectionTickets.
+         * @example
+         * // Create many ScoreCorrectionTickets
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ScoreCorrectionTickets and only return the `id`
+         * const scoreCorrectionTicketWithIdOnly = await prisma.scoreCorrectionTicket.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ScoreCorrectionTicketCreateManyAndReturnArgs>(args?: SelectSubset<T, ScoreCorrectionTicketCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ScoreCorrectionTicket.
+         * @param {ScoreCorrectionTicketDeleteArgs} args - Arguments to delete one ScoreCorrectionTicket.
+         * @example
+         * // Delete one ScoreCorrectionTicket
+         * const ScoreCorrectionTicket = await prisma.scoreCorrectionTicket.delete({
+         *   where: {
+         *     // ... filter to delete one ScoreCorrectionTicket
+         *   }
+         * })
+         */
+        delete<T extends ScoreCorrectionTicketDeleteArgs>(args: SelectSubset<T, ScoreCorrectionTicketDeleteArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ScoreCorrectionTicket.
+         * @param {ScoreCorrectionTicketUpdateArgs} args - Arguments to update one ScoreCorrectionTicket.
+         * @example
+         * // Update one ScoreCorrectionTicket
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ScoreCorrectionTicketUpdateArgs>(args: SelectSubset<T, ScoreCorrectionTicketUpdateArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ScoreCorrectionTickets.
+         * @param {ScoreCorrectionTicketDeleteManyArgs} args - Arguments to filter ScoreCorrectionTickets to delete.
+         * @example
+         * // Delete a few ScoreCorrectionTickets
+         * const { count } = await prisma.scoreCorrectionTicket.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ScoreCorrectionTicketDeleteManyArgs>(args?: SelectSubset<T, ScoreCorrectionTicketDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ScoreCorrectionTickets.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionTicketUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ScoreCorrectionTickets
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ScoreCorrectionTicketUpdateManyArgs>(args: SelectSubset<T, ScoreCorrectionTicketUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ScoreCorrectionTickets and returns the data updated in the database.
+         * @param {ScoreCorrectionTicketUpdateManyAndReturnArgs} args - Arguments to update many ScoreCorrectionTickets.
+         * @example
+         * // Update many ScoreCorrectionTickets
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ScoreCorrectionTickets and only return the `id`
+         * const scoreCorrectionTicketWithIdOnly = await prisma.scoreCorrectionTicket.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ScoreCorrectionTicketUpdateManyAndReturnArgs>(args: SelectSubset<T, ScoreCorrectionTicketUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ScoreCorrectionTicket.
+         * @param {ScoreCorrectionTicketUpsertArgs} args - Arguments to update or create a ScoreCorrectionTicket.
+         * @example
+         * // Update or create a ScoreCorrectionTicket
+         * const scoreCorrectionTicket = await prisma.scoreCorrectionTicket.upsert({
+         *   create: {
+         *     // ... data to create a ScoreCorrectionTicket
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ScoreCorrectionTicket we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ScoreCorrectionTicketUpsertArgs>(args: SelectSubset<T, ScoreCorrectionTicketUpsertArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ScoreCorrectionTickets.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionTicketCountArgs} args - Arguments to filter ScoreCorrectionTickets to count.
+         * @example
+         * // Count the number of ScoreCorrectionTickets
+         * const count = await prisma.scoreCorrectionTicket.count({
+         *   where: {
+         *     // ... the filter for the ScoreCorrectionTickets we want to count
+         *   }
+         * })
+         */
+        count<T extends ScoreCorrectionTicketCountArgs>(args?: Subset<T, ScoreCorrectionTicketCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ScoreCorrectionTicketCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ScoreCorrectionTicket.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionTicketAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ScoreCorrectionTicketAggregateArgs>(args: Subset<T, ScoreCorrectionTicketAggregateArgs>): Prisma.PrismaPromise<GetScoreCorrectionTicketAggregateType<T>>;
+        /**
+         * Group by ScoreCorrectionTicket.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionTicketGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ScoreCorrectionTicketGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScoreCorrectionTicketGroupByArgs['orderBy'] }
+        : { orderBy?: ScoreCorrectionTicketGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ScoreCorrectionTicketGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScoreCorrectionTicketGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ScoreCorrectionTicket.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ScoreCorrectionTicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        items<T extends ScoreCorrectionTicket$itemsArgs<ExtArgs> = {}>(args?: Subset<T, ScoreCorrectionTicket$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ScoreCorrectionTicket model
+     */
+    interface ScoreCorrectionTicketFieldRefs {
+        readonly id: FieldRef<"ScoreCorrectionTicket", 'String'>;
+        readonly code: FieldRef<"ScoreCorrectionTicket", 'String'>;
+        readonly active: FieldRef<"ScoreCorrectionTicket", 'Boolean'>;
+        readonly description: FieldRef<"ScoreCorrectionTicket", 'String'>;
+        readonly deletedAt: FieldRef<"ScoreCorrectionTicket", 'DateTime'>;
+        readonly createdAt: FieldRef<"ScoreCorrectionTicket", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ScoreCorrectionTicket", 'DateTime'>;
+        readonly createdBy: FieldRef<"ScoreCorrectionTicket", 'String'>;
+        readonly trainingObjectTypeId: FieldRef<"ScoreCorrectionTicket", 'String'>;
+        readonly number: FieldRef<"ScoreCorrectionTicket", 'Int'>;
+        readonly proposal: FieldRef<"ScoreCorrectionTicket", 'String'>;
+        readonly decision: FieldRef<"ScoreCorrectionTicket", 'String'>;
+        readonly date: FieldRef<"ScoreCorrectionTicket", 'DateTime'>;
+        readonly deadline: FieldRef<"ScoreCorrectionTicket", 'DateTime'>;
+        readonly status: FieldRef<"ScoreCorrectionTicket", 'ScoreCorrectionStatus'>;
+    }
+
+    export interface ScoreCorrectionItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ScoreCorrectionItem'], meta: { name: 'ScoreCorrectionItem' } };
+        /**
+         * Fields of the ScoreCorrectionItem model
+         */
+        readonly fields: ScoreCorrectionItemFieldRefs;
+        /**
+         * Find zero or one ScoreCorrectionItem that matches the filter.
+         * @param {ScoreCorrectionItemFindUniqueArgs} args - Arguments to find a ScoreCorrectionItem
+         * @example
+         * // Get one ScoreCorrectionItem
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ScoreCorrectionItemFindUniqueArgs>(args: SelectSubset<T, ScoreCorrectionItemFindUniqueArgs<ExtArgs>>): Prisma__ScoreCorrectionItemClient<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ScoreCorrectionItem that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ScoreCorrectionItemFindUniqueOrThrowArgs} args - Arguments to find a ScoreCorrectionItem
+         * @example
+         * // Get one ScoreCorrectionItem
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ScoreCorrectionItemFindUniqueOrThrowArgs>(args: SelectSubset<T, ScoreCorrectionItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScoreCorrectionItemClient<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ScoreCorrectionItem that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionItemFindFirstArgs} args - Arguments to find a ScoreCorrectionItem
+         * @example
+         * // Get one ScoreCorrectionItem
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ScoreCorrectionItemFindFirstArgs>(args?: SelectSubset<T, ScoreCorrectionItemFindFirstArgs<ExtArgs>>): Prisma__ScoreCorrectionItemClient<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ScoreCorrectionItem that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionItemFindFirstOrThrowArgs} args - Arguments to find a ScoreCorrectionItem
+         * @example
+         * // Get one ScoreCorrectionItem
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ScoreCorrectionItemFindFirstOrThrowArgs>(args?: SelectSubset<T, ScoreCorrectionItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScoreCorrectionItemClient<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ScoreCorrectionItems that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionItemFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ScoreCorrectionItems
+         * const scoreCorrectionItems = await prisma.scoreCorrectionItem.findMany()
+         *
+         * // Get first 10 ScoreCorrectionItems
+         * const scoreCorrectionItems = await prisma.scoreCorrectionItem.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const scoreCorrectionItemWithIdOnly = await prisma.scoreCorrectionItem.findMany({ select: { id: true } })
+         */
+        findMany<T extends ScoreCorrectionItemFindManyArgs>(args?: SelectSubset<T, ScoreCorrectionItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ScoreCorrectionItem.
+         * @param {ScoreCorrectionItemCreateArgs} args - Arguments to create a ScoreCorrectionItem.
+         * @example
+         * // Create one ScoreCorrectionItem
+         * const ScoreCorrectionItem = await prisma.scoreCorrectionItem.create({
+         *   data: {
+         *     // ... data to create a ScoreCorrectionItem
+         *   }
+         * })
+         */
+        create<T extends ScoreCorrectionItemCreateArgs>(args: SelectSubset<T, ScoreCorrectionItemCreateArgs<ExtArgs>>): Prisma__ScoreCorrectionItemClient<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ScoreCorrectionItems.
+         * @param {ScoreCorrectionItemCreateManyArgs} args - Arguments to create many ScoreCorrectionItems.
+         * @example
+         * // Create many ScoreCorrectionItems
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ScoreCorrectionItemCreateManyArgs>(args?: SelectSubset<T, ScoreCorrectionItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ScoreCorrectionItems and returns the data saved in the database.
+         * @param {ScoreCorrectionItemCreateManyAndReturnArgs} args - Arguments to create many ScoreCorrectionItems.
+         * @example
+         * // Create many ScoreCorrectionItems
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ScoreCorrectionItems and only return the `id`
+         * const scoreCorrectionItemWithIdOnly = await prisma.scoreCorrectionItem.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ScoreCorrectionItemCreateManyAndReturnArgs>(args?: SelectSubset<T, ScoreCorrectionItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ScoreCorrectionItem.
+         * @param {ScoreCorrectionItemDeleteArgs} args - Arguments to delete one ScoreCorrectionItem.
+         * @example
+         * // Delete one ScoreCorrectionItem
+         * const ScoreCorrectionItem = await prisma.scoreCorrectionItem.delete({
+         *   where: {
+         *     // ... filter to delete one ScoreCorrectionItem
+         *   }
+         * })
+         */
+        delete<T extends ScoreCorrectionItemDeleteArgs>(args: SelectSubset<T, ScoreCorrectionItemDeleteArgs<ExtArgs>>): Prisma__ScoreCorrectionItemClient<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ScoreCorrectionItem.
+         * @param {ScoreCorrectionItemUpdateArgs} args - Arguments to update one ScoreCorrectionItem.
+         * @example
+         * // Update one ScoreCorrectionItem
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ScoreCorrectionItemUpdateArgs>(args: SelectSubset<T, ScoreCorrectionItemUpdateArgs<ExtArgs>>): Prisma__ScoreCorrectionItemClient<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ScoreCorrectionItems.
+         * @param {ScoreCorrectionItemDeleteManyArgs} args - Arguments to filter ScoreCorrectionItems to delete.
+         * @example
+         * // Delete a few ScoreCorrectionItems
+         * const { count } = await prisma.scoreCorrectionItem.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ScoreCorrectionItemDeleteManyArgs>(args?: SelectSubset<T, ScoreCorrectionItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ScoreCorrectionItems.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionItemUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ScoreCorrectionItems
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ScoreCorrectionItemUpdateManyArgs>(args: SelectSubset<T, ScoreCorrectionItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ScoreCorrectionItems and returns the data updated in the database.
+         * @param {ScoreCorrectionItemUpdateManyAndReturnArgs} args - Arguments to update many ScoreCorrectionItems.
+         * @example
+         * // Update many ScoreCorrectionItems
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ScoreCorrectionItems and only return the `id`
+         * const scoreCorrectionItemWithIdOnly = await prisma.scoreCorrectionItem.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ScoreCorrectionItemUpdateManyAndReturnArgs>(args: SelectSubset<T, ScoreCorrectionItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ScoreCorrectionItem.
+         * @param {ScoreCorrectionItemUpsertArgs} args - Arguments to update or create a ScoreCorrectionItem.
+         * @example
+         * // Update or create a ScoreCorrectionItem
+         * const scoreCorrectionItem = await prisma.scoreCorrectionItem.upsert({
+         *   create: {
+         *     // ... data to create a ScoreCorrectionItem
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ScoreCorrectionItem we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ScoreCorrectionItemUpsertArgs>(args: SelectSubset<T, ScoreCorrectionItemUpsertArgs<ExtArgs>>): Prisma__ScoreCorrectionItemClient<$Result.GetResult<Prisma.$ScoreCorrectionItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ScoreCorrectionItems.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionItemCountArgs} args - Arguments to filter ScoreCorrectionItems to count.
+         * @example
+         * // Count the number of ScoreCorrectionItems
+         * const count = await prisma.scoreCorrectionItem.count({
+         *   where: {
+         *     // ... the filter for the ScoreCorrectionItems we want to count
+         *   }
+         * })
+         */
+        count<T extends ScoreCorrectionItemCountArgs>(args?: Subset<T, ScoreCorrectionItemCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ScoreCorrectionItemCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ScoreCorrectionItem.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ScoreCorrectionItemAggregateArgs>(args: Subset<T, ScoreCorrectionItemAggregateArgs>): Prisma.PrismaPromise<GetScoreCorrectionItemAggregateType<T>>;
+        /**
+         * Group by ScoreCorrectionItem.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ScoreCorrectionItemGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ScoreCorrectionItemGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScoreCorrectionItemGroupByArgs['orderBy'] }
+        : { orderBy?: ScoreCorrectionItemGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ScoreCorrectionItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScoreCorrectionItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ScoreCorrectionItem.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ScoreCorrectionItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        ticket<T extends ScoreCorrectionTicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ScoreCorrectionTicketDefaultArgs<ExtArgs>>): Prisma__ScoreCorrectionTicketClient<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        studentSubjectScore<T extends StudentSubjectScoreDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScoreDefaultArgs<ExtArgs>>): Prisma__StudentSubjectScoreClient<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ScoreCorrectionItem model
+     */
+    interface ScoreCorrectionItemFieldRefs {
+        readonly id: FieldRef<"ScoreCorrectionItem", 'String'>;
+        readonly code: FieldRef<"ScoreCorrectionItem", 'String'>;
+        readonly active: FieldRef<"ScoreCorrectionItem", 'Boolean'>;
+        readonly description: FieldRef<"ScoreCorrectionItem", 'String'>;
+        readonly deletedAt: FieldRef<"ScoreCorrectionItem", 'DateTime'>;
+        readonly createdAt: FieldRef<"ScoreCorrectionItem", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ScoreCorrectionItem", 'DateTime'>;
+        readonly createdBy: FieldRef<"ScoreCorrectionItem", 'String'>;
+        readonly ticketId: FieldRef<"ScoreCorrectionItem", 'String'>;
+        readonly studentSubjectScoreId: FieldRef<"ScoreCorrectionItem", 'String'>;
+        readonly newAttendanceScore: FieldRef<"ScoreCorrectionItem", 'Float'>;
+        readonly newMidtermScore: FieldRef<"ScoreCorrectionItem", 'Float'>;
+        readonly newExamScore: FieldRef<"ScoreCorrectionItem", 'Float'>;
+        readonly oldAttendanceScore: FieldRef<"ScoreCorrectionItem", 'Float'>;
+        readonly oldMidtermScore: FieldRef<"ScoreCorrectionItem", 'Float'>;
+        readonly oldExamScore: FieldRef<"ScoreCorrectionItem", 'Float'>;
+    }
+
     export interface TrainingObjectTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TrainingObjectType'], meta: { name: 'TrainingObjectType' } };
         /**
@@ -54498,6 +55378,7 @@ export namespace Prisma {
         trainingBlocks<T extends TrainingObjectType$trainingBlocksArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$trainingBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveyObjectType<T extends TrainingObjectType$surveyObjectTypeArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$surveyObjectTypeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         survey<T extends TrainingObjectType$surveyArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$surveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        scoreCorrectionTicket<T extends TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -114021,7 +114902,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -121792,6 +122673,154 @@ export namespace Prisma {
                     count: {
                         args: Prisma.ClassScheduleCountArgs<ExtArgs>
                         result: $Utils.Optional<ClassScheduleCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ScoreCorrectionTicket: {
+                payload: Prisma.$ScoreCorrectionTicketPayload<ExtArgs>
+                fields: Prisma.ScoreCorrectionTicketFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ScoreCorrectionTicketFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ScoreCorrectionTicketFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ScoreCorrectionTicketFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ScoreCorrectionTicketFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ScoreCorrectionTicketFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ScoreCorrectionTicketCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ScoreCorrectionTicketCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ScoreCorrectionTicketCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ScoreCorrectionTicketDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>
+                    }
+                    update: {
+                        args: Prisma.ScoreCorrectionTicketUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ScoreCorrectionTicketDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ScoreCorrectionTicketUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ScoreCorrectionTicketUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ScoreCorrectionTicketUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionTicketPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ScoreCorrectionTicketAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateScoreCorrectionTicket>
+                    }
+                    groupBy: {
+                        args: Prisma.ScoreCorrectionTicketGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ScoreCorrectionTicketGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ScoreCorrectionTicketCountArgs<ExtArgs>
+                        result: $Utils.Optional<ScoreCorrectionTicketCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ScoreCorrectionItem: {
+                payload: Prisma.$ScoreCorrectionItemPayload<ExtArgs>
+                fields: Prisma.ScoreCorrectionItemFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ScoreCorrectionItemFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ScoreCorrectionItemFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ScoreCorrectionItemFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ScoreCorrectionItemFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ScoreCorrectionItemFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ScoreCorrectionItemCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ScoreCorrectionItemCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ScoreCorrectionItemCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ScoreCorrectionItemDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>
+                    }
+                    update: {
+                        args: Prisma.ScoreCorrectionItemUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ScoreCorrectionItemDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ScoreCorrectionItemUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ScoreCorrectionItemUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ScoreCorrectionItemUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ScoreCorrectionItemPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ScoreCorrectionItemAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateScoreCorrectionItem>
+                    }
+                    groupBy: {
+                        args: Prisma.ScoreCorrectionItemGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ScoreCorrectionItemGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ScoreCorrectionItemCountArgs<ExtArgs>
+                        result: $Utils.Optional<ScoreCorrectionItemCountAggregateOutputType> | number
                     }
                 }
             }
@@ -133327,6 +134356,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryOmit
         subjectClassTime?: SubjectClassTimeOmit
         classSchedule?: ClassScheduleOmit
+        scoreCorrectionTicket?: ScoreCorrectionTicketOmit
+        scoreCorrectionItem?: ScoreCorrectionItemOmit
         trainingObjectType?: TrainingObjectTypeOmit
         priorityObject?: PriorityObjectOmit
         trainingType?: TrainingTypeOmit
@@ -135049,6 +136080,7 @@ export namespace Prisma {
         awards: number
         studentThesisRegistration: number
         studentSubjectScoreHistory: number
+        scoreCorrectionItem: number
     };
     export type StudentSubjectScoreCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         graduationGpaScores?: boolean | StudentSubjectScoreCountOutputTypeCountGraduationGpaScoresArgs
@@ -135057,6 +136089,7 @@ export namespace Prisma {
         awards?: boolean | StudentSubjectScoreCountOutputTypeCountAwardsArgs
         studentThesisRegistration?: boolean | StudentSubjectScoreCountOutputTypeCountStudentThesisRegistrationArgs
         studentSubjectScoreHistory?: boolean | StudentSubjectScoreCountOutputTypeCountStudentSubjectScoreHistoryArgs
+        scoreCorrectionItem?: boolean | StudentSubjectScoreCountOutputTypeCountScoreCorrectionItemArgs
     };
     /**
      * StudentSubjectScoreCountOutputType without action
@@ -135102,6 +136135,12 @@ export namespace Prisma {
      */
     export type StudentSubjectScoreCountOutputTypeCountStudentSubjectScoreHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StudentSubjectScoreHistoryWhereInput
+    };
+    /**
+     * StudentSubjectScoreCountOutputType without action
+     */
+    export type StudentSubjectScoreCountOutputTypeCountScoreCorrectionItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ScoreCorrectionItemWhereInput
     };
     /**
      * Count Type ArchivedCertificateCountOutputType
@@ -136064,6 +137103,30 @@ export namespace Prisma {
         where?: UserProfileWhereInput
     };
     /**
+     * Count Type ScoreCorrectionTicketCountOutputType
+     */
+    export type ScoreCorrectionTicketCountOutputType = {
+        items: number
+    };
+    export type ScoreCorrectionTicketCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        items?: boolean | ScoreCorrectionTicketCountOutputTypeCountItemsArgs
+    };
+    /**
+     * ScoreCorrectionTicketCountOutputType without action
+     */
+    export type ScoreCorrectionTicketCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicketCountOutputType
+         */
+        select?: ScoreCorrectionTicketCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ScoreCorrectionTicketCountOutputType without action
+     */
+    export type ScoreCorrectionTicketCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ScoreCorrectionItemWhereInput
+    };
+    /**
      * Count Type TrainingObjectTypeCountOutputType
      */
     export type TrainingObjectTypeCountOutputType = {
@@ -136081,6 +137144,7 @@ export namespace Prisma {
         trainingBlocks: number
         surveyObjectType: number
         survey: number
+        scoreCorrectionTicket: number
     };
     export type TrainingObjectTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingCourse?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingCourseArgs
@@ -136097,6 +137161,7 @@ export namespace Prisma {
         trainingBlocks?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingBlocksArgs
         surveyObjectType?: boolean | TrainingObjectTypeCountOutputTypeCountSurveyObjectTypeArgs
         survey?: boolean | TrainingObjectTypeCountOutputTypeCountSurveyArgs
+        scoreCorrectionTicket?: boolean | TrainingObjectTypeCountOutputTypeCountScoreCorrectionTicketArgs
     };
     /**
      * TrainingObjectTypeCountOutputType without action
@@ -136190,6 +137255,12 @@ export namespace Prisma {
      */
     export type TrainingObjectTypeCountOutputTypeCountSurveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SurveyWhereInput
+    };
+    /**
+     * TrainingObjectTypeCountOutputType without action
+     */
+    export type TrainingObjectTypeCountOutputTypeCountScoreCorrectionTicketArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ScoreCorrectionTicketWhereInput
     };
     /**
      * Count Type PriorityObjectCountOutputType
@@ -199957,6 +201028,7 @@ export namespace Prisma {
         awards?: boolean | StudentSubjectScore$awardsArgs<ExtArgs>
         studentThesisRegistration?: boolean | StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>
         studentSubjectScoreHistory?: boolean | StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs>
+        scoreCorrectionItem?: boolean | StudentSubjectScore$scoreCorrectionItemArgs<ExtArgs>
         _count?: boolean | StudentSubjectScoreCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["studentSubjectScore"]>;
     export type StudentSubjectScoreSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -200065,6 +201137,7 @@ export namespace Prisma {
         awards?: boolean | StudentSubjectScore$awardsArgs<ExtArgs>
         studentThesisRegistration?: boolean | StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>
         studentSubjectScoreHistory?: boolean | StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs>
+        scoreCorrectionItem?: boolean | StudentSubjectScore$scoreCorrectionItemArgs<ExtArgs>
         _count?: boolean | StudentSubjectScoreCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type StudentSubjectScoreIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -200097,6 +201170,7 @@ export namespace Prisma {
             awards: Prisma.$ArchivedAwardOnStudentSubjectScorePayload<ExtArgs>[]
             studentThesisRegistration: Prisma.$StudentThesisRegistrationPayload<ExtArgs>[]
             studentSubjectScoreHistory: Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>[]
+            scoreCorrectionItem: Prisma.$ScoreCorrectionItemPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -200735,6 +201809,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StudentSubjectScoreHistoryScalarFieldEnum | StudentSubjectScoreHistoryScalarFieldEnum[]
+    };
+    /**
+     * StudentSubjectScore.scoreCorrectionItem
+     */
+    export type StudentSubjectScore$scoreCorrectionItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        where?: ScoreCorrectionItemWhereInput
+        orderBy?: ScoreCorrectionItemOrderByWithRelationInput | ScoreCorrectionItemOrderByWithRelationInput[]
+        cursor?: ScoreCorrectionItemWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ScoreCorrectionItemScalarFieldEnum | ScoreCorrectionItemScalarFieldEnum[]
     };
     /**
      * StudentSubjectScore without action
@@ -226013,6 +227110,1559 @@ export namespace Prisma {
         include?: ClassScheduleInclude<ExtArgs> | null
     };
     /**
+     * Model ScoreCorrectionTicket
+     */
+    export type AggregateScoreCorrectionTicket = {
+        _count: ScoreCorrectionTicketCountAggregateOutputType | null
+        _avg: ScoreCorrectionTicketAvgAggregateOutputType | null
+        _sum: ScoreCorrectionTicketSumAggregateOutputType | null
+        _min: ScoreCorrectionTicketMinAggregateOutputType | null
+        _max: ScoreCorrectionTicketMaxAggregateOutputType | null
+    };
+    export type ScoreCorrectionTicketAvgAggregateOutputType = {
+        number: number | null
+    };
+    export type ScoreCorrectionTicketSumAggregateOutputType = {
+        number: number | null
+    };
+    export type ScoreCorrectionTicketMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        trainingObjectTypeId: string | null
+        number: number | null
+        proposal: string | null
+        decision: string | null
+        date: Date | null
+        deadline: Date | null
+        status: $Enums.ScoreCorrectionStatus | null
+    };
+    export type ScoreCorrectionTicketMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        trainingObjectTypeId: string | null
+        number: number | null
+        proposal: string | null
+        decision: string | null
+        date: Date | null
+        deadline: Date | null
+        status: $Enums.ScoreCorrectionStatus | null
+    };
+    export type ScoreCorrectionTicketCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        trainingObjectTypeId: number
+        number: number
+        proposal: number
+        decision: number
+        date: number
+        deadline: number
+        status: number
+        _all: number
+    };
+    export type ScoreCorrectionTicketAvgAggregateInputType = {
+        number?: true
+    };
+    export type ScoreCorrectionTicketSumAggregateInputType = {
+        number?: true
+    };
+    export type ScoreCorrectionTicketMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        trainingObjectTypeId?: true
+        number?: true
+        proposal?: true
+        decision?: true
+        date?: true
+        deadline?: true
+        status?: true
+    };
+    export type ScoreCorrectionTicketMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        trainingObjectTypeId?: true
+        number?: true
+        proposal?: true
+        decision?: true
+        date?: true
+        deadline?: true
+        status?: true
+    };
+    export type ScoreCorrectionTicketCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        trainingObjectTypeId?: true
+        number?: true
+        proposal?: true
+        decision?: true
+        date?: true
+        deadline?: true
+        status?: true
+        _all?: true
+    };
+    export type ScoreCorrectionTicketAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ScoreCorrectionTicket to aggregate.
+         */
+        where?: ScoreCorrectionTicketWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ScoreCorrectionTickets to fetch.
+         */
+        orderBy?: ScoreCorrectionTicketOrderByWithRelationInput | ScoreCorrectionTicketOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ScoreCorrectionTicketWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ScoreCorrectionTickets from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ScoreCorrectionTickets.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ScoreCorrectionTickets
+        **/
+        _count?: true | ScoreCorrectionTicketCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: ScoreCorrectionTicketAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: ScoreCorrectionTicketSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ScoreCorrectionTicketMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ScoreCorrectionTicketMaxAggregateInputType
+    };
+    export type GetScoreCorrectionTicketAggregateType<T extends ScoreCorrectionTicketAggregateArgs> = {
+        [P in keyof T & keyof AggregateScoreCorrectionTicket]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScoreCorrectionTicket[P]>
+        : GetScalarType<T[P], AggregateScoreCorrectionTicket[P]>
+    };
+    export type ScoreCorrectionTicketGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ScoreCorrectionTicketWhereInput
+        orderBy?: ScoreCorrectionTicketOrderByWithAggregationInput | ScoreCorrectionTicketOrderByWithAggregationInput[]
+        by: ScoreCorrectionTicketScalarFieldEnum[] | ScoreCorrectionTicketScalarFieldEnum
+        having?: ScoreCorrectionTicketScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ScoreCorrectionTicketCountAggregateInputType | true
+        _avg?: ScoreCorrectionTicketAvgAggregateInputType
+        _sum?: ScoreCorrectionTicketSumAggregateInputType
+        _min?: ScoreCorrectionTicketMinAggregateInputType
+        _max?: ScoreCorrectionTicketMaxAggregateInputType
+    };
+    export type ScoreCorrectionTicketGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        trainingObjectTypeId: string
+        number: number
+        proposal: string | null
+        decision: string | null
+        date: Date
+        deadline: Date | null
+        status: $Enums.ScoreCorrectionStatus
+        _count: ScoreCorrectionTicketCountAggregateOutputType | null
+        _avg: ScoreCorrectionTicketAvgAggregateOutputType | null
+        _sum: ScoreCorrectionTicketSumAggregateOutputType | null
+        _min: ScoreCorrectionTicketMinAggregateOutputType | null
+        _max: ScoreCorrectionTicketMaxAggregateOutputType | null
+    };
+    type GetScoreCorrectionTicketGroupByPayload<T extends ScoreCorrectionTicketGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ScoreCorrectionTicketGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ScoreCorrectionTicketGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ScoreCorrectionTicketGroupByOutputType[P]>
+                : GetScalarType<T[P], ScoreCorrectionTicketGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ScoreCorrectionTicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        trainingObjectTypeId?: boolean
+        number?: boolean
+        proposal?: boolean
+        decision?: boolean
+        date?: boolean
+        deadline?: boolean
+        status?: boolean
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+        items?: boolean | ScoreCorrectionTicket$itemsArgs<ExtArgs>
+        _count?: boolean | ScoreCorrectionTicketCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["scoreCorrectionTicket"]>;
+    export type ScoreCorrectionTicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        trainingObjectTypeId?: boolean
+        number?: boolean
+        proposal?: boolean
+        decision?: boolean
+        date?: boolean
+        deadline?: boolean
+        status?: boolean
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["scoreCorrectionTicket"]>;
+    export type ScoreCorrectionTicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        trainingObjectTypeId?: boolean
+        number?: boolean
+        proposal?: boolean
+        decision?: boolean
+        date?: boolean
+        deadline?: boolean
+        status?: boolean
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["scoreCorrectionTicket"]>;
+    export type ScoreCorrectionTicketSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        trainingObjectTypeId?: boolean
+        number?: boolean
+        proposal?: boolean
+        decision?: boolean
+        date?: boolean
+        deadline?: boolean
+        status?: boolean
+    };
+    export type ScoreCorrectionTicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "trainingObjectTypeId" | "number" | "proposal" | "decision" | "date" | "deadline" | "status", ExtArgs["result"]["scoreCorrectionTicket"]>;
+    export type ScoreCorrectionTicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+        items?: boolean | ScoreCorrectionTicket$itemsArgs<ExtArgs>
+        _count?: boolean | ScoreCorrectionTicketCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type ScoreCorrectionTicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+    };
+    export type ScoreCorrectionTicketIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+    };
+    export type $ScoreCorrectionTicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ScoreCorrectionTicket"
+        objects: {
+            trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
+            items: Prisma.$ScoreCorrectionItemPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            trainingObjectTypeId: string
+            number: number
+            proposal: string | null
+            decision: string | null
+            date: Date
+            deadline: Date | null
+            status: $Enums.ScoreCorrectionStatus
+        }, ExtArgs["result"]["scoreCorrectionTicket"]>
+        composites: {}
+    };
+    type ScoreCorrectionTicketGetPayload<S extends boolean | null | undefined | ScoreCorrectionTicketDefaultArgs> = $Result.GetResult<Prisma.$ScoreCorrectionTicketPayload, S>;
+    type ScoreCorrectionTicketCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ScoreCorrectionTicketFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ScoreCorrectionTicketCountAggregateInputType | true
+    };
+    /**
+     * ScoreCorrectionTicket findUnique
+     */
+    export type ScoreCorrectionTicketFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionTicket to fetch.
+         */
+        where: ScoreCorrectionTicketWhereUniqueInput
+    };
+    /**
+     * ScoreCorrectionTicket findUniqueOrThrow
+     */
+    export type ScoreCorrectionTicketFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionTicket to fetch.
+         */
+        where: ScoreCorrectionTicketWhereUniqueInput
+    };
+    /**
+     * ScoreCorrectionTicket findFirst
+     */
+    export type ScoreCorrectionTicketFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionTicket to fetch.
+         */
+        where?: ScoreCorrectionTicketWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ScoreCorrectionTickets to fetch.
+         */
+        orderBy?: ScoreCorrectionTicketOrderByWithRelationInput | ScoreCorrectionTicketOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ScoreCorrectionTickets.
+         */
+        cursor?: ScoreCorrectionTicketWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ScoreCorrectionTickets from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ScoreCorrectionTickets.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ScoreCorrectionTickets.
+         */
+        distinct?: ScoreCorrectionTicketScalarFieldEnum | ScoreCorrectionTicketScalarFieldEnum[]
+    };
+    /**
+     * ScoreCorrectionTicket findFirstOrThrow
+     */
+    export type ScoreCorrectionTicketFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionTicket to fetch.
+         */
+        where?: ScoreCorrectionTicketWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ScoreCorrectionTickets to fetch.
+         */
+        orderBy?: ScoreCorrectionTicketOrderByWithRelationInput | ScoreCorrectionTicketOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ScoreCorrectionTickets.
+         */
+        cursor?: ScoreCorrectionTicketWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ScoreCorrectionTickets from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ScoreCorrectionTickets.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ScoreCorrectionTickets.
+         */
+        distinct?: ScoreCorrectionTicketScalarFieldEnum | ScoreCorrectionTicketScalarFieldEnum[]
+    };
+    /**
+     * ScoreCorrectionTicket findMany
+     */
+    export type ScoreCorrectionTicketFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionTickets to fetch.
+         */
+        where?: ScoreCorrectionTicketWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ScoreCorrectionTickets to fetch.
+         */
+        orderBy?: ScoreCorrectionTicketOrderByWithRelationInput | ScoreCorrectionTicketOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ScoreCorrectionTickets.
+         */
+        cursor?: ScoreCorrectionTicketWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ScoreCorrectionTickets from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ScoreCorrectionTickets.
+         */
+        skip?: number
+        distinct?: ScoreCorrectionTicketScalarFieldEnum | ScoreCorrectionTicketScalarFieldEnum[]
+    };
+    /**
+     * ScoreCorrectionTicket create
+     */
+    export type ScoreCorrectionTicketCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ScoreCorrectionTicket.
+         */
+        data: XOR<ScoreCorrectionTicketCreateInput, ScoreCorrectionTicketUncheckedCreateInput>
+    };
+    /**
+     * ScoreCorrectionTicket createMany
+     */
+    export type ScoreCorrectionTicketCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ScoreCorrectionTickets.
+         */
+        data: ScoreCorrectionTicketCreateManyInput | ScoreCorrectionTicketCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ScoreCorrectionTicket createManyAndReturn
+     */
+    export type ScoreCorrectionTicketCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * The data used to create many ScoreCorrectionTickets.
+         */
+        data: ScoreCorrectionTicketCreateManyInput | ScoreCorrectionTicketCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ScoreCorrectionTicket update
+     */
+    export type ScoreCorrectionTicketUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ScoreCorrectionTicket.
+         */
+        data: XOR<ScoreCorrectionTicketUpdateInput, ScoreCorrectionTicketUncheckedUpdateInput>
+        /**
+         * Choose, which ScoreCorrectionTicket to update.
+         */
+        where: ScoreCorrectionTicketWhereUniqueInput
+    };
+    /**
+     * ScoreCorrectionTicket updateMany
+     */
+    export type ScoreCorrectionTicketUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ScoreCorrectionTickets.
+         */
+        data: XOR<ScoreCorrectionTicketUpdateManyMutationInput, ScoreCorrectionTicketUncheckedUpdateManyInput>
+        /**
+         * Filter which ScoreCorrectionTickets to update
+         */
+        where?: ScoreCorrectionTicketWhereInput
+        /**
+         * Limit how many ScoreCorrectionTickets to update.
+         */
+        limit?: number
+    };
+    /**
+     * ScoreCorrectionTicket updateManyAndReturn
+     */
+    export type ScoreCorrectionTicketUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * The data used to update ScoreCorrectionTickets.
+         */
+        data: XOR<ScoreCorrectionTicketUpdateManyMutationInput, ScoreCorrectionTicketUncheckedUpdateManyInput>
+        /**
+         * Filter which ScoreCorrectionTickets to update
+         */
+        where?: ScoreCorrectionTicketWhereInput
+        /**
+         * Limit how many ScoreCorrectionTickets to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ScoreCorrectionTicket upsert
+     */
+    export type ScoreCorrectionTicketUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ScoreCorrectionTicket to update in case it exists.
+         */
+        where: ScoreCorrectionTicketWhereUniqueInput
+        /**
+         * In case the ScoreCorrectionTicket found by the `where` argument doesn't exist, create a new ScoreCorrectionTicket with this data.
+         */
+        create: XOR<ScoreCorrectionTicketCreateInput, ScoreCorrectionTicketUncheckedCreateInput>
+        /**
+         * In case the ScoreCorrectionTicket was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ScoreCorrectionTicketUpdateInput, ScoreCorrectionTicketUncheckedUpdateInput>
+    };
+    /**
+     * ScoreCorrectionTicket delete
+     */
+    export type ScoreCorrectionTicketDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        /**
+         * Filter which ScoreCorrectionTicket to delete.
+         */
+        where: ScoreCorrectionTicketWhereUniqueInput
+    };
+    /**
+     * ScoreCorrectionTicket deleteMany
+     */
+    export type ScoreCorrectionTicketDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ScoreCorrectionTickets to delete
+         */
+        where?: ScoreCorrectionTicketWhereInput
+        /**
+         * Limit how many ScoreCorrectionTickets to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ScoreCorrectionTicket.items
+     */
+    export type ScoreCorrectionTicket$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        where?: ScoreCorrectionItemWhereInput
+        orderBy?: ScoreCorrectionItemOrderByWithRelationInput | ScoreCorrectionItemOrderByWithRelationInput[]
+        cursor?: ScoreCorrectionItemWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ScoreCorrectionItemScalarFieldEnum | ScoreCorrectionItemScalarFieldEnum[]
+    };
+    /**
+     * ScoreCorrectionTicket without action
+     */
+    export type ScoreCorrectionTicketDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+    };
+    /**
+     * Model ScoreCorrectionItem
+     */
+    export type AggregateScoreCorrectionItem = {
+        _count: ScoreCorrectionItemCountAggregateOutputType | null
+        _avg: ScoreCorrectionItemAvgAggregateOutputType | null
+        _sum: ScoreCorrectionItemSumAggregateOutputType | null
+        _min: ScoreCorrectionItemMinAggregateOutputType | null
+        _max: ScoreCorrectionItemMaxAggregateOutputType | null
+    };
+    export type ScoreCorrectionItemAvgAggregateOutputType = {
+        newAttendanceScore: number | null
+        newMidtermScore: number | null
+        newExamScore: number | null
+        oldAttendanceScore: number | null
+        oldMidtermScore: number | null
+        oldExamScore: number | null
+    };
+    export type ScoreCorrectionItemSumAggregateOutputType = {
+        newAttendanceScore: number | null
+        newMidtermScore: number | null
+        newExamScore: number | null
+        oldAttendanceScore: number | null
+        oldMidtermScore: number | null
+        oldExamScore: number | null
+    };
+    export type ScoreCorrectionItemMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        ticketId: string | null
+        studentSubjectScoreId: string | null
+        newAttendanceScore: number | null
+        newMidtermScore: number | null
+        newExamScore: number | null
+        oldAttendanceScore: number | null
+        oldMidtermScore: number | null
+        oldExamScore: number | null
+    };
+    export type ScoreCorrectionItemMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        ticketId: string | null
+        studentSubjectScoreId: string | null
+        newAttendanceScore: number | null
+        newMidtermScore: number | null
+        newExamScore: number | null
+        oldAttendanceScore: number | null
+        oldMidtermScore: number | null
+        oldExamScore: number | null
+    };
+    export type ScoreCorrectionItemCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        ticketId: number
+        studentSubjectScoreId: number
+        newAttendanceScore: number
+        newMidtermScore: number
+        newExamScore: number
+        oldAttendanceScore: number
+        oldMidtermScore: number
+        oldExamScore: number
+        _all: number
+    };
+    export type ScoreCorrectionItemAvgAggregateInputType = {
+        newAttendanceScore?: true
+        newMidtermScore?: true
+        newExamScore?: true
+        oldAttendanceScore?: true
+        oldMidtermScore?: true
+        oldExamScore?: true
+    };
+    export type ScoreCorrectionItemSumAggregateInputType = {
+        newAttendanceScore?: true
+        newMidtermScore?: true
+        newExamScore?: true
+        oldAttendanceScore?: true
+        oldMidtermScore?: true
+        oldExamScore?: true
+    };
+    export type ScoreCorrectionItemMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        ticketId?: true
+        studentSubjectScoreId?: true
+        newAttendanceScore?: true
+        newMidtermScore?: true
+        newExamScore?: true
+        oldAttendanceScore?: true
+        oldMidtermScore?: true
+        oldExamScore?: true
+    };
+    export type ScoreCorrectionItemMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        ticketId?: true
+        studentSubjectScoreId?: true
+        newAttendanceScore?: true
+        newMidtermScore?: true
+        newExamScore?: true
+        oldAttendanceScore?: true
+        oldMidtermScore?: true
+        oldExamScore?: true
+    };
+    export type ScoreCorrectionItemCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        ticketId?: true
+        studentSubjectScoreId?: true
+        newAttendanceScore?: true
+        newMidtermScore?: true
+        newExamScore?: true
+        oldAttendanceScore?: true
+        oldMidtermScore?: true
+        oldExamScore?: true
+        _all?: true
+    };
+    export type ScoreCorrectionItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ScoreCorrectionItem to aggregate.
+         */
+        where?: ScoreCorrectionItemWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ScoreCorrectionItems to fetch.
+         */
+        orderBy?: ScoreCorrectionItemOrderByWithRelationInput | ScoreCorrectionItemOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ScoreCorrectionItemWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ScoreCorrectionItems from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ScoreCorrectionItems.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ScoreCorrectionItems
+        **/
+        _count?: true | ScoreCorrectionItemCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: ScoreCorrectionItemAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: ScoreCorrectionItemSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ScoreCorrectionItemMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ScoreCorrectionItemMaxAggregateInputType
+    };
+    export type GetScoreCorrectionItemAggregateType<T extends ScoreCorrectionItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateScoreCorrectionItem]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScoreCorrectionItem[P]>
+        : GetScalarType<T[P], AggregateScoreCorrectionItem[P]>
+    };
+    export type ScoreCorrectionItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ScoreCorrectionItemWhereInput
+        orderBy?: ScoreCorrectionItemOrderByWithAggregationInput | ScoreCorrectionItemOrderByWithAggregationInput[]
+        by: ScoreCorrectionItemScalarFieldEnum[] | ScoreCorrectionItemScalarFieldEnum
+        having?: ScoreCorrectionItemScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ScoreCorrectionItemCountAggregateInputType | true
+        _avg?: ScoreCorrectionItemAvgAggregateInputType
+        _sum?: ScoreCorrectionItemSumAggregateInputType
+        _min?: ScoreCorrectionItemMinAggregateInputType
+        _max?: ScoreCorrectionItemMaxAggregateInputType
+    };
+    export type ScoreCorrectionItemGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        ticketId: string
+        studentSubjectScoreId: string
+        newAttendanceScore: number | null
+        newMidtermScore: number | null
+        newExamScore: number | null
+        oldAttendanceScore: number | null
+        oldMidtermScore: number | null
+        oldExamScore: number | null
+        _count: ScoreCorrectionItemCountAggregateOutputType | null
+        _avg: ScoreCorrectionItemAvgAggregateOutputType | null
+        _sum: ScoreCorrectionItemSumAggregateOutputType | null
+        _min: ScoreCorrectionItemMinAggregateOutputType | null
+        _max: ScoreCorrectionItemMaxAggregateOutputType | null
+    };
+    type GetScoreCorrectionItemGroupByPayload<T extends ScoreCorrectionItemGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ScoreCorrectionItemGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ScoreCorrectionItemGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ScoreCorrectionItemGroupByOutputType[P]>
+                : GetScalarType<T[P], ScoreCorrectionItemGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ScoreCorrectionItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        ticketId?: boolean
+        studentSubjectScoreId?: boolean
+        newAttendanceScore?: boolean
+        newMidtermScore?: boolean
+        newExamScore?: boolean
+        oldAttendanceScore?: boolean
+        oldMidtermScore?: boolean
+        oldExamScore?: boolean
+        ticket?: boolean | ScoreCorrectionTicketDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["scoreCorrectionItem"]>;
+    export type ScoreCorrectionItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        ticketId?: boolean
+        studentSubjectScoreId?: boolean
+        newAttendanceScore?: boolean
+        newMidtermScore?: boolean
+        newExamScore?: boolean
+        oldAttendanceScore?: boolean
+        oldMidtermScore?: boolean
+        oldExamScore?: boolean
+        ticket?: boolean | ScoreCorrectionTicketDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["scoreCorrectionItem"]>;
+    export type ScoreCorrectionItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        ticketId?: boolean
+        studentSubjectScoreId?: boolean
+        newAttendanceScore?: boolean
+        newMidtermScore?: boolean
+        newExamScore?: boolean
+        oldAttendanceScore?: boolean
+        oldMidtermScore?: boolean
+        oldExamScore?: boolean
+        ticket?: boolean | ScoreCorrectionTicketDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["scoreCorrectionItem"]>;
+    export type ScoreCorrectionItemSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        ticketId?: boolean
+        studentSubjectScoreId?: boolean
+        newAttendanceScore?: boolean
+        newMidtermScore?: boolean
+        newExamScore?: boolean
+        oldAttendanceScore?: boolean
+        oldMidtermScore?: boolean
+        oldExamScore?: boolean
+    };
+    export type ScoreCorrectionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "ticketId" | "studentSubjectScoreId" | "newAttendanceScore" | "newMidtermScore" | "newExamScore" | "oldAttendanceScore" | "oldMidtermScore" | "oldExamScore", ExtArgs["result"]["scoreCorrectionItem"]>;
+    export type ScoreCorrectionItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        ticket?: boolean | ScoreCorrectionTicketDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+    };
+    export type ScoreCorrectionItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        ticket?: boolean | ScoreCorrectionTicketDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+    };
+    export type ScoreCorrectionItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        ticket?: boolean | ScoreCorrectionTicketDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+    };
+    export type $ScoreCorrectionItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ScoreCorrectionItem"
+        objects: {
+            ticket: Prisma.$ScoreCorrectionTicketPayload<ExtArgs>
+            studentSubjectScore: Prisma.$StudentSubjectScorePayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            ticketId: string
+            studentSubjectScoreId: string
+            newAttendanceScore: number | null
+            newMidtermScore: number | null
+            newExamScore: number | null
+            oldAttendanceScore: number | null
+            oldMidtermScore: number | null
+            oldExamScore: number | null
+        }, ExtArgs["result"]["scoreCorrectionItem"]>
+        composites: {}
+    };
+    type ScoreCorrectionItemGetPayload<S extends boolean | null | undefined | ScoreCorrectionItemDefaultArgs> = $Result.GetResult<Prisma.$ScoreCorrectionItemPayload, S>;
+    type ScoreCorrectionItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ScoreCorrectionItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ScoreCorrectionItemCountAggregateInputType | true
+    };
+    /**
+     * ScoreCorrectionItem findUnique
+     */
+    export type ScoreCorrectionItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionItem to fetch.
+         */
+        where: ScoreCorrectionItemWhereUniqueInput
+    };
+    /**
+     * ScoreCorrectionItem findUniqueOrThrow
+     */
+    export type ScoreCorrectionItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionItem to fetch.
+         */
+        where: ScoreCorrectionItemWhereUniqueInput
+    };
+    /**
+     * ScoreCorrectionItem findFirst
+     */
+    export type ScoreCorrectionItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionItem to fetch.
+         */
+        where?: ScoreCorrectionItemWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ScoreCorrectionItems to fetch.
+         */
+        orderBy?: ScoreCorrectionItemOrderByWithRelationInput | ScoreCorrectionItemOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ScoreCorrectionItems.
+         */
+        cursor?: ScoreCorrectionItemWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ScoreCorrectionItems from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ScoreCorrectionItems.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ScoreCorrectionItems.
+         */
+        distinct?: ScoreCorrectionItemScalarFieldEnum | ScoreCorrectionItemScalarFieldEnum[]
+    };
+    /**
+     * ScoreCorrectionItem findFirstOrThrow
+     */
+    export type ScoreCorrectionItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionItem to fetch.
+         */
+        where?: ScoreCorrectionItemWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ScoreCorrectionItems to fetch.
+         */
+        orderBy?: ScoreCorrectionItemOrderByWithRelationInput | ScoreCorrectionItemOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ScoreCorrectionItems.
+         */
+        cursor?: ScoreCorrectionItemWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ScoreCorrectionItems from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ScoreCorrectionItems.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ScoreCorrectionItems.
+         */
+        distinct?: ScoreCorrectionItemScalarFieldEnum | ScoreCorrectionItemScalarFieldEnum[]
+    };
+    /**
+     * ScoreCorrectionItem findMany
+     */
+    export type ScoreCorrectionItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * Filter, which ScoreCorrectionItems to fetch.
+         */
+        where?: ScoreCorrectionItemWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ScoreCorrectionItems to fetch.
+         */
+        orderBy?: ScoreCorrectionItemOrderByWithRelationInput | ScoreCorrectionItemOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ScoreCorrectionItems.
+         */
+        cursor?: ScoreCorrectionItemWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ScoreCorrectionItems from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ScoreCorrectionItems.
+         */
+        skip?: number
+        distinct?: ScoreCorrectionItemScalarFieldEnum | ScoreCorrectionItemScalarFieldEnum[]
+    };
+    /**
+     * ScoreCorrectionItem create
+     */
+    export type ScoreCorrectionItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ScoreCorrectionItem.
+         */
+        data: XOR<ScoreCorrectionItemCreateInput, ScoreCorrectionItemUncheckedCreateInput>
+    };
+    /**
+     * ScoreCorrectionItem createMany
+     */
+    export type ScoreCorrectionItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ScoreCorrectionItems.
+         */
+        data: ScoreCorrectionItemCreateManyInput | ScoreCorrectionItemCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ScoreCorrectionItem createManyAndReturn
+     */
+    export type ScoreCorrectionItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * The data used to create many ScoreCorrectionItems.
+         */
+        data: ScoreCorrectionItemCreateManyInput | ScoreCorrectionItemCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ScoreCorrectionItem update
+     */
+    export type ScoreCorrectionItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ScoreCorrectionItem.
+         */
+        data: XOR<ScoreCorrectionItemUpdateInput, ScoreCorrectionItemUncheckedUpdateInput>
+        /**
+         * Choose, which ScoreCorrectionItem to update.
+         */
+        where: ScoreCorrectionItemWhereUniqueInput
+    };
+    /**
+     * ScoreCorrectionItem updateMany
+     */
+    export type ScoreCorrectionItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ScoreCorrectionItems.
+         */
+        data: XOR<ScoreCorrectionItemUpdateManyMutationInput, ScoreCorrectionItemUncheckedUpdateManyInput>
+        /**
+         * Filter which ScoreCorrectionItems to update
+         */
+        where?: ScoreCorrectionItemWhereInput
+        /**
+         * Limit how many ScoreCorrectionItems to update.
+         */
+        limit?: number
+    };
+    /**
+     * ScoreCorrectionItem updateManyAndReturn
+     */
+    export type ScoreCorrectionItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * The data used to update ScoreCorrectionItems.
+         */
+        data: XOR<ScoreCorrectionItemUpdateManyMutationInput, ScoreCorrectionItemUncheckedUpdateManyInput>
+        /**
+         * Filter which ScoreCorrectionItems to update
+         */
+        where?: ScoreCorrectionItemWhereInput
+        /**
+         * Limit how many ScoreCorrectionItems to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ScoreCorrectionItem upsert
+     */
+    export type ScoreCorrectionItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ScoreCorrectionItem to update in case it exists.
+         */
+        where: ScoreCorrectionItemWhereUniqueInput
+        /**
+         * In case the ScoreCorrectionItem found by the `where` argument doesn't exist, create a new ScoreCorrectionItem with this data.
+         */
+        create: XOR<ScoreCorrectionItemCreateInput, ScoreCorrectionItemUncheckedCreateInput>
+        /**
+         * In case the ScoreCorrectionItem was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ScoreCorrectionItemUpdateInput, ScoreCorrectionItemUncheckedUpdateInput>
+    };
+    /**
+     * ScoreCorrectionItem delete
+     */
+    export type ScoreCorrectionItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+        /**
+         * Filter which ScoreCorrectionItem to delete.
+         */
+        where: ScoreCorrectionItemWhereUniqueInput
+    };
+    /**
+     * ScoreCorrectionItem deleteMany
+     */
+    export type ScoreCorrectionItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ScoreCorrectionItems to delete
+         */
+        where?: ScoreCorrectionItemWhereInput
+        /**
+         * Limit how many ScoreCorrectionItems to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ScoreCorrectionItem without action
+     */
+    export type ScoreCorrectionItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionItem
+         */
+        select?: ScoreCorrectionItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionItem
+         */
+        omit?: ScoreCorrectionItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionItemInclude<ExtArgs> | null
+    };
+    /**
      * Model TrainingObjectType
      */
     export type AggregateTrainingObjectType = {
@@ -226234,6 +228884,7 @@ export namespace Prisma {
         trainingBlocks?: boolean | TrainingObjectType$trainingBlocksArgs<ExtArgs>
         surveyObjectType?: boolean | TrainingObjectType$surveyObjectTypeArgs<ExtArgs>
         survey?: boolean | TrainingObjectType$surveyArgs<ExtArgs>
+        scoreCorrectionTicket?: boolean | TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs>
         _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingObjectType"]>;
     export type TrainingObjectTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -226303,6 +228954,7 @@ export namespace Prisma {
         trainingBlocks?: boolean | TrainingObjectType$trainingBlocksArgs<ExtArgs>
         surveyObjectType?: boolean | TrainingObjectType$surveyObjectTypeArgs<ExtArgs>
         survey?: boolean | TrainingObjectType$surveyArgs<ExtArgs>
+        scoreCorrectionTicket?: boolean | TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs>
         _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type TrainingObjectTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -226332,6 +228984,7 @@ export namespace Prisma {
             trainingBlocks: Prisma.$TrainingBlockPayload<ExtArgs>[]
             surveyObjectType: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
             survey: Prisma.$SurveyPayload<ExtArgs>[]
+            scoreCorrectionTicket: Prisma.$ScoreCorrectionTicketPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -227088,6 +229741,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: SurveyScalarFieldEnum | SurveyScalarFieldEnum[]
+    };
+    /**
+     * TrainingObjectType.scoreCorrectionTicket
+     */
+    export type TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ScoreCorrectionTicket
+         */
+        select?: ScoreCorrectionTicketSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ScoreCorrectionTicket
+         */
+        omit?: ScoreCorrectionTicketOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ScoreCorrectionTicketInclude<ExtArgs> | null
+        where?: ScoreCorrectionTicketWhereInput
+        orderBy?: ScoreCorrectionTicketOrderByWithRelationInput | ScoreCorrectionTicketOrderByWithRelationInput[]
+        cursor?: ScoreCorrectionTicketWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ScoreCorrectionTicketScalarFieldEnum | ScoreCorrectionTicketScalarFieldEnum[]
     };
     /**
      * TrainingObjectType without action
@@ -343237,6 +345913,8 @@ export namespace Prisma {
     export type SubjectClassHistoryScalarFieldEnum = (typeof SubjectClassHistoryScalarFieldEnum)[keyof typeof SubjectClassHistoryScalarFieldEnum];
     export type SubjectClassTimeScalarFieldEnum = (typeof SubjectClassTimeScalarFieldEnum)[keyof typeof SubjectClassTimeScalarFieldEnum];
     export type ClassScheduleScalarFieldEnum = (typeof ClassScheduleScalarFieldEnum)[keyof typeof ClassScheduleScalarFieldEnum];
+    export type ScoreCorrectionTicketScalarFieldEnum = (typeof ScoreCorrectionTicketScalarFieldEnum)[keyof typeof ScoreCorrectionTicketScalarFieldEnum];
+    export type ScoreCorrectionItemScalarFieldEnum = (typeof ScoreCorrectionItemScalarFieldEnum)[keyof typeof ScoreCorrectionItemScalarFieldEnum];
     export type TrainingObjectTypeScalarFieldEnum = (typeof TrainingObjectTypeScalarFieldEnum)[keyof typeof TrainingObjectTypeScalarFieldEnum];
     export type PriorityObjectScalarFieldEnum = (typeof PriorityObjectScalarFieldEnum)[keyof typeof PriorityObjectScalarFieldEnum];
     export type TrainingTypeScalarFieldEnum = (typeof TrainingTypeScalarFieldEnum)[keyof typeof TrainingTypeScalarFieldEnum];
@@ -343501,6 +346179,8 @@ export namespace Prisma {
     export type SubjectClassHistoryOrderByRelevanceFieldEnum = (typeof SubjectClassHistoryOrderByRelevanceFieldEnum)[keyof typeof SubjectClassHistoryOrderByRelevanceFieldEnum];
     export type SubjectClassTimeOrderByRelevanceFieldEnum = (typeof SubjectClassTimeOrderByRelevanceFieldEnum)[keyof typeof SubjectClassTimeOrderByRelevanceFieldEnum];
     export type ClassScheduleOrderByRelevanceFieldEnum = (typeof ClassScheduleOrderByRelevanceFieldEnum)[keyof typeof ClassScheduleOrderByRelevanceFieldEnum];
+    export type ScoreCorrectionTicketOrderByRelevanceFieldEnum = (typeof ScoreCorrectionTicketOrderByRelevanceFieldEnum)[keyof typeof ScoreCorrectionTicketOrderByRelevanceFieldEnum];
+    export type ScoreCorrectionItemOrderByRelevanceFieldEnum = (typeof ScoreCorrectionItemOrderByRelevanceFieldEnum)[keyof typeof ScoreCorrectionItemOrderByRelevanceFieldEnum];
     export type TrainingObjectTypeOrderByRelevanceFieldEnum = (typeof TrainingObjectTypeOrderByRelevanceFieldEnum)[keyof typeof TrainingObjectTypeOrderByRelevanceFieldEnum];
     export type PriorityObjectOrderByRelevanceFieldEnum = (typeof PriorityObjectOrderByRelevanceFieldEnum)[keyof typeof PriorityObjectOrderByRelevanceFieldEnum];
     export type TrainingTypeOrderByRelevanceFieldEnum = (typeof TrainingTypeOrderByRelevanceFieldEnum)[keyof typeof TrainingTypeOrderByRelevanceFieldEnum];
@@ -343854,6 +346534,14 @@ export namespace Prisma {
      * Reference to a field of type 'PeriodType[]'
      */
     export type ListEnumPeriodTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PeriodType[]'>;
+    /**
+     * Reference to a field of type 'ScoreCorrectionStatus'
+     */
+    export type EnumScoreCorrectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ScoreCorrectionStatus'>;
+    /**
+     * Reference to a field of type 'ScoreCorrectionStatus[]'
+     */
+    export type ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ScoreCorrectionStatus[]'>;
     /**
      * Reference to a field of type 'TrainingObjectTypes'
      */
@@ -352729,6 +355417,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreListRelationFilter
         studentThesisRegistration?: StudentThesisRegistrationListRelationFilter
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryListRelationFilter
+        scoreCorrectionItem?: ScoreCorrectionItemListRelationFilter
     };
     export type StudentSubjectScoreOrderByWithRelationInput = {
         id?: SortOrder
@@ -352769,6 +355458,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreOrderByRelationAggregateInput
         studentThesisRegistration?: StudentThesisRegistrationOrderByRelationAggregateInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryOrderByRelationAggregateInput
+        scoreCorrectionItem?: ScoreCorrectionItemOrderByRelationAggregateInput
         _relevance?: StudentSubjectScoreOrderByRelevanceInput
     };
     export type StudentSubjectScoreWhereUniqueInput = Prisma.AtLeast<{
@@ -352814,6 +355504,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreListRelationFilter
         studentThesisRegistration?: StudentThesisRegistrationListRelationFilter
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryListRelationFilter
+        scoreCorrectionItem?: ScoreCorrectionItemListRelationFilter
     }, "id" | "code" | "subjectClassId_studentId">;
     export type StudentSubjectScoreOrderByWithAggregationInput = {
         id?: SortOrder
@@ -356516,6 +359207,224 @@ export namespace Prisma {
         originalScheduleId?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
         cancelReason?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
     };
+    export type ScoreCorrectionTicketWhereInput = {
+        AND?: ScoreCorrectionTicketWhereInput | ScoreCorrectionTicketWhereInput[]
+        OR?: ScoreCorrectionTicketWhereInput[]
+        NOT?: ScoreCorrectionTicketWhereInput | ScoreCorrectionTicketWhereInput[]
+        id?: StringFilter<"ScoreCorrectionTicket"> | string
+        code?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        active?: BoolFilter<"ScoreCorrectionTicket"> | boolean
+        description?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ScoreCorrectionTicket"> | Date | string | null
+        createdAt?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        updatedAt?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        createdBy?: UuidNullableFilter<"ScoreCorrectionTicket"> | string | null
+        trainingObjectTypeId?: StringFilter<"ScoreCorrectionTicket"> | string
+        number?: IntFilter<"ScoreCorrectionTicket"> | number
+        proposal?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        decision?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        date?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        deadline?: DateTimeNullableFilter<"ScoreCorrectionTicket"> | Date | string | null
+        status?: EnumScoreCorrectionStatusFilter<"ScoreCorrectionTicket"> | $Enums.ScoreCorrectionStatus
+        trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
+        items?: ScoreCorrectionItemListRelationFilter
+    };
+    export type ScoreCorrectionTicketOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        trainingObjectTypeId?: SortOrder
+        number?: SortOrder
+        proposal?: SortOrderInput | SortOrder
+        decision?: SortOrderInput | SortOrder
+        date?: SortOrder
+        deadline?: SortOrderInput | SortOrder
+        status?: SortOrder
+        trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
+        items?: ScoreCorrectionItemOrderByRelationAggregateInput
+        _relevance?: ScoreCorrectionTicketOrderByRelevanceInput
+    };
+    export type ScoreCorrectionTicketWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: ScoreCorrectionTicketWhereInput | ScoreCorrectionTicketWhereInput[]
+        OR?: ScoreCorrectionTicketWhereInput[]
+        NOT?: ScoreCorrectionTicketWhereInput | ScoreCorrectionTicketWhereInput[]
+        active?: BoolFilter<"ScoreCorrectionTicket"> | boolean
+        description?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ScoreCorrectionTicket"> | Date | string | null
+        createdAt?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        updatedAt?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        createdBy?: UuidNullableFilter<"ScoreCorrectionTicket"> | string | null
+        trainingObjectTypeId?: StringFilter<"ScoreCorrectionTicket"> | string
+        number?: IntFilter<"ScoreCorrectionTicket"> | number
+        proposal?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        decision?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        date?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        deadline?: DateTimeNullableFilter<"ScoreCorrectionTicket"> | Date | string | null
+        status?: EnumScoreCorrectionStatusFilter<"ScoreCorrectionTicket"> | $Enums.ScoreCorrectionStatus
+        trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
+        items?: ScoreCorrectionItemListRelationFilter
+    }, "id" | "code">;
+    export type ScoreCorrectionTicketOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        trainingObjectTypeId?: SortOrder
+        number?: SortOrder
+        proposal?: SortOrderInput | SortOrder
+        decision?: SortOrderInput | SortOrder
+        date?: SortOrder
+        deadline?: SortOrderInput | SortOrder
+        status?: SortOrder
+        _count?: ScoreCorrectionTicketCountOrderByAggregateInput
+        _avg?: ScoreCorrectionTicketAvgOrderByAggregateInput
+        _max?: ScoreCorrectionTicketMaxOrderByAggregateInput
+        _min?: ScoreCorrectionTicketMinOrderByAggregateInput
+        _sum?: ScoreCorrectionTicketSumOrderByAggregateInput
+    };
+    export type ScoreCorrectionTicketScalarWhereWithAggregatesInput = {
+        AND?: ScoreCorrectionTicketScalarWhereWithAggregatesInput | ScoreCorrectionTicketScalarWhereWithAggregatesInput[]
+        OR?: ScoreCorrectionTicketScalarWhereWithAggregatesInput[]
+        NOT?: ScoreCorrectionTicketScalarWhereWithAggregatesInput | ScoreCorrectionTicketScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ScoreCorrectionTicket"> | string
+        code?: StringNullableWithAggregatesFilter<"ScoreCorrectionTicket"> | string | null
+        active?: BoolWithAggregatesFilter<"ScoreCorrectionTicket"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ScoreCorrectionTicket"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ScoreCorrectionTicket"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ScoreCorrectionTicket"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ScoreCorrectionTicket"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"ScoreCorrectionTicket"> | string | null
+        trainingObjectTypeId?: StringWithAggregatesFilter<"ScoreCorrectionTicket"> | string
+        number?: IntWithAggregatesFilter<"ScoreCorrectionTicket"> | number
+        proposal?: StringNullableWithAggregatesFilter<"ScoreCorrectionTicket"> | string | null
+        decision?: StringNullableWithAggregatesFilter<"ScoreCorrectionTicket"> | string | null
+        date?: DateTimeWithAggregatesFilter<"ScoreCorrectionTicket"> | Date | string
+        deadline?: DateTimeNullableWithAggregatesFilter<"ScoreCorrectionTicket"> | Date | string | null
+        status?: EnumScoreCorrectionStatusWithAggregatesFilter<"ScoreCorrectionTicket"> | $Enums.ScoreCorrectionStatus
+    };
+    export type ScoreCorrectionItemWhereInput = {
+        AND?: ScoreCorrectionItemWhereInput | ScoreCorrectionItemWhereInput[]
+        OR?: ScoreCorrectionItemWhereInput[]
+        NOT?: ScoreCorrectionItemWhereInput | ScoreCorrectionItemWhereInput[]
+        id?: StringFilter<"ScoreCorrectionItem"> | string
+        code?: StringNullableFilter<"ScoreCorrectionItem"> | string | null
+        active?: BoolFilter<"ScoreCorrectionItem"> | boolean
+        description?: StringNullableFilter<"ScoreCorrectionItem"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ScoreCorrectionItem"> | Date | string | null
+        createdAt?: DateTimeFilter<"ScoreCorrectionItem"> | Date | string
+        updatedAt?: DateTimeFilter<"ScoreCorrectionItem"> | Date | string
+        createdBy?: UuidNullableFilter<"ScoreCorrectionItem"> | string | null
+        ticketId?: StringFilter<"ScoreCorrectionItem"> | string
+        studentSubjectScoreId?: StringFilter<"ScoreCorrectionItem"> | string
+        newAttendanceScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        newMidtermScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        newExamScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldAttendanceScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldMidtermScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldExamScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        ticket?: XOR<ScoreCorrectionTicketScalarRelationFilter, ScoreCorrectionTicketWhereInput>
+        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+    };
+    export type ScoreCorrectionItemOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        ticketId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        newAttendanceScore?: SortOrderInput | SortOrder
+        newMidtermScore?: SortOrderInput | SortOrder
+        newExamScore?: SortOrderInput | SortOrder
+        oldAttendanceScore?: SortOrderInput | SortOrder
+        oldMidtermScore?: SortOrderInput | SortOrder
+        oldExamScore?: SortOrderInput | SortOrder
+        ticket?: ScoreCorrectionTicketOrderByWithRelationInput
+        studentSubjectScore?: StudentSubjectScoreOrderByWithRelationInput
+        _relevance?: ScoreCorrectionItemOrderByRelevanceInput
+    };
+    export type ScoreCorrectionItemWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        ticketId_studentSubjectScoreId?: ScoreCorrectionItemTicketIdStudentSubjectScoreIdCompoundUniqueInput
+        AND?: ScoreCorrectionItemWhereInput | ScoreCorrectionItemWhereInput[]
+        OR?: ScoreCorrectionItemWhereInput[]
+        NOT?: ScoreCorrectionItemWhereInput | ScoreCorrectionItemWhereInput[]
+        active?: BoolFilter<"ScoreCorrectionItem"> | boolean
+        description?: StringNullableFilter<"ScoreCorrectionItem"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ScoreCorrectionItem"> | Date | string | null
+        createdAt?: DateTimeFilter<"ScoreCorrectionItem"> | Date | string
+        updatedAt?: DateTimeFilter<"ScoreCorrectionItem"> | Date | string
+        createdBy?: UuidNullableFilter<"ScoreCorrectionItem"> | string | null
+        ticketId?: StringFilter<"ScoreCorrectionItem"> | string
+        studentSubjectScoreId?: StringFilter<"ScoreCorrectionItem"> | string
+        newAttendanceScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        newMidtermScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        newExamScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldAttendanceScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldMidtermScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldExamScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        ticket?: XOR<ScoreCorrectionTicketScalarRelationFilter, ScoreCorrectionTicketWhereInput>
+        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+    }, "id" | "code" | "ticketId_studentSubjectScoreId">;
+    export type ScoreCorrectionItemOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        ticketId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        newAttendanceScore?: SortOrderInput | SortOrder
+        newMidtermScore?: SortOrderInput | SortOrder
+        newExamScore?: SortOrderInput | SortOrder
+        oldAttendanceScore?: SortOrderInput | SortOrder
+        oldMidtermScore?: SortOrderInput | SortOrder
+        oldExamScore?: SortOrderInput | SortOrder
+        _count?: ScoreCorrectionItemCountOrderByAggregateInput
+        _avg?: ScoreCorrectionItemAvgOrderByAggregateInput
+        _max?: ScoreCorrectionItemMaxOrderByAggregateInput
+        _min?: ScoreCorrectionItemMinOrderByAggregateInput
+        _sum?: ScoreCorrectionItemSumOrderByAggregateInput
+    };
+    export type ScoreCorrectionItemScalarWhereWithAggregatesInput = {
+        AND?: ScoreCorrectionItemScalarWhereWithAggregatesInput | ScoreCorrectionItemScalarWhereWithAggregatesInput[]
+        OR?: ScoreCorrectionItemScalarWhereWithAggregatesInput[]
+        NOT?: ScoreCorrectionItemScalarWhereWithAggregatesInput | ScoreCorrectionItemScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ScoreCorrectionItem"> | string
+        code?: StringNullableWithAggregatesFilter<"ScoreCorrectionItem"> | string | null
+        active?: BoolWithAggregatesFilter<"ScoreCorrectionItem"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ScoreCorrectionItem"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ScoreCorrectionItem"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ScoreCorrectionItem"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ScoreCorrectionItem"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"ScoreCorrectionItem"> | string | null
+        ticketId?: StringWithAggregatesFilter<"ScoreCorrectionItem"> | string
+        studentSubjectScoreId?: StringWithAggregatesFilter<"ScoreCorrectionItem"> | string
+        newAttendanceScore?: FloatNullableWithAggregatesFilter<"ScoreCorrectionItem"> | number | null
+        newMidtermScore?: FloatNullableWithAggregatesFilter<"ScoreCorrectionItem"> | number | null
+        newExamScore?: FloatNullableWithAggregatesFilter<"ScoreCorrectionItem"> | number | null
+        oldAttendanceScore?: FloatNullableWithAggregatesFilter<"ScoreCorrectionItem"> | number | null
+        oldMidtermScore?: FloatNullableWithAggregatesFilter<"ScoreCorrectionItem"> | number | null
+        oldExamScore?: FloatNullableWithAggregatesFilter<"ScoreCorrectionItem"> | number | null
+    };
     export type TrainingObjectTypeWhereInput = {
         AND?: TrainingObjectTypeWhereInput | TrainingObjectTypeWhereInput[]
         OR?: TrainingObjectTypeWhereInput[]
@@ -356549,6 +359458,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockListRelationFilter
         surveyObjectType?: SurveyObjectTypeListRelationFilter
         survey?: SurveyListRelationFilter
+        scoreCorrectionTicket?: ScoreCorrectionTicketListRelationFilter
     };
     export type TrainingObjectTypeOrderByWithRelationInput = {
         id?: SortOrder
@@ -356580,6 +359490,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockOrderByRelationAggregateInput
         surveyObjectType?: SurveyObjectTypeOrderByRelationAggregateInput
         survey?: SurveyOrderByRelationAggregateInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketOrderByRelationAggregateInput
         _relevance?: TrainingObjectTypeOrderByRelevanceInput
     };
     export type TrainingObjectTypeWhereUniqueInput = Prisma.AtLeast<{
@@ -356615,6 +359526,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockListRelationFilter
         surveyObjectType?: SurveyObjectTypeListRelationFilter
         survey?: SurveyListRelationFilter
+        scoreCorrectionTicket?: ScoreCorrectionTicketListRelationFilter
     }, "id" | "code" | "name">;
     export type TrainingObjectTypeOrderByWithAggregationInput = {
         id?: SortOrder
@@ -381581,6 +384493,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateInput = {
         id?: string
@@ -381618,6 +384531,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -381655,6 +384569,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -381692,6 +384607,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreCreateManyInput = {
         id?: string
@@ -385909,6 +388825,252 @@ export namespace Prisma {
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ScoreCorrectionTicketCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        number?: number
+        proposal?: string | null
+        decision?: string | null
+        date?: Date | string
+        deadline?: Date | string | null
+        status?: $Enums.ScoreCorrectionStatus
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutScoreCorrectionTicketInput
+        items?: ScoreCorrectionItemCreateNestedManyWithoutTicketInput
+    };
+    export type ScoreCorrectionTicketUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        trainingObjectTypeId: string
+        number?: number
+        proposal?: string | null
+        decision?: string | null
+        date?: Date | string
+        deadline?: Date | string | null
+        status?: $Enums.ScoreCorrectionStatus
+        items?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutTicketInput
+    };
+    export type ScoreCorrectionTicketUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutScoreCorrectionTicketNestedInput
+        items?: ScoreCorrectionItemUpdateManyWithoutTicketNestedInput
+    };
+    export type ScoreCorrectionTicketUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+        items?: ScoreCorrectionItemUncheckedUpdateManyWithoutTicketNestedInput
+    };
+    export type ScoreCorrectionTicketCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        trainingObjectTypeId: string
+        number?: number
+        proposal?: string | null
+        decision?: string | null
+        date?: Date | string
+        deadline?: Date | string | null
+        status?: $Enums.ScoreCorrectionStatus
+    };
+    export type ScoreCorrectionTicketUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+    };
+    export type ScoreCorrectionTicketUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+    };
+    export type ScoreCorrectionItemCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+        ticket: ScoreCorrectionTicketCreateNestedOneWithoutItemsInput
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutScoreCorrectionItemInput
+    };
+    export type ScoreCorrectionItemUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        ticketId: string
+        studentSubjectScoreId: string
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+    };
+    export type ScoreCorrectionItemUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        ticket?: ScoreCorrectionTicketUpdateOneRequiredWithoutItemsNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutScoreCorrectionItemNestedInput
+    };
+    export type ScoreCorrectionItemUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        ticketId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    };
+    export type ScoreCorrectionItemCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        ticketId: string
+        studentSubjectScoreId: string
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+    };
+    export type ScoreCorrectionItemUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    };
+    export type ScoreCorrectionItemUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        ticketId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    };
     export type TrainingObjectTypeCreateInput = {
         id?: string
         code?: string | null
@@ -385937,6 +389099,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateInput = {
         id?: string
@@ -385966,6 +389129,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -385995,6 +389159,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -386024,6 +389189,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeCreateManyInput = {
         id?: string
@@ -409044,6 +412210,11 @@ export namespace Prisma {
         some?: StudentThesisRegistrationWhereInput
         none?: StudentThesisRegistrationWhereInput
     };
+    export type ScoreCorrectionItemListRelationFilter = {
+        every?: ScoreCorrectionItemWhereInput
+        some?: ScoreCorrectionItemWhereInput
+        none?: ScoreCorrectionItemWhereInput
+    };
     export type StudentGraduationApplicationOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -409054,6 +412225,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type StudentThesisRegistrationOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ScoreCorrectionItemOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type StudentSubjectScoreOrderByRelevanceInput = {
@@ -411835,6 +415009,166 @@ export namespace Prisma {
         _min?: NestedEnumPeriodTypeFilter<$PrismaModel>
         _max?: NestedEnumPeriodTypeFilter<$PrismaModel>
     };
+    export type EnumScoreCorrectionStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.ScoreCorrectionStatus | EnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ScoreCorrectionStatus[] | ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ScoreCorrectionStatus[] | ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumScoreCorrectionStatusFilter<$PrismaModel> | $Enums.ScoreCorrectionStatus
+    };
+    export type ScoreCorrectionTicketOrderByRelevanceInput = {
+        fields: ScoreCorrectionTicketOrderByRelevanceFieldEnum | ScoreCorrectionTicketOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ScoreCorrectionTicketCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        number?: SortOrder
+        proposal?: SortOrder
+        decision?: SortOrder
+        date?: SortOrder
+        deadline?: SortOrder
+        status?: SortOrder
+    };
+    export type ScoreCorrectionTicketAvgOrderByAggregateInput = {
+        number?: SortOrder
+    };
+    export type ScoreCorrectionTicketMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        number?: SortOrder
+        proposal?: SortOrder
+        decision?: SortOrder
+        date?: SortOrder
+        deadline?: SortOrder
+        status?: SortOrder
+    };
+    export type ScoreCorrectionTicketMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        number?: SortOrder
+        proposal?: SortOrder
+        decision?: SortOrder
+        date?: SortOrder
+        deadline?: SortOrder
+        status?: SortOrder
+    };
+    export type ScoreCorrectionTicketSumOrderByAggregateInput = {
+        number?: SortOrder
+    };
+    export type EnumScoreCorrectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ScoreCorrectionStatus | EnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ScoreCorrectionStatus[] | ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ScoreCorrectionStatus[] | ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumScoreCorrectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.ScoreCorrectionStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumScoreCorrectionStatusFilter<$PrismaModel>
+        _max?: NestedEnumScoreCorrectionStatusFilter<$PrismaModel>
+    };
+    export type ScoreCorrectionTicketScalarRelationFilter = {
+        is?: ScoreCorrectionTicketWhereInput
+        isNot?: ScoreCorrectionTicketWhereInput
+    };
+    export type ScoreCorrectionItemOrderByRelevanceInput = {
+        fields: ScoreCorrectionItemOrderByRelevanceFieldEnum | ScoreCorrectionItemOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ScoreCorrectionItemTicketIdStudentSubjectScoreIdCompoundUniqueInput = {
+        ticketId: string
+        studentSubjectScoreId: string
+    };
+    export type ScoreCorrectionItemCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        ticketId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        newAttendanceScore?: SortOrder
+        newMidtermScore?: SortOrder
+        newExamScore?: SortOrder
+        oldAttendanceScore?: SortOrder
+        oldMidtermScore?: SortOrder
+        oldExamScore?: SortOrder
+    };
+    export type ScoreCorrectionItemAvgOrderByAggregateInput = {
+        newAttendanceScore?: SortOrder
+        newMidtermScore?: SortOrder
+        newExamScore?: SortOrder
+        oldAttendanceScore?: SortOrder
+        oldMidtermScore?: SortOrder
+        oldExamScore?: SortOrder
+    };
+    export type ScoreCorrectionItemMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        ticketId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        newAttendanceScore?: SortOrder
+        newMidtermScore?: SortOrder
+        newExamScore?: SortOrder
+        oldAttendanceScore?: SortOrder
+        oldMidtermScore?: SortOrder
+        oldExamScore?: SortOrder
+    };
+    export type ScoreCorrectionItemMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        ticketId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        newAttendanceScore?: SortOrder
+        newMidtermScore?: SortOrder
+        newExamScore?: SortOrder
+        oldAttendanceScore?: SortOrder
+        oldMidtermScore?: SortOrder
+        oldExamScore?: SortOrder
+    };
+    export type ScoreCorrectionItemSumOrderByAggregateInput = {
+        newAttendanceScore?: SortOrder
+        newMidtermScore?: SortOrder
+        newExamScore?: SortOrder
+        oldAttendanceScore?: SortOrder
+        oldMidtermScore?: SortOrder
+        oldExamScore?: SortOrder
+    };
     export type EnumTrainingObjectTypesFilter<$PrismaModel = never> = {
         equals?: $Enums.TrainingObjectTypes | EnumTrainingObjectTypesFieldRefInput<$PrismaModel>
         in?: $Enums.TrainingObjectTypes[] | ListEnumTrainingObjectTypesFieldRefInput<$PrismaModel>
@@ -411867,6 +415201,11 @@ export namespace Prisma {
         some?: TrainingBlockWhereInput
         none?: TrainingBlockWhereInput
     };
+    export type ScoreCorrectionTicketListRelationFilter = {
+        every?: ScoreCorrectionTicketWhereInput
+        some?: ScoreCorrectionTicketWhereInput
+        none?: ScoreCorrectionTicketWhereInput
+    };
     export type TrainingMajorOnTrainingObjectTypeOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -411874,6 +415213,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type TrainingBlockOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ScoreCorrectionTicketOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type TrainingObjectTypeOrderByRelevanceInput = {
@@ -428186,6 +431528,12 @@ export namespace Prisma {
         createMany?: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInputEnvelope
         connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
     };
+    export type ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput = {
+        create?: XOR<ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput, ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput> | ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput[] | ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput[]
+        connectOrCreate?: ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput | ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput[]
+        createMany?: ScoreCorrectionItemCreateManyStudentSubjectScoreInputEnvelope
+        connect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+    };
     export type ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput = {
         create?: XOR<ExamPaperCreateWithoutStudentSubjectScoreInput, ExamPaperUncheckedCreateWithoutStudentSubjectScoreInput>
         connectOrCreate?: ExamPaperCreateOrConnectWithoutStudentSubjectScoreInput
@@ -428229,6 +431577,12 @@ export namespace Prisma {
         connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput[]
         createMany?: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInputEnvelope
         connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+    };
+    export type ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput = {
+        create?: XOR<ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput, ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput> | ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput[] | ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput[]
+        connectOrCreate?: ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput | ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput[]
+        createMany?: ScoreCorrectionItemCreateManyStudentSubjectScoreInputEnvelope
+        connect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
     };
     export type NullableFloatFieldUpdateOperationsInput = {
         set?: number | null
@@ -428361,6 +431715,19 @@ export namespace Prisma {
         updateMany?: StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
         deleteMany?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
     };
+    export type ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput, ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput> | ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput[] | ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput[]
+        connectOrCreate?: ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput | ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput[]
+        upsert?: ScoreCorrectionItemUpsertWithWhereUniqueWithoutStudentSubjectScoreInput | ScoreCorrectionItemUpsertWithWhereUniqueWithoutStudentSubjectScoreInput[]
+        createMany?: ScoreCorrectionItemCreateManyStudentSubjectScoreInputEnvelope
+        set?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        disconnect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        delete?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        connect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        update?: ScoreCorrectionItemUpdateWithWhereUniqueWithoutStudentSubjectScoreInput | ScoreCorrectionItemUpdateWithWhereUniqueWithoutStudentSubjectScoreInput[]
+        updateMany?: ScoreCorrectionItemUpdateManyWithWhereWithoutStudentSubjectScoreInput | ScoreCorrectionItemUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
+        deleteMany?: ScoreCorrectionItemScalarWhereInput | ScoreCorrectionItemScalarWhereInput[]
+    };
     export type ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput = {
         create?: XOR<ExamPaperCreateWithoutStudentSubjectScoreInput, ExamPaperUncheckedCreateWithoutStudentSubjectScoreInput>
         connectOrCreate?: ExamPaperCreateOrConnectWithoutStudentSubjectScoreInput
@@ -428454,6 +431821,19 @@ export namespace Prisma {
         update?: StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput[]
         updateMany?: StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
         deleteMany?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
+    };
+    export type ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput, ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput> | ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput[] | ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput[]
+        connectOrCreate?: ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput | ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput[]
+        upsert?: ScoreCorrectionItemUpsertWithWhereUniqueWithoutStudentSubjectScoreInput | ScoreCorrectionItemUpsertWithWhereUniqueWithoutStudentSubjectScoreInput[]
+        createMany?: ScoreCorrectionItemCreateManyStudentSubjectScoreInputEnvelope
+        set?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        disconnect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        delete?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        connect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        update?: ScoreCorrectionItemUpdateWithWhereUniqueWithoutStudentSubjectScoreInput | ScoreCorrectionItemUpdateWithWhereUniqueWithoutStudentSubjectScoreInput[]
+        updateMany?: ScoreCorrectionItemUpdateManyWithWhereWithoutStudentSubjectScoreInput | ScoreCorrectionItemUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
+        deleteMany?: ScoreCorrectionItemScalarWhereInput | ScoreCorrectionItemScalarWhereInput[]
     };
     export type StudentSubjectScoreCreateNestedOneWithoutStudentSubjectScoreHistoryInput = {
         create?: XOR<StudentSubjectScoreCreateWithoutStudentSubjectScoreHistoryInput, StudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
@@ -432652,6 +436032,83 @@ export namespace Prisma {
         connect?: ClassScheduleWhereUniqueInput
         update?: XOR<XOR<ClassScheduleUpdateToOneWithWhereWithoutOriginalScheduleInput, ClassScheduleUpdateWithoutOriginalScheduleInput>, ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput>
     };
+    export type TrainingObjectTypeCreateNestedOneWithoutScoreCorrectionTicketInput = {
+        create?: XOR<TrainingObjectTypeCreateWithoutScoreCorrectionTicketInput, TrainingObjectTypeUncheckedCreateWithoutScoreCorrectionTicketInput>
+        connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutScoreCorrectionTicketInput
+        connect?: TrainingObjectTypeWhereUniqueInput
+    };
+    export type ScoreCorrectionItemCreateNestedManyWithoutTicketInput = {
+        create?: XOR<ScoreCorrectionItemCreateWithoutTicketInput, ScoreCorrectionItemUncheckedCreateWithoutTicketInput> | ScoreCorrectionItemCreateWithoutTicketInput[] | ScoreCorrectionItemUncheckedCreateWithoutTicketInput[]
+        connectOrCreate?: ScoreCorrectionItemCreateOrConnectWithoutTicketInput | ScoreCorrectionItemCreateOrConnectWithoutTicketInput[]
+        createMany?: ScoreCorrectionItemCreateManyTicketInputEnvelope
+        connect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+    };
+    export type ScoreCorrectionItemUncheckedCreateNestedManyWithoutTicketInput = {
+        create?: XOR<ScoreCorrectionItemCreateWithoutTicketInput, ScoreCorrectionItemUncheckedCreateWithoutTicketInput> | ScoreCorrectionItemCreateWithoutTicketInput[] | ScoreCorrectionItemUncheckedCreateWithoutTicketInput[]
+        connectOrCreate?: ScoreCorrectionItemCreateOrConnectWithoutTicketInput | ScoreCorrectionItemCreateOrConnectWithoutTicketInput[]
+        createMany?: ScoreCorrectionItemCreateManyTicketInputEnvelope
+        connect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+    };
+    export type EnumScoreCorrectionStatusFieldUpdateOperationsInput = {
+        set?: $Enums.ScoreCorrectionStatus
+    };
+    export type TrainingObjectTypeUpdateOneRequiredWithoutScoreCorrectionTicketNestedInput = {
+        create?: XOR<TrainingObjectTypeCreateWithoutScoreCorrectionTicketInput, TrainingObjectTypeUncheckedCreateWithoutScoreCorrectionTicketInput>
+        connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutScoreCorrectionTicketInput
+        upsert?: TrainingObjectTypeUpsertWithoutScoreCorrectionTicketInput
+        connect?: TrainingObjectTypeWhereUniqueInput
+        update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutScoreCorrectionTicketInput, TrainingObjectTypeUpdateWithoutScoreCorrectionTicketInput>, TrainingObjectTypeUncheckedUpdateWithoutScoreCorrectionTicketInput>
+    };
+    export type ScoreCorrectionItemUpdateManyWithoutTicketNestedInput = {
+        create?: XOR<ScoreCorrectionItemCreateWithoutTicketInput, ScoreCorrectionItemUncheckedCreateWithoutTicketInput> | ScoreCorrectionItemCreateWithoutTicketInput[] | ScoreCorrectionItemUncheckedCreateWithoutTicketInput[]
+        connectOrCreate?: ScoreCorrectionItemCreateOrConnectWithoutTicketInput | ScoreCorrectionItemCreateOrConnectWithoutTicketInput[]
+        upsert?: ScoreCorrectionItemUpsertWithWhereUniqueWithoutTicketInput | ScoreCorrectionItemUpsertWithWhereUniqueWithoutTicketInput[]
+        createMany?: ScoreCorrectionItemCreateManyTicketInputEnvelope
+        set?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        disconnect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        delete?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        connect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        update?: ScoreCorrectionItemUpdateWithWhereUniqueWithoutTicketInput | ScoreCorrectionItemUpdateWithWhereUniqueWithoutTicketInput[]
+        updateMany?: ScoreCorrectionItemUpdateManyWithWhereWithoutTicketInput | ScoreCorrectionItemUpdateManyWithWhereWithoutTicketInput[]
+        deleteMany?: ScoreCorrectionItemScalarWhereInput | ScoreCorrectionItemScalarWhereInput[]
+    };
+    export type ScoreCorrectionItemUncheckedUpdateManyWithoutTicketNestedInput = {
+        create?: XOR<ScoreCorrectionItemCreateWithoutTicketInput, ScoreCorrectionItemUncheckedCreateWithoutTicketInput> | ScoreCorrectionItemCreateWithoutTicketInput[] | ScoreCorrectionItemUncheckedCreateWithoutTicketInput[]
+        connectOrCreate?: ScoreCorrectionItemCreateOrConnectWithoutTicketInput | ScoreCorrectionItemCreateOrConnectWithoutTicketInput[]
+        upsert?: ScoreCorrectionItemUpsertWithWhereUniqueWithoutTicketInput | ScoreCorrectionItemUpsertWithWhereUniqueWithoutTicketInput[]
+        createMany?: ScoreCorrectionItemCreateManyTicketInputEnvelope
+        set?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        disconnect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        delete?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        connect?: ScoreCorrectionItemWhereUniqueInput | ScoreCorrectionItemWhereUniqueInput[]
+        update?: ScoreCorrectionItemUpdateWithWhereUniqueWithoutTicketInput | ScoreCorrectionItemUpdateWithWhereUniqueWithoutTicketInput[]
+        updateMany?: ScoreCorrectionItemUpdateManyWithWhereWithoutTicketInput | ScoreCorrectionItemUpdateManyWithWhereWithoutTicketInput[]
+        deleteMany?: ScoreCorrectionItemScalarWhereInput | ScoreCorrectionItemScalarWhereInput[]
+    };
+    export type ScoreCorrectionTicketCreateNestedOneWithoutItemsInput = {
+        create?: XOR<ScoreCorrectionTicketCreateWithoutItemsInput, ScoreCorrectionTicketUncheckedCreateWithoutItemsInput>
+        connectOrCreate?: ScoreCorrectionTicketCreateOrConnectWithoutItemsInput
+        connect?: ScoreCorrectionTicketWhereUniqueInput
+    };
+    export type StudentSubjectScoreCreateNestedOneWithoutScoreCorrectionItemInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutScoreCorrectionItemInput, StudentSubjectScoreUncheckedCreateWithoutScoreCorrectionItemInput>
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutScoreCorrectionItemInput
+        connect?: StudentSubjectScoreWhereUniqueInput
+    };
+    export type ScoreCorrectionTicketUpdateOneRequiredWithoutItemsNestedInput = {
+        create?: XOR<ScoreCorrectionTicketCreateWithoutItemsInput, ScoreCorrectionTicketUncheckedCreateWithoutItemsInput>
+        connectOrCreate?: ScoreCorrectionTicketCreateOrConnectWithoutItemsInput
+        upsert?: ScoreCorrectionTicketUpsertWithoutItemsInput
+        connect?: ScoreCorrectionTicketWhereUniqueInput
+        update?: XOR<XOR<ScoreCorrectionTicketUpdateToOneWithWhereWithoutItemsInput, ScoreCorrectionTicketUpdateWithoutItemsInput>, ScoreCorrectionTicketUncheckedUpdateWithoutItemsInput>
+    };
+    export type StudentSubjectScoreUpdateOneRequiredWithoutScoreCorrectionItemNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutScoreCorrectionItemInput, StudentSubjectScoreUncheckedCreateWithoutScoreCorrectionItemInput>
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutScoreCorrectionItemInput
+        upsert?: StudentSubjectScoreUpsertWithoutScoreCorrectionItemInput
+        connect?: StudentSubjectScoreWhereUniqueInput
+        update?: XOR<XOR<StudentSubjectScoreUpdateToOneWithWhereWithoutScoreCorrectionItemInput, StudentSubjectScoreUpdateWithoutScoreCorrectionItemInput>, StudentSubjectScoreUncheckedUpdateWithoutScoreCorrectionItemInput>
+    };
     export type TrainingObjectTypeCreatevaiTroInput = {
         set: string[]
     };
@@ -432749,6 +436206,12 @@ export namespace Prisma {
         createMany?: SurveyCreateManyTrainingObjectTypeInputEnvelope
         connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
     };
+    export type ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput = {
+        create?: XOR<ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput, ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput> | ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput[] | ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput | ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput[]
+        createMany?: ScoreCorrectionTicketCreateManyTrainingObjectTypeInputEnvelope
+        connect?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+    };
     export type TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
         create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
         connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -432832,6 +436295,12 @@ export namespace Prisma {
         connectOrCreate?: SurveyCreateOrConnectWithoutTrainingObjectTypeInput | SurveyCreateOrConnectWithoutTrainingObjectTypeInput[]
         createMany?: SurveyCreateManyTrainingObjectTypeInputEnvelope
         connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    };
+    export type ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
+        create?: XOR<ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput, ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput> | ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput[] | ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput | ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput[]
+        createMany?: ScoreCorrectionTicketCreateManyTrainingObjectTypeInputEnvelope
+        connect?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
     };
     export type EnumTrainingObjectTypesFieldUpdateOperationsInput = {
         set?: $Enums.TrainingObjectTypes
@@ -433040,6 +436509,19 @@ export namespace Prisma {
         updateMany?: SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput | SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
         deleteMany?: SurveyScalarWhereInput | SurveyScalarWhereInput[]
     };
+    export type ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput = {
+        create?: XOR<ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput, ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput> | ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput[] | ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput | ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput[]
+        upsert?: ScoreCorrectionTicketUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | ScoreCorrectionTicketUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        createMany?: ScoreCorrectionTicketCreateManyTrainingObjectTypeInputEnvelope
+        set?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+        disconnect?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+        delete?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+        connect?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+        update?: ScoreCorrectionTicketUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | ScoreCorrectionTicketUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        updateMany?: ScoreCorrectionTicketUpdateManyWithWhereWithoutTrainingObjectTypeInput | ScoreCorrectionTicketUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+        deleteMany?: ScoreCorrectionTicketScalarWhereInput | ScoreCorrectionTicketScalarWhereInput[]
+    };
     export type TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
         create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
         connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -433221,6 +436703,19 @@ export namespace Prisma {
         update?: SurveyUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | SurveyUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
         updateMany?: SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput | SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
         deleteMany?: SurveyScalarWhereInput | SurveyScalarWhereInput[]
+    };
+    export type ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
+        create?: XOR<ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput, ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput> | ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput[] | ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput | ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput[]
+        upsert?: ScoreCorrectionTicketUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | ScoreCorrectionTicketUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        createMany?: ScoreCorrectionTicketCreateManyTrainingObjectTypeInputEnvelope
+        set?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+        disconnect?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+        delete?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+        connect?: ScoreCorrectionTicketWhereUniqueInput | ScoreCorrectionTicketWhereUniqueInput[]
+        update?: ScoreCorrectionTicketUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | ScoreCorrectionTicketUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        updateMany?: ScoreCorrectionTicketUpdateManyWithWhereWithoutTrainingObjectTypeInput | ScoreCorrectionTicketUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+        deleteMany?: ScoreCorrectionTicketScalarWhereInput | ScoreCorrectionTicketScalarWhereInput[]
     };
     export type StudentCreateNestedManyWithoutPriorityObjectInput = {
         create?: XOR<StudentCreateWithoutPriorityObjectInput, StudentUncheckedCreateWithoutPriorityObjectInput> | StudentCreateWithoutPriorityObjectInput[] | StudentUncheckedCreateWithoutPriorityObjectInput[]
@@ -446049,6 +449544,21 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumPeriodTypeFilter<$PrismaModel>
         _max?: NestedEnumPeriodTypeFilter<$PrismaModel>
+    };
+    export type NestedEnumScoreCorrectionStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.ScoreCorrectionStatus | EnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ScoreCorrectionStatus[] | ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ScoreCorrectionStatus[] | ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumScoreCorrectionStatusFilter<$PrismaModel> | $Enums.ScoreCorrectionStatus
+    };
+    export type NestedEnumScoreCorrectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ScoreCorrectionStatus | EnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ScoreCorrectionStatus[] | ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ScoreCorrectionStatus[] | ListEnumScoreCorrectionStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumScoreCorrectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.ScoreCorrectionStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumScoreCorrectionStatusFilter<$PrismaModel>
+        _max?: NestedEnumScoreCorrectionStatusFilter<$PrismaModel>
     };
     export type NestedEnumTrainingObjectTypesFilter<$PrismaModel = never> = {
         equals?: $Enums.TrainingObjectTypes | EnumTrainingObjectTypesFieldRefInput<$PrismaModel>
@@ -493921,6 +497431,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutPlanTrainingInput = {
         id?: string
@@ -493949,6 +497460,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutPlanTrainingInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -494194,6 +497706,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -494222,6 +497735,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SemesterUpsertWithoutPlanTrainingInput = {
         update: XOR<SemesterUpdateWithoutPlanTrainingInput, SemesterUncheckedUpdateWithoutPlanTrainingInput>
@@ -496104,6 +499618,48 @@ export namespace Prisma {
         data: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInput | StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInput[]
         skipDuplicates?: boolean
     };
+    export type ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+        ticket: ScoreCorrectionTicketCreateNestedOneWithoutItemsInput
+    };
+    export type ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        ticketId: string
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+    };
+    export type ScoreCorrectionItemCreateOrConnectWithoutStudentSubjectScoreInput = {
+        where: ScoreCorrectionItemWhereUniqueInput
+        create: XOR<ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput, ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput>
+    };
+    export type ScoreCorrectionItemCreateManyStudentSubjectScoreInputEnvelope = {
+        data: ScoreCorrectionItemCreateManyStudentSubjectScoreInput | ScoreCorrectionItemCreateManyStudentSubjectScoreInput[]
+        skipDuplicates?: boolean
+    };
     export type SubjectClassUpsertWithoutSubjectClassStudentInput = {
         update: XOR<SubjectClassUpdateWithoutSubjectClassStudentInput, SubjectClassUncheckedUpdateWithoutSubjectClassStudentInput>
         create: XOR<SubjectClassCreateWithoutSubjectClassStudentInput, SubjectClassUncheckedCreateWithoutSubjectClassStudentInput>
@@ -496730,6 +500286,40 @@ export namespace Prisma {
         where: StudentSubjectScoreHistoryScalarWhereInput
         data: XOR<StudentSubjectScoreHistoryUpdateManyMutationInput, StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreInput>
     };
+    export type ScoreCorrectionItemUpsertWithWhereUniqueWithoutStudentSubjectScoreInput = {
+        where: ScoreCorrectionItemWhereUniqueInput
+        update: XOR<ScoreCorrectionItemUpdateWithoutStudentSubjectScoreInput, ScoreCorrectionItemUncheckedUpdateWithoutStudentSubjectScoreInput>
+        create: XOR<ScoreCorrectionItemCreateWithoutStudentSubjectScoreInput, ScoreCorrectionItemUncheckedCreateWithoutStudentSubjectScoreInput>
+    };
+    export type ScoreCorrectionItemUpdateWithWhereUniqueWithoutStudentSubjectScoreInput = {
+        where: ScoreCorrectionItemWhereUniqueInput
+        data: XOR<ScoreCorrectionItemUpdateWithoutStudentSubjectScoreInput, ScoreCorrectionItemUncheckedUpdateWithoutStudentSubjectScoreInput>
+    };
+    export type ScoreCorrectionItemUpdateManyWithWhereWithoutStudentSubjectScoreInput = {
+        where: ScoreCorrectionItemScalarWhereInput
+        data: XOR<ScoreCorrectionItemUpdateManyMutationInput, ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreInput>
+    };
+    export type ScoreCorrectionItemScalarWhereInput = {
+        AND?: ScoreCorrectionItemScalarWhereInput | ScoreCorrectionItemScalarWhereInput[]
+        OR?: ScoreCorrectionItemScalarWhereInput[]
+        NOT?: ScoreCorrectionItemScalarWhereInput | ScoreCorrectionItemScalarWhereInput[]
+        id?: StringFilter<"ScoreCorrectionItem"> | string
+        code?: StringNullableFilter<"ScoreCorrectionItem"> | string | null
+        active?: BoolFilter<"ScoreCorrectionItem"> | boolean
+        description?: StringNullableFilter<"ScoreCorrectionItem"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ScoreCorrectionItem"> | Date | string | null
+        createdAt?: DateTimeFilter<"ScoreCorrectionItem"> | Date | string
+        updatedAt?: DateTimeFilter<"ScoreCorrectionItem"> | Date | string
+        createdBy?: UuidNullableFilter<"ScoreCorrectionItem"> | string | null
+        ticketId?: StringFilter<"ScoreCorrectionItem"> | string
+        studentSubjectScoreId?: StringFilter<"ScoreCorrectionItem"> | string
+        newAttendanceScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        newMidtermScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        newExamScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldAttendanceScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldMidtermScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+        oldExamScore?: FloatNullableFilter<"ScoreCorrectionItem"> | number | null
+    };
     export type StudentSubjectScoreCreateWithoutStudentSubjectScoreHistoryInput = {
         id?: string
         code?: string | null
@@ -496765,6 +500355,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreHistoryInput = {
         id?: string
@@ -496801,6 +500392,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreHistoryInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -497198,6 +500790,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutStudentSubjectScoreHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -497234,6 +500827,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type UserProfileUpsertWithoutStudentSubjectScoreHistoryInput = {
         update: XOR<UserProfileUpdateWithoutStudentSubjectScoreHistoryInput, UserProfileUncheckedUpdateWithoutStudentSubjectScoreHistoryInput>
@@ -497623,6 +501217,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutStudentResearchTopicInput = {
         id?: string
@@ -497659,6 +501254,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutStudentResearchTopicInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -497844,6 +501440,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutStudentResearchTopicInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -497880,6 +501477,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type ExpertProfileUpsertWithoutSupervisorResearchTopicInput = {
         update: XOR<ExpertProfileUpdateWithoutSupervisorResearchTopicInput, ExpertProfileUncheckedUpdateWithoutSupervisorResearchTopicInput>
@@ -498062,6 +501660,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutCertificatesInput = {
         id?: string
@@ -498098,6 +501697,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutCertificatesInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -498189,6 +501789,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutCertificatesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -498225,6 +501826,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type ArchivedCertificateUpsertWithoutStudentSubjectScoreInput = {
         update: XOR<ArchivedCertificateUpdateWithoutStudentSubjectScoreInput, ArchivedCertificateUncheckedUpdateWithoutStudentSubjectScoreInput>
@@ -498798,6 +502400,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutAwardsInput = {
         id?: string
@@ -498834,6 +502437,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutAwardsInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -498919,6 +502523,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutAwardsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -498955,6 +502560,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type ArchivedAwardUpsertWithoutStudentSubjectScoreInput = {
         update: XOR<ArchivedAwardUpdateWithoutStudentSubjectScoreInput, ArchivedAwardUncheckedUpdateWithoutStudentSubjectScoreInput>
@@ -501638,6 +505244,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingCourseInput = {
         id?: string
@@ -501666,6 +505273,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingCourseInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -502583,6 +506191,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -502611,6 +506220,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput = {
         where: TrainingCourseRegulationWhereUniqueInput
@@ -505197,6 +508807,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutCurriculumInput = {
         id?: string
@@ -505225,6 +508836,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutCurriculumInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -505586,6 +509198,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -505614,6 +509227,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutCurriculumInput = {
         where: DocumentFileWhereUniqueInput
@@ -505736,6 +509350,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutCurriculumVersionInput = {
         id?: string
@@ -505764,6 +509379,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutCurriculumVersionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -506601,6 +510217,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -506629,6 +510246,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingCourseUpsertWithoutCurriculumVersionInput = {
         update: XOR<TrainingCourseUpdateWithoutCurriculumVersionInput, TrainingCourseUncheckedUpdateWithoutCurriculumVersionInput>
@@ -507731,6 +511349,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -507759,6 +511378,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSubjectVersionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -508483,6 +512103,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -508519,6 +512140,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutSubjectVersionInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -508946,6 +512568,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -508974,6 +512597,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SubjectVersionCategoryUpsertWithoutSubjectVersionsInput = {
         update: XOR<SubjectVersionCategoryUpdateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedUpdateWithoutSubjectVersionsInput>
@@ -512097,6 +515721,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -512125,6 +515750,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSubjectClassInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -512553,6 +516179,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -512589,6 +516216,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -513327,6 +516955,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -513355,6 +516984,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SemesterUpsertWithoutSubjectClassesInput = {
         update: XOR<SemesterUpdateWithoutSubjectClassesInput, SemesterUncheckedUpdateWithoutSubjectClassesInput>
@@ -516397,6 +520027,432 @@ export namespace Prisma {
         userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
     };
+    export type TrainingObjectTypeCreateWithoutScoreCorrectionTicketInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
+        trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
+        trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
+        trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
+        graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
+        planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
+        surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+    };
+    export type TrainingObjectTypeUncheckedCreateWithoutScoreCorrectionTicketInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        type: $Enums.TrainingObjectTypes
+        trainingFormId?: string | null
+        trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
+        trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    };
+    export type TrainingObjectTypeCreateOrConnectWithoutScoreCorrectionTicketInput = {
+        where: TrainingObjectTypeWhereUniqueInput
+        create: XOR<TrainingObjectTypeCreateWithoutScoreCorrectionTicketInput, TrainingObjectTypeUncheckedCreateWithoutScoreCorrectionTicketInput>
+    };
+    export type ScoreCorrectionItemCreateWithoutTicketInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutScoreCorrectionItemInput
+    };
+    export type ScoreCorrectionItemUncheckedCreateWithoutTicketInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentSubjectScoreId: string
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+    };
+    export type ScoreCorrectionItemCreateOrConnectWithoutTicketInput = {
+        where: ScoreCorrectionItemWhereUniqueInput
+        create: XOR<ScoreCorrectionItemCreateWithoutTicketInput, ScoreCorrectionItemUncheckedCreateWithoutTicketInput>
+    };
+    export type ScoreCorrectionItemCreateManyTicketInputEnvelope = {
+        data: ScoreCorrectionItemCreateManyTicketInput | ScoreCorrectionItemCreateManyTicketInput[]
+        skipDuplicates?: boolean
+    };
+    export type TrainingObjectTypeUpsertWithoutScoreCorrectionTicketInput = {
+        update: XOR<TrainingObjectTypeUpdateWithoutScoreCorrectionTicketInput, TrainingObjectTypeUncheckedUpdateWithoutScoreCorrectionTicketInput>
+        create: XOR<TrainingObjectTypeCreateWithoutScoreCorrectionTicketInput, TrainingObjectTypeUncheckedCreateWithoutScoreCorrectionTicketInput>
+        where?: TrainingObjectTypeWhereInput
+    };
+    export type TrainingObjectTypeUpdateToOneWithWhereWithoutScoreCorrectionTicketInput = {
+        where?: TrainingObjectTypeWhereInput
+        data: XOR<TrainingObjectTypeUpdateWithoutScoreCorrectionTicketInput, TrainingObjectTypeUncheckedUpdateWithoutScoreCorrectionTicketInput>
+    };
+    export type TrainingObjectTypeUpdateWithoutScoreCorrectionTicketInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
+        trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
+        trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
+        trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
+        graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+        planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
+        surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+    };
+    export type TrainingObjectTypeUncheckedUpdateWithoutScoreCorrectionTicketInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
+        trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    };
+    export type ScoreCorrectionItemUpsertWithWhereUniqueWithoutTicketInput = {
+        where: ScoreCorrectionItemWhereUniqueInput
+        update: XOR<ScoreCorrectionItemUpdateWithoutTicketInput, ScoreCorrectionItemUncheckedUpdateWithoutTicketInput>
+        create: XOR<ScoreCorrectionItemCreateWithoutTicketInput, ScoreCorrectionItemUncheckedCreateWithoutTicketInput>
+    };
+    export type ScoreCorrectionItemUpdateWithWhereUniqueWithoutTicketInput = {
+        where: ScoreCorrectionItemWhereUniqueInput
+        data: XOR<ScoreCorrectionItemUpdateWithoutTicketInput, ScoreCorrectionItemUncheckedUpdateWithoutTicketInput>
+    };
+    export type ScoreCorrectionItemUpdateManyWithWhereWithoutTicketInput = {
+        where: ScoreCorrectionItemScalarWhereInput
+        data: XOR<ScoreCorrectionItemUpdateManyMutationInput, ScoreCorrectionItemUncheckedUpdateManyWithoutTicketInput>
+    };
+    export type ScoreCorrectionTicketCreateWithoutItemsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        number?: number
+        proposal?: string | null
+        decision?: string | null
+        date?: Date | string
+        deadline?: Date | string | null
+        status?: $Enums.ScoreCorrectionStatus
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutScoreCorrectionTicketInput
+    };
+    export type ScoreCorrectionTicketUncheckedCreateWithoutItemsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        trainingObjectTypeId: string
+        number?: number
+        proposal?: string | null
+        decision?: string | null
+        date?: Date | string
+        deadline?: Date | string | null
+        status?: $Enums.ScoreCorrectionStatus
+    };
+    export type ScoreCorrectionTicketCreateOrConnectWithoutItemsInput = {
+        where: ScoreCorrectionTicketWhereUniqueInput
+        create: XOR<ScoreCorrectionTicketCreateWithoutItemsInput, ScoreCorrectionTicketUncheckedCreateWithoutItemsInput>
+    };
+    export type StudentSubjectScoreCreateWithoutScoreCorrectionItemInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
+        subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
+        subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
+        studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreUncheckedCreateWithoutScoreCorrectionItemInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        subjectClassId?: string | null
+        subjectVersionId: string
+        studentId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
+        examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreCreateOrConnectWithoutScoreCorrectionItemInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        create: XOR<StudentSubjectScoreCreateWithoutScoreCorrectionItemInput, StudentSubjectScoreUncheckedCreateWithoutScoreCorrectionItemInput>
+    };
+    export type ScoreCorrectionTicketUpsertWithoutItemsInput = {
+        update: XOR<ScoreCorrectionTicketUpdateWithoutItemsInput, ScoreCorrectionTicketUncheckedUpdateWithoutItemsInput>
+        create: XOR<ScoreCorrectionTicketCreateWithoutItemsInput, ScoreCorrectionTicketUncheckedCreateWithoutItemsInput>
+        where?: ScoreCorrectionTicketWhereInput
+    };
+    export type ScoreCorrectionTicketUpdateToOneWithWhereWithoutItemsInput = {
+        where?: ScoreCorrectionTicketWhereInput
+        data: XOR<ScoreCorrectionTicketUpdateWithoutItemsInput, ScoreCorrectionTicketUncheckedUpdateWithoutItemsInput>
+    };
+    export type ScoreCorrectionTicketUpdateWithoutItemsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutScoreCorrectionTicketNestedInput
+    };
+    export type ScoreCorrectionTicketUncheckedUpdateWithoutItemsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+    };
+    export type StudentSubjectScoreUpsertWithoutScoreCorrectionItemInput = {
+        update: XOR<StudentSubjectScoreUpdateWithoutScoreCorrectionItemInput, StudentSubjectScoreUncheckedUpdateWithoutScoreCorrectionItemInput>
+        create: XOR<StudentSubjectScoreCreateWithoutScoreCorrectionItemInput, StudentSubjectScoreUncheckedCreateWithoutScoreCorrectionItemInput>
+        where?: StudentSubjectScoreWhereInput
+    };
+    export type StudentSubjectScoreUpdateToOneWithWhereWithoutScoreCorrectionItemInput = {
+        where?: StudentSubjectScoreWhereInput
+        data: XOR<StudentSubjectScoreUpdateWithoutScoreCorrectionItemInput, StudentSubjectScoreUncheckedUpdateWithoutScoreCorrectionItemInput>
+    };
+    export type StudentSubjectScoreUpdateWithoutScoreCorrectionItemInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
+        subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateWithoutScoreCorrectionItemInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
     export type TrainingFormCreateWithoutTrainingObjectTypeInput = {
         id?: string
         code?: string | null
@@ -517339,6 +521395,48 @@ export namespace Prisma {
         data: SurveyCreateManyTrainingObjectTypeInput | SurveyCreateManyTrainingObjectTypeInput[]
         skipDuplicates?: boolean
     };
+    export type ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        number?: number
+        proposal?: string | null
+        decision?: string | null
+        date?: Date | string
+        deadline?: Date | string | null
+        status?: $Enums.ScoreCorrectionStatus
+        items?: ScoreCorrectionItemCreateNestedManyWithoutTicketInput
+    };
+    export type ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        number?: number
+        proposal?: string | null
+        decision?: string | null
+        date?: Date | string
+        deadline?: Date | string | null
+        status?: $Enums.ScoreCorrectionStatus
+        items?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutTicketInput
+    };
+    export type ScoreCorrectionTicketCreateOrConnectWithoutTrainingObjectTypeInput = {
+        where: ScoreCorrectionTicketWhereUniqueInput
+        create: XOR<ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput, ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput>
+    };
+    export type ScoreCorrectionTicketCreateManyTrainingObjectTypeInputEnvelope = {
+        data: ScoreCorrectionTicketCreateManyTrainingObjectTypeInput | ScoreCorrectionTicketCreateManyTrainingObjectTypeInput[]
+        skipDuplicates?: boolean
+    };
     export type TrainingFormUpsertWithoutTrainingObjectTypeInput = {
         update: XOR<TrainingFormUpdateWithoutTrainingObjectTypeInput, TrainingFormUncheckedUpdateWithoutTrainingObjectTypeInput>
         create: XOR<TrainingFormCreateWithoutTrainingObjectTypeInput, TrainingFormUncheckedCreateWithoutTrainingObjectTypeInput>
@@ -517631,6 +521729,39 @@ export namespace Prisma {
     export type SurveyUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
         where: SurveyScalarWhereInput
         data: XOR<SurveyUpdateManyMutationInput, SurveyUncheckedUpdateManyWithoutTrainingObjectTypeInput>
+    };
+    export type ScoreCorrectionTicketUpsertWithWhereUniqueWithoutTrainingObjectTypeInput = {
+        where: ScoreCorrectionTicketWhereUniqueInput
+        update: XOR<ScoreCorrectionTicketUpdateWithoutTrainingObjectTypeInput, ScoreCorrectionTicketUncheckedUpdateWithoutTrainingObjectTypeInput>
+        create: XOR<ScoreCorrectionTicketCreateWithoutTrainingObjectTypeInput, ScoreCorrectionTicketUncheckedCreateWithoutTrainingObjectTypeInput>
+    };
+    export type ScoreCorrectionTicketUpdateWithWhereUniqueWithoutTrainingObjectTypeInput = {
+        where: ScoreCorrectionTicketWhereUniqueInput
+        data: XOR<ScoreCorrectionTicketUpdateWithoutTrainingObjectTypeInput, ScoreCorrectionTicketUncheckedUpdateWithoutTrainingObjectTypeInput>
+    };
+    export type ScoreCorrectionTicketUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
+        where: ScoreCorrectionTicketScalarWhereInput
+        data: XOR<ScoreCorrectionTicketUpdateManyMutationInput, ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeInput>
+    };
+    export type ScoreCorrectionTicketScalarWhereInput = {
+        AND?: ScoreCorrectionTicketScalarWhereInput | ScoreCorrectionTicketScalarWhereInput[]
+        OR?: ScoreCorrectionTicketScalarWhereInput[]
+        NOT?: ScoreCorrectionTicketScalarWhereInput | ScoreCorrectionTicketScalarWhereInput[]
+        id?: StringFilter<"ScoreCorrectionTicket"> | string
+        code?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        active?: BoolFilter<"ScoreCorrectionTicket"> | boolean
+        description?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ScoreCorrectionTicket"> | Date | string | null
+        createdAt?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        updatedAt?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        createdBy?: UuidNullableFilter<"ScoreCorrectionTicket"> | string | null
+        trainingObjectTypeId?: StringFilter<"ScoreCorrectionTicket"> | string
+        number?: IntFilter<"ScoreCorrectionTicket"> | number
+        proposal?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        decision?: StringNullableFilter<"ScoreCorrectionTicket"> | string | null
+        date?: DateTimeFilter<"ScoreCorrectionTicket"> | Date | string
+        deadline?: DateTimeNullableFilter<"ScoreCorrectionTicket"> | Date | string | null
+        status?: EnumScoreCorrectionStatusFilter<"ScoreCorrectionTicket"> | $Enums.ScoreCorrectionStatus
     };
     export type StudentCreateWithoutPriorityObjectInput = {
         id?: string
@@ -518019,6 +522150,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingLevelInput = {
         id?: string
@@ -518047,6 +522179,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingLevelInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -518127,6 +522260,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingFormInput = {
         id?: string
@@ -518155,6 +522289,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingFormInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -519946,6 +524081,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput = {
         id?: string
@@ -519974,6 +524110,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -520060,6 +524197,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -520088,6 +524226,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type DM_DonViCreateWithoutTrainingMajorsInput = {
         Id?: string
@@ -521213,6 +525352,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingMajorsInput = {
         id?: string
@@ -521241,6 +525381,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingMajorsInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -521341,6 +525482,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingMajorsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -521369,6 +525511,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeCreateWithoutTrainingBlocksInput = {
         id?: string
@@ -521397,6 +525540,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput = {
         id?: string
@@ -521425,6 +525569,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingBlocksInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -521574,6 +525719,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingBlocksInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -521602,6 +525748,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingBlockUpsertWithoutChildrenInput = {
         update: XOR<TrainingBlockUpdateWithoutChildrenInput, TrainingBlockUncheckedUpdateWithoutChildrenInput>
@@ -523768,6 +527915,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutStudentInput = {
         id?: string
@@ -523804,6 +527952,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutStudentInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -531662,6 +535811,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingScoreSessionInput = {
         id?: string
@@ -531690,6 +535840,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingScoreSessionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -531830,6 +535981,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingScoreSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -531858,6 +536010,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type StudentTrainingScoreUpsertWithWhereUniqueWithoutTrainingScoreSessionInput = {
         where: StudentTrainingScoreWhereUniqueInput
@@ -536832,6 +540985,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput = {
         id?: string
@@ -536860,6 +541014,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutThesisSessionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -537107,6 +541262,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -537135,6 +541291,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingCourseUpsertWithoutThesisSessionInput = {
         update: XOR<TrainingCourseUpdateWithoutThesisSessionInput, TrainingCourseUncheckedUpdateWithoutThesisSessionInput>
@@ -538980,6 +543137,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutStudentThesisRegistrationInput = {
         id?: string
@@ -539016,6 +543174,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutStudentThesisRegistrationInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -539402,6 +543561,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutStudentThesisRegistrationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539438,6 +543598,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type ThesisProjectUpsertWithoutRegistrationsInput = {
         update: XOR<ThesisProjectUpdateWithoutRegistrationsInput, ThesisProjectUncheckedUpdateWithoutRegistrationsInput>
@@ -547302,6 +551463,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSurveyObjectTypeInput = {
         id?: string
@@ -547330,6 +551492,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSurveyObjectTypeInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -547517,6 +551680,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSurveyObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547545,6 +551709,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type ClusterSurveyCreateWithoutSurveyTopicInput = {
         id?: string
@@ -548599,6 +552764,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSurveyInput = {
         id?: string
@@ -548627,6 +552793,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSurveyInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -549127,6 +553294,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549155,6 +553323,7 @@ export namespace Prisma {
         thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SurveyChoiceUpsertWithWhereUniqueWithoutSurveyInput = {
         where: SurveyChoiceWhereUniqueInput
@@ -554199,6 +558368,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutExamPaperInput = {
         id?: string
@@ -554235,6 +558405,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutExamPaperInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -554327,6 +558498,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutExamPaperInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554363,6 +558535,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type SubjectVersionCreateWithoutExamFrameworkInput = {
         id?: string
@@ -558430,6 +562603,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutGraduationSessionInput = {
         id?: string
@@ -558458,6 +562632,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutGraduationSessionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -558737,6 +562912,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutGraduationSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -558765,6 +562941,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutSessionInput = {
         where: StudentGraduationApplicationWhereUniqueInput
@@ -559384,6 +563561,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput = {
         id?: string
@@ -559420,6 +563598,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -559460,6 +563639,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput = {
         id?: string
@@ -559496,6 +563676,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -596990,6 +601171,23 @@ export namespace Prisma {
         suspendedReason?: string | null
         updatedById?: string | null
     };
+    export type ScoreCorrectionItemCreateManyStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        ticketId: string
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+    };
     export type StudentGraduationApplicationUpdateWithoutGpaScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -597436,6 +601634,57 @@ export namespace Prisma {
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ScoreCorrectionItemUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        ticket?: ScoreCorrectionTicketUpdateOneRequiredWithoutItemsNestedInput
+    };
+    export type ScoreCorrectionItemUncheckedUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        ticketId?: StringFieldUpdateOperationsInput | string
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    };
+    export type ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        ticketId?: StringFieldUpdateOperationsInput | string
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
     };
     export type DocumentFileCreateManyArchivedCertificateInput = {
         id?: string
@@ -603942,6 +608191,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -603978,6 +608228,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -604886,6 +609137,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -604922,6 +609174,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -606154,6 +610407,74 @@ export namespace Prisma {
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ScoreCorrectionItemCreateManyTicketInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentSubjectScoreId: string
+        newAttendanceScore?: number | null
+        newMidtermScore?: number | null
+        newExamScore?: number | null
+        oldAttendanceScore?: number | null
+        oldMidtermScore?: number | null
+        oldExamScore?: number | null
+    };
+    export type ScoreCorrectionItemUpdateWithoutTicketInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutScoreCorrectionItemNestedInput
+    };
+    export type ScoreCorrectionItemUncheckedUpdateWithoutTicketInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    };
+    export type ScoreCorrectionItemUncheckedUpdateManyWithoutTicketInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        newAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        newExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldAttendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldMidtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        oldExamScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    };
     export type TrainingCourseCreateManyTrainingObjectTypeInput = {
         id?: string
         code?: string | null
@@ -606471,6 +610792,22 @@ export namespace Prisma {
         semesterId?: string | null
         surveyTopicId: string
         clusterSurveyId?: string | null
+    };
+    export type ScoreCorrectionTicketCreateManyTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        number?: number
+        proposal?: string | null
+        decision?: string | null
+        date?: Date | string
+        deadline?: Date | string | null
+        status?: $Enums.ScoreCorrectionStatus
     };
     export type TrainingCourseUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -607566,6 +611903,56 @@ export namespace Prisma {
         surveyTopicId?: StringFieldUpdateOperationsInput | string
         clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ScoreCorrectionTicketUpdateWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+        items?: ScoreCorrectionItemUpdateManyWithoutTicketNestedInput
+    };
+    export type ScoreCorrectionTicketUncheckedUpdateWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+        items?: ScoreCorrectionItemUncheckedUpdateManyWithoutTicketNestedInput
+    };
+    export type ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        number?: IntFieldUpdateOperationsInput | number
+        proposal?: NullableStringFieldUpdateOperationsInput | string | null
+        decision?: NullableStringFieldUpdateOperationsInput | string | null
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumScoreCorrectionStatusFieldUpdateOperationsInput | $Enums.ScoreCorrectionStatus
+    };
     export type StudentUpdateWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -608119,6 +612506,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -608147,6 +612535,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -608203,6 +612592,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFormInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -608231,6 +612621,7 @@ export namespace Prisma {
         trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFormInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -611908,6 +616299,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -611944,6 +616336,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -623180,6 +627573,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutGraduationGpaScoresInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -623216,6 +627610,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -623281,6 +627676,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutGraduationSupplementaryScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -623317,6 +627713,7 @@ export namespace Prisma {
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreInput = {
         id?: StringFieldUpdateOperationsInput | string

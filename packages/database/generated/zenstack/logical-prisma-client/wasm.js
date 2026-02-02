@@ -2147,6 +2147,43 @@ exports.Prisma.ClassScheduleScalarFieldEnum = {
   cancelReason: 'cancelReason'
 };
 
+exports.Prisma.ScoreCorrectionTicketScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  number: 'number',
+  proposal: 'proposal',
+  decision: 'decision',
+  date: 'date',
+  deadline: 'deadline',
+  status: 'status'
+};
+
+exports.Prisma.ScoreCorrectionItemScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  ticketId: 'ticketId',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  newAttendanceScore: 'newAttendanceScore',
+  newMidtermScore: 'newMidtermScore',
+  newExamScore: 'newExamScore',
+  oldAttendanceScore: 'oldAttendanceScore',
+  oldMidtermScore: 'oldMidtermScore',
+  oldExamScore: 'oldExamScore'
+};
+
 exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5945,6 +5982,25 @@ exports.Prisma.ClassScheduleOrderByRelevanceFieldEnum = {
   cancelReason: 'cancelReason'
 };
 
+exports.Prisma.ScoreCorrectionTicketOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  proposal: 'proposal',
+  decision: 'decision'
+};
+
+exports.Prisma.ScoreCorrectionItemOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  ticketId: 'ticketId',
+  studentSubjectScoreId: 'studentSubjectScoreId'
+};
+
 exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -7606,6 +7662,12 @@ exports.PeriodType = exports.$Enums.PeriodType = {
   WEEK: 'WEEK'
 };
 
+exports.ScoreCorrectionStatus = exports.$Enums.ScoreCorrectionStatus = {
+  INITIALIZED: 'INITIALIZED',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  APPROVED: 'APPROVED'
+};
+
 exports.TrainingObjectTypes = exports.$Enums.TrainingObjectTypes = {
   MILITARY: 'MILITARY',
   CIVILIAN: 'CIVILIAN',
@@ -8028,6 +8090,8 @@ exports.Prisma.ModelName = {
   SubjectClassHistory: 'SubjectClassHistory',
   SubjectClassTime: 'SubjectClassTime',
   ClassSchedule: 'ClassSchedule',
+  ScoreCorrectionTicket: 'ScoreCorrectionTicket',
+  ScoreCorrectionItem: 'ScoreCorrectionItem',
   TrainingObjectType: 'TrainingObjectType',
   PriorityObject: 'PriorityObject',
   TrainingType: 'TrainingType',
