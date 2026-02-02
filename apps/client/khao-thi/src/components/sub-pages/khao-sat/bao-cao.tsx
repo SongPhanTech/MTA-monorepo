@@ -316,6 +316,27 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     }
 
     const renderTable = (dataTable: any) => {
+          if (!dataTable?.length) return
+        let average = dataTable[0]?.answers.map((i: any) => {
+            return { ...i, total: 0, count: 0 }
+        })
+             dataTable.forEach((e: any) => {
+            average = average.map((i: any) => {
+                return {
+                    ...i,
+                    total: i.total + e.answers.find((a: any) => a.id === i.id)?.total,
+                    count: i.count + e.answers.find((a: any) => a.id === i.id)?.count,
+                }
+            })
+        })
+        const datarender = [
+            ...dataTable,
+            {
+                name: 'Trung bình',
+                answers: average,
+                id: 'average',
+            },
+        ]
         return (
             <Table
                 columns={
@@ -328,19 +349,25 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                   fixed: 'left',
                                   render: (_, __, index) => index + 1,
                               },
-                              {
+                            {
                                   title: 'Câu hỏi',
                                   align: 'center',
                                   width: 100,
                                   render: (_, record, index) => {
-                                      return `Câu hỏi ${index + 1}`
+                                      return index === datarender.length - 1
+                                          ? 'ĐGTB'
+                                          : `Câu hỏi ${index + 1}`
                                   },
                               },
                               {
                                   title: 'Nội dung câu hỏi',
                                   align: 'left',
                                   render: (_, record, index) => {
-                                      return <HtmlTruncate>{record?.name}</HtmlTruncate>
+                                      return index === datarender.length - 1 ? (
+                                          ''
+                                      ) : (
+                                          <HtmlTruncate>{record?.name}</HtmlTruncate>
+                                      )
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>

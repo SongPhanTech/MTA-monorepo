@@ -25,6 +25,13 @@ interface MyTreeNode {
     children?: MyTreeNode[]
 }
 
+type DonVi = {
+    Id: string
+    sTen: string
+    sParentId: string | null
+    children?: DonVi[]
+}
+
 function buildOrgAndLectureTree(
     list: Array<any>,
     lecturers: Array<any>,
@@ -103,7 +110,30 @@ export default function BaoCaoGiangVien() {
         isLoading: organizationsLoading,
         isFetching,
         error: organizationsError,
-    } = useFindManyDM_DonVi()
+    } = useFindManyDM_DonVi(
+        {
+            where: {
+                iLoaiDonVi: {
+                    in: [0,5, 6, 7],
+                },
+            },
+            select:{
+                Id:true,
+                sMa:true,
+                sTen:true,
+                bActive:true,
+                iCapDonVi: true,
+                iDictionaryKey: true,
+                iLoaiDonVi:true ,
+                iNhomDonVi: true,
+                sParentId:true
+            }
+        },
+
+        {
+            refetchOnWindowFocus: false,
+        }
+    )
 
     const { data: lecturerData = [] } = useFindManyLecturer({
         where: {
@@ -112,6 +142,11 @@ export default function BaoCaoGiangVien() {
                     ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
                 },
             },
+            organization:{
+                 iLoaiDonVi: {
+                    in: [0,5, 6, 7],
+                },
+            }
         },
         orderBy: {
             userProfile: {
@@ -125,10 +160,41 @@ export default function BaoCaoGiangVien() {
         },
     })
 
+    function buildDonViTree(list: any[]): DonVi[] {
+        const map = new Map<string, DonVi>()
+        const roots: DonVi[] = []
+
+        // clone + init children
+        list.forEach((item) => {
+            map.set(item.key, { ...item, children: [] })
+        })
+
+        list.forEach((item) => {
+            const node = map.get(item.Id)!
+
+            // iCapDonVi = 2 → node gốc
+            if (item.iCapDonVi === 2) {
+                node.sParentId = null
+                roots.push(node)
+                return
+            }
+
+            // node con
+            if (item.sParentId && map.has(item.sParentId)) {
+                map.get(item.sParentId)!.children!.push(node)
+            }
+        })
+
+        return roots
+    }
+
     // Tạo treeData từ organizations và lecturers
     const treeData: any[] = useMemo(() => {
         if (!organizations.length || !lecturerData.length) return []
+        // const treeData1 = buildDonViTree(organizations.map(i=>{return {...i,key:i.Id,title:i.sTen}}))
 
+        // console.log(treeData1, '123')
+        // return treeData1
         return buildOrgAndLectureTree(
             organizations.map((org) => ({
                 ...org,
