@@ -507,8 +507,8 @@ app.openapi(getOrganizationSurveyStatistics, async (c) => {
     const organization = await prisma.dM_DonVi.findMany({
         where: {
             sParentId: organizationId,
-            iLoaiDonVi: {
-                in: [5, 6, 7],
+            iCapDonVi: {
+                in: [2, 3],
             }
             // lecturers: {
             //     some: {

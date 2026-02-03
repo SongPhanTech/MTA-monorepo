@@ -158,8 +158,8 @@ export default function BaoCaoGiangVien() {
                 },
             },
             organization: {
-                iLoaiDonVi: {
-                    in: [0, 5, 6, 7],
+                iCapDonVi: {
+                    in: [0, 2, 3],
                 },
             },
         },
@@ -415,7 +415,7 @@ export default function BaoCaoGiangVien() {
                 )}
             </Col>
 
-            <Col span={18}>{items}</Col>
+            <Col span={18}>{isFetching ?<Skeleton />:items}</Col>
         </Row>
     )
 }
