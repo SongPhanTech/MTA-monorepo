@@ -35,7 +35,6 @@ model ScoreLinkSheet extends Base {
   scoreLinkSubjectVersions ScoreLinkSubjectVersion[]
   documents                DocumentFile[]
 
-
   @@schema("ql-dao-tao")
 }
 
