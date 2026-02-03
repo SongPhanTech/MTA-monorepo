@@ -2,6 +2,7 @@ import { queryClient } from '@api/index'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { Store, useStore } from '@tanstack/react-store'
+import type { $Enums } from '@workspace/db/client'
 import {
     useFindManyEvaluationStandardSet,
     useUpdateEvaluationStandardSet,
@@ -16,9 +17,14 @@ export const store = new Store<{
     selectedStandardSetId: undefined,
 })
 
-const SidebarStandardSet = () => {
+interface SidebarProps {
+    objectType: $Enums.StandardCatalogType
+}
+
+const SidebarStandardSet = ({ objectType }: SidebarProps) => {
     const { onOpen } = useDisclosure<{
         id?: string
+        objectType: $Enums.StandardCatalogType
     }>({
         tag: 'PutBoTieuChuanModal',
     })
@@ -28,6 +34,7 @@ const SidebarStandardSet = () => {
     const { data: evaluationStandardSets = [] } = useFindManyEvaluationStandardSet({
         where: {
             deletedAt: null,
+            objectType: objectType,
         },
         orderBy: {
             createdAt: 'desc',
@@ -59,7 +66,16 @@ const SidebarStandardSet = () => {
 
     return (
         <div className="w-full border-r border-gray-200 bg-gray-50/50 p-3 h-[calc(100vh-120px)] overflow-y-auto">
-            <Button onClick={() => onOpen()} type="primary" className="w-full mb-3" size="small">
+            <Button
+                onClick={() =>
+                    onOpen({
+                        objectType: objectType,
+                    })
+                }
+                type="primary"
+                className="w-full mb-3"
+                size="small"
+            >
                 Tạo bộ tiêu chuẩn mới
             </Button>
 
@@ -85,7 +101,7 @@ const SidebarStandardSet = () => {
                         <div className="flex justify-end items-center gap-2">
                             <EditIcon
                                 className="text-blue-600 cursor-pointer hover:text-blue-700 w-4 h-4"
-                                onClick={() => onOpen({ id: standardSet.id })}
+                                onClick={() => onOpen({ id: standardSet.id, objectType })}
                             />
                             <DeleteIcon
                                 popConfirm={{
