@@ -1,6 +1,6 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import type { EvaluationStandardSet } from '@workspace/db/client'
+import type { $Enums, EvaluationStandardSet } from '@workspace/db/client'
 import {
     useCreateEvaluationStandardSet,
     useFindUniqueEvaluationStandardSet,
@@ -15,6 +15,7 @@ const PutBoTieuChuanModal = () => {
 
     const { isOpen, onClose, input } = useDisclosure<{
         id?: string
+        objectType: $Enums.StandardCatalogType
     }>({
         tag: 'PutBoTieuChuanModal',
         onClose: () => {
@@ -22,10 +23,18 @@ const PutBoTieuChuanModal = () => {
         },
     })
 
+    console.log('objectType: ', input?.objectType)
+
     const { data: initialValue } = useFindUniqueEvaluationStandardSet(
         {
             where: {
                 id: input?.id || '',
+                standards: {
+                    some: {
+                        objectType: input?.objectType,
+                        deletedAt: null,
+                    },
+                },
             },
         },
         {
@@ -38,7 +47,7 @@ const PutBoTieuChuanModal = () => {
 
     const onOk = async (output: EvaluationStandardSet) => {
         try {
-            if (!output) return
+            if (!output || !input?.objectType) return
 
             if (input?.id) {
                 await updateEvaluationStandardSet({
@@ -55,6 +64,7 @@ const PutBoTieuChuanModal = () => {
                     data: {
                         code: output.code,
                         name: output.name,
+                        objectType: input.objectType,
                     },
                 })
             }
