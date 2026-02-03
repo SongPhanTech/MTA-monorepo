@@ -17,7 +17,7 @@ import {
 } from '@workspace/db/hooks'
 import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
 import { queryClient } from '@api/index'
-import { Difficult, ExamType, QuestionType } from '@workspace/db'
+import { type Difficult, ExamType, QuestionType } from '@workspace/db'
 interface ParsedQuestion {
     order: number
     content: string
