@@ -18996,6 +18996,9 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, objectType: {
+                    name: "objectType",
+                    type: "StandardCatalogType",
                 }, standards: {
                     name: "standards",
                     type: "StandardCatalog",

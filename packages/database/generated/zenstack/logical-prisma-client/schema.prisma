@@ -2703,15 +2703,15 @@ model StudentSubjectScore {
   subjectVersionId             String
   student                      Student                                    @relation(fields: [studentId], references: [id])
   studentId                    String
-  /// điểm chuyên cần
+  /// điểm thường xuyên
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
   attendanceScore              Float?
-  /// điểm giữa kỳ
+  /// điểm định kỳ
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
   midtermScore                 Float?
-  /// điểm cuối kỳ
+  /// điểm thi
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
   examScore                    Float?
@@ -5426,15 +5426,16 @@ model EvaluationPeriod {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model EvaluationStandardSet {
-  id          String            @id() @default(cuid())
-  code        String?           @unique()
-  active      Boolean           @default(true)
-  description String?           @db.Text()
+  id          String              @id() @default(cuid())
+  code        String?             @unique()
+  active      Boolean             @default(true)
+  description String?             @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @default(now()) @updatedAt()
-  createdBy   String?           @default("") @db.Uuid()
-  name        String            @unique()
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @default(now()) @updatedAt()
+  createdBy   String?             @default("") @db.Uuid()
+  name        String              @unique()
+  objectType  StandardCatalogType
   standards   StandardCatalog[]
 
   @@schema("khao-thi")

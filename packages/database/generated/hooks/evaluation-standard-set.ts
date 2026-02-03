@@ -326,8 +326,9 @@ export function useSuspenseCountEvaluationStandardSet<TArgs extends Prisma.Evalu
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('EvaluationStandardSet', `${endpoint}/evaluationStandardSet/count`, args, options, fetch);
 }
+import type { StandardCatalogType } from '../zenstack/models';
 
-export function useCheckEvaluationStandardSet<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckEvaluationStandardSet<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; objectType?: StandardCatalogType }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('EvaluationStandardSet', `${endpoint}/evaluationStandardSet/check`, args, options, fetch);
 }

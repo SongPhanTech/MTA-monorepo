@@ -1,8 +1,8 @@
+import CommentList from '@components/commons/comment-list'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
+import ExportCriteriaEvaluation from '@components/modal/export-criteria-evaluation'
+import { getStatusConfig } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { Button, Collapse, Form, message, Tag, Badge } from 'antd'
-import { useEffect, useState } from 'react'
-import { sqlTransaction } from '@workspace/libs/api/model'
 import {
     $Enums,
     type EvaluationCriterionComment,
@@ -10,13 +10,13 @@ import {
     type CriterionPeriod,
     type EvaluationCriterion,
 } from '@workspace/db/client'
-import dayjs from 'dayjs'
-import { getStatusConfig } from '@constants/constants'
-import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import CommentList from '@components/commons/comment-list'
-import ExportCriteriaEvaluation from '@components/modal/export-criteria-evaluation'
+import { Badge, Button, Collapse, Form, message, Tag } from 'antd'
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 
 export type DataTabEvaluationCriterionType = StandardPeriod & {
     criteria: (CriterionPeriod & {
@@ -68,34 +68,31 @@ const CriteriaEvaluationSubPage = ({
 
         // Cập nhật các tiêu chí
         if (dataSubmit?.criteria && dataSubmit.criteria.length > 0) {
-            listSqlTransaction = [
-                ...listSqlTransaction,
-                ...dataSubmit.criteria.map(
-                    (
-                        i: CriterionPeriod & {
-                            evaluationCriterion: EvaluationCriterion
-                        }
-                    ) => {
-                        return {
-                            model: 'EvaluationCriterion',
-                            operation: 'update',
-                            data: {
-                                where: {
-                                    id: i.evaluationCriterion.id,
-                                    criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
-                                },
-                                data: {
-                                    currentSituation: i.evaluationCriterion.currentSituation || '',
-                                    strengths: i.evaluationCriterion.strengths || '',
-                                    weakness: i.evaluationCriterion.weakness || '',
-                                    actionPlan: i.evaluationCriterion.actionPlan || '',
-                                    score: i.evaluationCriterion.score || '',
-                                },
-                            },
-                        }
+            listSqlTransaction = dataSubmit.criteria.map(
+                (
+                    i: CriterionPeriod & {
+                        evaluationCriterion: EvaluationCriterion
                     }
-                ),
-            ]
+                ) => {
+                    return {
+                        model: 'EvaluationCriterion',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: i.evaluationCriterion.id,
+                                criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
+                            },
+                            data: {
+                                currentSituation: i.evaluationCriterion.currentSituation || '',
+                                strengths: i.evaluationCriterion.strengths || '',
+                                weakness: i.evaluationCriterion.weakness || '',
+                                actionPlan: i.evaluationCriterion.actionPlan || '',
+                                score: i.evaluationCriterion.score || '',
+                            },
+                        },
+                    }
+                }
+            )
         }
         try {
             showSpinner()

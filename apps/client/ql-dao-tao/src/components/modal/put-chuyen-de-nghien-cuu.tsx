@@ -10,9 +10,9 @@ import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
-import { useEffect } from 'react'
 import type { StudentResearchTopic } from '@workspace/db/client'
 import { FormItem } from '@workspace/ui'
+import { useEffect } from 'react'
 
 dayjs.locale('vi')
 const { TextArea } = Input
@@ -27,6 +27,7 @@ const PutResearchTopicModal = () => {
     const [form] = Form.useForm<PutResearchTopicForm>()
     const { isOpen, onClose, input } = useDisclosure<{
         studentResearchTopicId: string
+        role: 'P7' | 'KHOA_BO_MON'
     }>({
         tag: 'PutResearchTopicModal',
         onClose: form.resetFields,
@@ -210,7 +211,7 @@ const PutResearchTopicModal = () => {
                 </Col>
 
                 <Col span={12}>
-                    <FormItem form={form} name="supervisorId" label="Giảng viên hướng dẫn" required>
+                    <FormItem form={form} name="supervisorId" label="Hướng dẫn 1" required>
                         <Select
                             placeholder="Chọn giảng viên hướng dẫn"
                             options={expertProfile.map((item) => ({
@@ -234,9 +235,9 @@ const PutResearchTopicModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem form={form} name="coSupervisorId" label="Chuyên gia hướng dẫn phụ">
+                    <FormItem form={form} name="coSupervisorId" label="Hướng dẫn 2">
                         <Select
-                            placeholder="Chọn chuyên gia phụ"
+                            placeholder="Chọn giảng viên hướng dẫn"
                             options={expertProfile.map((item) => ({
                                 label: item.lecturer
                                     ? [
@@ -269,6 +270,7 @@ const PutResearchTopicModal = () => {
                 <Col span={8}>
                     <FormItem form={form} name="deadline" label="Hạn nhập chuyên đề">
                         <DatePicker
+                            disabled={input?.role !== 'P7'}
                             format={{ format: 'DD/MM/YYYY', type: 'mask' }}
                             className="w-full"
                             placeholder="Chọn hạn nhập chuyên đề"

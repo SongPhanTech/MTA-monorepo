@@ -18004,6 +18004,9 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, objectType: {
+                    name: "objectType",
+                    type: "StandardCatalogType",
                 }, standards: {
                     name: "standards",
                     type: "StandardCatalog",

@@ -129722,15 +129722,15 @@ export namespace Prisma {
       subjectVersionId: string
       studentId: string
       /**
-       * điểm chuyên cần
+       * điểm thường xuyên
        */
       attendanceScore: number | null
       /**
-       * điểm giữa kỳ
+       * điểm định kỳ
        */
       midtermScore: number | null
       /**
-       * điểm cuối kỳ
+       * điểm thi
        */
       examScore: number | null
       /**
@@ -246648,6 +246648,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    objectType: $Enums.StandardCatalogType | null
   }
 
   export type EvaluationStandardSetMaxAggregateOutputType = {
@@ -246660,6 +246661,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    objectType: $Enums.StandardCatalogType | null
   }
 
   export type EvaluationStandardSetCountAggregateOutputType = {
@@ -246672,6 +246674,7 @@ export namespace Prisma {
     updatedAt: number
     createdBy: number
     name: number
+    objectType: number
     _all: number
   }
 
@@ -246686,6 +246689,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    objectType?: true
   }
 
   export type EvaluationStandardSetMaxAggregateInputType = {
@@ -246698,6 +246702,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    objectType?: true
   }
 
   export type EvaluationStandardSetCountAggregateInputType = {
@@ -246710,6 +246715,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    objectType?: true
     _all?: true
   }
 
@@ -246795,6 +246801,7 @@ export namespace Prisma {
     updatedAt: Date
     createdBy: string | null
     name: string
+    objectType: $Enums.StandardCatalogType
     _count: EvaluationStandardSetCountAggregateOutputType | null
     _min: EvaluationStandardSetMinAggregateOutputType | null
     _max: EvaluationStandardSetMaxAggregateOutputType | null
@@ -246824,6 +246831,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    objectType?: boolean
     standards?: boolean | EvaluationStandardSet$standardsArgs<ExtArgs>
     _count?: boolean | EvaluationStandardSetCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationStandardSet"]>
@@ -246838,6 +246846,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    objectType?: boolean
   }, ExtArgs["result"]["evaluationStandardSet"]>
 
   export type EvaluationStandardSetSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -246850,6 +246859,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    objectType?: boolean
   }, ExtArgs["result"]["evaluationStandardSet"]>
 
   export type EvaluationStandardSetSelectScalar = {
@@ -246862,9 +246872,10 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    objectType?: boolean
   }
 
-  export type EvaluationStandardSetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["evaluationStandardSet"]>
+  export type EvaluationStandardSetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "objectType", ExtArgs["result"]["evaluationStandardSet"]>
   export type EvaluationStandardSetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     standards?: boolean | EvaluationStandardSet$standardsArgs<ExtArgs>
     _count?: boolean | EvaluationStandardSetCountOutputTypeDefaultArgs<ExtArgs>
@@ -246887,6 +246898,7 @@ export namespace Prisma {
       updatedAt: Date
       createdBy: string | null
       name: string
+      objectType: $Enums.StandardCatalogType
     }, ExtArgs["result"]["evaluationStandardSet"]>
     composites: {}
   }
@@ -247320,6 +247332,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"EvaluationStandardSet", 'DateTime'>
     readonly createdBy: FieldRef<"EvaluationStandardSet", 'String'>
     readonly name: FieldRef<"EvaluationStandardSet", 'String'>
+    readonly objectType: FieldRef<"EvaluationStandardSet", 'StandardCatalogType'>
   }
     
 
@@ -367297,7 +367310,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
-    name: 'name'
+    name: 'name',
+    objectType: 'objectType'
   };
 
   export type EvaluationStandardSetScalarFieldEnum = (typeof EvaluationStandardSetScalarFieldEnum)[keyof typeof EvaluationStandardSetScalarFieldEnum]
@@ -393374,6 +393388,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"EvaluationStandardSet"> | Date | string
     createdBy?: UuidNullableFilter<"EvaluationStandardSet"> | string | null
     name?: StringFilter<"EvaluationStandardSet"> | string
+    objectType?: EnumStandardCatalogTypeFilter<"EvaluationStandardSet"> | $Enums.StandardCatalogType
     standards?: StandardCatalogListRelationFilter
   }
 
@@ -393387,6 +393402,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    objectType?: SortOrder
     standards?: StandardCatalogOrderByRelationAggregateInput
     _relevance?: EvaluationStandardSetOrderByRelevanceInput
   }
@@ -393404,6 +393420,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"EvaluationStandardSet"> | Date | string
     updatedAt?: DateTimeFilter<"EvaluationStandardSet"> | Date | string
     createdBy?: UuidNullableFilter<"EvaluationStandardSet"> | string | null
+    objectType?: EnumStandardCatalogTypeFilter<"EvaluationStandardSet"> | $Enums.StandardCatalogType
     standards?: StandardCatalogListRelationFilter
   }, "id" | "code" | "name">
 
@@ -393417,6 +393434,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    objectType?: SortOrder
     _count?: EvaluationStandardSetCountOrderByAggregateInput
     _max?: EvaluationStandardSetMaxOrderByAggregateInput
     _min?: EvaluationStandardSetMinOrderByAggregateInput
@@ -393435,6 +393453,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"EvaluationStandardSet"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"EvaluationStandardSet"> | string | null
     name?: StringWithAggregatesFilter<"EvaluationStandardSet"> | string
+    objectType?: EnumStandardCatalogTypeWithAggregatesFilter<"EvaluationStandardSet"> | $Enums.StandardCatalogType
   }
 
   export type StandardCatalogWhereInput = {
@@ -425493,6 +425512,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType: $Enums.StandardCatalogType
     standards?: StandardCatalogCreateNestedManyWithoutStandardSetInput
   }
 
@@ -425506,6 +425526,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType: $Enums.StandardCatalogType
     standards?: StandardCatalogUncheckedCreateNestedManyWithoutStandardSetInput
   }
 
@@ -425519,6 +425540,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
     standards?: StandardCatalogUpdateManyWithoutStandardSetNestedInput
   }
 
@@ -425532,6 +425554,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
     standards?: StandardCatalogUncheckedUpdateManyWithoutStandardSetNestedInput
   }
 
@@ -425545,6 +425568,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType: $Enums.StandardCatalogType
   }
 
   export type EvaluationStandardSetUpdateManyMutationInput = {
@@ -425557,6 +425581,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
   export type EvaluationStandardSetUncheckedUpdateManyInput = {
@@ -425569,6 +425594,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
   export type StandardCatalogCreateInput = {
@@ -450745,6 +450771,13 @@ export namespace Prisma {
     _max?: NestedEnumEvaluationPeriodStatusFilter<$PrismaModel>
   }
 
+  export type EnumStandardCatalogTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StandardCatalogType | EnumStandardCatalogTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StandardCatalogType[] | ListEnumStandardCatalogTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StandardCatalogType[] | ListEnumStandardCatalogTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStandardCatalogTypeFilter<$PrismaModel> | $Enums.StandardCatalogType
+  }
+
   export type StandardCatalogListRelationFilter = {
     every?: StandardCatalogWhereInput
     some?: StandardCatalogWhereInput
@@ -450771,6 +450804,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    objectType?: SortOrder
   }
 
   export type EvaluationStandardSetMaxOrderByAggregateInput = {
@@ -450783,6 +450817,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    objectType?: SortOrder
   }
 
   export type EvaluationStandardSetMinOrderByAggregateInput = {
@@ -450795,13 +450830,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    objectType?: SortOrder
   }
 
-  export type EnumStandardCatalogTypeFilter<$PrismaModel = never> = {
+  export type EnumStandardCatalogTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StandardCatalogType | EnumStandardCatalogTypeFieldRefInput<$PrismaModel>
     in?: $Enums.StandardCatalogType[] | ListEnumStandardCatalogTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.StandardCatalogType[] | ListEnumStandardCatalogTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStandardCatalogTypeFilter<$PrismaModel> | $Enums.StandardCatalogType
+    not?: NestedEnumStandardCatalogTypeWithAggregatesFilter<$PrismaModel> | $Enums.StandardCatalogType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStandardCatalogTypeFilter<$PrismaModel>
+    _max?: NestedEnumStandardCatalogTypeFilter<$PrismaModel>
   }
 
   export type CriterionCatalogListRelationFilter = {
@@ -450876,16 +450915,6 @@ export namespace Prisma {
 
   export type StandardCatalogSumOrderByAggregateInput = {
     order?: SortOrder
-  }
-
-  export type EnumStandardCatalogTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StandardCatalogType | EnumStandardCatalogTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StandardCatalogType[] | ListEnumStandardCatalogTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StandardCatalogType[] | ListEnumStandardCatalogTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStandardCatalogTypeWithAggregatesFilter<$PrismaModel> | $Enums.StandardCatalogType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStandardCatalogTypeFilter<$PrismaModel>
-    _max?: NestedEnumStandardCatalogTypeFilter<$PrismaModel>
   }
 
   export type StandardCatalogScalarRelationFilter = {
@@ -476680,6 +476709,10 @@ export namespace Prisma {
     connect?: StandardCatalogWhereUniqueInput | StandardCatalogWhereUniqueInput[]
   }
 
+  export type EnumStandardCatalogTypeFieldUpdateOperationsInput = {
+    set?: $Enums.StandardCatalogType
+  }
+
   export type StandardCatalogUpdateManyWithoutStandardSetNestedInput = {
     create?: XOR<StandardCatalogCreateWithoutStandardSetInput, StandardCatalogUncheckedCreateWithoutStandardSetInput> | StandardCatalogCreateWithoutStandardSetInput[] | StandardCatalogUncheckedCreateWithoutStandardSetInput[]
     connectOrCreate?: StandardCatalogCreateOrConnectWithoutStandardSetInput | StandardCatalogCreateOrConnectWithoutStandardSetInput[]
@@ -476726,10 +476759,6 @@ export namespace Prisma {
     connectOrCreate?: CriterionCatalogCreateOrConnectWithoutStandardInput | CriterionCatalogCreateOrConnectWithoutStandardInput[]
     createMany?: CriterionCatalogCreateManyStandardInputEnvelope
     connect?: CriterionCatalogWhereUniqueInput | CriterionCatalogWhereUniqueInput[]
-  }
-
-  export type EnumStandardCatalogTypeFieldUpdateOperationsInput = {
-    set?: $Enums.StandardCatalogType
   }
 
   export type CriterionCatalogUpdateManyWithoutStandardNestedInput = {
@@ -586421,6 +586450,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType: $Enums.StandardCatalogType
   }
 
   export type EvaluationStandardSetUncheckedCreateWithoutStandardsInput = {
@@ -586433,6 +586463,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType: $Enums.StandardCatalogType
   }
 
   export type EvaluationStandardSetCreateOrConnectWithoutStandardsInput = {
@@ -586494,6 +586525,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
   export type EvaluationStandardSetUncheckedUpdateWithoutStandardsInput = {
@@ -586506,6 +586538,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
   export type StandardCatalogCreateWithoutCriteriaInput = {

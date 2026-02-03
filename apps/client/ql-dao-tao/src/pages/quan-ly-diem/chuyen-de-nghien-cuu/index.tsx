@@ -47,6 +47,7 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
 
     const { onOpen: openPutResearchTopicModal } = useDisclosure<{
         studentResearchTopicId: string
+        role: 'P7' | 'KHOA_BO_MON'
     }>({
         tag: 'PutResearchTopicModal',
     })
@@ -1359,13 +1360,14 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                                 return (
                                     <div className="flex justify-center items-center">
                                         {((record?.deadline &&
-                                            dayjs().isAfter(dayjs(record.deadline))) ||
+                                            dayjs().isBefore(dayjs(record.deadline))) ||
                                             role === 'P7') && (
                                             <SquarePen
                                                 className="text-sm cursor-pointer m-1"
                                                 onClick={() =>
                                                     openPutResearchTopicModal({
                                                         studentResearchTopicId: record.id,
+                                                        role,
                                                     })
                                                 }
                                             />

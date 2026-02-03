@@ -49,9 +49,10 @@ model EvaluationPeriod extends Base {
 
 //Bộ tiêu chuẩn và tiêu chí đánh giá theo năm
 model EvaluationStandardSet extends Base {
-  name      String            @unique
+  name       String              @unique
 
-  standards StandardCatalog[]
+  objectType StandardCatalogType
+  standards  StandardCatalog[]
 
   @@schema("khao-thi")
 }
@@ -216,7 +217,7 @@ model EvaluationCriterion extends Base {
   criterionPeriodId           String                       @unique
 
   // người được phân công làm phiếu phân tích
-  lecturer                    Lecturer?                    @relation("EvaluationCriterionLecturer",  fields: [lecturerId], references: [id])
+  lecturer                    Lecturer?                    @relation("EvaluationCriterionLecturer", fields: [lecturerId], references: [id])
   lecturerId                  String?
   deadline                    DateTime?
 
