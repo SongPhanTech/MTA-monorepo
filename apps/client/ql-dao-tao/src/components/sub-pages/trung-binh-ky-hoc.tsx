@@ -15,7 +15,7 @@ import {
     useTrainingCourseStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, message, Row, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import _ from 'lodash'
@@ -45,23 +45,27 @@ const DiemTrungBinhKyHoc = () => {
     const where = useMemo(() => {
         return {
             deletedAt: null,
-            subjectClassStudent: {
-                some: {
-                    subjectClass: {
-                        semesterId,
+            OR: [
+                {
+                    subjectClassStudent: {
+                        some: {
+                            subjectClass: {
+                                semesterId,
+                            },
+                        },
                     },
                 },
-            },
-            // studentSemesterResult: {
-            //     some: { semesterId },
-            // },
+                {
+                    studentSemesterResult: {
+                        some: { semesterId },
+                    },
+                },
+            ],
             ...(filters.code
                 ? {
-                      userProfile: {
-                          code: {
-                              contains: filters.code,
-                              mode: 'insensitive' as const,
-                          },
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -101,15 +105,24 @@ const DiemTrungBinhKyHoc = () => {
                     where: { semesterId },
                     include: { rank: true },
                 },
-                userProfile: true,
+                userProfile: {
+                    select: {
+                        fullname: true,
+                        dateOfBirth: true,
+                    },
+                },
                 fixedClass: {
-                    include: {
-                        trainingCourse: true,
-                        managementOrganization: true,
+                    select: {
+                        code: true,
+                        name: true,
                     },
                 },
             },
-            orderBy: [{ userProfile: { firstName: 'asc' } }, { userProfile: { lastName: 'asc' } }],
+            orderBy: [
+                { fixedClass: { code: 'desc' } },
+                { userProfile: { firstName: 'asc' } },
+                { userProfile: { lastName: 'asc' } },
+            ],
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
@@ -161,6 +174,11 @@ const DiemTrungBinhKyHoc = () => {
     const handleSummaryClick = async () => {
         if (!semesterId) {
             message.warning('Vui lòng chọn học kỳ')
+            return
+        }
+
+        if (!trainingCourseId) {
+            message.warning('Vui lòng chọn khoá')
             return
         }
 
@@ -226,11 +244,7 @@ const DiemTrungBinhKyHoc = () => {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    disabled={!trainingCourseId}
-                                    onClick={handleSummaryClick}
-                                >
+                                <Button type="primary" onClick={handleSummaryClick}>
                                     Tổng kết kết quả học kỳ
                                 </Button>
                             </Flex>
@@ -265,6 +279,26 @@ const DiemTrungBinhKyHoc = () => {
                                 fixed: 'left',
                                 type: 'input',
                                 render: (__, record) => record?.userProfile?.fullname,
+                            },
+                            {
+                                title: 'Ngày sinh',
+                                width: 150,
+                                align: 'center',
+                                render: (__, record) =>
+                                    record?.userProfile?.birthday
+                                        ? dayjs(record?.userProfile?.birthday).format('DD/MM/YYYY')
+                                        : '',
+                            },
+
+                            {
+                                title: 'Lớp',
+                                width: 150,
+                                align: 'center',
+                                render: (__, record) => (
+                                    <Tooltip title={record?.fixedClass?.name}>
+                                        {record?.fixedClass?.code}
+                                    </Tooltip>
+                                ),
                             },
                             {
                                 title: 'Năm học thứ...',

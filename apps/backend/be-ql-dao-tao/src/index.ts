@@ -17,6 +17,8 @@ import CurriculumSubjectApp from './api/curriculum-subject'
 import DiplomaVerificationApp from './api/diploma-verification'
 import ExamApp from './api/exam'
 import ExamScoreApp from './api/exam-score'
+import ExportStudentSemesterResultApp from './api/export-student-result'
+import ExportStudentYearResultApp from './api/export-student-year-result'
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
 import ImportApp from './api/import'
@@ -101,6 +103,8 @@ app.route('/api/score-correction', ScoreCorrectionApp)
 app.route('/api/archived-score', ArchivedScoreApp)
 app.route('/api/exam', ExamApp)
 app.route('/api/exam-score', ExamScoreApp)
+app.route('/api/student-result', ExportStudentSemesterResultApp)
+app.route('/api/student-result', ExportStudentYearResultApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow()
 

@@ -43,16 +43,25 @@ const DiemTrungBinhKyHoc = () => {
 
     const where = useMemo(() => {
         return {
-            studentSemesterResult: {
-                some: { semesterId },
-            },
+            deletedAt: null,
+            OR: [
+                {
+                    subjectClassStudent: {
+                        some: { subjectClass: { semesterId } },
+                    },
+                },
+                {
+                    studentYearResult: {
+                        some: { schoolYear: { semesters: { some: { id: semesterId } } } },
+                    },
+                },
+            ],
+
             ...(filters.code
                 ? {
-                      userProfile: {
-                          code: {
-                              contains: filters.code,
-                              mode: 'insensitive' as const,
-                          },
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -70,7 +79,6 @@ const DiemTrungBinhKyHoc = () => {
                 ? {
                       fixedClass: {
                           ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
-                          //   ...(trainingCourseId ? { trainingCourseId } : {}),
                           ...(trainingCourseId
                               ? {
                                     trainingCourse: {
@@ -99,25 +107,23 @@ const DiemTrungBinhKyHoc = () => {
                     where: { schoolYear: { semesters: { some: { id: semesterId } } } },
                     include: { rank: true },
                 },
-                userProfile: true,
+                userProfile: {
+                    select: {
+                        fullname: true,
+                        dateOfBirth: true,
+                    },
+                },
                 fixedClass: {
-                    include: {
-                        trainingCourse: true,
-                        managementOrganization: true,
+                    select: {
+                        code: true,
+                        name: true,
                     },
                 },
             },
             orderBy: [
-                {
-                    userProfile: {
-                        firstName: 'asc',
-                    },
-                },
-                {
-                    userProfile: {
-                        lastName: 'asc',
-                    },
-                },
+                { fixedClass: { code: 'desc' } },
+                { userProfile: { firstName: 'asc' } },
+                { userProfile: { lastName: 'asc' } },
             ],
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
@@ -183,6 +189,11 @@ const DiemTrungBinhKyHoc = () => {
             return
         }
 
+        if (!trainingCourseId) {
+            message.warning('Vui lòng chọn khoá')
+            return
+        }
+
         try {
             showSpinner()
             const res = await calculateSchoolYearResult({
@@ -240,11 +251,7 @@ const DiemTrungBinhKyHoc = () => {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    disabled={!trainingCourseId}
-                                    onClick={handleSummaryClick}
-                                >
+                                <Button type="primary" onClick={handleSummaryClick}>
                                     Tổng kết kết quả năm học
                                 </Button>
                             </Flex>
@@ -279,6 +286,16 @@ const DiemTrungBinhKyHoc = () => {
                                 fixed: 'left',
                                 type: 'input',
                                 render: (__, record) => record?.userProfile?.fullname,
+                            },
+
+                            {
+                                title: 'Ngày sinh',
+                                width: 150,
+                                align: 'center',
+                                render: (__, record) =>
+                                    record?.userProfile?.birthday
+                                        ? dayjs(record?.userProfile?.birthday).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Lớp',
