@@ -503,18 +503,22 @@ app.openapi(getOrganizationSurveyStatistics, async (c) => {
     if (!cluster) {
         return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
     }
+    
     const organization = await prisma.dM_DonVi.findMany({
         where: {
             sParentId: organizationId,
-            lecturers: {
-                some: {
-                    survey: {
-                        some: {
-                            clusterSurveyId: id,
-                        },
-                    },
-                },
-            },
+            iLoaiDonVi: {
+                in: [5, 6, 7],
+            }
+            // lecturers: {
+            //     some: {
+            //         survey: {
+            //             some: {
+            //                 clusterSurveyId: id,
+            //             },
+            //         },
+            //     },
+            // },
         },
         include: {
             lecturers: {
@@ -821,7 +825,7 @@ app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
                     lecture: {
                         organizationId: {
                             in: organizations?.length
-                                ? organizations.map((i) => i.Id)
+                                ? organizations.map((i:any) => i.Id)
                                 : [organizationId],
                         },
                     },
