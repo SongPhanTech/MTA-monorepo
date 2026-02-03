@@ -49,12 +49,14 @@ import {
     exportBanSaoHDDGLV,
     exportDanhSachBaoVe,
     exportDanhSachNopLuanVanThuVien,
+    exportDsChuyenGia,
     exportGiayMoiChamLvPb,
     exportGiayMoiHdlv,
     exportHosobvlv,
     exportKetQuaBaoVeLuanVan,
     exportKiemTraTienDo,
     exportPhuLucDsLuanVan,
+    exportPhuLucQdhdd,
     exportSaoQDHDLV,
     exportThanhToanHoiDongBaoVe,
     exportThanhToanHuongDanTrongHv,
@@ -600,8 +602,12 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 6,
             label: 'Phụ lục QĐHĐ',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportPhuLucQdhdd({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            }),
         },
         {
             id: 6.1,
@@ -643,12 +649,15 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
             onClick: () => defaultButtonClick(),
             disabled: true,
         },
-
         {
             id: 12,
             label: 'Danh sách chuyên gia',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportDsChuyenGia({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            }),
         },
 
         {

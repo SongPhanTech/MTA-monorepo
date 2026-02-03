@@ -4,6 +4,7 @@ import { dayjs } from '@workspace/ui'
 import { CouncilRole, TrainingObjectTypes } from '@workspace/db/client'
 import type { ExcelTemplateBody } from '@workspace/libs/api/schemas'
 import { excelTemplate } from '@workspace/libs/api/model'
+import { toRoman } from './romans'
 
 interface ExportOptions {
     allStudentsInClasses: any[]
@@ -172,14 +173,79 @@ interface banSaoHDDGLV {
         toChucUyVien: string
         tenPb1: string
         toChucPb1: string
-        tenPhanBien2: string
-        toChucPhanBien2: string
+        tenPb2: string
+        toChucPb2: string
         ngay: string
         thang: string
         nam: string
     }
 }
-
+interface PhuLucQdhdHead {
+    data: {
+        khoa: string
+        dotXet: string
+        soQd: string
+        ngayQd: string
+    }
+}
+interface PhuLucQdhdTail {
+    data: {
+        soHoiDong: string
+    }
+}
+interface PhuLucQdhdData {
+    data: {
+        sttChuyenNganh: string
+        tenChuyenNganh: string
+        data: PhuLucQdhdTable[]
+    }
+}
+interface PhuLucQdhdTable {
+    sttHoiDong: string
+    contentDieu1: string
+    tenHocVien: string
+    ngaySinh: string
+    gvhd1: string
+    gvhd2: string
+    tenChuTich: string
+    toChucChuTich: string
+    tenThuKy: string
+    toChucThuKy: string
+    tenUyVien: string
+    toChucUyVien: string
+    tenPb1: string
+    toChucPb1: string
+    tenPb2: string
+    toChucPb2: string
+}
+interface PhuLucQdhdTemplateData {
+    head: PhuLucQdhdHead
+    tail: PhuLucQdhdTail
+    data: PhuLucQdhdData[]
+}
+interface DsChuyenGiaData {
+    data: {
+        ngay: string
+        thang: string
+        nam: string
+        diaDiem: string
+        thoiGian: string
+        tongTienSo: string
+        soChuyenGia: number
+        tongTienChu: string
+        data: DsChuyenGiaTable[]
+    }
+}
+interface DsChuyenGiaTable {
+    stt: string
+    tenChuyenGia: string
+    chucVu: string
+    donViQuanLi: string
+    soTien: string
+    stk: string
+    ngangHang: string
+    kiNhan: string
+}
 export const exportPhuLucDsLuanVan = async ({
     allStudentsInClasses,
     showSpinner,
@@ -1775,7 +1841,7 @@ export const exportBanSaoHDDGLV = async ({
     try {
         showSpinner?.()
         const dataConvert = convertToBanSaoHDDGLV(allStudentsInClasses)
-        console.log('dataConvert',dataConvert)
+
         if (!dataConvert) {
             message.error('Chưa có dữ liệu để xuất bản sao hội đồng bảo vệ luan van')
             return
@@ -1826,11 +1892,15 @@ const convertToBanSaoHDDGLV = (allStudentsInClasses: any[]): banSaoHDDGLV[] => {
         const qdDate = session?.defenseDecisionDate ? dayjs(session.defenseDecisionDate) : null
         let gvhd1 = ''
         if (project?.supervisor) {
-            gvhd1 = project?.supervisor?.lecturer ? `1.${project?.supervisor?.lecturer?.organization?.sTen}` : project?.supervisor?.name 
+            gvhd1 = project?.supervisor?.lecturer
+                ? `1.${project?.supervisor?.lecturer?.organization?.sTen}`
+                : project?.supervisor?.name
         }
         let gvhd2 = ''
         if (project?.coSupervisor) {
-            gvhd2 = project?.coSupervisor?.lecturer ? `2.${project?.coSupervisor?.lecturer?.organization?.sTen}` : project?.coSupervisor?.name || ''
+            gvhd2 = project?.coSupervisor?.lecturer
+                ? `2.${project?.coSupervisor?.lecturer?.organization?.sTen}`
+                : project?.coSupervisor?.name || ''
         }
         return {
             data: {
@@ -1855,29 +1925,290 @@ const convertToBanSaoHDDGLV = (allStudentsInClasses: any[]): banSaoHDDGLV[] => {
                 gvhd1: gvhd1 || '',
                 gvhd2: gvhd2 || '',
                 tenChuTich: chairman?.expert?.name || '',
-                toChucChuTich: (chairman?.expert?.lecturer
-                    ? chairman?.expert?.lecturer?.organization?.sTen
-                    : chairman?.expert?.organization) || '',
+                toChucChuTich:
+                    (chairman?.expert?.lecturer
+                        ? chairman?.expert?.lecturer?.organization?.sTen
+                        : chairman?.expert?.organization) || '',
                 tenThuKy: secretary?.expert?.name || '',
-                toChucThuKy: (secretary?.expert?.lecturer
-                    ? secretary?.expert?.lecturer?.organization?.sTen
-                    : secretary?.expert?.organization) || '',
+                toChucThuKy:
+                    (secretary?.expert?.lecturer
+                        ? secretary?.expert?.lecturer?.organization?.sTen
+                        : secretary?.expert?.organization) || '',
                 tenUyVien: member?.expert?.name || '',
-                toChucUyVien: (member?.expert?.lecturer
-                    ? member?.expert?.lecturer?.organization?.sTen
-                    : member?.expert?.organization) || '',
+                toChucUyVien:
+                    (member?.expert?.lecturer
+                        ? member?.expert?.lecturer?.organization?.sTen
+                        : member?.expert?.organization) || '',
                 tenPb1: pb1?.expert?.name || '',
-                toChucPb1: (pb1?.expert?.lecturer
-                    ? pb1?.expert?.lecturer?.organization?.sTen
-                    : pb1?.expert?.organization) || '',
-                tenPhanBien2: pb2?.expert?.name || '',
-                toChucPhanBien2: (pb2?.expert?.lecturer
-                    ? pb2?.expert?.lecturer?.organization?.sTen
-                    : pb2?.expert?.organization) || '',
+                toChucPb1:
+                    (pb1?.expert?.lecturer
+                        ? pb1?.expert?.lecturer?.organization?.sTen
+                        : pb1?.expert?.organization) || '',
+                tenPb2: pb2?.expert?.name || '',
+                toChucPb2:
+                    (pb2?.expert?.lecturer
+                        ? pb2?.expert?.lecturer?.organization?.sTen
+                        : pb2?.expert?.organization) || '',
                 ngay: currentDay,
                 thang: currentMonth,
                 nam: currentYear,
             },
         }
     })
+}
+export const exportPhuLucQdhdd = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
+}: ExportOptions) => {
+    if (!allStudentsInClasses?.length) {
+        message.error('Không có dữ liệu để xuất phụ lục QĐHĐ')
+        return []
+    }
+    try {
+        showSpinner?.()
+        const dataConvert = convertToPhuLucQdhdTemplateData(allStudentsInClasses)
+        if (!dataConvert) {
+            message.error('Chưa có dữ liệu để xuất phụ lục QĐHĐ')
+            return []
+        }
+        console.log('dataConvert', dataConvert)
+        const payload: ExcelTemplateBody = {
+            head: { data: dataConvert.head.data },
+            tail: { data: dataConvert.tail.data },
+            fileName: 'PhuLucQdhd',
+            path: 'PhuLucQDHoiDong.xlsx',
+            payload: dataConvert.data,
+            showGridLines: true,
+            wrapText: true,
+        }
+        const response = await excelTemplate(payload)
+        if (response.status !== 200) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            return []
+        }
+        const blob = response.data
+        downloadFile(blob, 'PhuLucQdhd.xlsx')
+        message.success('Xuất file thành công')
+    } catch (error) {
+        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+    } finally {
+        hideSpinner?.()
+    }
+}
+const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdhdTemplateData => {
+    if (!allStudentsInClasses?.length) {
+        return {
+            head: { data: { khoa: '', dotXet: '', soQd: '', ngayQd: '' } },
+            tail: { data: { soHoiDong: '0' } },
+            data: [],
+        }
+    }
+
+    const firstStudent = allStudentsInClasses[0]
+    const firstProject = firstStudent?.thesisRegistrations?.[0]?.thesisProject
+    console.log('firstProject', firstProject)
+    const session = firstProject?.thesisSession
+
+    const head: PhuLucQdhdHead = {
+        data: {
+            khoa: firstStudent?.fixedClass?.trainingCourse?.name || '',
+            dotXet: session?.name || '',
+            soQd: session?.defenseDecisionNumber || '',
+            ngayQd: session?.defenseDecisionDate
+                ? dayjs(session.defenseDecisionDate).format('DD/MM/YYYY')
+                : '',
+        },
+    }
+
+    const majorMap = new Map<string, any[]>()
+    allStudentsInClasses.forEach((student) => {
+        const majorName =
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+            'Chưa xác định'
+        if (!majorMap.has(majorName)) {
+            majorMap.set(majorName, [])
+        }
+        majorMap.get(majorName)?.push(student)
+    })
+
+    let totalCouncils = 0
+    const groupedData: PhuLucQdhdData[] = []
+    let majorIndex = 1
+
+    majorMap.forEach((students, majorName) => {
+        const tableRows: PhuLucQdhdTable[] = students.map((student, studentIdx) => {
+            const project = student.thesisRegistrations?.[0]?.thesisProject
+            const members = project?.council?.members || []
+            totalCouncils++
+
+            const getMember = (role: CouncilRole) => members.find((m: any) => m.role === role)
+
+            const chairman = getMember(CouncilRole.CHAIRMAN)
+            const secretary = getMember(CouncilRole.SECRETARY)
+            const reviewer1 = getMember(CouncilRole.REVIEWER_1)
+            const reviewer2 = getMember(CouncilRole.REVIEWER_2)
+            const member = getMember(CouncilRole.MEMBER)
+
+            return {
+                sttHoiDong: (studentIdx + 1).toString(),
+                contentDieu1: `${project?.type} tốt nghiệp thạc sĩ ngành ${student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ''},Khóa: ${student.fixedClass?.trainingCourse?.name || ''} (${student.fixedClass?.trainingCourse?.academicYear || ''}), Đề tài: ${project?.title || ''}`,
+                tenHocVien: student.userProfile?.fullname || '',
+                ngaySinh: student.userProfile?.dateOfBirth
+                    ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                    : '',
+                gvhd1: project?.supervisor?.name || '',
+                gvhd2: project?.coSupervisor?.name || '',
+
+                tenChuTich: chairman?.expert?.name || 'Chưa có thông tin chủ tịch',
+                toChucChuTich: chairman?.expert?.organization || '',
+
+                tenThuKy: secretary?.expert?.name || 'Chưa có thông tin thư ký',
+                toChucThuKy: secretary?.expert?.organization || '',
+
+                tenUyVien: member?.expert?.name || 'Chưa có thông tin ủy viên',
+                toChucUyVien: member?.expert?.organization || '',
+
+                tenPb1: reviewer1?.expert?.name || 'Chưa có thông tin PB1',
+                toChucPb1: reviewer1?.expert?.organization || '',
+
+                tenPb2: reviewer2?.expert?.name || 'Chưa có thông tin PB2',
+                toChucPb2: reviewer2?.expert?.organization || '',
+            }
+        })
+
+        groupedData.push({
+            data: {
+                sttChuyenNganh: toRoman(majorIndex),
+                tenChuyenNganh: majorName,
+                data: tableRows,
+            },
+        })
+        majorIndex++
+    })
+
+    return {
+        head,
+        tail: { data: { soHoiDong: totalCouncils.toString() } },
+        data: groupedData,
+    }
+}
+export const exportDsChuyenGia = async ({
+    allStudentsInClasses,
+    showSpinner,
+    hideSpinner,
+    message,
+}: ExportOptions) => {
+    if (!allStudentsInClasses?.length) {
+        message.error('Không có dữ liệu để xuất danh sách chuyên gia')
+        return []
+    }
+    try {
+        const dataConvert = convertToDsChuyenGiaData(allStudentsInClasses)
+        if (!dataConvert) {
+            message.error('Chưa có dữ liệu để xuất danh sách chuyên gia')
+            return []
+        }
+        showSpinner?.()
+        const payload: ExcelTemplateBody = {
+            head: { data: null },
+            tail: { data: null },
+            fileName: 'DsChuyenGia',
+            path: 'DanhSachChuyenGia.xlsx',
+            payload: [dataConvert],
+            showGridLines: true,
+            wrapText: true,
+        }
+        const response = await excelTemplate(payload)
+        if (response.status !== 200) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            return []
+        }
+        const blob = response.data
+        downloadFile(blob, 'DsChuyenGia.xlsx')
+        message.success('Xuất file thành công')
+    } catch (error) {
+        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+    } finally {
+        hideSpinner?.()
+    }
+}
+const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData => {
+    if (!allStudentsInClasses?.length) {
+        return {
+            data: {
+                ngay: '',
+                thang: '',
+                nam: '',
+                diaDiem: '',
+                thoiGian: '',
+                tongTienSo: '0',
+                soChuyenGia: 0,
+                tongTienChu: '0',
+                data: [],
+            },
+        }
+    }
+
+    const expertAggregator = new Map<string, any>()
+    const now = dayjs()
+
+    allStudentsInClasses.forEach((student) => {
+        const project = student?.thesisRegistrations?.[0]?.thesisProject
+        const members = project?.council?.members || []
+
+        members.forEach((member: any) => {
+            const expert = member.expert
+            if (!expert || expert.lecturerId || expert.lecturer) return
+
+            const expertId = expert.id
+            const amount = Number(member.payment?.amount || 0)
+
+            if (!expertAggregator.has(expertId)) {
+                expertAggregator.set(expertId, {
+                    tenChuyenGia: expert.name || '',
+                    chucVu: expert.position || expert.academicDegree || '',
+                    donViQuanLi: expert.organization || expert.workplace || '',
+                    soTienRaw: 0,
+                    stk: expert.bankAccountNumber || '',
+                    ngangHang: expert.bankName || '',
+                })
+            }
+
+            const current = expertAggregator.get(expertId)
+            current.soTienRaw += amount
+        })
+    })
+
+    let totalSum = 0
+    const tableData: DsChuyenGiaTable[] = Array.from(expertAggregator.values()).map(
+        (item, index) => {
+            totalSum += item.soTienRaw
+            return {
+                stt: (index + 1).toString(),
+                tenChuyenGia: item.tenChuyenGia,
+                chucVu: item.chucVu,
+                donViQuanLi: item.donViQuanLi,
+                soTien: item.soTienRaw.toLocaleString('vi-VN'),
+                stk: item.stk,
+                ngangHang: item.ngangHang,
+                kiNhan: '',
+            }
+        }
+    )
+
+    return {
+        data: {
+            ngay: now.format('DD'),
+            thang: now.format('MM'),
+            nam: now.format('YYYY'),
+            diaDiem: 'Hà Nội',
+            thoiGian: `Ngày ${now.format('DD')} tháng ${now.format('MM')} năm ${now.format('YYYY')}`,
+            tongTienSo: totalSum.toLocaleString('vi-VN'),
+            soChuyenGia: tableData.length,
+            tongTienChu: Number(totalSum).toVndWord('đồng'),
+            data: tableData,
+        },
+    }
 }
