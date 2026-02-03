@@ -7,7 +7,10 @@ import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import type { AcademicRankingConvert, FixedClass } from '@workspace/db/client'
 import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from '@workspace/db/hooks'
-import { useCalculateStudentSchoolYearResult } from '@workspace/libs/api/training'
+import {
+    useCalculateStudentSchoolYearResult,
+    useExportStudentYearResult,
+} from '@workspace/libs/api/training'
 import {
     Select,
     SelectTrainingCourseStore,
@@ -17,6 +20,7 @@ import {
 } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { saveAs } from 'file-saver'
 import 'dayjs/locale/vi'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -167,6 +171,7 @@ const DiemTrungBinhKyHoc = () => {
     )
 
     const { mutateAsync: calculateSchoolYearResult } = useCalculateStudentSchoolYearResult()
+    const { mutateAsync: exportExcel } = useExportStudentYearResult()
 
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -222,6 +227,29 @@ const DiemTrungBinhKyHoc = () => {
         }
     }
 
+    const handleExportExcel = async () => {
+        if (!semesterId) {
+            message.warning('Vui lòng chọn học kỳ')
+            return
+        }
+
+        if (!trainingObjectTypeId) {
+            message.warning('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
+
+        const res = await exportExcel({
+            data: { semesterId, trainingObjectTypeId },
+        })
+
+        if (res.status === 200) {
+            message.success('Xuất file thành công')
+            saveAs(res.data, 'KET_QUA_HOC_TAP_NAM.xlsx')
+        } else {
+            message.error(res.data?.message || 'Xuất file thất bại')
+        }
+    }
+
     return (
         <div className="bg-white rounded-lg shadow-sm px-4">
             <Row>
@@ -253,6 +281,9 @@ const DiemTrungBinhKyHoc = () => {
                             <Flex justify="end">
                                 <Button type="primary" onClick={handleSummaryClick}>
                                     Tổng kết kết quả năm học
+                                </Button>
+                                <Button type="primary" onClick={handleExportExcel}>
+                                    Xuất excel
                                 </Button>
                             </Flex>
                         </Col>

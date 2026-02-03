@@ -1,5 +1,6 @@
 import { getTemplateBuffer } from '@workspace/libs/server'
 import dayjs from 'dayjs'
+import { HTTPException } from 'hono/http-exception'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 
@@ -175,15 +176,32 @@ export async function exportStudentSemesterResult({
 // ${table:data.disciplinaryWarningLevel}	Disciplinary Warning Level.
 // ${table:data.note}	Note.
 export async function exportStudentYearResult({
+    semesterId,
     schoolYearId,
     trainingObjectTypeId,
 }: {
-    schoolYearId: string
+    semesterId?: string
+    schoolYearId?: string
     trainingObjectTypeId: string
 }) {
-    const schoolYear = await prisma.schoolYear.findUniqueOrThrow({
-        where: { id: schoolYearId },
+    const schoolYear = await prisma.schoolYear.findFirst({
+        where: {
+            OR: [
+                { id: schoolYearId },
+                {
+                    semesters: {
+                        some: {
+                            id: semesterId,
+                        },
+                    },
+                },
+            ],
+        },
     })
+
+    if (!schoolYear) {
+        throw new HTTPException(404, { message: 'Không tìm thấy năm học' })
+    }
 
     const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
         where: { id: trainingObjectTypeId },
@@ -191,7 +209,7 @@ export async function exportStudentYearResult({
 
     const studentYearResults = await prisma.studentYearResult.findMany({
         where: {
-            schoolYearId,
+            schoolYearId: schoolYear.id,
             student: {
                 curriculumVersion: {
                     trainingObjectTypeId,

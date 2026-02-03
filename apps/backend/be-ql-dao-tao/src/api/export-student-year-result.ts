@@ -15,7 +15,8 @@ const exportStudentYearResultRoute = createRoute({
             content: {
                 'application/json': {
                     schema: z.object({
-                        schoolYearId: z.string(),
+                        semesterId: z.string().optional(),
+                        schoolYearId: z.string().optional(),
                         trainingObjectTypeId: z.string(),
                     }),
                 },
@@ -43,10 +44,14 @@ const exportStudentYearResultRoute = createRoute({
 })
 
 app.openapi(exportStudentYearResultRoute, async (c) => {
-    const { schoolYearId, trainingObjectTypeId } = c.req.valid('json')
+    const { semesterId, schoolYearId, trainingObjectTypeId } = c.req.valid('json')
 
     try {
-        const result = await exportStudentYearResult({ schoolYearId, trainingObjectTypeId })
+        const result = await exportStudentYearResult({
+            semesterId,
+            schoolYearId,
+            trainingObjectTypeId,
+        })
 
         const fileName = 'KET_QUA_HOC_TAP_NAM.xlsx'
         const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
