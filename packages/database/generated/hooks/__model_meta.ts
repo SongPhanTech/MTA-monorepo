@@ -8886,6 +8886,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
+                }, scoreLinkSheets: {
+                    name: "scoreLinkSheets",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -9563,6 +9569,12 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'fixedClasses',
                     isRelationOwner: true,
+                }, scoreLinkSheets: {
+                    name: "scoreLinkSheets",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'fixedClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10390,6 +10402,12 @@ const metadata: ModelMeta = {
                 }, examFramework: {
                     name: "examFramework",
                     type: "ExamFramework",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersion',
+                }, scoreLinkSubjectVersion: {
+                    name: "scoreLinkSubjectVersion",
+                    type: "ScoreLinkSubjectVersion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectVersion',
@@ -11227,6 +11245,18 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'enterGradeLecturer',
+                }, scoreLinkSubjectVersion: {
+                    name: "scoreLinkSubjectVersion",
+                    type: "ScoreLinkSubjectVersion",
+                    isDataModel: true,
+                    backLink: 'subjectClass',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSubjectVersionId" },
+                }, scoreLinkSubjectVersionId: {
+                    name: "scoreLinkSubjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSubjectVersion',
                 }, subjectClassStudent: {
                     name: "subjectClassStudent",
                     type: "StudentSubjectScore",
@@ -11307,6 +11337,9 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, scoreLinkSubjectVersionId: {
+                    name: "scoreLinkSubjectVersionId",
+                    fields: ["scoreLinkSubjectVersionId"]
                 },
             },
         },
@@ -12003,6 +12036,12 @@ const metadata: ModelMeta = {
                 }, scoreCorrectionTicket: {
                     name: "scoreCorrectionTicket",
                     type: "ScoreCorrectionTicket",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -14184,6 +14223,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',
+                }, scoreLinkStudent: {
+                    name: "scoreLinkStudent",
+                    type: "ScoreLinkStudent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
                 }, classRegisterLogs: {
                     name: "classRegisterLogs",
                     type: "ClassRegisterLogs",
@@ -14969,6 +15014,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'studentScoreConvert',
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSheetId" },
+                }, scoreLinkSheetId: {
+                    name: "scoreLinkSheetId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSheet',
                 }, examFramework: {
                     name: "examFramework",
                     type: "ExamFramework",
@@ -23433,6 +23492,279 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        scoreLinkSheet: {
+            name: 'ScoreLinkSheet', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreLinkSheet$createdBy,
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'scoreLinkSheet',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
+                }, decision: {
+                    name: "decision",
+                    type: "String",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ScoreLinkStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, fixedClass: {
+                    name: "fixedClass",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    backLink: 'scoreLinkSheets',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "fixedClassId" },
+                }, fixedClassId: {
+                    name: "fixedClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'fixedClass',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    backLink: 'scoreLinkSheets',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, scoreLinkSubjectVersions: {
+                    name: "scoreLinkSubjectVersions",
+                    type: "ScoreLinkSubjectVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'scoreLinkSheet',
+                }, documents: {
+                    name: "documents",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'scoreLinkSheet',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        scoreLinkSubjectVersion: {
+            name: 'ScoreLinkSubjectVersion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreLinkSubjectVersion$createdBy,
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    backLink: 'scoreLinkSubjectVersions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSheetId" },
+                }, scoreLinkSheetId: {
+                    name: "scoreLinkSheetId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSheet',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    backLink: 'scoreLinkSubjectVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, scoreLinkStudents: {
+                    name: "scoreLinkStudents",
+                    type: "ScoreLinkStudent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'scoreLinkSubjectVersion',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'scoreLinkSubjectVersion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, scoreLinkSheetId_subjectVersionId: {
+                    name: "scoreLinkSheetId_subjectVersionId",
+                    fields: ["scoreLinkSheetId", "subjectVersionId"]
+                },
+            },
+        },
+        scoreLinkStudent: {
+            name: 'ScoreLinkStudent', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreLinkStudent$createdBy,
+                }, scoreLinkSubjectVersion: {
+                    name: "scoreLinkSubjectVersion",
+                    type: "ScoreLinkSubjectVersion",
+                    isDataModel: true,
+                    backLink: 'scoreLinkStudents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSubjectVersionId" },
+                }, scoreLinkSubjectVersionId: {
+                    name: "scoreLinkSubjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSubjectVersion',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'scoreLinkStudent',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Float",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, scoreLinkSubjectVersionId_studentId: {
+                    name: "scoreLinkSubjectVersionId_studentId",
+                    fields: ["scoreLinkSubjectVersionId", "studentId"]
+                },
+            },
+        },
         note: {
             name: 'Note', fields: {
                 id: {
@@ -26915,6 +27247,18 @@ function $default$RankingCondition$createdBy(user: any): unknown {
 }
 
 function $default$DiplomaVerificationApplication$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ScoreLinkSheet$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ScoreLinkSubjectVersion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ScoreLinkStudent$createdBy(user: any): unknown {
     return user?.id;
 }
 
