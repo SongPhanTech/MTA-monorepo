@@ -16,12 +16,13 @@ import Table from '@components/commons/table'
 import CreateIcon from '@components/icons/create'
 import EditIcon from '@components/icons/edit'
 import DeleteIcon from '@components/icons/delete'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 
 export default function KhungDeList() {
     const queryClient = new QueryClient()
     const examFrameworkId = useStore(store, (s) => s.examFrameworkId)
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(10)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         evidenceName: '',
@@ -149,7 +150,7 @@ export default function KhungDeList() {
             <Col span={24}>
                 <Table
                     rowKey="id"
-                    dataSource={filteredList}
+                    data={filteredList}
                     filters={filters}
                     setFilters={setFilters}
                     pagination={{
@@ -192,15 +193,21 @@ export default function KhungDeList() {
                             title: 'STT',
                             width: '40px',
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_, __, index) =>
+                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
                             title: 'Tên khung đề',
                             dataIndex: 'name',
+                            width: '300px',
                             type: 'input',
-                            align: 'center',
-                            render: (name) =>
-                                examFrameworkList.length > 50 ? `${name.slice(0, 50)}...` : name,
+                            render: (name) => (
+                                <span className="text-left">
+                                    {examFrameworkList.length > 50
+                                        ? `${name.slice(0, 50)}...`
+                                        : name}
+                                </span>
+                            ),
                         },
                         {
                             title: 'Thời gian thi',
@@ -219,8 +226,13 @@ export default function KhungDeList() {
                             title: 'Môn học',
                             dataIndex: 'subjectVersion',
                             type: 'input',
-                            align: 'center',
+                            width: '250px',
                             render: (_, record) => record?.subjectVersion?.name || '',
+                        },
+                        {
+                            title: 'Mô tả',
+                            width: '200px',
+                            render: (_, record) => record?.description || '',
                         },
                         {
                             title: 'Thao tác',

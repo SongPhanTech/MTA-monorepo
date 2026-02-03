@@ -1,10 +1,9 @@
-import type { PrismaClient } from './client'
 
 export { createId } from '@paralleldrive/cuid2'
 export * from '../generated/prisma-client'
 export { enhance } from '../generated/zenstack/enhance'
 
-export const getOrganizationAndAllChildren = async (prisma: PrismaClient, rootId: string) => {
+export const getOrganizationAndAllChildren = async (prisma: any, rootId: string) => {
     const allOrgs = await prisma.dM_DonVi.findMany()
 
     const childrenMap = new Map<string, typeof allOrgs>()

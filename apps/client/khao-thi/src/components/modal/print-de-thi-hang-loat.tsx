@@ -8,6 +8,39 @@ import { queryClient } from '@api/index'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { TemplateHandler } from 'easy-template-x'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
+import type { Prisma } from '@workspace/db/client'
+
+export type ExamBankType = Prisma.ExamBankGetPayload<{
+    include: {
+        exam: {
+            include: {
+                semester: true
+                subjectVersion: true
+            }
+        }
+        questions: {
+            include: {
+                question: true
+            }
+        }
+        subjectClass: {
+            select: {
+                name: true
+                id: true
+                code: true
+            }
+        }
+        examMatrix: {
+            include: {
+                examFramework: {
+                    select: {
+                        time: true
+                    }
+                }
+            }
+        }
+    }
+}>
 
 const PrintBatchExamBank = () => {
     const [name, setName] = useState('Nguyễn Văn A')
@@ -80,50 +113,53 @@ const PrintBatchExamBank = () => {
         documentTitle: `De-Thi-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name || 'Exam'}`,
     })
 
-    const allowMaterials = true
-
     // Download file
     const handleDownload = async () => {
         if (!exams) return
         const res = await fetch(getMinioUrl('mta/template/template-de-thi-hang-loat.docx'))
         const templateFile = await res.blob()
 
-        const currentDate = new Date()
-        const day = currentDate.getDate()
-        const month = currentDate.getMonth() + 1
-        const year = currentDate.getFullYear()
-
         const templateData = {
-            exams: exams.map((exam, index) => ({
-                semester: exam?.exam?.semester?.name || '',
-                className: exam?.subjectClass?.name || '',
-                day,
-                month,
-                year,
-                semesterName: exam?.exam?.semester?.name || '',
-                examCode: exam?.examCode || '',
-                subjectName: exam?.exam?.subjectVersion?.name || '',
-                duration: duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
-                teacherName: name,
-                allowMaterials: allowMaterials ? '(Được sử dụng tài liệu)' : '',
-                questions:
-                    exam?.questions?.map((q: any, qIndex: number) => ({
-                        order: q?.order || qIndex + 1,
-                        point: Number(q?.question?.point || 0).toFixed(1),
-                        content: convertHtmlBreaks(q?.question?.content || ''),
-                    })) || [],
-                isLastExam: index === exams.length - 1,
-            })),
+            exams: exams.map((exam, index) => {
+                const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
+                return {
+                    semester: exam?.exam?.semester?.name || '',
+                    className: exam?.subjectClass?.name || '',
+                    day: examDate.getDate(),
+                    month: examDate.getMonth() + 1,
+                    year: examDate.getFullYear(),
+                    semesterName: exam?.exam?.semester?.name || '',
+                    examCode: exam?.examCode || '',
+                    subjectName: exam?.exam?.subjectVersion?.name || '',
+                    duration:
+                        duration ||
+                        exam?.examMatrix?.examFramework?.time ||
+                        exam?.exam?.duration ||
+                        30,
+                    teacherName: name,
+                    isNote:
+                        exam?.isNote === true
+                            ? 'Được sử dụng tài liệu'
+                            : exam?.explain || 'Không được sử dụng tài liệu',
+                    questions:
+                        exam?.questions?.map((q: any, qIndex: number) => ({
+                            order: q?.order || qIndex + 1,
+                            point: Number(q?.question?.point || 0).toFixed(1),
+                            content: convertHtmlBreaks(q?.question?.content || ''),
+                        })) || [],
+                    isLastExam: index === exams.length - 1,
+                }
+            }),
         }
 
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
         saveFile(`De-Thi-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name}.docx`, doc)
+        setHasDownloaded(true)
     }
 
     const handleClose = async () => {
         if (hasDownloaded) {
-            // Cập nhật isLock cho tất cả các đề đã tải
             await Promise.all(
                 exams.map((exam) =>
                     updateExamBank({
@@ -140,12 +176,11 @@ const PrintBatchExamBank = () => {
         onClose()
     }
 
-    // Render preview cho một đề thi
-    const renderExamPreview = (exam: any, index: number) => {
-        const currentDate = new Date()
-        const day = currentDate.getDate()
-        const month = currentDate.getMonth() + 1
-        const year = currentDate.getFullYear()
+    const renderExamPreview = (exam: ExamBankType, index: number) => {
+        const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
+        const day = examDate.getDate()
+        const month = examDate.getMonth() + 1
+        const year = examDate.getFullYear()
 
         return (
             <div key={exam.id}>
@@ -306,11 +341,13 @@ const PrintBatchExamBank = () => {
                         <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>
                             -----HẾT-----
                         </div>
-                        {allowMaterials && (
-                            <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
-                                (Được sử dụng tài liệu)
-                            </div>
-                        )}
+                        <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
+                            {exam?.isNote
+                                ? '(Được sử dụng tài liệu)'
+                                : exam?.explain
+                                  ? `(${exam.explain})`
+                                  : '(Không được sử dụng tài liệu)'}
+                        </div>
                     </div>
 
                     {/* Note */}

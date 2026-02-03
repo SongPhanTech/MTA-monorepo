@@ -7,12 +7,13 @@ import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type {
-    FixedClass,
-    TrainingCourse,
-    TrainingField,
-    TrainingMajor,
-    TrainingObjectType,
+import {
+    $Enums,
+    type FixedClass,
+    type TrainingCourse,
+    type TrainingField,
+    type TrainingMajor,
+    type TrainingObjectType,
 } from '@workspace/db/client'
 import {
     useCountGraduationDecision,
@@ -25,6 +26,7 @@ import {
     useFindManyTrainingField,
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -35,7 +37,6 @@ import { BookCheckIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
-import { whereOrganization } from '@workspace/libs/constants'
 export default function GraduationDecisionDiploma() {
     const { can, canSome } = useAbility()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -331,6 +332,9 @@ export default function GraduationDecisionDiploma() {
                                     },
                                 },
                                 awards: {
+                                    where: {
+                                        status: $Enums.ArchivedCertificateStatus.APPROVED,
+                                    },
                                     include: {
                                         archivedAward: true,
                                     },

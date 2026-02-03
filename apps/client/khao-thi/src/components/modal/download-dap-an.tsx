@@ -83,10 +83,10 @@ const PrintExplanation = () => {
         documentTitle: `Dap-An-${data?.exam?.subjectVersion?.name || 'Exam'}`,
     })
 
-    const currentDate = new Date()
-    const day = currentDate.getDate()
-    const month = currentDate.getMonth() + 1
-    const year = currentDate.getFullYear()
+    const examDate = data?.examDay ? new Date(data.examDay) : new Date()
+    const day = examDate.getDate()
+    const month = examDate.getMonth() + 1
+    const year = examDate.getFullYear()
 
     // Download file
     const handleDownload = async () => {

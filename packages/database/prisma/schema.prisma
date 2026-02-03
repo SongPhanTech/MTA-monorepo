@@ -5676,6 +5676,7 @@ model ExamBank {
   examMatrix     ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
   examMatrixId   String?
   isLock         Boolean?           @default(false)
+  isNote         Boolean?           @default(false)
 
   @@unique([examId, examCode])
   @@schema("khao-thi")

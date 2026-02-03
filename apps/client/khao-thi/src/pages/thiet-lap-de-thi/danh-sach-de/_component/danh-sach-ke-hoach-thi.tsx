@@ -156,7 +156,11 @@ export default function DanhSachKeHoachThi() {
                         marginTop: '10px',
                     }}
                     onRow={(record) => ({
-                        className: cn(selectedExamId === record.id && 'bg-orange-100'),
+                        className: cn(
+                            selectedExamId === record.id
+                                ? '!bg-orange-200 hover:!bg-orange-200 [&>td]:!bg-orange-200 [&>td]:hover:!bg-orange-200'
+                                : ''
+                        ),
                         onClick: (e) => {
                             const target = e.target as HTMLElement
                             if (

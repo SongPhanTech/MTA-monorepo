@@ -25,7 +25,7 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { graduationApplicationInit, useGraduationCheck } from '@workspace/libs/api/training'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip, Divider } from 'antd'
+import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons'
 import type { TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
@@ -273,7 +273,7 @@ export default function StudentGraduationApplication() {
                     item.student?.archivedCertificate?.map((ac: any) => ac.certificateId) || []
                 )
                 hasAllRequiredCerts = requiredCertificateIds.every((certId) =>
-                    studentCertificateSet!.has(certId)
+                    studentCertificateSet?.has(certId)
                 )
             }
 

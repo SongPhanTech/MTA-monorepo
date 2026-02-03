@@ -8,6 +8,44 @@ import { queryClient } from '@api/index'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { TemplateHandler } from 'easy-template-x'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
+import type { Prisma } from '@workspace/db/client'
+
+type ExamBankQuestionType = Prisma.ExamBankGetPayload<{
+    include: {
+        exam: {
+            include: {
+                semester: true
+                subjectVersion: true
+            }
+        }
+        questions: {
+            include: {
+                question: {
+                    include: {
+                        multipleChoiceOptions: true
+                        fillInBlankSlots: true
+                        orderingItems: true
+                    }
+                }
+            }
+        }
+        subjectClass: {
+            select: {
+                id: true
+                name: true
+            }
+        }
+        examMatrix: {
+            include: {
+                examFramework: {
+                    select: {
+                        time: true
+                    }
+                }
+            }
+        }
+    }
+}>
 
 const PrintBatchExplanation = () => {
     const [name, setName] = useState('Nguyễn Văn A')
@@ -93,66 +131,71 @@ const PrintBatchExplanation = () => {
         const res = await fetch(getMinioUrl('mta/template/template-dap-an-hang-loat-bk.docx'))
         const templateFile = await res.blob()
 
-        const currentDate = new Date()
-        const day = currentDate.getDate()
-        const month = currentDate.getMonth() + 1
-        const year = currentDate.getFullYear()
-
         const templateData = {
-            exams: exams.map((exam, index) => ({
-                semester: exam?.exam?.semester?.name || '',
-                className: exam?.subjectClass?.name || '',
-                day,
-                month,
-                year,
-                semesterName: exam?.exam?.semester?.name || '',
-                examCode: exam?.examCode || '',
-                subjectName: exam?.exam?.subjectVersion?.name || '',
-                duration: duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
-                teacherName: name,
-                questions:
-                    exam?.questions?.map((q, qIndex) => {
-                        const question = q?.question
-                        let answer = ''
+            exams: exams.map((exam, index) => {
+                const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
+                return {
+                    semester: exam?.exam?.semester?.name || '',
+                    className: exam?.subjectClass?.name || '',
+                    day: examDate.getDate(),
+                    month: examDate.getMonth() + 1,
+                    year: examDate.getFullYear(),
+                    semesterName: exam?.exam?.semester?.name || '',
+                    examCode: exam?.examCode || '',
+                    subjectName: exam?.exam?.subjectVersion?.name || '',
+                    duration:
+                        duration ||
+                        exam?.examMatrix?.examFramework?.time ||
+                        exam?.exam?.duration ||
+                        30,
+                    teacherName: name,
+                    questions:
+                        exam?.questions?.map((q, qIndex) => {
+                            const question = q?.question
+                            let answer = ''
 
-                        // Xử lý đáp án theo loại câu hỏi
-                        if (
-                            question?.multipleChoiceOptions &&
-                            question?.multipleChoiceOptions?.length > 0
-                        ) {
-                            // Lấy các đáp án đúng
-                            const correctAnswers = question.multipleChoiceOptions
-                                .filter((option) => option?.isCorrect)
-                                .map((option) => convertHtmlBreaks(option?.content || ''))
-                                .join(', ')
-                            answer = correctAnswers
-                        } else if (question?.orderingItems && question?.orderingItems?.length > 0) {
-                            // Hiển thị thứ tự đúng
-                            const orderSequence = question.orderingItems
-                                .sort((a, b) => (a?.correctOrder || 0) - (b?.correctOrder || 0))
-                                .map((_, idx) => String.fromCharCode(65 + idx))
-                                .join(' → ')
-                            answer = orderSequence
-                        } else {
-                            // Các loại câu hỏi khác (tự luận, điền chỗ trống, v.v.)
-                            answer = convertHtmlBreaks(question?.explanation || '')
-                        }
+                            // Xử lý đáp án theo loại câu hỏi
+                            if (
+                                question?.multipleChoiceOptions &&
+                                question?.multipleChoiceOptions?.length > 0
+                            ) {
+                                // Lấy các đáp án đúng
+                                const correctAnswers = question.multipleChoiceOptions
+                                    .filter((option) => option?.isCorrect)
+                                    .map((option) => convertHtmlBreaks(option?.content || ''))
+                                    .join(', ')
+                                answer = correctAnswers
+                            } else if (
+                                question?.orderingItems &&
+                                question?.orderingItems?.length > 0
+                            ) {
+                                // Hiển thị thứ tự đúng
+                                const orderSequence = question.orderingItems
+                                    .sort((a, b) => (a?.correctOrder || 0) - (b?.correctOrder || 0))
+                                    .map((_, idx) => String.fromCharCode(65 + idx))
+                                    .join(' → ')
+                                answer = orderSequence
+                            } else {
+                                // Các loại câu hỏi khác (tự luận, điền chỗ trống, v.v.)
+                                answer = convertHtmlBreaks(question?.explanation || '')
+                            }
 
-                        return {
-                            order: q?.order || qIndex + 1,
-                            point: Number(question?.point || 0).toFixed(1),
-                            content: convertHtmlBreaks(question?.content || ''),
-                            answer: answer,
-                        }
-                    }) || [],
-                isLastExam: index === exams.length - 1,
-            })),
+                            return {
+                                order: q?.order || qIndex + 1,
+                                point: Number(question?.point || 0).toFixed(1),
+                                content: convertHtmlBreaks(question?.content || ''),
+                                answer: answer,
+                            }
+                        }) || [],
+                    isLastExam: index === exams.length - 1,
+                }
+            }),
         }
 
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
-
         saveFile(`Dap-An-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name}.docx`, doc)
+        setHasDownloaded(true)
     }
 
     const handleClose = async () => {
@@ -175,11 +218,11 @@ const PrintBatchExplanation = () => {
     }
 
     // Render preview cho một đáp án
-    const renderAnswerPreview = (exam: any, index: number) => {
-        const currentDate = new Date()
-        const day = currentDate.getDate()
-        const month = currentDate.getMonth() + 1
-        const year = currentDate.getFullYear()
+    const renderAnswerPreview = (exam: ExamBankQuestionType, index: number) => {
+        const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
+        const day = examDate.getDate()
+        const month = examDate.getMonth() + 1
+        const year = examDate.getFullYear()
 
         return (
             <div key={exam.id}>

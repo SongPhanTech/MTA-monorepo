@@ -97,10 +97,9 @@ const PickQuestionFromBankModal = () => {
     )
     const where = useMemo(
         () => ({
-            deletedAt: null as null,
+            deletedAt: null,
             questionBankId,
-            knowledgeBlockId: null as string | null,
-
+            knowledgeBlockId: knowledgeBlockId,
             ...(filters.questionType && filters.questionType.length > 0
                 ? {
                       type: { in: filters.questionType },
@@ -134,6 +133,7 @@ const PickQuestionFromBankModal = () => {
             filters.content,
             filters.difficult,
             filters.knowledgeBlockId,
+            knowledgeBlockId,
         ]
     )
     const { data: questions = [] } = useFindManyQuestion(
@@ -465,7 +465,7 @@ const PickQuestionFromBankModal = () => {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                        dataSource={questions}
+                        data={questions}
                         scroll={{ y: 420 }}
                         pagination={{
                             current: currentPage,

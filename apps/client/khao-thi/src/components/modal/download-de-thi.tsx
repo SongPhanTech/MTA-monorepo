@@ -61,6 +61,8 @@ const PrintExamBank = () => {
         }
     )
 
+    console.log('data: ', data)
+
     const subjectClassName = data?.subjectClass?.name || ''
 
     // Tự động fill thời gian từ examFramework
@@ -77,16 +79,14 @@ const PrintExamBank = () => {
         documentTitle: `De-Thi-${data?.exam?.subjectVersion?.name || 'Exam'}`,
     })
 
-    const allowMaterials = true
-
-    const currentDate = new Date()
-    const day = currentDate.getDate()
-    const month = currentDate.getMonth() + 1
-    const year = currentDate.getFullYear()
+    const examDate = data?.examDay ? new Date(data.examDay) : new Date()
+    const day = examDate.getDate()
+    const month = examDate.getMonth() + 1
+    const year = examDate.getFullYear()
 
     const handleDownload = async () => {
         if (!data) return
-        const res = await fetch(getMinioUrl('mta/template/template-de-thi.docx'))
+        const res = await fetch(getMinioUrl('mta/template/template-de-thi-bk.docx'))
         const templateFile = await res.blob()
 
         const templateData = {
@@ -94,7 +94,13 @@ const PrintExamBank = () => {
             subjectName: data.exam?.subjectVersion?.name || '',
             semesterName: data.exam?.semester?.name || '',
             className: data.subjectClass?.name || '',
-            duration: String(duration || data.examMatrix?.examFramework?.time || data.exam?.duration || ''),
+            duration: String(
+                duration || data.examMatrix?.examFramework?.time || data.exam?.duration || ''
+            ),
+            isNote:
+                data?.isNote === true
+                    ? 'Được sử dụng tài liệu'
+                    : data?.explain || 'Không được sử dụng tài liệu',
             day: String(day),
             month: String(month),
             year: String(year),
@@ -110,6 +116,7 @@ const PrintExamBank = () => {
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
         saveFile(`De-Thi-${data?.exam?.subjectVersion?.name}.docx`, doc)
+        setHasDownloaded(true)
     }
 
     const handleClose = async () => {
@@ -319,11 +326,13 @@ const PrintExamBank = () => {
                         <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>
                             -----HẾT-----
                         </div>
-                        {allowMaterials && (
-                            <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
-                                (Được sử dụng tài liệu)
-                            </div>
-                        )}
+                        <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
+                            {data?.isNote
+                                ? '(Được sử dụng tài liệu)'
+                                : data?.explain
+                                  ? `(${data.explain})`
+                                  : '(Không được sử dụng tài liệu)'}
+                        </div>
                     </div>
 
                     {/* Note */}

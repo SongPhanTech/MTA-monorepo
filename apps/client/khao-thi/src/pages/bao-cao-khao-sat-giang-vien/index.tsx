@@ -129,20 +129,20 @@ export default function BaoCaoGiangVien() {
         {
             where: {
                 iLoaiDonVi: {
-                    in: [0,5, 6, 7],
+                    in: [0, 5, 6, 7],
                 },
             },
-            select:{
-                Id:true,
-                sMa:true,
-                sTen:true,
-                bActive:true,
+            select: {
+                Id: true,
+                sMa: true,
+                sTen: true,
+                bActive: true,
                 iCapDonVi: true,
                 iDictionaryKey: true,
-                iLoaiDonVi:true ,
+                iLoaiDonVi: true,
                 iNhomDonVi: true,
-                sParentId:true
-            }
+                sParentId: true,
+            },
         },
 
         {
@@ -157,11 +157,11 @@ export default function BaoCaoGiangVien() {
                     ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
                 },
             },
-            organization:{
-                 iLoaiDonVi: {
-                    in: [0,5, 6, 7],
+            organization: {
+                iCapDonVi: {
+                    in: [0, 2, 3],
                 },
-            }
+            },
         },
         orderBy: {
             userProfile: {
@@ -267,47 +267,44 @@ export default function BaoCaoGiangVien() {
                 )
             }
 
-            if (selectedItem?.id && selectedItem?.iCapDonVi === 2) {
+            if (selectedItem?.id && selectedItem?.iCapDonVi) {
                 return (
                     <SurveyOrganizationReport
                         selectedId={filters.clusterId}
                         organizationId={selectedItem.id}
                         surveyName={filters?.surveyName}
                         trainingObjectTypeName={trainingObjectTypeName}
-                        organizationCode={selectedItem.sMa}
-                        organizationName={selectedItem.sTen}
-                    />
-                )
-            }
-
-            if (selectedItem?.id && selectedItem?.iCapDonVi === 3) {
-                return (
-                    <SurveyOrganizationReport
-                        selectedId={filters.clusterId}
-                        organizationId={selectedItem.id}
-                        surveyName={filters?.surveyName}
-                        trainingObjectTypeName={trainingObjectTypeName}
-                        departmentName={selectedItem.sTen}
-                        departmentCode={selectedItem.sMa}
-                        organizationName={selectedItem.parent?.sTen}
-                        organizationCode={selectedItem.parent?.sMa}
+                        organizationName={
+                            selectedItem.iCapDonVi === 3
+                                ? selectedItem.parent?.sTen
+                                : selectedItem.sTen
+                        }
+                        organizationCode={
+                            selectedItem.iCapDonVi === 3
+                                ? selectedItem.parent?.sMa
+                                : selectedItem.sMa
+                        }
+                        departmentName={selectedItem.iCapDonVi === 3 ? selectedItem.sTen : ''}
+                        departmentCode={selectedItem.iCapDonVi === 3 ? selectedItem.sMa : ''}
                     />
                 )
             }
 
             if (selectedItem?.id && !selectedItem?.iCapDonVi) {
+                const org = selectedItem.organization
+                const isDepartment = org?.iCapDonVi === 3
                 return (
                     <SurveylecturerReport
                         selectedId={filters?.clusterId}
                         lectureId={selectedItem?.id}
                         surveyName={filters?.surveyName}
                         trainingObjectTypeName={trainingObjectTypeName}
-                        organizationName={selectedItem.parent?.sTen}
-                        organizationCode={selectedItem.parent?.sMa}
+                        organizationName={isDepartment ? org.parent?.sTen : org?.sTen}
+                        organizationCode={isDepartment ? org.parent?.sMa : org?.sMa}
                         lecturerName={selectedItem?.userProfile?.fullName}
-                        lecturerCode={selectedItem?.sMa}
-                        departmentName={selectedItem?.organization?.sTen}
-                        departmentCode={selectedItem?.organization?.sMa}
+                        lecturerCode={selectedItem?.code}
+                        departmentName={isDepartment ? org?.sTen : ''}
+                        departmentCode={isDepartment ? org?.sMa : ''}
                     />
                 )
             }
@@ -418,7 +415,7 @@ export default function BaoCaoGiangVien() {
                 )}
             </Col>
 
-            <Col span={18}>{items}</Col>
+            <Col span={18}>{isFetching ?<Skeleton />:items}</Col>
         </Row>
     )
 }

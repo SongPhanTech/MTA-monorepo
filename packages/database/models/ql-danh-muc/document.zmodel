@@ -66,14 +66,17 @@ model DocumentFile extends Base {
   studentScoreConvert        StudentScoreConvert?            @relation(fields: [studentScoreConvertId], references: [id])
   studentScoreConvertId      String?
 
+  examFramework              ExamFramework?                  @relation(fields: [examFrameworkId], references: [id])
+  examFrameworkId            String?
+
   // THÊM MỚI:
   note                       Note?                           @relation(fields: [noteId], references: [id])
   noteId                     String?
 
-	evaluationPeriod EvaluationPeriod? @relation(fields: [evaluationPeriodId], references: [id])
-	evaluationPeriodId String?
-  knowledgeBlock KnowledgeBlock? @relation(fields: [knowledgeBlockId], references: [id])
-	knowledgeBlockId String?
-  
+  evaluationPeriod           EvaluationPeriod?               @relation(fields: [evaluationPeriodId], references: [id])
+  evaluationPeriodId         String?
+  knowledgeBlock             KnowledgeBlock?                 @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId           String?
+
   @@schema("ql-danh-muc")
 }

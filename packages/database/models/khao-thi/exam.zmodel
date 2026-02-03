@@ -274,22 +274,23 @@ model ExamList extends Base {
 
 /// Đề thi
 model ExamBank extends Base {
-  exam         Exam               @relation(fields: [examId], references: [id])
-  examId       String
+  exam           Exam               @relation(fields: [examId], references: [id])
+  examId         String
 
-  examCode     String
+  examCode       String
 
-  subjectClass       SubjectClass? @relation(fields: [subjectClassId], references: [id])
-  subjectClassId     String?
-  
-  explain      String?
-  examDay      DateTime?
-  examType     ExamType?
-  questions    ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
-  examMatrix   ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
-  examMatrixId String?
-  isLock       Boolean?           @default(false)
+  subjectClass   SubjectClass?      @relation(fields: [subjectClassId], references: [id])
+  subjectClassId String?
 
+  explain        String?
+  examDay        DateTime?
+  examType       ExamType?
+  questions      ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
+  examMatrix     ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
+  examMatrixId   String?
+  isLock         Boolean?           @default(false)
+  /// được sử dụng tài liệu hay không
+  isNote         Boolean?           @default(false)
   @@unique([examId, examCode])
   @@schema("khao-thi")
 }
@@ -339,6 +340,7 @@ model ExamFramework extends Base {
   subjectVersionId String
 
   examMatrixs      ExamMatrix[]
+  documentFiles    DocumentFile[]
   @@schema("khao-thi")
 }
 

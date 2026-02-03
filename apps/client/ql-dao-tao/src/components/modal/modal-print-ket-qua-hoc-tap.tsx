@@ -464,7 +464,7 @@ const ModalPrintToKQHT = () => {
                             </span>
                         </div>
                         <div>
-                            <span>Điểm trung bình chung tích lũy toàn khoá (Thanh điểm 4): </span>
+                            <span>Điểm trung bình chung tích lũy toàn khoá (Thang điểm 4): </span>
                             <span className="font-bold">{gpaScore.toFixed(2)}</span>
                         </div>
                         <div className="flex">
