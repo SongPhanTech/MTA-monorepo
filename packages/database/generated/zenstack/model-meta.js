@@ -11839,6 +11839,7 @@ const metadata = {
                     name: "scoreLinkSubjectVersion",
                     type: "ScoreLinkSubjectVersion",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectClass',
                     isRelationOwner: true,
@@ -11846,6 +11847,7 @@ const metadata = {
                 }, scoreLinkSubjectVersionId: {
                     name: "scoreLinkSubjectVersionId",
                     type: "String",
+                    isOptional: true,
                     attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'scoreLinkSubjectVersion',

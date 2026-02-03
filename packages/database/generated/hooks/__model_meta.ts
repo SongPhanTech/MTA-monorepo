@@ -11249,12 +11249,14 @@ const metadata: ModelMeta = {
                     name: "scoreLinkSubjectVersion",
                     type: "ScoreLinkSubjectVersion",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'subjectClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "scoreLinkSubjectVersionId" },
                 }, scoreLinkSubjectVersionId: {
                     name: "scoreLinkSubjectVersionId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'scoreLinkSubjectVersion',
                 }, subjectClassStudent: {
