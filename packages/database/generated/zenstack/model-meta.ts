@@ -24849,10 +24849,6 @@ const metadata: ModelMeta = {
                     name: "decision",
                     type: "String",
                     isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "ScoreLinkStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
@@ -24968,6 +24964,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subjectVersion',
+                }, status: {
+                    name: "status",
+                    type: "ScoreLinkStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, scoreLinkStudents: {
                     name: "scoreLinkStudents",
                     type: "ScoreLinkStudent",

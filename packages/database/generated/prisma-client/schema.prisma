@@ -6265,7 +6265,6 @@ model ScoreLinkSheet {
   trainingObjectTypeId     String
   note                     String?
   decision                 String?
-  status                   ScoreLinkStatus           @default(PENDING)
   fixedClass               FixedClass                @relation(fields: [fixedClassId], references: [id])
   fixedClassId             String
   semester                 Semester                  @relation(fields: [semesterId], references: [id])
@@ -6290,6 +6289,7 @@ model ScoreLinkSubjectVersion {
   scoreLinkSheetId  String
   subjectVersion    SubjectVersion     @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId  String
+  status            ScoreLinkStatus    @default(PENDING)
   scoreLinkStudents ScoreLinkStudent[]
   subjectClass      SubjectClass?
 
