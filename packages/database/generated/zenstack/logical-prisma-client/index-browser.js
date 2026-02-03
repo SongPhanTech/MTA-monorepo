@@ -3742,7 +3742,8 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   examDay: 'examDay',
   examType: 'examType',
   examMatrixId: 'examMatrixId',
-  isLock: 'isLock'
+  isLock: 'isLock',
+  isNote: 'isNote'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {
