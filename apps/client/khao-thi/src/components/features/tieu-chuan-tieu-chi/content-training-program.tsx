@@ -116,6 +116,7 @@ const ContentTrainingProgram = () => {
         id: string
         count: number
         objectType?: $Enums.StandardCatalogType
+        standardSetId?: string
     }>({
         tag: 'PutStandardCatalog',
     })
@@ -186,6 +187,7 @@ const ContentTrainingProgram = () => {
                                         id: '',
                                         count: count || 0,
                                         objectType: $Enums.StandardCatalogType.PROGRAM,
+                                        standardSetId: selectedStandardSetId,
                                     })
                                 }}
                             >
@@ -238,6 +240,7 @@ const ContentTrainingProgram = () => {
                                             onOpenPutStandardCatalog({
                                                 id: record?.id,
                                                 count: count || 0,
+                                                standardSetId: selectedStandardSetId,
                                             })
                                         }}
                                         className="text-sm text-blue-700 cursor-pointer"
