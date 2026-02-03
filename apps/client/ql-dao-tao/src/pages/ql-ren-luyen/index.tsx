@@ -15,7 +15,7 @@ import { Button, Col, Collapse, Empty, Flex, message, Row, Table, Tag, Tooltip }
 import dayjs from 'dayjs'
 import { BookPlus, ChevronDown, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function QuanLyDiemRenLuyen() {
@@ -28,6 +28,8 @@ export default function QuanLyDiemRenLuyen() {
         tag: 'PutDotRenLuyen',
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const [isOpen, setIsOpen] = useState(false)
 
     // Fetch semester list
     const { data: semesterList = [] } = useFindManySemester({
@@ -207,6 +209,29 @@ export default function QuanLyDiemRenLuyen() {
             : []),
     ]
 
+    useEffect(() => {
+        if (isOpen) {
+            const handleScroll = (e: Event) => {
+                // Kiểm tra xem có phải đang cuộn cái danh sách học kỳ không
+                // (Class 'rc-virtual-list-holder' là của cái thanh cuộn trong dropdown Antd)
+                const target = e.target as HTMLElement;
+                if (target?.classList?.contains('rc-virtual-list-holder')) {
+                    return; // Nếu cuộn trong dropdown thì giữ nguyên
+                }
+                
+                // Nếu cuộn ở ngoài (body, main layout...) thì đóng lại
+                setIsOpen(false);
+            };
+
+            // Dùng capture: true để bắt được sự kiện scroll của bất kỳ thành phần nào
+            window.addEventListener('scroll', handleScroll, true);
+            
+            return () => {
+                window.removeEventListener('scroll', handleScroll, true);
+            };
+        }
+    }, [isOpen]);
+
     return (
         <div className="p-4">
             <Row gutter={[16, 16]}>
@@ -218,9 +243,15 @@ export default function QuanLyDiemRenLuyen() {
                                 className="w-full"
                                 placeholder="Lọc theo học kỳ"
                                 value={semesterFilter}
-                                onChange={(value) => setSemesterFilter(value)}
+                                onChange={(value) => {
+                                    setSemesterFilter(value)
+                                    setIsOpen(false)
+                                }}
                                 allowClear
                                 showSearch
+                                open={isOpen}
+                                onDropdownVisibleChange={(visible) => setIsOpen(visible)}
+                                dropdownStyle={{ zIndex: 950 }}
                                 options={semesterList.map((s) => ({
                                     value: s.id,
                                     label: [s.name, s.schoolYear?.name].filter(Boolean).join(' - '),
