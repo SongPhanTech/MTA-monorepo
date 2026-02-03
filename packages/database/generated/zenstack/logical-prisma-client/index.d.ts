@@ -8649,6 +8649,7 @@ export namespace Prisma {
         diplomaVerificationBackId: 'diplomaVerificationBackId',
         trainingFieldId: 'trainingFieldId',
         studentScoreConvertId: 'studentScoreConvertId',
+        examFrameworkId: 'examFrameworkId',
         noteId: 'noteId',
         evaluationPeriodId: 'evaluationPeriodId',
         knowledgeBlockId: 'knowledgeBlockId'
@@ -8901,10 +8902,17 @@ export namespace Prisma {
         type: 'type',
         subjectClassId: 'subjectClassId',
         thesisSessionId: 'thesisSessionId',
+        supervisorName: 'supervisorName',
         supervisorId: 'supervisorId',
         supervisorPaymentId: 'supervisorPaymentId',
+        coSupervisorName: 'coSupervisorName',
         coSupervisorId: 'coSupervisorId',
         coSupervisorPaymentId: 'coSupervisorPaymentId',
+        CHUTICH: 'CHUTICH',
+        THUKY: 'THUKY',
+        PHANBIEN1: 'PHANBIEN1',
+        PHANBIEN2: 'PHANBIEN2',
+        UYVIEN3: 'UYVIEN3',
         organizationId: 'organizationId',
         maxStudents: 'maxStudents',
         councilId: 'councilId',
@@ -11988,6 +11996,7 @@ export namespace Prisma {
         diplomaVerificationBackId: 'diplomaVerificationBackId',
         trainingFieldId: 'trainingFieldId',
         studentScoreConvertId: 'studentScoreConvertId',
+        examFrameworkId: 'examFrameworkId',
         noteId: 'noteId',
         evaluationPeriodId: 'evaluationPeriodId',
         knowledgeBlockId: 'knowledgeBlockId'
@@ -12143,10 +12152,17 @@ export namespace Prisma {
         type: 'type',
         subjectClassId: 'subjectClassId',
         thesisSessionId: 'thesisSessionId',
+        supervisorName: 'supervisorName',
         supervisorId: 'supervisorId',
         supervisorPaymentId: 'supervisorPaymentId',
+        coSupervisorName: 'coSupervisorName',
         coSupervisorId: 'coSupervisorId',
         coSupervisorPaymentId: 'coSupervisorPaymentId',
+        CHUTICH: 'CHUTICH',
+        THUKY: 'THUKY',
+        PHANBIEN1: 'PHANBIEN1',
+        PHANBIEN2: 'PHANBIEN2',
+        UYVIEN3: 'UYVIEN3',
         organizationId: 'organizationId',
         councilId: 'councilId',
         roomId: 'roomId',
@@ -65916,6 +65932,7 @@ export namespace Prisma {
         diplomaVerificationBack<T extends DocumentFile$diplomaVerificationBackArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$diplomaVerificationBackArgs<ExtArgs>>): Prisma__DiplomaVerificationApplicationClient<$Result.GetResult<Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         trainingField<T extends DocumentFile$trainingFieldArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$trainingFieldArgs<ExtArgs>>): Prisma__TrainingFieldClient<$Result.GetResult<Prisma.$TrainingFieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         studentScoreConvert<T extends DocumentFile$studentScoreConvertArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$studentScoreConvertArgs<ExtArgs>>): Prisma__StudentScoreConvertClient<$Result.GetResult<Prisma.$StudentScoreConvertPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        examFramework<T extends DocumentFile$examFrameworkArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$examFrameworkArgs<ExtArgs>>): Prisma__ExamFrameworkClient<$Result.GetResult<Prisma.$ExamFrameworkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         note<T extends DocumentFile$noteArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$noteArgs<ExtArgs>>): Prisma__NoteClient<$Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         evaluationPeriod<T extends DocumentFile$evaluationPeriodArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$evaluationPeriodArgs<ExtArgs>>): Prisma__EvaluationPeriodClient<$Result.GetResult<Prisma.$EvaluationPeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         knowledgeBlock<T extends DocumentFile$knowledgeBlockArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$knowledgeBlockArgs<ExtArgs>>): Prisma__KnowledgeBlockClient<$Result.GetResult<Prisma.$KnowledgeBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -65975,6 +65992,7 @@ export namespace Prisma {
         readonly diplomaVerificationBackId: FieldRef<"DocumentFile", 'String'>;
         readonly trainingFieldId: FieldRef<"DocumentFile", 'String'>;
         readonly studentScoreConvertId: FieldRef<"DocumentFile", 'String'>;
+        readonly examFrameworkId: FieldRef<"DocumentFile", 'String'>;
         readonly noteId: FieldRef<"DocumentFile", 'String'>;
         readonly evaluationPeriodId: FieldRef<"DocumentFile", 'String'>;
         readonly knowledgeBlockId: FieldRef<"DocumentFile", 'String'>;
@@ -71831,10 +71849,17 @@ export namespace Prisma {
         readonly type: FieldRef<"ThesisProject", 'String'>;
         readonly subjectClassId: FieldRef<"ThesisProject", 'String'>;
         readonly thesisSessionId: FieldRef<"ThesisProject", 'String'>;
+        readonly supervisorName: FieldRef<"ThesisProject", 'String'>;
         readonly supervisorId: FieldRef<"ThesisProject", 'String'>;
         readonly supervisorPaymentId: FieldRef<"ThesisProject", 'String'>;
+        readonly coSupervisorName: FieldRef<"ThesisProject", 'String'>;
         readonly coSupervisorId: FieldRef<"ThesisProject", 'String'>;
         readonly coSupervisorPaymentId: FieldRef<"ThesisProject", 'String'>;
+        readonly CHUTICH: FieldRef<"ThesisProject", 'String'>;
+        readonly THUKY: FieldRef<"ThesisProject", 'String'>;
+        readonly PHANBIEN1: FieldRef<"ThesisProject", 'String'>;
+        readonly PHANBIEN2: FieldRef<"ThesisProject", 'String'>;
+        readonly UYVIEN3: FieldRef<"ThesisProject", 'String'>;
         readonly organizationId: FieldRef<"ThesisProject", 'String'>;
         readonly maxStudents: FieldRef<"ThesisProject", 'Int'>;
         readonly councilId: FieldRef<"ThesisProject", 'String'>;
@@ -91910,6 +91935,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         subjectVersion<T extends SubjectVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersionDefaultArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         examMatrixs<T extends ExamFramework$examMatrixsArgs<ExtArgs> = {}>(args?: Subset<T, ExamFramework$examMatrixsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamMatrixPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        documentFiles<T extends ExamFramework$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, ExamFramework$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -139615,9 +139641,11 @@ export namespace Prisma {
      */
     export type ExamFrameworkCountOutputType = {
         examMatrixs: number
+        documentFiles: number
     };
     export type ExamFrameworkCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         examMatrixs?: boolean | ExamFrameworkCountOutputTypeCountExamMatrixsArgs
+        documentFiles?: boolean | ExamFrameworkCountOutputTypeCountDocumentFilesArgs
     };
     /**
      * ExamFrameworkCountOutputType without action
@@ -139633,6 +139661,12 @@ export namespace Prisma {
      */
     export type ExamFrameworkCountOutputTypeCountExamMatrixsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ExamMatrixWhereInput
+    };
+    /**
+     * ExamFrameworkCountOutputType without action
+     */
+    export type ExamFrameworkCountOutputTypeCountDocumentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DocumentFileWhereInput
     };
     /**
      * Count Type ExamMatrixCountOutputType
@@ -250941,6 +250975,7 @@ export namespace Prisma {
         diplomaVerificationBackId: string | null
         trainingFieldId: string | null
         studentScoreConvertId: string | null
+        examFrameworkId: string | null
         noteId: string | null
         evaluationPeriodId: string | null
         knowledgeBlockId: string | null
@@ -250976,6 +251011,7 @@ export namespace Prisma {
         diplomaVerificationBackId: string | null
         trainingFieldId: string | null
         studentScoreConvertId: string | null
+        examFrameworkId: string | null
         noteId: string | null
         evaluationPeriodId: string | null
         knowledgeBlockId: string | null
@@ -251011,6 +251047,7 @@ export namespace Prisma {
         diplomaVerificationBackId: number
         trainingFieldId: number
         studentScoreConvertId: number
+        examFrameworkId: number
         noteId: number
         evaluationPeriodId: number
         knowledgeBlockId: number
@@ -251053,6 +251090,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: true
         trainingFieldId?: true
         studentScoreConvertId?: true
+        examFrameworkId?: true
         noteId?: true
         evaluationPeriodId?: true
         knowledgeBlockId?: true
@@ -251088,6 +251126,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: true
         trainingFieldId?: true
         studentScoreConvertId?: true
+        examFrameworkId?: true
         noteId?: true
         evaluationPeriodId?: true
         knowledgeBlockId?: true
@@ -251123,6 +251162,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: true
         trainingFieldId?: true
         studentScoreConvertId?: true
+        examFrameworkId?: true
         noteId?: true
         evaluationPeriodId?: true
         knowledgeBlockId?: true
@@ -251239,6 +251279,7 @@ export namespace Prisma {
         diplomaVerificationBackId: string | null
         trainingFieldId: string | null
         studentScoreConvertId: string | null
+        examFrameworkId: string | null
         noteId: string | null
         evaluationPeriodId: string | null
         knowledgeBlockId: string | null
@@ -251291,6 +251332,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: boolean
         trainingFieldId?: boolean
         studentScoreConvertId?: boolean
+        examFrameworkId?: boolean
         noteId?: boolean
         evaluationPeriodId?: boolean
         knowledgeBlockId?: boolean
@@ -251312,6 +251354,7 @@ export namespace Prisma {
         diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
+        examFramework?: boolean | DocumentFile$examFrameworkArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
         evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
         knowledgeBlock?: boolean | DocumentFile$knowledgeBlockArgs<ExtArgs>
@@ -251347,6 +251390,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: boolean
         trainingFieldId?: boolean
         studentScoreConvertId?: boolean
+        examFrameworkId?: boolean
         noteId?: boolean
         evaluationPeriodId?: boolean
         knowledgeBlockId?: boolean
@@ -251368,6 +251412,7 @@ export namespace Prisma {
         diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
+        examFramework?: boolean | DocumentFile$examFrameworkArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
         evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
         knowledgeBlock?: boolean | DocumentFile$knowledgeBlockArgs<ExtArgs>
@@ -251403,6 +251448,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: boolean
         trainingFieldId?: boolean
         studentScoreConvertId?: boolean
+        examFrameworkId?: boolean
         noteId?: boolean
         evaluationPeriodId?: boolean
         knowledgeBlockId?: boolean
@@ -251424,6 +251470,7 @@ export namespace Prisma {
         diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
+        examFramework?: boolean | DocumentFile$examFrameworkArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
         evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
         knowledgeBlock?: boolean | DocumentFile$knowledgeBlockArgs<ExtArgs>
@@ -251459,11 +251506,12 @@ export namespace Prisma {
         diplomaVerificationBackId?: boolean
         trainingFieldId?: boolean
         studentScoreConvertId?: boolean
+        examFrameworkId?: boolean
         noteId?: boolean
         evaluationPeriodId?: boolean
         knowledgeBlockId?: boolean
     };
-    export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "noteId" | "evaluationPeriodId" | "knowledgeBlockId", ExtArgs["result"]["documentFile"]>;
+    export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "examFrameworkId" | "noteId" | "evaluationPeriodId" | "knowledgeBlockId", ExtArgs["result"]["documentFile"]>;
     export type DocumentFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
         trainingCourse?: boolean | DocumentFile$trainingCourseArgs<ExtArgs>
@@ -251483,6 +251531,7 @@ export namespace Prisma {
         diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
+        examFramework?: boolean | DocumentFile$examFrameworkArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
         evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
         knowledgeBlock?: boolean | DocumentFile$knowledgeBlockArgs<ExtArgs>
@@ -251506,6 +251555,7 @@ export namespace Prisma {
         diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
+        examFramework?: boolean | DocumentFile$examFrameworkArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
         evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
         knowledgeBlock?: boolean | DocumentFile$knowledgeBlockArgs<ExtArgs>
@@ -251529,6 +251579,7 @@ export namespace Prisma {
         diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
+        examFramework?: boolean | DocumentFile$examFrameworkArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
         evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
         knowledgeBlock?: boolean | DocumentFile$knowledgeBlockArgs<ExtArgs>
@@ -251554,6 +251605,7 @@ export namespace Prisma {
             diplomaVerificationBack: Prisma.$DiplomaVerificationApplicationPayload<ExtArgs> | null
             trainingField: Prisma.$TrainingFieldPayload<ExtArgs> | null
             studentScoreConvert: Prisma.$StudentScoreConvertPayload<ExtArgs> | null
+            examFramework: Prisma.$ExamFrameworkPayload<ExtArgs> | null
             note: Prisma.$NotePayload<ExtArgs> | null
             evaluationPeriod: Prisma.$EvaluationPeriodPayload<ExtArgs> | null
             knowledgeBlock: Prisma.$KnowledgeBlockPayload<ExtArgs> | null
@@ -251589,6 +251641,7 @@ export namespace Prisma {
             diplomaVerificationBackId: string | null
             trainingFieldId: string | null
             studentScoreConvertId: string | null
+            examFrameworkId: string | null
             noteId: string | null
             evaluationPeriodId: string | null
             knowledgeBlockId: string | null
@@ -252299,6 +252352,24 @@ export namespace Prisma {
          */
         include?: StudentScoreConvertInclude<ExtArgs> | null
         where?: StudentScoreConvertWhereInput
+    };
+    /**
+     * DocumentFile.examFramework
+     */
+    export type DocumentFile$examFrameworkArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamFramework
+         */
+        select?: ExamFrameworkSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamFramework
+         */
+        omit?: ExamFrameworkOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamFrameworkInclude<ExtArgs> | null
+        where?: ExamFrameworkWhereInput
     };
     /**
      * DocumentFile.note
@@ -263296,10 +263367,17 @@ export namespace Prisma {
         type: string | null
         subjectClassId: string | null
         thesisSessionId: string | null
+        supervisorName: string | null
         supervisorId: string | null
         supervisorPaymentId: string | null
+        coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        CHUTICH: string | null
+        THUKY: string | null
+        PHANBIEN1: string | null
+        PHANBIEN2: string | null
+        UYVIEN3: string | null
         organizationId: string | null
         maxStudents: number | null
         councilId: string | null
@@ -263335,10 +263413,17 @@ export namespace Prisma {
         type: string | null
         subjectClassId: string | null
         thesisSessionId: string | null
+        supervisorName: string | null
         supervisorId: string | null
         supervisorPaymentId: string | null
+        coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        CHUTICH: string | null
+        THUKY: string | null
+        PHANBIEN1: string | null
+        PHANBIEN2: string | null
+        UYVIEN3: string | null
         organizationId: string | null
         maxStudents: number | null
         councilId: string | null
@@ -263374,10 +263459,17 @@ export namespace Prisma {
         type: number
         subjectClassId: number
         thesisSessionId: number
+        supervisorName: number
         supervisorId: number
         supervisorPaymentId: number
+        coSupervisorName: number
         coSupervisorId: number
         coSupervisorPaymentId: number
+        CHUTICH: number
+        THUKY: number
+        PHANBIEN1: number
+        PHANBIEN2: number
+        UYVIEN3: number
         organizationId: number
         maxStudents: number
         councilId: number
@@ -263420,10 +263512,17 @@ export namespace Prisma {
         type?: true
         subjectClassId?: true
         thesisSessionId?: true
+        supervisorName?: true
         supervisorId?: true
         supervisorPaymentId?: true
+        coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        CHUTICH?: true
+        THUKY?: true
+        PHANBIEN1?: true
+        PHANBIEN2?: true
+        UYVIEN3?: true
         organizationId?: true
         maxStudents?: true
         councilId?: true
@@ -263459,10 +263558,17 @@ export namespace Prisma {
         type?: true
         subjectClassId?: true
         thesisSessionId?: true
+        supervisorName?: true
         supervisorId?: true
         supervisorPaymentId?: true
+        coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        CHUTICH?: true
+        THUKY?: true
+        PHANBIEN1?: true
+        PHANBIEN2?: true
+        UYVIEN3?: true
         organizationId?: true
         maxStudents?: true
         councilId?: true
@@ -263498,10 +263604,17 @@ export namespace Prisma {
         type?: true
         subjectClassId?: true
         thesisSessionId?: true
+        supervisorName?: true
         supervisorId?: true
         supervisorPaymentId?: true
+        coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        CHUTICH?: true
+        THUKY?: true
+        PHANBIEN1?: true
+        PHANBIEN2?: true
+        UYVIEN3?: true
         organizationId?: true
         maxStudents?: true
         councilId?: true
@@ -263618,10 +263731,17 @@ export namespace Prisma {
         type: string | null
         subjectClassId: string | null
         thesisSessionId: string | null
+        supervisorName: string | null
         supervisorId: string | null
         supervisorPaymentId: string | null
+        coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        CHUTICH: string | null
+        THUKY: string | null
+        PHANBIEN1: string | null
+        PHANBIEN2: string | null
+        UYVIEN3: string | null
         organizationId: string | null
         maxStudents: number | null
         councilId: string | null
@@ -263674,10 +263794,17 @@ export namespace Prisma {
         type?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
+        supervisorName?: boolean
         supervisorId?: boolean
         supervisorPaymentId?: boolean
+        coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        CHUTICH?: boolean
+        THUKY?: boolean
+        PHANBIEN1?: boolean
+        PHANBIEN2?: boolean
+        UYVIEN3?: boolean
         organizationId?: boolean
         maxStudents?: boolean
         councilId?: boolean
@@ -263728,10 +263855,17 @@ export namespace Prisma {
         type?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
+        supervisorName?: boolean
         supervisorId?: boolean
         supervisorPaymentId?: boolean
+        coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        CHUTICH?: boolean
+        THUKY?: boolean
+        PHANBIEN1?: boolean
+        PHANBIEN2?: boolean
+        UYVIEN3?: boolean
         organizationId?: boolean
         maxStudents?: boolean
         councilId?: boolean
@@ -263777,10 +263911,17 @@ export namespace Prisma {
         type?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
+        supervisorName?: boolean
         supervisorId?: boolean
         supervisorPaymentId?: boolean
+        coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        CHUTICH?: boolean
+        THUKY?: boolean
+        PHANBIEN1?: boolean
+        PHANBIEN2?: boolean
+        UYVIEN3?: boolean
         organizationId?: boolean
         maxStudents?: boolean
         councilId?: boolean
@@ -263826,10 +263967,17 @@ export namespace Prisma {
         type?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
+        supervisorName?: boolean
         supervisorId?: boolean
         supervisorPaymentId?: boolean
+        coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        CHUTICH?: boolean
+        THUKY?: boolean
+        PHANBIEN1?: boolean
+        PHANBIEN2?: boolean
+        UYVIEN3?: boolean
         organizationId?: boolean
         maxStudents?: boolean
         councilId?: boolean
@@ -263841,7 +263989,7 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "supervisorPaymentId" | "coSupervisorId" | "coSupervisorPaymentId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
@@ -263889,7 +264037,7 @@ export namespace Prisma {
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
             thesisSession: Prisma.$ThesisSessionPayload<ExtArgs> | null
             /**
-             * Chuyên gia hướng dẫn b 
+             * Chuyên gia hướng dẫn
              */
             supervisor: Prisma.$ExpertProfilePayload<ExtArgs> | null
             supervisorPayment: Prisma.$SupervisorPaymentRecordPayload<ExtArgs> | null
@@ -263940,10 +264088,17 @@ export namespace Prisma {
             type: string | null
             subjectClassId: string | null
             thesisSessionId: string | null
+            supervisorName: string | null
             supervisorId: string | null
             supervisorPaymentId: string | null
+            coSupervisorName: string | null
             coSupervisorId: string | null
             coSupervisorPaymentId: string | null
+            CHUTICH: string | null
+            THUKY: string | null
+            PHANBIEN1: string | null
+            PHANBIEN2: string | null
+            UYVIEN3: string | null
             organizationId: string | null
             maxStudents: number | null
             councilId: string | null
@@ -301031,6 +301186,9 @@ export namespace Prisma {
             examType: $Enums.ExamType | null
             examMatrixId: string | null
             isLock: boolean | null
+            /**
+             * được sử dụng tài liệu hay không
+             */
             isNote: boolean | null
         }, ExtArgs["result"]["examBank"]>
         composites: {}
@@ -303113,6 +303271,7 @@ export namespace Prisma {
         subjectVersionId?: boolean
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         examMatrixs?: boolean | ExamFramework$examMatrixsArgs<ExtArgs>
+        documentFiles?: boolean | ExamFramework$documentFilesArgs<ExtArgs>
         _count?: boolean | ExamFrameworkCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examFramework"]>;
     export type ExamFrameworkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -303160,6 +303319,7 @@ export namespace Prisma {
     export type ExamFrameworkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         examMatrixs?: boolean | ExamFramework$examMatrixsArgs<ExtArgs>
+        documentFiles?: boolean | ExamFramework$documentFilesArgs<ExtArgs>
         _count?: boolean | ExamFrameworkCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ExamFrameworkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -303173,6 +303333,7 @@ export namespace Prisma {
         objects: {
             subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>
             examMatrixs: Prisma.$ExamMatrixPayload<ExtArgs>[]
+            documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -303592,6 +303753,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ExamMatrixScalarFieldEnum | ExamMatrixScalarFieldEnum[]
+    };
+    /**
+     * ExamFramework.documentFiles
+     */
+    export type ExamFramework$documentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DocumentFile
+         */
+        select?: DocumentFileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DocumentFile
+         */
+        omit?: DocumentFileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DocumentFileInclude<ExtArgs> | null
+        where?: DocumentFileWhereInput
+        orderBy?: DocumentFileOrderByWithRelationInput | DocumentFileOrderByWithRelationInput[]
+        cursor?: DocumentFileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DocumentFileScalarFieldEnum | DocumentFileScalarFieldEnum[]
     };
     /**
      * ExamFramework without action
@@ -362490,6 +362674,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: StringNullableFilter<"DocumentFile"> | string | null
         trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableFilter<"DocumentFile"> | string | null
+        examFrameworkId?: StringNullableFilter<"DocumentFile"> | string | null
         noteId?: StringNullableFilter<"DocumentFile"> | string | null
         evaluationPeriodId?: StringNullableFilter<"DocumentFile"> | string | null
         knowledgeBlockId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -362511,6 +362696,7 @@ export namespace Prisma {
         diplomaVerificationBack?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
         trainingField?: XOR<TrainingFieldNullableScalarRelationFilter, TrainingFieldWhereInput> | null
         studentScoreConvert?: XOR<StudentScoreConvertNullableScalarRelationFilter, StudentScoreConvertWhereInput> | null
+        examFramework?: XOR<ExamFrameworkNullableScalarRelationFilter, ExamFrameworkWhereInput> | null
         note?: XOR<NoteNullableScalarRelationFilter, NoteWhereInput> | null
         evaluationPeriod?: XOR<EvaluationPeriodNullableScalarRelationFilter, EvaluationPeriodWhereInput> | null
         knowledgeBlock?: XOR<KnowledgeBlockNullableScalarRelationFilter, KnowledgeBlockWhereInput> | null
@@ -362546,6 +362732,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: SortOrderInput | SortOrder
         trainingFieldId?: SortOrderInput | SortOrder
         studentScoreConvertId?: SortOrderInput | SortOrder
+        examFrameworkId?: SortOrderInput | SortOrder
         noteId?: SortOrderInput | SortOrder
         evaluationPeriodId?: SortOrderInput | SortOrder
         knowledgeBlockId?: SortOrderInput | SortOrder
@@ -362567,6 +362754,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationOrderByWithRelationInput
         trainingField?: TrainingFieldOrderByWithRelationInput
         studentScoreConvert?: StudentScoreConvertOrderByWithRelationInput
+        examFramework?: ExamFrameworkOrderByWithRelationInput
         note?: NoteOrderByWithRelationInput
         evaluationPeriod?: EvaluationPeriodOrderByWithRelationInput
         knowledgeBlock?: KnowledgeBlockOrderByWithRelationInput
@@ -362606,6 +362794,7 @@ export namespace Prisma {
         librarySubmissionId?: StringNullableFilter<"DocumentFile"> | string | null
         trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableFilter<"DocumentFile"> | string | null
+        examFrameworkId?: StringNullableFilter<"DocumentFile"> | string | null
         noteId?: StringNullableFilter<"DocumentFile"> | string | null
         evaluationPeriodId?: StringNullableFilter<"DocumentFile"> | string | null
         knowledgeBlockId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -362627,6 +362816,7 @@ export namespace Prisma {
         diplomaVerificationBack?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
         trainingField?: XOR<TrainingFieldNullableScalarRelationFilter, TrainingFieldWhereInput> | null
         studentScoreConvert?: XOR<StudentScoreConvertNullableScalarRelationFilter, StudentScoreConvertWhereInput> | null
+        examFramework?: XOR<ExamFrameworkNullableScalarRelationFilter, ExamFrameworkWhereInput> | null
         note?: XOR<NoteNullableScalarRelationFilter, NoteWhereInput> | null
         evaluationPeriod?: XOR<EvaluationPeriodNullableScalarRelationFilter, EvaluationPeriodWhereInput> | null
         knowledgeBlock?: XOR<KnowledgeBlockNullableScalarRelationFilter, KnowledgeBlockWhereInput> | null
@@ -362662,6 +362852,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: SortOrderInput | SortOrder
         trainingFieldId?: SortOrderInput | SortOrder
         studentScoreConvertId?: SortOrderInput | SortOrder
+        examFrameworkId?: SortOrderInput | SortOrder
         noteId?: SortOrderInput | SortOrder
         evaluationPeriodId?: SortOrderInput | SortOrder
         knowledgeBlockId?: SortOrderInput | SortOrder
@@ -362705,6 +362896,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         trainingFieldId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
+        examFrameworkId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         noteId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         evaluationPeriodId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         knowledgeBlockId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
@@ -364213,10 +364405,17 @@ export namespace Prisma {
         type?: StringNullableFilter<"ThesisProject"> | string | null
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
+        supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
+        THUKY?: StringNullableFilter<"ThesisProject"> | string | null
+        PHANBIEN1?: StringNullableFilter<"ThesisProject"> | string | null
+        PHANBIEN2?: StringNullableFilter<"ThesisProject"> | string | null
+        UYVIEN3?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
         maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
         councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -364266,10 +364465,17 @@ export namespace Prisma {
         type?: SortOrderInput | SortOrder
         subjectClassId?: SortOrderInput | SortOrder
         thesisSessionId?: SortOrderInput | SortOrder
+        supervisorName?: SortOrderInput | SortOrder
         supervisorId?: SortOrderInput | SortOrder
         supervisorPaymentId?: SortOrderInput | SortOrder
+        coSupervisorName?: SortOrderInput | SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
         coSupervisorPaymentId?: SortOrderInput | SortOrder
+        CHUTICH?: SortOrderInput | SortOrder
+        THUKY?: SortOrderInput | SortOrder
+        PHANBIEN1?: SortOrderInput | SortOrder
+        PHANBIEN2?: SortOrderInput | SortOrder
+        UYVIEN3?: SortOrderInput | SortOrder
         organizationId?: SortOrderInput | SortOrder
         maxStudents?: SortOrderInput | SortOrder
         councilId?: SortOrderInput | SortOrder
@@ -364323,10 +364529,17 @@ export namespace Prisma {
         type?: StringNullableFilter<"ThesisProject"> | string | null
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
+        supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
+        THUKY?: StringNullableFilter<"ThesisProject"> | string | null
+        PHANBIEN1?: StringNullableFilter<"ThesisProject"> | string | null
+        PHANBIEN2?: StringNullableFilter<"ThesisProject"> | string | null
+        UYVIEN3?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
         maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
         councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -364376,10 +364589,17 @@ export namespace Prisma {
         type?: SortOrderInput | SortOrder
         subjectClassId?: SortOrderInput | SortOrder
         thesisSessionId?: SortOrderInput | SortOrder
+        supervisorName?: SortOrderInput | SortOrder
         supervisorId?: SortOrderInput | SortOrder
         supervisorPaymentId?: SortOrderInput | SortOrder
+        coSupervisorName?: SortOrderInput | SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
         coSupervisorPaymentId?: SortOrderInput | SortOrder
+        CHUTICH?: SortOrderInput | SortOrder
+        THUKY?: SortOrderInput | SortOrder
+        PHANBIEN1?: SortOrderInput | SortOrder
+        PHANBIEN2?: SortOrderInput | SortOrder
+        UYVIEN3?: SortOrderInput | SortOrder
         organizationId?: SortOrderInput | SortOrder
         maxStudents?: SortOrderInput | SortOrder
         councilId?: SortOrderInput | SortOrder
@@ -364423,10 +364643,17 @@ export namespace Prisma {
         type?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         subjectClassId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        supervisorName?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         supervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         supervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        coSupervisorName?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        CHUTICH?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        THUKY?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        PHANBIEN1?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        PHANBIEN2?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        UYVIEN3?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         organizationId?: UuidNullableWithAggregatesFilter<"ThesisProject"> | string | null
         maxStudents?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
         councilId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -369363,6 +369590,7 @@ export namespace Prisma {
         subjectVersionId?: StringFilter<"ExamFramework"> | string
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         examMatrixs?: ExamMatrixListRelationFilter
+        documentFiles?: DocumentFileListRelationFilter
     };
     export type ExamFrameworkOrderByWithRelationInput = {
         id?: SortOrder
@@ -369378,6 +369606,7 @@ export namespace Prisma {
         subjectVersionId?: SortOrder
         subjectVersion?: SubjectVersionOrderByWithRelationInput
         examMatrixs?: ExamMatrixOrderByRelationAggregateInput
+        documentFiles?: DocumentFileOrderByRelationAggregateInput
         _relevance?: ExamFrameworkOrderByRelevanceInput
     };
     export type ExamFrameworkWhereUniqueInput = Prisma.AtLeast<{
@@ -369397,6 +369626,7 @@ export namespace Prisma {
         subjectVersionId?: StringFilter<"ExamFramework"> | string
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         examMatrixs?: ExamMatrixListRelationFilter
+        documentFiles?: DocumentFileListRelationFilter
     }, "id" | "code">;
     export type ExamFrameworkOrderByWithAggregationInput = {
         id?: SortOrder
@@ -392598,6 +392828,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -392633,6 +392864,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -392668,6 +392900,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -392703,6 +392936,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -392738,6 +392972,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -392787,6 +393022,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -394481,6 +394717,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -394526,10 +394769,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -394567,6 +394817,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -394612,10 +394869,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -394655,10 +394919,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -394692,6 +394963,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -394723,10 +395001,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -400207,6 +400492,7 @@ export namespace Prisma {
         time: number
         subjectVersion: SubjectVersionCreateNestedOneWithoutExamFrameworkInput
         examMatrixs?: ExamMatrixCreateNestedManyWithoutExamFrameworkInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutExamFrameworkInput
     };
     export type ExamFrameworkUncheckedCreateInput = {
         id?: string
@@ -400221,6 +400507,7 @@ export namespace Prisma {
         time: number
         subjectVersionId: string
         examMatrixs?: ExamMatrixUncheckedCreateNestedManyWithoutExamFrameworkInput
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutExamFrameworkInput
     };
     export type ExamFrameworkUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -400235,6 +400522,7 @@ export namespace Prisma {
         time?: IntFieldUpdateOperationsInput | number
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutExamFrameworkNestedInput
         examMatrixs?: ExamMatrixUpdateManyWithoutExamFrameworkNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutExamFrameworkNestedInput
     };
     export type ExamFrameworkUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -400249,6 +400537,7 @@ export namespace Prisma {
         time?: IntFieldUpdateOperationsInput | number
         subjectVersionId?: StringFieldUpdateOperationsInput | string
         examMatrixs?: ExamMatrixUncheckedUpdateManyWithoutExamFrameworkNestedInput
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutExamFrameworkNestedInput
     };
     export type ExamFrameworkCreateManyInput = {
         id?: string
@@ -417279,6 +417568,10 @@ export namespace Prisma {
         is?: StudentScoreConvertWhereInput | null
         isNot?: StudentScoreConvertWhereInput | null
     };
+    export type ExamFrameworkNullableScalarRelationFilter = {
+        is?: ExamFrameworkWhereInput | null
+        isNot?: ExamFrameworkWhereInput | null
+    };
     export type NoteNullableScalarRelationFilter = {
         is?: NoteWhereInput | null
         isNot?: NoteWhereInput | null
@@ -417327,6 +417620,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: SortOrder
         trainingFieldId?: SortOrder
         studentScoreConvertId?: SortOrder
+        examFrameworkId?: SortOrder
         noteId?: SortOrder
         evaluationPeriodId?: SortOrder
         knowledgeBlockId?: SortOrder
@@ -417365,6 +417659,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: SortOrder
         trainingFieldId?: SortOrder
         studentScoreConvertId?: SortOrder
+        examFrameworkId?: SortOrder
         noteId?: SortOrder
         evaluationPeriodId?: SortOrder
         knowledgeBlockId?: SortOrder
@@ -417400,6 +417695,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: SortOrder
         trainingFieldId?: SortOrder
         studentScoreConvertId?: SortOrder
+        examFrameworkId?: SortOrder
         noteId?: SortOrder
         evaluationPeriodId?: SortOrder
         knowledgeBlockId?: SortOrder
@@ -418479,10 +418775,17 @@ export namespace Prisma {
         type?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
+        supervisorName?: SortOrder
         supervisorId?: SortOrder
         supervisorPaymentId?: SortOrder
+        coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        CHUTICH?: SortOrder
+        THUKY?: SortOrder
+        PHANBIEN1?: SortOrder
+        PHANBIEN2?: SortOrder
+        UYVIEN3?: SortOrder
         organizationId?: SortOrder
         maxStudents?: SortOrder
         councilId?: SortOrder
@@ -418521,10 +418824,17 @@ export namespace Prisma {
         type?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
+        supervisorName?: SortOrder
         supervisorId?: SortOrder
         supervisorPaymentId?: SortOrder
+        coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        CHUTICH?: SortOrder
+        THUKY?: SortOrder
+        PHANBIEN1?: SortOrder
+        PHANBIEN2?: SortOrder
+        UYVIEN3?: SortOrder
         organizationId?: SortOrder
         maxStudents?: SortOrder
         councilId?: SortOrder
@@ -418560,10 +418870,17 @@ export namespace Prisma {
         type?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
+        supervisorName?: SortOrder
         supervisorId?: SortOrder
         supervisorPaymentId?: SortOrder
+        coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        CHUTICH?: SortOrder
+        THUKY?: SortOrder
+        PHANBIEN1?: SortOrder
+        PHANBIEN2?: SortOrder
+        UYVIEN3?: SortOrder
         organizationId?: SortOrder
         maxStudents?: SortOrder
         councilId?: SortOrder
@@ -439769,6 +440086,11 @@ export namespace Prisma {
         connectOrCreate?: StudentScoreConvertCreateOrConnectWithoutDocumentFilesInput
         connect?: StudentScoreConvertWhereUniqueInput
     };
+    export type ExamFrameworkCreateNestedOneWithoutDocumentFilesInput = {
+        create?: XOR<ExamFrameworkCreateWithoutDocumentFilesInput, ExamFrameworkUncheckedCreateWithoutDocumentFilesInput>
+        connectOrCreate?: ExamFrameworkCreateOrConnectWithoutDocumentFilesInput
+        connect?: ExamFrameworkWhereUniqueInput
+    };
     export type NoteCreateNestedOneWithoutAttachmentsInput = {
         create?: XOR<NoteCreateWithoutAttachmentsInput, NoteUncheckedCreateWithoutAttachmentsInput>
         connectOrCreate?: NoteCreateOrConnectWithoutAttachmentsInput
@@ -439952,6 +440274,15 @@ export namespace Prisma {
         delete?: StudentScoreConvertWhereInput | boolean
         connect?: StudentScoreConvertWhereUniqueInput
         update?: XOR<XOR<StudentScoreConvertUpdateToOneWithWhereWithoutDocumentFilesInput, StudentScoreConvertUpdateWithoutDocumentFilesInput>, StudentScoreConvertUncheckedUpdateWithoutDocumentFilesInput>
+    };
+    export type ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput = {
+        create?: XOR<ExamFrameworkCreateWithoutDocumentFilesInput, ExamFrameworkUncheckedCreateWithoutDocumentFilesInput>
+        connectOrCreate?: ExamFrameworkCreateOrConnectWithoutDocumentFilesInput
+        upsert?: ExamFrameworkUpsertWithoutDocumentFilesInput
+        disconnect?: ExamFrameworkWhereInput | boolean
+        delete?: ExamFrameworkWhereInput | boolean
+        connect?: ExamFrameworkWhereUniqueInput
+        update?: XOR<XOR<ExamFrameworkUpdateToOneWithWhereWithoutDocumentFilesInput, ExamFrameworkUpdateWithoutDocumentFilesInput>, ExamFrameworkUncheckedUpdateWithoutDocumentFilesInput>
     };
     export type NoteUpdateOneWithoutAttachmentsNestedInput = {
         create?: XOR<NoteCreateWithoutAttachmentsInput, NoteUncheckedCreateWithoutAttachmentsInput>
@@ -445656,11 +445987,23 @@ export namespace Prisma {
         createMany?: ExamMatrixCreateManyExamFrameworkInputEnvelope
         connect?: ExamMatrixWhereUniqueInput | ExamMatrixWhereUniqueInput[]
     };
+    export type DocumentFileCreateNestedManyWithoutExamFrameworkInput = {
+        create?: XOR<DocumentFileCreateWithoutExamFrameworkInput, DocumentFileUncheckedCreateWithoutExamFrameworkInput> | DocumentFileCreateWithoutExamFrameworkInput[] | DocumentFileUncheckedCreateWithoutExamFrameworkInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutExamFrameworkInput | DocumentFileCreateOrConnectWithoutExamFrameworkInput[]
+        createMany?: DocumentFileCreateManyExamFrameworkInputEnvelope
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    };
     export type ExamMatrixUncheckedCreateNestedManyWithoutExamFrameworkInput = {
         create?: XOR<ExamMatrixCreateWithoutExamFrameworkInput, ExamMatrixUncheckedCreateWithoutExamFrameworkInput> | ExamMatrixCreateWithoutExamFrameworkInput[] | ExamMatrixUncheckedCreateWithoutExamFrameworkInput[]
         connectOrCreate?: ExamMatrixCreateOrConnectWithoutExamFrameworkInput | ExamMatrixCreateOrConnectWithoutExamFrameworkInput[]
         createMany?: ExamMatrixCreateManyExamFrameworkInputEnvelope
         connect?: ExamMatrixWhereUniqueInput | ExamMatrixWhereUniqueInput[]
+    };
+    export type DocumentFileUncheckedCreateNestedManyWithoutExamFrameworkInput = {
+        create?: XOR<DocumentFileCreateWithoutExamFrameworkInput, DocumentFileUncheckedCreateWithoutExamFrameworkInput> | DocumentFileCreateWithoutExamFrameworkInput[] | DocumentFileUncheckedCreateWithoutExamFrameworkInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutExamFrameworkInput | DocumentFileCreateOrConnectWithoutExamFrameworkInput[]
+        createMany?: DocumentFileCreateManyExamFrameworkInputEnvelope
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
     };
     export type SubjectVersionUpdateOneRequiredWithoutExamFrameworkNestedInput = {
         create?: XOR<SubjectVersionCreateWithoutExamFrameworkInput, SubjectVersionUncheckedCreateWithoutExamFrameworkInput>
@@ -445682,6 +446025,19 @@ export namespace Prisma {
         updateMany?: ExamMatrixUpdateManyWithWhereWithoutExamFrameworkInput | ExamMatrixUpdateManyWithWhereWithoutExamFrameworkInput[]
         deleteMany?: ExamMatrixScalarWhereInput | ExamMatrixScalarWhereInput[]
     };
+    export type DocumentFileUpdateManyWithoutExamFrameworkNestedInput = {
+        create?: XOR<DocumentFileCreateWithoutExamFrameworkInput, DocumentFileUncheckedCreateWithoutExamFrameworkInput> | DocumentFileCreateWithoutExamFrameworkInput[] | DocumentFileUncheckedCreateWithoutExamFrameworkInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutExamFrameworkInput | DocumentFileCreateOrConnectWithoutExamFrameworkInput[]
+        upsert?: DocumentFileUpsertWithWhereUniqueWithoutExamFrameworkInput | DocumentFileUpsertWithWhereUniqueWithoutExamFrameworkInput[]
+        createMany?: DocumentFileCreateManyExamFrameworkInputEnvelope
+        set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        update?: DocumentFileUpdateWithWhereUniqueWithoutExamFrameworkInput | DocumentFileUpdateWithWhereUniqueWithoutExamFrameworkInput[]
+        updateMany?: DocumentFileUpdateManyWithWhereWithoutExamFrameworkInput | DocumentFileUpdateManyWithWhereWithoutExamFrameworkInput[]
+        deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+    };
     export type ExamMatrixUncheckedUpdateManyWithoutExamFrameworkNestedInput = {
         create?: XOR<ExamMatrixCreateWithoutExamFrameworkInput, ExamMatrixUncheckedCreateWithoutExamFrameworkInput> | ExamMatrixCreateWithoutExamFrameworkInput[] | ExamMatrixUncheckedCreateWithoutExamFrameworkInput[]
         connectOrCreate?: ExamMatrixCreateOrConnectWithoutExamFrameworkInput | ExamMatrixCreateOrConnectWithoutExamFrameworkInput[]
@@ -445694,6 +446050,19 @@ export namespace Prisma {
         update?: ExamMatrixUpdateWithWhereUniqueWithoutExamFrameworkInput | ExamMatrixUpdateWithWhereUniqueWithoutExamFrameworkInput[]
         updateMany?: ExamMatrixUpdateManyWithWhereWithoutExamFrameworkInput | ExamMatrixUpdateManyWithWhereWithoutExamFrameworkInput[]
         deleteMany?: ExamMatrixScalarWhereInput | ExamMatrixScalarWhereInput[]
+    };
+    export type DocumentFileUncheckedUpdateManyWithoutExamFrameworkNestedInput = {
+        create?: XOR<DocumentFileCreateWithoutExamFrameworkInput, DocumentFileUncheckedCreateWithoutExamFrameworkInput> | DocumentFileCreateWithoutExamFrameworkInput[] | DocumentFileUncheckedCreateWithoutExamFrameworkInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutExamFrameworkInput | DocumentFileCreateOrConnectWithoutExamFrameworkInput[]
+        upsert?: DocumentFileUpsertWithWhereUniqueWithoutExamFrameworkInput | DocumentFileUpsertWithWhereUniqueWithoutExamFrameworkInput[]
+        createMany?: DocumentFileCreateManyExamFrameworkInputEnvelope
+        set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        update?: DocumentFileUpdateWithWhereUniqueWithoutExamFrameworkInput | DocumentFileUpdateWithWhereUniqueWithoutExamFrameworkInput[]
+        updateMany?: DocumentFileUpdateManyWithWhereWithoutExamFrameworkInput | DocumentFileUpdateManyWithWhereWithoutExamFrameworkInput[]
+        deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
     };
     export type ExamFrameworkCreateNestedOneWithoutExamMatrixsInput = {
         create?: XOR<ExamFrameworkCreateWithoutExamMatrixsInput, ExamFrameworkUncheckedCreateWithoutExamMatrixsInput>
@@ -487827,6 +488196,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -487871,10 +488247,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         councilId?: string | null
         roomId?: string | null
@@ -488360,10 +488743,17 @@ export namespace Prisma {
         type?: StringNullableFilter<"ThesisProject"> | string | null
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
+        supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
+        THUKY?: StringNullableFilter<"ThesisProject"> | string | null
+        PHANBIEN1?: StringNullableFilter<"ThesisProject"> | string | null
+        PHANBIEN2?: StringNullableFilter<"ThesisProject"> | string | null
+        UYVIEN3?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidNullableFilter<"ThesisProject"> | string | null
         maxStudents?: IntNullableFilter<"ThesisProject"> | number | null
         councilId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -498316,6 +498706,7 @@ export namespace Prisma {
         diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -498350,6 +498741,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: string | null
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -498590,6 +498982,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: StringNullableFilter<"DocumentFile"> | string | null
         trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableFilter<"DocumentFile"> | string | null
+        examFrameworkId?: StringNullableFilter<"DocumentFile"> | string | null
         noteId?: StringNullableFilter<"DocumentFile"> | string | null
         evaluationPeriodId?: StringNullableFilter<"DocumentFile"> | string | null
         knowledgeBlockId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -502137,6 +502530,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -502171,6 +502565,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -502865,6 +503260,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -502899,6 +503295,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -505909,6 +506306,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -505943,6 +506341,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -508930,6 +509329,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -508964,6 +509364,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -509735,6 +510136,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -509769,6 +510171,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -512238,6 +512641,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -512272,6 +512676,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -512438,6 +512843,7 @@ export namespace Prisma {
         name: string
         time: number
         examMatrixs?: ExamMatrixCreateNestedManyWithoutExamFrameworkInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutExamFrameworkInput
     };
     export type ExamFrameworkUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -512451,6 +512857,7 @@ export namespace Prisma {
         name: string
         time: number
         examMatrixs?: ExamMatrixUncheckedCreateNestedManyWithoutExamFrameworkInput
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutExamFrameworkInput
     };
     export type ExamFrameworkCreateOrConnectWithoutSubjectVersionInput = {
         where: ExamFrameworkWhereUniqueInput
@@ -516418,6 +516825,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -516461,10 +516875,17 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -523360,6 +523781,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -523404,10 +523832,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -523888,6 +524323,7 @@ export namespace Prisma {
         diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -523922,6 +524358,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: string | null
         diplomaVerificationBackId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -532206,6 +532643,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -532240,6 +532678,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -533275,6 +533714,38 @@ export namespace Prisma {
     export type StudentScoreConvertCreateOrConnectWithoutDocumentFilesInput = {
         where: StudentScoreConvertWhereUniqueInput
         create: XOR<StudentScoreConvertCreateWithoutDocumentFilesInput, StudentScoreConvertUncheckedCreateWithoutDocumentFilesInput>
+    };
+    export type ExamFrameworkCreateWithoutDocumentFilesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        time: number
+        subjectVersion: SubjectVersionCreateNestedOneWithoutExamFrameworkInput
+        examMatrixs?: ExamMatrixCreateNestedManyWithoutExamFrameworkInput
+    };
+    export type ExamFrameworkUncheckedCreateWithoutDocumentFilesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        time: number
+        subjectVersionId: string
+        examMatrixs?: ExamMatrixUncheckedCreateNestedManyWithoutExamFrameworkInput
+    };
+    export type ExamFrameworkCreateOrConnectWithoutDocumentFilesInput = {
+        where: ExamFrameworkWhereUniqueInput
+        create: XOR<ExamFrameworkCreateWithoutDocumentFilesInput, ExamFrameworkUncheckedCreateWithoutDocumentFilesInput>
     };
     export type NoteCreateWithoutAttachmentsInput = {
         id?: string
@@ -534454,6 +534925,43 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         subjectScoreConvert?: SubjectScoreConvertUncheckedUpdateManyWithoutStudentScoreConvertNestedInput
     };
+    export type ExamFrameworkUpsertWithoutDocumentFilesInput = {
+        update: XOR<ExamFrameworkUpdateWithoutDocumentFilesInput, ExamFrameworkUncheckedUpdateWithoutDocumentFilesInput>
+        create: XOR<ExamFrameworkCreateWithoutDocumentFilesInput, ExamFrameworkUncheckedCreateWithoutDocumentFilesInput>
+        where?: ExamFrameworkWhereInput
+    };
+    export type ExamFrameworkUpdateToOneWithWhereWithoutDocumentFilesInput = {
+        where?: ExamFrameworkWhereInput
+        data: XOR<ExamFrameworkUpdateWithoutDocumentFilesInput, ExamFrameworkUncheckedUpdateWithoutDocumentFilesInput>
+    };
+    export type ExamFrameworkUpdateWithoutDocumentFilesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        time?: IntFieldUpdateOperationsInput | number
+        subjectVersion?: SubjectVersionUpdateOneRequiredWithoutExamFrameworkNestedInput
+        examMatrixs?: ExamMatrixUpdateManyWithoutExamFrameworkNestedInput
+    };
+    export type ExamFrameworkUncheckedUpdateWithoutDocumentFilesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        time?: IntFieldUpdateOperationsInput | number
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        examMatrixs?: ExamMatrixUncheckedUpdateManyWithoutExamFrameworkNestedInput
+    };
     export type NoteUpsertWithoutAttachmentsInput = {
         update: XOR<NoteUpdateWithoutAttachmentsInput, NoteUncheckedUpdateWithoutAttachmentsInput>
         create: XOR<NoteCreateWithoutAttachmentsInput, NoteUncheckedCreateWithoutAttachmentsInput>
@@ -535438,6 +535946,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -535472,6 +535981,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -541217,6 +541727,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -541260,10 +541777,17 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         subjectClassId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -542938,6 +543462,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -542982,10 +543513,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -543263,6 +543801,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -543307,10 +543852,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -543692,6 +544244,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543736,10 +544295,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544012,6 +544578,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -544056,9 +544629,16 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -544104,6 +544684,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -544148,9 +544735,16 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -544634,6 +545228,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -544668,6 +545263,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -544702,6 +545298,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -544746,10 +545349,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -544812,6 +545422,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -544856,10 +545473,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -545011,6 +545635,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -545055,10 +545686,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         roomId?: string | null
@@ -545556,6 +546194,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -545600,10 +546245,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -545652,6 +546304,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -545686,6 +546339,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -545729,6 +546383,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -545773,10 +546434,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -545826,6 +546494,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -545870,10 +546545,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -545922,6 +546604,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -545956,6 +546639,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -545999,6 +546683,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -546043,10 +546734,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546165,6 +546863,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -546209,9 +546914,16 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -546257,6 +546969,13 @@ export namespace Prisma {
         status?: $Enums.ThesisProjectStatus
         language?: string | null
         type?: string | null
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         defenseDate?: Date | string | null
         registrationStart?: Date | string | null
@@ -546301,9 +547020,16 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -546488,6 +547214,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
     };
@@ -546522,6 +547249,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         knowledgeBlockId?: string | null
     };
@@ -558752,6 +559480,84 @@ export namespace Prisma {
         data: ExamMatrixCreateManyExamFrameworkInput | ExamMatrixCreateManyExamFrameworkInput[]
         skipDuplicates?: boolean
     };
+    export type DocumentFileCreateWithoutExamFrameworkInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificate?: ArchivedCertificateCreateNestedOneWithoutDocumentFilesInput
+        trainingCourse?: TrainingCourseCreateNestedOneWithoutDocumentFilesInput
+        archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
+        curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
+        subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
+        notification?: NotificationCreateNestedOneWithoutAttachmentsInput
+        decision?: DecisionCreateNestedOneWithoutDocumentFileInput
+        defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
+        diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
+        diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
+        diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
+        diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
+        diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+        trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
+        knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
+    };
+    export type DocumentFileUncheckedCreateWithoutExamFrameworkInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificateId?: string | null
+        trainingCourseId?: string | null
+        archivedAwardId?: string | null
+        curriculumId?: string | null
+        curriculumVersionId?: string | null
+        subjectVersionId?: string | null
+        studentAcademicDecisionId?: string | null
+        notificationId?: string | null
+        decisionId?: string | null
+        defenseRecordId?: string | null
+        librarySubmissionId?: string | null
+        diplomaFrontId?: string | null
+        diplomaBackId?: string | null
+        diplomaVerificationId?: string | null
+        diplomaVerificationFrontId?: string | null
+        diplomaVerificationBackId?: string | null
+        trainingFieldId?: string | null
+        studentScoreConvertId?: string | null
+        noteId?: string | null
+        evaluationPeriodId?: string | null
+        knowledgeBlockId?: string | null
+    };
+    export type DocumentFileCreateOrConnectWithoutExamFrameworkInput = {
+        where: DocumentFileWhereUniqueInput
+        create: XOR<DocumentFileCreateWithoutExamFrameworkInput, DocumentFileUncheckedCreateWithoutExamFrameworkInput>
+    };
+    export type DocumentFileCreateManyExamFrameworkInputEnvelope = {
+        data: DocumentFileCreateManyExamFrameworkInput | DocumentFileCreateManyExamFrameworkInput[]
+        skipDuplicates?: boolean
+    };
     export type SubjectVersionUpsertWithoutExamFrameworkInput = {
         update: XOR<SubjectVersionUpdateWithoutExamFrameworkInput, SubjectVersionUncheckedUpdateWithoutExamFrameworkInput>
         create: XOR<SubjectVersionCreateWithoutExamFrameworkInput, SubjectVersionUncheckedCreateWithoutExamFrameworkInput>
@@ -558894,6 +559700,19 @@ export namespace Prisma {
         isDefault?: BoolFilter<"ExamMatrix"> | boolean
         examFrameworkId?: StringFilter<"ExamMatrix"> | string
     };
+    export type DocumentFileUpsertWithWhereUniqueWithoutExamFrameworkInput = {
+        where: DocumentFileWhereUniqueInput
+        update: XOR<DocumentFileUpdateWithoutExamFrameworkInput, DocumentFileUncheckedUpdateWithoutExamFrameworkInput>
+        create: XOR<DocumentFileCreateWithoutExamFrameworkInput, DocumentFileUncheckedCreateWithoutExamFrameworkInput>
+    };
+    export type DocumentFileUpdateWithWhereUniqueWithoutExamFrameworkInput = {
+        where: DocumentFileWhereUniqueInput
+        data: XOR<DocumentFileUpdateWithoutExamFrameworkInput, DocumentFileUncheckedUpdateWithoutExamFrameworkInput>
+    };
+    export type DocumentFileUpdateManyWithWhereWithoutExamFrameworkInput = {
+        where: DocumentFileScalarWhereInput
+        data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutExamFrameworkInput>
+    };
     export type ExamFrameworkCreateWithoutExamMatrixsInput = {
         id?: string
         code?: string | null
@@ -558906,6 +559725,7 @@ export namespace Prisma {
         name: string
         time: number
         subjectVersion: SubjectVersionCreateNestedOneWithoutExamFrameworkInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutExamFrameworkInput
     };
     export type ExamFrameworkUncheckedCreateWithoutExamMatrixsInput = {
         id?: string
@@ -558919,6 +559739,7 @@ export namespace Prisma {
         name: string
         time: number
         subjectVersionId: string
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutExamFrameworkInput
     };
     export type ExamFrameworkCreateOrConnectWithoutExamMatrixsInput = {
         where: ExamFrameworkWhereUniqueInput
@@ -559029,6 +559850,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         time?: IntFieldUpdateOperationsInput | number
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutExamFrameworkNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutExamFrameworkNestedInput
     };
     export type ExamFrameworkUncheckedUpdateWithoutExamMatrixsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559042,6 +559864,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         time?: IntFieldUpdateOperationsInput | number
         subjectVersionId?: StringFieldUpdateOperationsInput | string
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutExamFrameworkNestedInput
     };
     export type KnowledgeBlockUpsertWithWhereUniqueWithoutExamMatrixInput = {
         where: KnowledgeBlockWhereUniqueInput
@@ -559182,6 +560005,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
@@ -559216,6 +560040,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
     };
@@ -565380,6 +566205,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -565414,6 +566240,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -565452,6 +566279,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -565486,6 +566314,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -565936,6 +566765,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -565970,6 +566800,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566013,6 +566844,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -566047,6 +566879,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567311,6 +568144,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -567345,6 +568179,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -567387,6 +568222,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -567421,6 +568257,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -567459,6 +568296,7 @@ export namespace Prisma {
         diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
@@ -567493,6 +568331,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -567695,6 +568534,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -567729,6 +568569,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567772,6 +568613,7 @@ export namespace Prisma {
         diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -567806,6 +568648,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -568194,6 +569037,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        examFramework?: ExamFrameworkCreateNestedOneWithoutDocumentFilesInput
         evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutDocumentFilesInput
     };
@@ -568228,6 +569072,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
     };
@@ -585402,10 +586247,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         maxStudents?: number | null
         councilId?: string | null
         roomId?: string | null
@@ -586296,6 +587148,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -586340,10 +587199,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586382,10 +587248,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -601021,6 +601894,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: string | null
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -601068,6 +601942,7 @@ export namespace Prisma {
         diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -601102,6 +601977,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -601136,6 +602012,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -601789,6 +602666,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -601834,6 +602712,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -601868,6 +602747,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -601902,6 +602782,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -601969,6 +602850,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -602015,6 +602897,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -602049,6 +602932,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -602083,6 +602967,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -604208,6 +605093,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -604971,6 +605857,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -605005,6 +605892,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -605039,6 +605927,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -605767,6 +606656,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -605839,6 +606729,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -605873,6 +606764,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -605907,6 +606799,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -606080,6 +606973,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -606256,6 +607150,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -606290,6 +607185,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -606324,6 +607220,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -607319,6 +608216,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -608361,6 +609259,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -608395,6 +609294,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -608429,6 +609329,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -608606,6 +609507,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         time?: IntFieldUpdateOperationsInput | number
         examMatrixs?: ExamMatrixUpdateManyWithoutExamFrameworkNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutExamFrameworkNestedInput
     };
     export type ExamFrameworkUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -608619,6 +609521,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         time?: IntFieldUpdateOperationsInput | number
         examMatrixs?: ExamMatrixUncheckedUpdateManyWithoutExamFrameworkNestedInput
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutExamFrameworkNestedInput
     };
     export type ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -609078,10 +609981,17 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -609445,6 +610355,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609488,10 +610405,17 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -609530,10 +610454,17 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -613328,10 +614259,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -613701,6 +614639,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613745,10 +614690,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -613787,10 +614739,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -613975,6 +614934,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: string | null
         diplomaVerificationBackId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -614166,6 +615126,7 @@ export namespace Prisma {
         diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -614200,6 +615161,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614234,6 +615196,7 @@ export namespace Prisma {
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -617631,6 +618594,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -618069,6 +619033,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -618103,6 +619068,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618137,6 +619103,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618359,6 +619326,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -618393,6 +619361,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -618427,6 +619396,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618461,6 +619431,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620781,10 +621752,17 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         subjectClassId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -620818,6 +621796,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -620861,10 +621846,17 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620903,10 +621895,17 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621074,10 +622073,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -621110,6 +622116,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -621154,10 +622167,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621196,10 +622216,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621234,9 +622261,16 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -621272,9 +622306,16 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -621422,6 +622463,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -621466,9 +622514,16 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621508,9 +622563,16 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621544,6 +622606,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -621588,9 +622657,16 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621630,9 +622706,16 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621961,6 +623044,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -621995,6 +623079,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -622029,6 +623114,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622063,6 +623149,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622091,10 +623178,17 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         roomId?: string | null
@@ -622139,6 +623233,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622183,10 +623284,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622225,10 +623333,17 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622309,6 +623424,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -622343,6 +623459,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -622377,6 +623494,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622411,6 +623529,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622445,6 +623564,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -622479,6 +623599,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -622513,6 +623634,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622547,6 +623669,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622575,9 +623698,16 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -622613,9 +623743,16 @@ export namespace Prisma {
         type?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
+        supervisorName?: string | null
         supervisorId?: string | null
         supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
         coSupervisorId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
         organizationId?: string | null
         maxStudents?: number | null
         councilId?: string | null
@@ -622649,6 +623786,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622693,9 +623837,16 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622735,9 +623886,16 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622771,6 +623929,13 @@ export namespace Prisma {
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622815,9 +623980,16 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622857,9 +624029,16 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         councilId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622916,6 +624095,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         knowledgeBlockId?: string | null
     };
@@ -622994,6 +624174,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
     };
@@ -623028,6 +624209,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -623062,6 +624244,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -626724,6 +627907,41 @@ export namespace Prisma {
         name: string
         isDefault?: boolean
     };
+    export type DocumentFileCreateManyExamFrameworkInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificateId?: string | null
+        trainingCourseId?: string | null
+        archivedAwardId?: string | null
+        curriculumId?: string | null
+        curriculumVersionId?: string | null
+        subjectVersionId?: string | null
+        studentAcademicDecisionId?: string | null
+        notificationId?: string | null
+        decisionId?: string | null
+        defenseRecordId?: string | null
+        librarySubmissionId?: string | null
+        diplomaFrontId?: string | null
+        diplomaBackId?: string | null
+        diplomaVerificationId?: string | null
+        diplomaVerificationFrontId?: string | null
+        diplomaVerificationBackId?: string | null
+        trainingFieldId?: string | null
+        studentScoreConvertId?: string | null
+        noteId?: string | null
+        evaluationPeriodId?: string | null
+        knowledgeBlockId?: string | null
+    };
     export type ExamMatrixUpdateWithoutExamFrameworkInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -626763,6 +627981,111 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         isDefault?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type DocumentFileUpdateWithoutExamFrameworkInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificate?: ArchivedCertificateUpdateOneWithoutDocumentFilesNestedInput
+        trainingCourse?: TrainingCourseUpdateOneWithoutDocumentFilesNestedInput
+        archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
+        curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
+        subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
+        notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
+        decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
+        diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
+        diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
+        diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
+        diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
+        diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+        trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
+        knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
+    };
+    export type DocumentFileUncheckedUpdateWithoutExamFrameworkInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
+        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DocumentFileUncheckedUpdateManyWithoutExamFrameworkInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
+        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type KnowledgeBlockCreateManyExamMatrixInput = {
         id?: string
@@ -626940,6 +628263,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
     };
@@ -627047,6 +628371,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
@@ -627081,6 +628406,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -627115,6 +628441,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -628761,6 +630088,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         noteId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
@@ -628795,6 +630123,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
@@ -628829,6 +630158,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628863,6 +630193,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628898,6 +630229,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        examFrameworkId?: string | null
         evaluationPeriodId?: string | null
         knowledgeBlockId?: string | null
     };
@@ -628984,6 +630316,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        examFramework?: ExamFrameworkUpdateOneWithoutDocumentFilesNestedInput
         evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutDocumentFilesNestedInput
     };
@@ -629018,6 +630351,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -629052,6 +630386,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        examFrameworkId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
     };

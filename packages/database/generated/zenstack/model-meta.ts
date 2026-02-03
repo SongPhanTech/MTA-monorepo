@@ -15766,6 +15766,21 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'studentScoreConvert',
+                }, examFramework: {
+                    name: "examFramework",
+                    type: "ExamFramework",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examFrameworkId" },
+                }, examFrameworkId: {
+                    name: "examFrameworkId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examFramework',
                 }, note: {
                     name: "note",
                     type: "Note",
@@ -17468,6 +17483,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'thesisSession',
+                }, supervisorName: {
+                    name: "supervisorName",
+                    type: "String",
+                    isOptional: true,
                 }, supervisor: {
                     name: "supervisor",
                     type: "ExpertProfile",
@@ -17498,6 +17517,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'supervisorPayment',
+                }, coSupervisorName: {
+                    name: "coSupervisorName",
+                    type: "String",
+                    isOptional: true,
                 }, coSupervisor: {
                     name: "coSupervisor",
                     type: "ExpertProfile",
@@ -17528,6 +17551,26 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisorPayment',
+                }, CHUTICH: {
+                    name: "CHUTICH",
+                    type: "String",
+                    isOptional: true,
+                }, THUKY: {
+                    name: "THUKY",
+                    type: "String",
+                    isOptional: true,
+                }, PHANBIEN1: {
+                    name: "PHANBIEN1",
+                    type: "String",
+                    isOptional: true,
+                }, PHANBIEN2: {
+                    name: "PHANBIEN2",
+                    type: "String",
+                    isOptional: true,
+                }, UYVIEN3: {
+                    name: "UYVIEN3",
+                    type: "String",
+                    isOptional: true,
                 }, organization: {
                     name: "organization",
                     type: "DM_DonVi",
@@ -22552,6 +22595,12 @@ const metadata: ModelMeta = {
                 }, examMatrixs: {
                     name: "examMatrixs",
                     type: "ExamMatrix",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examFramework',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'examFramework',
