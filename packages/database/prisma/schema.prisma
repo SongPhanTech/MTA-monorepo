@@ -188,8 +188,11 @@ enum PeriodType {
 
 enum SubjectClassType {
   NORMAL
-  RETAKE
+  LINKED
   REEXAM
+  RETAKE
+  STAYBACK
+  TRANSFER
 
   @@schema("ql-dao-tao")
 }
@@ -575,6 +578,14 @@ enum RankingContext {
 enum DiplomaVerificationStatus {
   PENDING
   IN_PROGRESS
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
+enum ScoreLinkStatus {
+  PENDING
   APPROVED
   REJECTED
 
@@ -2726,6 +2737,7 @@ model Semester {
   planTraining            PlanTraining[]
   survey                  Survey[]
   exam                    Exam[]
+  scoreLinkSheets         ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -2894,6 +2906,7 @@ model FixedClass {
   subjectClasses           SubjectClass[]
   notifications            Notification[]
   surveyObjectTypes        SurveyObjectType[]
+  scoreLinkSheets          ScoreLinkSheet[]
 
   @@unique([name, trainingCourseId, curriculumVersionId])
   @@schema("ql-dao-tao")
@@ -3022,22 +3035,22 @@ model SubjectVersionCategory {
 
 /// Phiên bản môn học
 model SubjectVersion {
-  id                       String                  @id() @default(cuid())
-  active                   Boolean                 @default(true)
-  description              String?                 @db.Text()
+  id                       String                    @id() @default(cuid())
+  active                   Boolean                   @default(true)
+  description              String?                   @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime                @default(now())
-  updatedAt                DateTime                @default(now()) @updatedAt()
-  createdBy                String?                 @db.Uuid()
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @default(now()) @updatedAt()
+  createdBy                String?                   @db.Uuid()
   code                     String?
-  isLocked                 Boolean                 @default(false)
+  isLocked                 Boolean                   @default(false)
   name                     String
   codeTkb                  String?
   examType                 ExamType
   /// loại học phần
-  type                     SubjectVersionType      @default(Normal)
+  type                     SubjectVersionType        @default(Normal)
   /// 1 đầu điểm
-  onePoint                 Boolean                 @default(false)
+  onePoint                 Boolean                   @default(false)
   credit                   Int
   week                     Int?
   /// số tiết
@@ -3058,21 +3071,21 @@ model SubjectVersion {
   academicResults          String?
   materials                String?
   rules                    String?
-  managementOrganization   DM_DonVi?               @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?                 @db.Uuid()
-  subject                  Subject                 @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  managementOrganization   DM_DonVi?                 @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                   @db.Uuid()
+  subject                  Subject                   @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
-  trainingObjectType       TrainingObjectType      @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType       TrainingObjectType        @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId     String
-  subjectVersionCategory   SubjectVersionCategory? @relation(fields: [subjectVersionCategoryId], references: [id])
+  subjectVersionCategory   SubjectVersionCategory?   @relation(fields: [subjectVersionCategoryId], references: [id])
   subjectVersionCategoryId String?
   /// môn học khối kiến thức - CTĐT
   trainingBlocks           TrainingBlockSubject[]
   /// môn học tiên quyết
-  prerequisiteSubject      SubjectVersion[]        @relation(name: "PrerequisiteSubject")
-  dependentSubject         SubjectVersion[]        @relation(name: "PrerequisiteSubject")
-  coRequisiteSubject       SubjectVersion[]        @relation(name: "CoRequisiteSubject")
-  depCoRequisiteSubject    SubjectVersion[]        @relation(name: "CoRequisiteSubject")
+  prerequisiteSubject      SubjectVersion[]          @relation(name: "PrerequisiteSubject")
+  dependentSubject         SubjectVersion[]          @relation(name: "PrerequisiteSubject")
+  coRequisiteSubject       SubjectVersion[]          @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject    SubjectVersion[]          @relation(name: "CoRequisiteSubject")
   equivalencyGroups        SubjectInGroup[]
   knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]
@@ -3083,6 +3096,7 @@ model SubjectVersion {
   subjectVersionHistory    SubjectVersionHistory[]
   exams                    Exam[]
   examFramework            ExamFramework[]
+  scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
 
   @@index([name, trainingObjectTypeId])
   @@schema("ql-dao-tao")
@@ -3238,35 +3252,35 @@ model ClassRegisterLogs {
 
 /// Lớp môn học
 model SubjectClass {
-  id                          String                @id() @default(cuid())
-  active                      Boolean               @default(true)
-  description                 String?               @db.Text()
+  id                          String                  @id() @default(cuid())
+  active                      Boolean                 @default(true)
+  description                 String?                 @db.Text()
   deletedAt                   DateTime?
-  createdAt                   DateTime              @default(now())
-  updatedAt                   DateTime              @default(now()) @updatedAt()
-  createdBy                   String?               @db.Uuid()
+  createdAt                   DateTime                @default(now())
+  updatedAt                   DateTime                @default(now()) @updatedAt()
+  createdBy                   String?                 @db.Uuid()
   code                        String
   name                        String
   startDate                   DateTime?
   endDate                     DateTime?
-  subject                     SubjectVersion        @relation(fields: [subjectId], references: [id])
+  subject                     SubjectVersion          @relation(fields: [subjectId], references: [id])
   subjectId                   String
   schedule                    SubjectClassSchedule?
   maxStudent                  Int
-  type                        SubjectClassType      @default(NORMAL)
-  status                      SubjectClassStatus    @default(DRAFT)
-  trainingObjectType          TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  type                        SubjectClassType        @default(NORMAL)
+  status                      SubjectClassStatus      @default(DRAFT)
+  trainingObjectType          TrainingObjectType      @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId        String
-  semester                    Semester              @relation(fields: [semesterId], references: [id])
+  semester                    Semester                @relation(fields: [semesterId], references: [id])
   semesterId                  String
-  cancelled                   Boolean               @default(false)
+  cancelled                   Boolean                 @default(false)
   lecturerAssignmentDeadline  DateTime?
   sendLecturerAssignmentAt    DateTime?
   submitLecturerAssignmentAt  DateTime?
   approveLecturerAssignmentAt DateTime?
   examDate                    DateTime?
   examType                    ExamType?
-  exam                        Exam?                 @relation(fields: [examId], references: [id])
+  exam                        Exam?                   @relation(fields: [examId], references: [id])
   examId                      String?
   /// ngày bắt đầu nhập điểm CC/TX
   scoreDeadLineStart          DateTime?
@@ -3274,31 +3288,33 @@ model SubjectClass {
   scoreDeadline               DateTime?
   /// hạn nhập điểm thi
   examScoreDeadline           DateTime?
-  enteredScore                Boolean               @default(false)
-  enteredExamScore            Boolean               @default(false)
+  enteredScore                Boolean                 @default(false)
+  enteredExamScore            Boolean                 @default(false)
   issuedScoreAt               DateTime?
   /// khoá điểm CC/TX
-  isLockScore                 Boolean               @default(false)
+  isLockScore                 Boolean                 @default(false)
   /// khoá điểm thi
-  isLockExamScore             Boolean               @default(false)
-  scoreSubmitted              Boolean               @default(false)
-  scoreChecked                Boolean               @default(false)
-  room                        Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
+  isLockExamScore             Boolean                 @default(false)
+  scoreSubmitted              Boolean                 @default(false)
+  scoreChecked                Boolean                 @default(false)
+  room                        Room?                   @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                      String?
-  trainingLocation            TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocation            TrainingLocation?       @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
   trainingLocationId          String?
-  mainLecturer                Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  mainLecturer                Lecturer?               @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId                  String?
-  extraLecturer               Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturer               Lecturer?               @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId             String?
-  enterGradeLecturer          Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturer          Lecturer?               @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
   enterGradeLecturerId        String?
+  scoreLinkSubjectVersion     ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id])
+  scoreLinkSubjectVersionId   String                  @unique()
   subjectClassStudent         StudentSubjectScore[]
   fixedClasses                FixedClass[]
   classSchedules              ClassSchedule[]
   thesisProjects              ThesisProject[]
   expertProfile               ExpertProfile[]
-  defenseRooms                Room[]                @relation("DefenseRooms")
+  defenseRooms                Room[]                  @relation("DefenseRooms")
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]
@@ -3466,6 +3482,7 @@ model TrainingObjectType {
   surveyObjectType      SurveyObjectType[]
   survey                Survey[]
   scoreCorrectionTicket ScoreCorrectionTicket[]
+  scoreLinkSheet        ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -4020,6 +4037,7 @@ model Student {
   thesisRegistrations            StudentThesisRegistration[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
   studentScoreConvert            StudentScoreConvert[]
+  scoreLinkStudent               ScoreLinkStudent[]
   classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
@@ -4192,6 +4210,10 @@ model DocumentFile {
   trainingFieldId            String?
   studentScoreConvert        StudentScoreConvert?            @relation(fields: [studentScoreConvertId], references: [id])
   studentScoreConvertId      String?
+  scoreLinkSheet             ScoreLinkSheet?                 @relation(fields: [scoreLinkSheetId], references: [id])
+  scoreLinkSheetId           String?
+  examFramework              ExamFramework?                  @relation(fields: [examFrameworkId], references: [id])
+  examFrameworkId            String?
   note                       Note?                           @relation(fields: [noteId], references: [id])
   noteId                     String?
   evaluationPeriod           EvaluationPeriod?               @relation(fields: [evaluationPeriodId], references: [id])
@@ -4569,16 +4591,23 @@ model ThesisProject {
   subjectClassId        String?
   thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
   thesisSessionId       String?
-  /// Chuyên gia hướng dẫn b 
+  supervisorName        String?
+  /// Chuyên gia hướng dẫn
   supervisor            ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId          String?
   supervisorPayment     SupervisorPaymentRecord?    @relation("SupervisorToSupervisorPayment", fields: [supervisorPaymentId], references: [id])
   supervisorPaymentId   String?
+  coSupervisorName      String?
   /// Chuyên gia hướng dẫn bảo vệ phụ
   coSupervisor          ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
   coSupervisorPayment   SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
   coSupervisorPaymentId String?
+  CHUTICH               String?
+  THUKY                 String?
+  PHANBIEN1             String?
+  PHANBIEN2             String?
+  UYVIEN3               String?
   /// Đơn vị quản lý
   organization          DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
   organizationId        String?                     @db.Uuid()
@@ -5676,6 +5705,7 @@ model ExamBank {
   examMatrix     ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
   examMatrixId   String?
   isLock         Boolean?           @default(false)
+  /// được sử dụng tài liệu hay không
   isNote         Boolean?           @default(false)
 
   @@unique([examId, examCode])
@@ -5738,6 +5768,7 @@ model ExamFramework {
   subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
   examMatrixs      ExamMatrix[]
+  documentFiles    DocumentFile[]
 
   @@schema("khao-thi")
 }
@@ -6218,6 +6249,72 @@ model DiplomaVerificationApplication {
   studentId               String?
   student                 Student?                  @relation(fields: [studentId], references: [id])
 
+  @@schema("ql-dao-tao")
+}
+
+model ScoreLinkSheet {
+  id                       String                    @id() @default(cuid())
+  code                     String?                   @unique()
+  active                   Boolean                   @default(true)
+  description              String?                   @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @default(now()) @updatedAt()
+  createdBy                String?                   @db.Uuid()
+  trainingObjectType       TrainingObjectType        @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
+  note                     String?
+  decision                 String?
+  status                   ScoreLinkStatus           @default(PENDING)
+  fixedClass               FixedClass                @relation(fields: [fixedClassId], references: [id])
+  fixedClassId             String
+  semester                 Semester                  @relation(fields: [semesterId], references: [id])
+  semesterId               String
+  scoreLinkSubjectVersions ScoreLinkSubjectVersion[]
+  documents                DocumentFile[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Danh sách môn/điểm liên kết
+model ScoreLinkSubjectVersion {
+  id                String             @id() @default(cuid())
+  code              String?            @unique()
+  active            Boolean            @default(true)
+  description       String?            @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @default(now()) @updatedAt()
+  createdBy         String?            @db.Uuid()
+  scoreLinkSheet    ScoreLinkSheet     @relation(fields: [scoreLinkSheetId], references: [id])
+  scoreLinkSheetId  String
+  subjectVersion    SubjectVersion     @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId  String
+  scoreLinkStudents ScoreLinkStudent[]
+  subjectClass      SubjectClass?
+
+  @@unique([scoreLinkSheetId, subjectVersionId])
+  @@schema("ql-dao-tao")
+}
+
+/// Danh sách điểm liên kết theo môn
+model ScoreLinkStudent {
+  id                        String                  @id() @default(cuid())
+  code                      String?                 @unique()
+  active                    Boolean                 @default(true)
+  description               String?                 @db.Text()
+  deletedAt                 DateTime?
+  createdAt                 DateTime                @default(now())
+  updatedAt                 DateTime                @default(now()) @updatedAt()
+  createdBy                 String?                 @db.Uuid()
+  scoreLinkSubjectVersion   ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id])
+  scoreLinkSubjectVersionId String
+  student                   Student                 @relation(fields: [studentId], references: [id])
+  studentId                 String
+  /// Điểm học phần => attendanceScore=midtermScore=examScore=finalScore=manualFinalScore
+  score                     Float
+
+  @@unique([scoreLinkSubjectVersionId, studentId])
   @@schema("ql-dao-tao")
 }
 

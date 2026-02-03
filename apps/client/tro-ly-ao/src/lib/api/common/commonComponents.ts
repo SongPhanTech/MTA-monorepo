@@ -1693,6 +1693,80 @@ export const useImportExcelToDatabase = (
   });
 };
 
+export type ExcelTemplateError = Fetcher.ErrorWrapper<undefined>;
+
+export type ExcelTemplateRequestBody = {
+  tail?: {
+    data?: void | null;
+  };
+  head?: {
+    data?: void | null;
+  };
+  /**
+   * Dữ liệu để điền vào template
+   */
+  payload: {
+    data?: void | null;
+    /**
+     * Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2
+     */
+    mergeCells?: string[];
+  }[];
+  fileName: string;
+  path: string;
+  /**
+   * Có hiển thị lưới trong Excel hay không
+   *
+   * @default false
+   */
+  showGridLines?: boolean;
+  /**
+   * Có tự động xuống dòng trong ô hay không
+   *
+   * @default true
+   */
+  wrapText?: boolean;
+};
+
+export type ExcelTemplateVariables = {
+  body: ExcelTemplateRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchExcelTemplate = (
+  variables: ExcelTemplateVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    undefined,
+    ExcelTemplateError,
+    ExcelTemplateRequestBody,
+    {},
+    {},
+    {}
+  >({ url: "/api/excel-template", method: "post", ...variables, signal });
+
+export const useExcelTemplate = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      undefined,
+      ExcelTemplateError,
+      ExcelTemplateVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    undefined,
+    ExcelTemplateError,
+    ExcelTemplateVariables
+  >({
+    mutationFn: (variables: ExcelTemplateVariables) =>
+      fetchExcelTemplate(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
 export type GeneratePresignedUrlError = Fetcher.ErrorWrapper<undefined>;
 
 export type GeneratePresignedUrlVariables = {
@@ -2161,6 +2235,8 @@ export type SqlTransactionRequestBody = {
     | "SubjectClassHistory"
     | "SubjectClassTime"
     | "ClassSchedule"
+    | "ScoreCorrectionTicket"
+    | "ScoreCorrectionItem"
     | "TrainingObjectType"
     | "PriorityObject"
     | "TrainingType"
@@ -2218,6 +2294,7 @@ export type SqlTransactionRequestBody = {
     | "PaymentRecord"
     | "SupervisorPaymentRecord"
     | "EvaluationPeriod"
+    | "EvaluationStandardSet"
     | "StandardCatalog"
     | "CriterionCatalog"
     | "EvidenceCategory"
@@ -2239,12 +2316,11 @@ export type SqlTransactionRequestBody = {
     | "ClusterSurvey"
     | "Survey"
     | "SurveyQuestion"
+    | "SpecificChoice"
     | "SurveyChoice"
     | "SurveySession"
     | "SurveyResponse"
     | "QuestionBank"
-    | "Difficulty"
-    | "KnowledgeBlock"
     | "Question"
     | "MultipleChoiceOption"
     | "FillInBlankSlot"
@@ -2252,10 +2328,13 @@ export type SqlTransactionRequestBody = {
     | "Exam"
     | "ExamRoom"
     | "ExamList"
-    | "TestStructureRule"
     | "ExamBank"
     | "ExamBankQuestion"
     | "ExamPaper"
+    | "ExamFramework"
+    | "ExamMatrix"
+    | "KnowledgeBlock"
+    | "ConfigExam"
     | "Staff"
     | "StaffHistory"
     | "Scholarship"

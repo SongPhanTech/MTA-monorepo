@@ -34,6 +34,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     subjectVersion: z.record(z.string(), z.unknown()),
     examMatrixs: z.array(z.unknown()).optional(),
+    documentFiles: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

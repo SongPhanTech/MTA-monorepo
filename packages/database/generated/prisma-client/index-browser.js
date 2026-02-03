@@ -2083,7 +2083,8 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   trainingLocationId: 'trainingLocationId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
-  enterGradeLecturerId: 'enterGradeLecturerId'
+  enterGradeLecturerId: 'enterGradeLecturerId',
+  scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId'
 };
 
 exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
@@ -2695,6 +2696,8 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   diplomaVerificationBackId: 'diplomaVerificationBackId',
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  examFrameworkId: 'examFrameworkId',
   noteId: 'noteId',
   evaluationPeriodId: 'evaluationPeriodId',
   knowledgeBlockId: 'knowledgeBlockId'
@@ -2962,10 +2965,17 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   type: 'type',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
+  supervisorName: 'supervisorName',
   supervisorId: 'supervisorId',
   supervisorPaymentId: 'supervisorPaymentId',
+  coSupervisorName: 'coSupervisorName',
   coSupervisorId: 'coSupervisorId',
   coSupervisorPaymentId: 'coSupervisorPaymentId',
+  CHUTICH: 'CHUTICH',
+  THUKY: 'THUKY',
+  PHANBIEN1: 'PHANBIEN1',
+  PHANBIEN2: 'PHANBIEN2',
+  UYVIEN3: 'UYVIEN3',
   organizationId: 'organizationId',
   maxStudents: 'maxStudents',
   councilId: 'councilId',
@@ -4138,6 +4148,50 @@ exports.Prisma.DiplomaVerificationApplicationScalarFieldEnum = {
   classification: 'classification',
   status: 'status',
   studentId: 'studentId'
+};
+
+exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  note: 'note',
+  decision: 'decision',
+  status: 'status',
+  fixedClassId: 'fixedClassId',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.ScoreLinkSubjectVersionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ScoreLinkStudentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId',
+  studentId: 'studentId',
+  score: 'score'
 };
 
 exports.Prisma.NoteScalarFieldEnum = {
@@ -5949,7 +6003,8 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   trainingLocationId: 'trainingLocationId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
-  enterGradeLecturerId: 'enterGradeLecturerId'
+  enterGradeLecturerId: 'enterGradeLecturerId',
+  scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId'
 };
 
 exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
@@ -6300,6 +6355,8 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   diplomaVerificationBackId: 'diplomaVerificationBackId',
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  examFrameworkId: 'examFrameworkId',
   noteId: 'noteId',
   evaluationPeriodId: 'evaluationPeriodId',
   knowledgeBlockId: 'knowledgeBlockId'
@@ -6470,10 +6527,17 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   type: 'type',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
+  supervisorName: 'supervisorName',
   supervisorId: 'supervisorId',
   supervisorPaymentId: 'supervisorPaymentId',
+  coSupervisorName: 'coSupervisorName',
   coSupervisorId: 'coSupervisorId',
   coSupervisorPaymentId: 'coSupervisorPaymentId',
+  CHUTICH: 'CHUTICH',
+  THUKY: 'THUKY',
+  PHANBIEN1: 'PHANBIEN1',
+  PHANBIEN2: 'PHANBIEN2',
+  UYVIEN3: 'UYVIEN3',
   organizationId: 'organizationId',
   councilId: 'councilId',
   roomId: 'roomId',
@@ -7191,6 +7255,36 @@ exports.Prisma.DiplomaVerificationApplicationOrderByRelevanceFieldEnum = {
   studentId: 'studentId'
 };
 
+exports.Prisma.ScoreLinkSheetOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  note: 'note',
+  decision: 'decision',
+  fixedClassId: 'fixedClassId',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.ScoreLinkSubjectVersionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ScoreLinkStudentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId',
+  studentId: 'studentId'
+};
+
 exports.Prisma.NoteOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -7570,8 +7664,11 @@ exports.MessageSender = exports.$Enums.MessageSender = {
 
 exports.SubjectClassType = exports.$Enums.SubjectClassType = {
   NORMAL: 'NORMAL',
+  LINKED: 'LINKED',
+  REEXAM: 'REEXAM',
   RETAKE: 'RETAKE',
-  REEXAM: 'REEXAM'
+  STAYBACK: 'STAYBACK',
+  TRANSFER: 'TRANSFER'
 };
 
 exports.ScoreConvertStatus = exports.$Enums.ScoreConvertStatus = {
@@ -7957,6 +8054,12 @@ exports.DiplomaVerificationStatus = exports.$Enums.DiplomaVerificationStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.ScoreLinkStatus = exports.$Enums.ScoreLinkStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.ReminderRepeatType = exports.$Enums.ReminderRepeatType = {
   NONE: 'NONE',
   DAILY: 'DAILY',
@@ -8207,6 +8310,9 @@ exports.Prisma.ModelName = {
   GraduationRankDowngradeCondition: 'GraduationRankDowngradeCondition',
   RankingCondition: 'RankingCondition',
   DiplomaVerificationApplication: 'DiplomaVerificationApplication',
+  ScoreLinkSheet: 'ScoreLinkSheet',
+  ScoreLinkSubjectVersion: 'ScoreLinkSubjectVersion',
+  ScoreLinkStudent: 'ScoreLinkStudent',
   Note: 'Note',
   NoteFolder: 'NoteFolder',
   NoteTag: 'NoteTag',
