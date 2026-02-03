@@ -221,7 +221,7 @@ export default function QuestionBankLite({
                                 render: (_: unknown, record: any) => (
                                     <Tooltip title="Xem câu hỏi">
                                         <EyeOutlined
-                                            className="cursor-pointer text-blue-600 hover:text-blue-800"
+                                            className="text-sm cursor-pointer text-blue-600 hover:text-blue-800"
                                             onClick={() => {
                                                 onOpenQuestionListModal({
                                                     knowledgeBlockId: record.knowledgeBlockId,
