@@ -24,7 +24,7 @@ import { getUrl } from '@workspace/libs/api/custom-instance'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
 import { getExportSubjectClassScoreUrl } from '@workspace/libs/api/training'
-import { calcFinalScore, fastIsEqual, getRuntimeEnv } from '@workspace/libs/utils'
+import { calcFinalScore, fastIsEqual, getRuntimeEnv, isNullish } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { cn } from '@workspace/ui/lib/utils'
@@ -878,33 +878,33 @@ export default function NhapDiem({
                     onValuesChange={(changedValues) => {
                         const changedId = Object.keys(changedValues.list || {})?.[0]
                         if (changedId) {
-                            const examScore =
+                            const examScore: number | null =
                                 changedValues.list[changedId]?.examScore ??
                                 listForm[changedId].examScore ??
-                                0
-                            const attendanceScore = dataDetailSubjectClass?.subject.onePoint
+                                null
+                            const attendanceScore: number | null = dataDetailSubjectClass?.subject
+                                .onePoint
                                 ? examScore
-                                : changedValues.list[changedId]?.attendanceScore !== undefined
+                                : !isNullish(changedValues.list[changedId]?.attendanceScore)
                                   ? changedValues.list[changedId]?.attendanceScore
-                                  : listForm[changedId].attendanceScore
-                            const midtermScore = dataDetailSubjectClass?.subject.onePoint
+                                  : (listForm[changedId].attendanceScore ?? null)
+                            const midtermScore: number | null = dataDetailSubjectClass?.subject
+                                .onePoint
                                 ? examScore
-                                : changedValues.list[changedId]?.midtermScore !== undefined
+                                : !isNullish(changedValues.list[changedId]?.midtermScore)
                                   ? changedValues.list[changedId]?.midtermScore
-                                  : listForm[changedId].midtermScore
+                                  : (listForm[changedId].midtermScore ?? null)
 
-                            const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam
+                            const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam ?? null
                             // TODO: fix not work if directly uncheck exam banned
                             const isExamBanned =
                                 !!changedValues.list[changedId]?.examBannedReason ||
                                 !!listForm[changedId]?.examBannedReason ||
                                 (attendanceScore !== null &&
                                     scoreToTakeExam !== null &&
-                                    scoreToTakeExam !== undefined &&
                                     attendanceScore < scoreToTakeExam) ||
                                 (midtermScore !== null &&
                                     scoreToTakeExam !== null &&
-                                    scoreToTakeExam !== undefined &&
                                     midtermScore < scoreToTakeExam)
 
                             const dataForCalc = dataTable.find((i) => i.id === changedId)
