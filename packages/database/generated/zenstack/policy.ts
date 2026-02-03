@@ -4489,13 +4489,13 @@ const policy: PolicyDef = {
             },
 
         },
-        scoreLinkSubject: {
+        scoreLinkSubjectVersion: {
             modelLevel: {
-                read: { guard: ScoreLinkSubject_read, },
-                create: { guard: ScoreLinkSubject_create, inputChecker: ScoreLinkSubject_create_input, },
-                update: { guard: ScoreLinkSubject_update, },
-                postUpdate: { guard: ScoreLinkSubject_postUpdate, },
-                delete: { guard: ScoreLinkSubject_delete, }
+                read: { guard: ScoreLinkSubjectVersion_read, },
+                create: { guard: ScoreLinkSubjectVersion_create, inputChecker: ScoreLinkSubjectVersion_create_input, },
+                update: { guard: ScoreLinkSubjectVersion_update, },
+                postUpdate: { guard: ScoreLinkSubjectVersion_postUpdate, },
+                delete: { guard: ScoreLinkSubjectVersion_delete, }
             },
             fieldLevel: {
                 read:
@@ -5572,8 +5572,8 @@ const policy: PolicyDef = {
         rankingCondition: { hasValidation: false },
         diplomaVerificationApplication: { hasValidation: false },
         scoreLinkSheet: { hasValidation: false },
-        scoreLinkSubject: { hasValidation: false },
-        scoreLinkStudent: { hasValidation: false },
+        scoreLinkSubjectVersion: { hasValidation: false },
+        scoreLinkStudent: { hasValidation: true },
         note: { hasValidation: false },
         noteFolder: { hasValidation: false },
         noteTag: { hasValidation: false },
@@ -19963,12 +19963,12 @@ function $check_ScoreLinkSheet_delete(input: any, context: QueryContext): any {
     return false;
 }
 
-function ScoreLinkSubject_read(context: QueryContext, db: CrudContract): any {
+function ScoreLinkSubjectVersion_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_ScoreLinkSubject_read(input: any, context: QueryContext): any {
+function $check_ScoreLinkSubjectVersion_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -19979,49 +19979,49 @@ function $check_ScoreLinkSubject_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ScoreLinkSubject_create(context: QueryContext, db: CrudContract): any {
+function ScoreLinkSubjectVersion_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ScoreLinkSubject_create(input: any, context: QueryContext): any {
+function $check_ScoreLinkSubjectVersion_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ScoreLinkSubject_create_input(input: any, context: QueryContext): boolean {
+function ScoreLinkSubjectVersion_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function ScoreLinkSubject_update(context: QueryContext, db: CrudContract): any {
+function ScoreLinkSubjectVersion_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ScoreLinkSubject_update(input: any, context: QueryContext): any {
+function $check_ScoreLinkSubjectVersion_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ScoreLinkSubject_postUpdate(context: QueryContext, db: CrudContract): any {
+function ScoreLinkSubjectVersion_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ScoreLinkSubject_postUpdate(input: any, context: QueryContext): any {
+function $check_ScoreLinkSubjectVersion_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ScoreLinkSubject_delete(context: QueryContext, db: CrudContract): any {
+function ScoreLinkSubjectVersion_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ScoreLinkSubject_delete(input: any, context: QueryContext): any {
+function $check_ScoreLinkSubjectVersion_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

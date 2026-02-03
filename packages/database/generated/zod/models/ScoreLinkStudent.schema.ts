@@ -14,6 +14,7 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    score: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -25,16 +26,16 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    score: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }),
 }
 ).strict();
 const relationSchema = z.object({
-    scoreLinkSheet: z.record(z.string(), z.unknown()),
+    scoreLinkSubjectVersion: z.record(z.string(), z.unknown()),
     student: z.record(z.string(), z.unknown()),
-    subjects: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    scoreLinkSheetId: z.string(),
+    scoreLinkSubjectVersionId: z.string(),
     studentId: z.string(),
 }
 );
@@ -70,7 +71,8 @@ export const ScoreLinkStudentPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    createdBy: z.string().uuid().nullish()
+    createdBy: z.string().uuid().nullish(),
+    score: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 

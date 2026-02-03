@@ -17,6 +17,7 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
+    decision: z.string().nullish(),
     status: ScoreLinkStatusSchema,
 }
 ).strict();
@@ -30,23 +31,22 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
+    decision: z.string().nullish(),
     status: ScoreLinkStatusSchema,
 }
 ).strict();
 const relationSchema = z.object({
+    trainingObjectType: z.record(z.string(), z.unknown()),
     fixedClass: z.record(z.string(), z.unknown()),
     semester: z.record(z.string(), z.unknown()),
-    curriculum: z.record(z.string(), z.unknown()),
-    trainingCourse: z.record(z.string(), z.unknown()),
-    students: z.array(z.unknown()).optional(),
+    scoreLinkSubjectVersions: z.array(z.unknown()).optional(),
     documents: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
+    trainingObjectTypeId: z.string(),
     fixedClassId: z.string(),
     semesterId: z.string(),
-    curriculumId: z.string(),
-    trainingCourseId: z.string(),
 }
 );
 
@@ -83,6 +83,7 @@ export const ScoreLinkSheetPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
+    decision: z.string().nullish(),
     status: ScoreLinkStatusSchema
 }).partial().passthrough();
 

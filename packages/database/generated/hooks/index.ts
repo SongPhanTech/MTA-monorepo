@@ -225,7 +225,7 @@ export * from './graduation-rank-downgrade-condition';
 export * from './ranking-condition';
 export * from './diploma-verification-application';
 export * from './score-link-sheet';
-export * from './score-link-subject';
+export * from './score-link-subject-version';
 export * from './score-link-student';
 export * from './note';
 export * from './note-folder';

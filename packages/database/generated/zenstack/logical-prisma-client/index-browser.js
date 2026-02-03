@@ -1565,8 +1565,7 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   suspendedReason: 'suspendedReason',
   repeated: 'repeated',
   repeatedReason: 'repeatedReason',
-  isImproving: 'isImproving',
-  scoreLinkSubjectId: 'scoreLinkSubjectId'
+  isImproving: 'isImproving'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
@@ -2084,7 +2083,8 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   trainingLocationId: 'trainingLocationId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
-  enterGradeLecturerId: 'enterGradeLecturerId'
+  enterGradeLecturerId: 'enterGradeLecturerId',
+  scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId'
 };
 
 exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
@@ -2697,6 +2697,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
   scoreLinkSheetId: 'scoreLinkSheetId',
+  examFrameworkId: 'examFrameworkId',
   noteId: 'noteId',
   evaluationPeriodId: 'evaluationPeriodId',
   knowledgeBlockId: 'knowledgeBlockId'
@@ -2964,10 +2965,17 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   type: 'type',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
+  supervisorName: 'supervisorName',
   supervisorId: 'supervisorId',
   supervisorPaymentId: 'supervisorPaymentId',
+  coSupervisorName: 'coSupervisorName',
   coSupervisorId: 'coSupervisorId',
   coSupervisorPaymentId: 'coSupervisorPaymentId',
+  CHUTICH: 'CHUTICH',
+  THUKY: 'THUKY',
+  PHANBIEN1: 'PHANBIEN1',
+  PHANBIEN2: 'PHANBIEN2',
+  UYVIEN3: 'UYVIEN3',
   organizationId: 'organizationId',
   maxStudents: 'maxStudents',
   councilId: 'councilId',
@@ -4151,15 +4159,15 @@ exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   note: 'note',
+  decision: 'decision',
   status: 'status',
   fixedClassId: 'fixedClassId',
-  semesterId: 'semesterId',
-  curriculumId: 'curriculumId',
-  trainingCourseId: 'trainingCourseId'
+  semesterId: 'semesterId'
 };
 
-exports.Prisma.ScoreLinkSubjectScalarFieldEnum = {
+exports.Prisma.ScoreLinkSubjectVersionScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -4168,11 +4176,8 @@ exports.Prisma.ScoreLinkSubjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  scoreLinkStudentId: 'scoreLinkStudentId',
-  subjectVersionId: 'subjectVersionId',
-  score: 'score',
-  note: 'note',
-  studentSubjectScoreId: 'studentSubjectScoreId'
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  subjectVersionId: 'subjectVersionId'
 };
 
 exports.Prisma.ScoreLinkStudentScalarFieldEnum = {
@@ -4184,8 +4189,9 @@ exports.Prisma.ScoreLinkStudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  scoreLinkSheetId: 'scoreLinkSheetId',
-  studentId: 'studentId'
+  scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId',
+  studentId: 'studentId',
+  score: 'score'
 };
 
 exports.Prisma.NoteScalarFieldEnum = {
@@ -5697,8 +5703,7 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
-  repeatedReason: 'repeatedReason',
-  scoreLinkSubjectId: 'scoreLinkSubjectId'
+  repeatedReason: 'repeatedReason'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
@@ -5998,7 +6003,8 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   trainingLocationId: 'trainingLocationId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
-  enterGradeLecturerId: 'enterGradeLecturerId'
+  enterGradeLecturerId: 'enterGradeLecturerId',
+  scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId'
 };
 
 exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
@@ -6350,6 +6356,7 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
   scoreLinkSheetId: 'scoreLinkSheetId',
+  examFrameworkId: 'examFrameworkId',
   noteId: 'noteId',
   evaluationPeriodId: 'evaluationPeriodId',
   knowledgeBlockId: 'knowledgeBlockId'
@@ -6520,10 +6527,17 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   type: 'type',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
+  supervisorName: 'supervisorName',
   supervisorId: 'supervisorId',
   supervisorPaymentId: 'supervisorPaymentId',
+  coSupervisorName: 'coSupervisorName',
   coSupervisorId: 'coSupervisorId',
   coSupervisorPaymentId: 'coSupervisorPaymentId',
+  CHUTICH: 'CHUTICH',
+  THUKY: 'THUKY',
+  PHANBIEN1: 'PHANBIEN1',
+  PHANBIEN2: 'PHANBIEN2',
+  UYVIEN3: 'UYVIEN3',
   organizationId: 'organizationId',
   councilId: 'councilId',
   roomId: 'roomId',
@@ -7246,22 +7260,20 @@ exports.Prisma.ScoreLinkSheetOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   note: 'note',
+  decision: 'decision',
   fixedClassId: 'fixedClassId',
-  semesterId: 'semesterId',
-  curriculumId: 'curriculumId',
-  trainingCourseId: 'trainingCourseId'
+  semesterId: 'semesterId'
 };
 
-exports.Prisma.ScoreLinkSubjectOrderByRelevanceFieldEnum = {
+exports.Prisma.ScoreLinkSubjectVersionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  scoreLinkStudentId: 'scoreLinkStudentId',
-  subjectVersionId: 'subjectVersionId',
-  note: 'note',
-  studentSubjectScoreId: 'studentSubjectScoreId'
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  subjectVersionId: 'subjectVersionId'
 };
 
 exports.Prisma.ScoreLinkStudentOrderByRelevanceFieldEnum = {
@@ -7269,7 +7281,7 @@ exports.Prisma.ScoreLinkStudentOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  scoreLinkSheetId: 'scoreLinkSheetId',
+  scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId',
   studentId: 'studentId'
 };
 
@@ -7652,8 +7664,11 @@ exports.MessageSender = exports.$Enums.MessageSender = {
 
 exports.SubjectClassType = exports.$Enums.SubjectClassType = {
   NORMAL: 'NORMAL',
+  LINKED: 'LINKED',
+  REEXAM: 'REEXAM',
   RETAKE: 'RETAKE',
-  REEXAM: 'REEXAM'
+  STAYBACK: 'STAYBACK',
+  TRANSFER: 'TRANSFER'
 };
 
 exports.ScoreConvertStatus = exports.$Enums.ScoreConvertStatus = {
@@ -8296,7 +8311,7 @@ exports.Prisma.ModelName = {
   RankingCondition: 'RankingCondition',
   DiplomaVerificationApplication: 'DiplomaVerificationApplication',
   ScoreLinkSheet: 'ScoreLinkSheet',
-  ScoreLinkSubject: 'ScoreLinkSubject',
+  ScoreLinkSubjectVersion: 'ScoreLinkSubjectVersion',
   ScoreLinkStudent: 'ScoreLinkStudent',
   Note: 'Note',
   NoteFolder: 'NoteFolder',

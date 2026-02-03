@@ -225,7 +225,7 @@ export * from './GraduationRankDowngradeCondition.schema';
 export * from './RankingCondition.schema';
 export * from './DiplomaVerificationApplication.schema';
 export * from './ScoreLinkSheet.schema';
-export * from './ScoreLinkSubject.schema';
+export * from './ScoreLinkSubjectVersion.schema';
 export * from './ScoreLinkStudent.schema';
 export * from './Note.schema';
 export * from './NoteFolder.schema';

@@ -41,7 +41,6 @@ const relationSchema = z.object({
     trainingObjectType: z.record(z.string(), z.unknown()),
     documentFiles: z.array(z.unknown()).optional(),
     curriculumVersion: z.array(z.unknown()).optional(),
-    scoreLinkSheets: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

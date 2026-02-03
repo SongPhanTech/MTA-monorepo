@@ -98,14 +98,12 @@ const relationSchema = z.object({
     studentThesisRegistration: z.array(z.unknown()).optional(),
     studentSubjectScoreHistory: z.array(z.unknown()).optional(),
     scoreCorrectionItem: z.array(z.unknown()).optional(),
-    scoreLinkSubject: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     subjectClassId: z.string().nullish(),
     subjectVersionId: z.string(),
     studentId: z.string(),
-    scoreLinkSubjectId: z.string().nullish(),
 }
 );
 

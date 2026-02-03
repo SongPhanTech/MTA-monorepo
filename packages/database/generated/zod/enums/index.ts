@@ -226,7 +226,7 @@ export * from './GraduationRankDowngradeConditionScalarFieldEnum.schema';
 export * from './RankingConditionScalarFieldEnum.schema';
 export * from './DiplomaVerificationApplicationScalarFieldEnum.schema';
 export * from './ScoreLinkSheetScalarFieldEnum.schema';
-export * from './ScoreLinkSubjectScalarFieldEnum.schema';
+export * from './ScoreLinkSubjectVersionScalarFieldEnum.schema';
 export * from './ScoreLinkStudentScalarFieldEnum.schema';
 export * from './NoteScalarFieldEnum.schema';
 export * from './NoteFolderScalarFieldEnum.schema';
@@ -495,7 +495,7 @@ export * from './GraduationRankDowngradeConditionOrderByRelevanceFieldEnum.schem
 export * from './RankingConditionOrderByRelevanceFieldEnum.schema';
 export * from './DiplomaVerificationApplicationOrderByRelevanceFieldEnum.schema';
 export * from './ScoreLinkSheetOrderByRelevanceFieldEnum.schema';
-export * from './ScoreLinkSubjectOrderByRelevanceFieldEnum.schema';
+export * from './ScoreLinkSubjectVersionOrderByRelevanceFieldEnum.schema';
 export * from './ScoreLinkStudentOrderByRelevanceFieldEnum.schema';
 export * from './NoteOrderByRelevanceFieldEnum.schema';
 export * from './NoteFolderOrderByRelevanceFieldEnum.schema';
