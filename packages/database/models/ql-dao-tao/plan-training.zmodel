@@ -11,6 +11,7 @@ import 'training-score'
 import 'scholarship'
 import 'warning'
 import 'training-action'
+import 'score-link'
 import 'ranking'
 import 'thesis'
 import '../ql-danh-muc/notification'
@@ -162,7 +163,10 @@ model StudentSubjectScore extends Base {
   studentSubjectScoreHistory   StudentSubjectScoreHistory[]
   scoreCorrectionItem          ScoreCorrectionItem[]
 
-  @@unique([subjectClassId, studentId])
+  scoreLinkSubject             ScoreLinkSubject?                          @relation(fields: [scoreLinkSubjectId], references: [id])
+  scoreLinkSubjectId           String?                                    @unique
+
+  @@unique([subjectClassId, studentId, scoreLinkSubjectId])
   @@schema("ql-dao-tao")
 }
 
@@ -354,6 +358,7 @@ model Semester extends Base {
   planTraining            PlanTraining[]
   survey                  Survey[]
   exam                    Exam[]
+  scoreLinkSheets         ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -454,6 +459,7 @@ model TrainingCourse extends Base {
   thesisSession              ThesisSession[]
   planTrainings              PlanTraining[]
   graduationSessions         GraduationSession[]
+  scoreLinkSheets            ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -502,6 +508,8 @@ model FixedClass extends Base {
   notifications            Notification[]  // Thông báo cho lớp
   surveyObjectTypes        SurveyObjectType[]
 
+  scoreLinkSheets          ScoreLinkSheet[]
+
   @@unique([name, trainingCourseId, curriculumVersionId])
 
   @@schema("ql-dao-tao")
@@ -527,6 +535,8 @@ model Curriculum extends BaseNoCode {
 
   documentFiles            DocumentFile[]
   curriculumVersion        CurriculumVersion[]
+
+  scoreLinkSheets          ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -712,6 +722,8 @@ model SubjectVersion extends BaseNoCode {
   subjectVersionHistory    SubjectVersionHistory[]
   exams                    Exam[]
   examFramework            ExamFramework[]
+
+  scoreLinkSubjects        ScoreLinkSubject[]
 
   // @@unique([trainingObjectTypeId, name, credit, period])
   @@index([name, trainingObjectTypeId])

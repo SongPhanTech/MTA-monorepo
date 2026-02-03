@@ -1565,7 +1565,8 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   suspendedReason: 'suspendedReason',
   repeated: 'repeated',
   repeatedReason: 'repeatedReason',
-  isImproving: 'isImproving'
+  isImproving: 'isImproving',
+  scoreLinkSubjectId: 'scoreLinkSubjectId'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
@@ -2695,6 +2696,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   diplomaVerificationBackId: 'diplomaVerificationBackId',
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
+  scoreLinkSheetId: 'scoreLinkSheetId',
   noteId: 'noteId',
   evaluationPeriodId: 'evaluationPeriodId',
   knowledgeBlockId: 'knowledgeBlockId'
@@ -4137,6 +4139,52 @@ exports.Prisma.DiplomaVerificationApplicationScalarFieldEnum = {
   diplomaIssueDate: 'diplomaIssueDate',
   classification: 'classification',
   status: 'status',
+  studentId: 'studentId'
+};
+
+exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  note: 'note',
+  status: 'status',
+  fixedClassId: 'fixedClassId',
+  semesterId: 'semesterId',
+  curriculumId: 'curriculumId',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.ScoreLinkSubjectScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  scoreLinkStudentId: 'scoreLinkStudentId',
+  subjectVersionId: 'subjectVersionId',
+  score: 'score',
+  note: 'note',
+  studentSubjectScoreId: 'studentSubjectScoreId'
+};
+
+exports.Prisma.ScoreLinkStudentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  scoreLinkSheetId: 'scoreLinkSheetId',
   studentId: 'studentId'
 };
 
@@ -5649,7 +5697,8 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
-  repeatedReason: 'repeatedReason'
+  repeatedReason: 'repeatedReason',
+  scoreLinkSubjectId: 'scoreLinkSubjectId'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
@@ -6300,6 +6349,7 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   diplomaVerificationBackId: 'diplomaVerificationBackId',
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
+  scoreLinkSheetId: 'scoreLinkSheetId',
   noteId: 'noteId',
   evaluationPeriodId: 'evaluationPeriodId',
   knowledgeBlockId: 'knowledgeBlockId'
@@ -7191,6 +7241,38 @@ exports.Prisma.DiplomaVerificationApplicationOrderByRelevanceFieldEnum = {
   studentId: 'studentId'
 };
 
+exports.Prisma.ScoreLinkSheetOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  note: 'note',
+  fixedClassId: 'fixedClassId',
+  semesterId: 'semesterId',
+  curriculumId: 'curriculumId',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.ScoreLinkSubjectOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  scoreLinkStudentId: 'scoreLinkStudentId',
+  subjectVersionId: 'subjectVersionId',
+  note: 'note',
+  studentSubjectScoreId: 'studentSubjectScoreId'
+};
+
+exports.Prisma.ScoreLinkStudentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  studentId: 'studentId'
+};
+
 exports.Prisma.NoteOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -7957,6 +8039,12 @@ exports.DiplomaVerificationStatus = exports.$Enums.DiplomaVerificationStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.ScoreLinkStatus = exports.$Enums.ScoreLinkStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.ReminderRepeatType = exports.$Enums.ReminderRepeatType = {
   NONE: 'NONE',
   DAILY: 'DAILY',
@@ -8207,6 +8295,9 @@ exports.Prisma.ModelName = {
   GraduationRankDowngradeCondition: 'GraduationRankDowngradeCondition',
   RankingCondition: 'RankingCondition',
   DiplomaVerificationApplication: 'DiplomaVerificationApplication',
+  ScoreLinkSheet: 'ScoreLinkSheet',
+  ScoreLinkSubject: 'ScoreLinkSubject',
+  ScoreLinkStudent: 'ScoreLinkStudent',
   Note: 'Note',
   NoteFolder: 'NoteFolder',
   NoteTag: 'NoteTag',

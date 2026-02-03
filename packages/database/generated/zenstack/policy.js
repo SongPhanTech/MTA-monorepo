@@ -2865,6 +2865,45 @@ const policy = {
                 update: {},
             },
         },
+        scoreLinkSheet: {
+            modelLevel: {
+                read: { guard: ScoreLinkSheet_read, },
+                create: { guard: ScoreLinkSheet_create, inputChecker: ScoreLinkSheet_create_input, },
+                update: { guard: ScoreLinkSheet_update, },
+                postUpdate: { guard: ScoreLinkSheet_postUpdate, },
+                delete: { guard: ScoreLinkSheet_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        scoreLinkSubject: {
+            modelLevel: {
+                read: { guard: ScoreLinkSubject_read, },
+                create: { guard: ScoreLinkSubject_create, inputChecker: ScoreLinkSubject_create_input, },
+                update: { guard: ScoreLinkSubject_update, },
+                postUpdate: { guard: ScoreLinkSubject_postUpdate, },
+                delete: { guard: ScoreLinkSubject_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        scoreLinkStudent: {
+            modelLevel: {
+                read: { guard: ScoreLinkStudent_read, },
+                create: { guard: ScoreLinkStudent_create, inputChecker: ScoreLinkStudent_create_input, },
+                update: { guard: ScoreLinkStudent_update, },
+                postUpdate: { guard: ScoreLinkStudent_postUpdate, },
+                delete: { guard: ScoreLinkStudent_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         note: {
             modelLevel: {
                 read: { guard: Note_read, },
@@ -3620,6 +3659,9 @@ const policy = {
         graduationRankDowngradeCondition: { hasValidation: false },
         rankingCondition: { hasValidation: false },
         diplomaVerificationApplication: { hasValidation: false },
+        scoreLinkSheet: { hasValidation: false },
+        scoreLinkSubject: { hasValidation: false },
+        scoreLinkStudent: { hasValidation: false },
         note: { hasValidation: false },
         noteFolder: { hasValidation: false },
         noteTag: { hasValidation: false },
@@ -20771,6 +20813,240 @@ function DiplomaVerificationApplication_delete(context, db) {
     return { OR: [] };
 }
 function $check_DiplomaVerificationApplication_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkSheet_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ScoreLinkSheet_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkSheet_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkSheet_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkSheet_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ScoreLinkSheet_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkSheet_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkSheet_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ScoreLinkSheet_postUpdate(input, context) {
+    return true;
+}
+function ScoreLinkSheet_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkSheet_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkSubject_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ScoreLinkSubject_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkSubject_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkSubject_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkSubject_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ScoreLinkSubject_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkSubject_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkSubject_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ScoreLinkSubject_postUpdate(input, context) {
+    return true;
+}
+function ScoreLinkSubject_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkSubject_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkStudent_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ScoreLinkStudent_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkStudent_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkStudent_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkStudent_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ScoreLinkStudent_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkStudent_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScoreLinkStudent_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ScoreLinkStudent_postUpdate(input, context) {
+    return true;
+}
+function ScoreLinkStudent_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScoreLinkStudent_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

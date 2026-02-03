@@ -4,6 +4,8 @@ import '../ql-dao-tao/training-action'
 import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/ranking'
+import '../ql-dao-tao/score-link'
+import '../ql-dao-tao/score-link'
 import 'notification'
 import '../ql-dao-tao/note.zmodel'
 import '../khao-thi/evaluate'
@@ -65,6 +67,9 @@ model DocumentFile extends Base {
 
   studentScoreConvert        StudentScoreConvert?            @relation(fields: [studentScoreConvertId], references: [id])
   studentScoreConvertId      String?
+
+  scoreLinkSheet             ScoreLinkSheet?                 @relation(fields: [scoreLinkSheetId], references: [id])
+  scoreLinkSheetId           String?
 
   // THÊM MỚI:
   note                       Note?                           @relation(fields: [noteId], references: [id])

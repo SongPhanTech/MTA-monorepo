@@ -581,6 +581,14 @@ enum DiplomaVerificationStatus {
   @@schema("ql-dao-tao")
 }
 
+enum ScoreLinkStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
 /// Enum cho loại lặp lại nhắc nhở
 enum ReminderRepeatType {
   NONE
@@ -2512,8 +2520,10 @@ model StudentSubjectScore {
   studentThesisRegistration    StudentThesisRegistration[]                @relation("ScoreToRegistration")
   studentSubjectScoreHistory   StudentSubjectScoreHistory[]
   scoreCorrectionItem          ScoreCorrectionItem[]
+  scoreLinkSubject             ScoreLinkSubject?                          @relation(fields: [scoreLinkSubjectId], references: [id])
+  scoreLinkSubjectId           String?                                    @unique()
 
-  @@unique([subjectClassId, studentId])
+  @@unique([subjectClassId, studentId, scoreLinkSubjectId])
   @@schema("ql-dao-tao")
 }
 
@@ -2726,6 +2736,7 @@ model Semester {
   planTraining            PlanTraining[]
   survey                  Survey[]
   exam                    Exam[]
+  scoreLinkSheets         ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -2840,6 +2851,7 @@ model TrainingCourse {
   thesisSession              ThesisSession[]
   planTrainings              PlanTraining[]
   graduationSessions         GraduationSession[]
+  scoreLinkSheets            ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -2894,6 +2906,7 @@ model FixedClass {
   subjectClasses           SubjectClass[]
   notifications            Notification[]
   surveyObjectTypes        SurveyObjectType[]
+  scoreLinkSheets          ScoreLinkSheet[]
 
   @@unique([name, trainingCourseId, curriculumVersionId])
   @@schema("ql-dao-tao")
@@ -2921,6 +2934,7 @@ model Curriculum {
   renderPath               String?
   documentFiles            DocumentFile[]
   curriculumVersion        CurriculumVersion[]
+  scoreLinkSheets          ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -3083,6 +3097,7 @@ model SubjectVersion {
   subjectVersionHistory    SubjectVersionHistory[]
   exams                    Exam[]
   examFramework            ExamFramework[]
+  scoreLinkSubjects        ScoreLinkSubject[]
 
   @@index([name, trainingObjectTypeId])
   @@schema("ql-dao-tao")
@@ -4020,6 +4035,7 @@ model Student {
   thesisRegistrations            StudentThesisRegistration[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
   studentScoreConvert            StudentScoreConvert[]
+  scoreLinkStudent               ScoreLinkStudent[]
   classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
@@ -4192,6 +4208,8 @@ model DocumentFile {
   trainingFieldId            String?
   studentScoreConvert        StudentScoreConvert?            @relation(fields: [studentScoreConvertId], references: [id])
   studentScoreConvertId      String?
+  scoreLinkSheet             ScoreLinkSheet?                 @relation(fields: [scoreLinkSheetId], references: [id])
+  scoreLinkSheetId           String?
   note                       Note?                           @relation(fields: [noteId], references: [id])
   noteId                     String?
   evaluationPeriod           EvaluationPeriod?               @relation(fields: [evaluationPeriodId], references: [id])
@@ -6218,6 +6236,73 @@ model DiplomaVerificationApplication {
   studentId               String?
   student                 Student?                  @relation(fields: [studentId], references: [id])
 
+  @@schema("ql-dao-tao")
+}
+
+model ScoreLinkSheet {
+  id               String             @id() @default(cuid())
+  code             String?            @unique()
+  active           Boolean            @default(true)
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt()
+  createdBy        String?            @db.Uuid()
+  note             String?
+  status           ScoreLinkStatus    @default(PENDING)
+  fixedClass       FixedClass         @relation(fields: [fixedClassId], references: [id])
+  fixedClassId     String
+  semester         Semester           @relation(fields: [semesterId], references: [id])
+  semesterId       String
+  curriculum       Curriculum         @relation(fields: [curriculumId], references: [id])
+  curriculumId     String
+  trainingCourse   TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  students         ScoreLinkStudent[]
+  documents        DocumentFile[]
+
+  @@unique([fixedClassId, semesterId, curriculumId, trainingCourseId])
+  @@schema("ql-dao-tao")
+}
+
+model ScoreLinkSubject {
+  id                    String               @id() @default(cuid())
+  code                  String?              @unique()
+  active                Boolean              @default(true)
+  description           String?              @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @default(now()) @updatedAt()
+  createdBy             String?              @db.Uuid()
+  scoreLinkStudent      ScoreLinkStudent     @relation(fields: [scoreLinkStudentId], references: [id])
+  scoreLinkStudentId    String
+  subjectVersion        SubjectVersion       @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId      String
+  score                 Float
+  note                  String?
+  studentSubjectScore   StudentSubjectScore?
+  studentSubjectScoreId String?
+
+  @@unique([scoreLinkStudentId, subjectVersionId])
+  @@schema("ql-dao-tao")
+}
+
+model ScoreLinkStudent {
+  id               String             @id() @default(cuid())
+  code             String?            @unique()
+  active           Boolean            @default(true)
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt()
+  createdBy        String?            @db.Uuid()
+  scoreLinkSheet   ScoreLinkSheet     @relation(fields: [scoreLinkSheetId], references: [id])
+  scoreLinkSheetId String
+  student          Student            @relation(fields: [studentId], references: [id])
+  studentId        String
+  subjects         ScoreLinkSubject[]
+
+  @@unique([scoreLinkSheetId, studentId])
   @@schema("ql-dao-tao")
 }
 

@@ -98,6 +98,7 @@ export default {
     "QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH": "/quan-ly-diem/nhap-diem-theo-phach",
     "QUAN_LY_DIEM_QL_DIEM_CC_TX": "/quan-ly-diem/ql-diem-cc-tx",
     "QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13": "/quan-ly-diem/ql-diem-lop-mon-hoc-p13",
+    "QUAN_LY_DIEM_LIEN_KET": "/quan-ly-diem/diem-lien-ket",
     "QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC": "/quan-ly-diem/ql-diem-lop-mon-hoc",
     "QUAN_LY_DIEM_QL_DIEM_THI": "/quan-ly-diem/ql-diem-thi",
     "QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG": "/quan-ly-diem/ql-sv-hv-chuyen-truong",
