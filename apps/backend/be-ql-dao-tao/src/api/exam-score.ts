@@ -228,6 +228,9 @@ app.openapi(saveExamScore, async (c) => {
                         },
                     },
                     awards: {
+                        where: {
+                            status: $Enums.ArchivedCertificateStatus.APPROVED,
+                        },
                         select: {
                             status: true,
                             archivedAward: {

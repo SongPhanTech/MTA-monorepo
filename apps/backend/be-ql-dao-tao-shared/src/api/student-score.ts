@@ -1,10 +1,10 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
-import type { ScoreConvert } from '@workspace/db'
+import { $Enums, type ScoreConvert } from '@workspace/db'
 import { prisma } from '..'
 import {
+    StudentScoreNotFoundResponse,
     StudentScoreRequest,
     StudentScoreResponse,
-    StudentScoreNotFoundResponse,
 } from '../dto/student-score'
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
@@ -115,7 +115,12 @@ app.openapi(getStudentScore, async (c) => {
                         where: { studentId: student.id },
                         include: {
                             subjectVersion: true,
-                            awards: { include: { archivedAward: true } },
+                            awards: {
+                                where: {
+                                    status: $Enums.ArchivedCertificateStatus.APPROVED,
+                                },
+                                include: { archivedAward: true },
+                            },
                             certificates: { include: { archivedCertificate: true } },
                         },
                     },

@@ -83,17 +83,25 @@ model ThesisProject extends Base {
   thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
   thesisSessionId       String?
 
-  /// Chuyên gia hướng dẫn b 
+  supervisorName        String?
+  /// Chuyên gia hướng dẫn
   supervisor            ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId          String?
   supervisorPayment     SupervisorPaymentRecord?    @relation("SupervisorToSupervisorPayment", fields: [supervisorPaymentId], references: [id])
   supervisorPaymentId   String?
 
+  coSupervisorName      String?
   /// Chuyên gia hướng dẫn bảo vệ phụ
   coSupervisor          ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
   coSupervisorPayment   SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
   coSupervisorPaymentId String?
+
+  CHUTICH               String?
+  THUKY                 String?
+  PHANBIEN1             String?
+  PHANBIEN2             String?
+  UYVIEN3               String?
 
   /// Đơn vị quản lý
   organization          DM_DonVi?                   @relation(fields: [organizationId], references: [Id])

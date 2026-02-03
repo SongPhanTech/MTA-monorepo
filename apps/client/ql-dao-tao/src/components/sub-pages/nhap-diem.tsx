@@ -204,6 +204,9 @@ export default function NhapDiem({
                     },
                 },
                 awards: {
+                    where: {
+                        status: $Enums.ArchivedCertificateStatus.APPROVED,
+                    },
                     include: {
                         archivedAward: true,
                     },
