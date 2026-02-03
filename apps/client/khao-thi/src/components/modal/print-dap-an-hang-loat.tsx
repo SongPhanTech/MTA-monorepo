@@ -108,7 +108,8 @@ const PrintBatchExplanation = () => {
                 semesterName: exam?.exam?.semester?.name || '',
                 examCode: exam?.examCode || '',
                 subjectName: exam?.exam?.subjectVersion?.name || '',
-                duration: duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
+                duration:
+                    duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
                 teacherName: name,
                 questions:
                     exam?.questions?.map((q, qIndex) => {
@@ -151,8 +152,8 @@ const PrintBatchExplanation = () => {
 
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
-
         saveFile(`Dap-An-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name}.docx`, doc)
+        setHasDownloaded(true)
     }
 
     const handleClose = async () => {

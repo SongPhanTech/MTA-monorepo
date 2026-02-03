@@ -80,8 +80,6 @@ const PrintBatchExamBank = () => {
         documentTitle: `De-Thi-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name || 'Exam'}`,
     })
 
-    const allowMaterials = true
-
     // Download file
     const handleDownload = async () => {
         if (!exams) return
@@ -109,7 +107,7 @@ const PrintBatchExamBank = () => {
                 isNote:
                     exam?.isNote === true
                         ? 'Được sử dụng tài liệu'
-                        : exam?.description || 'Không được sử dụng tài liệu',
+                        : exam?.explain || 'Không được sử dụng tài liệu',
                 questions:
                     exam?.questions?.map((q: any, qIndex: number) => ({
                         order: q?.order || qIndex + 1,
@@ -123,11 +121,11 @@ const PrintBatchExamBank = () => {
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
         saveFile(`De-Thi-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name}.docx`, doc)
+        setHasDownloaded(true)
     }
 
     const handleClose = async () => {
         if (hasDownloaded) {
-            // Cập nhật isLock cho tất cả các đề đã tải
             await Promise.all(
                 exams.map((exam) =>
                     updateExamBank({
@@ -313,9 +311,9 @@ const PrintBatchExamBank = () => {
                         <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
                             {exam?.isNote
                                 ? '(Được sử dụng tài liệu)'
-                                : exam?.description
-                                    ? `(${exam.description})`
-                                    : '(Không được sử dụng tài liệu)'}
+                                : exam?.explain
+                                  ? `(${exam.explain})`
+                                  : '(Không được sử dụng tài liệu)'}
                         </div>
                     </div>
 

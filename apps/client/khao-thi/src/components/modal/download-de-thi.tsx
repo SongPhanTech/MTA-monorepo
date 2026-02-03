@@ -100,7 +100,7 @@ const PrintExamBank = () => {
             isNote:
                 data?.isNote === true
                     ? 'Được sử dụng tài liệu'
-                    : data?.description || 'Không được sử dụng tài liệu',
+                    : data?.explain || 'Không được sử dụng tài liệu',
             day: String(day),
             month: String(month),
             year: String(year),
@@ -116,6 +116,7 @@ const PrintExamBank = () => {
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
         saveFile(`De-Thi-${data?.exam?.subjectVersion?.name}.docx`, doc)
+        setHasDownloaded(true)
     }
 
     const handleClose = async () => {
@@ -328,8 +329,8 @@ const PrintExamBank = () => {
                         <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
                             {data?.isNote
                                 ? '(Được sử dụng tài liệu)'
-                                : data?.description
-                                  ? `(${data.description})`
+                                : data?.explain
+                                  ? `(${data.explain})`
                                   : '(Không được sử dụng tài liệu)'}
                         </div>
                     </div>
