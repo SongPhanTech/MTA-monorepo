@@ -147,11 +147,12 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
         },
     })
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     useEffect(() => {
         if (subjects) {
             resetData()
         }
-    }, [subjects, resetData])
+    }, [subjects])
 
     const resetData = () => {
         if (!subjects) return
