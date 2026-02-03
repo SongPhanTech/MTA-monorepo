@@ -61,6 +61,8 @@ const PrintExamBank = () => {
         }
     )
 
+    console.log('data: ', data)
+
     const subjectClassName = data?.subjectClass?.name || ''
 
     // Tự động fill thời gian từ examFramework
@@ -77,8 +79,6 @@ const PrintExamBank = () => {
         documentTitle: `De-Thi-${data?.exam?.subjectVersion?.name || 'Exam'}`,
     })
 
-    const allowMaterials = true
-
     const currentDate = new Date()
     const day = currentDate.getDate()
     const month = currentDate.getMonth() + 1
@@ -86,7 +86,7 @@ const PrintExamBank = () => {
 
     const handleDownload = async () => {
         if (!data) return
-        const res = await fetch(getMinioUrl('mta/template/template-de-thi.docx'))
+        const res = await fetch(getMinioUrl('mta/template/template-de-thi-bk.docx'))
         const templateFile = await res.blob()
 
         const templateData = {
@@ -94,7 +94,13 @@ const PrintExamBank = () => {
             subjectName: data.exam?.subjectVersion?.name || '',
             semesterName: data.exam?.semester?.name || '',
             className: data.subjectClass?.name || '',
-            duration: String(duration || data.examMatrix?.examFramework?.time || data.exam?.duration || ''),
+            duration: String(
+                duration || data.examMatrix?.examFramework?.time || data.exam?.duration || ''
+            ),
+            isNote:
+                data?.isNote === true
+                    ? 'Được sử dụng tài liệu'
+                    : data?.description || 'Không được sử dụng tài liệu',
             day: String(day),
             month: String(month),
             year: String(year),
@@ -319,11 +325,13 @@ const PrintExamBank = () => {
                         <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>
                             -----HẾT-----
                         </div>
-                        {allowMaterials && (
-                            <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
-                                (Được sử dụng tài liệu)
-                            </div>
-                        )}
+                        <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
+                            {data?.isNote
+                                ? '(Được sử dụng tài liệu)'
+                                : data?.description
+                                  ? `(${data.description})`
+                                  : '(Không được sử dụng tài liệu)'}
+                        </div>
                     </div>
 
                     {/* Note */}

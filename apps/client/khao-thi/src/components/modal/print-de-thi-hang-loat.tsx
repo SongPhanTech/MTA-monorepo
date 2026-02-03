@@ -103,9 +103,13 @@ const PrintBatchExamBank = () => {
                 semesterName: exam?.exam?.semester?.name || '',
                 examCode: exam?.examCode || '',
                 subjectName: exam?.exam?.subjectVersion?.name || '',
-                duration: duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
+                duration:
+                    duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
                 teacherName: name,
-                allowMaterials: allowMaterials ? '(Được sử dụng tài liệu)' : '',
+                isNote:
+                    exam?.isNote === true
+                        ? 'Được sử dụng tài liệu'
+                        : exam?.description || 'Không được sử dụng tài liệu',
                 questions:
                     exam?.questions?.map((q: any, qIndex: number) => ({
                         order: q?.order || qIndex + 1,
@@ -306,11 +310,13 @@ const PrintBatchExamBank = () => {
                         <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>
                             -----HẾT-----
                         </div>
-                        {allowMaterials && (
-                            <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
-                                (Được sử dụng tài liệu)
-                            </div>
-                        )}
+                        <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
+                            {exam?.isNote
+                                ? '(Được sử dụng tài liệu)'
+                                : exam?.description
+                                    ? `(${exam.description})`
+                                    : '(Không được sử dụng tài liệu)'}
+                        </div>
                     </div>
 
                     {/* Note */}
