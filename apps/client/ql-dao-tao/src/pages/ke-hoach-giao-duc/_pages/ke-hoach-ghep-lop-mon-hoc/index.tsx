@@ -350,7 +350,7 @@ export default function KeHoachGhepLopMonHoc() {
         if (data) {
             resetSubjectClassToFixedClass()
         }
-    }, [data])
+    }, [data, resetSubjectClassToFixedClass])
 
     const resetSubjectClassToFixedClass = () => {
         if (!data) return

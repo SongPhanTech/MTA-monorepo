@@ -1,7 +1,7 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
+import type { DataTabCrossReviewPeriodType } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/cross-review'
 import { Collapse, Form } from 'antd'
 import { useEffect } from 'react'
-import type { DataTabCrossReviewPeriodType } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/cross-review'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>

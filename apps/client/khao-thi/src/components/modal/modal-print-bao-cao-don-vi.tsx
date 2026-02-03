@@ -1,10 +1,10 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
+import ReactECharts from 'echarts-for-react'
 import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
-import ReactECharts from 'echarts-for-react'
 
 dayjs.locale('vi')
 
@@ -132,7 +132,9 @@ const ModalPrintBaoCaoDonVi = () => {
 
                             return (
                                 <tr key={row.organization?.Id || index}>
-                                    <td className="border-2  border-black text-center">{index + 1}</td>
+                                    <td className="border-2  border-black text-center">
+                                        {index + 1}
+                                    </td>
 
                                     <td className="border-2 border-black px-2">
                                         {row.organization?.sMa || ''} -{' '}
@@ -143,7 +145,10 @@ const ModalPrintBaoCaoDonVi = () => {
                                         const found = percentData.find((p: any) => p.id === c.id)
 
                                         return (
-                                            <td key={c.id} className="border-2 border-black text-center">
+                                            <td
+                                                key={c.id}
+                                                className="border-2 border-black text-center"
+                                            >
                                                 {found
                                                     ? `${found.percent}% (${found.totalCount}/${found.total})`
                                                     : '0% (0/0)'}

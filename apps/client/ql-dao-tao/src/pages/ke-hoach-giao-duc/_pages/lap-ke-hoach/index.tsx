@@ -1,4 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
+import { $Enums } from '@workspace/db/client'
 import { Col, Row, Tabs, Tooltip } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
@@ -7,7 +8,6 @@ import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
 import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
 import MonKySau from './_components/mon-ky-sau'
 import MonTheoKeHoachDuKien from './_components/mon-theo-ke-hoach-du-kien'
-import { $Enums } from '@workspace/db/client'
 
 interface TabItem {
     key: string

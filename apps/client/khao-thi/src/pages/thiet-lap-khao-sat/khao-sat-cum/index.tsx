@@ -1,14 +1,15 @@
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
+
+import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
+import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 import DetailSurveyPage from '@components/sub-pages/khao-sat/danh-sach-giang-vien'
 import DanhSachHocVien from '@components/sub-pages/khao-sat/danh-sach-hoc-vien'
+import SurveyEssay from '@components/sub-pages/khao-sat/liet-ke'
 import TabDotKhaoSatCum from '@components/sub-pages/khat-sat-cum'
 import DefaultLayout from '@layouts/default-layout'
-import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import type { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo, useState } from 'react'
-import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
-import SurveyEssay from '@components/sub-pages/khao-sat/liet-ke'
 // import OrganizationSurveyReport from '@components/sub-pages/khao-sat/bao-cao-don-vi'
 
 export type LectuerType = Lecturer & {

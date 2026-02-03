@@ -1,6 +1,9 @@
 @import "./font.css";
+/* biome-ignore lint/suspicious/noUnknownAtRules: <tailwind> */
 @tailwind base;
+/* biome-ignore lint/suspicious/noUnknownAtRules: <tailwind> */
 @tailwind components;
+/* biome-ignore lint/suspicious/noUnknownAtRules: <tailwind> */
 @tailwind utilities;
 
 html,
@@ -97,17 +100,17 @@ select {
 }
 
 .ant-select-disabled .ant-select-selector .ant-select-selection-item {
-    color: #000 !important;
+    color: #000;
 }
 
 .ant-picker-disabled > .ant-picker-input > input {
-    color: #000 !important;
+    color: #000;
 }
 
 .ant-input-number-disabled .ant-input-number-input {
-    color: #000 !important;
+    color: #000;
 }
 
 .ant-input-disabled {
-    color: #000 !important;
+    color: #000;
 }

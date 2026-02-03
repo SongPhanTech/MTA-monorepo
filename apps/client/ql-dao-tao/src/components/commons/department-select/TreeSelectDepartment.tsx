@@ -1,8 +1,8 @@
 import { buildOrgTree } from '@lib/utils'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs/constants'
 import type { TreeSelectProps } from 'antd'
 import { TreeSelect as TreeSelectAnt } from 'antd'
-import { whereOrganization } from '@workspace/libs/constants'
 
 // Define props for our custom component
 type TreeSelectDepartmentProps = {

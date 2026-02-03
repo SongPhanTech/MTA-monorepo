@@ -11,6 +11,9 @@ export type ImportPhanCongGiangDayType =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ImportPhanCongGiangDayType = {
     NORMAL: 'NORMAL',
-    RETAKE: 'RETAKE',
+    LINKED: 'LINKED',
     REEXAM: 'REEXAM',
+    RETAKE: 'RETAKE',
+    STAYBACK: 'STAYBACK',
+    TRANSFER: 'TRANSFER',
 } as const

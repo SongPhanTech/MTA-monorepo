@@ -218,7 +218,7 @@ const TableIndexCollapse = <
                     : 1,
             }),
         }))
-    }, [columns, childrenFieldName, allChildren, isTitle])
+    }, [columns, childrenFieldName, isTitle, dataWithKey.length, dataWithKey[i]])
 
     return (
         <>

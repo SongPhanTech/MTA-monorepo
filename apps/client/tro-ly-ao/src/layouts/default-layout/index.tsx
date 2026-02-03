@@ -6,7 +6,6 @@ import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
-import { useSSOSession } from '@/hooks/useSSOSession'
 import { WidgetChatbot } from '@workspace/ui'
 import { Breadcrumb, Layout, Spin, theme } from 'antd'
 import Image from 'next/image'
@@ -15,6 +14,7 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
+import { useSSOSession } from '@/hooks/useSSOSession'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {

@@ -151,7 +151,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
         if (subjects) {
             resetData()
         }
-    }, [subjects])
+    }, [subjects, resetData])
 
     const resetData = () => {
         if (!subjects) return

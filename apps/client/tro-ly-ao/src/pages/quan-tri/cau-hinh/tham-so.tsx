@@ -1,7 +1,3 @@
-import { useEffect, useState } from 'react'
-
-import { Alert, Button, Col, Form, InputNumber, message, Row, Typography } from 'antd'
-
 import FormItem from '@components/commons/form-item'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -9,6 +5,8 @@ import {
     useFindManyChatBotConfig,
     useUpdateChatBotConfig,
 } from '@workspace/db/hooks'
+import { Alert, Button, Col, Form, InputNumber, message, Row, Typography } from 'antd'
+import { useEffect, useState } from 'react'
 
 const { Paragraph, Text } = Typography
 

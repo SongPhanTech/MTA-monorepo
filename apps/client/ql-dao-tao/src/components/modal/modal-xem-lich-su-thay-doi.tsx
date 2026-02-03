@@ -1,16 +1,15 @@
-// biome-ignore assist/source/organizeImports: <code fix>
-
 import { Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-import Table from '@components/commons/table'
-import { useEffect, useState } from 'react'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import ExpandableContent from '@components/commons/expandable-content/ExpandableContent'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import type { SubjectVersionHistory } from '@workspace/db/client'
+import Table from '@components/commons/table'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import type { SubjectVersionHistory } from '@workspace/db/client'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { useEffect, useState } from 'react'
+
 dayjs.locale('vi')
 
 const ModalViewHistoryChange = () => {
@@ -63,9 +62,10 @@ const ModalViewHistoryChange = () => {
             hideSpinner()
         }
     }
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     useEffect(() => {
         fetchData()
-    }, [currentPage, numberOfPages])
+    }, [])
     // useEffect(() => {
     //     async function fetchData() {}
     //     fetchData()

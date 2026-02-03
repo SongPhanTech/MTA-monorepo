@@ -1,4 +1,6 @@
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -9,8 +11,6 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, message, Tree } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
-import Select from '@components/commons/select'
 
 export type PutEvaluationPeriod = EvaluationPeriod & {
     councilIds: string[]

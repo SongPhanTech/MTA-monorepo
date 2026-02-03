@@ -1,13 +1,14 @@
+import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
+import Table from '@components/commons/table'
 import { useGetOrganizationSurveyStatistics } from '@workspace/libs/api/exam'
 import { Button, Col, Dropdown, Empty, Flex, message, Row, Typography } from 'antd'
+import ReactECharts from 'echarts-for-react'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import ReactECharts from 'echarts-for-react'
-import Table from '@components/commons/table'
-import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 const { Title } = Typography
 
 type AnswerItem = {
@@ -287,7 +288,7 @@ function OrganizationSurveyReport({
                 //     }
                 // }}
                 columns={
-                    choices?.length > 0
+                    choices?.length
                         ? [
                               {
                                   title: 'STT',
@@ -303,8 +304,7 @@ function OrganizationSurveyReport({
                                       return `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
                                   },
                               },
-                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                              ...choices?.map((i: any, index: number) => ({
+                              ...choices.map((i: any, index: number) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,

@@ -10,8 +10,8 @@ import {
     UpOutlined,
 } from '@ant-design/icons'
 import { useFindUniqueDocument } from '@workspace/db/hooks'
-import { useEffect, useRef, useState } from 'react'
 import { Drawer, Input, Tooltip } from 'antd'
+import { useEffect, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface DocumentSidebarProps {

@@ -1,6 +1,6 @@
 import { Tooltip } from 'antd'
-import { Printer, type LucideProps } from 'lucide-react'
 import clsx from 'clsx'
+import { type LucideProps, Printer } from 'lucide-react'
 
 type PrintIconProps = LucideProps & {
     title?: string
