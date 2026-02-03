@@ -1,8 +1,7 @@
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Col, Form, Input, InputNumber, message, Row } from 'antd'
-
+import { Checkbox, Col, Form, Input, InputNumber, message, Row } from 'antd'
 import dayjs from 'dayjs'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useStore } from '@tanstack/react-store'
 import { store } from '@pages/thiet-lap-de-thi/danh-sach-de'
 import {
@@ -16,6 +15,7 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import type { ExamBank } from '@workspace/db/client'
 import { automaticTopicGeneration } from '@workspace/libs/api/exam'
+import { queryClient } from '@api/index'
 
 type PutMaTranDeInputType = ExamBank & {
     quantity: number
@@ -27,6 +27,7 @@ type PutMaTranDeInputType = ExamBank & {
 
 const SinhDeModal = () => {
     const [form] = Form.useForm<PutMaTranDeInputType>()
+    const [showExplain, setShowExplain] = useState(false)
 
     const { isOpen, onClose, input } = useDisclosure<{
         id?: string
@@ -113,7 +114,10 @@ const SinhDeModal = () => {
                 examDay: values?.examDay ? new Date(values?.examDay).toISOString() : null,
             })
             if (res?.status === 200) {
-                message.success('Tạo đề thành cong!')
+                message.success('Tạo đề thành công!')
+                queryClient.invalidateQueries({
+                    queryKey: ['ExamBank'],
+                })
                 onClose()
             } else {
                 message.error('Lỗi tạo đề')
@@ -227,11 +231,32 @@ const SinhDeModal = () => {
                             <Select options={dataOption} placeholder="Chọn lớp môn học" />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
-                        <FormItem form={form} name="explain" label="Chú thích">
-                            <Input.TextArea placeholder="Nhập chú thích" />
+
+                    <Col span={5}>
+                        <FormItem
+                            form={form}
+                            name="isNote"
+                            valuePropName="checked"
+                            initialValue={false}
+                        >
+                            <Checkbox>Được sử dụng tài liệu</Checkbox>
                         </FormItem>
                     </Col>
+                    <Col span={4}>
+                        <Form.Item>
+                            <Checkbox onChange={(e) => setShowExplain(e.target.checked)}>
+                                Khác
+                            </Checkbox>
+                        </Form.Item>
+                    </Col>
+
+                    {showExplain && (
+                        <Col span={24} className="mt-3">
+                            <FormItem form={form} name="explain" label="Chú thích">
+                                <Input.TextArea placeholder="Nhập chú thích" />
+                            </FormItem>
+                        </Col>
+                    )}
                 </Row>
             </Col>
         </PutFormModal>

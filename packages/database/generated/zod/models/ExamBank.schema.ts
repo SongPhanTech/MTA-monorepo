@@ -20,6 +20,7 @@ const baseSchema = z.object({
     examDay: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
     isLock: z.boolean().default(false).nullish(),
+    isNote: z.boolean().default(false).nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -36,6 +37,7 @@ const baseSchemaWithoutDefaults = z.object({
     examDay: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
     isLock: z.boolean().nullish(),
+    isNote: z.boolean().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -88,7 +90,8 @@ export const ExamBankPrismaUpdateSchema = z.object({
     explain: z.string().nullish(),
     examDay: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
-    isLock: z.boolean().nullish()
+    isLock: z.boolean().nullish(),
+    isNote: z.boolean().nullish()
 }).partial().passthrough();
 
 
@@ -96,7 +99,7 @@ export const ExamBankPrismaUpdateSchema = z.object({
  * `ExamBank` schema for create operations excluding foreign keys and relations.
  */
 export const ExamBankCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isLock: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isLock: true, isNote: true
 });
 
 
