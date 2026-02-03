@@ -52,6 +52,7 @@ import {
     exportDsChuyenGia,
     exportGiayMoiChamLvPb,
     exportGiayMoiHdlv,
+    exportHDDanhGiaLuanVan,
     exportHosobvlv,
     exportKetQuaBaoVeLuanVan,
     exportKiemTraTienDo,
@@ -623,8 +624,12 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 7,
             label: 'Đề xuất hội đồng',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportHDDanhGiaLuanVan({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            })
         },
         {
             id: 8,
