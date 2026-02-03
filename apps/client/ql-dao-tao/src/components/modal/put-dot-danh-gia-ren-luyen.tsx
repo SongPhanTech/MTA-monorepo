@@ -146,7 +146,7 @@ const PutDotRenLuyen = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa đợt rèn luyện' : 'Thêm mới đợt rèn luyện'}
+            title={id ? 'Chỉnh sửa đợt đánh giá' : 'Thêm mới đợt đánh giá'}
             className="w-[30vw]"
         >
             <Col span={24}>
