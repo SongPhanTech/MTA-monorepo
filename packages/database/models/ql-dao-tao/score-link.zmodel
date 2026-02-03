@@ -17,56 +17,55 @@ enum ScoreLinkStatus {
 }
 
 model ScoreLinkSheet extends Base {
-  note             String?
-  status           ScoreLinkStatus    @default(PENDING)
+  trainingObjectType       TrainingObjectType        @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
 
-  fixedClass       FixedClass         @relation(fields: [fixedClassId], references: [id])
-  fixedClassId     String
+  note                     String?
+  decision                 String?  // Số quyết định
+  status                   ScoreLinkStatus           @default(PENDING)
 
-  semester         Semester           @relation(fields: [semesterId], references: [id])
-  semesterId       String
+  // hiện danh sách SV từ lớp quản lý
+  fixedClass               FixedClass                @relation(fields: [fixedClassId], references: [id])
+  fixedClassId             String
 
-  curriculum       Curriculum         @relation(fields: [curriculumId], references: [id])
-  curriculumId     String
+  semester                 Semester                  @relation(fields: [semesterId], references: [id])
+  semesterId               String
 
-  trainingCourse   TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String
+  // chọn môn từ danh sách fixedClass.CurriculumVersion.TraingBlock.Subject
+  scoreLinkSubjectVersions ScoreLinkSubjectVersion[]
+  documents                DocumentFile[]
 
-  students         ScoreLinkStudent[]
-  documents        DocumentFile[]
 
-  @@unique([fixedClassId, semesterId, curriculumId, trainingCourseId])
   @@schema("ql-dao-tao")
 }
 
-model ScoreLinkSubject extends Base {
-  scoreLinkStudent      ScoreLinkStudent     @relation(fields: [scoreLinkStudentId], references: [id])
-  scoreLinkStudentId    String
+/// Danh sách môn/điểm liên kết
+// Tạo SubjectClass(type=LINKED & scoreLinkSubjectVersionId) + StudentSubjectScore từ bảng này khi phê duyệt
+model ScoreLinkSubjectVersion extends Base {
+  scoreLinkSheet    ScoreLinkSheet     @relation(fields: [scoreLinkSheetId], references: [id])
+  scoreLinkSheetId  String
 
-  subjectVersion        SubjectVersion       @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId      String
+  subjectVersion    SubjectVersion     @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId  String
 
-  score                 Float
-  note                  String?
+  scoreLinkStudents ScoreLinkStudent[]
+  subjectClass      SubjectClass?
 
-  studentSubjectScore   StudentSubjectScore?
-  studentSubjectScoreId String?
-
-  @@unique([scoreLinkStudentId, subjectVersionId])
+  @@unique([scoreLinkSheetId, subjectVersionId])
   @@schema("ql-dao-tao")
 }
 
-
-
+/// Danh sách điểm liên kết theo môn
 model ScoreLinkStudent extends Base {
-  scoreLinkSheet   ScoreLinkSheet     @relation(fields: [scoreLinkSheetId], references: [id])
-  scoreLinkSheetId String
+  scoreLinkSubjectVersion   ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id])
+  scoreLinkSubjectVersionId String
 
-  student          Student            @relation(fields: [studentId], references: [id])
-  studentId        String
+  student                   Student                 @relation(fields: [studentId], references: [id])
+  studentId                 String
 
-  subjects         ScoreLinkSubject[]
+  /// Điểm học phần => attendanceScore=midtermScore=examScore=finalScore=manualFinalScore
+  score                     Float                   @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
 
-  @@unique([scoreLinkSheetId, studentId])
+  @@unique([scoreLinkSubjectVersionId, studentId])
   @@schema("ql-dao-tao")
 }
