@@ -119,6 +119,7 @@ export default function ReviewCriteriaAnalysis() {
         },
         {
             enabled: !!selectedEvaluationPeriodId,
+            refetchOnWindowFocus: false,
         }
     )
 
