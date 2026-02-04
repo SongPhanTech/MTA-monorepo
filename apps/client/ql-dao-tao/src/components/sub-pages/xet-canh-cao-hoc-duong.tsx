@@ -264,6 +264,15 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                                 render: (__, record) => record?.student?.userProfile?.fullname,
                             },
                             {
+                                title: 'Ngày sinh',
+                                width: 120,
+                                align: 'center',
+                                render: (__, record) => {
+                                    const date = record?.student?.userProfile?.dateOfBirth
+                                    return date ? dayjs(date).format('DD/MM/YYYY') : ''
+                                },
+                            },
+                            {
                                 title: 'Lớp niên chế',
                                 dataIndex: 'fixedClassId',
                                 width: 150,

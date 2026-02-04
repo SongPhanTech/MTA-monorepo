@@ -68,17 +68,17 @@ export default function TongKetKyHoc() {
                     //         />
                     //     ),
                     // },
-                    {
-                        key: '6',
-                        label: 'Xét lưu ban',
-                        children: (
-                            <XetXuLyHocTap
-                                semesterId={semesterId}
-                                trainingObjectTypeId={trainingObjectTypeId}
-                                actionTaken={AcademicActionType.REPEAT_YEAR}
-                            />
-                        ),
-                    },
+                    // {
+                    //     key: '6',
+                    //     label: 'Xét lưu ban',
+                    //     children: (
+                    //         <XetXuLyHocTap
+                    //             semesterId={semesterId}
+                    //             trainingObjectTypeId={trainingObjectTypeId}
+                    //             actionTaken={AcademicActionType.REPEAT_YEAR}
+                    //         />
+                    //     ),
+                    // },
                     {
                         key: '7',
                         label: 'Xét đình chỉ',

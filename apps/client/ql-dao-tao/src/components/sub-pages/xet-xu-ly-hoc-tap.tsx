@@ -451,6 +451,15 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                                     render: (__, record) => record?.student?.userProfile?.fullname,
                                 },
                                 {
+                                    title: 'Ngày sinh',
+                                    width: 120,
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        const date = record?.student?.userProfile?.dateOfBirth
+                                        return date ? dayjs(date).format('DD/MM/YYYY') : ''
+                                    },
+                                },
+                                {
                                     title: 'Lớp niên chế',
                                     dataIndex: 'fixedClass',
                                     width: 150,
@@ -624,7 +633,15 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                                     dataIndex: ['userProfile', 'fullname'],
                                     width: 150,
                                 },
-
+                                {
+                                    title: 'Ngày sinh',
+                                    width: 120,
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        const date = record?.userProfile?.dateOfBirth
+                                        return date ? dayjs(date).format('DD/MM/YYYY') : ''
+                                    },
+                                },
                                 {
                                     title: 'Lớp',
                                     width: 60,

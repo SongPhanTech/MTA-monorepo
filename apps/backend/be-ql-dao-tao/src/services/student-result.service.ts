@@ -1463,7 +1463,7 @@ export const listStudentResultInfo = async (semesterId: string, trainingObjectTy
                 return {
                     stt: 0,
                     id: item.student.id ?? '',
-                    hoTen: `${userProfile?.lastName ?? ''} ${userProfile?.firstName ?? ''}`.trim(),
+                    hoTen: userProfile.fullname || 'Không rõ',
                     maSinhVien: userProfile?.code || '',
                     doiTuong:
                         item.student.fixedClass?.trainingCourse?.trainingObjectType.name || '',
