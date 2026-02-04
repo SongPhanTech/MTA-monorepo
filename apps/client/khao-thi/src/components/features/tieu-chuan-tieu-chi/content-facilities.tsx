@@ -13,12 +13,13 @@ import {
     useCountStandardCatalog,
     useDeleteCriterionCatalog,
     useDeleteStandardCatalog,
+    useFindManyEvaluationStandardSet,
     useFindManyStandardCatalog,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip, Typography } from 'antd'
-import { BookPlus } from 'lucide-react'
+import { BookPlus, FolderClosed } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -32,6 +33,13 @@ const ContentFacilities = () => {
     })
 
     const selectedStandardSetId = useStore(store, (s) => s.selectedStandardSetId)
+
+    const { data: evaluationStandardSets = [] } = useFindManyEvaluationStandardSet({
+        where: {
+            deletedAt: null,
+            objectType: $Enums.StandardCatalogType.ASSET,
+        },
+    })
 
     const where = useMemo(
         () => ({
@@ -167,207 +175,222 @@ const ContentFacilities = () => {
 
     return (
         <div>
-            <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Flex justify="space-between" align="center">
-                        <Typography.Title level={4}>
-                            Danh mục tiêu chuẩn - tiêu chí cơ sở vật chất
-                        </Typography.Title>
+            {evaluationStandardSets.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-[70vh] bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                    <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                        <FolderClosed className="w-12 h-12 text-green-600" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                        Chọn bộ tiêu chuẩn - tiêu chí cơ sở vật chất
+                    </h3>
+                    <p className="text-gray-500 text-center max-w-md mb-4 text-sm">
+                        Vui lòng chọn một bộ tiêu chuẩn - tiêu chí cơ sở vật chất để xem và quản lý
+                        câu hỏi
+                    </p>
+                </div>
+            ) : (
+                <Row gutter={[16, 0]}>
+                    <Col span={24}>
+                        <Flex justify="space-between" align="center">
+                            <Typography.Title level={4}>
+                                Danh mục tiêu chuẩn - tiêu chí cơ sở vật chất
+                            </Typography.Title>
 
-                        {can(
-                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                            'THEM'
-                        ) && (
-                            <Button
-                                type="primary"
-                                size="small"
-                                onClick={() => {
-                                    onOpenPutStandardCatalog({
-                                        id: '',
-                                        count: count || 0,
-                                        objectType: $Enums.StandardCatalogType.ASSET,
-                                    })
-                                }}
-                            >
-                                <BookPlus />
-                                Thêm mới
-                            </Button>
-                        )}
-                    </Flex>
-                </Col>
+                            {can(
+                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                'THEM'
+                            ) && (
+                                <Button
+                                    type="primary"
+                                    size="small"
+                                    onClick={() => {
+                                        onOpenPutStandardCatalog({
+                                            id: '',
+                                            count: count || 0,
+                                            objectType: $Enums.StandardCatalogType.ASSET,
+                                        })
+                                    }}
+                                >
+                                    <BookPlus />
+                                    Thêm mới
+                                </Button>
+                            )}
+                        </Flex>
+                    </Col>
 
-                <Col span={24}>
-                    <TableIndexCollapse
-                        rowKey="id"
-                        headerTitleKey={({ order, name }) =>
-                            `${[order, name].filter(Boolean).join(' - ')}`
-                        }
-                        className="w-full mt-2"
-                        loading={isLoading}
-                        scroll={{ y: 'calc(100vh - 240px)' }}
-                        childrenFieldName="criteria"
-                        defaultExpandAll
-                        filters={filters}
-                        setFilters={(value) => {
-                            setFilters(value)
-                        }}
-                        headerRight={(record) => (
-                            <div className="flex px-3 gap-2.5 items-center justify-end">
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'THEM'
-                                ) && (
-                                    <CreateIcon
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenPutCriterionCatalog({
-                                                id: '',
-                                                standardId: record?.id,
-                                            })
-                                        }}
-                                        title="Thêm mới phiên bản"
-                                    />
-                                )}
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'SUA'
-                                ) && (
-                                    <EditIcon
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenPutStandardCatalog({
-                                                id: record?.id,
-                                                count: count || 0,
-                                            })
-                                        }}
-                                        className="text-sm text-blue-700 cursor-pointer"
-                                    />
-                                )}
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'XOA'
-                                ) &&
-                                    (() => {
-                                        const hasCriteria = record?.criteria?.length > 0
+                    <Col span={24}>
+                        <TableIndexCollapse
+                            rowKey="id"
+                            headerTitleKey={({ order, name }) =>
+                                `${[order, name].filter(Boolean).join(' - ')}`
+                            }
+                            className="w-full mt-2"
+                            loading={isLoading}
+                            scroll={{ y: 'calc(100vh - 240px)' }}
+                            childrenFieldName="criteria"
+                            defaultExpandAll
+                            filters={filters}
+                            setFilters={(value) => {
+                                setFilters(value)
+                            }}
+                            headerRight={(record) => (
+                                <div className="flex px-3 gap-2.5 items-center justify-end">
+                                    {can(
+                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                        'THEM'
+                                    ) && (
+                                        <CreateIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenPutCriterionCatalog({
+                                                    id: '',
+                                                    standardId: record?.id,
+                                                })
+                                            }}
+                                            title="Thêm mới phiên bản"
+                                        />
+                                    )}
+                                    {can(
+                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                        'SUA'
+                                    ) && (
+                                        <EditIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenPutStandardCatalog({
+                                                    id: record?.id,
+                                                    count: count || 0,
+                                                })
+                                            }}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
+                                    )}
+                                    {can(
+                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                        'XOA'
+                                    ) &&
+                                        (() => {
+                                            const hasCriteria = record?.criteria?.length > 0
 
-                                        return (
-                                            <Tooltip
-                                                placement="top"
-                                                title={
-                                                    hasCriteria
-                                                        ? 'Không thể xóa vì tiêu chuẩn đã có tiêu chí'
-                                                        : ''
-                                                }
-                                            >
-                                                <DeleteIcon
-                                                    disabled={hasCriteria}
-                                                    className={
+                                            return (
+                                                <Tooltip
+                                                    placement="top"
+                                                    title={
                                                         hasCriteria
-                                                            ? 'opacity-50 cursor-not-allowed'
-                                                            : 'cursor-pointer'
+                                                            ? 'Không thể xóa vì tiêu chuẩn đã có tiêu chí'
+                                                            : ''
                                                     }
-                                                    popConfirm={
-                                                        hasCriteria
-                                                            ? undefined
-                                                            : {
-                                                                  onConfirm: (e) => {
-                                                                      handleDeleteStandardCatalog(
-                                                                          record?.id
-                                                                      )
-                                                                      e?.stopPropagation()
-                                                                  },
-                                                                  onCancel: (e) => {
-                                                                      e?.stopPropagation()
-                                                                  },
-                                                              }
-                                                    }
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
-                                            </Tooltip>
-                                        )
-                                    })()}
-                            </div>
-                        )}
-                        columns={[
-                            {
-                                title: 'Tiêu chí',
-                                dataIndex: 'name',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Thao tác',
-                                align: 'center',
-                                width: 120,
-                                hidden: !canSome(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'SUA',
-                                    'XOA'
-                                ),
-                                render: (_, record) => {
-                                    if (record?.id) {
-                                        return (
-                                            <Row className="justify-end gap-2 px-3">
-                                                {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                                    'XEM'
-                                                ) && (
-                                                    <Tooltip
-                                                        title="Chi tiết tiêu chí"
-                                                        placement="top"
-                                                    >
-                                                        <EyeOutlined
-                                                            style={{ fontSize: '24px' }}
-                                                            className="text-sm cursor-pointer"
-                                                        />
-                                                    </Tooltip>
-                                                )}
-
-                                                {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            onOpenPutCriterionCatalog({
-                                                                id: record?.id,
-                                                                standardId: record?.standardId,
-                                                            })
-                                                        }}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                                    'XOA'
-                                                ) && (
+                                                >
                                                     <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: (e) => {
-                                                                handleDeleteCriterionCatalog(
-                                                                    record?.id
-                                                                )
-                                                                e?.stopPropagation()
-                                                            },
-                                                            onCancel: (e) => {
-                                                                e?.stopPropagation()
-                                                            },
-                                                        }}
+                                                        disabled={hasCriteria}
+                                                        className={
+                                                            hasCriteria
+                                                                ? 'opacity-50 cursor-not-allowed'
+                                                                : 'cursor-pointer'
+                                                        }
+                                                        popConfirm={
+                                                            hasCriteria
+                                                                ? undefined
+                                                                : {
+                                                                      onConfirm: (e) => {
+                                                                          handleDeleteStandardCatalog(
+                                                                              record?.id
+                                                                          )
+                                                                          e?.stopPropagation()
+                                                                      },
+                                                                      onCancel: (e) => {
+                                                                          e?.stopPropagation()
+                                                                      },
+                                                                  }
+                                                        }
                                                         onClick={(e) => e.stopPropagation()}
                                                     />
-                                                )}
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
+                                                </Tooltip>
+                                            )
+                                        })()}
+                                </div>
+                            )}
+                            columns={[
+                                {
+                                    title: 'Tiêu chí',
+                                    dataIndex: 'name',
+                                    type: 'input',
                                 },
-                            },
-                        ]}
-                        data={data}
-                        pagination={false}
-                    />
-                </Col>
-            </Row>
+                                {
+                                    title: 'Thao tác',
+                                    align: 'center',
+                                    width: 120,
+                                    hidden: !canSome(
+                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                        'SUA',
+                                        'XOA'
+                                    ),
+                                    render: (_, record) => {
+                                        if (record?.id) {
+                                            return (
+                                                <Row className="justify-end gap-2 px-3">
+                                                    {can(
+                                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                                        'XEM'
+                                                    ) && (
+                                                        <Tooltip
+                                                            title="Chi tiết tiêu chí"
+                                                            placement="top"
+                                                        >
+                                                            <EyeOutlined
+                                                                style={{ fontSize: '24px' }}
+                                                                className="text-sm cursor-pointer"
+                                                            />
+                                                        </Tooltip>
+                                                    )}
+
+                                                    {can(
+                                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                                        'SUA'
+                                                    ) && (
+                                                        <EditIcon
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                onOpenPutCriterionCatalog({
+                                                                    id: record?.id,
+                                                                    standardId: record?.standardId,
+                                                                })
+                                                            }}
+                                                            className="text-sm text-blue-700 cursor-pointer"
+                                                        />
+                                                    )}
+                                                    {can(
+                                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                                        'XOA'
+                                                    ) && (
+                                                        <DeleteIcon
+                                                            popConfirm={{
+                                                                onConfirm: (e) => {
+                                                                    handleDeleteCriterionCatalog(
+                                                                        record?.id
+                                                                    )
+                                                                    e?.stopPropagation()
+                                                                },
+                                                                onCancel: (e) => {
+                                                                    e?.stopPropagation()
+                                                                },
+                                                            }}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    )}
+                                                </Row>
+                                            )
+                                        }
+                                        return ''
+                                    },
+                                },
+                            ]}
+                            data={data}
+                            pagination={false}
+                        />
+                    </Col>
+                </Row>
+            )}
         </div>
     )
 }

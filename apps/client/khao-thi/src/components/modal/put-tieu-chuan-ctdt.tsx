@@ -114,7 +114,7 @@ const PutStandardCatalog = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên tiêu chuẩn" required>
-                    <Input placeholder="Nhập tên tiêu chuẩn" />
+                    <Input.TextArea rows={2} placeholder="Nhập tên tiêu chuẩn" spellCheck={false} />
                 </FormItem>
             </Col>
             <Col span={24}>
