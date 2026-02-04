@@ -13,10 +13,10 @@ import {
     useUpdateExamFramework,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Input, message, Row, Space, Typography } from 'antd'
-import type { Key } from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { store } from '../index'
+import { cn } from '@lib/utils'
 
 export default function KhungDeList() {
     const queryClient = new QueryClient()
@@ -168,16 +168,6 @@ export default function KhungDeList() {
                         showTotal: (total, range) =>
                             `${range[0]} - ${range[1]} trong tổng số ${totalExamFramework} bản ghi`,
                     }}
-                    rowSelection={{
-                        type: 'radio',
-                        selectedRowKeys: [examFrameworkId as Key],
-                        onChange: (selectedRowKeys) => {
-                            store.setState((s) => ({
-                                ...s,
-                                examFrameworkId: selectedRowKeys[0] as string,
-                            }))
-                        },
-                    }}
                     onRow={(record) => {
                         return {
                             onClick: () => {
@@ -186,6 +176,11 @@ export default function KhungDeList() {
                                     examFrameworkId: record.id,
                                 }))
                             },
+                            className: cn(
+                                examFrameworkId === record.id
+                                    ? '!bg-orange-200 hover:!bg-orange-200 [&>td]:!bg-orange-200 [&>td]:hover:!bg-orange-200'
+                                    : ''
+                            ),
                         }
                     }}
                     columns={[
@@ -228,11 +223,6 @@ export default function KhungDeList() {
                             type: 'input',
                             width: '250px',
                             render: (_, record) => record?.subjectVersion?.name || '',
-                        },
-                        {
-                            title: 'Mô tả',
-                            width: '200px',
-                            render: (_, record) => record?.description || '',
                         },
                         {
                             title: 'Thao tác',
