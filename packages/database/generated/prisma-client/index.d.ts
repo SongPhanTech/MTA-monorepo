@@ -228365,10 +228365,14 @@ export namespace Prisma {
   }
 
   export type ThesisProjectAvgAggregateOutputType = {
+    firstCheckProgress: number | null
+    secondCheckProgress: number | null
     maxStudents: number | null
   }
 
   export type ThesisProjectSumAggregateOutputType = {
+    firstCheckProgress: number | null
+    secondCheckProgress: number | null
     maxStudents: number | null
   }
 
@@ -228394,6 +228398,9 @@ export namespace Prisma {
     status: $Enums.ThesisProjectStatus | null
     language: string | null
     type: string | null
+    firstCheckProgress: number | null
+    secondCheckProgress: number | null
+    isEligibleForDefense: boolean | null
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorName: string | null
@@ -228441,6 +228448,9 @@ export namespace Prisma {
     status: $Enums.ThesisProjectStatus | null
     language: string | null
     type: string | null
+    firstCheckProgress: number | null
+    secondCheckProgress: number | null
+    isEligibleForDefense: boolean | null
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorName: string | null
@@ -228488,6 +228498,9 @@ export namespace Prisma {
     status: number
     language: number
     type: number
+    firstCheckProgress: number
+    secondCheckProgress: number
+    isEligibleForDefense: number
     subjectClassId: number
     thesisSessionId: number
     supervisorName: number
@@ -228516,10 +228529,14 @@ export namespace Prisma {
 
 
   export type ThesisProjectAvgAggregateInputType = {
+    firstCheckProgress?: true
+    secondCheckProgress?: true
     maxStudents?: true
   }
 
   export type ThesisProjectSumAggregateInputType = {
+    firstCheckProgress?: true
+    secondCheckProgress?: true
     maxStudents?: true
   }
 
@@ -228545,6 +228562,9 @@ export namespace Prisma {
     status?: true
     language?: true
     type?: true
+    firstCheckProgress?: true
+    secondCheckProgress?: true
+    isEligibleForDefense?: true
     subjectClassId?: true
     thesisSessionId?: true
     supervisorName?: true
@@ -228592,6 +228612,9 @@ export namespace Prisma {
     status?: true
     language?: true
     type?: true
+    firstCheckProgress?: true
+    secondCheckProgress?: true
+    isEligibleForDefense?: true
     subjectClassId?: true
     thesisSessionId?: true
     supervisorName?: true
@@ -228639,6 +228662,9 @@ export namespace Prisma {
     status?: true
     language?: true
     type?: true
+    firstCheckProgress?: true
+    secondCheckProgress?: true
+    isEligibleForDefense?: true
     subjectClassId?: true
     thesisSessionId?: true
     supervisorName?: true
@@ -228773,6 +228799,9 @@ export namespace Prisma {
     status: $Enums.ThesisProjectStatus
     language: string | null
     type: string | null
+    firstCheckProgress: number | null
+    secondCheckProgress: number | null
+    isEligibleForDefense: boolean
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorName: string | null
@@ -228839,6 +228868,9 @@ export namespace Prisma {
     status?: boolean
     language?: boolean
     type?: boolean
+    firstCheckProgress?: boolean
+    secondCheckProgress?: boolean
+    isEligibleForDefense?: boolean
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorName?: boolean
@@ -228901,6 +228933,9 @@ export namespace Prisma {
     status?: boolean
     language?: boolean
     type?: boolean
+    firstCheckProgress?: boolean
+    secondCheckProgress?: boolean
+    isEligibleForDefense?: boolean
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorName?: boolean
@@ -228958,6 +228993,9 @@ export namespace Prisma {
     status?: boolean
     language?: boolean
     type?: boolean
+    firstCheckProgress?: boolean
+    secondCheckProgress?: boolean
+    isEligibleForDefense?: boolean
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorName?: boolean
@@ -229015,6 +229053,9 @@ export namespace Prisma {
     status?: boolean
     language?: boolean
     type?: boolean
+    firstCheckProgress?: boolean
+    secondCheckProgress?: boolean
+    isEligibleForDefense?: boolean
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorName?: boolean
@@ -229040,7 +229081,7 @@ export namespace Prisma {
     projectEnd?: boolean
   }
 
-  export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>
+  export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>
   export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
     thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
@@ -229138,6 +229179,9 @@ export namespace Prisma {
       status: $Enums.ThesisProjectStatus
       language: string | null
       type: string | null
+      firstCheckProgress: number | null
+      secondCheckProgress: number | null
+      isEligibleForDefense: boolean
       subjectClassId: string | null
       thesisSessionId: string | null
       supervisorName: string | null
@@ -229622,6 +229666,9 @@ export namespace Prisma {
     readonly status: FieldRef<"ThesisProject", 'ThesisProjectStatus'>
     readonly language: FieldRef<"ThesisProject", 'String'>
     readonly type: FieldRef<"ThesisProject", 'String'>
+    readonly firstCheckProgress: FieldRef<"ThesisProject", 'Int'>
+    readonly secondCheckProgress: FieldRef<"ThesisProject", 'Int'>
+    readonly isEligibleForDefense: FieldRef<"ThesisProject", 'Boolean'>
     readonly subjectClassId: FieldRef<"ThesisProject", 'String'>
     readonly thesisSessionId: FieldRef<"ThesisProject", 'String'>
     readonly supervisorName: FieldRef<"ThesisProject", 'String'>
@@ -371436,6 +371483,9 @@ export namespace Prisma {
     status: 'status',
     language: 'language',
     type: 'type',
+    firstCheckProgress: 'firstCheckProgress',
+    secondCheckProgress: 'secondCheckProgress',
+    isEligibleForDefense: 'isEligibleForDefense',
     subjectClassId: 'subjectClassId',
     thesisSessionId: 'thesisSessionId',
     supervisorName: 'supervisorName',
@@ -396293,6 +396343,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
     language?: StringNullableFilter<"ThesisProject"> | string | null
     type?: StringNullableFilter<"ThesisProject"> | string | null
+    firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
+    secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
+    isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
@@ -396354,6 +396407,9 @@ export namespace Prisma {
     status?: SortOrder
     language?: SortOrderInput | SortOrder
     type?: SortOrderInput | SortOrder
+    firstCheckProgress?: SortOrderInput | SortOrder
+    secondCheckProgress?: SortOrderInput | SortOrder
+    isEligibleForDefense?: SortOrder
     subjectClassId?: SortOrderInput | SortOrder
     thesisSessionId?: SortOrderInput | SortOrder
     supervisorName?: SortOrderInput | SortOrder
@@ -396419,6 +396475,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
     language?: StringNullableFilter<"ThesisProject"> | string | null
     type?: StringNullableFilter<"ThesisProject"> | string | null
+    firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
+    secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
+    isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
@@ -396480,6 +396539,9 @@ export namespace Prisma {
     status?: SortOrder
     language?: SortOrderInput | SortOrder
     type?: SortOrderInput | SortOrder
+    firstCheckProgress?: SortOrderInput | SortOrder
+    secondCheckProgress?: SortOrderInput | SortOrder
+    isEligibleForDefense?: SortOrder
     subjectClassId?: SortOrderInput | SortOrder
     thesisSessionId?: SortOrderInput | SortOrder
     supervisorName?: SortOrderInput | SortOrder
@@ -396535,6 +396597,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusWithAggregatesFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
     language?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     type?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+    firstCheckProgress?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
+    secondCheckProgress?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
+    isEligibleForDefense?: BoolWithAggregatesFilter<"ThesisProject"> | boolean
     subjectClassId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     supervisorName?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -428538,6 +428603,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -428589,6 +428657,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -428640,6 +428711,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -428691,6 +428765,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -428742,6 +428819,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -428789,6 +428869,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -428826,6 +428909,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -455025,6 +455111,9 @@ export namespace Prisma {
     status?: SortOrder
     language?: SortOrder
     type?: SortOrder
+    firstCheckProgress?: SortOrder
+    secondCheckProgress?: SortOrder
+    isEligibleForDefense?: SortOrder
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorName?: SortOrder
@@ -455051,6 +455140,8 @@ export namespace Prisma {
   }
 
   export type ThesisProjectAvgOrderByAggregateInput = {
+    firstCheckProgress?: SortOrder
+    secondCheckProgress?: SortOrder
     maxStudents?: SortOrder
   }
 
@@ -455076,6 +455167,9 @@ export namespace Prisma {
     status?: SortOrder
     language?: SortOrder
     type?: SortOrder
+    firstCheckProgress?: SortOrder
+    secondCheckProgress?: SortOrder
+    isEligibleForDefense?: SortOrder
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorName?: SortOrder
@@ -455123,6 +455217,9 @@ export namespace Prisma {
     status?: SortOrder
     language?: SortOrder
     type?: SortOrder
+    firstCheckProgress?: SortOrder
+    secondCheckProgress?: SortOrder
+    isEligibleForDefense?: SortOrder
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorName?: SortOrder
@@ -455149,6 +455246,8 @@ export namespace Prisma {
   }
 
   export type ThesisProjectSumOrderByAggregateInput = {
+    firstCheckProgress?: SortOrder
+    secondCheckProgress?: SortOrder
     maxStudents?: SortOrder
   }
 
@@ -530373,6 +530472,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -530423,6 +530525,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -530976,6 +531081,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
     language?: StringNullableFilter<"ThesisProject"> | string | null
     type?: StringNullableFilter<"ThesisProject"> | string | null
+    firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
+    secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
+    isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
@@ -560811,6 +560919,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -560861,6 +560972,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     thesisSessionId?: string | null
     supervisorName?: string | null
     supervisorId?: string | null
@@ -568332,6 +568446,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -568382,6 +568499,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -587662,6 +587782,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -587712,6 +587835,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     supervisorName?: string | null
     supervisorId?: string | null
@@ -589517,6 +589643,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -589567,6 +589696,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -589871,6 +590003,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -589921,6 +590056,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -590335,6 +590473,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -590385,6 +590526,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -590685,6 +590829,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -590735,6 +590882,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -590795,6 +590945,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -590845,6 +590998,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -591463,6 +591619,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -591513,6 +591672,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -591595,6 +591757,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -591645,6 +591810,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -591820,6 +591988,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -591870,6 +592041,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -592425,6 +592599,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -592475,6 +592652,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -592625,6 +592805,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -592675,6 +592858,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -592741,6 +592927,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -592791,6 +592980,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -592941,6 +593133,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -592991,6 +593186,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -593133,6 +593331,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -593183,6 +593384,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -593243,6 +593447,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     supervisorName?: string | null
     coSupervisorName?: string | null
     CHUTICH?: string | null
@@ -593293,6 +593500,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -636214,6 +636424,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -637161,6 +637374,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637211,6 +637427,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637261,6 +637480,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660698,6 +660920,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     thesisSessionId?: string | null
     supervisorName?: string | null
     supervisorId?: string | null
@@ -661090,6 +661315,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661140,6 +661368,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661190,6 +661421,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665209,6 +665443,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -665606,6 +665843,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665656,6 +665896,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665706,6 +665949,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673113,6 +673359,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     supervisorName?: string | null
     supervisorId?: string | null
@@ -673159,6 +673408,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673209,6 +673461,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673259,6 +673514,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673445,6 +673703,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -673491,6 +673752,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673541,6 +673805,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673591,6 +673858,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673637,6 +673907,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -673683,6 +673956,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -673849,6 +674125,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673899,6 +674178,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673949,6 +674231,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673995,6 +674280,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674045,6 +674333,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674095,6 +674386,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674591,6 +674885,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -674650,6 +674947,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674700,6 +675000,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674750,6 +675053,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -675135,6 +675441,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -675181,6 +675490,9 @@ export namespace Prisma {
     status?: $Enums.ThesisProjectStatus
     language?: string | null
     type?: string | null
+    firstCheckProgress?: number | null
+    secondCheckProgress?: number | null
+    isEligibleForDefense?: boolean
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorName?: string | null
@@ -675227,6 +675539,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -675277,6 +675592,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -675327,6 +675645,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -675373,6 +675694,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
     CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
@@ -675423,6 +675747,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -675473,6 +675800,9 @@ export namespace Prisma {
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
+    firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+    isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorName?: NullableStringFieldUpdateOperationsInput | string | null

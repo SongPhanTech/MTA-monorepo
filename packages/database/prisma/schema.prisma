@@ -4587,6 +4587,9 @@ model ThesisProject {
   status                ThesisProjectStatus         @default(PROPOSED)
   language              String?                     @db.Text()
   type                  String?                     @db.Text()
+  firstCheckProgress    Int?
+  secondCheckProgress   Int?
+  isEligibleForDefense  Boolean                     @default(true)
   subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId        String?
   thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])

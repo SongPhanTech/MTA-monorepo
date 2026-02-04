@@ -16609,6 +16609,18 @@ const metadata: ModelMeta = {
                     name: "type",
                     type: "String",
                     isOptional: true,
+                }, firstCheckProgress: {
+                    name: "firstCheckProgress",
+                    type: "Int",
+                    isOptional: true,
+                }, secondCheckProgress: {
+                    name: "secondCheckProgress",
+                    type: "Int",
+                    isOptional: true,
+                }, isEligibleForDefense: {
+                    name: "isEligibleForDefense",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
