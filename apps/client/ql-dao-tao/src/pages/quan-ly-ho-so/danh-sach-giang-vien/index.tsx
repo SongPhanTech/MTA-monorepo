@@ -214,8 +214,6 @@ export default function UserProfilePageLecture() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const data = lecturerData
-
     const { data: count, refetch: refetchCount } = useCountLecturer({
         where: {
             ...where,
@@ -495,12 +493,13 @@ export default function UserProfilePageLecture() {
                                                     'SUA'
                                                 ) && (
                                                     <Tooltip title="Sửa" placement="top">
-                                                        <ExportOutlined
-                                                            size={18}
+                                                        <Button
                                                             target="_blank"
                                                             href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
-                                                            className="text-green-600 cursor-pointer"
-                                                        />
+                                                            className="text-green-600 border-none"
+                                                        >
+                                                            <ExportOutlined />
+                                                        </Button>
                                                     </Tooltip>
                                                 )}
                                             </Row>
@@ -510,7 +509,7 @@ export default function UserProfilePageLecture() {
                                 },
                             },
                         ]}
-                        data={data}
+                        data={lecturerData}
                         rowKey="id"
                         pagination={{
                             current: currentPage,
