@@ -1,6 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
+import type { Prisma } from '@workspace/db/'
 import { useUpdateManyThesisProject } from '@workspace/db/hooks'
 import { Col, Form, InputNumber, message, Select } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -30,7 +31,7 @@ export const UpdateProgressModal = () => {
         try {
             showSpinner()
 
-            const dataToUpdate: UpdateThesisProjectInput = {
+            const dataToUpdate: Prisma.ThesisProjectUncheckedUpdateManyInput = {
                 isEligibleForDefense: output.isEligibleForDefense,
             }
 
