@@ -626,7 +626,7 @@ const PutCurriculumVersion = () => {
                                     </Col>
                                     <Col span={12}>
                                         <FormItem form={form} name="description" label="Mô tả">
-                                            <RichTextEditor />
+                                            <Input.TextArea placeholder="Nhập mô tả" />
                                         </FormItem>
                                     </Col>
                                     {input?.versionId && (
@@ -719,15 +719,17 @@ const PutCurriculumVersion = () => {
                         children: (
                             <FormItem form={form} name="jobPosition" label="Vị trí công việc">
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập vị trí công việc" /> */}
                             </FormItem>
                         ),
                     },
                     {
                         key: '3',
-                        label: 'Mục tiêu bcccccc',
+                        label: 'Mục tiêu',
                         children: (
                             <FormItem form={form} name="objectives" label="Mục tiêu">
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập mục tiêu" /> */}
                             </FormItem>
                         ),
                     },
@@ -737,6 +739,7 @@ const PutCurriculumVersion = () => {
                         children: (
                             <FormItem form={form} name="learningOutcome" label="Chuẩn đầu ra">
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập chuẩn đầu ra" /> */}
                             </FormItem>
                         ),
                     },
@@ -746,6 +749,7 @@ const PutCurriculumVersion = () => {
                         children: (
                             <FormItem form={form} name="inputStandard" label="Chuẩn đầu vào">
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập chuẩn đầu vào" /> */}
                             </FormItem>
                         ),
                     },
@@ -755,6 +759,7 @@ const PutCurriculumVersion = () => {
                         children: (
                             <FormItem form={form} name="time" label="Thời gian toàn khoá">
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập thời gian toàn khoá" /> */}
                             </FormItem>
                         ),
                     },
@@ -768,6 +773,7 @@ const PutCurriculumVersion = () => {
                                 label="Cấu trúc chương trình đào tạo"
                             >
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập cấu trúc chương trình đào tạo" /> */}
                             </FormItem>
                         ),
                     },
@@ -781,6 +787,7 @@ const PutCurriculumVersion = () => {
                                 label="Ma trận chuẩn đầu ra"
                             >
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập ma trận chuẩn đầu ra" /> */}
                             </FormItem>
                         ),
                     },
@@ -794,6 +801,7 @@ const PutCurriculumVersion = () => {
                                 label="Mô tả tóm tắt nội dung các học phần"
                             >
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập mô tả tóm tắt nội dung các học phần" /> */}
                             </FormItem>
                         ),
                     },
@@ -803,6 +811,7 @@ const PutCurriculumVersion = () => {
                         children: (
                             <FormItem form={form} name="learningDiagram" label="Sơ đồ liên hệ">
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập sơ đồ liên hệ" /> */}
                             </FormItem>
                         ),
                     },
@@ -812,6 +821,7 @@ const PutCurriculumVersion = () => {
                         children: (
                             <FormItem form={form} name="guide" label="Hướng dẫn thực hiện">
                                 <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập hướng dẫn thực hiện" /> */}
                             </FormItem>
                         ),
                     },
