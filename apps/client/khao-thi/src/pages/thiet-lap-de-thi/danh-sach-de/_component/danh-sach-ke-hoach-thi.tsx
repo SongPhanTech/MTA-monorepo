@@ -1,7 +1,6 @@
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import { useStore } from '@tanstack/react-store'
-import type { SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
@@ -9,6 +8,7 @@ import { Checkbox, Col, DatePicker, Flex, Input, Popover, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useMemo, useState } from 'react'
 import { store } from '../index'
+import { SubjectClass } from '@workspace/db/client';
 
 const EXAM_TYPE_LABEL: Record<string, string> = {
     OfflineWritten: 'Thi viết (offline)',

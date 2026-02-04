@@ -257,6 +257,8 @@ export default function BaoCaoGiangVien() {
             return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
         }
         if (filters?.clusterId) {
+            console.log(selectedItem,'123');
+            
             if (selectedItem?.id && selectedItem?.iCapDonVi === 0) {
                 return (
                     <OrganizationSurveyReport
