@@ -1,12 +1,12 @@
 import { EditOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DefaultLayout from '@layouts/default-layout'
-import { Tag, Tooltip, Input } from 'antd'
+import { Input, Tag, Tooltip } from 'antd'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useFindManyPrompt } from '@/../../../../packages/database/generated/hooks/prompt'
-import { useState, useMemo } from 'react'
-import type { PutPromptHoiDapInput } from '@/components/modal/put-prompt-hoi-dap'
 import { PutPromptHoiDap } from '@/components/modal'
+import type { PutPromptHoiDapInput } from '@/components/modal/put-prompt-hoi-dap'
 
 const SYSTEM_PROMPTS = [
     { code: 'rag', name: 'Hỏi đáp dựa trên RAG' },

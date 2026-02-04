@@ -12,6 +12,7 @@ import { buildOrgFlat, formatDate } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import { $Enums, type Prisma, type SubjectClass } from '@workspace/db/client'
 import { useCountDM_DonVi, useDeleteSubjectClass, useFindManyDM_DonVi } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -21,7 +22,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 
 type TeachingAssignmentForm = {
     subjectClass: Record<

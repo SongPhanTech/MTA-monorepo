@@ -1,18 +1,18 @@
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useState } from 'react'
+import { queryClient } from '@api/index'
+import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import type { ConfigExam, DocumentFile } from '@workspace/db/client'
 import {
     useCreateDocumentFile,
     useDeleteDocumentFile,
     useFindManyKnowledgeBlock,
     useUpdateKnowledgeBlock,
 } from '@workspace/db/hooks'
-import { queryClient } from '@api/index'
-import { Button, Flex, message, Upload } from 'antd'
-import type { ConfigExam, DocumentFile } from '@workspace/db/client'
-import DeleteIcon from '@components/icons/delete'
-import Table from '@components/commons/table'
-import EditIcon from '@components/icons/edit'
+import { Button, Flex, message, Tooltip, Upload } from 'antd'
+import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface TableChuongMucProps {
     matrixId?: string
@@ -80,17 +80,25 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
         }
     }
 
-    const getTotals = (configExams: ConfigExam[]): { quantity: number; point: number } => {
+    const getTotals = (configExams: ConfigExam[]): { quantity: number; point: number,total:number } => {
+        console.log('configExams:', configExams);
+        
         return (
             configExams?.reduce(
                 (acc, config) => ({
                     quantity: acc.quantity + (config.quantity || 0),
                     point: acc.point + (config.point || 0),
+                    total: (acc?.total||0) + (config.point || 0) * (config.quantity || 0),
                 }),
-                { quantity: 0, point: 0 }
-            ) || { quantity: 0, point: 0 }
+                { quantity: 0, point: 0,total:0 }
+            ) || { quantity: 0, point: 0,total:0 }
         )
     }
+    const calcTotal = (data: ConfigExam[]) => {
+  return data.reduce((total, item) => {
+    return total + item.point * item.quantity;
+  }, 0);
+};
 
     const { mutateAsync: createDocumentFile } = useCreateDocumentFile()
 
@@ -183,10 +191,22 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
 
     const renderCell = (quantity: number, point: number) => (
         <div className="relative inline-block min-w-[40px]">
+                
+
             <div className="absolute -top-2 -right-2 text-xs text-green-500 font-semibold">
-                {point}
+                 <Tooltip title="Điểm mỗi câu đúng">
+                    <div>
+                        {point}
+                    </div>
+                </Tooltip>
             </div>
-            <div className="text-base font-medium">{quantity}</div>
+            <div className="text-base font-medium">
+                  <Tooltip title="Số câu hỏi">
+                    <div className="text-base font-medium">
+                        {quantity}
+                    </div>
+                </Tooltip>
+               </div>
         </div>
     )
 
@@ -210,9 +230,10 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                 return {
                     quantity: acc.quantity + totals.quantity,
                     point: acc.point + totals.point,
+                    total: (acc?.total || 0) + totals.total,
                 }
             },
-            { quantity: 0, point: 0 }
+            { quantity: 0, point: 0, total: 0 }
         )
     }
 
@@ -289,8 +310,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                         width: 100,
                         align: 'center',
                         render: (_, record) => {
-                            const { point } = getTotals(record.configExams)
-                            return <span className="font-medium">{point}</span>
+                            const { total } = getTotals(record.configExams)
+                            return <span className="font-medium">{total}</span>
                         },
                     },
                     {
@@ -353,7 +374,7 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                                     {grandTotal.quantity}
                                 </Table.Summary.Cell>
                                 <Table.Summary.Cell index={7} align="center">
-                                    {grandTotal.point}
+                                    {grandTotal.total}
                                 </Table.Summary.Cell>
                                 <Table.Summary.Cell index={8} align="center" />
                             </Table.Summary.Row>

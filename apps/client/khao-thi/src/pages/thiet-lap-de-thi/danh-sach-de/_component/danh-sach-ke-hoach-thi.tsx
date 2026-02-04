@@ -1,18 +1,30 @@
-import { Checkbox, Col, Flex, Input, Popover, Row } from 'antd'
-import { useCallback, useMemo, useState } from 'react'
-import { useStore } from '@tanstack/react-store'
-import { store } from '../index'
-import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
+import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
-import { cn } from '@workspace/ui/lib/utils'
+import { useStore } from '@tanstack/react-store'
+import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import type { SubjectClass } from '@workspace/db/client'
+import { cn } from '@workspace/ui/lib/utils'
+import { Checkbox, Col, DatePicker, Flex, Input, Popover, Row } from 'antd'
+import dayjs from 'dayjs'
+import { useCallback, useMemo, useState } from 'react'
+import { store } from '../index'
+import { SubjectClass } from '@workspace/db/client';
+
+const EXAM_TYPE_LABEL: Record<string, string> = {
+    OfflineWritten: 'Thi viết (offline)',
+    OnlineWritten: 'Thi viết (online)',
+    Oral: 'Thi vấn đáp',
+    Practice: 'Thi thực hành',
+    Project: 'Thi đồ án',
+    Other: 'Khác',
+}
 
 export default function DanhSachKeHoachThi() {
     const { id: semesterId } = useSemesterStore()
     const selectedExamId = useStore(store, (state) => state.selectedExamId)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(10)
+
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const updateStateselectedExamId = (value: string, item: string) => {
@@ -28,34 +40,76 @@ export default function DanhSachKeHoachThi() {
         searchText: '',
         examType: undefined,
         examRoom: undefined,
+        examDay: undefined,
     })
 
-    const where = useMemo(
-        () => ({
+    const where = useMemo(() => {
+        const result: any = {
             semesterId,
             deletedAt: null,
             subjectVersion: {
-                ...(trainingObjectTypeId && {
-                    trainingObjectTypeId,
-                }),
+                ...(trainingObjectTypeId && { trainingObjectTypeId }),
                 ...(filters.searchText && {
                     OR: [
-                        {
-                            code: {
-                                contains: filters.searchText,
-                            },
-                        },
-                        {
-                            name: {
-                                contains: filters.searchText,
-                            },
-                        },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                        { name: { contains: filters.searchText, mode: 'insensitive' } },
                     ],
                 }),
             },
-        }),
-        [filters.searchText, semesterId, trainingObjectTypeId]
-    )
+        }
+
+        if (filters.examDay) {
+            const d = new Date(filters.examDay)
+
+            const start = new Date(d)
+            start.setHours(0, 0, 0, 0)
+
+            const end = new Date(d)
+            end.setHours(23, 59, 59, 999)
+
+            result.examBank = {
+                some: {
+                    examDay: {
+                        gte: start,
+                        lt: end,
+                    },
+                },
+            }
+        }
+
+        if (filters.examType && filters.examType.length > 0) {
+            result.examBank = {
+                ...result.examBank,
+                some: {
+                    ...result.examBank?.some,
+                    examType: {
+                        in: filters.examType,
+                    },
+                },
+            }
+        }
+
+        if (filters.examRoom) {
+            result.examRooms = {
+                some: {
+                    room: {
+                        name: {
+                            contains: filters.examRoom,
+                        },
+                    },
+                },
+            }
+        }
+
+        return result
+    }, [
+        filters.searchText,
+        filters.examDay,
+        filters.examType,
+        filters.examRoom,
+        semesterId,
+        trainingObjectTypeId,
+    ])
 
     const { data: exams = [] } = useFindManyExam(
         {
@@ -79,7 +133,16 @@ export default function DanhSachKeHoachThi() {
                         },
                     },
                 },
-                examBank: true,
+                examBank: {
+                    include: {
+                        examMatrix: {
+                            include: {
+                                examFramework: true,
+                            },
+                        },
+                    },
+                },
+
                 subjectClass: {
                     select: {
                         name: true,
@@ -97,6 +160,12 @@ export default function DanhSachKeHoachThi() {
             enabled: !!semesterId,
         }
     )
+    console.log('EXAMS:', exams)
+    const formatDate = (date?: string | Date) => {
+        if (!date) return ''
+        const d = new Date(date)
+        return d.toLocaleDateString('vi-VN')
+    }
 
     const { data: count } = useCountExam(
         {
@@ -112,6 +181,7 @@ export default function DanhSachKeHoachThi() {
             ...prev,
             searchText: value,
         }))
+        setCurrentPage(1)
     }, [])
 
     const HighlightText = ({ text, searchText }: { text: string; searchText?: string }) => {
@@ -145,6 +215,18 @@ export default function DanhSachKeHoachThi() {
                             allowClear
                             onChange={(e) => debouncedSearch(e.target.value)}
                         />
+                        <DatePicker
+                            placeholder="Chọn ngày thi"
+                            allowClear
+                            onChange={(date) => {
+                                setFilters((prev: any) => ({
+                                    ...prev,
+                                    examDay: date ? date.toDate() : undefined,
+                                }))
+                                setCurrentPage(1)
+                            }}
+                            value={filters.examDay ? dayjs(filters.examDay) : null}
+                        />
                     </Flex>
                 </Flex>
             </Col>
@@ -155,8 +237,36 @@ export default function DanhSachKeHoachThi() {
                     style={{
                         marginTop: '10px',
                     }}
+                    filters={filters}
+                    setFilters={(value: any) => {
+                        // Reset to initial state if all filters are cleared
+                        const isCleared =
+                            !value.searchText &&
+                            !value.examType &&
+                            !value.examRoom &&
+                            !value.examDay
+                        setFilters(
+                            isCleared
+                                ? {
+                                      searchText: '',
+                                      examType: undefined,
+                                      examRoom: undefined,
+                                      examDay: undefined,
+                                  }
+                                : value
+                        )
+                        setCurrentPage(1)
+                    }}
+                    onChange={(_, __, ___, extra) => {
+                        if (extra.action === 'paginate') {
+                        }
+                    }}
                     onRow={(record) => ({
-                        className: cn(selectedExamId === record.id && 'bg-orange-100'),
+                        className: cn(
+                            selectedExamId === record.id
+                                ? '!bg-orange-200 hover:!bg-orange-200 [&>td]:!bg-orange-200 [&>td]:hover:!bg-orange-200'
+                                : ''
+                        ),
                         onClick: (e) => {
                             const target = e.target as HTMLElement
                             if (
@@ -185,15 +295,24 @@ export default function DanhSachKeHoachThi() {
                             dataIndex: 'searchText',
                             type: 'input',
                             render: (_, record) => {
-                                const name =
-                                    `${record.subjectVersion?.code} - ${record.subjectVersion?.name}` ||
-                                    ''
+                                const code = record.subjectVersion?.code || ''
+                                const name = record.subjectVersion?.name || ''
+
                                 return (
                                     <div className="text-left">
-                                        <HighlightText
-                                            text={name}
-                                            searchText={filters.searchText}
-                                        />
+                                        <span className="font-semibold mr-1">
+                                            <HighlightText
+                                                text={code}
+                                                searchText={filters.searchText}
+                                            />
+                                        </span>
+                                        -
+                                        <span className="ml-1">
+                                            <HighlightText
+                                                text={name}
+                                                searchText={filters.searchText}
+                                            />
+                                        </span>
                                     </div>
                                 )
                             },
@@ -223,7 +342,7 @@ export default function DanhSachKeHoachThi() {
                             title: 'Phòng thi',
                             align: 'center',
                             // dataIndex: 'examRoom',
-                            // type:'input',
+                            // type: 'input',
                             width: 150,
                             render: (_, record) => {
                                 if (!record?.examRooms || record.examRooms?.length === 0) {
@@ -235,55 +354,60 @@ export default function DanhSachKeHoachThi() {
                                 }
 
                                 const totalRooms = record.examRooms.length
-                                const displayLimit = 3 // Hiển thị tối đa 3 phòng
+                                const displayLimit = 3
                                 const displayRooms = record.examRooms.slice(0, displayLimit)
                                 const remainingCount = totalRooms - displayLimit
 
-                                // Nội dung đầy đủ cho Popover
+                                const renderRoom = (examRoom: any) => (
+                                    <div key={examRoom.id} className="mb-2">
+                                        <div className="font-semibold">{examRoom.room?.name}</div>
+                                        <ul className="list-disc pl-4 text-xs text-gray-700">
+                                            <li>{examRoom.examList?.length || 0} thí sinh</li>
+                                        </ul>
+                                    </div>
+                                )
+
                                 const fullContent = (
                                     <div className="max-h-60 overflow-y-auto">
-                                        {record.examRooms.map((examRoom: any, index: number) => (
-                                            <div key={examRoom.id} className="py-1">
-                                                {examRoom.room?.name} - {examRoom.capacity} chỗ
-                                            </div>
-                                        ))}
+                                        {record.examRooms.map(renderRoom)}
                                     </div>
                                 )
 
                                 return (
                                     <div className="text-left">
-                                        {displayRooms.map((examRoom: any, index: number) => (
-                                            <div key={examRoom.id}>
-                                                {examRoom.room?.name}- {examRoom.capacity} chỗ
-                                            </div>
-                                        ))}
-                                        {remainingCount > 0 && (
-                                            <Popover content={fullContent} title="Tất cả phòng thi">
-                                                <span className="text-blue-600 cursor-pointer hover:underline">
-                                                    + {remainingCount} phòng khác
-                                                </span>
-                                            </Popover>
-                                        )}
+                                        <HtmlTruncate>
+                                            {displayRooms.map(renderRoom)}
+                                            {remainingCount > 0 && (
+                                                <Popover
+                                                    content={fullContent}
+                                                    title="Tất cả phòng thi"
+                                                >
+                                                    <span className="text-blue-600 cursor-pointer hover:underline">
+                                                        + {remainingCount} phòng khác
+                                                    </span>
+                                                </Popover>
+                                            )}
+                                        </HtmlTruncate>
                                     </div>
                                 )
                             },
                         },
-                        {
-                            title: 'Số phòng thi',
-                            align: 'center',
-                            width: 120,
-                            render: (_, record) => {
-                                return record?.examRooms?.length
-                            },
-                        },
-                        {
-                            title: 'Số ca thi',
-                            align: 'center',
-                            width: 100,
-                            render: (_, record) => {
-                                return record?.session
-                            },
-                        },
+                        // {
+                        //     title: 'Số phòng thi',
+                        //     align: 'center',
+                        //     width: 60,
+                        //     render: (_, record) => {
+                        //         return record?.examRooms?.length
+                        //     },
+                        // },
+                        // {
+                        //     title: 'Số ca thi',
+                        //     align: 'center',
+                        //     width: 100,
+                        //     render: (_, record) => {
+                        //         return record?.session
+                        //     },
+                        // },
                         {
                             title: 'Lớp môn học',
                             align: 'center',
@@ -291,9 +415,100 @@ export default function DanhSachKeHoachThi() {
                             render: (_, record) => {
                                 return record?.subjectClass.length > 0
                                     ? record?.subjectClass
-                                          .map((i: SubjectClass) => i.name)
+                                          .map((i: SubjectClass) => `${i?.code||''}-${i?.name||''}`)
                                           .join(', ')
                                     : ''
+                            },
+                        },
+                        {
+                            title: 'Ngày thi',
+                            align: 'center',
+                            width: 100,
+                            type: 'date',
+                            dataIndex: 'examDay',
+                            render: (_, record) => {
+                                if (!record?.examBank?.length) return ''
+
+                                const today = new Date()
+                                today.setHours(0, 0, 0, 0)
+
+                                const examDays = record.examBank
+                                    .map((e: any) => e.examDay)
+                                    .filter(Boolean)
+                                    .map((d: any) => new Date(d))
+                                    .sort((a: Date, b: Date) => a.getTime() - b.getTime())
+
+                                if (!examDays.length) return ''
+
+                                return (
+                                    <HtmlTruncate>
+                                        <ul className="list-disc pl-4">
+                                            {examDays.map((day: Date, index: number) => {
+                                                const isExpired = day < today
+                                                return (
+                                                    <li
+                                                        key={index}
+                                                        className={
+                                                            isExpired
+                                                                ? 'text-red-600 font-semibold'
+                                                                : 'text-green-600 font-semibold'
+                                                        }
+                                                    >
+                                                        {formatDate(day)}
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </HtmlTruncate>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Khung đề / Ma trận',
+                            align: 'center',
+                            width: 100,
+                            render: (_, record) => {
+                                const hasMatrix = record?.examBank?.some(
+                                    (b: any) => !!b.examMatrixId
+                                )
+
+                                const hasFramework = record?.examBank?.some(
+                                    (b: any) => !!b.examMatrix?.examFrameworkId
+                                )
+
+                                return (
+                                    <div className="flex flex-col items-center gap-1">
+                                        <span
+                                            className={
+                                                hasFramework ? 'text-green-600' : 'text-red-400'
+                                            }
+                                        >
+                                            Khung đề: {hasFramework ? '✔' : '✖'}
+                                        </span>
+                                        <span
+                                            className={
+                                                hasMatrix ? 'text-green-600' : 'text-red-400'
+                                            }
+                                        >
+                                            Ma trận: {hasMatrix ? '✔' : '✖'}
+                                        </span>
+                                    </div>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Hình thức thi',
+                            align: 'center',
+                            width: 100,
+                            dataIndex: 'examType',
+                            type: 'select',
+                            options: Object.entries(EXAM_TYPE_LABEL).map(([value, label]) => ({
+                                label,
+                                value,
+                            })),
+                            render: (_, record) => {
+                                const examType = record?.examBank?.[0]?.examType
+                                return EXAM_TYPE_LABEL[examType] || ''
                             },
                         },
                         {

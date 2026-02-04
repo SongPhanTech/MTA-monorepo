@@ -1,7 +1,7 @@
 import { useStoreActions, useStoreState } from '@redux/hook'
 import ability from '@workspace/permissions/ability'
 import { useAbility, usePermissions } from '@workspace/permissions/hooks'
-import NAVIGATION, { ROUTER_PATH, type QL_HO_SO_PERMISSION } from '@workspace/router'
+import NAVIGATION, { type QL_HO_SO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useEffect, useMemo } from 'react'
 
 const useMenuList = () => {

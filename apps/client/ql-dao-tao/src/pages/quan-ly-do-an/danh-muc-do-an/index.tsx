@@ -4,6 +4,7 @@ import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import SettingsIcon from '@components/icons/settings'
+import UpdateProgressModal from '@components/modal/update-progress-modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -25,6 +26,7 @@ import {
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore } from '@workspace/ui'
@@ -35,7 +37,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 
 export default function ThesisProject() {
     const { can, canSome } = useAbility()
@@ -169,7 +170,7 @@ export default function ThesisProject() {
         filters.summary,
     ])
 
-    const { data: subjectClass } = useFindManySubjectClass({
+    const { data: subjectClass, refetch } = useFindManySubjectClass({
         where,
         include: {
             subject: true,
@@ -283,6 +284,14 @@ export default function ThesisProject() {
 
     const { onOpen: openPrintSupervisorGuide } = useDisclosure({
         tag: 'ModalPrintSupervisorGuide',
+    })
+
+    const { onOpen: openUpdateProgress } = useDisclosure<{
+        selectedRowKeys: string[]
+        type: 'FIRST' | 'SECOND'
+        onSuccess?: () => void
+    }>({
+        tag: 'UpdateProgressModal',
     })
 
     useEffect(() => {
@@ -519,6 +528,33 @@ export default function ThesisProject() {
                                             <BookPlus />
                                             Tạo thư mời
                                         </Button>
+
+                                        <Button
+                                            onClick={() =>
+                                                openUpdateProgress({
+                                                    selectedRowKeys: selectedRowKeys as string[],
+                                                    type: 'FIRST',
+                                                    onSuccess: () => refetch(),
+                                                })
+                                            }
+                                            type="primary"
+                                            disabled={selectedRowKeys.length === 0}
+                                        >
+                                            Cập nhật tiến độ 1
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                openUpdateProgress({
+                                                    selectedRowKeys: selectedRowKeys as string[],
+                                                    type: 'SECOND',
+                                                    onSuccess: () => refetch(),
+                                                })
+                                            }
+                                            type="primary"
+                                            disabled={selectedRowKeys.length === 0}
+                                        >
+                                            Cập nhật tiến độ 2
+                                        </Button>
                                     </>
                                 )}
                             </Flex>
@@ -659,6 +695,32 @@ export default function ThesisProject() {
                                         : '',
                             },
                             {
+                                title: 'Tiến độ KT 1',
+                                dataIndex: 'firstCheckProgress',
+                                align: 'center',
+                                width: 120,
+                                render: (value) => (value ? `${value}%` : ''),
+                            },
+                            {
+                                title: 'Tiến độ KT 2',
+                                dataIndex: 'secondCheckProgress',
+                                align: 'center',
+                                width: 120,
+                                render: (value) => (value ? `${value}%` : ''),
+                            },
+                            {
+                                title: 'ĐK bảo vệ',
+                                dataIndex: 'isEligibleForDefense',
+                                align: 'center',
+                                width: 120,
+                                render: (value) =>
+                                    value ? (
+                                        <Tag color="success">Đủ ĐK</Tag>
+                                    ) : (
+                                        <Tag color="error">Không đủ ĐK</Tag>
+                                    ),
+                            },
+                            {
                                 title: 'Trạng thái',
                                 dataIndex: 'statusThesisProject',
                                 align: 'center',
@@ -749,6 +811,7 @@ export default function ThesisProject() {
                     />
                 </Col>
             </Row>
+            <UpdateProgressModal />
         </div>
     )
 }

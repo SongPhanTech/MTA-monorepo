@@ -17,12 +17,12 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
 import { buildOrgTree, limitTreeDepth } from '@lib/utils'
+import { whereOrganization } from '@workspace/libs/constants'
+import { normalizeVietnamese } from '@workspace/libs/utils'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import _ from 'lodash'
-import { useCallback, useEffect, useState, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
-import { normalizeVietnamese } from '@workspace/libs/utils'
-import { whereOrganization } from '@workspace/libs/constants'
 export type PutTrainingBlockSubject = TrainingBlockSubject & {
     conditional?: boolean
 }

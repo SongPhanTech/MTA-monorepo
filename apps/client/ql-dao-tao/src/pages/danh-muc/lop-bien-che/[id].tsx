@@ -8,7 +8,7 @@ import type { FilterProps } from '@constants/type'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Semester, StudentSemesterResult } from '@workspace/db'
+import { $Enums, type Semester, type StudentSemesterResult } from '@workspace/db'
 import type { Student } from '@workspace/db/client'
 import {
     useFindManyCurriculumVersion,
@@ -694,6 +694,10 @@ export default function StudentFixedClassPage() {
                                                     },
                                                 },
                                                 awards: {
+                                                    where: {
+                                                        status: $Enums.ArchivedCertificateStatus
+                                                            .APPROVED,
+                                                    },
                                                     include: {
                                                         archivedAward: true,
                                                     },
@@ -1086,6 +1090,10 @@ export default function StudentFixedClassPage() {
                                                     },
                                                 },
                                                 awards: {
+                                                    where: {
+                                                        status: $Enums.ArchivedCertificateStatus
+                                                            .APPROVED,
+                                                    },
                                                     include: {
                                                         archivedAward: true,
                                                     },
@@ -1458,6 +1466,10 @@ export default function StudentFixedClassPage() {
                                                     },
                                                 },
                                                 awards: {
+                                                    where: {
+                                                        status: $Enums.ArchivedCertificateStatus
+                                                            .APPROVED,
+                                                    },
                                                     include: {
                                                         archivedAward: true,
                                                     },

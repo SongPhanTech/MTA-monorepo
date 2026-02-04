@@ -17,6 +17,7 @@ import {
     useFindManyLecturerType,
 } from '@workspace/db/hooks'
 import { exportLecturerProfile } from '@workspace/libs/api/training'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Row, Tooltip } from 'antd'
@@ -27,7 +28,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 
 dayjs.locale('vi')
 
@@ -189,7 +189,7 @@ export default function UserProfilePageLecture() {
         [filters, canXemTatCa, orgIds]
     )
 
-    const { data = [], refetch } = useFindManyLecturer({
+    const { data: lecturerData = [], refetch } = useFindManyLecturer({
         where,
         include: {
             userProfile: {
@@ -213,6 +213,8 @@ export default function UserProfilePageLecture() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+
+    const data = lecturerData
 
     const { data: count, refetch: refetchCount } = useCountLecturer({
         where: {
@@ -298,6 +300,7 @@ export default function UserProfilePageLecture() {
                     <Table
                         rowSelection={{
                             selectedRowKeys,
+                            preserveSelectedRowKeys: true,
                             onChange: (keys) => {
                                 setSelectedRowKeys(keys)
                             },

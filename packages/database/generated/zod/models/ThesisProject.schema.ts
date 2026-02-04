@@ -30,6 +30,16 @@ const baseSchema = z.object({
     status: ThesisProjectStatusSchema,
     language: z.string().nullish(),
     type: z.string().nullish(),
+    firstCheckProgress: z.number().nullish(),
+    secondCheckProgress: z.number().nullish(),
+    isEligibleForDefense: z.boolean().default(true),
+    supervisorName: z.string().nullish(),
+    coSupervisorName: z.string().nullish(),
+    CHUTICH: z.string().nullish(),
+    THUKY: z.string().nullish(),
+    PHANBIEN1: z.string().nullish(),
+    PHANBIEN2: z.string().nullish(),
+    UYVIEN3: z.string().nullish(),
     maxStudents: z.number().nullish(),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
@@ -60,6 +70,16 @@ const baseSchemaWithoutDefaults = z.object({
     status: ThesisProjectStatusSchema,
     language: z.string().nullish(),
     type: z.string().nullish(),
+    firstCheckProgress: z.number().nullish(),
+    secondCheckProgress: z.number().nullish(),
+    isEligibleForDefense: z.boolean(),
+    supervisorName: z.string().nullish(),
+    coSupervisorName: z.string().nullish(),
+    CHUTICH: z.string().nullish(),
+    THUKY: z.string().nullish(),
+    PHANBIEN1: z.string().nullish(),
+    PHANBIEN2: z.string().nullish(),
+    UYVIEN3: z.string().nullish(),
     maxStudents: z.number().nullish(),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
@@ -144,6 +164,16 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
     status: ThesisProjectStatusSchema,
     language: z.string().nullish(),
     type: z.string().nullish(),
+    firstCheckProgress: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    secondCheckProgress: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    isEligibleForDefense: z.boolean(),
+    supervisorName: z.string().nullish(),
+    coSupervisorName: z.string().nullish(),
+    CHUTICH: z.string().nullish(),
+    THUKY: z.string().nullish(),
+    PHANBIEN1: z.string().nullish(),
+    PHANBIEN2: z.string().nullish(),
+    UYVIEN3: z.string().nullish(),
     maxStudents: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
@@ -157,7 +187,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
  * `ThesisProject` schema for create operations excluding foreign keys and relations.
  */
 export const ThesisProjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, thesisType: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, thesisType: true, status: true, isEligibleForDefense: true
 });
 
 

@@ -9,16 +9,17 @@ import {
     useUpdateManyExamList,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
+import { getUrl } from '@workspace/libs/api/custom-instance'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas'
 import { getExportSubjectClassScoreUrl, useGenExamListCode } from '@workspace/libs/api/training'
-import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from 'antd'
-import { useEffect } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Printer } from 'lucide-react'
-import { getUrl } from '@workspace/libs/api/custom-instance'
 import { getRuntimeEnv } from '@workspace/libs/utils'
 import { cn } from '@workspace/ui/lib/utils'
+import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from 'antd'
+import { Printer } from 'lucide-react'
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
 interface StudentExamFormType {
     list: Record<
         string,

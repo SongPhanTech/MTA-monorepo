@@ -1,12 +1,11 @@
-import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import CommentList from '@components/commons/comment-list'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import type { DataTabType } from '@components/sub-pages/tu-danh-gia-ctdt/criteria-analysis'
 import {
-    getStatusEvaluation,
-    EVALUATION_CRITERION_STATUS_OPTIONS,
     DEADLINE_OPTIONS,
+    EVALUATION_CRITERION_STATUS_OPTIONS,
+    getStatusEvaluation,
 } from '@constants/constants'
 import { formatDate } from '@lib/utils'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
@@ -15,6 +14,7 @@ import { Badge, Button, Empty, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { MessageCircle } from 'lucide-react'
 import { useState } from 'react'
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 
 const CriteriaAnalysisPeriodSubPage = ({
     data,

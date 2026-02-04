@@ -11,6 +11,7 @@ import 'training-score'
 import 'scholarship'
 import 'warning'
 import 'training-action'
+import 'score-link'
 import 'ranking'
 import 'thesis'
 import '../ql-danh-muc/notification'
@@ -162,7 +163,7 @@ model StudentSubjectScore extends Base {
   studentSubjectScoreHistory   StudentSubjectScoreHistory[]
   scoreCorrectionItem          ScoreCorrectionItem[]
 
-  @@unique([subjectClassId, studentId])
+  @@unique([subjectClassId, studentId ])
   @@schema("ql-dao-tao")
 }
 
@@ -354,6 +355,7 @@ model Semester extends Base {
   planTraining            PlanTraining[]
   survey                  Survey[]
   exam                    Exam[]
+  scoreLinkSheets         ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }
@@ -502,6 +504,8 @@ model FixedClass extends Base {
   notifications            Notification[]  // Thông báo cho lớp
   surveyObjectTypes        SurveyObjectType[]
 
+  scoreLinkSheets          ScoreLinkSheet[]
+
   @@unique([name, trainingCourseId, curriculumVersionId])
 
   @@schema("ql-dao-tao")
@@ -645,14 +649,14 @@ enum SubjectVersionType {
 /// Phiên bản môn học
 model SubjectVersion extends BaseNoCode {
   code                     String?
-  isLocked                 Boolean                 @default(false)
+  isLocked                 Boolean                   @default(false)
   name                     String
   codeTkb                  String?
   examType                 ExamType
   /// loại học phần
-  type                     SubjectVersionType      @default(Normal)
+  type                     SubjectVersionType        @default(Normal)
   /// 1 đầu điểm
-  onePoint                 Boolean                 @default(false)
+  onePoint                 Boolean                   @default(false)
   credit                   Int // số tín chỉ
   week                     Int? // số tuần
   /// số tiết
@@ -676,28 +680,28 @@ model SubjectVersion extends BaseNoCode {
   materials                String? // VIII. Cơ sở vật chất, học liệu
   rules                    String? // ​IX. Quy định của học phần
 
-  managementOrganization   DM_DonVi?               @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?                 @db.Uuid
+  managementOrganization   DM_DonVi?                 @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                   @db.Uuid
 
-  subject                  Subject                 @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  subject                  Subject                   @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
 
-  trainingObjectType       TrainingObjectType      @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType       TrainingObjectType        @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId     String
 
-  subjectVersionCategory   SubjectVersionCategory? @relation(fields: [subjectVersionCategoryId], references: [id])
+  subjectVersionCategory   SubjectVersionCategory?   @relation(fields: [subjectVersionCategoryId], references: [id])
   subjectVersionCategoryId String?
 
   /// môn học khối kiến thức - CTĐT
   trainingBlocks           TrainingBlockSubject[]
 
   /// môn học tiên quyết
-  prerequisiteSubject      SubjectVersion[]        @relation(name: "PrerequisiteSubject")
-  dependentSubject         SubjectVersion[]        @relation(name: "PrerequisiteSubject")
+  prerequisiteSubject      SubjectVersion[]          @relation(name: "PrerequisiteSubject")
+  dependentSubject         SubjectVersion[]          @relation(name: "PrerequisiteSubject")
 
   // môn học song hành
-  coRequisiteSubject       SubjectVersion[]        @relation(name: "CoRequisiteSubject")
-  depCoRequisiteSubject    SubjectVersion[]        @relation(name: "CoRequisiteSubject")
+  coRequisiteSubject       SubjectVersion[]          @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject    SubjectVersion[]          @relation(name: "CoRequisiteSubject")
 
   // Nhóm môn tương đương
   equivalencyGroups        SubjectInGroup[]
@@ -708,10 +712,11 @@ model SubjectVersion extends BaseNoCode {
   documentFiles            DocumentFile[]
   questionBanks            QuestionBank[]
   subjectScoreConvert      SubjectScoreConvert[]
-
   subjectVersionHistory    SubjectVersionHistory[]
   exams                    Exam[]
   examFramework            ExamFramework[]
+  scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
+
 
   // @@unique([trainingObjectTypeId, name, credit, period])
   @@index([name, trainingObjectTypeId])
@@ -865,8 +870,11 @@ enum PeriodType {
 
 enum SubjectClassType {
   NORMAL // Lớp thường
-  RETAKE // Học lại
+  LINKED // Lớp liên kết
   REEXAM // Thi lại
+  RETAKE // Học lại
+  STAYBACK // Lớp lưu ban
+  TRANSFER // Lớp chuyển trường
   @@schema("ql-dao-tao")
 }
 
@@ -882,20 +890,20 @@ model SubjectClass extends BaseNoCode {
   name                        String
   startDate                   DateTime?
   endDate                     DateTime?
-  subject                     SubjectVersion        @relation(fields: [subjectId], references: [id])
+  subject                     SubjectVersion           @relation(fields: [subjectId], references: [id])
   subjectId                   String
   schedule                    SubjectClassSchedule?
   maxStudent                  Int // Số SV tối đa
-  type                        SubjectClassType      @default(NORMAL)
-  status                      SubjectClassStatus    @default(DRAFT)
+  type                        SubjectClassType         @default(NORMAL)
+  status                      SubjectClassStatus       @default(DRAFT)
   // Đối tượng đào tạo
-  trainingObjectType          TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType          TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId        String
 
-  semester                    Semester              @relation(fields: [semesterId], references: [id])
+  semester                    Semester                 @relation(fields: [semesterId], references: [id])
   semesterId                  String
 
-  cancelled                   Boolean               @default(false) // đã hủy lớp
+  cancelled                   Boolean                  @default(false) // đã hủy lớp
 
   lecturerAssignmentDeadline  DateTime? // hạn phân công giảng dạy
   sendLecturerAssignmentAt    DateTime? // ngày gửi phân công giảng dạy
@@ -906,7 +914,7 @@ model SubjectClass extends BaseNoCode {
   // hình thức thi copy từ phiên bản môn học; hình thức thi của lớp có thể thay đổi giữa kỳ học
   examType                    ExamType?
 
-  exam                        Exam?                 @relation(fields: [examId], references: [id])
+  exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
 
   /// ngày bắt đầu nhập điểm CC/TX
@@ -916,39 +924,42 @@ model SubjectClass extends BaseNoCode {
   /// hạn nhập điểm thi
   examScoreDeadline           DateTime? // : default 10 ngày sau ngày thi
 
-  enteredScore                Boolean               @default(false)
-  enteredExamScore            Boolean               @default(false)
+  enteredScore                Boolean                  @default(false)
+  enteredExamScore            Boolean                  @default(false)
 
   // khi xuất phiếu điểm cuối cùng
   issuedScoreAt               DateTime? // ngày xuất phiếu điểm
 
   // khoá khi xuất phiếu điểm, lên DS thi. (P13 có thể mở khoá)
   /// khoá điểm CC/TX
-  isLockScore                 Boolean               @default(false)
+  isLockScore                 Boolean                  @default(false)
   // khoá khi xuất phiếu điểm. (P13 có thể mở khoá)
   /// khoá điểm thi
-  isLockExamScore             Boolean               @default(false)
+  isLockExamScore             Boolean                  @default(false)
 
   // P13 kiểm tra phiếu điểm và gửi
-  scoreSubmitted              Boolean               @default(false)
+  scoreSubmitted              Boolean                  @default(false)
 
   // P2/P7 kiểm tra lại phiếu điểm và dữ liệu phần mềm
-  scoreChecked                Boolean               @default(false)
+  scoreChecked                Boolean                  @default(false)
 
-  room                        Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
+  room                        Room?                    @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                      String?
 
-  trainingLocation            TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocation            TrainingLocation?        @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
   trainingLocationId          String?
 
-  mainLecturer                Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  mainLecturer                Lecturer?                @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId                  String?
 
-  extraLecturer               Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturer               Lecturer?                @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId             String?
 
-  enterGradeLecturer          Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturer          Lecturer?                @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
   enterGradeLecturerId        String?
+
+  scoreLinkSubjectVersion     ScoreLinkSubjectVersion? @relation(fields: [scoreLinkSubjectVersionId], references: [id])
+  scoreLinkSubjectVersionId   String?                  @unique
 
   subjectClassStudent         StudentSubjectScore[]
   fixedClasses                FixedClass[]
@@ -957,7 +968,7 @@ model SubjectClass extends BaseNoCode {
   // Môn đồ án
   thesisProjects              ThesisProject[] // DS đồ án
   expertProfile               ExpertProfile[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
-  defenseRooms                Room[]                @relation("DefenseRooms") // DS phòng -> chọn phòng tự động
+  defenseRooms                Room[]                   @relation("DefenseRooms") // DS phòng -> chọn phòng tự động
 
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
@@ -966,6 +977,7 @@ model SubjectClass extends BaseNoCode {
 
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
+
   @@schema("ql-dao-tao")
 }
 

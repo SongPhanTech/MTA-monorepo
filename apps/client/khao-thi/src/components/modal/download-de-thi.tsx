@@ -1,12 +1,12 @@
-import { Modal, Button, Flex, Input } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useState, useRef, useEffect } from 'react'
-import { useReactToPrint } from 'react-to-print'
-import { useFindUniqueExamBank, useUpdateExamBank } from '@workspace/db/hooks'
-import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { queryClient } from '@api/index'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
+import { useFindUniqueExamBank, useUpdateExamBank } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/libs/utils'
+import { Button, Flex, Input, Modal } from 'antd'
 import { TemplateHandler } from 'easy-template-x'
+import { useEffect, useRef, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useReactToPrint } from 'react-to-print'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
 
 const PrintExamBank = () => {
@@ -79,10 +79,10 @@ const PrintExamBank = () => {
         documentTitle: `De-Thi-${data?.exam?.subjectVersion?.name || 'Exam'}`,
     })
 
-    const currentDate = new Date()
-    const day = currentDate.getDate()
-    const month = currentDate.getMonth() + 1
-    const year = currentDate.getFullYear()
+    const examDate = data?.examDay ? new Date(data.examDay) : new Date()
+    const day = examDate.getDate()
+    const month = examDate.getMonth() + 1
+    const year = examDate.getFullYear()
 
     const handleDownload = async () => {
         if (!data) return

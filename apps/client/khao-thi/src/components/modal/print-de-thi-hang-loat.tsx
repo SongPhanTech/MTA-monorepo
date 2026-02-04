@@ -1,13 +1,46 @@
-import { Modal, Button, Flex, Divider, Input } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useState, useRef, useEffect } from 'react'
-import { useReactToPrint } from 'react-to-print'
-import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
-import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { queryClient } from '@api/index'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
+import type { Prisma } from '@workspace/db/client'
+import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/libs/utils'
+import { Button, Divider, Flex, Input, Modal } from 'antd'
 import { TemplateHandler } from 'easy-template-x'
+import { useEffect, useRef, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useReactToPrint } from 'react-to-print'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
+
+export type ExamBankType = Prisma.ExamBankGetPayload<{
+    include: {
+        exam: {
+            include: {
+                semester: true
+                subjectVersion: true
+            }
+        }
+        questions: {
+            include: {
+                question: true
+            }
+        }
+        subjectClass: {
+            select: {
+                name: true
+                id: true
+                code: true
+            }
+        }
+        examMatrix: {
+            include: {
+                examFramework: {
+                    select: {
+                        time: true
+                    }
+                }
+            }
+        }
+    }
+}>
 
 const PrintBatchExamBank = () => {
     const [name, setName] = useState('Nguyễn Văn A')
@@ -86,36 +119,37 @@ const PrintBatchExamBank = () => {
         const res = await fetch(getMinioUrl('mta/template/template-de-thi-hang-loat.docx'))
         const templateFile = await res.blob()
 
-        const currentDate = new Date()
-        const day = currentDate.getDate()
-        const month = currentDate.getMonth() + 1
-        const year = currentDate.getFullYear()
-
         const templateData = {
-            exams: exams.map((exam, index) => ({
-                semester: exam?.exam?.semester?.name || '',
-                className: exam?.subjectClass?.name || '',
-                day,
-                month,
-                year,
-                semesterName: exam?.exam?.semester?.name || '',
-                examCode: exam?.examCode || '',
-                subjectName: exam?.exam?.subjectVersion?.name || '',
-                duration:
-                    duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
-                teacherName: name,
-                isNote:
-                    exam?.isNote === true
-                        ? 'Được sử dụng tài liệu'
-                        : exam?.explain || 'Không được sử dụng tài liệu',
-                questions:
-                    exam?.questions?.map((q: any, qIndex: number) => ({
-                        order: q?.order || qIndex + 1,
-                        point: Number(q?.question?.point || 0).toFixed(1),
-                        content: convertHtmlBreaks(q?.question?.content || ''),
-                    })) || [],
-                isLastExam: index === exams.length - 1,
-            })),
+            exams: exams.map((exam, index) => {
+                const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
+                return {
+                    semester: exam?.exam?.semester?.name || '',
+                    className: exam?.subjectClass?.name || '',
+                    day: examDate.getDate(),
+                    month: examDate.getMonth() + 1,
+                    year: examDate.getFullYear(),
+                    semesterName: exam?.exam?.semester?.name || '',
+                    examCode: exam?.examCode || '',
+                    subjectName: exam?.exam?.subjectVersion?.name || '',
+                    duration:
+                        duration ||
+                        exam?.examMatrix?.examFramework?.time ||
+                        exam?.exam?.duration ||
+                        30,
+                    teacherName: name,
+                    isNote:
+                        exam?.isNote === true
+                            ? 'Được sử dụng tài liệu'
+                            : exam?.explain || 'Không được sử dụng tài liệu',
+                    questions:
+                        exam?.questions?.map((q: any, qIndex: number) => ({
+                            order: q?.order || qIndex + 1,
+                            point: Number(q?.question?.point || 0).toFixed(1),
+                            content: convertHtmlBreaks(q?.question?.content || ''),
+                        })) || [],
+                    isLastExam: index === exams.length - 1,
+                }
+            }),
         }
 
         const handler = new TemplateHandler()
@@ -142,12 +176,11 @@ const PrintBatchExamBank = () => {
         onClose()
     }
 
-    // Render preview cho một đề thi
-    const renderExamPreview = (exam: any, index: number) => {
-        const currentDate = new Date()
-        const day = currentDate.getDate()
-        const month = currentDate.getMonth() + 1
-        const year = currentDate.getFullYear()
+    const renderExamPreview = (exam: ExamBankType, index: number) => {
+        const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
+        const day = examDate.getDate()
+        const month = examDate.getMonth() + 1
+        const year = examDate.getFullYear()
 
         return (
             <div key={exam.id}>

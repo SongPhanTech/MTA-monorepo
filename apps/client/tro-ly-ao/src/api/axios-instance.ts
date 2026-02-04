@@ -1,7 +1,7 @@
 // lib/axios-instance.ts
 
-import axios from 'axios'
 import { getRuntimeEnv } from '@workspace/libs/utils'
+import axios from 'axios'
 
 const axiosInstanceChatbot = axios.create({
     baseURL: getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL'),

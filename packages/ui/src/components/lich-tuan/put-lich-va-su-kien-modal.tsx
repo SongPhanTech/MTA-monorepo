@@ -26,7 +26,7 @@ import {
 } from 'antd'
 import locale from 'antd/es/date-picker/locale/vi_VN'
 import dayjs, { type Dayjs } from 'dayjs'
-import { Key, useCallback, useEffect, useState } from 'react'
+import { type Key, useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { FormItem, InputSuggestion, PutFormModal, type PutModalFormType } from '../commons'
 import { useSemesterStore } from '../select-semester'

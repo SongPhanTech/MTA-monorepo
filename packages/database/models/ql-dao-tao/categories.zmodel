@@ -1,6 +1,7 @@
 import '../base'
 import 'output-standard'
 import '../ql-dao-tao/plan-training'
+import '../ql-dao-tao/score-link'
 import '../ql-dao-tao/student'
 import '../ql-dao-tao/thesis'
 import '../ql-danh-muc/common'
@@ -48,6 +49,7 @@ model TrainingObjectType extends Base {
   surveyObjectType      SurveyObjectType[]
   survey                Survey[]
   scoreCorrectionTicket ScoreCorrectionTicket[]
+  scoreLinkSheet        ScoreLinkSheet[]
 
   @@schema("ql-dao-tao")
 }

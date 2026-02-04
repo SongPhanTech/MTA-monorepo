@@ -1,18 +1,18 @@
-import { Button, Row, Col, Tooltip } from 'antd'
-import { BookPlus } from 'lucide-react'
-import { useMemo } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { LEVEL_COLORS } from '@constants/constants'
+import { store } from '@pages/thiet-lap-de-thi/khung-de'
+import { useStore } from '@tanstack/react-store'
 import {
     useFindManyExamMatrix,
     useFindManyKnowledgeBlock,
     useFindManyQuestion,
     useFindUniqueQuestionBank,
 } from '@workspace/db/hooks'
-import { useStore } from '@tanstack/react-store'
-import { store } from '@pages/thiet-lap-de-thi/khung-de'
+import { Button, Col, Row, Tooltip } from 'antd'
+import { BookPlus } from 'lucide-react'
+import { useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface QuestionBankLiteProps {
     examFrameworkId?: string
@@ -221,7 +221,7 @@ export default function QuestionBankLite({
                                 render: (_: unknown, record: any) => (
                                     <Tooltip title="Xem câu hỏi">
                                         <EyeOutlined
-                                            className="cursor-pointer text-blue-600 hover:text-blue-800"
+                                            className="text-sm cursor-pointer text-blue-600 hover:text-blue-800"
                                             onClick={() => {
                                                 onOpenQuestionListModal({
                                                     knowledgeBlockId: record.knowledgeBlockId,

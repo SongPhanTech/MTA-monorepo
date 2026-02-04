@@ -5,8 +5,8 @@ import { useFindManyPrompt } from '@workspace/db/hooks'
 import { Input, Tag, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import type { PutPromptChucNangInput } from '@/components/modal/put-prompt-chuc-nang'
 import { PutPromptChucNang } from '@/components/modal'
+import type { PutPromptChucNangInput } from '@/components/modal/put-prompt-chuc-nang'
 
 const SYSTEM_PROMPTS = [
     {

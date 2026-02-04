@@ -1,6 +1,7 @@
 import { FilterFilled } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { ColumnTypeProps, FilterProps } from '@constants/type'
+import { normalizeVietnamese } from '@workspace/libs/utils'
 import { cn } from '@workspace/ui/lib/utils'
 import {
     AutoComplete,
@@ -21,7 +22,6 @@ import dayjs from 'dayjs'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import FilterSelect from './filter-select'
-import { normalizeVietnamese } from '@workspace/libs/utils'
 
 dayjs.locale('vi')
 
