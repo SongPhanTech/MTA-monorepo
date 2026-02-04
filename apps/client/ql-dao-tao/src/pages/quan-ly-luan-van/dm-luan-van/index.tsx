@@ -26,7 +26,7 @@ import {
     useFindManyThesisSession,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-
+import { whereOrganization } from '@workspace/libs/constants'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
@@ -46,20 +46,24 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 import {
+    exportBanSaoHDDGLV,
     exportDanhSachBaoVe,
     exportDanhSachNopLuanVanThuVien,
+    exportDsChuyenGia,
     exportGiayMoiChamLvPb,
     exportGiayMoiHdlv,
+    exportHDDanhGiaLuanVan,
     exportHosobvlv,
+    exportKetQuaBaoVeLuanVan,
     exportKiemTraTienDo,
     exportPhuLucDsLuanVan,
+    exportPhuLucQdhdd,
     exportSaoQDHDLV,
     exportThanhToanHoiDongBaoVe,
     exportThanhToanHuongDanTrongHv,
     exportThongKeCbHdlv,
     exportThongKeCbThamGiaHd,
 } from '@/utils/thesis-excel'
-import { whereOrganization } from '@workspace/libs/constants'
 
 interface ThesisProjectForm {
     thesisSessionId: string
@@ -598,20 +602,33 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 6,
             label: 'Phụ lục QĐHĐ',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportPhuLucQdhdd({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            }),
         },
         {
             id: 6.1,
             label: 'Bản sao HDDGLV',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportBanSaoHDDGLV({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 7,
             label: 'Đề xuất hội đồng',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportHDDanhGiaLuanVan({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            })
         },
         {
             id: 8,
@@ -636,12 +653,15 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
             onClick: () => defaultButtonClick(),
             disabled: true,
         },
-
         {
             id: 12,
             label: 'Danh sách chuyên gia',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () => await exportDsChuyenGia({
+                allStudentsInClasses,
+                showSpinner,
+                hideSpinner,
+                message,
+            }),
         },
 
         {
@@ -653,13 +673,20 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                     showSpinner,
                     hideSpinner,
                     message,
+                    inAcademy: true,
                 }),
         },
         {
             id: 13.1,
             label: 'Thanh toán hướng dẫn - Ngoài HV',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportThanhToanHuongDanTrongHv({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                    inAcademy: false,
+                }),
         },
         {
             id: 14,
@@ -686,8 +713,13 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 16,
             label: 'Thống kê KQ BV LV',
-            onClick: () => defaultButtonClick(),
-            disabled: true,
+            onClick: async () =>
+                await exportKetQuaBaoVeLuanVan({
+                    allStudentsInClasses,
+                    showSpinner,
+                    hideSpinner,
+                    message,
+                }),
         },
         {
             id: 19,
@@ -727,6 +759,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                     <Form.Item name="thesisSessionId" label="Đợt xét" required>
                                         <Select
                                             className="w-36"
+                                            dropdownMatchSelectWidth={false}
+                                                    dropdownStyle={{ minWidth: 300 }}
                                             options={thesisSessionData?.map((item) => ({
                                                 label: item.name,
                                                 value: item.id,
@@ -1051,6 +1085,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
                                                     className="w-full"
+                                                    dropdownMatchSelectWidth={false}
+                                                    dropdownStyle={{ minWidth: 200 }}
                                                     options={expertProfileData?.map((item) => ({
                                                         label: item.name,
                                                         value: item.id,
@@ -1094,6 +1130,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         return (
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
+                                                dropdownMatchSelectWidth={false}
+                                                dropdownStyle={{ minWidth: 200 }}
                                                     className="w-full"
                                                     options={expertProfileData?.map((item) => ({
                                                         label: item.name,
@@ -1136,6 +1174,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         return (
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
+                                                dropdownMatchSelectWidth={false}
+                                                dropdownStyle={{ minWidth: 200 }}
                                                     className="w-full"
                                                     options={expertProfileData
                                                         ?.filter(
@@ -1186,6 +1226,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
                                                     className="w-full"
+                                                    dropdownMatchSelectWidth={false}
+                                                    dropdownStyle={{ minWidth: 200 }}
                                                     options={expertProfileData
                                                         ?.filter(
                                                             (item) =>
@@ -1234,6 +1276,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
                                                     className="w-full"
+                                                    dropdownMatchSelectWidth={false}
+                                                    dropdownStyle={{ minWidth: 200 }}
                                                     options={expertProfileData?.map((item) => ({
                                                         label: item.name,
                                                         value: item.id,
@@ -1277,6 +1321,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
                                                     className="w-full"
+                                                    dropdownMatchSelectWidth={false}
+                                                    dropdownStyle={{ minWidth: 200 }}
                                                     options={expertProfileData?.map((item) => ({
                                                         label: item.name,
                                                         value: item.id,
@@ -1320,6 +1366,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
                                                     className="w-full"
+                                                    dropdownMatchSelectWidth={false}
+                                                    dropdownStyle={{ minWidth: 200 }}
                                                     options={expertProfileData?.map((item) => ({
                                                         label: item.name,
                                                         value: item.id,
@@ -1360,6 +1408,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                         return (
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
+                                                dropdownMatchSelectWidth={false}
+                                                dropdownStyle={{ minWidth: 200 }}
                                                     className="w-full"
                                                     value={currentValue || ''}
                                                     options={roomData?.map((item) => ({
@@ -1439,6 +1489,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <Select
                                                     className="w-full"
+                                                    dropdownMatchSelectWidth={false}
+                                                    dropdownStyle={{ minWidth: 100 }}
                                                     value={dayjsValue || undefined}
                                                     placeholder="Chọn ca bảo vệ"
                                                     options={defenseSessionData?.map((item) => ({

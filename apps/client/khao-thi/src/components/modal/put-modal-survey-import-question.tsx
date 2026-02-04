@@ -1,3 +1,4 @@
+import { UploadOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
@@ -10,14 +11,13 @@ import {
     useFindManySurveyQuestionGroup,
     useFindUniqueSurveyQuestion,
 } from '@workspace/db/hooks'
-import { Button, Col, Form, message, Table, Upload } from 'antd'
-import { useEffect, useState } from 'react'
-import type { Key } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { UploadOutlined } from '@ant-design/icons'
-import { XMLParser } from 'fast-xml-parser'
 import { PizZip } from '@workspace/libs/docxjs'
+import { Button, Col, Form, message, Table, Upload } from 'antd'
+import { XMLParser } from 'fast-xml-parser'
+import type { Key } from 'react'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutSurveyQuestionType = SurveyQuestion
 type ImportedQuestion = {
@@ -69,15 +69,15 @@ function stripLeadingIndex(text: string): string {
             // remove (TN) / (TL)
             .replace(/\((TN|TL)\)/gi, '')
             // dấu . hoặc - đứng một mình
-            .replace(/^[\.\-]\s*/, '')
+            .replace(/^[.-]\s*/, '')
             // 1. , 1.1 , 1.2.3 , 01.02
-            .replace(/^\d+(?:\.\d+)*\s*[\.\)\-]?\s*/, '')
+            .replace(/^\d+(?:\.\d+)*\s*[.)-]?\s*/, '')
             // I. II. III.
-            .replace(/^[IVX]+\s*[\.\)\-]?\s*/i, '')
+            .replace(/^[IVX]+\s*[.)-]?\s*/i, '')
             // a) b) c.
-            .replace(/^[a-zA-Z]\s*[\.\)\-]\s*/, '')
+            .replace(/^[a-zA-Z]\s*[.)-]\s*/, '')
             // Câu 1:, Câu hỏi 2:
-            .replace(/^(Câu|Câu hỏi)\s*\d+\s*[:\-]?\s*/i, '')
+            .replace(/^(Câu|Câu hỏi)\s*\d+\s*[:-]?\s*/i, '')
             .trim()
     )
 }

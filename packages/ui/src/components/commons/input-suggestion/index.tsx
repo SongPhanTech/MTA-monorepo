@@ -39,8 +39,8 @@ import {
     useDeleteSuggestion,
     useFindManySuggestion,
 } from '@workspace/db/hooks'
-import { AutoComplete, Button } from 'antd'
 import type { AutoCompleteProps } from 'antd'
+import { AutoComplete, Button } from 'antd'
 import { forwardRef, useMemo, useState } from 'react'
 
 export type SuggestionMode = 'personal' | 'global'

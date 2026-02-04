@@ -1,8 +1,27 @@
 {
-    "extends": "@workspace/typescript-config/base.json",
     "compilerOptions": {
+        "lib": [
+            "ESNext"
+        ],
+        "target": "ESNext",
+        "module": "Preserve",
+        "moduleDetection": "force",
+        "allowJs": true,
+        // Bundler mode
+        "esModuleInterop": true,
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "noEmit": true,
+        // Best practices
         "strict": true,
-        "jsx": "react-jsx",
-        "jsxImportSource": "hono/jsx"
+        "skipLibCheck": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        // Some stricter flags (disabled by default)
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noPropertyAccessFromIndexSignature": false
     }
 }

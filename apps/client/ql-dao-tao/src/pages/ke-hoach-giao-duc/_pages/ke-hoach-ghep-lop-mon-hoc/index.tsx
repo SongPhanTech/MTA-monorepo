@@ -346,6 +346,7 @@ export default function KeHoachGhepLopMonHoc() {
         }
     )
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     useEffect(() => {
         if (data) {
             resetSubjectClassToFixedClass()

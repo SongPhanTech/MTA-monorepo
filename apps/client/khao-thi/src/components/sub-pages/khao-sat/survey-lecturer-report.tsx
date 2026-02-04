@@ -1,17 +1,18 @@
+import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
+import HtmlTruncate from '@components/commons/html-truncate'
+import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import { useGetClusterSurveyStatisticsForLecturer } from '@workspace/libs/api/exam'
+import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
 import { Button, Col, Dropdown, Empty, Row, Typography } from 'antd'
-import { useRouter } from 'next/router'
-import { useMemo } from 'react'
 // @ts-nocheck
 import ReactECharts from 'echarts-for-react'
-import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
-import Table from '@components/commons/table'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
-import HtmlTruncate from '@components/commons/html-truncate'
-import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
+import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 const { Title } = Typography
 
 export interface CriteriaItem {
@@ -98,8 +99,8 @@ function SurveylecturerReport({
 
         return { categories, series }
     }
-    console.log(dataLevel)
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     const dataBarchart = useMemo(() => {
         let label: string[] = []
         if (dataLevel?.status === 200 && dataLevel?.data?.data?.questions?.length) {
@@ -277,8 +278,7 @@ function SurveylecturerReport({
                   'STT',
                   'Câu hỏi',
                   'Tên Câu hỏi',
-                  // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                  ...dataTable[0]?.answers?.map((i: any) => i?.description),
+                  ...dataTable[0].answers.map((i: any) => i?.description),
               ]
             : ['STT', 'Câu hỏi', 'Tên Câu hỏi']
         headerRow.eachCell((cell: any) => {
@@ -362,7 +362,7 @@ function SurveylecturerReport({
             <Table
                 rowKey={'id'}
                 columns={
-                    dataTable?.length > 0
+                    dataTable?.length
                         ? [
                               {
                                   title: 'STT',
@@ -392,8 +392,7 @@ function SurveylecturerReport({
                                       )
                                   },
                               },
-                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                              ...dataTable[0]?.answers?.map((i: any) => ({
+                              ...dataTable[0].answers.map((i: any) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,

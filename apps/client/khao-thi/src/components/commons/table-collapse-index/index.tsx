@@ -167,6 +167,7 @@ const TableIndexCollapse = <
         return children
     }, [dataWithKey, childrenFieldName])
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const restColumns = useMemo(() => {
         const baseColumns = [
             {

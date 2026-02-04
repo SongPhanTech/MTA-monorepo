@@ -9,7 +9,6 @@ import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
-import { $Enums } from '@workspace/db'
 import type { SubjectClass } from '@workspace/db/client'
 import {
     useFindManyBuilding,
@@ -288,7 +287,7 @@ const PutOneSubjectClassModal = () => {
                 },
                 awards: {
                     where: {
-                        status: $Enums.ArchivedCertificateStatus.APPROVED,
+                        status: 'APPROVED',
                     },
                     include: {
                         archivedAward: true,

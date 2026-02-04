@@ -325,7 +325,7 @@ function UpdateTicketModal({
                 deadline: ticket.deadline ? dayjs(ticket.deadline) : undefined,
             })
         }
-    }, [ticket, open])
+    }, [ticket, form.setFieldsValue])
 
     const onFinish = async (values: any) => {
         try {
@@ -406,7 +406,7 @@ function CreateTicketModal({
 
     useEffect(() => {
         form.setFieldsValue({ trainingObjectTypeId })
-    }, [trainingObjectTypeId])
+    }, [trainingObjectTypeId, form.setFieldsValue])
 
     return (
         <Modal

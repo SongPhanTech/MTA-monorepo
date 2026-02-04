@@ -1,6 +1,6 @@
 import DefaultLayout from '@layouts/default-layout'
-import type React from 'react'
 import ChuyenDeNghienCuu from '@pages/quan-ly-diem/chuyen-de-nghien-cuu'
+import type React from 'react'
 
 export default function KhaoBoMonPhanCongChuyenDeNghienCuu() {
     // biome-ignore lint/a11y/useValidAriaRole: <explanation>

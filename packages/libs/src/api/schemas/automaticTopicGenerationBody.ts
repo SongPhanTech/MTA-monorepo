@@ -11,8 +11,7 @@ export type AutomaticTopicGenerationBody = {
     /** @nullable */
     code?: string | null
     active?: boolean
-    /** @nullable */
-    description?: string | null
+    description?: string
     /** @nullable */
     deletedAt?: string | null
     /** @nullable */
@@ -30,6 +29,7 @@ export type AutomaticTopicGenerationBody = {
     examType?: AutomaticTopicGenerationBodyExamType
     /** @nullable */
     isLock?: boolean | null
+    isNote: boolean
     quantity: number
     /** @minLength 1 */
     examFrameworkId: string

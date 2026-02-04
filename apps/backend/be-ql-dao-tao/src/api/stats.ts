@@ -1,4 +1,5 @@
 import { Faker, vi } from '@faker-js/faker'
+
 const faker = new Faker({
     locale: [vi],
 })
@@ -2110,13 +2111,13 @@ app.openapi(
             })
         }
         const result = await prisma.$queryRaw<
-            Array<{ activeCurricula: bigint; activeCurriculumVersions: bigint }>
+            [{ activeCurricula: bigint; activeCurriculumVersions: bigint }]
         >`
             SELECT
                 (SELECT COUNT(*) FROM "ql-dao-tao"."Curriculum" WHERE "active" = true) AS "activeCurricula",
                 (SELECT COUNT(*) FROM "ql-dao-tao"."CurriculumVersion" WHERE "active" = true) AS "activeCurriculumVersions"
         `
-        const { activeCurricula, activeCurriculumVersions } = result[0]!
+        const { activeCurricula, activeCurriculumVersions } = result[0]
 
         return c.json({
             data: [{ activeCurricula, activeCurriculumVersions }],
