@@ -321,8 +321,9 @@ export default function SinhPhach() {
                                 render: (_, __, index) => index + 1,
                             },
                             {
-                                title: 'Mã SV',
+                                title: 'Mã sinh viên',
                                 dataIndex: 'name',
+                                align: 'center',
                                 width: 150,
                                 render: (_, record) =>
                                     record?.studentSubjectScore?.student?.code || '',

@@ -781,7 +781,7 @@ export default function DanhSachSinhVien() {
                                     return (
                                         <div className="text-left">
                                             {record?.studentSubjectScore?.student?.userProfile
-                                                ?.fullname || ''}
+                                                ?.fullname || 'Không rõ'}
                                         </div>
                                     )
                                 },
