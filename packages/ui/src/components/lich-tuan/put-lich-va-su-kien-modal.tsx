@@ -26,7 +26,7 @@ import {
 } from 'antd'
 import locale from 'antd/es/date-picker/locale/vi_VN'
 import dayjs, { type Dayjs } from 'dayjs'
-import { Key, useCallback, useEffect, useState } from 'react'
+import { type Key, useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { FormItem, InputSuggestion, PutFormModal, type PutModalFormType } from '../commons'
 import { useSemesterStore } from '../select-semester'
@@ -913,15 +913,11 @@ const PutLichVaSuKienModal = () => {
                                                       // Same day - show date once with time range
                                                       if (allDay) {
                                                           return startTime.format('DD/MM/YYYY')
-                                                          // biome-ignore lint/style/noUselessElse: <explanation>
-                                                      } else {
-                                                          return `${startTime.format('DD/MM/YYYY')} ${startTime.format('HH:mm')} - ${endTime.format('HH:mm')}`
                                                       }
-                                                      // biome-ignore lint/style/noUselessElse: <explanation>
-                                                  } else {
-                                                      // Different days - show full range
-                                                      return `${formatTime(startTime)} - ${formatTime(endTime)}`
+                                                      return `${startTime.format('DD/MM/YYYY')} ${startTime.format('HH:mm')} - ${endTime.format('HH:mm')}`
                                                   }
+                                                  // Different days - show full range
+                                                  return `${formatTime(startTime)} - ${formatTime(endTime)}`
                                               })()
                                             : startTime
                                               ? formatTime(startTime)

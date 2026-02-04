@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
-import { type ScoreConvert } from '@workspace/db/client'
+import type { ScoreConvert } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'

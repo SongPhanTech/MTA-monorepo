@@ -1,10 +1,9 @@
 import { Checkbox, Col, DatePicker, Flex, Input, Popover, Row } from 'antd'
 import { useCallback, useMemo, useState } from 'react'
-import { useStore } from '@tanstack/react-store'
-import { store } from '../index'
-import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import Table from '@components/commons/table'
-import { cn } from '@workspace/ui/lib/utils'
+import { useStore } from '@tanstack/react-store'
+import type { SubjectClass } from '@workspace/db/client'
+import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import type { SubjectClass } from '@workspace/db/client'
 import HtmlTruncate from '@components/commons/html-truncate'
@@ -17,6 +16,10 @@ const EXAM_TYPE_LABEL: Record<string, string> = {
     Project: 'Thi đồ án',
     Other: 'Khác',
 }
+import { cn } from '@workspace/ui/lib/utils'
+import { Checkbox, Col, Flex, Input, Popover, Row } from 'antd'
+import { useCallback, useMemo, useState } from 'react'
+import { store } from '../index'
 
 export default function DanhSachKeHoachThi() {
     const { id: semesterId } = useSemesterStore()
@@ -261,7 +264,11 @@ export default function DanhSachKeHoachThi() {
                         }
                     }}
                     onRow={(record) => ({
-                        className: cn(selectedExamId === record.id && 'bg-orange-100'),
+                        className: cn(
+                            selectedExamId === record.id
+                                ? '!bg-orange-200 hover:!bg-orange-200 [&>td]:!bg-orange-200 [&>td]:hover:!bg-orange-200'
+                                : ''
+                        ),
                         onClick: (e) => {
                             const target = e.target as HTMLElement
                             if (

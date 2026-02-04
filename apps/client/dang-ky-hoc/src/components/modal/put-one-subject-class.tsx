@@ -287,7 +287,7 @@ const PutOneSubjectClassModal = () => {
                 },
                 awards: {
                     where: {
-                        status: $Enums.ArchivedCertificateStatus.APPROVED,
+                        status: 'APPROVED',
                     },
                     include: {
                         archivedAward: true,

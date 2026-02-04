@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { StandardCatalog, $Enums } from '@workspace/db/client'
+import type { $Enums, StandardCatalog } from '@workspace/db/client'
 import {
     useCreateStandardCatalog,
     useFindUniqueStandardCatalog,
@@ -20,6 +20,7 @@ const PutStandardCatalog = () => {
         id: string
         count: number
         objectType?: $Enums.StandardCatalogType
+        standardSetId?: string
     }>({
         tag: 'PutStandardCatalog',
         onClose: form.resetFields,
@@ -29,13 +30,14 @@ const PutStandardCatalog = () => {
     const { mutateAsync: createStandardCatalog } = useCreateStandardCatalog()
     const { mutateAsync: updateStandardCatalog } = useUpdateStandardCatalog()
     async function onOk(output?: PutStandardCatalogType) {
-        if (!output) return
+        if (!output || !input?.standardSetId) return
         try {
             showSpinner()
             const data = {
                 order: output.order,
                 name: output.name.trim(),
                 objectType: output.objectType,
+                standardSetId: input.standardSetId,
             }
             if (input?.id) {
                 await updateStandardCatalog({
@@ -95,7 +97,7 @@ const PutStandardCatalog = () => {
             onCancel={onClose}
             maskClosable={true}
             title={input?.id ? 'Chỉnh sửa tiêu chuẩn' : 'Thêm mới tiêu chuẩn'}
-            className="w-[30vw]"
+            className="w-[50vw]"
         >
             <Col span={24}>
                 <FormItem form={form} name="order" label="Thứ tự" required>
@@ -112,12 +114,13 @@ const PutStandardCatalog = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên tiêu chuẩn" required>
-                    <Input placeholder="Nhập tên tiêu chuẩn" />
+                    <Input.TextArea rows={2} placeholder="Nhập tên tiêu chuẩn" spellCheck={false} />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="objectType" label="Loại kho" required>
                     <Select
+                        disabled
                         placeholder="Chọn loại kho"
                         options={STANDARD_CATALOG_TYPE_OPTIONS.map(({ value, label }) => ({
                             value,

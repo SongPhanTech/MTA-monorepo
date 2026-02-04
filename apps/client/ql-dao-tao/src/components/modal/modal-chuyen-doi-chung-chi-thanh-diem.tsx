@@ -1,18 +1,18 @@
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
+import type { StudentSubjectScore } from '@workspace/db/client'
 import {
     useCreateManyStudentSubjectScore,
     useFindManyCertificate,
     useFindManyStudent,
     useFindUniqueCertificate,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Modal, message, Row, Typography } from 'antd'
+import dayjs from 'dayjs'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import type { StudentSubjectScore } from '@workspace/db/client'
-import dayjs from 'dayjs'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 const { Title } = Typography
 

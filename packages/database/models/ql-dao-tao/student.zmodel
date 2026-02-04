@@ -7,6 +7,7 @@ import '../ql-danh-muc/common'
 import '../khao-thi/survey'
 import '../khao-thi/exam'
 import 'training-score'
+import 'score-link'
 import 'categories'
 import 'plan-training'
 import 'scholarship'
@@ -119,6 +120,8 @@ model Student extends Base {
   thesisRegistrations            StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
   diplomaVerificationApplication DiplomaVerificationApplication[]
   studentScoreConvert            StudentScoreConvert[]
+  scoreLinkStudent               ScoreLinkStudent[]
+
   classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]

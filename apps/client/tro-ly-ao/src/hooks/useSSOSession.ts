@@ -50,7 +50,7 @@ const checkSSORedirect = (): boolean => {
     if (authIssuer) {
         try {
             const authHostname = new URL(authIssuer).hostname
-            if (document.referrer && document.referrer.includes(authHostname)) {
+            if (document.referrer?.includes(authHostname)) {
                 console.log(
                     '[useSSOSession] Detected redirect from SSO via referrer, invalidating cache'
                 )

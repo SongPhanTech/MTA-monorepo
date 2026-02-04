@@ -14,16 +14,16 @@ import {
     useFindManyTrainingField,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
-import { whereOrganization } from '@workspace/libs/constants'
 
 export default function TrainingMajorPage() {
     const { can, canSome } = useAbility()

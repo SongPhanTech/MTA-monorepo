@@ -5,10 +5,10 @@ import { getStatusConfig } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
     $Enums,
-    type EvaluationCriterionComment,
-    type StandardPeriod,
     type CriterionPeriod,
     type EvaluationCriterion,
+    type EvaluationCriterionComment,
+    type StandardPeriod,
 } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'

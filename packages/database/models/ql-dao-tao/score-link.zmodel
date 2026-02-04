@@ -1,0 +1,70 @@
+import '../base'
+import '../ql-nguoi-dung/user'
+import '../ql-ho-so/profile'
+import '../ql-danh-muc/core-categories'
+import '../ql-danh-muc/document'
+import '../ql-danh-muc/common'
+import 'categories'
+import 'plan-training'
+import 'student'
+
+enum ScoreLinkStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
+model ScoreLinkSheet extends Base {
+  trainingObjectType       TrainingObjectType        @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
+
+  note                     String?
+  decision                 String?  // Số quyết định
+  status                   ScoreLinkStatus           @default(PENDING)
+
+  // hiện danh sách SV từ lớp quản lý
+  fixedClass               FixedClass                @relation(fields: [fixedClassId], references: [id])
+  fixedClassId             String
+
+  semester                 Semester                  @relation(fields: [semesterId], references: [id])
+  semesterId               String
+
+  // chọn môn từ danh sách fixedClass.CurriculumVersion.TraingBlock.Subject
+  scoreLinkSubjectVersions ScoreLinkSubjectVersion[]
+  documents                DocumentFile[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Danh sách môn/điểm liên kết
+// Tạo SubjectClass(type=LINKED & scoreLinkSubjectVersionId) + StudentSubjectScore từ bảng này khi phê duyệt
+model ScoreLinkSubjectVersion extends Base {
+  scoreLinkSheet    ScoreLinkSheet     @relation(fields: [scoreLinkSheetId], references: [id])
+  scoreLinkSheetId  String
+
+  subjectVersion    SubjectVersion     @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId  String
+
+  scoreLinkStudents ScoreLinkStudent[]
+  subjectClass      SubjectClass?
+
+  @@unique([scoreLinkSheetId, subjectVersionId])
+  @@schema("ql-dao-tao")
+}
+
+/// Danh sách điểm liên kết theo môn
+model ScoreLinkStudent extends Base {
+  scoreLinkSubjectVersion   ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id])
+  scoreLinkSubjectVersionId String
+
+  student                   Student                 @relation(fields: [studentId], references: [id])
+  studentId                 String
+
+  /// Điểm học phần => attendanceScore=midtermScore=examScore=finalScore=manualFinalScore
+  score                     Float                   @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+
+  @@unique([scoreLinkSubjectVersionId, studentId])
+  @@schema("ql-dao-tao")
+}

@@ -19,11 +19,11 @@ import {
     useUpdateDisciplinaryWarning,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 
 dayjs.locale('vi')
 

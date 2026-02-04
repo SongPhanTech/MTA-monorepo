@@ -286,6 +286,9 @@ const PutOneSubjectClassModal = () => {
                     },
                 },
                 awards: {
+                    where: {
+                        status: 'APPROVED',
+                    },
                     include: {
                         archivedAward: true,
                     },

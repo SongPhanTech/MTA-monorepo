@@ -7,10 +7,6 @@ const TYPEOF_BOOLEAN = 'boolean'
 const TYPEOF_SYMBOL = 'symbol'
 const TYPEOF_BIGINT = 'bigint'
 
-// Inline NaN check for maximum speed
-// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-const isNaN = Number.isNaN
-
 // Cache for constructor checks
 const dateConstructor = Date
 const regExpConstructor = RegExp
@@ -34,7 +30,7 @@ export function fastIsEqual(a: any, b: any) {
     // Type mismatch = not equal (avoid second typeof if possible)
     if (typeA === TYPEOF_NUMBER) {
         // Optimize number comparison - avoid typeof b when possible
-        return typeof b === TYPEOF_NUMBER && isNaN(a) && isNaN(b)
+        return typeof b === TYPEOF_NUMBER && Number.isNaN(a) && Number.isNaN(b)
     }
 
     if (
@@ -91,7 +87,7 @@ export function fastIsEqual(a: any, b: any) {
 
                 // Number special case
                 if (elemTypeA === TYPEOF_NUMBER) {
-                    if (!(isNaN(elemA) && isNaN(elemB))) return false
+                    if (!(Number.isNaN(elemA) && Number.isNaN(elemB))) return false
                     continue
                 }
 
@@ -136,7 +132,7 @@ function deepEqual(valA: any, valB: any, visited: Map<any, any>): boolean {
 
     // Primitive types
     if (typeA === TYPEOF_NUMBER) {
-        return isNaN(valA) && isNaN(valB)
+        return Number.isNaN(valA) && Number.isNaN(valB)
     }
 
     if (typeA !== TYPEOF_OBJECT && typeA !== TYPEOF_FUNCTION) {
@@ -441,7 +437,7 @@ function deepEqual(valA: any, valB: any, visited: Map<any, any>): boolean {
             if (propTypeA === TYPEOF_OBJECT || propTypeA === TYPEOF_FUNCTION) {
                 if (!deepEqual(propA, propB, visited)) return false
             } else if (propTypeA === TYPEOF_NUMBER) {
-                if (!(isNaN(propA) && isNaN(propB))) return false
+                if (!(Number.isNaN(propA) && Number.isNaN(propB))) return false
             } else {
                 return false
             }

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SubjectClassTypeSchema = z.enum(["NORMAL", "RETAKE", "REEXAM"])
+export const SubjectClassTypeSchema = z.enum(["NORMAL", "LINKED", "REEXAM", "RETAKE", "STAYBACK", "TRANSFER"])

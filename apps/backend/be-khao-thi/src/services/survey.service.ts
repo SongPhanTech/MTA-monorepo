@@ -1,5 +1,6 @@
 import {
-getOrganizationAndAllChildren,     type DM_DonVi,
+    type DM_DonVi,
+    getOrganizationAndAllChildren,
     type Lecturer,
     type PrismaClient,
     type SubjectClass,
@@ -8,8 +9,8 @@ getOrganizationAndAllChildren,     type DM_DonVi,
     type SurveyQuestion,
     type UserProfile,
 } from '@workspace/db'
-import { prisma } from '..'
 import { models } from '@workspace/db/zod'
+import { prisma } from '..'
 
 // Define the surveyReportTable type (replace fields with actual structure as needed)
 type surveyReportTable = {
@@ -257,15 +258,15 @@ export const getOrganizationsSurveyStats = async (
     clusterSurveyId: string
 ) => {
     const questionIds = questions.map((q) => q.id)
-    const organizations = await getOrganizationAndAllChildren(prisma,  orga.Id)
+    const organizations = await getOrganizationAndAllChildren(prisma, orga.Id)
     const answerCounts = await prisma.surveyResponse.groupBy({
         by: ['surveyChoiceId'],
         where: {
             surveySession: {
                 survey: {
                     lecture: {
-                        organizationId:{
-                            in: organizations.map((i:DM_DonVi)=>i.Id)
+                        organizationId: {
+                            in: organizations.map((i: DM_DonVi) => i.Id),
                         },
                     },
                     clusterSurveyId,

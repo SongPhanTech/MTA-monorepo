@@ -47,16 +47,17 @@ export default function TongKetKyHoc() {
                     //     label: 'Xét cảnh cáo học đường',
                     //     children: <XetCanhCaoHocDuong semesterId={semesterId} />,
                     // },
-                    // {
-                    //     key: '5',
-                    //     label: 'Xét thôi học',
-                    //     children: (
-                    //         <XetXuLyHocTap
-                    //             semesterId={semesterId}
-                    //             actionTaken={AcademicActionType.EXPULSION}
-                    //         />
-                    //     ),
-                    // },
+                    {
+                        key: '5',
+                        label: 'Xét thôi học',
+                        children: (
+                            <XetXuLyHocTap
+                                semesterId={semesterId}
+                                trainingObjectTypeId={trainingObjectTypeId}
+                                actionTaken={AcademicActionType.EXPULSION}
+                            />
+                        ),
+                    },
                     {
                         key: '6',
                         label: 'Xét lưu ban',

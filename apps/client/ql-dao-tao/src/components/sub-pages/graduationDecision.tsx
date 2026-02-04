@@ -1,4 +1,3 @@
-import { removeVietnameseTones } from '@/utils/removeVietnamese'
 import { ClipboardButton } from '@components/commons/clipboard'
 import FormItem from '@components/commons/form-item'
 import Table from '@components/commons/table'
@@ -7,6 +6,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
+import { $Enums } from '@workspace/db'
 import { ApplicationStatus, type Prisma } from '@workspace/db/client'
 import {
     useCountGraduationDecision,
@@ -43,6 +43,7 @@ import { saveAs } from 'file-saver'
 import { BookCheckIcon, FileDown, Presentation, Sheet } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { removeVietnameseTones } from '@/utils/removeVietnamese'
 
 interface GraduationDecisionProps {
     sessionId: string
@@ -393,6 +394,9 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                     },
                                 },
                                 awards: {
+                                    where: {
+                                        status: $Enums.ArchivedCertificateStatus.APPROVED,
+                                    },
                                     include: {
                                         archivedAward: true,
                                     },

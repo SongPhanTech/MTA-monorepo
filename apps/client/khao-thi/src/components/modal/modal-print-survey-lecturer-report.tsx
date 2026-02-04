@@ -1,10 +1,10 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
+import ReactECharts from 'echarts-for-react'
 import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
-import ReactECharts from 'echarts-for-react'
 
 dayjs.locale('vi')
 
@@ -198,13 +198,22 @@ const ModalPrintSurveylecturer = () => {
                 </div>
 
                 {/* ===== TABLE ===== */}
-                <table className="mt-6 text-sm border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
+                <table
+                    className="mt-6 text-sm border-collapse"
+                    style={{ tableLayout: 'fixed', width: '100%' }}
+                >
                     <thead>
                         <tr className="font-bold text-center">
-                            <th className="border-2 border-black" style={{ width: 50 }}>STT</th>
-                            <th className="border-2  border-black" style={{ width: 90 }}>Câu hỏi</th>
+                            <th className="border-2 border-black" style={{ width: 50 }}>
+                                STT
+                            </th>
+                            <th className="border-2  border-black" style={{ width: 90 }}>
+                                Câu hỏi
+                            </th>
                             {input.questions[0]?.answers.map((a: any) => (
-                                <th key={a.id} className="border-2  border-black">{a.description}</th>
+                                <th key={a.id} className="border-2  border-black">
+                                    {a.description}
+                                </th>
                             ))}
                         </tr>
                     </thead>
@@ -224,7 +233,10 @@ const ModalPrintSurveylecturer = () => {
                                             {isAvg ? '' : `Câu ${index + 1}`}
                                         </td>
                                         {percent.map((p: any) => (
-                                            <td key={p.id} className="text-center border-2  border-black">
+                                            <td
+                                                key={p.id}
+                                                className="text-center border-2  border-black"
+                                            >
                                                 {p.percent}% ({p.count}/{p.total})
                                             </td>
                                         ))}

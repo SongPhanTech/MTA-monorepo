@@ -9,7 +9,7 @@
     "generate": "turbo run generate",
     "generate:sql": "turbo run generate:sql",
     "generate:router": "turbo run generate:router",
-    "generate:api": "turbo run generate:api",
+    "generate:api": "turbo run generate:api && pnpm format",
     "db:push": "turbo run db:push",
     "db:sync": "turbo run db:sync",
     "format": "biome format --write --verbose",
