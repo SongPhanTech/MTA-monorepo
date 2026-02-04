@@ -134,8 +134,8 @@ export default function BaoCaoGiangVien() {
                 //         { sMa: { contains: searchText, mode: 'insensitive' } },
                 //     ],
                 // }),
-                iLoaiDonVi: {
-                    in: [0, 5, 6, 7],
+                iCapDonVi: {
+                    in: [0, 2, 3],
                 },
             },
             select: {
