@@ -212,18 +212,12 @@ export default function QuanLyDiemRenLuyen() {
     useEffect(() => {
         if (isOpen) {
             const handleScroll = (e: Event) => {
-                // Kiểm tra xem có phải đang cuộn cái danh sách học kỳ không
-                // (Class 'rc-virtual-list-holder' là của cái thanh cuộn trong dropdown Antd)
                 const target = e.target as HTMLElement;
                 if (target?.classList?.contains('rc-virtual-list-holder')) {
-                    return; // Nếu cuộn trong dropdown thì giữ nguyên
+                    return;
                 }
-                
-                // Nếu cuộn ở ngoài (body, main layout...) thì đóng lại
                 setIsOpen(false);
             };
-
-            // Dùng capture: true để bắt được sự kiện scroll của bất kỳ thành phần nào
             window.addEventListener('scroll', handleScroll, true);
             
             return () => {
