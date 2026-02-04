@@ -49,7 +49,7 @@ export default function AssigmentOfAssessmentTab() {
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
 
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '879df395-99ce-448c-b057-e8df891406cb'
+    const idProfile = me?.sDM_NhanVienId || 'f1218263-341e-40c4-b269-a711a0186c741'
 
     const { onOpen: openPhanCongHangLoat } = useDisclosure<PutPhanCongHangLoatModalProps>({
         tag: 'PutPhanCongHangLoatModal',
@@ -62,7 +62,12 @@ export default function AssigmentOfAssessmentTab() {
             evaluationCouncil: {
                 periodId: selectedEvaluationPeriodId,
             },
-            role: $Enums.EvaluationMemberRole.SPECIALIZED,
+            role: {
+                in: [
+                    $Enums.EvaluationMemberRole.SPECIALIZED,
+                    $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
+                ],
+            },
         },
         include: {
             lecturer: {
@@ -373,11 +378,15 @@ export default function AssigmentOfAssessmentTab() {
                         isTitle={true}
                         headerTitleKey="displayName"
                         childrenFieldName="criteria"
-                        rowSelection={{
-                            type: 'checkbox',
-                            selectedRowKeys,
-                            onChange: onSelectChange,
-                        }}
+                        rowSelection={
+                            isHeadSecretary
+                                ? {
+                                      type: 'checkbox',
+                                      selectedRowKeys,
+                                      onChange: onSelectChange,
+                                  }
+                                : undefined
+                        }
                         expandable={{
                             expandRowByClick: false,
                         }}
@@ -462,7 +471,6 @@ export default function AssigmentOfAssessmentTab() {
                                                     const degreeRank =
                                                         i.lecturer?.userProfile?.academicDegreeType
                                                             ?.sTen || ''
-
                                                     const fullName = i?.lecturer?.userProfile
                                                         ?.fullname
                                                         ? i?.lecturer?.userProfile?.fullname

@@ -3,7 +3,6 @@ import DatePicker from '@components/commons/date-picker'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import ApproveIcon from '@components/icons/approve'
 import { DEADLINE_OPTIONS, getStatusEvaluation } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
@@ -280,12 +279,14 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                     <Empty description="Không có dữ liệu" />
                 </div>
             ) : (
-                filteredCriteria?.map((item, idx: number) => {
+                filteredCriteria?.map((item) => {
                     return (
                         <div key={item.id} className="ml-4 mb-6">
                             <div className="mb-3">
                                 <div className="text-base">
-                                    <span className="font-bold">Tiêu chí {item.order}: </span>
+                                    <span className="font-bold">
+                                        Tiêu chí {idx}.{item.order}:{' '}
+                                    </span>
                                     <span>{item?.name}</span>
                                 </div>
                                 <div className="flex gap-2 items-center">
@@ -321,6 +322,35 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                             }
                                         </Tag>
                                     )}
+                                    {item?.analysisCriterions?.status ===
+                                        $Enums.EvaluationCriterionStatus.SUBMITTED &&
+                                        can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+                                            'DUYET'
+                                        ) && (
+                                            <Tooltip title={'Phê duyệt'} placement="top">
+                                                <Popconfirm
+                                                    placement="topLeft"
+                                                    title="Xác nhận phê duyệt?"
+                                                    okText="Đồng ý"
+                                                    cancelText="Hủy"
+                                                    onConfirm={(e) => {
+                                                        e?.stopPropagation()
+                                                        handleApproveCriterionAnalysisFinal(
+                                                            item.analysisCriterions?.id as string,
+                                                            item.id
+                                                        )
+                                                    }}
+                                                    onCancel={(e) => {
+                                                        e?.stopPropagation()
+                                                    }}
+                                                >
+                                                    <Button type="primary" size="small">
+                                                        Nộp tiêu chí
+                                                    </Button>
+                                                </Popconfirm>
+                                            </Tooltip>
+                                        )}
                                 </div>
                             </div>
                             <div>
@@ -436,49 +466,24 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                                     'DUYET'
                                                 ),
                                             render: (__, record) => {
-                                                const isSubmitted =
-                                                    item.analysisCriterions?.status ===
-                                                    $Enums.EvaluationCriterionStatus.SUBMITTED
-
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
                                                         {can(
                                                             KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                                                             'DUYET'
                                                         ) && (
-                                                            <>
-                                                                {isSubmitted && (
-                                                                    <ApproveIcon
-                                                                        popConfirm={{
-                                                                            onConfirm: (e) => {
-                                                                                e?.stopPropagation()
-                                                                                handleApproveCriterionAnalysisFinal(
-                                                                                    record.analysisCriterionId,
-                                                                                    item.id
-                                                                                )
-                                                                            },
-                                                                            onCancel: (e) => {
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                        }}
-                                                                    />
-                                                                )}
-
-                                                                <Tooltip title="Yêu cầu chỉnh sửa">
-                                                                    <FileEdit
-                                                                        size={16}
-                                                                        strokeWidth={1.5}
-                                                                        className={
-                                                                            'text-blue-600 cursor-pointer'
-                                                                        }
-                                                                        onClick={() => {
-                                                                            toggleCommentRow(
-                                                                                record.id
-                                                                            )
-                                                                        }}
-                                                                    />
-                                                                </Tooltip>
-                                                            </>
+                                                            <Tooltip title="Yêu cầu chỉnh sửa">
+                                                                <FileEdit
+                                                                    size={16}
+                                                                    strokeWidth={1.5}
+                                                                    className={
+                                                                        'text-blue-600 cursor-pointer'
+                                                                    }
+                                                                    onClick={() => {
+                                                                        toggleCommentRow(record.id)
+                                                                    }}
+                                                                />
+                                                            </Tooltip>
                                                         )}
                                                     </div>
                                                 )
